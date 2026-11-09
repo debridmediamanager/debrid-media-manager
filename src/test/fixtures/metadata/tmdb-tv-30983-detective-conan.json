@@ -1,0 +1,778 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"results": [
+			{
+				"iso_3166_1": "CN",
+				"title": "名侦探柯南 警察学校篇 疯狂警察故事",
+				"type": "story arc"
+			},
+			{ "iso_3166_1": "CN", "title": "名侦探柯南 本厅刑警恋爱物语", "type": "story arc" },
+			{ "iso_3166_1": "JP", "title": "Meitantei Conan", "type": "romaji" },
+			{ "iso_3166_1": "JP", "title": "Detective Conan", "type": "" },
+			{
+				"iso_3166_1": "JP",
+				"title": "名探偵コナン 警察学校編 Wild Police Story",
+				"type": "story arc"
+			},
+			{ "iso_3166_1": "TH", "title": "ยอดนักสืบจิ๋วโคนัน เดอะซีรีส์", "type": "" },
+			{ "iso_3166_1": "TR", "title": "Detektif Konan", "type": "" },
+			{ "iso_3166_1": "US", "title": "Great Detective Conan", "type": "literal translation" },
+			{
+				"iso_3166_1": "US",
+				"title": "Detective Conan: Conan vs. The Black Organization",
+				"type": "Netflix and Crunchyroll episode collection 1"
+			},
+			{
+				"iso_3166_1": "US",
+				"title": "Case Closed: One Truth Prevails",
+				"type": "title with tagline"
+			},
+			{ "iso_3166_1": "US", "title": "Case Closed (Detective Conan)", "type": "2021-2025" },
+			{
+				"iso_3166_1": "US",
+				"title": "Detective Conan: Rivals of the Great Detective",
+				"type": "Netflix and Crunchyroll episode collection 2"
+			},
+			{
+				"iso_3166_1": "US",
+				"title": "Detective Conan: FBI Intervention",
+				"type": "Netflix and Crunchyroll episode collection 3"
+			},
+			{ "iso_3166_1": "US", "title": "Case Closed", "type": "2004-2021; 2026" }
+		]
+	},
+	"backdrop_path": "/z67lpMtm8YGykJO4p89meuNMvj8.jpg",
+	"content_ratings": {
+		"results": [
+			{ "descriptors": [], "iso_3166_1": "DE", "rating": "12" },
+			{ "descriptors": [], "iso_3166_1": "US", "rating": "TV-14" },
+			{ "descriptors": [], "iso_3166_1": "KR", "rating": "15" },
+			{ "descriptors": [], "iso_3166_1": "PH", "rating": "PG" },
+			{ "descriptors": [], "iso_3166_1": "MX", "rating": "AA" },
+			{ "descriptors": [], "iso_3166_1": "AU", "rating": "M" },
+			{ "descriptors": [], "iso_3166_1": "ES", "rating": "7" },
+			{ "descriptors": [], "iso_3166_1": "AT", "rating": "14" },
+			{ "descriptors": [], "iso_3166_1": "IE", "rating": "15" },
+			{ "descriptors": [], "iso_3166_1": "CH", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "PL", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "HU", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "CZ", "rating": "15+" },
+			{ "descriptors": [], "iso_3166_1": "RO", "rating": "15" },
+			{ "descriptors": [], "iso_3166_1": "TW", "rating": "12+" },
+			{ "descriptors": [], "iso_3166_1": "CA", "rating": "14+" },
+			{ "descriptors": [], "iso_3166_1": "BR", "rating": "14" }
+		]
+	},
+	"created_by": [],
+	"credits": {
+		"cast": [
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 68470,
+				"known_for_department": "Acting",
+				"name": "Minami Takayama",
+				"original_name": "高山みなみ",
+				"popularity": 3.1562,
+				"profile_path": "/4Gunxt2UWnAX74ZoXKtqK2rI0e.jpg",
+				"character": "Conan Edogawa (voice)",
+				"credit_id": "5c42b6e792514121490af34e",
+				"order": 1
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 68472,
+				"known_for_department": "Acting",
+				"name": "Kappei Yamaguchi",
+				"original_name": "山口勝平",
+				"popularity": 5.115,
+				"profile_path": "/mJyxKRZxLv9D7LH5KcNSkjSKYOB.jpg",
+				"character": "Shinichi Kudo (voice)",
+				"credit_id": "5c42b70ac3a3687e9aefdbb8",
+				"order": 2
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 87582,
+				"known_for_department": "Acting",
+				"name": "Wakana Yamazaki",
+				"original_name": "山崎和佳奈",
+				"popularity": 2.1786,
+				"profile_path": "/1hBk3w3v1p1VuAHs5On9nvL2rX2.jpg",
+				"character": "Ran Mouri (voice)",
+				"credit_id": "5c42b7a39251411d860af543",
+				"order": 4
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 90133,
+				"known_for_department": "Acting",
+				"name": "Akemi Okamura",
+				"original_name": "岡村明美",
+				"popularity": 3.6821,
+				"profile_path": "/qEwVfsrA23SCzRZMSlghw2sHctQ.jpg",
+				"character": "Ran Mouri (voice)",
+				"credit_id": "6a071263a5f48be615202a22",
+				"order": 5
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 54690,
+				"known_for_department": "Acting",
+				"name": "Akira Kamiya",
+				"original_name": "神谷明",
+				"popularity": 1.7876,
+				"profile_path": "/tJRMwbWFObv03KhATALs0Xbbgq7.jpg",
+				"character": "Kogoro Mouri (voice)",
+				"credit_id": "5c42b73392514121570afc3f",
+				"order": 7
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 237076,
+				"known_for_department": "Acting",
+				"name": "Rikiya Koyama",
+				"original_name": "小山力也",
+				"popularity": 2.191,
+				"profile_path": "/hsZm87BORLpzhaycBaWOD5xpjVC.jpg",
+				"character": "Kogoro Mouri (voice)",
+				"credit_id": "5c42b77392514121520b0a0c",
+				"order": 8
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 40325,
+				"known_for_department": "Acting",
+				"name": "Megumi Hayashibara",
+				"original_name": "林原めぐみ",
+				"popularity": 5.5156,
+				"profile_path": "/3Alm4pmBIxpeeh0Sdippxdbkpne.jpg",
+				"character": "Ai Haibara (voice)",
+				"credit_id": "5c42b7d2925141214e0af62a",
+				"order": 9
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 142704,
+				"known_for_department": "Acting",
+				"name": "Kenichi Ogata",
+				"original_name": "緒方賢一",
+				"popularity": 4.0385,
+				"profile_path": "/iQLEawIP2593yrGy22GzLSpnfgl.jpg",
+				"character": "Hiroshi Agasa (voice)",
+				"credit_id": "5c42b824c3a3687ea0efe944",
+				"order": 11
+			},
+			{
+				"adult": true,
+				"gender": 1,
+				"id": 1244457,
+				"known_for_department": "Acting",
+				"name": "Yukiko Iwai",
+				"original_name": "岩居由希子",
+				"popularity": 0.0,
+				"profile_path": "/9JpPkRCd4eYzMDUex8LZtSvEbUm.jpg",
+				"character": "Ayumi Yoshida (voice)",
+				"credit_id": "5c42b8ce92514121460afa4e",
+				"order": 12
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 112278,
+				"known_for_department": "Acting",
+				"name": "Wataru Takagi",
+				"original_name": "高木渉",
+				"popularity": 2.0709,
+				"profile_path": "/amccLvyTl5JP7T9F05BojgQedNw.jpg",
+				"character": "Genta Kojima (voice)",
+				"credit_id": "5c42b8ea92514121490af614",
+				"order": 13
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 73044,
+				"known_for_department": "Acting",
+				"name": "Ikue Otani",
+				"original_name": "大谷育江",
+				"popularity": 4.6624,
+				"profile_path": "/my8LBLQ4MsK4hRz1PAATIqtieaI.jpg",
+				"character": "Mitsuhiko Tsuburaya (voice)",
+				"credit_id": "5c42b9170e0a26675319cdda",
+				"order": 14
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 87583,
+				"known_for_department": "Acting",
+				"name": "Chafurin",
+				"original_name": "茶風林",
+				"popularity": 1.2693,
+				"profile_path": "/kiPG7EtYWxkj78US35gnTIMq5Dn.jpg",
+				"character": "Juzo Megure (voice)",
+				"credit_id": "5c42b93c92514121570b00c2",
+				"order": 16
+			}
+		],
+		"crew": [
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 101917,
+				"known_for_department": "Writing",
+				"name": "Gosho Aoyama",
+				"original_name": "青山剛昌",
+				"popularity": 1.0387,
+				"profile_path": "/73PHaGBEPFDnf5JlkV6G8TiQmXN.jpg",
+				"credit_id": "6884bf53d9da18e5168a6aab",
+				"department": "Writing",
+				"job": "Original Story"
+			}
+		]
+	},
+	"episode_run_time": [25],
+	"external_ids": {
+		"imdb_id": "tt0131179",
+		"freebase_mid": "/m/07tt455",
+		"freebase_id": null,
+		"tvdb_id": 72454,
+		"tvrage_id": null,
+		"wikidata_id": "Q5363072",
+		"facebook_id": "conan.portal",
+		"instagram_id": "conan.official",
+		"twitter_id": "conan_anime1000"
+	},
+	"first_air_date": "1996-01-08",
+	"genres": [
+		{ "id": 16, "name": "Animation" },
+		{ "id": 80, "name": "Crime" },
+		{ "id": 9648, "name": "Mystery" },
+		{ "id": 35, "name": "Comedy" }
+	],
+	"homepage": "http://www.ytv.co.jp/conan",
+	"id": 30983,
+	"in_production": true,
+	"languages": ["ja"],
+	"last_air_date": "2026-10-31",
+	"last_episode_to_air": {
+		"id": 8038327,
+		"name": "The Café of Many Refusals",
+		"overview": "",
+		"vote_average": 0.0,
+		"vote_count": 0,
+		"air_date": "2026-11-07",
+		"episode_number": 1219,
+		"episode_type": "standard",
+		"production_code": "",
+		"runtime": 25,
+		"season_number": 1,
+		"show_id": 30983,
+		"still_path": "/tz0ofPCUfMJoacnvWTT92MDjg83.jpg"
+	},
+	"name": "Detective Conan",
+	"networks": [
+		{
+			"id": 569,
+			"logo_path": "/cIMyE9cw1W4kMFGxmC17HKTnVz9.png",
+			"name": "YTV",
+			"origin_country": "JP"
+		}
+	],
+	"next_episode_to_air": {
+		"id": 8092581,
+		"name": "Girls Day Mystery 5 (Part One)",
+		"overview": "",
+		"vote_average": 0.0,
+		"vote_count": 0,
+		"air_date": "2026-11-14",
+		"episode_number": 1220,
+		"episode_type": "standard",
+		"production_code": "",
+		"runtime": 25,
+		"season_number": 1,
+		"show_id": 30983,
+		"still_path": "/1uSFKIeZwDp1JdcXCOmm2ao81Sw.jpg"
+	},
+	"number_of_episodes": 1219,
+	"number_of_seasons": 1,
+	"origin_country": ["JP"],
+	"original_language": "ja",
+	"original_name": "名探偵コナン",
+	"overview": "The son of a world famous mystery writer, Jimmy Kudo, has achieved his own notoriety by assisting the local police as a student detective. He has always been able to solve the most difficult of criminal cases using his wits and power of reason.",
+	"popularity": 134.362,
+	"poster_path": "/iHfA63x7rFaWbP2C832uCe2r0zy.jpg",
+	"production_companies": [
+		{
+			"id": 7164,
+			"logo_path": "/vHsaqTkQ2ZTbdqrCA272YahoVlg.png",
+			"name": "TMS Entertainment",
+			"origin_country": "JP"
+		},
+		{ "id": 160520, "logo_path": null, "name": "Kyokuichi-Tokyo Movie", "origin_country": "JP" }
+	],
+	"production_countries": [{ "iso_3166_1": "JP", "name": "Japan" }],
+	"seasons": [
+		{
+			"air_date": "2000-01-01",
+			"episode_count": 35,
+			"id": 42559,
+			"name": "Specials",
+			"overview": "",
+			"poster_path": "/673EClC1zs7dJZYceI5bzwBjUiH.jpg",
+			"season_number": 0,
+			"vote_average": 0.0
+		},
+		{
+			"air_date": "1996-01-07",
+			"episode_count": 1221,
+			"id": 42543,
+			"name": "Season 1",
+			"overview": "Kudo Shinichi is a seventeen year-old high school detective whom people call the \"Modern Sherlock Holmes.\" However, one night after a date with his childhood sweetheart, Ran, Shinichi witnessed an illegal trade and, caught off his guard, was knocked unconscious and fed a drug that was supposed to kill him... but he woke up and found himself shrunken to a seven year-old. In order to track down the men who did this to him, Shinichi hid his identity and lived with Ran, whose father happened to be a hopeless detective, and with that came a series of murders and mysteries that he must solve.",
+			"poster_path": "/rRIEFvHRy01OYzmXQBbGeW0Qilc.jpg",
+			"season_number": 1,
+			"vote_average": 7.8
+		}
+	],
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "Japanese", "iso_639_1": "ja", "name": "日本語" }],
+	"status": "Returning Series",
+	"tagline": "One truth prevails.",
+	"translations": {
+		"translations": [
+			{
+				"iso_3166_1": "US",
+				"iso_639_1": "en",
+				"name": "English",
+				"english_name": "English",
+				"data": {
+					"name": "Detective Conan",
+					"overview": "The son of a world famous mystery writer, Jimmy Kudo, has achieved his own notoriety by assisting the local police as a student detective. He has always been able to solve the most difficult of criminal cases using his wits and power of reason.",
+					"homepage": "",
+					"tagline": "One truth prevails."
+				}
+			},
+			{
+				"iso_3166_1": "DE",
+				"iso_639_1": "de",
+				"name": "Deutsch",
+				"english_name": "German",
+				"data": {
+					"name": "Detektiv Conan",
+					"overview": "Conan Edogawa sieht aus wie ein Grundschüler. Tatsächlich ist er Shinichi Kudo, der 17-jährige Meisterdetektiv Japans, der von zwei Verbrechern vergiftet wurde. Er starb zwar nicht, entwickelte sich aber körperlich zum Kind zurück. Im Kopf ist er aber weiter der brillante Ermittler von einst und so stürzt er sich weiterhin auf geheimnisvolle Mordfälle.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "RU",
+				"iso_639_1": "ru",
+				"name": "Pусский",
+				"english_name": "Russian",
+				"data": {
+					"name": "Детектив Конан",
+					"overview": "Любому мужчине известно — либо девушкой занимайся, либо мировыми проблемами! Стоило 17-летнему Синъити Кудо на прогулке с подругой детства Ран Мори отвлечься на деяния подозрительных лиц, как злые бандиты схватили его и заставили принять странную пилюлю, которая обратила парня в 7-летнего мальчика. Чудом выживший Кудо бросился за помощью к другу, но даже гениальный профессор Агаса не смог ничего поделать. А уж когда в дом профессора ворвалась взволнованная Ран и спросила незнакомого ребенка, кто он такой, бедняга смог только скользнуть взглядом по книжным полкам и выдавить: «Эдогава… Конан». \n\n \n\n \n\nПойти против зловещего Чёрного Синдиката — не шутка, но герои и не думали отступать. Родители Кудо покинули страну, а малыш Конан поселился в семье Мори вместе с любимой Ран и ее отцом Когоро, бывшим полицейским. Благодаря собственному незаурядному уму, связям Когоро и технической поддержке профессора, мальчик-детектив вместе с друзьями активно включился в расследование преступлений и очищение Японии от криминала. Ну а главный вопрос сериала прост — сможет ли юный Эдогава побороть вражеские замыслы прежде, чем ненаглядная Ран сообразит, с кем живет под одной крышей?",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IT",
+				"iso_639_1": "it",
+				"name": "Italiano",
+				"english_name": "Italian",
+				"data": {
+					"name": "Detective Conan",
+					"overview": "Il giovane investigatore Shinichi Kudo viene avvelenato da una pericolosa organizzazione criminale, ma il farmaco invece di ucciderlo lo fa tornare bambino. Assunta l'identità di Conan Edogawa, inizia ad investigare sui suoi assalitori.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "FR",
+				"iso_639_1": "fr",
+				"name": "Français",
+				"english_name": "French",
+				"data": {
+					"name": "Détective Conan",
+					"overview": "Shinichi Kudo est un jeune lycéen de renom au Japon. Grâce à sa perspicacité et son intelligence, il est souvent amené à résoudre des affaires criminelles pour la police. Un jour, dans un parc d’attraction, il est témoin d’une étrange affaire qu'il voudra élucider : malgré son expérience et sa vigilance habituelle, Shinichi est enlevé par les membres d’une mystérieuse organisation, \"les hommes en noir\". Ces derniers lui font alors avaler une étrange pilule. Shinichi s'évanoui pour se réveiller dans le corps d'un enfant de 7 ans...",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "KR",
+				"iso_639_1": "ko",
+				"name": "한국어/조선말",
+				"english_name": "Korean",
+				"data": {
+					"name": "명탐정 코난",
+					"overview": "검은 조직의 약물에 당해서 초등학생의 몸이 된 고등학생 쿠도 신이치가 에도가와 코난이라는 가명을 사용하여 소꿉친구인 란의 아버지가 운영하는 탐정사무소에서 얹혀 살며 사건을 해결하는 이야기를 다루고 있다.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "BR",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"name": "Detetive Conan",
+					"overview": "Transformado em criança por uma substância misteriosa, o detetive adolescente Conan ajuda na solução de crimes complexos enquanto persegue os vilões que o envenenaram.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "CN",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "名侦探柯南",
+					"overview": "高中生侦探工藤新一与毛利兰在游乐园游玩时发现两个行动诡异的黑衣男子，便跟踪他们，不料被灌下一种叫「APTX4869」的神秘毒药，然而因为药物副作用，新一的身体竟回到孩童状态。为不使周围的人受到牵连，他化名为「江户川柯南」，寄住在毛利兰家中，用阿笠博士发明的手表型麻醉枪让毛利小五郎睡着，接着用蝴蝶结变声器模仿他的声音来进行推理，解决了许多案件，并一直寻找着黑衣组织的人的下落，希望有朝一日将其绳之以法，并变回原来的样子。",
+					"homepage": "",
+					"tagline": "身体虽然变小，头脑依旧灵活，无所不知的名侦探，真相只有一个！"
+				}
+			},
+			{
+				"iso_3166_1": "ES",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"name": "Detective Conan",
+					"overview": "Shinichi Kudo es un joven detective que consigue esclarecer cualquier misterio, por difícil que sea. Un día, nuestro protagonista descubre los maléficos planes de una peligrosa organización criminal y es envenenado. Sin embargo, el veneno no lo mata, sino que por accidente, lo encoge y lo convierte en un niño de apenas 6 años. Atrapado en este cuerpo, Shinichi, bajo el seudónimo de Conan Edogawa, deberá resolver los casos más difíciles mientras intenta encontrar un antídoto que lo devuelva a la normalidad y hacer lo posible para que su amiga, Ran Mouri, no sospeche quién es realmente el sabiondo Conan...",
+					"homepage": "",
+					"tagline": "La verdad prevalece."
+				}
+			},
+			{
+				"iso_3166_1": "TW",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "名偵探柯南",
+					"overview": "主角工藤新一原本是一位經常幫助警方破案的17歲高中生偵探；某一天和青梅竹馬的女朋友毛利蘭在熱帶樂園遊玩時目擊黑暗組織的可疑行動，獨自前往交易現場時卻遭另一名同夥從背後偷襲擊昏，並灌下代號為「APTX-4869」的神秘藥物。後來雖然倖免於死，但身體就此縮小為小學一年級時的模樣；情急之下化名為江戶川柯南，在鄰居阿笠博士的建議下，寄住在毛利蘭的父親毛利小五郎家中。同時他也憑藉著過人的推理能力，以及使用阿笠博士為他發明的各種道具，讓小五郎成為全國知名的名偵探，並藉由平時的案件調查努力找尋有關黑暗組織的線索。",
+					"homepage": "",
+					"tagline": "身體雖然變小，頭腦依舊靈活，無所不知的名偵探，真相只有一個！"
+				}
+			},
+			{
+				"iso_3166_1": "CZ",
+				"iso_639_1": "cs",
+				"name": "Český",
+				"english_name": "Czech",
+				"data": {
+					"name": "Detektiv Conan",
+					"overview": "Sledujeme osudy 17letého velice nadaného detektiva Shinichiho Kuda, který již na střední škole řeší případy, se kterými si neví rady ani policisté. Ale jen do doby, než ho při vyšetřování jednoho případu pachatel donutí spolknout jed APTX 4869. Shinichi sice neumře, ale jed způsobí, že se promění v 7leté dítě. Aby neprozradil, že je stále naživu, začne se vydávat za Conana Edogawu a snaží se přijít na to, jaká organizace vyrobila jed, který může za jeho omlazení. Žije u Kogoroua Mouriho, ne moc kvalitního detektiva, kterému Edogawa pomáhá bez Mouriho vědomí řešit případy spolu s jeho dcerou, která je zamilovaná do Shinichiho Kudoa.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "UA",
+				"iso_639_1": "uk",
+				"name": "Український",
+				"english_name": "Ukrainian",
+				"data": {
+					"name": "Детектив Конан",
+					"overview": "17-річний Шін'їчі Кудо, який захоплюється детективними історіями про Шерлока Холмса, допомагає поліції у вирішенні справ. Під час розслідування він потрапляє в пастку — члени Чорної організації змушують його проковтнути пігулку APTX 4869, маючи надію вбити його без ознак насильства. Проте в результаті рідкісного побічного ефекту Шін'їчі перетворюється на семирічного хлопчика Його близький друг, вчений-винахідник професор Аґаса, не може повернути його до попереднього стану. Кудо приховує свою справжню сутність, беручи псевдонім «Едоґава Конан», та починає розслідування справ Чорної організації. Шіхо Міяно, член Чорної організації та винахідник отрути APTX 4869, після смерті сестри намагається залишити синдикат, але потрапляє в полон. Намагаючись покінчити життя самогубством, вона ковтає пігулку й так само як і Кудо, перетворюється на дитину. Їй вдається втекти, а пізніше вона поступає до тієї самої школи, де навчається Конан. Конан допомагає агенту ЦРУ Хідемі Хондо на прізвисько Кір (яп. キール Кі:ру?), яка працює в Чорній організації під прикриттям. © Українська Вікіпедія",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "FI",
+				"iso_639_1": "fi",
+				"name": "suomi",
+				"english_name": "Finnish",
+				"data": {
+					"name": "Salapoliisi Conan",
+					"overview": "",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "BG",
+				"iso_639_1": "bg",
+				"name": "български език",
+				"english_name": "Bulgarian",
+				"data": { "name": "Детектив Конън", "overview": "", "homepage": "", "tagline": "" }
+			},
+			{
+				"iso_3166_1": "HU",
+				"iso_639_1": "hu",
+				"name": "Magyar",
+				"english_name": "Hungarian",
+				"data": {
+					"name": "Conan, a detektív",
+					"overview": "A főhős, Kudó Sinicsi, 17 éves középiskolai diák. Kitűnő tanuló, társaihoz képest kiemelkedő intelligenciával, aki szabadidejében a helyi rendőrség munkáját segíti. Egyik nyomozása során egy veszélyes bűnbandát próbál meg lefülelni, ám az akció balul sül el: csapdába csalják és leütik. Ellenfelei egy kísérleti mérget adnak neki, ami nem öli meg, csak visszaformálja testét 10 évvel korábbi állapotába.\n\nHogy elrejtse személyazonosságát támadói elől, felveszi az Edogava Conan nevet. Továbbá beköltözik gyerekkori barátjához, Móri Ranhoz, és a magánnyomozó apjához, Móri Kogoróhoz, annak reményében, hogy megtalálja a támadóit. Mivel nyomozói képességei nem változtak, tovább folytatja a bűnügyek megoldását, amiben a szomszédjától és barátjától, Agasza professzortól kapott szerkezetet segítik.\n\nMivel gyerekként nem vennék komolyan a felnőttek, általában Móri Kogoró nevében beszél (őt elaltatja és hangmodulátor segítségével utánozza a hangját). A babérokat így Kogoró aratja le, aminek köszönhetően az ő üzlete is fellendül.\n\nEmellett Conan-nek újra be kellett iratkoznia általános iskolába, ahol három osztálytársával alkotja az Ifi Detektívek-et.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "JP",
+				"iso_639_1": "ja",
+				"name": "日本語",
+				"english_name": "Japanese",
+				"data": {
+					"name": "",
+					"overview": "主人公、工藤新一（くどう しんいち）は、大人顔負けの推理力と洞察力を併せ持つ高校生探偵。ある日、新一は幼なじみの毛利蘭（もうり らん）と遊園地に遊びに行くが、そこで謎の組織の取引現場を目撃する。取引の模様を見るのに夢中になっていた新一は、組織のもう1人の仲間によって背後から殴り倒され、口封じのために毒薬を飲まされる。だが、組織も知らなかった薬の副作用によって神経を除いたすべての組織が退行し、小学1年生の体となってしまう。新一は、自分が生きていることを組織に知られたら再び命を狙われ、周囲の人間も巻き添えにしてしまうと隣人の阿笠博士（あがさはかせ）から助言を受ける。そして、正体を隠して江戸川コナン（えどがわ コナン）と名乗り、蘭の父・毛利小五郎（もうり こごろう）が探偵であることから謎の組織の情報が得られると考え、蘭の家に居候する。以後、コナンは周囲で次々に起きる事件を持ち前の推理力や、阿笠の開発した万能アイテムを駆使して解決していく。同時に、元の身体を取り戻すために謎に包まれた黒の組織の陰謀を追う。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "ES",
+				"iso_639_1": "ca",
+				"name": "Català",
+				"english_name": "Catalan",
+				"data": {
+					"name": "El detectiu Conan",
+					"overview": "En Shinichi Kudo és un detectiu adolescent que tot sovint ajuda la policia a resoldre casos. Durant una trobada amb la Ran Mouri, la seva amiga de la infància, en un parc d'atraccions, en Shinichi veu dos homes vestits de negre fent un intercanvi sospitós. El descobreixen i li fan prendre un verí experimental amb la intenció de matar-lo. Tanmateix, un efecte secundari fa que en Shinichi s'encongeixi i es converteixi en un nen petit. Amb l'ajuda del doctor Agasa, el seu veí inventor, adopta la identitat d'en Conan Edogawa, nom format a partir dels d'Arthur Conan Doyle i Edogawa Ranpo. Així vol evitar que els que l'han encongit, l'Organització dels Homes de Negre, el trobin i el matin a ell i als del seu voltant. Precisament per aquesta raó decideix no revelar la seva identitat a ningú més. Se'n va a viure a casa de la Ran i el seu pare, el mediocre detectiu privat Kogoro Mouri, on espera investigar sobre els que l'han encongit.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "PL",
+				"iso_639_1": "pl",
+				"name": "Polski",
+				"english_name": "Polish",
+				"data": {
+					"name": "Detektyw Conan",
+					"overview": "Shin'ichi Kudo ma siedemnaście lat i jest genialnym detektywem. Współpracuje z policją, pomagając im rozwiązywać niezwykle trudne sprawy. Po jednej z nich zostaje ogłuszony i zmuszony do spożycia nowej, eksperymentalnej trucizny. Shin'ichi nie umiera, lecz zmienia się w małego chłopca. Od tej chwili musi ukrywać swoją tożsamość. Przyjmuje imię Conan Edogawa: po Arthurze Conan Doyle'u i Rampo Edogawie, słynnym japońskim autorze powieści detektywistycznych.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IR",
+				"iso_639_1": "fa",
+				"name": "فارسی",
+				"english_name": "Persian",
+				"data": { "name": "کاراگاه کونان", "overview": "", "homepage": "", "tagline": "" }
+			},
+			{
+				"iso_3166_1": "TR",
+				"iso_639_1": "tr",
+				"name": "Türkçe",
+				"english_name": "Turkish",
+				"data": {
+					"name": "Dedektif Konan",
+					"overview": "Dünyaca ünlü bir gizem yazarı olan Jimmy Kudo'nun oğlu, yerel polise bir öğrenci dedektifi olarak yardım ederek ün kazandı. Zekasını ve muhakeme gücünü kullanarak her zaman en zor ceza davalarını çözebilmiştir. HD Kaliteli Olsun Hemde Tam Bolum Turkce Seslendirmeli Olsun",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "VN",
+				"iso_639_1": "vi",
+				"name": "Tiếng Việt",
+				"english_name": "Vietnamese",
+				"data": {
+					"name": "Thám Tử Lừng Danh Conan",
+					"overview": "Phim khởi đầu sau vụ việc xảy ra trong công viên giải trí nổi tiếng Tropical Land tại khu tàu lượn siêu tốc. Shinichi Kudo trong một lần đi chơi cùng người bạn thuở nhỏ Ran Mouri đã nhìn thấy hai người đàn ông có vẻ ngoài khả nghi được cho là nghi phạm trong vụ việc, nảy sinh nghi ngờ và quyết định bám theo để rồi phát hiện ra một cuộc giao dịch mờ ám. Trong một giây phút sơ suất khi theo dõi, anh bị tấn công bởi một trong người số họ có mật danh là Gin và đồng bọn của anh ta tên là Vodka. Sau khi đánh ngất, Gin đã ép anh uống một loại thuốc có tên gọi là APTX 4869 nhằm bịt miệng một lần và mãi mãi. Thực tế, loại thuốc này có một tác dụng phụ hiếm gặp, biến đổi cơ thể anh từ một cơ thể trưởng thành thành một đứa trẻ thay vì mất mạng. Sau sự cố quan trọng đó, anh quay về và lấy tên là Conan Edogawa. Shinichi Kudo đã cố gắng che giấu danh tính bí mật của mình với những người anh quan tâm và ở lại nhà của Thám tử Kogoro Mouri để có nhiều cơ hội tiếp cận và điều tra về tổ chức Áo Đen.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "TH",
+				"iso_639_1": "th",
+				"name": "ภาษาไทย",
+				"english_name": "Thai",
+				"data": {
+					"name": "ยอดนักสืบจิ๋วโคนัน",
+					"overview": "'คุโด้ ชินอิจิ' ยอดนักสืบม.ปลายที่ได้รับขนานนามว่า 'เชอร์ล็อก โฮล์มส์แห่งยุคเฮเซ' วันหนึ่งขณะที่เขาไปเที่ยวสวนสนุกพร้อมเพื่อนสาว 'โมริ รัน' เขาได้พบกับกลุ่มคนชุดดำที่น่าสงสัย ด้วยความไม่ระวังทำให้พวกมันจับได้และจับกรอกยาบางอย่างทำให้ตัวเขาหดเล็กลง เพื่อตามหาเบาะแสของพวกมัน ชินอิจิจึงต้องปิดบังตัวตนของตัวเองไว้และใช้ชื่อใหม่ว่า 'เอโดงาวะ โคนัน'",
+					"homepage": "",
+					"tagline": "ความจริงมีเพียงหนึ่งเดียวเท่านั้น"
+				}
+			},
+			{
+				"iso_3166_1": "SE",
+				"iso_639_1": "sv",
+				"name": "svenska",
+				"english_name": "Swedish",
+				"data": {
+					"name": "Mästerdetektiven Conan",
+					"overview": "Shinichi Kudo är en av Japans mest kända detektiver och en stor beundrare av Sherlock Holmes. Under ett spaningsarbete blir Shinichi överfallen av några mystiska män som tvingar i honom ett gift. Ett gift som krymper hans kropp till ett barns! I en sexårings kropp, med det tagna namnet Conan Edogawa, letar Shinichi efter sina förövare. Samtidigt fortsätter han att med sin skarpa hjärna lösa kniviga mordfall...",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SA",
+				"iso_639_1": "ar",
+				"name": "العربية",
+				"english_name": "Arabic",
+				"data": {
+					"name": "المحقق كونان",
+					"overview": "كودو شينتشي هو متحرٍ في المدرسة الثانوية ذاع صيته لحله العديد من القضايا الصعبة، وهو ابن مؤلف الروايات الغموض العالمي، كودو يوساكو. يتورط شينتشي في حادثة مع رجال منظمة غامضة ذوي رداء أسود، ويجبرونه على تجرع عقار غريب بقلص جسده، فيصبح إيدوغاوا كونان. على شينتشي الآن الانتقال لمنزل صديقة طفولته، موري ران، حيث يعمل والدها متحرياً لإيجاد معلومات عن أولئك الرجال.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "RO",
+				"iso_639_1": "ro",
+				"name": "Română",
+				"english_name": "Romanian",
+				"data": {
+					"name": "Detective Conan",
+					"overview": "Shinichi Kudou, un elev de liceu cu o înclinație formidabilă spre munca de detectiv, e cunoscut pentru faptul că a rezolvat cazuri complicate. Într-o zi, când Shinichi vede doi bărbați suspecți și decide să-i urmărească, devine martorul unei activități ilegale. Din păcate e observat, așa că bărbații folosesc pe el un drog experimental, cu scopul de a-l ucide. Însă spre surprinderea lui, Shinichi supraviețuiește, prins însă în corpul unui copil de șapte ani.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "ID",
+				"iso_639_1": "id",
+				"name": "Bahasa indonesia",
+				"english_name": "Indonesian",
+				"data": { "name": "Detektif Conan", "overview": "", "homepage": "", "tagline": "" }
+			},
+			{
+				"iso_3166_1": "MX",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"name": "Detective Conan",
+					"overview": "Shinichi Kudo es un joven detective que consigue esclarecer cualquier misterio, por difícil que sea. Un día, nuestro protagonista descubre los maléficos planes de una peligrosa organización criminal y es envenenado. Sin embargo, el veneno no lo mata, sino que por accidente, lo encoge y lo convierte en un niño de apenas 6 años. Atrapado en este cuerpo, Shinichi, bajo el seudónimo de Conan Edogawa, deberá resolver los casos más difíciles mientras intenta encontrar un antídoto que lo devuelva a la normalidad y hacer lo posible para que su amiga, Ran Mouri, no sospeche quién es realmente el sabiondo Conan...",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "HK",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "名偵探柯南",
+					"overview": "主角工藤新一原本是一位經常幫助警方破案的 17 歲高中生偵探；某一天和青梅竹馬毛利蘭在熱帶樂園遊玩時目擊黑暗組織的可疑行動，獨自前往交易現場時卻遭另一名同夥從背後偷襲擊昏，並灌下代號為「APTX-4869」的神秘藥物。\n\n後來雖然倖免於死，但身體就此縮小為小學一年級時的模樣；情急之下化名為江戶川柯南，在鄰居阿笠博士的建議下，寄住在毛利蘭的父親毛利小五郎家中。同時他也憑藉著過人的推理能力，以及使用阿笠博士為他發明的各種道具，讓小五郎成為全球知名的名偵探，並藉由平時的案件調查努力找尋有關黑暗組織的線索。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SK",
+				"iso_639_1": "sk",
+				"name": "Slovenčina",
+				"english_name": "Slovak",
+				"data": {
+					"name": "Detective Conan",
+					"overview": "Schinichi Kudo, 17-ročný stredoškolák, skvelý amatérsky detektív a futbalista, sa pri riešení prípadu zapletie s tajnou organizáciu Muži v čiernom. Pokúsia sa ho otráviť vývojovým jedom, no vedľajšie účinky ho neusmrtia, ale spôsobia jeho omladnutie asi o 10 rokov. Jeho vzrast a fyzická sila sa zmenšili, no jeho vedomosti a inteligencia ostávajú nezmenené. Aby ostal v utajení pred tajnou organizáciou vystupuje pod pseudonymom Conan Edogawa. Stáva sa opäť študentom základnej školy a spolu s tromi spolužiakmi vytvára skupinu Mladí detektíví. Jeho sused profesor Agasa preňho vyrába rôzne technické pomôcky ako transformátor hlasu, uspávacie hodinky alebo skateboard na solárny pohon, ktoré mu pomáhajú riešiť detektívne prípady.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "NL",
+				"iso_639_1": "nl",
+				"name": "Nederlands",
+				"english_name": "Dutch",
+				"data": {
+					"name": "",
+					"overview": "De zoon van een wereldberoemde mysterieschrijver, Jimmy Kudo, heeft zijn eigen bekendheid verworven door als studentdetective de lokale politie bij te staan. Met zijn verstand heeft hij altijd de moeilijkste strafzaken kunnen oplossen.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "ES",
+				"iso_639_1": "gl",
+				"name": "Galego",
+				"english_name": "Galician",
+				"data": {
+					"name": "O detective Conan",
+					"overview": "",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IL",
+				"iso_639_1": "he",
+				"name": "עִבְרִית",
+				"english_name": "Hebrew",
+				"data": {
+					"name": "הבלש קונאן",
+					"overview": "לאחר שנאלץ לבלוע גלולת רעל שהפכה אותו לילד קטן, קונאן, הנער הבלש, עוזר לפענח פשעים מסובכים ובאותו הזמן מנסה לאתר את הסוכנים המרושעים שהרעילו אותו.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "PT",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"name": "Detetive Conan",
+					"overview": "Filho de Jimmy Kudo, um escritor de mistério mundialmente famoso, conquistou a sua própria notoriedade ao auxiliar a polícia local como detetive estagiário. Sempre foi capaz de resolver os casos criminais mais difíceis utilizando a sua inteligência e poder de raciocínio.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "BE",
+				"iso_639_1": "nl",
+				"name": "Nederlands",
+				"english_name": "Dutch",
+				"data": {
+					"name": "",
+					"overview": "De zoon van een wereldberoemde mysterieschrijver, Jimmy Kudo, heeft zijn eigen bekendheid verworven door als student detective de lokale politie bij te staan. Met zijn verstand en verstand heeft hij altijd de moeilijkste strafzaken kunnen oplossen.",
+					"homepage": "",
+					"tagline": ""
+				}
+			}
+		]
+	},
+	"type": "Scripted",
+	"videos": {
+		"results": [
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "English Dub Trailer",
+				"key": "1xl1fQJbl1Y",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "69a4d3f002d0372d41e2b9ed",
+				"published_at": "2025-07-03T16:00:06.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Opening Theme 1 | Mune ga Dokidoki by  ↑THE HIGH-LOWS↓ [Subtitled]",
+				"key": "Q_0IkLznJzA",
+				"site": "YouTube",
+				"size": 480,
+				"type": "Opening Credits",
+				"official": true,
+				"id": "673d030378f0cd489173ac45",
+				"published_at": "2020-09-17T22:00:09.000Z"
+			}
+		]
+	},
+	"vote_average": 8.0,
+	"vote_count": 801
+}

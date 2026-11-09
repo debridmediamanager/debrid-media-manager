@@ -1,3 +1,6 @@
+import aliceInBorderland from '@/test/fixtures/metadata/tmdb-tv-110316-alice-in-borderland.json';
+import detectiveConan from '@/test/fixtures/metadata/tmdb-tv-30983-detective-conan.json';
+import theSimpsons from '@/test/fixtures/metadata/tmdb-tv-456-the-simpsons.json';
 import { describe, expect, it } from 'vitest';
 import titles from '../test/fixtures/placement/titles.json';
 import { titled, type PlacedRelease, type PlacementSources } from './placement';
@@ -97,5 +100,53 @@ describe('titled', () => {
 			skipped: true,
 		};
 		expect(await titled(waiting, sources)).toEqual(waiting);
+	});
+});
+
+describe('anime', () => {
+	// TMDB's `/tv/{id}` records with DMM's appends, captured 2026-11-09: what placement already reads
+	const shows: Record<number, unknown> = {
+		30983: detectiveConan,
+		456: theSimpsons,
+		110316: aliceInBorderland,
+	};
+	const captured = {
+		show: async (id: number) => shows[id] ?? null,
+		find: async (imdbId: string) => (titles as any)[`find/${imdbId}`] ?? null,
+	} as unknown as PlacementSources;
+	const show = (imdbId: string, tmdbId: number | null): PlacedRelease => ({
+		kind: 'tv',
+		imdbId,
+		tmdbId,
+		files: [{ path: 'Show.S01E01.mkv', ...episode, episode: 1 }],
+	});
+
+	it('answers true for a Japanese animated show: Animation, ja, JP', async () => {
+		expect((await titled(show('tt0131179', 30983), captured)).anime).toBe(true);
+	});
+
+	it('answers false for animation from elsewhere and for Japanese live action', async () => {
+		// The Simpsons: Animation, en, US
+		expect(await titled(show('tt0096697', 456), captured)).toHaveProperty('anime', false);
+		// Alice in Borderland: ja, JP, no Animation
+		expect(await titled(show('tt10795658', 110316), captured)).toHaveProperty('anime', false);
+	});
+
+	it('leaves it out where the show is unknown or its record could not be read', async () => {
+		expect(await titled(show('tt0131179', null), captured)).not.toHaveProperty('anime');
+		const unread = { ...captured, show: async () => null } as PlacementSources;
+		expect(await titled(show('tt0131179', 30983), unread)).not.toHaveProperty('anime');
+	});
+
+	it('never answers it for a movie', async () => {
+		const movie: PlacedRelease = {
+			kind: 'movie',
+			imdbId: 'tt29714073',
+			tmdbId: 1198654,
+			files: [{ path: 'Bad Apples 1080.mkv', ...episode, season: null, episode: null }],
+		};
+		const out = await titled(movie, captured);
+		expect(out.title).toBe('Bad Apples');
+		expect(out).not.toHaveProperty('anime');
 	});
 });

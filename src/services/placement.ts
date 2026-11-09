@@ -107,6 +107,12 @@ export interface PlacedRelease {
 	year?: number;
 	/** The show's TheTVDB id as TMDB records it, which Plex's show rows carry as `tvdb://`; absent for a movie or where TMDB has none. */
 	tvdbId?: number;
+	/**
+	 * Whether the show is Japanese animation, which zurg files under `__anime__`: TMDB's record
+	 * lists the Animation genre (16), `original_language` `ja` and `JP` among `origin_country`, all
+	 * three. Absent for a movie, or where the show's TMDB record could not be read.
+	 */
+	anime?: boolean;
 	files: PlacedFile[];
 	/** Not placed in this request's time budget, or a source could not be asked; ask again. */
 	skipped?: true;
@@ -244,15 +250,15 @@ export async function placeReleases(
 }
 
 /**
- * TMDB's title and first year of a movie or show, and a show's TVDB id, from the record
- * placement already read.
+ * TMDB's title and first year of a movie or show, and a show's TVDB id and whether it is anime,
+ * from the record placement already read.
  */
 async function tmdbTitle(
 	kind: 'movie' | 'tv',
 	imdbId: string | null | undefined,
 	tmdbId: number | null | undefined,
 	sources: PlacementSources
-): Promise<{ title?: string; year?: number; tvdbId?: number }> {
+): Promise<{ title?: string; year?: number; tvdbId?: number; anime?: boolean }> {
 	const record =
 		kind === 'tv'
 			? tmdbId == null
@@ -266,16 +272,26 @@ async function tmdbTitle(
 		String((kind === 'tv' ? record?.first_air_date : record?.release_date) ?? '').slice(0, 4)
 	);
 	const tvdbId = kind === 'tv' ? Number(record?.external_ids?.tvdb_id) : 0;
+	// all three, no fewer: The Simpsons is Animation from the US, Alice in Borderland Japanese live
+	// action; a record without `genres` (unread, or TMDB's 404 for a deleted show) answers nothing
+	const anime =
+		kind === 'tv' && Array.isArray(record?.genres)
+			? record.genres.some((genre: any) => genre?.id === 16) &&
+				record.original_language === 'ja' &&
+				Array.isArray(record.origin_country) &&
+				record.origin_country.includes('JP')
+			: undefined;
 	return {
 		...(typeof title === 'string' && title.trim()
 			? { title: title.trim(), ...(year > 0 ? { year } : {}) }
 			: {}),
 		...(Number.isInteger(tvdbId) && tvdbId > 0 ? { tvdbId } : {}),
+		...(anime === undefined ? {} : { anime }),
 	};
 }
 
 /**
- * The release's title and year (and a show's TVDB id), and those of each film placed inside it. Asked after placement,
+ * The release's title and year (and a show's TVDB id and anime verdict), and those of each film placed inside it. Asked after placement,
  * from the records placement already read, so what a release is placed as never depends on it.
  */
 export async function titled(

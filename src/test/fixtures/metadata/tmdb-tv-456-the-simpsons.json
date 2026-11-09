@@ -1,0 +1,1435 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"results": [
+			{ "iso_3166_1": "AL", "title": "Simpsonët", "type": "" },
+			{ "iso_3166_1": "AO", "title": "Os Simpson", "type": "" },
+			{ "iso_3166_1": "EG", "title": "Al-Shamshoon", "type": "" },
+			{ "iso_3166_1": "IL", "title": "הסימפסונים", "type": "Kan 11" },
+			{ "iso_3166_1": "KR", "title": "심슨네 가족들", "type": "" },
+			{ "iso_3166_1": "KR", "title": "심슨가족", "type": "" },
+			{ "iso_3166_1": "MZ", "title": "Os Simpson", "type": "" },
+			{ "iso_3166_1": "UZ", "title": "Simpsonlar oilasi", "type": "" }
+		]
+	},
+	"backdrop_path": "/jIArNHIekrCSVgdMbKPAXpPY03Y.jpg",
+	"content_ratings": {
+		"results": [
+			{ "descriptors": [], "iso_3166_1": "DE", "rating": "12" },
+			{ "descriptors": [], "iso_3166_1": "CA", "rating": "14+" },
+			{ "descriptors": [], "iso_3166_1": "AU", "rating": "M" },
+			{ "descriptors": [], "iso_3166_1": "FR", "rating": "12" },
+			{ "descriptors": [], "iso_3166_1": "RU", "rating": "18+" },
+			{ "descriptors": [], "iso_3166_1": "KR", "rating": "15" },
+			{ "descriptors": [], "iso_3166_1": "GB", "rating": "12" },
+			{ "descriptors": [], "iso_3166_1": "BR", "rating": "12" },
+			{ "descriptors": [], "iso_3166_1": "PT", "rating": "10AP" },
+			{ "descriptors": [], "iso_3166_1": "LT", "rating": "N-7" },
+			{ "descriptors": [], "iso_3166_1": "ES", "rating": "12" },
+			{ "descriptors": [], "iso_3166_1": "IN", "rating": "U/A 13+" },
+			{ "descriptors": [], "iso_3166_1": "IL", "rating": "12+" },
+			{ "descriptors": [], "iso_3166_1": "US", "rating": "TV-14" },
+			{ "descriptors": [], "iso_3166_1": "SG", "rating": "G" },
+			{ "descriptors": [], "iso_3166_1": "DK", "rating": "11" },
+			{ "descriptors": [], "iso_3166_1": "PH", "rating": "G" },
+			{ "descriptors": [], "iso_3166_1": "MX", "rating": "B" },
+			{ "descriptors": [], "iso_3166_1": "NL", "rating": "6" },
+			{ "descriptors": [], "iso_3166_1": "IT", "rating": "T" },
+			{ "descriptors": [], "iso_3166_1": "TR", "rating": "13+" },
+			{ "descriptors": [], "iso_3166_1": "MY", "rating": "U" },
+			{ "descriptors": [], "iso_3166_1": "AT", "rating": "12" },
+			{ "descriptors": [], "iso_3166_1": "IE", "rating": "12" },
+			{ "descriptors": [], "iso_3166_1": "CH", "rating": "12" },
+			{ "descriptors": [], "iso_3166_1": "PL", "rating": "12" },
+			{ "descriptors": [], "iso_3166_1": "RO", "rating": "12" },
+			{ "descriptors": [], "iso_3166_1": "FI", "rating": "S" }
+		]
+	},
+	"created_by": [
+		{
+			"id": 5741,
+			"credit_id": "5256bdc619c2956ff6001be4",
+			"name": "Matt Groening",
+			"original_name": "Matt Groening",
+			"gender": 2,
+			"profile_path": "/2HmAw3AN93DGESPi3ibLZgBa8cT.jpg"
+		}
+	],
+	"credits": {
+		"cast": [
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 198,
+				"known_for_department": "Acting",
+				"name": "Dan Castellaneta",
+				"original_name": "Dan Castellaneta",
+				"popularity": 1.5441,
+				"profile_path": "/AmeqWhP4A46AWkM4kVphg6jOTQX.jpg",
+				"character": "Homer Simpson / Abe Simpson / Barney Gumble / Krusty the Clown / Groundskeeper Willie / Mayor Quimby (voice)",
+				"credit_id": "5256bdc319c2956ff600157c",
+				"order": 0
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 199,
+				"known_for_department": "Acting",
+				"name": "Julie Kavner",
+				"original_name": "Julie Kavner",
+				"popularity": 1.7244,
+				"profile_path": "/84xSt9hHByPcL6fZy5M0BCGahlQ.jpg",
+				"character": "Marge Simpson / Patty Bouvier / Selma Bouvier / Jacqueline Bouvier (voice)",
+				"credit_id": "5256bdc319c2956ff60015a0",
+				"order": 1
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 200,
+				"known_for_department": "Acting",
+				"name": "Nancy Cartwright",
+				"original_name": "Nancy Cartwright",
+				"popularity": 1.644,
+				"profile_path": "/vHABhyLL9PkvEU7KqLf5K8AhOlS.jpg",
+				"character": "Bart Simpson / Maggie Simpson / Nelson Muntz / Ralph Wiggum (voice)",
+				"credit_id": "5256bdc319c2956ff6001554",
+				"order": 2
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 5586,
+				"known_for_department": "Acting",
+				"name": "Yeardley Smith",
+				"original_name": "Yeardley Smith",
+				"popularity": 1.8001,
+				"profile_path": "/9AjPwbb3uz4GfgOPBYsy2ILvwkB.jpg",
+				"character": "Lisa Simpson / Maggie Simpson (voice)",
+				"credit_id": "5256bdc319c2956ff60015ba",
+				"order": 3
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 5587,
+				"known_for_department": "Acting",
+				"name": "Hank Azaria",
+				"original_name": "Hank Azaria",
+				"popularity": 2.4507,
+				"profile_path": "/yFDw4b0jucuFWNnGcBPfpYUtn16.jpg",
+				"character": "Moe Szyslak / Chief Wiggum / Apu / Comic Book Guy / Carl Carlson / Superintendent Chalmers (voice)",
+				"credit_id": "5256bdc319c2956ff600167a",
+				"order": 4
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 6008,
+				"known_for_department": "Acting",
+				"name": "Harry Shearer",
+				"original_name": "Harry Shearer",
+				"popularity": 1.1282,
+				"profile_path": "/7PnGZGVKJNDTUv3DkbaMEnCseT0.jpg",
+				"character": "Ned Flanders / Mr. Burns / Smithers / Principal Skinner / Lenny Leonard (voice)",
+				"credit_id": "5cf20dbe9251411cdbba646e",
+				"order": 6
+			}
+		],
+		"crew": [
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 3716251,
+				"known_for_department": "Sound",
+				"name": "Kara Talve",
+				"original_name": "Kara Talve",
+				"popularity": 0.3145,
+				"profile_path": "/uKmrhx5uZnQBlRR3LNhD5PnfYO3.jpg",
+				"credit_id": "6abd9aa0ed27eea59d163b5a",
+				"department": "Sound",
+				"job": "Original Music Composer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 3149124,
+				"known_for_department": "Production",
+				"name": "Scott Muller",
+				"original_name": "Scott Muller",
+				"popularity": 0.2808,
+				"profile_path": null,
+				"credit_id": "6a907d79ec208f9a49ce810f",
+				"department": "Production",
+				"job": "Casting"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1216623,
+				"known_for_department": "Writing",
+				"name": "Dan Greaney",
+				"original_name": "Dan Greaney",
+				"popularity": 0.4587,
+				"profile_path": "/fn3iWvUVSqjYSYb2m4gKMWIEsVf.jpg",
+				"credit_id": "6a90690903dc67c310d019f1",
+				"department": "Production",
+				"job": "Consulting Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 165901,
+				"known_for_department": "Writing",
+				"name": "John Frink",
+				"original_name": "John Frink",
+				"popularity": 0.6832,
+				"profile_path": null,
+				"credit_id": "6abd9bc16ebf8f878c8f950c",
+				"department": "Production",
+				"job": "Executive Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 197,
+				"known_for_department": "Writing",
+				"name": "David Silverman",
+				"original_name": "David Silverman",
+				"popularity": 0.8474,
+				"profile_path": "/4ia152M03hntrS7FBHveRx2VeuP.jpg",
+				"credit_id": "6a906836742fbf1584d019ef",
+				"department": "Production",
+				"job": "Consulting Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 165843,
+				"known_for_department": "Writing",
+				"name": "Matt Selman",
+				"original_name": "Matt Selman",
+				"popularity": 0.2954,
+				"profile_path": "/hPhaKKXtgrrPySb8qw4YG474FkC.jpg",
+				"credit_id": "67b06023e5a6eebadf3625bc",
+				"department": "Production",
+				"job": "Executive Producer"
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 1216672,
+				"known_for_department": "Production",
+				"name": "Bonita Pietila",
+				"original_name": "Bonita Pietila",
+				"popularity": 0.4142,
+				"profile_path": "/wfVp4MbOeVj2kjwA96a8Co4AF0g.jpg",
+				"credit_id": "6a907ce2a47aeeca9ba23810",
+				"department": "Production",
+				"job": "Original Casting"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1213292,
+				"known_for_department": "Writing",
+				"name": "Rob LaZebnik",
+				"original_name": "Rob LaZebnik",
+				"popularity": 0.3762,
+				"profile_path": "/tRWCvP8S9QTh48HLTBqdOEoHNp1.jpg",
+				"credit_id": "69bdba088168c0edaf833206",
+				"department": "Production",
+				"job": "Co-Executive Producer"
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 1216674,
+				"known_for_department": "Production",
+				"name": "Denise Sirkot",
+				"original_name": "Denise Sirkot",
+				"popularity": 0.2239,
+				"profile_path": null,
+				"credit_id": "6abda1e1aa7c400673f4db90",
+				"department": "Production",
+				"job": "Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1175223,
+				"known_for_department": "Production",
+				"name": "Richard Raynis",
+				"original_name": "Richard Raynis",
+				"popularity": 0.4437,
+				"profile_path": null,
+				"credit_id": "5256bdcf19c2956ff600221a",
+				"department": "Production",
+				"job": "Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 3388,
+				"known_for_department": "Production",
+				"name": "James L. Brooks",
+				"original_name": "James L. Brooks",
+				"popularity": 1.4851,
+				"profile_path": "/mZBy39mFACFHMCqfbsN4Kc2qb2k.jpg",
+				"credit_id": "5256bdcc19c2956ff6002056",
+				"department": "Production",
+				"job": "Executive Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 5741,
+				"known_for_department": "Writing",
+				"name": "Matt Groening",
+				"original_name": "Matt Groening",
+				"popularity": 1.0788,
+				"profile_path": "/2HmAw3AN93DGESPi3ibLZgBa8cT.jpg",
+				"credit_id": "5256bdcd19c2956ff60020be",
+				"department": "Production",
+				"job": "Executive Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 57572,
+				"known_for_department": "Production",
+				"name": "Richard Sakai",
+				"original_name": "Richard Sakai",
+				"popularity": 0.3818,
+				"profile_path": "/lvvO9kRkatORzpbc1hEUBh42MsL.jpg",
+				"credit_id": "5256bdd019c2956ff600222c",
+				"department": "Production",
+				"job": "Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 7088,
+				"known_for_department": "Writing",
+				"name": "Sam Simon",
+				"original_name": "Sam Simon",
+				"popularity": 0.6666,
+				"profile_path": "/88bZbxTtkYbYaHayI2p0LODKQd.jpg",
+				"credit_id": "5256bdcd19c2956ff600208c",
+				"department": "Production",
+				"job": "Executive Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 531,
+				"known_for_department": "Sound",
+				"name": "Danny Elfman",
+				"original_name": "Danny Elfman",
+				"popularity": 1.8538,
+				"profile_path": "/bcpur9bF56nLxzFzZowipA2wZhy.jpg",
+				"credit_id": "60c132f7a284eb00298890dc",
+				"department": "Sound",
+				"job": "Main Title Theme Composer"
+			}
+		]
+	},
+	"episode_run_time": [],
+	"external_ids": {
+		"imdb_id": "tt0096697",
+		"freebase_mid": "/m/07c72",
+		"freebase_id": "/en/the_simpsons",
+		"tvdb_id": 71663,
+		"tvrage_id": 6190,
+		"wikidata_id": "Q886",
+		"facebook_id": "TheSimpsons",
+		"instagram_id": "thesimpsons",
+		"twitter_id": "thesimpsons"
+	},
+	"first_air_date": "1989-12-17",
+	"genres": [
+		{ "id": 16, "name": "Animation" },
+		{ "id": 35, "name": "Comedy" }
+	],
+	"homepage": "http://www.thesimpsons.com/",
+	"id": 456,
+	"in_production": true,
+	"languages": ["en"],
+	"last_air_date": "2026-11-01",
+	"last_episode_to_air": {
+		"id": 7871604,
+		"name": "The Kosmic Kruiser",
+		"overview": "Bart and Lisa break into Krustyland's most notorious failed attraction, only to discover that it hasn't been completely abandoned.",
+		"vote_average": 0.0,
+		"vote_count": 0,
+		"air_date": "2026-11-08",
+		"episode_number": 6,
+		"episode_type": "standard",
+		"production_code": "37ABF11",
+		"runtime": 21,
+		"season_number": 38,
+		"show_id": 456,
+		"still_path": "/dBZnWz1iJcXo7h6eDU30mKk0B9E.jpg"
+	},
+	"name": "The Simpsons",
+	"networks": [
+		{
+			"id": 19,
+			"logo_path": "/1DSpHrWyOORkL9N2QHX7Adt31mQ.png",
+			"name": "FOX",
+			"origin_country": "US"
+		}
+	],
+	"next_episode_to_air": {
+		"id": 7970233,
+		"name": "Dream Scenari-Moe",
+		"overview": "When Moe has trouble sleeping, he enrolls in a brand-new sleep study that gives him the greatest romantic comedy dreams of his life. But unbeknownst to him, his beautiful fantasy comes at a nightmarish price.",
+		"vote_average": 0.0,
+		"vote_count": 0,
+		"air_date": "2026-11-15",
+		"episode_number": 7,
+		"episode_type": "standard",
+		"production_code": "37ABF15",
+		"runtime": 21,
+		"season_number": 38,
+		"show_id": 456,
+		"still_path": null
+	},
+	"number_of_episodes": 816,
+	"number_of_seasons": 38,
+	"origin_country": ["US"],
+	"original_language": "en",
+	"original_name": "The Simpsons",
+	"overview": "Set in Springfield, the average American town, the show focuses on the antics and everyday adventures of the Simpson family; Homer, Marge, Bart, Lisa and Maggie, as well as a virtual cast of thousands. Since the beginning, the series has been a pop culture icon, attracting hundreds of celebrities to guest star. The show has also made name for itself in its fearless satirical take on politics, media and American life in general.",
+	"popularity": 1357.8334,
+	"poster_path": "/tf0CUEynk6GfmrlHIQKQ5mfFP5P.jpg",
+	"production_companies": [
+		{
+			"id": 18,
+			"logo_path": "/uqhagSwM7NAkQWVCQhKTyoqF8XH.png",
+			"name": "Gracie Films",
+			"origin_country": "US"
+		},
+		{
+			"id": 1556,
+			"logo_path": "/31h94rG9hzjprXoYNy3L1ErUya2.png",
+			"name": "20th Century Fox Television",
+			"origin_country": "US"
+		},
+		{
+			"id": 154887,
+			"logo_path": "/wLFPu95hIMmyLR5hdtvYaMuK0tG.png",
+			"name": "20th Television Animation",
+			"origin_country": "US"
+		},
+		{
+			"id": 236166,
+			"logo_path": "/8rFlu5iytnjsciYXZDw90ktllCI.png",
+			"name": "20th Television",
+			"origin_country": "US"
+		}
+	],
+	"production_countries": [{ "iso_3166_1": "US", "name": "United States of America" }],
+	"seasons": [
+		{
+			"air_date": "1987-04-19",
+			"episode_count": 82,
+			"id": 3581,
+			"name": "Specials",
+			"overview": "Special installments of the series.",
+			"poster_path": "/oICoFoPJuEk5VJbEP2HYLEmEQi3.jpg",
+			"season_number": 0,
+			"vote_average": 0.0
+		},
+		{
+			"air_date": "1989-12-17",
+			"episode_count": 13,
+			"id": 3582,
+			"name": "Season 1",
+			"overview": "",
+			"poster_path": "/t544zSFUNyvmyeP4sHotlcEX3zH.jpg",
+			"season_number": 1,
+			"vote_average": 7.1
+		},
+		{
+			"air_date": "1990-10-11",
+			"episode_count": 22,
+			"id": 3583,
+			"name": "Season 2",
+			"overview": "",
+			"poster_path": "/bRyDlUQQafSoIT052jpjLBMe8TH.jpg",
+			"season_number": 2,
+			"vote_average": 7.5
+		},
+		{
+			"air_date": "1991-09-19",
+			"episode_count": 24,
+			"id": 3584,
+			"name": "Season 3",
+			"overview": "",
+			"poster_path": "/9ghmIhWJJuTx3UHyfVVBXQoUGvI.jpg",
+			"season_number": 3,
+			"vote_average": 7.5
+		},
+		{
+			"air_date": "1992-09-24",
+			"episode_count": 22,
+			"id": 3585,
+			"name": "Season 4",
+			"overview": "",
+			"poster_path": "/voqu5a4drV1CXMjjZ0Mkw35n26l.jpg",
+			"season_number": 4,
+			"vote_average": 7.7
+		},
+		{
+			"air_date": "1993-09-30",
+			"episode_count": 22,
+			"id": 3586,
+			"name": "Season 5",
+			"overview": "",
+			"poster_path": "/9O7tIcS2KZk1ukMq3aOvoj8KIJZ.jpg",
+			"season_number": 5,
+			"vote_average": 7.8
+		},
+		{
+			"air_date": "1994-09-04",
+			"episode_count": 25,
+			"id": 3587,
+			"name": "Season 6",
+			"overview": "",
+			"poster_path": "/qD20BnTxIdF1rcnX4BARmFshzKA.jpg",
+			"season_number": 6,
+			"vote_average": 7.7
+		},
+		{
+			"air_date": "1995-09-17",
+			"episode_count": 25,
+			"id": 3588,
+			"name": "Season 7",
+			"overview": "",
+			"poster_path": "/blCeZS6BmN3wwmF40fuCZSeFwbB.jpg",
+			"season_number": 7,
+			"vote_average": 7.7
+		},
+		{
+			"air_date": "1996-10-27",
+			"episode_count": 25,
+			"id": 3589,
+			"name": "Season 8",
+			"overview": "",
+			"poster_path": "/xLebCxRHSwXBW39a4OLmMSGChLs.jpg",
+			"season_number": 8,
+			"vote_average": 7.7
+		},
+		{
+			"air_date": "1997-09-21",
+			"episode_count": 25,
+			"id": 3590,
+			"name": "Season 9",
+			"overview": "",
+			"poster_path": "/6PTYyLD8bSiNZf1PFdCQ9JyiIFW.jpg",
+			"season_number": 9,
+			"vote_average": 7.3
+		},
+		{
+			"air_date": "1998-08-23",
+			"episode_count": 23,
+			"id": 3591,
+			"name": "Season 10",
+			"overview": "",
+			"poster_path": "/A77xKuxA13aXA1mQd6YLAaTIErK.jpg",
+			"season_number": 10,
+			"vote_average": 7.2
+		},
+		{
+			"air_date": "1999-09-26",
+			"episode_count": 22,
+			"id": 3592,
+			"name": "Season 11",
+			"overview": "",
+			"poster_path": "/7lgnlOENoCdub15UijLKTHawyhm.jpg",
+			"season_number": 11,
+			"vote_average": 6.9
+		},
+		{
+			"air_date": "2000-11-01",
+			"episode_count": 21,
+			"id": 3593,
+			"name": "Season 12",
+			"overview": "",
+			"poster_path": "/jfxiyjRLoQq9LavlFNRBgjuweg5.jpg",
+			"season_number": 12,
+			"vote_average": 7.0
+		},
+		{
+			"air_date": "2001-11-06",
+			"episode_count": 22,
+			"id": 3594,
+			"name": "Season 13",
+			"overview": "",
+			"poster_path": "/xflc3aV1SbP2bGeZNuu4AG6cIqH.jpg",
+			"season_number": 13,
+			"vote_average": 6.6
+		},
+		{
+			"air_date": "2002-11-03",
+			"episode_count": 22,
+			"id": 3595,
+			"name": "Season 14",
+			"overview": "",
+			"poster_path": "/9IowK57TpeO09D4B46jd4J3wjPO.jpg",
+			"season_number": 14,
+			"vote_average": 6.7
+		},
+		{
+			"air_date": "2003-11-02",
+			"episode_count": 22,
+			"id": 3596,
+			"name": "Season 15",
+			"overview": "",
+			"poster_path": "/bmMwmEfwmziKzWP2jiU0GMw8yKd.jpg",
+			"season_number": 15,
+			"vote_average": 6.7
+		},
+		{
+			"air_date": "2004-11-07",
+			"episode_count": 21,
+			"id": 3597,
+			"name": "Season 16",
+			"overview": "",
+			"poster_path": "/ifjiG1gHGRyYmNDWRb9Ul9VCfEn.jpg",
+			"season_number": 16,
+			"vote_average": 6.5
+		},
+		{
+			"air_date": "2005-09-11",
+			"episode_count": 22,
+			"id": 3598,
+			"name": "Season 17",
+			"overview": "",
+			"poster_path": "/evIWfK3hKFIExETjv6L2YS9J8fw.jpg",
+			"season_number": 17,
+			"vote_average": 6.7
+		},
+		{
+			"air_date": "2006-09-10",
+			"episode_count": 22,
+			"id": 3599,
+			"name": "Season 18",
+			"overview": "",
+			"poster_path": "/kwb8AZAHyhn96dzn17mtTV3l8dl.jpg",
+			"season_number": 18,
+			"vote_average": 6.5
+		},
+		{
+			"air_date": "2007-09-23",
+			"episode_count": 20,
+			"id": 3600,
+			"name": "Season 19",
+			"overview": "",
+			"poster_path": "/nLKZJ1ozVvYFtaOynzkShE8wN4k.jpg",
+			"season_number": 19,
+			"vote_average": 6.6
+		},
+		{
+			"air_date": "2008-09-28",
+			"episode_count": 21,
+			"id": 3601,
+			"name": "Season 20",
+			"overview": "",
+			"poster_path": "/2CUdLX4K8fMlcdVPHUbciTYt4ri.jpg",
+			"season_number": 20,
+			"vote_average": 6.6
+		},
+		{
+			"air_date": "2009-09-27",
+			"episode_count": 23,
+			"id": 3602,
+			"name": "Season 21",
+			"overview": "",
+			"poster_path": "/fEykf9XN4Cn5tJ17pOD2PObdjoc.jpg",
+			"season_number": 21,
+			"vote_average": 6.5
+		},
+		{
+			"air_date": "2010-09-26",
+			"episode_count": 22,
+			"id": 3603,
+			"name": "Season 22",
+			"overview": "",
+			"poster_path": "/xUZeYO9NPkmXCcuRrr8PgXzk2Qd.jpg",
+			"season_number": 22,
+			"vote_average": 6.6
+		},
+		{
+			"air_date": "2011-09-25",
+			"episode_count": 22,
+			"id": 3604,
+			"name": "Season 23",
+			"overview": "",
+			"poster_path": "/wlQnKb3pHBxtMivCjcvM8TDpBbv.jpg",
+			"season_number": 23,
+			"vote_average": 6.6
+		},
+		{
+			"air_date": "2012-09-30",
+			"episode_count": 22,
+			"id": 3605,
+			"name": "Season 24",
+			"overview": "",
+			"poster_path": "/qGPFl3X6ukZ6fBQRiLxueLWQh9y.jpg",
+			"season_number": 24,
+			"vote_average": 6.6
+		},
+		{
+			"air_date": "2013-09-29",
+			"episode_count": 22,
+			"id": 3606,
+			"name": "Season 25",
+			"overview": "",
+			"poster_path": "/iwlh2yoia66MCaZEqybsLSt3OHa.jpg",
+			"season_number": 25,
+			"vote_average": 6.6
+		},
+		{
+			"air_date": "2014-09-28",
+			"episode_count": 22,
+			"id": 62103,
+			"name": "Season 26",
+			"overview": "",
+			"poster_path": "/9bGpb3vWygBogXpQBnTodFWaQte.jpg",
+			"season_number": 26,
+			"vote_average": 6.6
+		},
+		{
+			"air_date": "2015-09-27",
+			"episode_count": 22,
+			"id": 68067,
+			"name": "Season 27",
+			"overview": "",
+			"poster_path": "/aw26dkO0PnxD0EfYWXCMUQLFNbI.jpg",
+			"season_number": 27,
+			"vote_average": 6.6
+		},
+		{
+			"air_date": "2016-09-25",
+			"episode_count": 22,
+			"id": 80361,
+			"name": "Season 28",
+			"overview": "",
+			"poster_path": "/j4GZ2oH5PEWEyZkwuZ41OYLb30W.jpg",
+			"season_number": 28,
+			"vote_average": 6.3
+		},
+		{
+			"air_date": "2017-10-01",
+			"episode_count": 21,
+			"id": 91255,
+			"name": "Season 29",
+			"overview": "",
+			"poster_path": "/93JeevhHA93SpHZ5hxqJyOtB5Wf.jpg",
+			"season_number": 29,
+			"vote_average": 6.2
+		},
+		{
+			"air_date": "2018-09-30",
+			"episode_count": 23,
+			"id": 110088,
+			"name": "Season 30",
+			"overview": "",
+			"poster_path": "/d9svqHWZSCv5vQP5CbH6tLSuVyo.jpg",
+			"season_number": 30,
+			"vote_average": 6.0
+		},
+		{
+			"air_date": "2019-09-29",
+			"episode_count": 22,
+			"id": 131143,
+			"name": "Season 31",
+			"overview": "",
+			"poster_path": "/2IUYDBYYzjc5mqRZq26KgIActiy.jpg",
+			"season_number": 31,
+			"vote_average": 6.1
+		},
+		{
+			"air_date": "2020-09-27",
+			"episode_count": 22,
+			"id": 156684,
+			"name": "Season 32",
+			"overview": "",
+			"poster_path": "/y6EII2ExAXxFqM9hm6AURBjWkyu.jpg",
+			"season_number": 32,
+			"vote_average": 6.4
+		},
+		{
+			"air_date": "2021-09-26",
+			"episode_count": 22,
+			"id": 184349,
+			"name": "Season 33",
+			"overview": "",
+			"poster_path": "/tubgEpjTUA7t0kejVMBsNBZDarZ.jpg",
+			"season_number": 33,
+			"vote_average": 6.3
+		},
+		{
+			"air_date": "2022-09-25",
+			"episode_count": 22,
+			"id": 296972,
+			"name": "Season 34",
+			"overview": "",
+			"poster_path": "/zI3E2a3WYma5w8emI35mgq5Iurx.jpg",
+			"season_number": 34,
+			"vote_average": 6.9
+		},
+		{
+			"air_date": "2023-10-01",
+			"episode_count": 18,
+			"id": 336243,
+			"name": "Season 35",
+			"overview": "",
+			"poster_path": "/vHqeLzYl3dEAutojCO26g0LIkom.jpg",
+			"season_number": 35,
+			"vote_average": 7.7
+		},
+		{
+			"air_date": "2024-09-29",
+			"episode_count": 18,
+			"id": 384511,
+			"name": "Season 36",
+			"overview": "",
+			"poster_path": "/cxsN4ScIt28frDw0Br4Zr0QJDdr.jpg",
+			"season_number": 36,
+			"vote_average": 7.0
+		},
+		{
+			"air_date": "2025-09-28",
+			"episode_count": 15,
+			"id": 467353,
+			"name": "Season 37",
+			"overview": "",
+			"poster_path": "/uWpG7GqfKGQqX4YMAo3nv5OrglV.jpg",
+			"season_number": 37,
+			"vote_average": 7.2
+		},
+		{
+			"air_date": "2026-09-27",
+			"episode_count": 15,
+			"id": 529943,
+			"name": "Season 38",
+			"overview": "",
+			"poster_path": "/tnPBA5xCCR3EWgap15STjiD4MvO.jpg",
+			"season_number": 38,
+			"vote_average": 7.3
+		}
+	],
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "English", "iso_639_1": "en", "name": "English" }],
+	"status": "Returning Series",
+	"tagline": "Just a product of society that's lost its good manners.",
+	"translations": {
+		"translations": [
+			{
+				"iso_3166_1": "US",
+				"iso_639_1": "en",
+				"name": "English",
+				"english_name": "English",
+				"data": {
+					"name": "",
+					"overview": "Set in Springfield, the average American town, the show focuses on the antics and everyday adventures of the Simpson family; Homer, Marge, Bart, Lisa and Maggie, as well as a virtual cast of thousands. Since the beginning, the series has been a pop culture icon, attracting hundreds of celebrities to guest star. The show has also made name for itself in its fearless satirical take on politics, media and American life in general.",
+					"homepage": "http://www.thesimpsons.com/",
+					"tagline": "Just a product of society that's lost its good manners."
+				}
+			},
+			{
+				"iso_3166_1": "DE",
+				"iso_639_1": "de",
+				"name": "Deutsch",
+				"english_name": "German",
+				"data": {
+					"name": "Die Simpsons",
+					"overview": "Die Simpsons sind eine amerikanische Durchschnittsfamilie. Immer neue Geschichten gibt es über Homer, Marge, Bart, Lisa und Maggie und über die weiteren Bewohner von Springfield zu erzählen.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SK",
+				"iso_639_1": "sk",
+				"name": "Slovenčina",
+				"english_name": "Slovak",
+				"data": {
+					"name": "Simpsonovci",
+					"overview": "Simpsonovci je animovaný komediálny seriál zo života rodiny žijúcej na predmestí amerického fiktívneho malomesta Springfield. Jednotliví rodinní príslušníci sú paródiou na tradičných členov rodiny americkej strednej vrstvy. Seriál zosmiešňuje nielen vlastnosti charakterových stereotypov, ale aj americkú kultúru, spoločnosť, politiku a média.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "RU",
+				"iso_639_1": "ru",
+				"name": "Pусский",
+				"english_name": "Russian",
+				"data": {
+					"name": "Симпсоны",
+					"overview": "Семейство Симпсонов — папаша Гомер, мама Мардж, дочери Лиза и маленькая Мэгги, и несносный подросток Барт — проживают в среднестатистическом городке Спрингфилд. Гомер трудится на местной атомной станции, Мардж занимается домом и детьми, любознательная Лиза отлично учится в школе, а Барт постоянно попадает во всякие переделки.",
+					"homepage": "",
+					"tagline": "Просто продукт общества, утратившего хорошие манеры"
+				}
+			},
+			{
+				"iso_3166_1": "PT",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"name": "Os Simpsons",
+					"overview": "A família: Homer, o pai desajeitado que trabalha como inspector na fábrica nuclear de Springfield, cidade onde vivem; Marge, a sua mulher que tenta, a todo o custo, manter a paz entre todos os membros da família; Bart, o malicioso rapaz de 10 anos que é um autêntico diabinho; Lisa, a inteligente rapariga de 8 anos que toca saxofone e é a vegetariana da família e, por fim, a bebé Maggie que transmite as suas emoções através da sua chupeta.",
+					"homepage": "http://www.thesimpsons.com/",
+					"tagline": "Aos vossos lugares, preparar, D'oh!"
+				}
+			},
+			{
+				"iso_3166_1": "ES",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"name": "Los Simpson",
+					"overview": "El día a día de una peculiar familia formada por Homer, Marge, Bart, Maggie y Lisa Simpson y otros divertidos personajes de la localidad norteamericana de Springfield. Homer, el padre, es un desastroso inspector de seguridad de una central nuclear. Marge, la madre, es un ama de casa acostumbrada a soportar a su peculiar familia. Bart, de diez años, intenta divertirse con travesuras de todo tipo. Lisa es la más inteligente de la familia, y Maggie, la más pequeña, es un bebé que todavía no habla, pero que juega un importante papel.",
+					"homepage": "",
+					"tagline": "En sus puestos, listos, ¡ouch!"
+				}
+			},
+			{
+				"iso_3166_1": "IT",
+				"iso_639_1": "it",
+				"name": "Italiano",
+				"english_name": "Italian",
+				"data": {
+					"name": "I Simpson",
+					"overview": "I Simpson (The Simpsons) è una popolare sitcom animata creata dal fumettista statunitense Matt Groening alla fine degli anni ottanta per la Fox Broadcasting Company. È una parodia satirica della società e dello stile di vita statunitensi, personificati dalla famiglia protagonista, di cui fanno parte Homer, Marge e i loro tre figli Bart, Lisa e Maggie.\n\nAmbientato in una cittadina statunitense chiamata Springfield, lo show tratta in chiave umoristica molti aspetti della condizione umana, così come la cultura, la società in generale e la stessa televisione.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "FR",
+				"iso_639_1": "fr",
+				"name": "Français",
+				"english_name": "French",
+				"data": {
+					"name": "Les Simpson",
+					"overview": "Située à Springfield, ville américaine moyenne, la série se concentre sur les singeries et les aventures quotidiennes de la famille Simpson : Homer, Marge, Bart, Lisa et Maggie, ainsi que des milliers d'autres personnages.",
+					"homepage": "",
+					"tagline": "À vos marques, prêts, T'Oh! !"
+				}
+			},
+			{
+				"iso_3166_1": "CZ",
+				"iso_639_1": "cs",
+				"name": "Český",
+				"english_name": "Czech",
+				"data": {
+					"name": "Simpsonovi",
+					"overview": "Natvrdlý lenoch Homer, pedantská puťka Marge, drzounský Bart, přechytralá Líza a roztomilá Maggie – to jsou členové rodiny nejslavnějšího a nejpopulárnějšího animovaného seriálu Simpsonovi.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "BG",
+				"iso_639_1": "bg",
+				"name": "български език",
+				"english_name": "Bulgarian",
+				"data": {
+					"name": "Семейство Симпсън",
+					"overview": "Анимационният сериал се слави като най-достоверното и смешно телевизионно предаване, което изобразява американското семейство, но и също така представлява осмиване на много от стереотипите, които са създадени по адрес на американската нация, общество и култура.",
+					"homepage": "",
+					"tagline": "По местата, готови, мърмори!"
+				}
+			},
+			{
+				"iso_3166_1": "NL",
+				"iso_639_1": "nl",
+				"name": "Nederlands",
+				"english_name": "Dutch",
+				"data": {
+					"name": "The Simpsons",
+					"overview": "The Simpsons zijn een gezin van misfits wonende in Springfield. Vader Homer werkt op een kernreactor en heeft altijd pech. Marge is de supermama. Bart is een straatschoffie, Lisa het wonderkind en dan is er nog de speenzuigende baby Maggie.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "KR",
+				"iso_639_1": "ko",
+				"name": "한국어/조선말",
+				"english_name": "Korean",
+				"data": {
+					"name": "심슨 가족",
+					"overview": "1989년 12월 FOX에서 방영을 시작한 애니메이션. 미국의 스프링필드를 배경으로 먹는 걸 유난히 밝히고 게으르며 독특한 성격의 가장 호머, 항상 사고만 치고 다니는 남편과 아이들의 뒤치다꺼리를 도맡아 하는 엄마 마지, 하루라도 장난을 치지 않고 넘어가는 날이 없는 장난꾸러기 아들 바트, 나이에 비해 꽤나 어른스럽고 똑똑한 리사, 그리고 말은 한마디도 못하지만 의외의 대활약을 보여주는 막내 메기 등 각각의 개성 만점 가족 구성원들이 펼치는 극적인 하루하루를 그리고 있다.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "FI",
+				"iso_639_1": "fi",
+				"name": "suomi",
+				"english_name": "Finnish",
+				"data": {
+					"name": "Simpsonit",
+					"overview": "Simpsonit - englanniksi The Simpsons - on yhdysvaltalainen animaatiosarja ja yksi kaikkien aikojen tunnetuimmista kulttuuri-ilmiöistä maailmassa. Simpsonit on miljoonayleisönsä turvin pyörinyt kotimaassaan kauemmin kuin mikään muu primetime-viihdeohjelma, minkä lisäksi se on voittanut huimat määrät viihdealan palkintoja. Sarjan pohjalta on myös julkaistu yksi kokoillan elokuva, lukuisia sarjakuvateoksia ja kirjoja sekä valtava määrä muita oheistuotteita.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "HU",
+				"iso_639_1": "hu",
+				"name": "Magyar",
+				"english_name": "Hungarian",
+				"data": {
+					"name": "A Simpson család",
+					"overview": "Aki még nem ismeri a Simpson családot, annak fogalma sincs arról, hogy egy rajzfilm ilyen humoros is lehet!\n\nImmár több mint 10 éve fut az amerikai televízióban töretlen, sőt, egyre növekvő népszerűséggel a különös Simpson család hajmeresztően vicces hétköznapjait bemutató rajzfilmsorozat. Az atomerőműben dolgozó, kissé bugyuta Homer, felesége, a kontymagassági világrekordot tartó Marge, egyetlen szertelen fiúk, a mindig minden kópéságra kapható Bart, a család esze, a kis Lisa és a mindig láb alatt totyogó aprócska cumis Maggie népszerűsége mostanra olyan figurákéval vetekszik, mint Mickey Egér, Superman és Tapsi Hapsi! A siker nem véletlen, hiszen a nem csak rikító sárga külsejük miatt abnormális Simpsonék kalandjaik során a mindenki által jól ismert hétköznapi helyzeteket, a legismertebb sztárokat, politikusokat és a legnagyobb filmsikereket figurázzák ki rendkívül eredeti és harsány humorral.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IL",
+				"iso_639_1": "he",
+				"name": "עִבְרִית",
+				"english_name": "Hebrew",
+				"data": {
+					"name": "משפחת סימפסון",
+					"overview": "בעיר הבידיונית ספרינגפילד חיה משפחה חצי נורמלית; הומר, האב השתיין השמן שאוהב דונאטס, הוא לא בדיוק אב השנה. לעומתו, מארג', האם, היא אם טובה, והדבר שהכי מעניין אותה הוא דאגה לילדים. והילדים: בארט, הילד הבעייתי של המשפחה, תמיד מסתבך בצרות, ליסה, הבת החכמה של המשפחה, ויש את מגי - תינוקת ממוצעת. כך חייהם מתגלגלים, עם שלל דמויות נחמדות וחביבות בכל הרפתקה חדשה.",
+					"homepage": "",
+					"tagline": "סתם תוצר של חברה שאיבדה את הנימוסים הטובים שלה."
+				}
+			},
+			{
+				"iso_3166_1": "DK",
+				"iso_639_1": "da",
+				"name": "Dansk",
+				"english_name": "Danish",
+				"data": {
+					"name": "Simpsons",
+					"overview": "Amerikansk tegnefilmserie oprindeligt skabt af tegneren Matt Groening.\n\nSerien foregår i den amerikanske by Springfield, hvor vi møder familien Simpson, der består af Homer, Marge, Bart, Lisa og Maggie, samt et væld af andre personer, der bl.a. tæller bedstefar Simpson, klovnen Krusty, barejeren Moe Szyslak. drukbolden Barney Gumble, borgmesteren Quimby, politimesteren Clancy Wiggum, milliardæren Charles Montgomery Burns og hans højrehånd Waylon Smithers, naboen Nedward \"Ned\" Flanders samt skoleinspektøren Seymour Skinner.",
+					"homepage": "http://www.thesimpsons.com/",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "JP",
+				"iso_639_1": "ja",
+				"name": "日本語",
+				"english_name": "Japanese",
+				"data": {
+					"name": "ザ・シンプソンズ",
+					"overview": "ショーは、平均的なアメリカの町であるスプリングフィールドを舞台に、シンプソン家のふざけた日常の冒険に焦点を当てています。 ホーマー、マージ、バート、リサ、マギー、そして数千人の仮想キャスト。 当初から、このシリーズはポップ カルチャーのアイコンであり、何百人もの有名人がゲスト出演しています。 このショーは、政治、メディア、アメリカの生活全般に関する大胆不敵な風刺的な解釈でも名を馳せています。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "CN",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "辛普森一家",
+					"overview": "辛普森一家是来自美国普通的五口之家，荷马是春田镇核能工厂的安全检查员，母亲马芝曾经是一个很有思想的女性，自从嫁给荷马后渐渐地适应了主妇生活的定式。巴特是家中的长子，天性顽皮的巴特经常爱玩一些恶作剧，以至于经常惹麻烦。妹妹丽莎是一个很聪明的孩子，同时还是素食主义者，佛教徒，爵士乐。小女马姬是一个永远长不大的孩子。故事设定于虚构小镇春田镇，从许多角度对美国的文化与社会、人的条件和电视本身进行了幽默的嘲讽，经久不衰。",
+					"homepage": "",
+					"tagline": "不过是社会失礼风气下的产物罢了。"
+				}
+			},
+			{
+				"iso_3166_1": "GR",
+				"iso_639_1": "el",
+				"name": "ελληνικά",
+				"english_name": "Greek",
+				"data": {
+					"name": "",
+					"overview": "Οι Simpsons, η “αγαπημένη μας οικογένεια”, είναι δημιουργία του κoμικογράφου Matt Groening. Ξεκίνησαν ως διάλειμμα στο The Tracey Ullman Show τον Απρίλιο του 1987, και μετά από 3 σεζόν απέκτησαν το δικό τους ημίωρο show. Η οικογένεια Simpson ζει στο Springfield, μια μέση αμερικανική πόλη, και αποτελείται από τους γνωστούς πλέον Homer, τον ήσυχο πατέρα που δουλεύει σε ένα πυρηνικό εργοστάσιο που ενδιαφέρεται περισσότερο για τα κέρδη παρά για την ασφάλεια, την υπερ-μητέρα Marge, τον γιό Bart, αιώνιο βαρεμένο, την 8χρονη κόρη Lisa, σοβαρή και μετρημένη, και τη Maggie, το μωρό που όλοι ψιλοξεχνάνε. Οι καθημερινές τους περιπέτειες, η πλήρης απουσία πολιτικής ορθότητας και η συνεχής σάτιρα της επικαιρότητας και του αμερικανικού τρόπου ζωής κατέστησαν τους Simpsons εικονικές φιγούρες του σύγχρονου παγκόσμιου πολιτισμού.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "TR",
+				"iso_639_1": "tr",
+				"name": "Türkçe",
+				"english_name": "Turkish",
+				"data": {
+					"name": "Simpsonlar",
+					"overview": "Bu animasyon komedi dizisi, Springfield'de diziye adını veren aileye odaklanmaktadır. Baba Homer, tipik bir aile babası değildir. Nükleer santralde çalışarak ailesine liderlik etmeye çalışır ancak çoğu zaman ailesi onu yönetir. Sevgi dolu, mavi saçlı aile reisi anne Marge, sorun çıkaran oğlu Bart, çok başarılı kızı Lisa ve bebek Maggie, ailenin diğer üyeleridir.",
+					"homepage": "",
+					"tagline": "Başlangıç işareti, hazır ol, vay canına!"
+				}
+			},
+			{
+				"iso_3166_1": "LV",
+				"iso_639_1": "lv",
+				"name": "Latviešu",
+				"english_name": "Latvian",
+				"data": {
+					"name": "Simpsoni",
+					"overview": "Simpsoni ir amerikāņu animācijas seriāls, ko radījis Mets Grenings. Seriālā tiek satīriski apspēlēta vidusmēra amerikāņu ģimenes dzīve. Ģimenes galva ir Homērs, viņš ir precējies ar sievu Mārdžu un viņiem abiem ir trīs bērni: Bārts, Liza un Megija. Seriāla darbība norisinās izdomātā pilsētā - Springfīldā un tajā tiek 'izsmieta' amerikāņu kultūra, sabiedrība, televīzija.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "RO",
+				"iso_639_1": "ro",
+				"name": "Română",
+				"english_name": "Romanian",
+				"data": {
+					"name": "Familia Simpson",
+					"overview": "Această comedie animată prezintă familia omonimă din Springfield. Capul familiei Simpson, Homer, nu e un familist tipic. Angajat la o centrală nucleară, încearcă să-și conducă familia, dar adesea constată îl conduc ei. Familia o include pe mama iubitoare cu păr albastru, Marge, pe fiul poznaș, Bart, pe fiica elitistă, Lisa, și pe bebelușa Maggie.",
+					"homepage": "",
+					"tagline": "Doar un produs al unei societăți care și-a pierdut bunele maniere."
+				}
+			},
+			{
+				"iso_3166_1": "PL",
+				"iso_639_1": "pl",
+				"name": "Polski",
+				"english_name": "Polish",
+				"data": {
+					"name": "Simpsonowie",
+					"overview": "Marge, Homer, Bart, Lisa i Maggie Simpsonowie mieszkają na przedmieściu Springfield, przeciętnego amerykańskiego miasteczka. Ich przygody jednak do przeciętnych nie należą...",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SE",
+				"iso_639_1": "sv",
+				"name": "svenska",
+				"english_name": "Swedish",
+				"data": {
+					"name": "Simpsons",
+					"overview": "Den amerikanska tecknade serien The Simpsons handlar om de vardagliga problemen och äventyren hos den minst sagt annorlunda familjen med samma namn i den fiktiva staden Springfield. Familjens medlemmar består av den lite korkade pappan Homer, sonen och busfröet Bart, den smarta dottern Lisa, mamma Marge, babyn Maggie och deras vänner.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "LT",
+				"iso_639_1": "lt",
+				"name": "Lietuvių",
+				"english_name": "Lithuanian",
+				"data": {
+					"name": "Simpsonai",
+					"overview": "Nepaprastos šeimynos – Houmerio, Mardžės, Barto, Lizos ir Megės nepaprastas gyvenimas Springfilde ir nuotykiai tęsiasi.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "EE",
+				"iso_639_1": "et",
+				"name": "Eesti",
+				"english_name": "Estonian",
+				"data": {
+					"name": "Simpsonid",
+					"overview": "Seriaal räägib Simpsonite perekonnast, kes elavad väikeses linnas, nimega Springfield. Perekonda kuulub õllearmastajast pereisa Homer, korralik perenaine Marge ja 3 last - Bart, Lisa ja Maggie.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IR",
+				"iso_639_1": "fa",
+				"name": "فارسی",
+				"english_name": "Persian",
+				"data": {
+					"name": "سیمپسون‌ها",
+					"overview": "سیمپسون ها:  نمایش که در اسپرینگفیلد، یک شهر متوسط آمریکایی اتفاق می‌افتد، بر ماجراهای مضحک و روزمره خانواده سیمپسون متمرکز است. هومر، مارج، بارت، لیزا و مگی، و همچنین هزاران بازیگر مجازی. از ابتدا، این سریال نماد فرهنگ پاپ بوده و صدها نفر از افراد مشهور را به ستاره مهمان جذب کرده است. این نمایش همچنین با برداشت طنز بی باک خود از سیاست، رسانه و زندگی آمریکایی به طور کلی نام خود را به دست آورده است.به صورت قسمت های مجزّا و معمولاً بدون دنباله ارائه می شود. اما به طور کلی، موضوع آن درباره خانواده ای آمریکائی از طبقه کارگر است که سعی می شود نماینده طیف وسیعی از جامعه آمریکا باشد.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "UA",
+				"iso_639_1": "uk",
+				"name": "Український",
+				"english_name": "Ukrainian",
+				"data": {
+					"name": "Сімпсони",
+					"overview": "Американський анімаційний серіал, створений Меттом Ґрейнінґом для компанії Fox. Мультсеріал — сатирична пародія на стиль життя середнього класу США, втілена в сім'ї Сімпсонів, яка складається з Гомера, Мардж, Барта, Ліси та Меґґі. Більшість подій відбуваються у вигаданому містечку Спрингфілді. Шоу висміює численні аспекти життя людей, американську культуру, суспільство, навіть американське телебачення.",
+					"homepage": "",
+					"tagline": "На старт, увага, доу!"
+				}
+			},
+			{
+				"iso_3166_1": "BR",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"name": "Os Simpsons",
+					"overview": "Uma animação sobre uma típica família dos Estados Unidos. Homer é o pai de família nada saudável ou inteligente, que adora beber cerveja. Marge é a esposa e mãe de família dedicada. Bart é o filho de 10 anos, que não leva a escola a sério e tem orgulho disso. Lisa é a garota de 8 anos, um gênio não apreciado. E Maggie é a bebê que não larga a chupeta.",
+					"homepage": "http://www.thesimpsons.com/",
+					"tagline": "A comédia que nunca envelhece."
+				}
+			},
+			{
+				"iso_3166_1": "LB",
+				"iso_639_1": "lb",
+				"name": "",
+				"english_name": "Letzeburgesch",
+				"data": {
+					"name": "D'Simpsons",
+					"overview": "Setzt zu Springfield, der duerchschnëttlecher amerikanescher Stad, fokusséiert d'Show op Antik an alldeeglech Abenteuer vun der Simpson Famill; Homer, Marge, Bart, Lisa a Maggie, souwéi e virtuelle Besetzung vun Dausende. Zënter dem Ufank war d'Serie eng Popkultur Ikon, déi Honnerte vu Prominenz zu Gaaschtstär zitt. D'Show huet sech och Numm gemaach a senger angschtloser satirescher Iwwerleeung iwwer Politik, Medien an amerikanescht Liewen am Allgemengen.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "ID",
+				"iso_639_1": "id",
+				"name": "Bahasa indonesia",
+				"english_name": "Indonesian",
+				"data": {
+					"name": "Simpsons",
+					"overview": "Bertempat di Springfield, kota rata-rata di Amerika, pertunjukan ini berfokus pada kejenakaan dan petualangan sehari-hari keluarga Simpson; Homer, Marge, Bart, Lisa dan Maggie, serta ribuan pemain virtual. Sejak awal, serial ini telah menjadi ikon budaya pop, menarik ratusan selebriti menjadi bintang tamu. Acara ini juga menjadi terkenal karena satirnya yang tak kenal takut terhadap kehidupan politik, media, dan Amerika secara umum.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "RS",
+				"iso_639_1": "sr",
+				"name": "Srpski",
+				"english_name": "Serbian",
+				"data": {
+					"name": "Симпсонови",
+					"overview": "Серија је сатирична пародија начина живота америчког средњег сталежа, представљеног кроз живот породице из наслова.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "TW",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "辛普森家庭",
+					"overview": "辛普森一家是居住在美國「心臟地帶」類型的小鎮內糊的一個典型家庭。家中的父親荷馬擔任著內糊核電站的安全檢查員——這個職位與他粗心、弄臣式的個性顯得很不相稱。他的妻子瑪姬·辛普森，是一位典型的美國式主婦和母親。他們有著三個孩子：十歲的大兒子巴特是一個麻煩製造者；八歲早熟的女兒麗莎是一位積極行動主義者；小女兒麥姬是一個幾乎不會說話，只能用吸橡皮奶嘴進行交流的嬰兒。這家人養有一條名叫勇哥的狗，以及一隻名叫雪球二世的貓。兩隻寵物都曾在幾集動畫中充當中心角色。儘管度過了許多次節日或生日這樣的年度重要事件，辛普森一家人都沒有因為真實歲月的流逝而逐漸老去，其面貌與他們在1980年代末露面時並無二樣。\n\n《辛普森家庭》有許多怪僻的次要角色：同事、老師、親朋好友、地方名人。格朗寧起初只是打算讓這些角色出現一次，讓他們充當笑料製造者，或用來填補小鎮需要的一些功能。不過，大部分的這些角色後來都被保留了下來，其形象也得到擴充，甚至不少角色在後來還成為了幾集動畫的中心人物。",
+					"homepage": "",
+					"tagline": "讓功能失調恢復樂趣！"
+				}
+			},
+			{
+				"iso_3166_1": "TH",
+				"iso_639_1": "th",
+				"name": "ภาษาไทย",
+				"english_name": "Thai",
+				"data": {
+					"name": "เดอะ ซิมป์สันส์",
+					"overview": "เนื้อเรื่องตลกเสียดสีวิถีชีวิตชนชั้นกลางของชาวอเมริกัน โดยผ่านตัวละครในครอบครัวคือ โฮเมอร์, มาร์จ, บาร์ต, ลิซา และ แม็กกี โดยมีเนื้อหาเกิดที่เมืองที่ชื่อ สปริงฟิลด์ ที่ถากถางมุมมองของสังคมมนุษย์ วัฒนธรรมอเมริกัน สังคมทั้งหมดและวงการโทรทัศน์",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "HR",
+				"iso_639_1": "hr",
+				"name": "Hrvatski",
+				"english_name": "Croatian",
+				"data": {
+					"name": "Simpsoni",
+					"overview": "Simpsoni žive u gradiću Springfieldu. Homer je sigurnosni inspektor u tamošnjoj nuklearnoj elektrani. Marge pokušava održati mir u obitelji. Bart je nestašan desetogodišnjak. Osmogodišnja Lisa je inteligentni vegetarijanac koji svira saksofon, a djetešce Maggie emocije izražava pomoću dudice. Gledatelji su također zavoljeli bogat i ponekad osobenjački svijet ostalih stanovnika Springfielda. Nekoliko je glumaca dalo glasove Simpsonima i drugim stanovnicima Springfielda: Homeru, Krustyju, Djedici. Barneyju, gradonačelniku Quimbyju i podvorniku Willieju (Dan Castellaneta); Marge, Patty i Selmi (Julie Kavner); Bartu, Nelsonu i Ralphu Wiggumu (Nancy Cartwright); Lisi (Yeardley Smith); Moeu, Apuu, šefu policije Wiggumu, profesoru Frinku, skupljaču stripova i dr. Nicku Rivieri (Hank Azaria); te g. Burnsu, Smithersu, Nedu Flandersu, predstojniku škole Skinneru, velečasnom Lovejoyu i Kentu Brockmanu (Harry Shearer).",
+					"homepage": "",
+					"tagline": "Priprema, pozor, d'oh!"
+				}
+			},
+			{
+				"iso_3166_1": "MX",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"name": "Los Simpson",
+					"overview": "La familia Simpson (Homero, Marge, Bart, Lisa y Maggie), y un reparto virtual de miles, viven aventuras cotidianas en Springfield, una ciudad estadounidense promedio.",
+					"homepage": "http://www.thesimpsons.com/",
+					"tagline": "En sus marcas, listos, d'oh!"
+				}
+			},
+			{
+				"iso_3166_1": "CA",
+				"iso_639_1": "fr",
+				"name": "Français",
+				"english_name": "French",
+				"data": {
+					"name": "Les Simpson",
+					"overview": "Prenant place à Springfield, la ville américaine moyenne, la série se concentre sur les singeries et les aventures quotidiennes de la famille Simpson; Homer, Marge, Bart, Lisa et Maggie, ainsi qu'une distribution milliers de personnages. Depuis le début, la série est une icône de la culture pop, attirant des centaines de célébrités en invitation. L'émission s'est également fait un nom dans son interprétation satirique intrépide de la politique, des médias et de la vie américaine en général.",
+					"homepage": "",
+					"tagline": "À vos marques, prêt, D'Oh !"
+				}
+			},
+			{
+				"iso_3166_1": "NO",
+				"iso_639_1": "no",
+				"name": "Norsk",
+				"english_name": "Norwegian",
+				"data": {
+					"name": "The Simpsons",
+					"overview": "Familien Simpson er en satirisk fremstilling av den amerikanske familien. Vi følger dem i deres ikke særlig normale liv. Pappa Homer har dårlige manerer, arbeider i et kjernekraftverk og er ganske dum, men han elsker sin familie over alt på jord. Sønnen Bart er konstant på jakt etter nye apestreker, mens datteren Lisa er den intelligente. Baby Maggie kommuniserer.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SA",
+				"iso_639_1": "ar",
+				"name": "العربية",
+				"english_name": "Arabic",
+				"data": {
+					"name": "آل سيمبسون",
+					"overview": "في سبرينغفيلد، البلدة الأمريكية النموذجية، تمضي حياة عائلة سيمبسون بين المقالب والمواقف اليومية: هومر ومارج وبارت وليزا وماغي، ومعهم جمهور لا ينتهي من أهل البلدة. أيقونة في ثقافة البوب استضافت مئات المشاهير، وصنعت اسمها بسخرية جريئة من السياسة والإعلام والحياة الأمريكية عموماً.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "UZ",
+				"iso_639_1": "uz",
+				"name": "ozbek",
+				"english_name": "Uzbek",
+				"data": {
+					"name": "Simpsonlar",
+					"overview": "Multfilm — amerikaliklar hayoti tarziga parodiya. Simpsonlar oilasi beshta a’zodan iborat: otasi Gomer, oilaning onasi Marj, ularning qizlari, Liza va Meggi, va chidab bo‘lmaydigan darajadagi o‘smir Bart.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IN",
+				"iso_639_1": "ta",
+				"name": "தமிழ்",
+				"english_name": "Tamil",
+				"data": {
+					"name": "தி சிம்ப்சன்ஸ்",
+					"overview": "சராசரி அமெரிக்க நகரமான ஸ்பிரிங்ஃபீல்டில் அமைக்கப்பட்ட இந்த நிகழ்ச்சி சிம்ப்சன் குடும்பத்தின் வினோதங்கள் மற்றும் அன்றாட சாகசங்களை மையமாகக் கொண்டுள்ளது; ஹோமர், மார்ஜ், பார்ட், லிசா மற்றும் மேகி, அத்துடன் ஆயிரக்கணக்கான மெய்நிகர் நடிகர்கள். ஆரம்பத்தில் இருந்தே, இந்தத் தொடர் ஒரு பாப் கலாச்சார சின்னமாக இருந்து வருகிறது, இது நூற்றுக்கணக்கான பிரபலங்களை விருந்தினர் நட்சத்திரமாக ஈர்க்கிறது. அரசியல், ஊடகங்கள் மற்றும் பொதுவாக அமெரிக்க வாழ்க்கையை அதன் அச்சமற்ற நையாண்டி எடுப்பதில் இந்த நிகழ்ச்சி தனக்கென ஒரு பெயரை உருவாக்கியுள்ளது.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "HK",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "阿森一族",
+					"overview": "《阿森一族》是馬特·格朗寧為美國霍士廣播公司創作的一部成人動畫情景喜劇。該劇透過展現荷馬、瑪吉、巴特、麗莎和奶咀一家五口的日常生活，諷刺性地描繪了美國中產階級的生活方式。空間設定於虛構小鎮春田市的《阿森一族》，幽默地嘲諷了美國文化、社會、電視節目和人生百態。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "VN",
+				"iso_639_1": "vi",
+				"name": "Tiếng Việt",
+				"english_name": "Vietnamese",
+				"data": {
+					"name": "Gia Đình Simpson",
+					"overview": "",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "GE",
+				"iso_639_1": "ka",
+				"name": "ქართული",
+				"english_name": "Georgian",
+				"data": {
+					"name": "სიმფსონები",
+					"overview": "ჩვეულებრივი ამერიკული ქალაქი, სპრინგფილდი. სიმპსონების ოჯახის ყოვედღიურობა. მსოფლიოში ყველაზე ცნობილი ანიმაციური ოჯახი: მამა გომერი, დედა მარჯი, ქალიშვილები ლიზა და მეგი, და აუტანელი მოზარდი ბარტი.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "ES",
+				"iso_639_1": "ca",
+				"name": "Català",
+				"english_name": "Catalan",
+				"data": {
+					"name": "Els Simpson",
+					"overview": "Els Simpson és una sèrie de televisió d'animació creada per Matt Groening. Inicialment produïda als Estats Units d'Amèrica per Fox Broadcasting Company, en format de comèdia, s'ha emès en diversos països del món. La sèrie és una sàtira de la societat estatunidenca que narra la vida i el dia a dia d'una família de classe mitjana d'aquest país (els membres són Homer, Marge, Bart, Lisa i Maggie Simpson) que viuen en un poble fictici anomenat Springfield.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "BE",
+				"iso_639_1": "nl",
+				"name": "Nederlands",
+				"english_name": "Dutch",
+				"data": {
+					"name": "",
+					"overview": "The Simpsons zijn een gezin van misfits wonende in Springfield. Vader Homer werkt op een kernreactor en heeft altijd pech. Marge is de supermama. Bart is een straatschoffie, Lisa het wonderkind en dan is er nog de speenzuigende baby Maggie.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SG",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": { "name": "辛普森一家", "overview": "", "homepage": "", "tagline": "" }
+			},
+			{
+				"iso_3166_1": "SI",
+				"iso_639_1": "sl",
+				"name": "Slovenščina",
+				"english_name": "Slovenian",
+				"data": {
+					"name": "Simpsonovi",
+					"overview": "Serija, umeščena v mestece Springfield, spremlja vsakodnevne prigode družine Simpson, ki jo sestavljajo oče Homer, mati Marge ter njuni otroci Bart, Lisa in Maggie. Serija je satira na vse poglede življenja povprečne ameriške družine, kulture, družbe in celo na televizijo samo.",
+					"homepage": "",
+					"tagline": ""
+				}
+			}
+		]
+	},
+	"type": "Scripted",
+	"videos": {
+		"results": [
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "32 Seasons | The Simpsons | Disney+",
+				"key": "_jgYEYERYFQ",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "6373c5d021621b00cd6438a9",
+				"published_at": "2021-09-10T17:00:31.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Simpsons",
+				"key": "DX1iplQQJTo",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Opening Credits",
+				"official": false,
+				"id": "5336dbb79251417db4000ed8",
+				"published_at": "2010-10-10T14:20:47.000Z"
+			}
+		]
+	},
+	"vote_average": 8.027,
+	"vote_count": 11156
+}
