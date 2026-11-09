@@ -42,11 +42,14 @@ export function placementMisses(
 		const id = missId(release);
 		const identified =
 			answer.kind !== null && (answer.imdbId !== null || answer.tmdbId !== null);
-		const unplaced = !identified
-			? answer.files
-			: answer.kind === 'tv'
-				? answer.files.filter((file) => file.episode === null && file.kind !== 'movie')
-				: [];
+		// a series DMM numbers itself (One Pace) places the files it gives an episode of it
+		const unplaced = answer.series
+			? answer.files.filter((file) => !file.series)
+			: !identified
+				? answer.files
+				: answer.kind === 'tv'
+					? answer.files.filter((file) => file.episode === null && file.kind !== 'movie')
+					: [];
 		const row = releases.get(id);
 		releases.set(id, {
 			id,

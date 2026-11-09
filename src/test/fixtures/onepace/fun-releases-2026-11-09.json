@@ -1,0 +1,3205 @@
+{
+	"about": "fun's RD zurg (~/zurg/data/*.zurgtorrent), 2026-11-09: every release named [One Pace], as zurg asks /api/sponsor/place about it (name, hash, the IMDb id zurg holds, each selected file's name and folder).",
+	"releases": [
+		{
+			"name": "[One Pace] Paced One Piece - Thriller Bark [720p]",
+			"hash": "2c83d7ba67a243de5995f687073787341c69958c",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 01 [720p][30D0916C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 02 [720p][EA100F0C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 03 [720p][C2AAAAF7].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 04 [720p][EB4DA5F4].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 05 [720p][5B4DF29D].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 06 [720p][60E33665].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 07 [720p][1E847368].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 08 [720p][694AD702].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 09 [720p][19D3B6A3].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 10 [720p] [38BBF05C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 11 [720p][D538CFD7].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 12 [720p][8B836836].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 13 [720p][3AEE90B8].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 14 [720p][7CAE5640].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 15 [720p][A9784E2B].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 16 [720p][EF1D7B5F].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 17 [720p][6AAC9B33].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 18 [720p][2295F0A1].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 19 [720p][099FB95D].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 20 [720p][AD2D4BCD].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 21 [v2][720p][22E58F96].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Paced One Piece - Thriller Bark Episode 22 [720p][F23079ED].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace] Specials",
+			"hash": "a3b449356e0e57fac111b7382d55d0a1fa5ddafb",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace] Straw Hat Theatre [720p][415455AE].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][0] Strong World [480p][76B2C869].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][236-262 Covers] Wapol's Omnivorous Hurrah [720p][05BE81E6].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][823-824] Whole Cake Island 01 [720p][EDB72EE5].mp4",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace] Tournament of Power.mp4",
+			"hash": "bc6a301a348a78348aa65b4ec28320e450f2768a",
+			"imdbId": "tt1820720",
+			"files": [
+				{
+					"path": "[One Pace] Tournament of Power.mp4",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][1-7] Romance Dawn [1080p]",
+			"hash": "d42d71270da00dd578e34fb28517a5fffe4d2cfb",
+			"imdbId": "tt13689380",
+			"files": [
+				{
+					"path": "[One Pace][1] Romance Dawn 01 [1080p][FB72C13F].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][2] Romance Dawn 02 [1080p][667784D2].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][3-5] Romance Dawn 03 [1080p][8F0ACC44].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][5-7] Romance Dawn 04 [1080p][9A48E3EB].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][101-105] Reverse Mountain [1080p]",
+			"hash": "08545ca4151f7d4d7b86ecb9f485c3557551321f",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][101-103] Reverse Mountain 01 [1080p][CE01A533].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][103-105] Reverse Mountain 02 [1080p][5195CDBC].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][1058-1059] Egghead 01 [1080p][CA3F14A8].mkv",
+			"hash": "aa40134492bb9d86eb4b70632047db0e799d66d6",
+			"imdbId": "tt6620238",
+			"files": [
+				{
+					"path": "[One Pace][1058-1059] Egghead 01 [1080p][CA3F14A8].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][1059-1060] Egghead 02 [1080p][D511F339].mkv",
+			"hash": "56fc879f3e8a417a5be04a08204e48102e44fd82",
+			"imdbId": "tt6620238",
+			"files": [
+				{
+					"path": "[One Pace][1059-1060] Egghead 02 [1080p][D511F339].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][1060-1061] Egghead 03 [1080p][80D0E5B3].mkv",
+			"hash": "b262e72a16f164e9b0b9cdc9fcb6e6cc70134357",
+			"imdbId": "tt6620238",
+			"files": [
+				{
+					"path": "[One Pace][1060-1061] Egghead 03 [1080p][80D0E5B3].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][1062-1063] Egghead 04 [1080p][B3774055].mkv",
+			"hash": "01b48276fc39dac7f6d08837353ff67a8556d73a",
+			"imdbId": "tt6620238",
+			"files": [
+				{
+					"path": "[One Pace][1062-1063] Egghead 04 [1080p][B3774055].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][1066] Egghead 06 [1080p][C9D76388].mkv",
+			"hash": "ba8347a2c4303e2070629e68bb52d042b2f614f9",
+			"imdbId": "tt6620238",
+			"files": [
+				{
+					"path": "[One Pace][1066] Egghead 06 [1080p][C9D76388].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][1067-1068] Egghead 07 [1080p][A7AD080A].mkv",
+			"hash": "e1b53addffcf226c562ab1e8d132d96ca8a66b4f",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][1067-1068] Egghead 07 [1080p][A7AD080A].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][1069-1070] Egghead 08 [1080p][126ECF70].mkv",
+			"hash": "2e592be4503d0e8907efe7966563dd506ed5ccb6",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][1069-1070] Egghead 08 [1080p][126ECF70].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][1071-1072] Egghead 09 [1080p][ED808618].mkv",
+			"hash": "753b9af2423cc906060764c410baff0229c4f73b",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][1071-1072] Egghead 09 [1080p][ED808618].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][1073-1074] Egghead 10 [1080p][65405475].mkv",
+			"hash": "bcb19b0a92f6c7d9e3589e13f9f620cee59c3b8b",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][1073-1074] Egghead 10 [1080p][65405475].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][1075-1076] Egghead 11 [1080p][59087997].mkv",
+			"hash": "03147795ce7fc827790b0c1f0b4cad96035de89e",
+			"imdbId": "tt6620238",
+			"files": [
+				{
+					"path": "[One Pace][1075-1076] Egghead 11 [1080p][59087997].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][1077-1078] Egghead 12 [1080p][33FFA63D].mkv",
+			"hash": "94a11b62d949a061e51df0d5b13c6a00d64c7d87",
+			"imdbId": "tt6620238",
+			"files": [
+				{
+					"path": "[One Pace][1077-1078] Egghead 12 [1080p][33FFA63D].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][1079] Egghead 13 Extended [1080p][88019227].mkv",
+			"hash": "3743a9e6228181c83209835712a40c764e6660d5",
+			"imdbId": "tt6620238",
+			"files": [
+				{
+					"path": "[One Pace][1079] Egghead 13 Extended [1080p][88019227].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][1082-1083] Egghead 15 [1080p][B9537A27].mkv",
+			"hash": "4a60ad632a7b0e83751ca6b5202208e38f864bea",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][1082-1083] Egghead 15 [1080p][B9537A27].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][115-129] Little Garden [480p]",
+			"hash": "43093df501144a675d8f6a177ab1fdaf5e3c9328",
+			"imdbId": "tt0119389",
+			"files": [
+				{
+					"path": "[One Pace][115-117] Little Garden 01 [480p][C622761D].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][117-118] Little Garden 02 [480p][DD135B35].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][119-122] Little Garden 03 [480p][B5D2AC50].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][123-126] Little Garden 04 [480p][A6D860C5].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][127-129] Little Garden 05 [480p][08B90884].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][129-132] Drum Island 01 [1080p][FD2B4F32].mkv",
+			"hash": "00d22c441e261ae3005e32736f2154b1156f5c48",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][129-132] Drum Island 01 [1080p][FD2B4F32].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][132-135] Drum Island 02 [1080p][8FDCC832].mkv",
+			"hash": "6c31b3c4ffb98f61dc9dee31e7162755f467b748",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][132-135] Drum Island 02 [1080p][8FDCC832].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][136-139] Drum Island 03 [1080p][2971EF62].mkv",
+			"hash": "998c73c81bed577dcb03a5cbed5b0c9dc0fd1ff2",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][136-139] Drum Island 03 [1080p][2971EF62].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][139-140] Drum Island 04 [1080p][902076E8].mkv",
+			"hash": "d7b48a58f44b5a5f6c0f9709976629fa5efe17a8",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][139-140] Drum Island 04 [1080p][902076E8].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][141-145] Drum Island 05 [1080p][E7044DBE].mkv",
+			"hash": "d12effbcce07e669155bec4c2aaccaffaff790eb",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][141-145] Drum Island 05 [1080p][E7044DBE].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][145-148] Drum Island 06 [1080p][A5145C90].mkv",
+			"hash": "b6d264228c2fb62b413d9f73a9d546495fc35069",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][145-148] Drum Island 06 [1080p][A5145C90].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][149-152] Drum Island 07 [1080p][B1D913B9].mkv",
+			"hash": "22b7b193c5354584a48966995c3966fdb2c1d338",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][149-152] Drum Island 07 [1080p][B1D913B9].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][153-155, 142] Drum Island 08 [1080p][9794072D].mkv",
+			"hash": "a464ed705df4d6e5c82182720fcb680aff526df9",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][153-155, 142] Drum Island 08 [1080p][9794072D].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][155-157] Arabasta 01 [1080p][BB1D093C].mkv",
+			"hash": "5ecc22012328be9e0cc0cc33f4290291effd6a84",
+			"imdbId": "tt31228002",
+			"files": [
+				{
+					"path": "[One Pace][155-157] Arabasta 01 [1080p][BB1D093C].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][157-159] Arabasta 02 [1080p][E4BA97D6].mkv",
+			"hash": "6f145e0cf8063ea47b1fe875c2fad96368ea32cb",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][157-159] Arabasta 02 [1080p][E4BA97D6].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][159, 161-162] Arabasta 03 [1080p][73003149].mkv",
+			"hash": "4f3742283679c68ee64ccf1a7fbf71f1acb600da",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][159, 161-162] Arabasta 03 [1080p][73003149].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][159-164] Arabasta 04 [1080p][FF1E1708].mkv",
+			"hash": "48f7e9efea3a6c5a03a7f7cb9a609beb67aab9de",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][159-164] Arabasta 04 [1080p][FF1E1708].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][164-166] Arabasta 05 [1080p][E9E8604E].mkv",
+			"hash": "1f6197f6cf42220277a4edef259b74bd93ee5c4d",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][164-166] Arabasta 05 [1080p][E9E8604E].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][167-168] Arabasta 06 [1080p][9FC7EE52].mkv",
+			"hash": "32d0972a4b2a6bdfee33da8667e2bd4f6931cece",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][167-168] Arabasta 06 [1080p][9FC7EE52].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][169-170] Arabasta 07 [1080p][CFA091A0].mkv",
+			"hash": "c3d949cf5c3229da4e355867599bea0933a23ec2",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][169-170] Arabasta 07 [1080p][CFA091A0].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][171-174] Arabasta 08 [1080p][726FD61C].mkv",
+			"hash": "66df46977cd5206f7684963ac3af20ada7dfdea4",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][171-174] Arabasta 08 [1080p][726FD61C].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][175-178] Arabasta 09 [1080p][A905C964].mkv",
+			"hash": "56cd276106efe594f9722a27e63b4de25f6a0248",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][175-178] Arabasta 09 [1080p][A905C964].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][179-182] Arabasta 10 [1080p][4B8CC4E7].mkv",
+			"hash": "48869d544c38227988763c9b0835e421bdaeeed1",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][179-182] Arabasta 10 [1080p][4B8CC4E7].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][183-186] Arabasta 11 [1080p][C51CB284].mkv",
+			"hash": "5b9eb12d70a9290c0684cf72282dba53c8f56e35",
+			"imdbId": "tt11725450",
+			"files": [
+				{
+					"path": "[One Pace][183-186] Arabasta 11 [1080p][C51CB284].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][187-189] Arabasta 12 [1080p][FF26917C].mkv",
+			"hash": "1ef273f42db2c163f28c1a740498281a571e3604",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][187-189] Arabasta 12 [1080p][FF26917C].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][189-192] Arabasta 13 [1080p][58649840].mkv",
+			"hash": "b5a0d39d7b1eda73ccb3d70ddfa608e7834b84ce",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][189-192] Arabasta 13 [1080p][58649840].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][192-195] Arabasta 14 [1080p][0F3017E1].mkv",
+			"hash": "d8950e8a9686737e1a9966fbe44fa30eeaec0668",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][192-195] Arabasta 14 [1080p][0F3017E1].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][196-198] Arabasta 15 [1080p][2AD355ED].mkv",
+			"hash": "3a5927bc4599b185209cc79936265d57d95196c2",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][196-198] Arabasta 15 [1080p][2AD355ED].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][199-201] Arabasta 16 [1080p][5E646504].mkv",
+			"hash": "3cf270e6d4bc31029e40eb275f49a2121092c62b",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][199-201] Arabasta 16 [1080p][5E646504].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][202-205] Arabasta 17 [1080p][B5A40AD2].mkv",
+			"hash": "f16a5459f018ba802342c64e424ff005cdb47115",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][202-205] Arabasta 17 [1080p][B5A40AD2].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][206-210] Arabasta 18 [1080p][E4F68497].mkv",
+			"hash": "b5f43863a0a59e5cdbc3d6a36afad34f4ab4923f",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][206-210] Arabasta 18 [1080p][E4F68497].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][211-213] Arabasta 19 [1080p][845C0D1D].mkv",
+			"hash": "cf9b6a373f58b82bff412b2db09b72a1a3418543",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][211-213] Arabasta 19 [1080p][845C0D1D].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][214-216] Arabasta 20 [1080p][0C5E9A92].mkv",
+			"hash": "8bba964bcef29bebf7846d56b58fa92e903c6e51",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][214-216] Arabasta 20 [1080p][0C5E9A92].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][217-218] Arabasta 21 [1080p][EAA06203].mkv",
+			"hash": "5154d5a2f0abd8371ffb3ab7d0efe4f6f96d728a",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][217-218] Arabasta 21 [1080p][EAA06203].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][218-220] Jaya 01 [1080p][2BBCD106].mkv",
+			"hash": "d8e0cdb4a611e3fc0869c5689f84cd7414a4e3ca",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][218-220] Jaya 01 [1080p][2BBCD106].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][22,42] Gaimon 01 [1080p][9AA8B637].mkv",
+			"hash": "02819eb325abf0147963479bd7320590d6c641de",
+			"imdbId": "tt31228002",
+			"files": [
+				{
+					"path": "[One Pace][22,42] Gaimon 01 [1080p][9AA8B637].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][221-224] Jaya 02 [1080p][6DAB82A3].mkv",
+			"hash": "78a190b5e79d1155f9c5d2affd30cf73c3bb2f5e",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][221-224] Jaya 02 [1080p][6DAB82A3].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][225-226] Jaya 03 [1080p][B4950266].mkv",
+			"hash": "fb777e9dadcf29a80900d8846e64ab33f9df6077",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][225-226] Jaya 03 [1080p][B4950266].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][227-228] Jaya 04 [1080p][86DC8F38].mkv",
+			"hash": "0ee092c2048a597a5e14cbc7c41f3d0696d9821a",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][227-228] Jaya 04 [1080p][86DC8F38].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][229-230] Jaya 05 [1080p][E468A31D].mkv",
+			"hash": "b53ea9000dd3db38573e917b2109163568532797",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][229-230] Jaya 05 [1080p][E468A31D].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][23-25] Syrup Village 01 [1080p][0354B45C].mkv",
+			"hash": "51bacd4ea63c5b03a684ec50ab5ad5f3e97235f3",
+			"imdbId": "tt31228002",
+			"files": [
+				{
+					"path": "[One Pace][23-25] Syrup Village 01 [1080p][0354B45C].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][23-41] Syrup Village [480p]",
+			"hash": "6c29dedaa9bef46c73a04ebe2c8c9761b92cb9eb",
+			"imdbId": "tt31228002",
+			"files": [
+				{
+					"path": "[One Pace][23-25] Syrup Village 01 [480p][B19F374A].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][26-27] Syrup Village 02 [480p][7EE6C65F].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][28-30] Syrup Village 03 [480p][C2C0A86A].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][31-34] Syrup Village 04 [480p][FD399699].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][35-39] Syrup Village 05 [480p][5498C538].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][40-41] Syrup Village 06 [480p][D1742A98].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][231-232] Jaya 06 [1080p][8783E1B0].mkv",
+			"hash": "fc3b4c4e7449117776308505b8497ecbabf4784c",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][231-232] Jaya 06 [1080p][8783E1B0].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][232-234] Jaya 07 [1080p][580A0C3B].mkv",
+			"hash": "2f0b8368eb300acc4863283dbb5f21054a81adbe",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][232-234] Jaya 07 [1080p][580A0C3B].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][235-236] Jaya 08 [1080p][FA2E5ADD].mkv",
+			"hash": "abb69044f4a1806092b9a213669c5edb4f0bb92a",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][235-236] Jaya 08 [1080p][FA2E5ADD].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][237-238] Skypiea 01 [1080p][CA5552FC].mkv",
+			"hash": "e915f2fdd84e6b482417b25021a1c9a184b8658b",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][237-238] Skypiea 01 [1080p][CA5552FC].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][239-240] Skypiea 02 [1080p][EB6E8FF5].mkv",
+			"hash": "5d265cdb96a14dee3bd4d4684b273ff892ec6c9f",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][239-240] Skypiea 02 [1080p][EB6E8FF5].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][241-242] Skypiea 03 [1080p][A50167E6].mkv",
+			"hash": "5d49f234c0533738ca9d60d1c3c6ffac194e52a9",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][241-242] Skypiea 03 [1080p][A50167E6].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][243-244] Skypiea 04 [1080p][C6120876].mkv",
+			"hash": "aa34040a41bbdd8b165cfbc81dbe4e72f59e676e",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][243-244] Skypiea 04 [1080p][C6120876].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][245-246] Skypiea 05 [1080p][FEA121C3].mkv",
+			"hash": "948a213b3753b1572b65de94f049a116d1d19dee",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][245-246] Skypiea 05 [1080p][FEA121C3].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][247-249] Skypiea 06 [1080p][BF59EB14].mkv",
+			"hash": "914c0da7db2f30c80988adea7e67af78e1502587",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][247-249] Skypiea 06 [1080p][BF59EB14].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][250-251] Skypiea 07 [1080p][3C665F73].mkv",
+			"hash": "da97987eb5adeaed1f34269af22cf7202c6ae93c",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][250-251] Skypiea 07 [1080p][3C665F73].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][252-254] Skypiea 08 [1080p][236CCF51].mkv",
+			"hash": "63a53a466547469c6c854c498301c9308ab76c6a",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][252-254] Skypiea 08 [1080p][236CCF51].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][255-257] Skypiea 09 [1080p][CF0B1E5A].mkv",
+			"hash": "1ad1d02f115868eacb6852eef0a8e6ca59a3c524",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][255-257] Skypiea 09 [1080p][CF0B1E5A].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][258-260] Skypiea 10 [1080p][602704E6].mkv",
+			"hash": "aca4c747981ae6f366fe82d1fa6dceb7f619e49e",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][258-260] Skypiea 10 [1080p][602704E6].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][261-263] Skypiea 11 [1080p][F0EF6382].mkv",
+			"hash": "2b45ebd651777a757b1e8d35660b4d96a0ee4021",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][261-263] Skypiea 11 [1080p][F0EF6382].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][264-266, 268] Skypiea 12 [1080p][99260C5A].mkv",
+			"hash": "c14a990bf09719e44da4a0f64710d18a302c9a8d",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][264-266, 268] Skypiea 12 [1080p][99260C5A].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][266-269] Skypiea 13 [1080p][460CC2CD].mkv",
+			"hash": "16e16ed3e486700a85726477725608fd7d78348f",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][266-269] Skypiea 13 [1080p][460CC2CD].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][270-273] Skypiea 14 [1080p][702231E9].mkv",
+			"hash": "99068f6eabe3588fcd58da600fdfcfbd41ec5b9b",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][270-273] Skypiea 14 [1080p][702231E9].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][273-276] Skypiea 15 [1080p][9863ADF4].mkv",
+			"hash": "fbb47fa1f426b4f3c8afb9fcead3ba923f10fbc3",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][273-276] Skypiea 15 [1080p][9863ADF4].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][277-279] Skypiea 16 [1080p][088462CB].mkv",
+			"hash": "40190e3c2d42d65307a05ba9b795ad3a03d5dc9e",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][277-279] Skypiea 16 [1080p][088462CB].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][304-321] Long Ring Long Land [720p]",
+			"hash": "4f2b72009c25ec6c534a852ddfc3fd85ed10fdf5",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][304-306] Long Ring Long Land 01 [720p][B692FD08].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][307-309] Long Ring Long Land 02 [720p][57F75027].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][310-312] Long Ring Long Land 03 [720p][24351CC0].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][313-316] Long Ring Long Land 04 [720p][72C0B595].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][317-318] Long Ring Long Land 05 [720p][BCF2E97B].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][318-321] Long Ring Long Land 06 [720p][A65C20C2].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][322-324] Water Seven 01 [1080p][9101CF0E].mkv",
+			"hash": "2c90a26aa26847de6726432e57da790e551c7dfb",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][322-324] Water Seven 01 [1080p][9101CF0E].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][324-326] Water Seven 02 [1080p][763C1FA8].mkv",
+			"hash": "17cea791fe57b94d57713cc5ffbfb6346c3512e1",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][324-326] Water Seven 02 [1080p][763C1FA8].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][326-329] Water Seven 03 [1080p][01874097].mkv",
+			"hash": "6f5eea9fb14a4815605f94201e18758dbeb1e3bb",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][326-329] Water Seven 03 [1080p][01874097].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][330-332] Water Seven 04 [1080p][D5D6D5BA].mkv",
+			"hash": "694f0cd41d39d07433375929809a8a5ab1e9c668",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][330-332] Water Seven 04 [1080p][D5D6D5BA].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][332-333] Water Seven 05 [1080p][593FF591].mkv",
+			"hash": "ad55e3818ea4150920e6a5af3f1bde8e0a129d36",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][332-333] Water Seven 05 [1080p][593FF591].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][334-337] Water Seven 06 [1080p][D17BD2C5].mkv",
+			"hash": "d5460ed548e29b724bf6f1ef423b3dc60672bbab",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][334-337] Water Seven 06 [1080p][D17BD2C5].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][338-339] Water Seven 07 [1080p][4D75A2CA].mkv",
+			"hash": "aba8524c50790688447578b6497bf1235885f0d7",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][338-339] Water Seven 07 [1080p][4D75A2CA].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][340-342] Water Seven 08 [1080p][6E2DB1B9].mkv",
+			"hash": "ebe71894a4c941359a7c8083218e421e5bf67914",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][340-342] Water Seven 08 [1080p][6E2DB1B9].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][342-345] Water Seven 09 [1080p][F96F0A4A].mkv",
+			"hash": "9375a1c30eeb49ff96ec96dac5df252d74556f36",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][342-345] Water Seven 09 [1080p][F96F0A4A].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][346-348] Water Seven 10 [1080p][BAFD9522].mkv",
+			"hash": "3db5d95badd012ad1916dc624adfe747aec1b379",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][346-348] Water Seven 10 [1080p][BAFD9522].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][349-352] Water Seven 11 [1080p][0D273612].mkv",
+			"hash": "4407d9e55c5b3169646fd4e19dd605c4363fa37f",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][349-352] Water Seven 11 [1080p][0D273612].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][35-75] The Adventures of Buggy's Crew [1080p][E75794DB].mkv",
+			"hash": "435e4b1fe0aef5fec8cacc27f92b52ae7868ad7d",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][35-75] The Adventures of Buggy's Crew [1080p][E75794DB].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][353-355] Water Seven 12 [1080p][0017358A].mkv",
+			"hash": "a0a49ee80ad606513575e1fdff094b4625ff5f56",
+			"imdbId": "tt8356942",
+			"files": [
+				{
+					"path": "[One Pace][353-355] Water Seven 12 [1080p][0017358A].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][355-357] Water Seven 13 [1080p][B4592974].mkv",
+			"hash": "2c4f7c0f37291a1866df9c4382381c0c03f249cd",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][355-357] Water Seven 13 [1080p][B4592974].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][358-359] Water Seven 14 [1080p][203E5D6E].mkv",
+			"hash": "3db5f588f43b912d0c3b96a8b113a3ac92d32777",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][358-359] Water Seven 14 [1080p][203E5D6E].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][360-362] Water Seven 15 [1080p][87F0C48B].mkv",
+			"hash": "d85f798f06f91f45d9531df0abfbf863564517fb",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][360-362] Water Seven 15 [1080p][87F0C48B].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][363-365] Water Seven 16 [1080p][AF5B5194].mkv",
+			"hash": "ad30863829eeb7787198cedaed9825160c587893",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][363-365] Water Seven 16 [1080p][AF5B5194].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][366-367] Water Seven 17 [1080p][AB231A9E].mkv",
+			"hash": "8e6256aa057d6c88af4d7421ad4bdf1f0e266d92",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][366-367] Water Seven 17 [1080p][AB231A9E].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][368-369] Water Seven 18 [1080p][47D68652].mkv",
+			"hash": "e9f8880e64198a5c75768a6a89218aa694cee9c0",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][368-369] Water Seven 18 [1080p][47D68652].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][370-371] Water Seven 19 [1080p][1206A42A].mkv",
+			"hash": "b5c1549472cfc5856ad616b958d8520741e6ce6c",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][370-371] Water Seven 19 [1080p][1206A42A].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][372-374] Water Seven 20 [1080p][F0FBC907].mkv",
+			"hash": "048648996fbec99cb213893150d798a38efc3224",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][372-374] Water Seven 20 [1080p][F0FBC907].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][375-376] Enies Lobby 01 [1080p][A6CD3EBB].mkv",
+			"hash": "86fbff72e60cf50f347b9c30308c64f966e664a5",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][375-376] Enies Lobby 01 [1080p][A6CD3EBB].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][377-378] Enies Lobby 02 [1080p][EBBD7693].mkv",
+			"hash": "2ed606e870d5927f3d83acd72bd4aec691196a5d",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][377-378] Enies Lobby 02 [1080p][EBBD7693].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][379-380] Enies Lobby 03 [1080p][747CF45E].mkv",
+			"hash": "e5a18727ff4911ebc7026405e92912f7ca57aa2c",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][379-380] Enies Lobby 03 [1080p][747CF45E].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][381-382] Enies Lobby 04 [720p][194603B0].mkv",
+			"hash": "a99c9e4ea0fa627f135d3bc19da96338f4bb540e",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][381-382] Enies Lobby 04 [720p][194603B0].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][383-384] Enies Lobby 05 [720p][56E89B6A].mkv",
+			"hash": "abb1df690997f215a5866d7987223a26059ad4f9",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][383-384] Enies Lobby 05 [720p][56E89B6A].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][385-387] Enies Lobby 06 [720p][0E201E28].mkv",
+			"hash": "eef5f64e3d053a6abe98dcabe934c67d5d2e3a73",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][385-387] Enies Lobby 06 [720p][0E201E28].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][388-390] Enies Lobby 07 [720p][3BBE532B].mkv",
+			"hash": "c5f7298ed41089e6be7f670637aaee98bb869faa",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][388-390] Enies Lobby 07 [720p][3BBE532B].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][391-393] Enies Lobby 08 [720p][DECF4267].mkv",
+			"hash": "1fe8afe6de98a34ea89ce434db2a437fe50724fe",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][391-393] Enies Lobby 08 [720p][DECF4267].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][394-396] Enies Lobby 09 [720p][952F5BEB].mkv",
+			"hash": "bc2fa17f4130b673cfee7cde79e9bd6b2af59004",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][394-396] Enies Lobby 09 [720p][952F5BEB].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][397-398] Enies Lobby 10 [720p][6C908F32].mkv",
+			"hash": "24b093304e357aad9f3c7b958c199a3ce9fd8bff",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][397-398] Enies Lobby 10 [720p][6C908F32].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][399-400] Enies Lobby 11 [720p][CF6F1505].mkv",
+			"hash": "1305ccebb2193ef7249abc6a00b38b4c0cac92ff",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][399-400] Enies Lobby 11 [720p][CF6F1505].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][401-402] Enies Lobby 12 [720p][DA166192].mkv",
+			"hash": "5b49e7a4640ec5b8e455ea5be5cef520fea82da7",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][401-402] Enies Lobby 12 [720p][DA166192].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][403-404] Enies Lobby 13 [720p][FE0F64E2].mkv",
+			"hash": "f9fd0d2e8447d92505d9a3d9c9e60d47105d9720",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][403-404] Enies Lobby 13 [720p][FE0F64E2].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][405-406] Enies Lobby 14 [1080p][A9C9701B].mkv",
+			"hash": "ec44626d4aac1bc12516cf7677f3a141cf5eafa5",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][405-406] Enies Lobby 14 [1080p][A9C9701B].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][407-408] Enies Lobby 15 [1080p][160B1E51].mkv",
+			"hash": "7a490e03ce2488bd81cea75679e8590b40db004c",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][407-408] Enies Lobby 15 [1080p][160B1E51].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][409-411] Enies Lobby 16 [1080p][158476AB].mkv",
+			"hash": "30e6fcae8a70ef9d12e9dda2afa514b99bf402d6",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][409-411] Enies Lobby 16 [1080p][158476AB].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][412-413] Enies Lobby 17 [1080p][7562EF8D].mkv",
+			"hash": "4d3503626c56e2199ab7fdb911de35bf4605348a",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][412-413] Enies Lobby 17 [1080p][7562EF8D].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][414-415] Enies Lobby 18 [1080p][64207B1A].mkv",
+			"hash": "ef9e5570bfb77108ddfd69536d804a3a4e00bc64",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][414-415] Enies Lobby 18 [1080p][64207B1A].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][416-418] Enies Lobby 19 [1080p][C4106519].mkv",
+			"hash": "764222f18a8a43868058a0069310bae6556bcbfc",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][416-418] Enies Lobby 19 [1080p][C4106519].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][419-420] Enies Lobby 20 [1080p][5AC534CA].mkv",
+			"hash": "4cab4c469be3e484489256907ec662acb8a87025",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][419-420] Enies Lobby 20 [1080p][5AC534CA].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][42,22] Gaimon 01 [1080p][0C2DBF75].mkv",
+			"hash": "b83d8260265b01910c0068b2b488d81b674917ea",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][42,22] Gaimon 01 [1080p][0C2DBF75].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][42,22] Gaimon [480p][EFF6059A].mkv",
+			"hash": "06b1f1e89dc70b3bd217cd656605ebd3ac5c983a",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][42,22] Gaimon [480p][EFF6059A].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][42-44] Baratie 01 [1080p][CC37D6C6].mkv",
+			"hash": "69ae0463f6c8b9e8a0062faeadd1e9477bc04a0c",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][42-44] Baratie 01 [1080p][CC37D6C6].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][421-422] Enies Lobby 21 [1080p][13D874FD].mkv",
+			"hash": "b2a2edbbb0a4d476f93b479d2d6215ee46387e00",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][421-422] Enies Lobby 21 [1080p][13D874FD].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][423-424] Enies Lobby 22 [1080p][C0B33E05].mkv",
+			"hash": "f35f39679a934efa762f054cde6137a0a147aceb",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][423-424] Enies Lobby 22 [1080p][C0B33E05].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][425-427] Enies Lobby 23 [1080p][25AFC3E5].mkv",
+			"hash": "bef6efff0f7c81422ca057a2e575363eb0b350f3",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][425-427] Enies Lobby 23 [1080p][25AFC3E5].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][428-429] Enies Lobby 24 [1080p][7F76CDD9].mkv",
+			"hash": "d23029c1860a74513bac08372ee2c9f43a56550b",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][428-429] Enies Lobby 24 [1080p][7F76CDD9].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][430] Enies Lobby 25 [1080p][3251D51B].mkv",
+			"hash": "7e24c561da498f298ff137f5462d5fe89b38edff",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][430] Enies Lobby 25 [1080p][3251D51B].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][431-441] Post-Enies Lobby [720p]",
+			"hash": "59497fc3d9a6dbcdbaced48eaa9f5ba2047614df",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][431-432] Post-Enies Lobby 01 [720p][216595EE].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][433-435] Post-Enies Lobby 02 [720p][344EA844].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][436-437] Post-Enies Lobby 03 [720p][2C843A0F].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][438-439] Post-Enies Lobby 04 [720p][659EF70C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][440-441] Post-Enies Lobby 05 [720p][CEF78887].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][442-489] Thriller Bark [720p]",
+			"hash": "cca27737d4340787c7b25d50df0f42ab2d9ab939",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][442-443] Thriller Bark 01 [720p][30D0916C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][444-445] Thriller Bark 02 [720p][EA100F0C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][446-448] Thriller Bark 03 [720p][C2AAAAF7].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][449-450] Thriller Bark 04 [720p][EB4DA5F4].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][451-452] Thriller Bark 05 [720p][5B4DF29D].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][453-454] Thriller Bark 06 [720p][60E33665].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][455-456] Thriller Bark 07 [720p][1E847368].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][457-458] Thriller Bark 08 [720p][694AD702].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][459-460] Thriller Bark 09 [720p][19D3B6A3].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][461-462] Thriller Bark 10 [720p][38BBF05C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][463-464] Thriller Bark 11 [720p][D538CFD7].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][465-466] Thriller Bark 12 [720p][8B836836].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][467-468] Thriller Bark 13 [720p][3AEE90B8].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][469-470] Thriller Bark 14 [720p][7CAE5640].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][471-472] Thriller Bark 15 [720p][A9784E2B].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][473-474] Thriller Bark 16 [720p][EF1D7B5F].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][475-476] Thriller Bark 17 [720p][6AAC9B33].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][477-479] Thriller Bark 18 [720p][2295F0A1].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][480-482] Thriller Bark 19 [720p][099FB95D].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][483-484] Thriller Bark 20 [720p][AD2D4BCD].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][485-487] Thriller Bark 21 [720p][22E58F96].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][488-489] Thriller Bark 22 [720p][F23079ED].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][45-47] Baratie 02 [1080p][FCF3D074].mkv",
+			"hash": "f4389ed080b50f54ecfd1b0305ccac7ecc8345bc",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][45-47] Baratie 02 [1080p][FCF3D074].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][47-49] Baratie 03 [1080p][0EB7F7E9].mkv",
+			"hash": "a80390cd2b04c68811c6b139929dd5ac512a403c",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][47-49] Baratie 03 [1080p][0EB7F7E9].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][490-513] Sabaody Archipelago [720p]",
+			"hash": "2589926c8f90e8f031a6caeab93bcd5b79990c0e",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][490-491] Sabaody Archipelago 01 [720p][066FD68B].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][492-493] Sabaody Archipelago 02 [720p][F0334710].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][494-495] Sabaody Archipelago 03 [720p][C19CADF5].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][496-497] Sabaody Archipelago 04 [720p][76D21468].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][498-500] Sabaody Archipelago 05 [720p][7D6E8499].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][501-502] Sabaody Archipelago 06 [720p][234CBFDC].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][503-504] Sabaody Archipelago 07 [720p][63A829E4].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][505-506] Sabaody Archipelago 08 [720p][873CB57E].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][507-508] Sabaody Archipelago 09 [720p][0E0C5A82].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][509-511] Sabaody Archipelago 10 [720p][20ADEE90].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][512-513] Sabaody Archipelago 11 [720p][1306F53D].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][50-52] Baratie 04 [1080p][15D77CB3].mkv",
+			"hash": "c103456d91b3f07a283313deed5e9b793ecd5695",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][50-52] Baratie 04 [1080p][15D77CB3].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][514-524] Amazon Lily [720p]",
+			"hash": "1f62e2583956c412f8550672bc8066c5e96ab0a8",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][514-515] Amazon Lily 01 [720p][06BF070D].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][516-517] Amazon Lily 02 [720p][E817809A].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][518-519] Amazon Lily 03 [720p][C2835057].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][520-522] Amazon Lily 04 [720p][A5F0A507].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][523-524] Amazon Lily 05 [720p][0F8517DC].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][525-548] Impel Down [720p]",
+			"hash": "2e1a040b1de930368ae027be070e6e8bc134b709",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][525-526] Impel Down 01 [720p][479D510C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][527-528] Impel Down 02 [720p][7306EDA1].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][529-531] Impel Down 03 [720p][FB406E73].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][532-533] Impel Down 04 [720p][5DD0859D].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][534-536] Impel Down 05 [720p][B46EDD50].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][537-538] Impel Down 06 [720p][5D5D24DF].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][539-540] Impel Down 07 [720p][379DD054].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][541-543] Impel Down 08 [720p][683EDC5C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][544-546] Impel Down 09 [720p][F0C33425].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][547-548] Impel Down 10 [720p][540A9642].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][53-55] Baratie 05 [1080p][6858E16A].mkv",
+			"hash": "45a8b8b178f0f611bf48951edafcec57bf06c9f9",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][53-55] Baratie 05 [1080p][6858E16A].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][543-560] If You Could Go Anywhere... The Adventures of the Straw Hats [1080p][2BC41092].mkv",
+			"hash": "48112bfe29daffd541040e566d37607ea1835ceb",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][543-560] If You Could Go Anywhere... The Adventures of the Straw Hats [1080p][2BC41092].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][549-580] Marineford [720p]",
+			"hash": "3e96ef072e3798dc20d9c9fe21700eee27ff8312",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][549-550] Marineford 01 [720p][92956F40].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][551-552] Marineford 02 [720p][4F5151F2].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][553-554] Marineford 03 [720p][D16C3A7A].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][555-556] Marineford 04 [720p][738B1A3B].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][557-558] Marineford 05 [720p][66006702].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][559-560] Marineford 06 [720p][E46F5F07].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][561-562] Marineford 07 [720p][511BA151].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][563-564] Marineford 08 [720p][2A3B3264].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][565-566] Marineford 09 [720p][1638FE88].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][567] Marineford 10 [720p][C65F13AA].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][568-569] Marineford 11 [720p][A84B5499].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][570-571] Marineford 12 [720p][6BD41435].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][572-573] Marineford 13 [720p][66E68054].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][574] Marineford 14 [720p][29DBF233].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][575-576] Marineford 15 [720p][00768DB7].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][577-578] Marineford 16 [720p][91EEA92E].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][579-580] Marineford 17 [720p][2DC3ECF7].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][56-59] Baratie 06 [1080p][757AF173].mkv",
+			"hash": "a8813f7e4bd753fa76e32ee2b5288cffb5c898f8",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][56-59] Baratie 06 [1080p][757AF173].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][581-582] Post-War 01 [1080p][E7B15590].mkv",
+			"hash": "378ac16275940673ebac803955fcde9c8718d661",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][581-582] Post-War 01 [1080p][E7B15590].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][583-584] Post-War 02 [1080p][1A183CBE].mkv",
+			"hash": "535cb2a580f3051871405411a4484d45db62ee54",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][583-584] Post-War 02 [1080p][1A183CBE].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][585-586] Post-War 03 [1080p][9DEAD0F3].mkv",
+			"hash": "b15d098996eff6129be674891ae4cb14645c780f",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][585-586] Post-War 03 [1080p][9DEAD0F3].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][587-588] Post-War 04 [1080p][5FA1920A].mkv",
+			"hash": "4a03c4b6eea6bb621839a8f55fc56dab9942ae68",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][587-588] Post-War 04 [1080p][5FA1920A].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][589-590] Post-War 05 [1080p][FA5B3DCD].mkv",
+			"hash": "eacbf73c4965a12fbf2eb97e4db53151ff39788f",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][589-590] Post-War 05 [1080p][FA5B3DCD].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][59-63] Baratie 07 [1080p][A1039182].mkv",
+			"hash": "a0d4026bf8196196113b983517023ab4b1533359",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][59-63] Baratie 07 [1080p][A1039182].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][591-592] Post-War 06 [1080p][735F9F49].mkv",
+			"hash": "84a9b78f6f96dd7ab28c51cfe1917e97470cc7ab",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][591-592] Post-War 06 [1080p][735F9F49].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][593-594] Post-War 07 [1080p][D85BC22C].mkv",
+			"hash": "53b3c345c97722e5840573c7781d8c09583434dd",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][593-594] Post-War 07 [1080p][D85BC22C].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][595-597] Post-War 08 [1080p][178190BC].mkv",
+			"hash": "ea2c5500648c09321acf2be9aee11fc8a798af7b",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][595-597] Post-War 08 [1080p][178190BC].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][598-602] Return to Sabaody [1080p]",
+			"hash": "77cc4c78deedc5b7048cd72620688bf37de17032",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][598-599] Return to Sabaody 01 [1080p][5FBDCD0F].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][599-600] Return to Sabaody 02 [1080p][9677C63E].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][601-602] Return to Sabaody 03 [1080p][2FFA5720].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][603-653] Fishman Island [720p]",
+			"hash": "fd204b5dc346f5458f7f04cf1ad98679aaf9586e",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][603-604] Fishman Island 01 [720p][FBA08093].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][605-606] Fishman Island 02 [720p][BD7169C3].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][607-608] Fishman Island 03 [720p][5636E014].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][609-610] Fishman Island 04 [720p][9E0A91E9].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][611-612] Fishman Island 05 [720p][DA5B5D04].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][613-614] Fishman Island 06 [720p][64FB3990].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][614-615] Fishman Island 07 [720p][29A10280].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][616-618] Fishman Island 08 [720p][DBA50B89].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][619-620] Fishman Island 09 [720p][FCF7F7E4].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][621-622] Fishman Island 10 [720p][F4BB17EB].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][623-624] Fishman Island 11 [720p][7926F9B5].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][625-626] Fishman Island 12 [720p][F134C10A].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][627-629] Fishman Island 13 [720p][04C7B716].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][630-631] Fishman Island 14 [720p][35A189E2].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][632-633] Fishman Island 15 [720p][8014A332].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][634-635] Fishman Island 16 [720p][DF3A7006].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][636-637] Fishman Island 17 [720p][EB0BC95C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][638-639] Fishman Island 18 [720p][B6BD1A60].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][640-641] Fishman Island 19 [720p][C19D5680].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][642-645] Fishman Island 20 [720p][94E2099D].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][643-646] Fishman Island 21 [720p][85AD9C81].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][647-649] Fishman Island 22 [720p][7DBBFA18].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][650-651] Fishman Island 23 [720p][65BD682D].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][652-653] Fishman Island 24 [720p][99A61805].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][63-67] Baratie 08 [1080p][F850EAFD].mkv",
+			"hash": "ca0b3f280f40b9818a3c1624d800d4f2491ff87f",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][63-67] Baratie 08 [1080p][F850EAFD].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][654-699] Punk Hazard [720p]",
+			"hash": "bcdff039cd7c01f2ffb78799b4082d91de25b2fb",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][654-655] Punk Hazard 01 [720p][90015E67].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][656-658] Punk Hazard 02 [720p][5A3CE523].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][659-660] Punk Hazard 03 [720p][FE661F6E].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][661-662] Punk Hazard 04 [720p][666061E3].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][663-664] Punk Hazard 05 [720p][ACF1C889].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][665-666] Punk Hazard 06 [720p][CC88315A].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][667-668] Punk Hazard 07 [720p][F0B1F815].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][669-670] Punk Hazard 08 [720p][658D36CE].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][671-672] Punk Hazard 09 [720p][AD550761].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][673-674] Punk Hazard 10 [720p][72E3E794].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][675-676] Punk Hazard 11 [720p][398915C6].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][677-678] Punk Hazard 12 [720p][CD83F1E9].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][679-680] Punk Hazard 13 [720p][316829437].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][681-682] Punk Hazard 14 [720p][75CC1F6E].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][683-684] Punk Hazard 15 [720p][9CE5B9DD].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][685-686] Punk Hazard 16 [720p][4CD92CFC].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][687-688] Punk Hazard 17 [720p][0A2624D5].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][689-690] Punk Hazard 18 [720p][D56597BC].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][691-692] Punk Hazard 19 [720p][54AC1705].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][693-695] Punk Hazard 20 [720p][5012E091].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][696-697] Punk Hazard 21 [720p][0CBF5258].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][698-699] Punk Hazard 22 [720p][021A8886].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][67-68] Baratie 09 [1080p][D8C1FD62].mkv",
+			"hash": "d42ad6406584c715482920f7014eb190acaf601c",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][67-68] Baratie 09 [1080p][D8C1FD62].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][69-95] Arlong Park [480p]",
+			"hash": "4c688038db6ae51893f505fbb0c12eafacde8f4b",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][69-71] Arlong Park 01 [480p][D8004901].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][71-73] Arlong Park 02 [480p][97677F37].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][74-76] Arlong Park 03 [480p][1C80414F].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][77-78] Arlong Park 04 [480p][6E63ADEE].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][79-81] Arlong Park 05 [480p][038E3A4B].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][82-84] Arlong Park 06 [480p][06F25D1B].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][85-87] Arlong Park 07 [480p][9599889C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][88-90] Arlong Park 08 [480p][83E6D2A7].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][91-94] Arlong Park 09 [480p][A57211D1].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][94-95] Arlong Park 10 [480p][5AF7A9B1].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][700-800] Dressrosa [720p]",
+			"hash": "a031cac6baf81b804c4d034dfaef0e5e4a671145",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace] Chapter 700-701 [720p][2A35B710].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 702-703 [720p][E058DEF9].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 704-705 [720p][90034ECC].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 706-707 [720p][E98FA912].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 708-709 [720p][A95DE47B].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 710-711 [720p][F7CB97CD].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 712-713 [720p][EACE397D].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 714-715 [720p][777DE97C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 716-717 [720p][C2C37921].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 718-719 [720p][50143351].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 720-721 [720p][D8E8370A].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 722-723 [720p][F20B5423].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 724-725 [720p][C29E5C35].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 726-727 [720p][E3C90B8B].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 728-729 [720p][6A3CE0EA].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 730-731 [720p][7073A62F].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 732-733 [720p][174F92DD].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 734-735 [720p][C9362978].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 736-737 [720p][77081AEE].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 738-739 [720p][BE72EB0E].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 740-741 [720p][C21EC74A].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 742-743 [720p][5FC46535].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 744-745 [720p][5A38EC3B].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 746-747 [720p][11DA7BCB].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 748-749 [720p][1CADC5DC].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 750-751 [720p][71CA89FC].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 752-753 [720p][DC6C3C54].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 754-755 [720p][04186119].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 756-757 [720p][ACC7852E].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 758-759 [720p][4F16C5DC].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 760-761 [720p][9C3360D6].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 762-763 [720p][E98F852E].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 764-765 [720p][53AEB13C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 766-767 [720p][0CA47011].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 768-769 [720p][1B5DC33C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 770-771 [720p][F218F0E4].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 772-773 [720p][777A9A6A].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 774-775 [720p][0429451F].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 776-778 [720p][7391ECD4].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 779-781 [720p][ECD80B22].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 782-783 [720p][3E9F11F9].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 784-785 [720p][55292D1C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 786-787 [720p][CAA32C42].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 788-790 [720p][4DDF4C07].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 791-793 [720p][15344804].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 794-795 [720p][81C4666C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 796-797 [720p][01C40FA1].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace] Chapter 798-800 [720p][5F035A13].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][8-21] Orange Town [1080p]",
+			"hash": "d54ad844dcb2fcfd63bb3ef401f5004102aa39f0",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][12-19] Orange Town 02 [1080p][C0A5D51D].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][19-21] Orange Town 03 [1080p][86CC0CCF].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][8-11] Orange Town 01 [1080p][2388DB63].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][801-822] Zou [720p]",
+			"hash": "5c027631a28242814a6cf1fe24f455b70bca14bc",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][801-803] Zou 01 [720p][E70913D9].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][804-805] Zou 02 [720p][32150FF4].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][806-807] Zou 03 [720p][E4B077F8].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][808-809] Zou 04 [720p][A4F76B13].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][810-811] Zou 05 [720p][7149D13F].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][812-813] Zou 06 [720p][7F73DB45].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][814-815] Zou 07 [720p][55837445].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][816-817] Zou 08 [720p][5B2AAFBF].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][818-819] Zou 09 [720p][0880B38F].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][820-822] Zou 10 [720p][4A52B138].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][823-902] Whole Cake Island [720p]",
+			"hash": "8eae38e998ff4e537f0974ab4249f89479fb644d",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][823-824] Whole Cake Island 01 [720p][3F24A1D8].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][825-826] Whole Cake Island 02 [720p][6FFCB482].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][827-828] Whole Cake Island 03 [720p][3F6633B5].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][829-830] Whole Cake Island 04 [720p][02C6FC2B].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][831-832] Whole Cake Island 05 [720p][4CF30353].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][833-834] Whole Cake Island 06 [720p][410C8F0C].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][835-836] Whole Cake Island 07 [720p][FC2376A1].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][837-838] Whole Cake Island 08 [720p][31018FCB].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][839-840] Whole Cake Island 09 [720p][94E3481F].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][841-842] Whole Cake Island 10 [720p][E123D314].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][843-844] Whole Cake Island 11 [720p][8B5E1006].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][845-846] Whole Cake Island 12 [720p][36D0F622].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][847-848] Whole Cake Island 13 [720p][D9EEB564].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][849-850] Whole Cake Island 14 [720p][CCCBEFC0].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][851-852] Whole Cake Island 15 [720p][0E2022E4].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][853-854] Whole Cake Island 16 [720p][A8E42FE1].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][855-856] Whole Cake Island 17 [720p][0CF96D5A].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][857-858] Whole Cake Island 18 [720p][3F5E7FD3].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][859-860] Whole Cake Island 19 [720p][0F125E00].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][861-862] Whole Cake Island 20 [720p][4F38961B].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][863-864] Whole Cake Island 21 [720p][5FDB702D].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][865-866] Whole Cake Island 22 [720p][39D94718].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][867-868] Whole Cake Island 23 [720p][437F9E8D].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][869-870] Whole Cake Island 24 [720p][6E422CFB].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][870-872] Whole Cake Island 25 [720p][32CC4AB9].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][873-874] Whole Cake Island 26 [720p][71827EF0].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][875-876] Whole Cake Island 27 [720p][2CDA8E9D].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][877-878] Whole Cake Island 28 [720p][22B16322].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][879-880] Whole Cake Island 29 [720p][270A4ABD].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][881-883] Whole Cake Island 30 [720p][ABB0AC56].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][883-884] Whole Cake Island 31 [720p][529AE554].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][885-886] Whole Cake Island 32 [720p][8313ECE3].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][887-888] Whole Cake Island 33 [720p][6FBBD350].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][889-891] Whole Cake Island 34 [720p][A3939979].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][891-893] Whole Cake Island 35 [720p][1753F7D1].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][892-895] Whole Cake Island 36 [720p][3AF37912].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][896-897] Whole Cake Island 37 [720p][3C58DD41].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][898-900] Whole Cake Island 38 [720p][E9317CBD].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][901-902] Whole Cake Island 39 [720p][172F5F20].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][83-119] The Trials of Koby-Meppo [1080p][4B56844F].mkv",
+			"hash": "c345a0dc89a9d20b9cbdad787b0bd80c34f52809",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][83-119] The Trials of Koby-Meppo [1080p][4B56844F].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][903-908] Reverie [1080p]",
+			"hash": "c5860b5066c7ed8bfe51abde23f76ef3f78a6ec7",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][903-904] Reverie 01 [1080p][A4325AC2].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][905-906] Reverie 02 [1080p][759D49BC].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][907-908] Reverie 03 [1080p][F1430B21].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][909-924] Wano Act 1",
+			"hash": "d67ed82392c28cb6c40509383ba70bfb4e6aefdf",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][909-910] Wano 01 [1080p][F9F0F488].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][909-911] Wano 02 [1080p][453DCC92].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][911-912] Wano 03 [1080p][6E4E501E].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][913] Wano 04 [1080p][23CF2FA6].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][914-915] Wano 05 [1080p][B51C53E9].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][915-916] Wano 06 [1080p][13E4ABCF].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][916-917] Wano 07 [1080p][F71F9B71].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][918-919] Wano 08 [1080p][6DA86F5F].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][919-920] Wano 09 [1080p][5A5E65B1].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][921-922] Wano 10 [1080p][91BE23B7].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][922-923] Wano 11 [1080p][6A9CF454].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][924] Wano 12 [1080p][5ACE812A].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][925-926] Wano 13 [1080p][DCF7AD65].mkv",
+			"hash": "7bb74e6d6cb948274a02e389732418ad5d2aa39a",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][925-926] Wano 13 [1080p][DCF7AD65].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][926-927] Wano 14 [1080p][BF92DCAF].mkv",
+			"hash": "cdb26d84fba1712004b04a26d5484c766dfe1263",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][926-927] Wano 14 [1080p][BF92DCAF].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][928-930] Wano 15 [1080p][AE6ABE84].mkv",
+			"hash": "1e8b4afc42cce0c51f7b72973de5b90f18246459",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][928-930] Wano 15 [1080p][AE6ABE84].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][930-931] Wano 16 [1080p][9FA61F60].mkv",
+			"hash": "679f3a126c68708414677326663f1be953a4588c",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][930-931] Wano 16 [1080p][9FA61F60].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][932-933] Wano 17 [1080p][D2E02F36].mkv",
+			"hash": "ada27ed07c9bdb8339f563ea3a972e810db9c241",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][932-933] Wano 17 [1080p][D2E02F36].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][934-935] Wano 18 [1080p][94F78CF3].mkv",
+			"hash": "ee98dc9217e39a1142d34593fd1f69f370844d9f",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][934-935] Wano 18 [1080p][94F78CF3].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][936-938] Wano 19 [1080p][6C9E8055].mkv",
+			"hash": "21bfa9becd4b71b3f39a102b5182d4b5df601801",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][936-938] Wano 19 [1080p][6C9E8055].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][938-939] Wano 20 [1080p][93376225].mkv",
+			"hash": "d587b519994e3a8f771d188981f7a59fd6d578e5",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][938-939] Wano 20 [1080p][93376225].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][940-941] Wano 21 [1080p][0B965026].mkv",
+			"hash": "b1a87c6668cce9523fe8c56556fedb18438a242b",
+			"imdbId": "tt0414982",
+			"files": [
+				{
+					"path": "[One Pace][940-941] Wano 21 [1080p][0B965026].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][941-942] Wano 22 [1080p][9F63AF78].mkv",
+			"hash": "555b93c2e368c9f652ff4fff987d5fbc3c3bad6b",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][941-942] Wano 22 [1080p][9F63AF78].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][943-944] Wano 23 [1080p][37670A03].mkv",
+			"hash": "04f41b47c4144307737eafa4b03c58d4ddea4ba8",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][943-944] Wano 23 [1080p][37670A03].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][945] Wano 24 [1080p][6173BCE1].mkv",
+			"hash": "1806979f06ae1560485ef48bd1983d42aa5b5696",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][945] Wano 24 [1080p][6173BCE1].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][946-947] Wano 25 [1080p][C3825063].mkv",
+			"hash": "6a26cb6bb9d3f8259fd54a610acbe7b8fc1039bc",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][946-947] Wano 25 [1080p][C3825063].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][948-949] Wano 26 [1080p][F3E829E8].mkv",
+			"hash": "0a9639f371dbd1270c79b058309aeba62d91ebc6",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][948-949] Wano 26 [1080p][F3E829E8].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][950-951] Wano 27 [1080p][3CC8226D].mkv",
+			"hash": "b164abb99ea78b42c76b575a1591991302185d0d",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][950-951] Wano 27 [1080p][3CC8226D].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][951-952] Wano 28 [1080p][22F81B0E].mkv",
+			"hash": "b49ba708f178848d3430cbb7899ab0f8caecfdf1",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][951-952] Wano 28 [1080p][22F81B0E].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][953-954] Wano 29 [1080p][5C7E0604].mkv",
+			"hash": "0c335ffe392916183f738e9831c1379b2c432601",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][953-954] Wano 29 [1080p][5C7E0604].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][954-955] Wano 30 [1080p][43A0D1DF].mkv",
+			"hash": "e8cca1f69b748d85fd6a5f3eba2701ef6220cfb8",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][954-955] Wano 30 [1080p][43A0D1DF].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][956] Wano 31 [1080p][F6C7EB83].mkv",
+			"hash": "8d0650670a3b6de5de5b9411057e984d86247d9a",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][956] Wano 31 [1080p][F6C7EB83].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][957] Wano 32 [1080p][29B91F56].mkv",
+			"hash": "89bdea16caeaa66658592cd75be624c0a9dce31a",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][957] Wano 32 [1080p][29B91F56].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][958-959] Wano 33 [1080p][E3AB2BA0].mkv",
+			"hash": "8bb2c2f222f540c60d0a57fa54a6065e2c2da271",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][958-959] Wano 33 [1080p][E3AB2BA0].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][96-100] Loguetown [480p]",
+			"hash": "fc5f605b1fc12f8a14b6176690151ea53bcb7e19",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][96-97] Loguetown 01 [480p][4200CE0D].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][97] Loguetown 02 [480p][8E970FD4].mkv",
+					"folder": ""
+				},
+				{
+					"path": "[One Pace][98-100] Loguetown 03 [480p][23E3E489].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][960-961] Wano 34 [1080p][224B7846].mkv",
+			"hash": "131a50628ef03291dbce68a002875e3b33c9fda5",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][960-961] Wano 34 [1080p][224B7846].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][962-963] Wano 35 [1080p][98B5E26D].mkv",
+			"hash": "d46b4ffe4a5c2f71e35dc4fb72186ea8c772ca58",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][962-963] Wano 35 [1080p][98B5E26D].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][964-965] Wano 36 [1080p][BAFFE801].mkv",
+			"hash": "ec75dd4f1d60dc71dbc41556e375dcb616ca54ae",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][964-965] Wano 36 [1080p][BAFFE801].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][965-966] Wano 37 [1080p][AD8C9C16].mkv",
+			"hash": "904b90a8508bdfd00fe31a6cd901af116ac838ce",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][965-966] Wano 37 [1080p][AD8C9C16].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][967] Wano 38 [1080p][298A4284].mkv",
+			"hash": "c7e226bf4c40fb20dc2cce2bf5e32f8b5cde5dbd",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][967] Wano 38 [1080p][298A4284].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][968-969] Wano 39 [1080p][56CFB8B0].mkv",
+			"hash": "93e937753ccf59b30e05c8a35cecbe56e1ceada3",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][968-969] Wano 39 [1080p][56CFB8B0].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][970-972] Wano 40 [1080p][713F7916].mkv",
+			"hash": "bb2c6ec947742838a7daac23c54c87613eac604e",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][970-972] Wano 40 [1080p][713F7916].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][972-974] Wano 41 [1080p][C89B4C1E].mkv",
+			"hash": "6fb0ceb05a74e832246ddf23263d5d9a53290c9a",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][972-974] Wano 41 [1080p][C89B4C1E].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][975-976] Wano 42 [1080p][3FC81ABD].mkv",
+			"hash": "873fe3265ca245d9209c76404b20cab6771896a9",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][975-976] Wano 42 [1080p][3FC81ABD].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][977-978] Wano 43 [1080p][26D98629].mkv",
+			"hash": "352e9177eaa9a12b4ff56213dc6f1cdda883187b",
+			"imdbId": "tt0388629",
+			"files": [
+				{
+					"path": "[One Pace][977-978] Wano 43 [1080p][26D98629].mkv",
+					"folder": ""
+				}
+			]
+		},
+		{
+			"name": "[One Pace][Romance Dawn v2] Romance Dawn v2 [1080p][5E77445F].mkv",
+			"hash": "9a825f40a0a36882a51e221fff3e5b54d342f7f4",
+			"imdbId": null,
+			"files": [
+				{
+					"path": "[One Pace][Romance Dawn v2] Romance Dawn v2 [1080p][5E77445F].mkv",
+					"folder": ""
+				}
+			]
+		}
+	]
+}

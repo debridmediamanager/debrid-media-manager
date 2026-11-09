@@ -1,6 +1,8 @@
 import { buildFranchiseIndex } from '@/services/anime/animeFranchise';
 import type { FribbAnimeEntry } from '@/services/anime/animeMapping';
 import { getMetadataCache } from '@/services/metadataCache';
+import type { OnePaceCatalogue } from '@/services/onePace';
+import onePaceList from '@/services/onePaceCatalogue.json';
 import {
 	cachedSources,
 	placeReleases,
@@ -9,6 +11,7 @@ import {
 	type PlacementSources,
 	type PlaceRequest,
 } from '@/services/placement';
+import onePaceFun from '@/test/fixtures/onepace/fun-releases-2026-11-09.json';
 import pastCour from '@/test/fixtures/placement/anime-past-cour.json';
 import answers from '@/test/fixtures/placement/answers.json';
 import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
@@ -1453,5 +1456,45 @@ describe('a title with Saga in it', () => {
 			Array.from({ length: 24 }, (_, n) => [1, n + 1])
 		);
 		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('One Pace', () => {
+	// fun's zurg held One Piece's IMDb id for its One Pace releases (DMM's hash list), and DMM
+	// placed them as One Piece: `[One Pace][101-105] Reverse Mountain`'s two files on One Piece's
+	// S1E1 and S1E2 (fun, 2026-11-09). One Pace is its own show, numbered by its own list.
+	const asked = (onePaceFun.releases as PlaceRequest[]).filter((r) => r.imdbId === 'tt0388629');
+
+	it('is numbered by its own list, never as the One Piece its id names', async () => {
+		const find = vi.fn(sources.find);
+		const ask = vi.fn(identify);
+		const { releases, complete } = await place(
+			asked,
+			Infinity,
+			{ ...sources, find, onePace: () => onePaceList as OnePaceCatalogue },
+			ask
+		);
+		expect(complete).toBe(true);
+		expect(find).not.toHaveBeenCalled();
+		expect(ask).not.toHaveBeenCalled();
+		const reverse = releases[asked.findIndex((r) => r.name.includes('Reverse Mountain'))];
+		expect(reverse).toMatchObject({ kind: null, imdbId: null, tmdbId: null, anime: true });
+		expect(reverse.series).toMatchObject({ key: 'onepace', title: 'One Pace' });
+		expect(reverse.series!.seasons.map((s) => [s.season, s.title])).toEqual([
+			[8, 'Reverse Mountain'],
+		]);
+		// its 01 covers 101-103, a cut One Pace has since redone as 101-102: that file stays unplaced
+		expect(
+			reverse.files.map((f) => [f.season, f.episode, f.series?.season, f.series?.episode])
+		).toEqual([
+			[null, null, undefined, undefined],
+			[null, null, 8, 2],
+		]);
+		expect(releases.every((r) => r.kind === null && r.tmdbId === null)).toBe(true);
+		expect(
+			releases
+				.flatMap((r) => r.files)
+				.every((f) => f.season === null && f.tmdbEpisodeId === null)
+		).toBe(true);
 	});
 });

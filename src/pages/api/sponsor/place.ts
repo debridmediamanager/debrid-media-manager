@@ -61,9 +61,9 @@ function parseReleases(body: unknown): PlaceRequest[] | null {
 /**
  * What each release of a sponsor's library is, and its files' TMDB season and episode:
  * `{"releases": [{name, hash?, imdbId?, files: [{path, folder}]}], "parts"?: true}` answers
- * `{"releases": [{kind, imdbId, tmdbId, files: [{path, season, episode, episodeEnd, how, part?}]}],
- * "complete", "rules"}` in request order; every file carries `part` when `parts` was sent. See
- * docs/sponsor-api.md.
+ * `{"releases": [{kind, imdbId, tmdbId, series?, files: [{path, season, episode, episodeEnd, how, part?, series?}]}],
+ * "complete", "rules"}` in request order; every file carries `part` when `parts` was sent, and a
+ * One Pace release `series` (a show DMM numbers itself). See docs/sponsor-api.md.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {

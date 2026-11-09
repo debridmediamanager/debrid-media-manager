@@ -204,6 +204,66 @@ TMDB's count of the show's episodes reaches that number. `how` says which rule p
 | `absolute`   | A number with no season (`One Piece - 1100`), counted through TMDB's seasons; never for a fansub title the anime lists do not know, of a show they map season by season (`Pocket Monsters - Aim to be a Pokémon Master 10` is no tenth episode of Pokémon). A fansub number of a later cour the anime lists know is counted only where it runs past every episode of that cour's season: `[DB]Gintama (2017)_-_317_` is TMDB's S8E1.                                                                                                                                                                                                                                                                                            |
 | `airdate`    | A daily show's file named by the day it aired and no episode (`WWE.RAW.2026.10.05`, `WWE Monday Night RAW 2026 10 12`, or the day and month before the year), as the one episode TMDB lists as aired that day: Raw's S34E40. A name with an episode as well is placed by its numbers.                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
+One Pace (onepace.net), the fan re-edit of One Piece, is a show no TMDB, IMDb or Plex record
+numbers, so DMM numbers it by One Pace's own list. A release whose name, or every file's name,
+starts `[One Pace]` is answered with `kind`, `imdbId`, `tmdbId` and every file's `season`,
+`episode`, `how` and `tmdbEpisodeId` `null`, as a release DMM cannot place, so a tool that does
+not read the fields below keeps it unplaced, never on One Piece's episodes. Beside them:
+
+```json
+{
+	"anime": true,
+	"files": [
+		{
+			"path": "[One Pace][340-342] Water Seven 08 [1080p][6E2DB1B9].mkv",
+			"season": null,
+			"episode": null,
+			"episodeEnd": null,
+			"how": null,
+			"tmdbEpisodeId": null,
+			"series": {
+				"season": 16,
+				"episode": 8,
+				"title": "…",
+				"summary": "…",
+				"thumb": "https://onepace.net/…"
+			}
+		}
+	],
+	"imdbId": null,
+	"kind": null,
+	"series": {
+		"key": "onepace",
+		"title": "One Pace",
+		"summary": "One Pace is a fan project that recuts the One Piece anime…",
+		"poster": "https://onepace.net/_next/static/media/….jpg",
+		"art": "https://onepace.net/_next/static/media/….jpg",
+		"seasons": [
+			{
+				"season": 16,
+				"title": "Water Seven",
+				"summary": "…",
+				"poster": "https://onepace.net/…"
+			}
+		]
+	},
+	"tmdbId": null
+}
+```
+
+`series` names the show: `key` is the same for every release of it, so files of different
+releases are episodes of one show, and `seasons` describes each season the release's numbered
+files are on, an arc of One Pace's. Each main arc is a season in One Pace's order (Romance Dawn
+1 to Egghead 33, as One Pace numbers its arcs); its cover-story arcs and specials are season 0,
+in the list's order (The Adventures of Buggy's Crew is S00E01). A file's `series` is its episode,
+with One Pace's title, summary and still; a file without one is unplaced. A file is matched by
+the manga chapters its name covers (`[340-342]`, `Chapter 700-701` in a release named for its
+arc), which are unique to an episode, and its arc and number must agree: a file of a cut One
+Pace has since re-edited onto other chapters or numbers matches nothing. A release none of whose
+files is matched answers without `series` and `anime`. Artwork is onepace.net's own. DMM reads
+One Pace's list off onepace.net once a day, keeping the list it has when the page cannot be
+read, so a new episode is placed within a day of One Pace publishing it.
+
 `rules` names the placement rules the answer was made by. DMM changes it whenever it places releases differently; an answer you keep from other rules is worth asking about again, which is how zurg picks up DMM's fixes for releases it has already placed.
 
 `complete: false` means some releases could not be answered in this call: they ran past

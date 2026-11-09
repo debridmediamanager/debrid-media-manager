@@ -15,6 +15,12 @@ import {
 import type { ImdbSeries, NamesakeSeries } from '@/services/database/hashImdb';
 import { settle, TMDB_TV_APPEND } from '@/services/metadata';
 import { getMetadataCache } from '@/services/metadataCache';
+import {
+	isOnePace,
+	onePaceCatalogue,
+	placeOnePace,
+	type OnePaceCatalogue,
+} from '@/services/onePace';
 import { repository } from '@/services/repository';
 import {
 	absoluteFolders,
@@ -53,7 +59,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * releases they discarded). A caller that starts reading a field decides for itself whether to
  * ask again (zurg's placementReader). Deploys that place nothing differently keep it.
  */
-export const PLACEMENT_RULES = '2026-11-09.10';
+export const PLACEMENT_RULES = '2026-11-09.11';
 
 export interface PlaceRequest {
 	name: string;
@@ -93,6 +99,30 @@ export interface PlacedFile {
 	/** That film's TMDB title and year, which a client names its folder by. */
 	title?: string;
 	year?: number;
+	/** The file's episode of its release's `series`, present only on a file the series numbers. */
+	series?: SeriesEpisode;
+}
+
+/**
+ * A show no TMDB, IMDb or Plex record numbers, which DMM numbers itself (One Pace): a release's
+ * files it numbers are this show's, whichever release holds them, grouped by `key`.
+ */
+export interface PlacedSeries {
+	key: string;
+	title: string;
+	summary: string;
+	poster?: string;
+	art?: string;
+	/** The seasons the release's numbered files are on. */
+	seasons: { season: number; title: string; summary: string; poster?: string }[];
+}
+
+export interface SeriesEpisode {
+	season: number;
+	episode: number;
+	title: string;
+	summary: string;
+	thumb?: string;
 }
 
 export interface PlacedRelease {
@@ -115,6 +145,11 @@ export interface PlacedRelease {
 	 * where the show's TMDB record could not be read.
 	 */
 	anime?: boolean;
+	/**
+	 * The show DMM numbers itself that the release's files are episodes of, with `kind` and the
+	 * ids null; absent for every other release.
+	 */
+	series?: PlacedSeries;
 	files: PlacedFile[];
 	/** Not placed in this request's time budget, or a source could not be asked; ask again. */
 	skipped?: true;
@@ -164,6 +199,8 @@ export interface PlacementSources {
 	tvdbEpisodes?(tvdbId: number, order?: 'dvd'): Promise<any[] | null>;
 	/** TMDB's `/find` for a TheTVDB episode id; absent or null where it cannot be asked. */
 	findTvdbEpisode?(tvdbEpisodeId: number): Promise<any | null>;
+	/** One Pace's list; absent, the list DMM holds now. */
+	onePace?(): OnePaceCatalogue;
 }
 
 /** Releases placed at once; each one's files go one after another, sharing its lookups. */
@@ -206,16 +243,24 @@ export async function placeReleases(
 	deadline: number
 ): Promise<{ releases: PlacedRelease[]; complete: boolean }> {
 	const anime = await sources.anime();
+	// One Pace is numbered by its own list alone: the id zurg holds for it (One Piece's) and its
+	// name would place its files on One Piece's episodes
+	const onePace = releases.map(isOnePace);
 	const titles: (Title | null | undefined)[] = await Promise.all(
-		releases.map((release) =>
-			release.imdbId ? resolve(release.imdbId, null, release, sources) : null
+		releases.map((release, at) =>
+			release.imdbId && !onePace[at] ? resolve(release.imdbId, null, release, sources) : null
 		)
 	);
 	// a series IMDb numbers is the id sent, numbered there, never one its name reads as: the
 	// identifier reads `Digimon.Adventure.02.E03` as TMDB's Digimon: Digital Monsters, whose
 	// season 1 is the 1999 series
 	const ask = releases.flatMap((_, at) =>
-		titles[at] !== undefined && titles[at]?.tmdbId == null && !titles[at]?.listed ? [at] : []
+		!onePace[at] &&
+		titles[at] !== undefined &&
+		titles[at]?.tmdbId == null &&
+		!titles[at]?.listed
+			? [at]
+			: []
 	);
 	if (ask.length) {
 		const answers = await identify(ask.map((at) => releases[at]));
@@ -236,6 +281,10 @@ export async function placeReleases(
 		while (next < releases.length) {
 			const at = next++;
 			const release = releases[at];
+			if (onePace[at]) {
+				out[at] = placeOnePace(release, sources.onePace?.() ?? onePaceCatalogue());
+				continue;
+			}
 			// without the anime index a fansub cour would be placed on its own numbers
 			// (`Hibike Euphonium 3 - 01` as season 1), so it waits for the index instead
 			const waits =
@@ -1826,6 +1875,7 @@ export const cachedSources: PlacementSources = {
 					.map((row: any) => row?.series?.id)
 					.filter((id: unknown) => typeof id === 'number')
 		),
+	onePace: () => onePaceCatalogue(),
 	findTvdbEpisode: (id) =>
 		getTmdbAuth()
 			? settle(() =>

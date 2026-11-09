@@ -1,4 +1,7 @@
+import { placeOnePace, type OnePaceCatalogue } from '@/services/onePace';
+import onePaceList from '@/services/onePaceCatalogue.json';
 import type { PlacedRelease, PlaceRequest } from '@/services/placement';
+import onePaceFun from '@/test/fixtures/onepace/fun-releases-2026-11-09.json';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import live from '../__fixtures__/place-misses-2026-11-09.json';
 import { placementMisses, PlacementMissService } from './placementMisses';
@@ -27,6 +30,25 @@ describe('placementMisses', () => {
 		expect(missed[0].hash).toBe(requests[named('The Winchesters')].hash);
 		// Evil's episode, and X-Men: First Class, a film whose file names no episode
 		expect(placed).toHaveLength(2);
+	});
+
+	// fun's One Pace releases (2026-11-09) as One Pace's list numbers them: a file the series
+	// numbers is placed, as zurg counts it, and one of an older cut is kept as a miss
+	it('settles a One Pace release whose files One Pace numbers, and keeps the rest', () => {
+		const pace = onePaceFun.releases as PlaceRequest[];
+		const answered = pace.map((release) =>
+			placeOnePace(release, onePaceList as OnePaceCatalogue)
+		);
+		const water = pace.findIndex((r) => r.name.includes('Water Seven 08'));
+		expect(placementMisses([pace[water]], [answered[water]])).toEqual({
+			missed: [],
+			placed: [expect.any(String)],
+		});
+		const { missed } = placementMisses(pace, answered);
+		expect(missed.find((row) => row.name.includes('Reverse Mountain'))?.files).toEqual([
+			'[One Pace][101-103] Reverse Mountain 01 [1080p][CE01A533].mkv',
+		]);
+		expect(missed.reduce((n, row) => n + row.files.length, 0)).toBe(464 - 409);
 	});
 
 	it('leaves a skipped release alone: zurg asks again', () => {
