@@ -30,7 +30,7 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	{
 		href: '/torznab',
 		name: 'Torrent indexer',
-		what: "DMM's torrent library as a Torznab indexer, with cached-only feeds for Real-Debrid, AllDebrid, Debrid-Link, TorBox, Premiumize and Offcloud",
+		what: "DMM's torrent library as a Torznab indexer, with cached-only feeds for Real-Debrid, AllDebrid, Debrid-Link, TorBox, Premiumize and Offcloud, the last three with your key for them linked",
 	},
 	{
 		href: '/wanted',
