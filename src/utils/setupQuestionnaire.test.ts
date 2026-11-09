@@ -1112,7 +1112,7 @@ describe('the Torznab benefit matches the Torznab page', () => {
 		const torznab = result.sponsorship.optional.find((benefit) => benefit.id === 'torznab');
 
 		expect(torznab?.detail).toBe(
-			"Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr. Cached status comes from DMM's own record for Real-Debrid, AllDebrid and Debrid-Link; the TorBox, Premiumize and Offcloud feeds answer once your key is linked."
+			"Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr. Cached status comes from DMM's own library for Real-Debrid, AllDebrid and Debrid-Link; the TorBox, Premiumize and Offcloud feeds answer once your key is linked."
 		);
 		expect(torznab?.detail).not.toMatch(/live cache feeds/);
 	});

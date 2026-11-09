@@ -118,7 +118,7 @@ describe('SponsorPanel', () => {
 		expect(screen.getByText(/three jobs at once instead of one/)).toBeInTheDocument();
 		expect(
 			screen.getByText(
-				/cached status comes from DMM's own record for Real-Debrid, AllDebrid and Debrid-Link/
+				/cached status comes from DMM's own library for Real-Debrid, AllDebrid and Debrid-Link/
 			)
 		).toBeInTheDocument();
 		expect(screen.queryByText(/live cache feeds/)).not.toBeInTheDocument();

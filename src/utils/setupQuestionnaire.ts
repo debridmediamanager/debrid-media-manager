@@ -472,7 +472,7 @@ const SPONSOR_BENEFITS = {
 	torznab: {
 		id: 'torznab',
 		title: 'DMM torrent indexer',
-		detail: "Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr. Cached status comes from DMM's own record for Real-Debrid, AllDebrid and Debrid-Link; the TorBox, Premiumize and Offcloud feeds answer once your key is linked.",
+		detail: "Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr. Cached status comes from DMM's own library for Real-Debrid, AllDebrid and Debrid-Link; the TorBox, Premiumize and Offcloud feeds answer once your key is linked.",
 		href: '/torznab',
 	},
 	newznab: {
