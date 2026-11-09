@@ -192,6 +192,9 @@ const JAPANESE_NUMERALS = ['Ni', 'San', 'Shi', 'Go', 'Roku', 'Nana', 'Hachi', 'K
 const JAPANESE_SEASON = new RegExp(
 	`[\\s._](${JAPANESE_NUMERALS.join('|')})[\\s._]+(\\d{2,3})(?:v\\d)?(?:[\\s._(\\[]|$)`
 );
+// A fansub's name posted with dots for spaces, its episode joined to the title by a hyphen:
+// `[SubsPlease].Bungou.Stray.Dogs-38.1080p` is `[SubsPlease] Bungou Stray Dogs - 38 (1080p)`.
+const DOTTED_EPISODE = /(?<=\p{L})-(\d{2,4}(?:v\d)?)(?=[.[(]|$)/u;
 // `One Piece - 0160 - 10 Survival Rate!`: a run's zero-padded number before a title that has its own.
 const ZERO_PADDED = /\s-\s(0\d{3})(?:v\d)?\s-\s/;
 // `Détective Conan S11E01 - 286 [MULTI]`: the running number after the episode, nothing but tags after it.
@@ -287,6 +290,9 @@ function sceneNumbers(name: string): FileNumbers | null {
 
 /** Fansub and loose numbering: `Oshi no Ko S2 - 05`, `Kingdom 4th Season - 21`, `- 05`, `[05]`, `10of13`. */
 function looseNumbers(stem: string): FileNumbers | null {
+	if (fansubShaped(stem) && !/\s/.test(stem.replace(LEADING_GROUPS, ''))) {
+		stem = stem.replace(DOTTED_EPISODE, ' - $1 ');
+	}
 	// the words before the number only: after it is the episode's own title, `One Piece - 0700 -
 	// The Ultimate Power! The Secret of the Op-Op Fruit!`, `- 0918 - … The Special Operation …`,
 	// `One.Piece.EP1154.The.Truth.Behind.the.Secret.Plan`

@@ -1,5 +1,6 @@
 import debridLinkSeedbox from '@/test/fixtures/debridlink/seedbox-list-2026-09-06.json';
 import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
+import funNumbers from '@/test/fixtures/placement/fun-numbers-2026-11-09.json';
 import lost from '@/test/fixtures/placement/lost-tvdb-order.json';
 import packs from '@/test/fixtures/placement/pack-folders.json';
 import releases from '@/test/fixtures/placement/releases.json';
@@ -142,6 +143,17 @@ describe('airDates', () => {
 		const both = 'WWE Monday Night Raw S34E31 Netflix 2026-08-03 1080p AVCHD-SC-SDH.mp4';
 		expect(fileNumbers(both, '', both, true)).toMatchObject({ season: 34, episode: 31 });
 	});
+});
+
+describe("fileNumbers on files fun's zurg held unplaced on 2026-11-09", () => {
+	// numbers read by hand from each name (see the fixtures README)
+	it.each(funNumbers.files.map((c) => [`${c.shape}: ${c.release} / ${c.file}`, c] as const))(
+		'%s',
+		(_, c) => {
+			const got = fileNumbers(c.release, c.folder, c.file, Boolean((c as any).single));
+			expect(got && [got.season, got.episode]).toEqual([c.season, c.episode]);
+		}
+	);
 });
 
 describe('parseName', () => {

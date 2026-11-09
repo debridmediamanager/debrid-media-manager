@@ -1,0 +1,32 @@
+{
+	"files": [
+		{
+			"release": "[SubsPlease].Bungou.Stray.Dogs-38.1080p",
+			"folder": "",
+			"file": "be433369464748cd957d3d0c93393f73.mkv",
+			"single": true,
+			"season": null,
+			"episode": 38,
+			"shape": "dotted"
+		},
+		{
+			"release": "[LoliHouse].Bungou.Stray.Dogs-51.[WebRip.1080p.HEVC-10bit.AAC]",
+			"folder": "",
+			"file": "dd26a4648bd64b7f8bc8f7d8531519cd.mkv",
+			"single": true,
+			"season": null,
+			"episode": 51,
+			"shape": "dotted"
+		},
+		{
+			"release": "[Erai-raws].Youjo.Senki.II-09.[1080p.CR.WEB-DL.AVC.AAC][MultiSub][C8539E93]",
+			"folder": "",
+			"file": "[Erai-raws].Youjo.Senki.II-09.[1080p.CR.WEB-DL.AVC.AAC][MultiSub][C8539E93].mkv",
+			"single": true,
+			"season": null,
+			"episode": 9,
+			"shape": "dotted"
+		}
+	],
+	"source": "Files zurg on fun listed Unplaced on 2026-11-09 (RD, TB and Usenet units), as zurg asks DMM about them: the release's name, the file's folder inside it and its name (a RAR member's base name where the video is inside one; `single` where it is the release's one file, so DMM reads a file named by a hash by the release's name); season and episode read by hand from each name"
+}
