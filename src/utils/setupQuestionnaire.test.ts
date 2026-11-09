@@ -1407,14 +1407,17 @@ describe('route copy stays on the player and source it is about', () => {
 
 	const bazarr = 'https://notes.debridmediamanager.com/zurg/guides/subtitles/';
 
-	it('points at player subtitles, not Bazarr, without zurg or arr', () => {
-		const result = recommendSetup(answers({ needs: ['subtitles'] }));
+	it.each([{}, { player: 'webdav', host: 'willing' }] satisfies Partial<SetupAnswers>[])(
+		'points at player subtitles, not Bazarr, without Sonarr/Radarr (%o)',
+		(overrides) => {
+			const result = recommendSetup(answers({ ...overrides, needs: ['subtitles'] }));
 
-		expect(result.optionalNeeds).toContain(
-			'Check embedded/player subtitle support in your player.'
-		);
-		expect(result.setupLinks.map(({ href }) => href)).not.toContain(bazarr);
-	});
+			expect(result.optionalNeeds).toContain(
+				'Check embedded/player subtitle support in your player.'
+			);
+			expect(result.setupLinks.map(({ href }) => href)).not.toContain(bazarr);
+		}
+	);
 
 	it('keeps rex subtitle search for rex without zurg, minus the Bazarr link', () => {
 		const result = recommendSetup(
@@ -1433,18 +1436,14 @@ describe('route copy stays on the player and source it is about', () => {
 		expect(result.setupLinks.map(({ href }) => href)).not.toContain(bazarr);
 	});
 
-	it.each([
-		{ player: 'webdav', host: 'willing' },
-		{ host: 'willing', preference: 'arr' },
-	] satisfies Partial<SetupAnswers>[])(
-		'keeps the Bazarr note with zurg or arr (%o)',
-		(overrides) => {
-			const result = recommendSetup(answers({ ...overrides, needs: ['subtitles'] }));
+	it('keeps the Bazarr note for Sonarr/Radarr, whose imports Bazarr works from', () => {
+		const result = recommendSetup(
+			answers({ host: 'willing', preference: 'arr', needs: ['subtitles'] })
+		);
 
-			expect(result.optionalNeeds).toContain(
-				'Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles.'
-			);
-			expect(result.setupLinks.map(({ href }) => href)).toContain(bazarr);
-		}
-	);
+		expect(result.optionalNeeds).toContain(
+			'Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles.'
+		);
+		expect(result.setupLinks.map(({ href }) => href)).toContain(bazarr);
+	});
 });

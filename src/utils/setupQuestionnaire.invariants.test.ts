@@ -283,6 +283,18 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	it('suggests Bazarr only for Sonarr/Radarr, whose imports it works from', () => {
+		expect(
+			breaking(
+				(answers, result) =>
+					answers.preference !== 'arr' &&
+					texts(result).some(
+						(text) => /Bazarr can/.test(text) || text.includes('zurg/guides/subtitles')
+					)
+			)
+		).toEqual([]);
+	});
+
 	it('never says AllDebrid has no WebDAV', () => {
 		expect(
 			breaking((_, result) =>

@@ -1175,8 +1175,8 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			'Download or copy complete files and verify playback without the network. Virtual files, .strm links and debrid catalogs are not offline copies.'
 		);
 	if (answers.needs.includes('subtitles')) {
-		// The Bazarr notes only apply where zurg or arr runs.
-		const bazarr = answers.preference === 'arr' || routes.some(({ route: r }) => r.usesZurg);
+		// Bazarr works off Sonarr/Radarr imports only.
+		const bazarr = answers.preference === 'arr';
 		result.optionalNeeds.push(
 			rex
 				? 'rex offers Search Subtitles without Bazarr. Embedded/player subtitles may already be sufficient.'
