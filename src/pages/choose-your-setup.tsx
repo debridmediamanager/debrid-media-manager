@@ -38,6 +38,8 @@ const INITIAL_ANSWERS: SetupAnswers = {
 
 type QuestionKey = 'player' | 'plexRoute' | 'sources' | 'host' | 'preference' | 'needs';
 
+const QUESTION_HEADING_ID = 'setup-question-heading';
+
 const QUESTION_TITLES: Record<QuestionKey, string> = {
 	player: 'Where do you want to watch?',
 	plexRoute: 'How should Plex get the library?',
@@ -96,11 +98,16 @@ function ChoiceCard({
 	return (
 		<button
 			type="button"
-			aria-pressed={selected}
+			role={multi ? undefined : 'radio'}
+			aria-checked={multi ? undefined : selected}
+			aria-pressed={multi ? selected : undefined}
+			// aria-disabled, not disabled, keeps the card and its reason in the Tab order.
 			aria-disabled={disabled}
-			disabled={disabled}
-			onClick={onClick}
-			className={`flex min-h-20 w-full flex-col items-start gap-1 rounded border-2 px-4 py-3 text-left transition-colors focus:ring-2 focus:ring-cyan-300 focus:outline-hidden disabled:cursor-not-allowed disabled:opacity-65 ${selectedClass(selected)}`}
+			onClick={() => {
+				if (disabled) return;
+				onClick();
+			}}
+			className={`flex min-h-20 w-full flex-col items-start gap-1 rounded border-2 px-4 py-3 text-left transition-colors focus:ring-2 focus:ring-cyan-300 focus:outline-hidden aria-disabled:cursor-not-allowed aria-disabled:opacity-65 ${selectedClass(selected)}`}
 		>
 			<span className="flex w-full items-start justify-between gap-3 font-medium">
 				<span>{label}</span>
@@ -113,7 +120,7 @@ function ChoiceCard({
 				<span className="text-xs text-amber-200">Unavailable: {disabledReason}</span>
 			) : null}
 			{multi ? (
-				<span className="text-[11px] text-gray-500">Select all that apply</span>
+				<span className="text-[11px] text-gray-400">Select all that apply</span>
 			) : null}
 		</button>
 	);
@@ -164,7 +171,11 @@ function QuestionChoices({
 }) {
 	if (keyName === 'player') {
 		return (
-			<div className="grid gap-3 sm:grid-cols-2">
+			<div
+				role="radiogroup"
+				aria-labelledby={QUESTION_HEADING_ID}
+				className="grid gap-3 sm:grid-cols-2"
+			>
 				{PLAYER_OPTIONS.map((option) => (
 					<ChoiceCard
 						key={option.value}
@@ -195,7 +206,7 @@ function QuestionChoices({
 
 	if (keyName === 'plexRoute') {
 		return (
-			<div className="grid gap-3">
+			<div role="radiogroup" aria-labelledby={QUESTION_HEADING_ID} className="grid gap-3">
 				{PLEX_ROUTE_OPTIONS.map((option) => (
 					<ChoiceCard
 						key={option.value}
@@ -216,7 +227,11 @@ function QuestionChoices({
 
 	if (keyName === 'sources') {
 		return (
-			<div className="grid gap-3 sm:grid-cols-2">
+			<div
+				role="group"
+				aria-labelledby={QUESTION_HEADING_ID}
+				className="grid gap-3 sm:grid-cols-2"
+			>
 				{SOURCE_OPTIONS.map((option) => (
 					<ChoiceCard
 						key={option.value}
@@ -250,7 +265,7 @@ function QuestionChoices({
 
 	if (keyName === 'host') {
 		return (
-			<div className="grid gap-3">
+			<div role="radiogroup" aria-labelledby={QUESTION_HEADING_ID} className="grid gap-3">
 				{HOST_OPTIONS.map((option) => {
 					const disabledReason = hostChoiceReason(answers, option.value);
 					return (
@@ -277,7 +292,11 @@ function QuestionChoices({
 
 	if (keyName === 'preference') {
 		return (
-			<div className="grid gap-3 sm:grid-cols-2">
+			<div
+				role="radiogroup"
+				aria-labelledby={QUESTION_HEADING_ID}
+				className="grid gap-3 sm:grid-cols-2"
+			>
 				{PREFERENCE_OPTIONS.map((option) => {
 					const disabledReason = preferenceChoiceReason(answers, option.value);
 					return (
@@ -303,7 +322,11 @@ function QuestionChoices({
 	}
 
 	return (
-		<div className="grid gap-3 sm:grid-cols-2">
+		<div
+			role="group"
+			aria-labelledby={QUESTION_HEADING_ID}
+			className="grid gap-3 sm:grid-cols-2"
+		>
 			{NEED_OPTIONS.map((option) => (
 				<ChoiceCard
 					key={option.value}
@@ -617,7 +640,7 @@ function RecommendationView({
 							className="flex flex-wrap items-center justify-between gap-3 py-2 first:pt-0 last:pb-0"
 						>
 							<div className="min-w-0">
-								<div className="text-xs text-gray-500">{QUESTION_TITLES[key]}</div>
+								<div className="text-xs text-gray-400">{QUESTION_TITLES[key]}</div>
 								<div className="text-sm break-words text-gray-200">
 									{answerLabel(key, answers)}
 								</div>
@@ -659,7 +682,12 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 		setCurrentStep((step) => Math.min(step, questionKeys.length - 1));
 	}, [questionKeys.length]);
 
+	// Focus follows a later step or result change, never the first render, so Tab starts at the top.
+	const focusedView = useRef(`${currentStep}:${submitted}`);
 	useEffect(() => {
+		const view = `${currentStep}:${submitted}`;
+		if (focusedView.current === view) return;
+		focusedView.current = view;
 		if (submitted) resultHeadingRef.current?.focus();
 		else questionHeadingRef.current?.focus();
 	}, [currentStep, submitted]);
@@ -790,6 +818,7 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 										aria-valuemin={1}
 										aria-valuemax={questionKeys.length}
 										aria-valuenow={currentStep + 1}
+										aria-valuetext={`Question ${currentStep + 1} of ${questionKeys.length}`}
 										className="mt-2 h-1.5 w-36 overflow-hidden rounded bg-gray-700 sm:w-56"
 									>
 										<span
@@ -811,6 +840,7 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 							</div>
 
 							<h2
+								id={QUESTION_HEADING_ID}
 								ref={questionHeadingRef}
 								tabIndex={-1}
 								className="text-2xl font-bold text-white focus:outline-hidden"

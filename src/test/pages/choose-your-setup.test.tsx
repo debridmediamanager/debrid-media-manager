@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -29,15 +30,23 @@ beforeEach(() => {
 
 function reachStremioRecommendation(workflow: RegExp = /Choose and play as I go/) {
 	render(<ChooseYourSetupPage />);
-	fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+	fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 	fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-	fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+	fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-	fireEvent.click(screen.getByRole('button', { name: workflow }));
+	fireEvent.click(screen.getByRole('radio', { name: workflow }));
 	fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 	fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+}
+
+// An unavailable card stays in the Tab order so its reason is read out, and ignores activation.
+function expectUnavailable(card: HTMLElement) {
+	expect(card).toHaveAttribute('aria-disabled', 'true');
+	expect(card).not.toBeDisabled();
+	fireEvent.click(card);
+	expect(card).toHaveAttribute('aria-checked', 'false');
 }
 
 describe('choose your setup page', () => {
@@ -81,13 +90,13 @@ describe('choose your setup page', () => {
 		],
 	])('words the free Cast footnote for the chosen player (%s)', (player, footnote) => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: player }));
+		fireEvent.click(screen.getByRole('radio', { name: player }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /No host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Choose and play as I go/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
 
@@ -108,13 +117,13 @@ describe('choose your setup page', () => {
 
 	it('names no upgrades when only the sponsor page and Discord role are listed', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /An external player/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /An external player/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /AllDebrid/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /No host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Choose and play as I go/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
 
@@ -135,13 +144,13 @@ describe('choose your setup page', () => {
 
 	it('keeps a constraint ahead of sponsorship marketing and explains the limit', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /My own Usenet/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /No host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Choose and play as I go/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
 
@@ -159,13 +168,13 @@ describe('choose your setup page', () => {
 
 	it('asks for a supported source when the player cannot use the selected ones', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /HTTP links or files/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Choose and play as I go/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
 
@@ -181,13 +190,13 @@ describe('choose your setup page', () => {
 
 	it('asks for a source first in the sponsor box when none is selected', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /None yet/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Choose and play as I go/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
 
@@ -198,13 +207,13 @@ describe('choose your setup page', () => {
 
 	it('says only that sponsorship is optional when the route uses no DMM tool and no account', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /Existing Stremio URL addons/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Choose and play as I go/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
 
@@ -217,13 +226,13 @@ describe('choose your setup page', () => {
 
 	it("says sponsorship is for your accounts or other routes for a provider's own WebDAV", () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /WebDAV or SMB player/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /WebDAV or SMB player/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /No host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Choose and play as I go/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
 
@@ -236,13 +245,13 @@ describe('choose your setup page', () => {
 
 	it("says only that sponsorship is optional for AllDebrid's own WebDAV, which no benefit is for", () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /WebDAV or SMB player/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /WebDAV or SMB player/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /AllDebrid/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /No host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Choose and play as I go/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
 
@@ -255,17 +264,17 @@ describe('choose your setup page', () => {
 
 	it('disables arr until a full host is selected, with a visible reason', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /No host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
-		const arr = screen.getByRole('button', {
+		const arr = screen.getByRole('radio', {
 			name: /Automation with Sonarr\/Radarr/,
 		});
-		expect(arr).toBeDisabled();
+		expectUnavailable(arr);
 		expect(
 			screen.getByText(/Unavailable: The arr workflow needs an existing or willing full host/)
 		).toBeInTheDocument();
@@ -273,17 +282,17 @@ describe('choose your setup page', () => {
 
 	it('disables arr until a supported acquisition backend is selected', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /Easynews/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
-		const arr = screen.getByRole('button', {
+		const arr = screen.getByRole('radio', {
 			name: /Automation with Sonarr\/Radarr/,
 		});
-		expect(arr).toBeDisabled();
+		expectUnavailable(arr);
 		expect(
 			screen.getByText(
 				/Unavailable: The arr workflow needs a supported debrid or NZB backend/
@@ -293,17 +302,17 @@ describe('choose your setup page', () => {
 
 	it('keeps arr enabled for a mixed source set with a supported backend', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
 		fireEvent.click(screen.getByRole('button', { name: /Easynews/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
 		expect(
-			screen.getByRole('button', { name: /Automation with Sonarr\/Radarr/ })
-		).not.toBeDisabled();
+			screen.getByRole('radio', { name: /Automation with Sonarr\/Radarr/ })
+		).toHaveAttribute('aria-disabled', 'false');
 	});
 
 	const ARR = /Automation with Sonarr\/Radarr/;
@@ -312,19 +321,17 @@ describe('choose your setup page', () => {
 		expect(
 			screen.getByRole('heading', { name: 'How do you want to choose titles?' })
 		).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: ARR })).toHaveAttribute('aria-pressed', 'true');
+		expect(screen.getByRole('radio', { name: ARR })).toHaveAttribute('aria-checked', 'true');
 		expect(screen.queryByRole('status')).not.toBeInTheDocument();
 	}
 
 	function expectArrReset() {
+		expectUnavailable(screen.getByRole('radio', { name: ARR }));
 		expect(screen.getByRole('status')).toHaveTextContent(
 			/Automation with Sonarr\/Radarr was reset to/
 		);
-		const arr = screen.getByRole('button', { name: ARR });
-		expect(arr).toBeDisabled();
-		expect(arr).toHaveAttribute('aria-pressed', 'false');
-		expect(screen.getByRole('button', { name: /I am not sure yet/ })).toHaveAttribute(
-			'aria-pressed',
+		expect(screen.getByRole('radio', { name: /I am not sure yet/ })).toHaveAttribute(
+			'aria-checked',
 			'true'
 		);
 	}
@@ -343,8 +350,8 @@ describe('choose your setup page', () => {
 	it('keeps arr when No host is clicked by mistake before the existing host again', () => {
 		reachStremioRecommendation(ARR);
 		editAnswer('Can a machine stay on while you watch?');
-		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
-		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
 		expectArrKept();
@@ -353,10 +360,10 @@ describe('choose your setup page', () => {
 	it('keeps arr when going back past the sources step before fixing the host', () => {
 		reachStremioRecommendation(ARR);
 		editAnswer('Can a machine stay on while you watch?');
-		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /No host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
 		expectArrKept();
@@ -365,7 +372,7 @@ describe('choose your setup page', () => {
 	it('resets arr on leaving the host step once no host can run it', () => {
 		reachStremioRecommendation(ARR);
 		editAnswer('Can a machine stay on while you watch?');
-		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /No host/ }));
 		expect(screen.queryByRole('status')).not.toBeInTheDocument();
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
@@ -386,10 +393,9 @@ describe('choose your setup page', () => {
 		);
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
-		const arr = screen.getByRole('button', { name: ARR });
-		expect(arr).toBeDisabled();
-		expect(screen.getByRole('button', { name: /I am not sure yet/ })).toHaveAttribute(
-			'aria-pressed',
+		expectUnavailable(screen.getByRole('radio', { name: ARR }));
+		expect(screen.getByRole('radio', { name: /I am not sure yet/ })).toHaveAttribute(
+			'aria-checked',
 			'true'
 		);
 	});
@@ -430,14 +436,14 @@ describe('choose your setup page', () => {
 			screen.getByRole('heading', { name: 'How do you want to choose titles?' })
 		).toBeInTheDocument();
 		expect(screen.queryByRole('status')).not.toBeInTheDocument();
-		expect(screen.getByRole('button', { name: ARR })).not.toBeDisabled();
+		expect(screen.getByRole('radio', { name: ARR })).toHaveAttribute('aria-disabled', 'false');
 	});
 
 	// A notice set on the host step still holds while the host is unchanged, whatever the sources say.
 	it('keeps a host-step arr reset notice when only the sources step is passed again', () => {
 		reachStremioRecommendation(ARR);
 		editAnswer('Can a machine stay on while you watch?');
-		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /No host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
 		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
@@ -452,7 +458,7 @@ describe('choose your setup page', () => {
 	it('updates a showing arr reset notice to the reason that still rules arr out', () => {
 		reachStremioRecommendation(ARR);
 		editAnswer('Can a machine stay on while you watch?');
-		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /No host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		expect(screen.getByRole('status')).toHaveTextContent(/full host/);
 		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
@@ -460,14 +466,14 @@ describe('choose your setup page', () => {
 		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
 		fireEvent.click(screen.getByRole('button', { name: /Existing Stremio URL addons/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
 		const reason = 'The arr workflow needs a supported debrid or NZB backend.';
 		expect(screen.getByRole('status').textContent).toBe(
 			`Automation with Sonarr/Radarr was reset to “I am not sure yet”. ${reason}`
 		);
-		expect(screen.getByRole('button', { name: ARR })).toHaveTextContent(
+		expect(screen.getByRole('radio', { name: ARR })).toHaveTextContent(
 			`Unavailable: ${reason}`
 		);
 		expectArrReset();
@@ -476,17 +482,17 @@ describe('choose your setup page', () => {
 	it('keeps arr when a new player drops the Android host that is asked again later', () => {
 		reachStremioRecommendation(ARR);
 		editAnswer('Can a machine stay on while you watch?');
-		fireEvent.click(screen.getByRole('button', { name: /Android \/ Google TV/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Android \/ Google TV/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
 		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
-		fireEvent.click(screen.getByRole('button', { name: /Plex apps/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Plex apps/ }));
 		expect(screen.queryByRole('status')).not.toBeInTheDocument();
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Keep my existing Plex Media Server/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Keep my existing Plex Media Server/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
-		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
 		expectArrKept();
@@ -494,20 +500,20 @@ describe('choose your setup page', () => {
 
 	it('drops the arr reset notice once the setup is submitted and edited again', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Plex apps/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Plex apps/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Keep my existing Plex Media Server/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Keep my existing Plex Media Server/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Automation with Sonarr\/Radarr/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Automation with Sonarr\/Radarr/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
 
 		editAnswer('Can a machine stay on while you watch?');
-		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /No host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		expect(screen.getByRole('status')).toHaveTextContent(
 			/Automation with Sonarr\/Radarr was reset to/
@@ -526,17 +532,17 @@ describe('choose your setup page', () => {
 
 	it('keeps arr enabled and executable when a full host is selected', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
-		const arr = screen.getByRole('button', {
+		const arr = screen.getByRole('radio', {
 			name: /Automation with Sonarr\/Radarr/,
 		});
-		expect(arr).not.toBeDisabled();
+		expect(arr).toHaveAttribute('aria-disabled', 'false');
 		fireEvent.click(arr);
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
@@ -550,15 +556,14 @@ describe('choose your setup page', () => {
 
 	it('marks Android as insufficient for a full Plex stack', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Plex apps/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Plex apps/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Keep my existing Plex Media Server/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Keep my existing Plex Media Server/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
-		const android = screen.getByRole('button', { name: /Android \/ Google TV/ });
-		expect(android).toBeDisabled();
+		expectUnavailable(screen.getByRole('radio', { name: /Android \/ Google TV/ }));
 		expect(
 			screen.getByText(
 				'Unavailable: Plex Media Server needs a full server host; zurg Android cannot give a server on that device a library.'
@@ -575,9 +580,7 @@ describe('choose your setup page', () => {
 	}
 
 	function expectAndroidDropped() {
-		const android = screen.getByRole('button', { name: /Android \/ Google TV/ });
-		expect(android).toBeDisabled();
-		expect(android).toHaveAttribute('aria-pressed', 'false');
+		expectUnavailable(screen.getByRole('radio', { name: /Android \/ Google TV/ }));
 		expect(
 			screen.getByText(
 				'Unavailable: zurg Android has no TorBox hosted NZB backend; that route needs a normal host.'
@@ -588,11 +591,11 @@ describe('choose your setup page', () => {
 
 	it('drops an Android host when added TorBox hosted NZBs would need zurg on it', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /WebDAV or SMB player/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /WebDAV or SMB player/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Android \/ Google TV/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Android \/ Google TV/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
@@ -606,17 +609,17 @@ describe('choose your setup page', () => {
 
 	it('drops an Android host when a new player would play TorBox hosted NZBs through zurg', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /TorBox Pro hosted NZBs/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Android \/ Google TV/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Android \/ Google TV/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
 
 		editAnswer('Where do you want to watch?');
-		fireEvent.click(screen.getByRole('button', { name: /WebDAV or SMB player/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /WebDAV or SMB player/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
@@ -625,11 +628,11 @@ describe('choose your setup page', () => {
 
 	it('says only the Sonarr/Radarr choice changes the route', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
 		expect(
@@ -641,7 +644,7 @@ describe('choose your setup page', () => {
 
 	it('moves focus to the next question for keyboard users', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
 		expect(document.activeElement).toHaveTextContent('What do you already have?');
@@ -658,15 +661,15 @@ describe('choose your setup page', () => {
 		],
 	])('names rex-stremio as free only where it is offered (%s)', (source, footnote) => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Plex apps/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Plex apps/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Use rex for Plex apps/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Use rex for Plex apps/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: source }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Choose and play as I go/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
 
@@ -677,7 +680,7 @@ describe('choose your setup page', () => {
 
 	it('requires the conditional Plex choice before continuing', () => {
 		render(<ChooseYourSetupPage />);
-		fireEvent.click(screen.getByRole('button', { name: /Plex apps/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Plex apps/ }));
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
 		expect(
@@ -685,7 +688,7 @@ describe('choose your setup page', () => {
 		).toBeInTheDocument();
 		const next = screen.getByRole('button', { name: 'Next' });
 		expect(next).toBeDisabled();
-		fireEvent.click(screen.getByRole('button', { name: /Keep my existing Plex Media Server/ }));
+		fireEvent.click(screen.getByRole('radio', { name: /Keep my existing Plex Media Server/ }));
 		expect(next).not.toBeDisabled();
 	});
 
@@ -718,13 +721,126 @@ describe('choose your setup page', () => {
 		reachStremioRecommendation();
 		fireEvent.click(screen.getByRole('button', { name: 'Reset' }));
 
-		expect(
+		expect(document.activeElement).toBe(
 			screen.getByRole('heading', { name: 'Where do you want to watch?' })
-		).toBeInTheDocument();
+		);
 		expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1');
-		expect(screen.getByRole('button', { name: /Stremio/ })).toHaveAttribute(
-			'aria-pressed',
+		expect(screen.getByRole('radio', { name: /Stremio/ })).toHaveAttribute(
+			'aria-checked',
 			'false'
 		);
+	});
+
+	it('leaves focus at the top on first load and moves it with each step after that', () => {
+		render(<ChooseYourSetupPage />);
+
+		const first = screen.getByRole('heading', { name: 'Where do you want to watch?' });
+		expect(document.activeElement).not.toBe(first);
+		expect(document.activeElement).toBe(document.body);
+		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		expect(document.activeElement).toBe(
+			screen.getByRole('heading', { name: 'What do you already have?' })
+		);
+		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+		expect(document.activeElement).toBe(
+			screen.getByRole('heading', { name: 'Where do you want to watch?' })
+		);
+	});
+
+	it('moves focus to the edited question from the result', () => {
+		reachStremioRecommendation();
+		editAnswer('Can a machine stay on while you watch?');
+
+		expect(document.activeElement).toBe(
+			screen.getByRole('heading', { name: 'Can a machine stay on while you watch?' })
+		);
+	});
+
+	it('reads the progress bar out as the question number', () => {
+		render(<ChooseYourSetupPage />);
+		expect(screen.getByRole('progressbar')).toHaveAttribute(
+			'aria-valuetext',
+			'Question 1 of 5'
+		);
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		expect(screen.getByRole('progressbar')).toHaveAttribute(
+			'aria-valuetext',
+			'Question 2 of 5'
+		);
+	});
+
+	it('presents a single-choice step as radios named by its question', () => {
+		render(<ChooseYourSetupPage />);
+
+		const group = screen.getByRole('radiogroup', { name: 'Where do you want to watch?' });
+		const stremio = within(group).getByRole('radio', { name: /Stremio/ });
+		expect(stremio).toHaveAttribute('aria-checked', 'false');
+		expect(stremio).not.toHaveAttribute('aria-pressed');
+		fireEvent.click(stremio);
+		expect(stremio).toHaveAttribute('aria-checked', 'true');
+		expect(
+			within(group)
+				.getAllByRole('radio')
+				.filter((radio) => radio.getAttribute('aria-checked') === 'true')
+		).toEqual([stremio]);
+	});
+
+	it('presents a multi-select step as toggle buttons named by its question', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		const group = screen.getByRole('group', { name: 'What do you already have?' });
+		expect(within(group).queryAllByRole('radio')).toEqual([]);
+		const realDebrid = within(group).getByRole('button', { name: /Real-Debrid/ });
+		const easynews = within(group).getByRole('button', { name: /Easynews/ });
+		expect(realDebrid).not.toHaveAttribute('aria-checked');
+		fireEvent.click(realDebrid);
+		fireEvent.click(easynews);
+		expect(realDebrid).toHaveAttribute('aria-pressed', 'true');
+		expect(easynews).toHaveAttribute('aria-pressed', 'true');
+		expect(within(group).getAllByText('Select all that apply')[0]).toHaveClass('text-gray-400');
+	});
+
+	it('toggles cards with Enter and Space and reaches an unavailable card with Tab', async () => {
+		const user = userEvent.setup();
+		render(<ChooseYourSetupPage />);
+		const stremio = screen.getByRole('radio', { name: /Stremio/ });
+		stremio.focus();
+		await user.keyboard('{Enter}');
+		expect(stremio).toHaveAttribute('aria-checked', 'true');
+		await user.click(screen.getByRole('button', { name: 'Next' }));
+
+		const realDebrid = screen.getByRole('button', { name: /Real-Debrid/ });
+		realDebrid.focus();
+		await user.keyboard(' ');
+		expect(realDebrid).toHaveAttribute('aria-pressed', 'true');
+		await user.keyboard('{Enter}');
+		expect(realDebrid).toHaveAttribute('aria-pressed', 'false');
+		await user.keyboard(' ');
+		await user.click(screen.getByRole('button', { name: 'Next' }));
+		await user.click(screen.getByRole('radio', { name: /No host/ }));
+		await user.click(screen.getByRole('button', { name: 'Next' }));
+
+		const arr = screen.getByRole('radio', { name: ARR });
+		for (let i = 0; i < 10 && document.activeElement !== arr; i++) await user.tab();
+		expect(document.activeElement).toBe(arr);
+		expect(arr).toHaveAccessibleName(/Unavailable: The arr workflow needs/);
+		await user.keyboard('{Enter}');
+		await user.keyboard(' ');
+		expect(arr).toHaveAttribute('aria-checked', 'false');
+		expect(screen.getByRole('radio', { name: /I am not sure yet/ })).toHaveAttribute(
+			'aria-checked',
+			'true'
+		);
+	});
+
+	it('gives the question labels under Your answers readable contrast', () => {
+		reachStremioRecommendation();
+
+		const label = screen.getByText('What do you already have?');
+		expect(label).toHaveClass('text-gray-400');
+		expect(label).not.toHaveClass('text-gray-500');
 	});
 });
