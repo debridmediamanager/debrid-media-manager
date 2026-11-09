@@ -631,7 +631,11 @@ async function siblingLook(
  * [Season 1]` is the 11-episode drama (34142), the 23 files the anime of that name (45527); TMDB
  * files `[Delta] Rascal Does Not Dream of Santa Claus S02` as season 2, "Rascal Does Not Dream of
  * Santa Claus", of Bunny Girl Senpai (82739), and that title's own show is a one-episode stub.
- * Taken only where one such show places more of the files than any other and than the one it had.
+ * Taken only where one such show places more of the files than any other and than the one it had,
+ * or, of those that place as many, is the one made for the service the name was taken from
+ * (`streamedOn`). A release DMM named nothing is looked for so too: the identifier reads
+ * `JoJos.Bizarre.Adventure.E25…` as a film, and of TMDB's two JoJo's Bizarre Adventure only the
+ * 2012 series has an E25, not the 13-episode OVA of 1993.
  */
 async function namesakeLook(
 	release: PlaceRequest,
@@ -639,7 +643,9 @@ async function namesakeLook(
 	sources: PlacementSources,
 	anime: AnimeIndex | null
 ): Promise<PlacedRelease> {
-	if (placed.skipped || placed.kind !== 'tv' || placed.tmdbId === null) return placed;
+	const unnamed = !placed.kind && !placed.imdbId;
+	if (placed.skipped || (!unnamed && (placed.kind !== 'tv' || placed.tmdbId === null)))
+		return placed;
 	const single = release.files.length === 1;
 	const numbered = release.files.filter(
 		(file) => fileNumbers(release.name, file.folder, file.path, single) !== null
@@ -647,14 +653,15 @@ async function namesakeLook(
 	const count = (answer: PlacedRelease) =>
 		answer.files.filter((file) => file.season !== null).length;
 	if (!numbered || count(placed) >= numbered) return placed;
+	// a number by a day written year, month and day is a site's scene, no episode: `Freeze.25.03.21…`
+	if (unnamed && SHORT_DATE.test(release.name)) return placed;
 	const title = letters(parseName(release.name).title);
 	if (title.length < 4) return placed;
 	const named = ((await sources.searchTv(parseName(release.name).title))?.results ?? [])
 		.map((row: any) => row?.id)
 		.filter((id: unknown): id is number => typeof id === 'number' && id !== placed.tmdbId)
 		.slice(0, 8);
-	let best = placed;
-	let tie = false;
+	const better: PlacedRelease[] = [];
 	for (const tmdbId of named) {
 		const details = await sources.show(tmdbId);
 		const names = [
@@ -673,11 +680,41 @@ async function namesakeLook(
 			sources,
 			anime
 		);
-		if (there.skipped) continue;
-		if (count(there) > count(best)) [best, tie] = [there, false];
-		else if (best !== placed && count(there) === count(best)) tie = true;
+		if (!there.skipped && count(there) > count(placed)) better.push(there);
 	}
-	return tie ? placed : best;
+	const most = better.filter((there) => count(there) === Math.max(...better.map(count)));
+	const [best, ...tied] = most.length > 1 ? await streamedOn(release, most, sources) : most;
+	return best && !tied.length ? best : placed;
+}
+
+const SHORT_DATE = /(?<!\d)\d{2}([\s._-])(?:0[1-9]|1[0-2])\1(?:0[1-9]|[12]\d|3[01])(?!\d)/;
+
+// The service a scene name says it was taken from, as TMDB's network id: `Kingdom.S02E02.1080p.NF.
+// WEB-DL…-ExREN` is Netflix's Korean Kingdom, beside three other Kingdoms that hold an S02E02
+const SERVICES: [RegExp, number][] = [
+	[/(?:^|[\s._-])NF(?=[\s._-]|$)/i, 213], // Netflix
+	[/(?:^|[\s._-])AMZN(?=[\s._-]|$)/i, 1024], // Prime Video
+	[/(?:^|[\s._-])DSNP(?=[\s._-]|$)/i, 2739], // Disney+
+	[/(?:^|[\s._-])ATVP(?=[\s._-]|$)/i, 2552], // Apple TV
+	[/(?:^|[\s._-])HULU(?=[\s._-]|$)/i, 453], // Hulu
+];
+
+/** Of shows a release places as well on, those TMDB lists as made for the service its name says it was taken from. */
+async function streamedOn(
+	release: PlaceRequest,
+	shows: PlacedRelease[],
+	sources: PlacementSources
+): Promise<PlacedRelease[]> {
+	const network = SERVICES.find(([tag]) => tag.test(release.name))?.[1];
+	if (network === undefined) return shows;
+	const made = await Promise.all(
+		shows.map(async (there) =>
+			((await sources.show(there.tmdbId!))?.networks ?? []).some(
+				(row: any) => row?.id === network
+			)
+		)
+	);
+	return shows.filter((_, at) => made[at]);
 }
 
 // A film a show's release carries beside its episodes: `[Movie 02] Heroes Rising`, `One Piece Movie

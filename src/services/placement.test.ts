@@ -33,6 +33,7 @@ import fun1024 from '@/test/fixtures/placement/rex-fun-2026-10-24.json';
 import fun1025 from '@/test/fixtures/placement/rex-fun-2026-10-25.json';
 import fun1101 from '@/test/fixtures/placement/rex-fun-2026-11-01.json';
 import saga from '@/test/fixtures/placement/saga-titles.json';
+import showsByTitle from '@/test/fixtures/placement/shows-named-by-title.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
@@ -1575,5 +1576,47 @@ describe('a film named by its title before a colon', () => {
 			tmdbId,
 		]);
 		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a release DMM names nothing, on the show TMDB titles as it', () => {
+	// zurg-usenet on fun (2026-11-09): numbered episodes the identifier reads as a film or is unsure
+	// of, of shows TMDB lists several of under the name (see the fixtures README)
+	const ask = async (name: string) => {
+		const c = showsByTitle.cases.find((c) => c.request.name === name)!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(showsByTitle.answers),
+			async (list) =>
+				list.map(({ name }) => (showsByTitle.answers.identify as any)[name] ?? null)
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return releases[0];
+	};
+
+	it('places an episode only one of them has', async () => {
+		// the 2012 series, not the 13-episode OVA of 1993
+		const placed = await ask('JoJos.Bizarre.Adventure.E25.MULTi.1080p.WEB.x264-AMB3R');
+		expect([placed.tmdbId, placed.files[0].season, placed.files[0].episode]).toEqual([
+			45790, 1, 25,
+		]);
+	});
+
+	it('places one several have on the one made for the service the name says', async () => {
+		// Netflix's Korean Kingdom, beside three other Kingdoms with an S02E02
+		const placed = await ask('Kingdom.S02E02.1080p.NF.WEB-DL.Atmos.DDP5.1.x264-ExREN');
+		expect([placed.tmdbId, placed.files[0].season, placed.files[0].episode]).toEqual([
+			70593, 2, 2,
+		]);
+	});
+
+	it.each([
+		'JoJos.Bizarre.Adventure.E01.MULTi.1080p.WEB.x264-AMB3R',
+		'Kingdom.S02E10.1280x720.Hi10p.AAC-Obfuscated',
+		// a site's scene of 21 March 2025, not episode 25 of the 2026 series Freeze
+		'Freeze.25.03.21.J.Pop.Fanatic.1080p',
+	])('leaves %s unnamed where nothing tells the shows apart', async (name) => {
+		expect((await ask(name)).kind).toBe(null);
 	});
 });
