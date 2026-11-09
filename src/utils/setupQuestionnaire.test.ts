@@ -800,7 +800,7 @@ describe('rex-stremio with a DMM API key is offered wherever rex-stremio is', ()
 	const rexStremioKey = {
 		id: 'rex-stremio-key',
 		title: 'rex-stremio with your DMM API key',
-		detail: 'Torrent streams DMM already holds a probe of skip ffprobe, so titles DMM knows reach rex in seconds.',
+		detail: 'rex-stremio skips ffprobe for a debrid stream of a torrent DMM already holds a probe of, so those titles reach rex in seconds.',
 		href: 'https://notes.debridmediamanager.com/rex/stremio/',
 	};
 	it.each([
@@ -1370,7 +1370,7 @@ describe('the Torznab benefit matches the Torznab page', () => {
 		const torznab = result.sponsorship.optional.find((benefit) => benefit.id === 'torznab');
 
 		expect(torznab?.detail).toBe(
-			'Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr, with cached-only feeds for Real-Debrid, AllDebrid, Debrid-Link, TorBox, Premiumize and Offcloud; the last three answer once your key is linked.'
+			'Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr, with cached-only feeds for Real-Debrid, AllDebrid, Debrid-Link, TorBox, Premiumize and Offcloud; the last three answer once your TorBox, Premiumize or Offcloud key is linked on the Torznab page.'
 		);
 		expect(torznab?.detail).not.toMatch(/live cache feeds/);
 	});

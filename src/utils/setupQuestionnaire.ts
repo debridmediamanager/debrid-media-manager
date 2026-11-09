@@ -492,7 +492,7 @@ const SPONSOR_BENEFITS = {
 	torznab: {
 		id: 'torznab',
 		title: 'DMM torrent indexer',
-		detail: 'Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr, with cached-only feeds for Real-Debrid, AllDebrid, Debrid-Link, TorBox, Premiumize and Offcloud; the last three answer once your key is linked.',
+		detail: 'Search DMM as a Torznab indexer from Prowlarr, Sonarr or Radarr, with cached-only feeds for Real-Debrid, AllDebrid, Debrid-Link, TorBox, Premiumize and Offcloud; the last three answer once your TorBox, Premiumize or Offcloud key is linked on the Torznab page.',
 		href: '/torznab',
 	},
 	newznab: {
@@ -546,7 +546,7 @@ const SPONSOR_BENEFITS = {
 	rexStremio: {
 		id: 'rex-stremio-key',
 		title: 'rex-stremio with your DMM API key',
-		detail: 'Torrent streams DMM already holds a probe of skip ffprobe, so titles DMM knows reach rex in seconds.',
+		detail: 'rex-stremio skips ffprobe for a debrid stream of a torrent DMM already holds a probe of, so those titles reach rex in seconds.',
 		href: 'https://notes.debridmediamanager.com/rex/stremio/',
 	},
 	api: {
