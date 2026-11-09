@@ -1301,3 +1301,85 @@ describe('players read naturally mid-sentence', () => {
 		});
 	});
 });
+
+describe('route copy stays on the player and source it is about', () => {
+	it('keeps the Emby plugin limit off the Jellyfin plugin route', () => {
+		const limits = (player: 'jellyfin' | 'emby') =>
+			recommendSetup(answers({ player, host: 'existing' })).limits;
+
+		expect(limits('jellyfin')).toContain('Plugins have their own archive/version limits.');
+		expect(limits('jellyfin').join(' ')).not.toMatch(/Emby/);
+		expect(limits('emby')).toContain(
+			'Plugins have their own archive/version limits. DMM Emby plugins cover debrid, not direct NNTP or hosted NZBs.'
+		);
+	});
+
+	it('mentions the rex feed for separate Easynews only on a rex route', () => {
+		const requirements = (overrides: Partial<SetupAnswers>) =>
+			recommendSetup(answers({ sources: ['easynews'], host: 'existing', ...overrides }))
+				.sourceCoverage[0].requirements;
+
+		expect(requirements({ player: 'plex', plexRoute: 'existing-server' })).toEqual([
+			'Keep Easynews in a compatible player.',
+		]);
+		expect(requirements({ player: 'jellyfin' })).toEqual([
+			'Keep Easynews in a compatible player.',
+		]);
+		expect(requirements({ player: 'plex', plexRoute: 'rex' })).toEqual([
+			'Keep Easynews in a compatible player. For rex, a compatible URL addon or feed producer must supply streams and metadata.',
+		]);
+	});
+
+	it('says Stremio searches Easynews rather than a provider library', () => {
+		const components = recommendSetup(answers({ sources: ['easynews'] })).components;
+
+		expect(components).toContain('Stremio searches Easynews and plays its files.');
+		expect(components).not.toContain('Stremio plays the selected provider library.');
+		expect(recommendSetup(answers()).components).toContain(
+			'Stremio plays the selected provider library.'
+		);
+	});
+
+	const bazarr = 'https://notes.debridmediamanager.com/zurg/guides/subtitles/';
+
+	it('points at player subtitles, not Bazarr, without zurg or arr', () => {
+		const result = recommendSetup(answers({ needs: ['subtitles'] }));
+
+		expect(result.optionalNeeds).toContain(
+			'Check embedded/player subtitle support in your player.'
+		);
+		expect(result.setupLinks.map(({ href }) => href)).not.toContain(bazarr);
+	});
+
+	it('keeps rex subtitle search for rex without zurg, minus the Bazarr link', () => {
+		const result = recommendSetup(
+			answers({
+				player: 'plex',
+				plexRoute: 'rex',
+				sources: ['url-addon'],
+				host: 'willing',
+				needs: ['subtitles'],
+			})
+		);
+
+		expect(result.optionalNeeds).toContain(
+			'rex offers Search Subtitles without Bazarr. Embedded/player subtitles may already be sufficient.'
+		);
+		expect(result.setupLinks.map(({ href }) => href)).not.toContain(bazarr);
+	});
+
+	it.each([
+		{ player: 'webdav', host: 'willing' },
+		{ host: 'willing', preference: 'arr' },
+	] satisfies Partial<SetupAnswers>[])(
+		'keeps the Bazarr note with zurg or arr (%o)',
+		(overrides) => {
+			const result = recommendSetup(answers({ ...overrides, needs: ['subtitles'] }));
+
+			expect(result.optionalNeeds).toContain(
+				'Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles.'
+			);
+			expect(result.setupLinks.map(({ href }) => href)).toContain(bazarr);
+		}
+	);
+});

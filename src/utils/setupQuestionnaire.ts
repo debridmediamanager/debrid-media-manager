@@ -780,7 +780,7 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 			'none',
 			[],
 			[
-				'Keep Easynews in a compatible player. For rex, a compatible URL addon or feed producer must supply streams and metadata.',
+				`Keep Easynews in a compatible player.${rex ? ' For rex, a compatible URL addon or feed producer must supply streams and metadata.' : ''}`,
 			],
 			[
 				DMM_CAST_LINKS.easynews,
@@ -801,7 +801,12 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 					? 'Submit NZBs through DMM to TorBox Pro, wait for completion, then use TorBox Cast.'
 					: 'Use your account in Stremio without running zurg, rex or a media server.',
 				'none',
-				['DMM Cast addon → your player', 'Stremio plays the selected provider library.'],
+				[
+					'DMM Cast addon → your player',
+					source === 'easynews'
+						? 'Stremio searches Easynews and plays its files.'
+						: 'Stremio plays the selected provider library.',
+				],
 				hosted
 					? ['TorBox Pro and a way to submit the NZB']
 					: ['A supported provider account or Easynews account'],
@@ -865,7 +870,7 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 			],
 			[{ label: `DMM ${name} plugin setup`, href: `/${player}` }],
 			[
-				'Plugins have their own archive/version limits. DMM Emby plugins cover debrid, not direct NNTP or hosted NZBs.',
+				`Plugins have their own archive/version limits.${player === 'emby' ? ' DMM Emby plugins cover debrid, not direct NNTP or hosted NZBs.' : ''}`,
 			]
 		);
 	}
@@ -1160,12 +1165,16 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			'Download or copy complete files and verify playback without the network. Virtual files, .strm links and debrid catalogs are not offline copies.'
 		);
 	if (answers.needs.includes('subtitles')) {
+		// The Bazarr notes only apply where zurg or arr runs.
+		const bazarr = answers.preference === 'arr' || routes.some(({ route: r }) => r.usesZurg);
 		result.optionalNeeds.push(
 			rex
 				? 'rex offers Search Subtitles without Bazarr. Embedded/player subtitles may already be sufficient.'
-				: 'Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles.'
+				: bazarr
+					? 'Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles.'
+					: 'Check embedded/player subtitle support in your player.'
 		);
-		links(note('zurg/guides/subtitles', 'Subtitle setup notes'));
+		if (bazarr) links(note('zurg/guides/subtitles', 'Subtitle setup notes'));
 	}
 	if (answers.needs.includes('mixed'))
 		result.optionalNeeds.push(
