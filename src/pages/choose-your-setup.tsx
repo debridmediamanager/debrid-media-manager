@@ -448,7 +448,11 @@ function SponsorBenefits({
 					? sponsorship.required.length
 						? 'Sponsor DMM to unlock the required integrations below, then use the linked setup pages.'
 						: sponsorship.usesDmmTools
-							? 'Sponsorship is optional for the free tools above. Sponsor DMM to unlock the relevant upgrades below.'
+							? sponsorship.optional.some(
+									({ id }) => id !== 'sponsor-benefits' && id !== 'discord-role'
+								)
+								? 'Sponsorship is optional for the free tools above. Sponsor DMM for the upgrades below.'
+								: 'Sponsorship is optional for the free tools above.'
 							: sponsorship.hasAccount
 								? 'Sponsorship is optional here; the benefits below are for your accounts or other routes.'
 								: 'Sponsorship is optional here; the benefits below are for other routes.'

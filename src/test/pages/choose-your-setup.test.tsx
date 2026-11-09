@@ -66,6 +66,35 @@ describe('choose your setup page', () => {
 		expect(document.activeElement).toHaveTextContent('DMM Cast → Stremio');
 	});
 
+	it('names the upgrades below when the free tools have some', () => {
+		reachStremioRecommendation();
+
+		expect(
+			within(screen.getByTestId('sponsorship-section')).getByText(
+				'Sponsorship is optional for the free tools above. Sponsor DMM for the upgrades below.'
+			)
+		).toBeInTheDocument();
+	});
+
+	it('names no upgrades when only the sponsor page and Discord role are listed', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /An external player/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /AllDebrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Choose and play as I go/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		expect(
+			within(screen.getByTestId('sponsorship-section')).getByText(
+				'Sponsorship is optional for the free tools above.'
+			)
+		).toBeInTheDocument();
+	});
+
 	it('writes each source line as sentences', () => {
 		reachStremioRecommendation();
 
