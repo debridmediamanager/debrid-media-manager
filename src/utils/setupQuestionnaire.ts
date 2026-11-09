@@ -1221,8 +1221,8 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		const seerr = seerrFits(player, answers.plexRoute);
 		result.alternatives.push({
 			title: seerr ? 'DMM Wanted or Seerr requests' : 'DMM Wanted requests',
-			// Only Stremio, Kodi and external players browse a hosted Cast library.
-			detail: `Use Wanted → zurg for automatic acquisition without arr.${seerr ? ' Seerr can send requests through DMM Wanted.' : ''} These need sponsorship and a running zurg host${playerNeedsFullHost(player) || player === 'webdav' ? '.' : '; hosted Cast libraries do not need your own server just to browse them.'}`,
+			// Stremio and Kodi browse a hosted Cast library; an external player browses DMM's library pages.
+			detail: `Use Wanted → zurg for automatic acquisition without arr.${seerr ? ' Seerr can send requests through DMM Wanted.' : ''} These need sponsorship and a running zurg host${player === 'stremio' || player === 'kodi' ? '; hosted Cast libraries do not need your own server just to browse them.' : player === 'external' ? "; DMM's library pages do not need your own server just to browse them." : '.'}`,
 			links: [
 				note('zurg/guides/dmm-wanted', 'DMM Wanted setup'),
 				...(seerr ? [note('dmm/seerr', 'Seerr through DMM')] : []),

@@ -1394,29 +1394,30 @@ describe('Seerr needs a Plex, Jellyfin or Emby server to request against', () =>
 		});
 	});
 
+	const host = 'These need sponsorship and a running zurg host';
+	const cast = `${host}; hosted Cast libraries do not need your own server just to browse them.`;
+
 	it.each([
-		[{ player: 'plex', plexRoute: 'existing-server' }, false],
-		[{ player: 'plex', plexRoute: 'rex' }, false],
-		[{ player: 'plex', plexRoute: 'either' }, false],
-		[{ player: 'jellyfin' }, false],
-		[{ player: 'emby' }, false],
-		[{ player: 'webdav' }, false],
-		[{ player: 'stremio' }, true],
-		[{ player: 'kodi' }, true],
-		[{ player: 'external' }, true],
-	] satisfies [Partial<SetupAnswers>, boolean][])(
-		'mentions browsing hosted Cast libraries only where the player has them (%o)',
-		(mode, cast) => {
+		[{ player: 'plex', plexRoute: 'existing-server' }, `${host}.`],
+		[{ player: 'plex', plexRoute: 'rex' }, `${host}.`],
+		[{ player: 'plex', plexRoute: 'either' }, `${host}.`],
+		[{ player: 'jellyfin' }, `${host}.`],
+		[{ player: 'emby' }, `${host}.`],
+		[{ player: 'webdav' }, `${host}.`],
+		[{ player: 'stremio' }, cast],
+		[{ player: 'kodi' }, cast],
+		[
+			{ player: 'external' },
+			`${host}; DMM's library pages do not need your own server just to browse them.`,
+		],
+	] satisfies [Partial<SetupAnswers>, string][])(
+		'says what each player browses without a server (%o)',
+		(mode, ending) => {
 			const detail = managed(mode).alternatives.find(({ title }) =>
 				title.startsWith('DMM Wanted')
 			)?.detail;
 
-			expect(detail).toMatch(/These need sponsorship and a running zurg host[;.]/);
-			expect(
-				detail?.endsWith(
-					'; hosted Cast libraries do not need your own server just to browse them.'
-				)
-			).toBe(cast);
+			expect(detail?.slice(-ending.length)).toBe(ending);
 		}
 	);
 });
