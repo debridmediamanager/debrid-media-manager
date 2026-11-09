@@ -872,8 +872,18 @@ async function placeByRules(
 		// Nor is a title the index does not know, of a show the dataset files cour by cour in
 		// several TMDB seasons: `[Some-Stuffs] Pocket Monsters - Aim to be a Pokémon Master 10`
 		// is a series of its own, numbered from its own first, not Pokémon's tenth episode.
+		// unless its number runs past every episode of the cour's season, which no cour's own number
+		// does: [DB]'s `Gintama (2017)_-_317_` counts the show's run to TMDB's S8E1, though its year
+		// names Gintama. (2017), TMDB's 13-episode season 9
+		const past =
+			hit?.numbered &&
+			hit.target.tmdb === show.tmdbId &&
+			hit.target.season > 0 &&
+			season === null &&
+			episode > (counts.get(hit.target.season) ?? Infinity);
 		counted = hit
-			? !(
+			? past ||
+				!(
 					hit.numbered &&
 					(hit.target.season === 0 || hit.target.season > 1 || hit.target.offset > 0)
 				)

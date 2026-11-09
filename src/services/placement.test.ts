@@ -9,6 +9,7 @@ import {
 	type PlacementSources,
 	type PlaceRequest,
 } from '@/services/placement';
+import pastCour from '@/test/fixtures/placement/anime-past-cour.json';
 import answers from '@/test/fixtures/placement/answers.json';
 import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
 import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
@@ -1399,5 +1400,32 @@ describe('a season TVDB lists under the show and TMDB as a show of its own', () 
 		const [placed, expected] = await ask('The.Amazing.World.of.Gumball.S06E45');
 		expect([placed.tmdbId, placed.files[0].season]).toEqual([37606, null]);
 		expect(placed).toEqual(expected);
+	});
+});
+
+describe("a fansub number past every episode of its cour's season", () => {
+	// zurg-usenet on fun (2026-11-09): [DB]'s Gintama numbers its files by the show's run, and names
+	// the year of the cour after the one they are (see the fixtures README)
+	it("counts it through the show's seasons", async () => {
+		const [c] = pastCour.cases;
+		const { releases, complete } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			{
+				...recordedSources(pastCour.answers),
+				anime: async () =>
+					buildAnimeIndex(
+						buildFranchiseIndex(pastCour.answers.anime.fribb as FribbAnimeEntry[]),
+						pastCour.answers.anime.titles
+					),
+			},
+			async () => [null]
+		);
+		expect(complete).toBe(true);
+		// `Gintama (2017)_-_317_` to `_328_`: TMDB's season 8, Gintama., not season 9, Gintama. (2017)
+		expect(releases[0].files.map((f) => [f.season, f.episode, f.how])).toEqual(
+			Array.from({ length: 12 }, (_, n) => [8, n + 1, 'absolute'])
+		);
+		expect(releases[0]).toEqual(c.expect);
 	});
 });
