@@ -859,3 +859,54 @@ describe('Easynews alone is not offered zurg benefits', () => {
 		).toContain('wanted');
 	});
 });
+
+describe('provider WebDAV follows the chosen provider', () => {
+	it.each([
+		['real-debrid', 'Real-Debrid', 'https://dav.real-debrid.com/'],
+		['premiumize', 'Premiumize', 'https://webdav.premiumize.me/'],
+		['torbox', 'TorBox', 'https://webdav.torbox.app/'],
+		['debrid-link', 'Debrid-Link', 'https://webdav.debrid.link/'],
+	] as const)('sends %s straight to its own WebDAV without a host', (source, label, address) => {
+		const result = recommendSetup(
+			answers({ player: 'webdav', sources: [source], host: 'none' })
+		);
+
+		expect(result.primaryRoute.id).toBe('provider-webdav');
+		expect(result.primaryRoute.title).toBe(`${label} WebDAV → your player`);
+		expect(result.prerequisites.join(' ')).toContain(address);
+		expect(result.limits.join(' ')).toMatch(/zurg is not involved/);
+		expect(result.conflicts).toEqual([]);
+	});
+
+	it.each([
+		['all-debrid', 'AllDebrid'],
+		['offcloud', 'Offcloud'],
+	] as const)('needs zurg on a host for %s, which has no WebDAV', (source, label) => {
+		const result = recommendSetup(
+			answers({ player: 'webdav', sources: [source], host: 'none' })
+		);
+
+		expect(result.sourceCoverage[0].integration).toBe(`${label} → zurg → your network player`);
+		expect(result.hostRequirement).toBe('zurg');
+		expect(result.conflicts.join(' ')).toMatch(/zurg needs a host/);
+		expect(result.sourceNotes).toContain(
+			`${label} has no WebDAV of its own, so a WebDAV player needs zurg on a host.`
+		);
+	});
+
+	it('names the provider WebDAV as an alternative to zurg on a host', () => {
+		const result = recommendSetup(
+			answers({ player: 'webdav', sources: ['real-debrid'], host: 'existing' })
+		);
+
+		expect(result.primaryRoute.id).toBe('webdav-zurg-debrid');
+		expect(result.alternatives).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					title: 'Skip zurg: Real-Debrid WebDAV',
+					detail: expect.stringContaining('https://dav.real-debrid.com/'),
+				}),
+			])
+		);
+	});
+});

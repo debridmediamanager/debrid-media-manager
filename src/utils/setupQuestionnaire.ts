@@ -341,6 +341,14 @@ const DMM_CAST_LINKS: Record<string, SetupLink> = {
 	easynews: { label: 'DMM Cast for Easynews', href: '/stremio-easynews' },
 };
 
+/** Providers that serve their own WebDAV. AllDebrid and Offcloud have none. */
+const PROVIDER_WEBDAV: Partial<Record<SetupSource, string>> = {
+	'real-debrid': 'https://dav.real-debrid.com/',
+	premiumize: 'https://webdav.premiumize.me/',
+	torbox: 'https://webdav.torbox.app/',
+	'debrid-link': 'https://webdav.debrid.link/',
+};
+
 const SOURCE_LABELS = new Map<SetupSource, string>(
 	SOURCE_OPTIONS.map(({ value, label }) => [value, label])
 );
@@ -847,21 +855,22 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 			]
 		);
 	}
-	if (player === 'webdav' && debrid && answers.host === 'none' && answers.preference !== 'arr')
+	const webdav = PROVIDER_WEBDAV[source];
+	if (player === 'webdav' && webdav && answers.host === 'none' && answers.preference !== 'arr') {
+		const name = SOURCE_LABELS.get(source)!;
 		return route(
-			'provider-webdav-conditional',
-			'Provider WebDAV, if available',
-			'A direct provider endpoint can avoid hosting zurg, but only if your provider and player support it.',
+			'provider-webdav',
+			`${name} WebDAV → your player`,
+			`Add ${name}'s own WebDAV server to your player. No host or zurg is needed.`,
 			'none',
-			['Provider WebDAV → compatible player'],
+			[`${name} WebDAV → your player`],
 			[
-				'Verify the selected provider offers WebDAV for these files. Otherwise choose a host for zurg; an SMB-only player needs an SMB share instead.',
+				`Add ${webdav} to your player and sign in with the WebDAV credentials ${name} documents for your account.`,
 			],
-			[ZURG],
-			[
-				'This is conditional: not every provider offers WebDAV. zurg needs its own running host.',
-			]
+			[],
+			[`zurg is not involved, so ${name}'s own folder layout applies.`]
 		);
+	}
 	return zurgRoute(source, player, answers.plexRoute);
 }
 export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
@@ -963,12 +972,27 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				'An HTTP file or local disk needs a feed producer for rex; the program submitting metadata can be separate from the HTTP byte server.'
 			);
 	}
-	if (player === 'webdav')
+	if (player === 'webdav') {
 		result.alternatives.push({
 			title: 'For an SMB-only player',
 			detail: 'Use an existing SMB share, or zurg → filesystem mount → host SMB share → player. The host provides SMB; zurg itself does not. This bridge needs a normal host, not just the Android zurg app.',
 			links: [ZURG],
 		});
+		for (const source of selected) {
+			const name = SOURCE_LABELS.get(source)!;
+			const webdav = PROVIDER_WEBDAV[source];
+			if (source === 'all-debrid' || source === 'offcloud')
+				result.sourceNotes.push(
+					`${name} has no WebDAV of its own, so a WebDAV player needs zurg on a host.`
+				);
+			else if (webdav && answers.host !== 'none' && answers.preference !== 'arr')
+				result.alternatives.push({
+					title: `Skip zurg: ${name} WebDAV`,
+					detail: `Add ${webdav} to your player and sign in with the WebDAV credentials ${name} documents for your account. zurg is not involved, so ${name}'s own folder layout applies.`,
+					links: [],
+				});
+		}
+	}
 	if (answers.player === 'plex' && answers.plexRoute === 'either')
 		result.alternatives.push({
 			title: 'Use Plex Media Server instead',
