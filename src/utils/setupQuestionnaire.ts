@@ -726,25 +726,24 @@ function noHostClause(player: Player, selected: SetupSource[], undecided: boolea
 			);
 		return names.length > 1 ? `your ${orList(names)} accounts` : `your ${names[0]} account`;
 	};
+	// DMM Cast (TorBox Cast is its TorBox addon) and the Kodi addon also play TorBox Pro hosted NZBs.
+	const cast = selected.filter(
+		(source) => accounts.includes(source) || source === 'torbox-hosted'
+	);
 	if (player === 'stremio')
 		return account
-			? `, or use DMM Cast with ${yours(accounts)}, which needs no host`
+			? `, or use DMM Cast with ${yours(cast)}, which needs no host`
 			: hosted
 				? ', or use TorBox Cast, which needs no host'
 				: usenet
 					? ", or switch to TorBox hosted NZBs through TorBox Cast, or to DMM's Real-Debrid transfer, which need no host"
 					: '';
-	if (player === 'kodi') {
-		// The Kodi addon also plays TorBox Pro hosted NZBs from the TorBox library.
-		const kodi = selected.filter(
-			(source) => accounts.includes(source) || source === 'torbox-hosted'
-		);
-		return kodi.length
-			? `, or use the Kodi addon with ${yours(kodi)}, which needs no host`
+	if (player === 'kodi')
+		return cast.length
+			? `, or use the Kodi addon with ${yours(cast)}, which needs no host`
 			: usenet
 				? ", or switch to TorBox hosted NZBs through the Kodi addon, or to DMM's Real-Debrid transfer, which need no host"
 				: '';
-	}
 	if (player === 'external')
 		return account
 			? `, or use DMM Watch with ${yours(accounts)}, which needs no host`

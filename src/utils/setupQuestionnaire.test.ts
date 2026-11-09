@@ -1453,6 +1453,11 @@ describe('a no-host conflict names a route the player can use', () => {
 			{ player: 'stremio', sources: ['torbox-hosted', 'usenet'] },
 			`${zurgHost}, or use TorBox Cast, which needs no host.`,
 		],
+		// TorBox Cast is DMM's Cast for TorBox, so DMM Cast names TorBox Pro beside a debrid account.
+		[
+			{ player: 'stremio', sources: ['real-debrid', 'usenet', 'torbox-hosted'] },
+			`${zurgHost}, or use DMM Cast with your Real-Debrid or TorBox Pro accounts, which needs no host.`,
+		],
 		[
 			{ player: 'kodi', sources: ['usenet', 'torbox-hosted'] },
 			`${zurgHost}, or use the Kodi addon with your TorBox Pro account, which needs no host.`,
