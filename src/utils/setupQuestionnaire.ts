@@ -252,7 +252,7 @@ export interface SetupSponsorship {
 	routeAvailable: boolean;
 	/** A route uses DMM, zurg or rex, not only files, addons or provider WebDAV the user already has. */
 	usesDmmTools: boolean;
-	/** A debrid, Easynews or NZB account is selected, which benefits such as uploader priority apply to. */
+	/** A benefit for the selected accounts is listed; today only uploader priority, for Real-Debrid. */
 	hasAccount: boolean;
 }
 
@@ -685,9 +685,10 @@ function sponsorshipFor(
 		list.filter((benefit, index) => list.findIndex((item) => item.id === benefit.id) === index);
 	const requiredBenefits = unique(required);
 	const requiredIds = new Set(requiredBenefits.map((benefit) => benefit.id));
+	const optionalBenefits = unique(optional).filter((benefit) => !requiredIds.has(benefit.id));
 	return {
 		required: requiredBenefits,
-		optional: unique(optional).filter((benefit) => !requiredIds.has(benefit.id)),
+		optional: optionalBenefits,
 		freeFeatures: [
 			...(usesCast ? (['cast'] as const) : []),
 			...(usesRex ? (['rex'] as const) : []),
@@ -700,7 +701,9 @@ function sponsorshipFor(
 				r.id !== 'existing-url-addon-stremio' &&
 				r.id !== 'provider-webdav'
 		),
-		hasAccount: debrid || hasNzb || selected.has('easynews'),
+		hasAccount: [...requiredBenefits, ...optionalBenefits].some(
+			({ id }) => id === SPONSOR_BENEFITS.queue.id
+		),
 	};
 }
 /** A route this player can use with the selected sources and no host; empty when there is none. */

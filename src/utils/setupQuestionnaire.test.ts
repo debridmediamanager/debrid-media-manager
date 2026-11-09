@@ -658,8 +658,8 @@ describe('the sponsor box knows when no route uses a DMM tool', () => {
 	);
 });
 
-describe('the sponsor box knows when an account is selected', () => {
-	// Benefits such as uploader priority apply to an account even on a route with no DMM tool.
+describe('the sponsor box knows when a benefit for your accounts is listed', () => {
+	// Uploader priority applies to a Real-Debrid account even on a route with no DMM tool; no other account has a benefit of its own.
 	it.each([
 		[{ sources: ['url-addon'] }, false],
 		[
@@ -671,12 +671,22 @@ describe('the sponsor box knows when an account is selected', () => {
 			},
 			false,
 		],
+		[
+			{
+				player: 'plex',
+				plexRoute: 'existing-server',
+				sources: ['easynews', 'http-local'],
+				host: 'existing',
+			},
+			false,
+		],
 		[{ player: 'webdav', sources: ['real-debrid'], host: 'none' }, true],
-		[{ sources: ['easynews'] }, true],
-		[{ sources: ['torbox-hosted'] }, true],
-		[{ sources: ['usenet'], host: 'existing' }, true],
+		[{ player: 'webdav', sources: ['all-debrid'], host: 'none' }, false],
+		[{ sources: ['easynews'] }, false],
+		[{ sources: ['torbox-hosted'] }, false],
+		[{ sources: ['usenet'], host: 'existing' }, false],
 	] satisfies [Partial<SetupAnswers>, boolean][])(
-		'says whether %o selects one',
+		'says whether %o lists one',
 		(overrides, hasAccount) => {
 			expect(recommendSetup(answers(overrides)).sponsorship.hasAccount).toBe(hasAccount);
 		}
