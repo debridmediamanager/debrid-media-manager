@@ -439,6 +439,7 @@ const STREMIO = note('zurg/guides/stremio', 'zurg Stremio setup');
 const TORBOX_NZB = note('zurg/providers/torbox-nzb', 'zurg TorBox hosted NZB setup');
 const JELLYFIN = { label: 'DMM Jellyfin NZB setup', href: '/jellyfin' };
 const GUIDE = { label: 'Read the full setup guide', href: SETUP_GUIDE_URL };
+const NEWZNAB = { label: 'DMM Newznab setup', href: '/newznab' };
 
 interface SourceRoute {
 	id: string;
@@ -1278,9 +1279,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				{ label: 'DMM Torznab setup', href: '/torznab' },
 				note('zurg/guides/sonarr-radarr-torrents', 'Sonarr/Radarr torrent setup')
 			);
-		// DMM's SABnzbd endpoint for Real-Debrid takes NZBs from a Usenet indexer too.
-		if (nzb || selected.includes('real-debrid'))
-			links({ label: 'DMM Newznab setup', href: '/newznab' });
+		if (nzb) links(NEWZNAB);
 		if (nzb) links(note('zurg/guides/sonarr-radarr', 'Sonarr/Radarr NZB setup'));
 		links(note('zurg/guides/acquisition', 'Acquisition options'));
 		if (player === 'stremio' && selected.includes('usenet'))
@@ -1298,12 +1297,15 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	}
 	if (selected.includes('real-debrid')) {
 		const arr = answers.preference === 'arr';
+		// Without an NZB account zurg is no NZB download client, so the indexer belongs to this route.
+		const indexer = arr && !selected.includes('usenet') && !selected.includes('torbox-hosted');
 		result.alternatives.push({
 			title: 'NZBs without your own news account',
 			detail: `DMM can transfer a Usenet result into your Real-Debrid library, subject to its transfer allowance and queue. This is a hosted transfer, not native NNTP in Real-Debrid.${arr ? " Sonarr and Radarr can hand NZBs to DMM's SABnzbd-compatible endpoint, which transfers them into your Real-Debrid account; Sonarr/Radarr still need a Usenet indexer such as DMM's Newznab." : ''}`,
 			links: [
 				{ label: 'DMM Transfers', href: '/transfers' },
 				...(arr ? [{ label: 'DMM SABnzbd endpoint', href: '/sabnzbd' }] : []),
+				...(indexer ? [NEWZNAB] : []),
 				{
 					label: 'Usenet route comparison',
 					href: SETUP_GUIDE_URL + '#usenet-without-a-usenet-account-which-route',

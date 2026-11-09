@@ -1701,11 +1701,29 @@ describe('Sonarr/Radarr results explain the zurg they hand releases to', () => {
 		const result = (preference: Preference) =>
 			recommendSetup(answers({ host: 'existing', preference }));
 		const newznab = { label: 'DMM Newznab setup', href: '/newznab' };
+		const transfer = (preference: Preference, sources: SetupSource[] = ['real-debrid']) =>
+			recommendSetup(answers({ sources, host: 'existing', preference })).alternatives.find(
+				({ title }) => title === 'NZBs without your own news account'
+			);
 
 		expect(result('arr').sponsorship.optional.map(({ id }) => id)).toContain('newznab');
-		expect(result('arr').setupLinks).toContainEqual(newznab);
+		// The main route has no NZB download client, so the link sits with the SABnzbd alternative.
+		expect(result('arr').setupLinks).not.toContainEqual(newznab);
+		expect(transfer('arr')?.links).toContainEqual(newznab);
 		expect(result('managed').sponsorship.optional.map(({ id }) => id)).not.toContain('newznab');
 		expect(result('managed').setupLinks).not.toContainEqual(newznab);
+		expect(transfer('managed')?.links).not.toContainEqual(newznab);
+		// With an NZB account of its own, zurg is the NZB download client on the main route.
+		expect(
+			recommendSetup(
+				answers({
+					sources: ['real-debrid', 'torbox-hosted'],
+					host: 'existing',
+					preference: 'arr',
+				})
+			).setupLinks
+		).toContainEqual(newznab);
+		expect(transfer('arr', ['real-debrid', 'usenet'])?.links).not.toContainEqual(newznab);
 	});
 
 	it('says to give zurg an nzb account for own Usenet', () => {
