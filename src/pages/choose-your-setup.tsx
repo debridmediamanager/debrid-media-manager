@@ -39,6 +39,7 @@ const INITIAL_ANSWERS: SetupAnswers = {
 type QuestionKey = 'player' | 'plexRoute' | 'sources' | 'host' | 'preference' | 'needs';
 
 const QUESTION_HEADING_ID = 'setup-question-heading';
+const MULTI_SELECT_HINT_ID = 'setup-multi-select-hint';
 
 const QUESTION_TITLES: Record<QuestionKey, string> = {
 	player: 'Where do you want to watch?',
@@ -119,10 +120,26 @@ function ChoiceCard({
 			{disabledReason ? (
 				<span className="text-xs text-amber-200">Unavailable: {disabledReason}</span>
 			) : null}
-			{multi ? (
-				<span className="text-[11px] text-gray-400">Select all that apply</span>
-			) : null}
 		</button>
+	);
+}
+
+// Said once for the group, so each toggle is named by its own label and description.
+function MultiSelectGroup({ children }: { children: React.ReactNode }) {
+	return (
+		<>
+			<p id={MULTI_SELECT_HINT_ID} className="mb-3 text-xs text-gray-400">
+				Select all that apply
+			</p>
+			<div
+				role="group"
+				aria-labelledby={QUESTION_HEADING_ID}
+				aria-describedby={MULTI_SELECT_HINT_ID}
+				className="grid gap-3 sm:grid-cols-2"
+			>
+				{children}
+			</div>
+		</>
 	);
 }
 
@@ -247,11 +264,7 @@ function QuestionChoices({
 
 	if (keyName === 'sources') {
 		return (
-			<div
-				role="group"
-				aria-labelledby={QUESTION_HEADING_ID}
-				className="grid gap-3 sm:grid-cols-2"
-			>
+			<MultiSelectGroup>
 				{SOURCE_OPTIONS.map((option) => (
 					<ChoiceCard
 						key={option.value}
@@ -270,7 +283,7 @@ function QuestionChoices({
 						}
 					/>
 				))}
-			</div>
+			</MultiSelectGroup>
 		);
 	}
 
@@ -339,11 +352,7 @@ function QuestionChoices({
 	}
 
 	return (
-		<div
-			role="group"
-			aria-labelledby={QUESTION_HEADING_ID}
-			className="grid gap-3 sm:grid-cols-2"
-		>
+		<MultiSelectGroup>
 			{NEED_OPTIONS.map((option) => (
 				<ChoiceCard
 					key={option.value}
@@ -360,7 +369,7 @@ function QuestionChoices({
 					}
 				/>
 			))}
-		</div>
+		</MultiSelectGroup>
 	);
 }
 

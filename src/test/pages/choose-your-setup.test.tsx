@@ -995,16 +995,22 @@ describe('choose your setup page', () => {
 		fireEvent.click(easynews);
 		expect(realDebrid).toHaveAttribute('aria-pressed', 'true');
 		expect(easynews).toHaveAttribute('aria-pressed', 'true');
-		expect(within(group).getAllByText('Select all that apply')[0]).toHaveClass('text-gray-400');
+		// Said once for the group, so each card is named by its own label and description.
+		expect(group).toHaveAccessibleDescription('Select all that apply');
+		expect(screen.getAllByText('Select all that apply')).toHaveLength(1);
+		expect(realDebrid).not.toHaveAccessibleName(/Select all that apply/);
+		expect(screen.getByText('Select all that apply')).toHaveClass('text-gray-400');
 	});
 
 	it('presents the needs step as a group named by its question', () => {
 		reachStremioRecommendation();
 		editAnswer('Anything else that matters?');
 
+		const group = screen.getByRole('group', { name: 'Anything else that matters?' });
+		expect(group).toHaveAccessibleDescription('Select all that apply');
 		expect(
-			screen.getByRole('group', { name: 'Anything else that matters?' })
-		).toBeInTheDocument();
+			within(group).getByRole('button', { name: /Watch away from home/ })
+		).not.toHaveAccessibleName(/Select all that apply/);
 	});
 
 	it('toggles cards with Enter and Space and reaches an unavailable card with Tab', async () => {
