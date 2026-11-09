@@ -1011,16 +1011,41 @@ async function ofYear(
 		return row.season === 0 || started === year || started === year - 1;
 	});
 	const lists = await Promise.all(aired.map((row) => show.episodes(row.season)));
-	const title = titleText(file.slice(token.index + token[0].length));
+	// the title without the show's name before it: `2016e11.MythBusters - The Reunion` is "Reunion"
+	const names = show.names.map((name) => words(name).join(' '));
+	const own = (text: string) => {
+		const name = names.find((name) => text === name || text.startsWith(`${name} `));
+		return name ? text.slice(name.length).trim() : text;
+	};
+	const titleAt = (raw: string) => {
+		const title = titleText(raw);
+		const whole = title && own(title.whole);
+		return whole ? { whole, first: own(title!.first) || whole } : null;
+	};
+	const rest = file.slice(token.index + token[0].length);
+	const title = titleAt(rest);
 	if (!title) return null;
-	const found = titled(
-		title,
-		aired.flatMap((row, n) =>
-			(lists[n] ?? [])
-				.filter((item) => item.airDate?.startsWith(String(year)))
-				.map((item) => ({ ...item, season: row.season }))
+	const candidates = aired.flatMap((row, n) =>
+		(lists[n] ?? [])
+			.filter((item) => item.airDate?.startsWith(String(year)))
+			.map((item) => ({ ...item, season: row.season }))
+	);
+	// else by the first of the myths a file is titled by (`S2004E01.Explosive.Decompression,.Frog.
+	// Giggin',.Rear.Axle` is "Explosive Decompression"), else the one episode of the year whose title
+	// holds the file's (`2004x17.Christmas.Special` is "Viewers-Choice/Christmas Special")
+	const first = rest.includes(',') ? titleAt(rest.split(',')[0]) : null;
+	const bare = (text: string) => ` ${text.replace(PART, '')} `;
+	const holding = candidates.filter((item) =>
+		[title.whole, title.first].some(
+			(text) =>
+				text.replace(/ /g, '').length >= 3 &&
+				bare(words(item.name).join(' ')).includes(bare(text))
 		)
 	);
+	const found =
+		titled(title, candidates) ??
+		(first && titled(first, candidates)) ??
+		(holding.length === 1 ? holding[0] : null);
 	return found ? [found.season, found.episode] : null;
 }
 

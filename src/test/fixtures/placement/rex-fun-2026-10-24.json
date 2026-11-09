@@ -88855,11 +88855,11 @@
 					},
 					{
 						"path": "MythBusters.2004e17.Viewers choice - Christmas Special [Special].mkv",
-						"season": null,
-						"episode": null,
+						"season": 2,
+						"episode": 17,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1212610
 					},
 					{
 						"path": "MythBusters.2005e01.Buster Special [Special].avi",
@@ -89639,11 +89639,11 @@
 					},
 					{
 						"path": "MythBusters.2008e19.End with a bang.mkv",
-						"season": null,
-						"episode": null,
+						"season": 6,
+						"episode": 19,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 65345
 					},
 					{
 						"path": "MythBusters.2008e20.Viewers Special threequel!.mkv",
@@ -90695,11 +90695,11 @@
 					},
 					{
 						"path": "MythBusters.2015e14.Star Wars - The Myths strike back.mkv",
-						"season": null,
-						"episode": null,
+						"season": 13,
+						"episode": 14,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1158619
 					},
 					{
 						"path": "MythBusters.2016e01.MythBusters Revealed.mkv",
@@ -90783,11 +90783,11 @@
 					},
 					{
 						"path": "MythBusters.2016e11.MythBusters - The Reunion.mkv",
-						"season": null,
-						"episode": null,
+						"season": 14,
+						"episode": 11,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1158631
 					},
 					{
 						"path": "MythBusters.2016e12.Duct tape - The return.mp4",

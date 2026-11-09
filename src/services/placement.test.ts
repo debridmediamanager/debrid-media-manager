@@ -25,6 +25,7 @@ import imdbSeries from '@/test/fixtures/placement/imdb-series.json';
 import kitchenNightmares from '@/test/fixtures/placement/kitchen-nightmares-tvdb.json';
 import lost from '@/test/fixtures/placement/lost-tvdb-order.json';
 import namesakes from '@/test/fixtures/placement/miniseries-namesake-films.json';
+import mythbusters from '@/test/fixtures/placement/mythbusters-year-titles.json';
 import cases from '@/test/fixtures/placement/releases.json';
 import revival from '@/test/fixtures/placement/revival-seasons.json';
 import fun1022 from '@/test/fixtures/placement/rex-fun-2026-10-22.json';
@@ -1618,5 +1619,30 @@ describe('a release DMM names nothing, on the show TMDB titles as it', () => {
 		'Freeze.25.03.21.J.Pop.Fanatic.1080p',
 	])('leaves %s unnamed where nothing tells the shows apart', async (name) => {
 		expect((await ask(name)).kind).toBe(null);
+	});
+});
+
+describe('a year-numbered episode titled otherwise than TMDB titles it', () => {
+	// zurg on fun (2026-11-09): two MythBusters packs numbered in TVDB's years, whose titles are
+	// TMDB's with more words, the show's name, or the episode's myths (see the fixtures README)
+	it.each([
+		['MythBusters.2004e17.Viewers choice - Christmas Special [Special].mkv', [2, 17]],
+		// "End" is a release word where it opens a title
+		['MythBusters.2008e19.End with a bang.mkv', [6, 19]],
+		['MythBusters.2016e11.MythBusters - The Reunion.mkv', [14, 11]],
+		["Smyth S2004E02 Explosive Decompression, Frog Giggin', Rear Axle.mp4", [2, 1]],
+		['Smyth S2010E06 No Pain No Gain, Propane Tank Rocket.mp4', [8, 6]],
+		['Smyth S2008E08 Shark Week 2008.mp4', [6, 8]],
+	])('places %s', async (path, [season, episode]) => {
+		const c = mythbusters.cases.find((c) => c.request.files.some((f) => f.path === path))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(mythbusters.answers),
+			async () => [null]
+		);
+		const file = releases[0].files.find((f) => f.path === path)!;
+		expect([file.season, file.episode]).toEqual([season, episode]);
+		expect(releases[0]).toEqual(c.expect);
 	});
 });
