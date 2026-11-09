@@ -379,6 +379,38 @@ describe('choose your setup page', () => {
 		);
 	});
 
+	it('drops the arr reset notice once the setup is submitted and edited again', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('button', { name: /Plex apps/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Keep my existing Plex Media Server/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Automation with Sonarr\/Radarr/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		editAnswer('Can a machine stay on while you watch?');
+		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		expect(screen.getByRole('status')).toHaveTextContent(
+			/Automation with Sonarr\/Radarr was reset to/
+		);
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		editAnswer('Where do you want to watch?');
+		expect(
+			screen.getByRole('heading', { name: 'Where do you want to watch?' })
+		).toBeInTheDocument();
+		expect(
+			screen.queryByText(/Automation with Sonarr\/Radarr was reset to/)
+		).not.toBeInTheDocument();
+	});
+
 	it('keeps arr enabled and executable when a full host is selected', () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('button', { name: /Stremio/ }));

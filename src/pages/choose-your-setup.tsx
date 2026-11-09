@@ -737,11 +737,13 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 			setCurrentStep((step) => step + 1);
 			return;
 		}
+		setCompatibilityNotice(null);
 		setSubmitted(true);
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 
 	function edit(key: QuestionKey) {
+		setCompatibilityNotice(null);
 		setSubmitted(false);
 		setCurrentStep(questionKeys.indexOf(key));
 		window.scrollTo({ top: 0, behavior: 'smooth' });
