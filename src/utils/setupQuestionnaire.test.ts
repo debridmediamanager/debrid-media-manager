@@ -1937,6 +1937,34 @@ describe('players read naturally mid-sentence', () => {
 				.primaryRoute.id
 		).toBe('combined-sources');
 	});
+
+	// Away from Stremio the pair takes two routes, which still combine; only the note counts accounts.
+	it.each([
+		{ player: 'jellyfin', host: 'existing' },
+		{ player: 'external', host: 'existing' },
+	] satisfies Partial<SetupAnswers>[])(
+		'combines the two routes TorBox and its hosted NZBs take (%o)',
+		(overrides) => {
+			const result = recommendSetup(
+				answers({ sources: ['torbox', 'torbox-hosted'], ...overrides })
+			);
+
+			expect(result.primaryRoute.id).toBe('combined-sources');
+			expect(result.sourceNotes.join(' ')).not.toMatch(/Multiple sources can coexist/);
+		}
+	);
+
+	// In Stremio both are the TorBox addon, and files beside it are a separate route.
+	it.each(['stremio', 'unsure'] satisfies Player[])(
+		'keeps the TorBox addon one route beside files in %s',
+		(player) => {
+			expect(
+				recommendSetup(
+					answers({ player, sources: ['torbox', 'torbox-hosted', 'http-local'] })
+				).primaryRoute.id
+			).toBe('dmm-cast-stremio');
+		}
+	);
 });
 
 describe('"None yet" shows which accounts work with the player', () => {

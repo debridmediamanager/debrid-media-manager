@@ -1138,18 +1138,22 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	const accounts =
 		selected.length -
 		(selected.includes('torbox') && selected.includes('torbox-hosted') ? 1 : 0);
-	if (accounts > 1) {
+	if (accounts > 1)
 		result.sourceNotes.push(
 			'Multiple sources can coexist, but each keeps its own credentials, quota and availability. The source list below shows the route for each.'
 		);
-		if (new Set(integrated.map((x) => x.route.title)).size > 1)
-			result.primaryRoute = {
-				id: 'combined-sources',
-				title: `Combine your sources in ${PLAYER_PHRASES[player]}`,
-				summary:
-					'Use the routes below together. Each source retains its own requirements; adding one integration does not configure the others.',
-			};
-	}
+	// In Stremio, TorBox's DMM Cast and TorBox Cast for its hosted NZBs are one addon, /stremio-torbox.
+	const torboxAddon = player === 'stremio' && selected.includes('torbox-hosted');
+	const titles = integrated
+		.filter(({ source }) => !torboxAddon || source !== 'torbox')
+		.map((x) => x.route.title);
+	if (new Set(titles).size > 1)
+		result.primaryRoute = {
+			id: 'combined-sources',
+			title: `Combine your sources in ${PLAYER_PHRASES[player]}`,
+			summary:
+				'Use the routes below together. Each source retains its own requirements; adding one integration does not configure the others.',
+		};
 	if (!selected.length)
 		result.prerequisites.push(
 			'Choose a provider account, your own news account, an addon or files you already have.'

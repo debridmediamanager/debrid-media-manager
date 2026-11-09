@@ -232,6 +232,31 @@ describe('setup copy and benefits for every combination of up to two sources', (
 	const offered = (result: SetupRecommendation) =>
 		[...result.sponsorship.required, ...result.sponsorship.optional].map(({ id }) => id);
 
+	it('combines routes with different titles, counting the Stremio TorBox addon once', () => {
+		expect(
+			breaking((_, result) => {
+				const integrated = result.sourceCoverage.filter(
+					({ status }) => status === 'integrated'
+				);
+				// TorBox's DMM Cast and its TorBox Cast for hosted NZBs are one addon, /stremio-torbox.
+				const stremioTorBox =
+					integrated.some(({ source }) => source === 'torbox') &&
+					integrated.some(
+						({ source, integration }) =>
+							source === 'torbox-hosted' &&
+							integration.endsWith('TorBox Cast → Stremio')
+					);
+				return (
+					new Set(integrated.map(({ integration }) => integration)).size > 1 &&
+					!stremioTorBox &&
+					!['combined-sources', 'arr-zurg', 'resolve-constraints'].includes(
+						result.primaryRoute.id
+					)
+				);
+			})
+		).toEqual([]);
+	});
+
 	it('names players with a lowercase article mid-sentence', () => {
 		expect(
 			breaking((_, result) =>
