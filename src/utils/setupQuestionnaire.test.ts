@@ -480,6 +480,18 @@ describe('sponsorship benefits follow the selected route', () => {
 		expect(ids('optional', emby)).not.toContain('remote-help');
 	});
 
+	it.each([
+		['android', false],
+		['existing', true],
+	] as const)(
+		'offers remote help, which runs in a terminal, to Kodi with own Usenet on %s: %s',
+		(host, offeredHelp) => {
+			const result = recommendSetup(answers({ player: 'kodi', sources: ['usenet'], host }));
+
+			expect(ids('optional', result).includes('remote-help')).toBe(offeredHelp);
+		}
+	);
+
 	it('offers DMM Newznab as an optional indexer for Stremio direct Usenet search', () => {
 		const result = recommendSetup(
 			answers({ player: 'stremio', sources: ['usenet'], host: 'willing' })

@@ -621,7 +621,10 @@ function sponsorshipFor(
 	}
 	if (selected.has('real-debrid')) add(optional, 'queue');
 	if (usesZurg || usesRex) add(optional, 'api');
-	if (usesZurg || usesRex) add(optional, 'remoteHelp');
+	// Remote help runs in a terminal, which an Android device running zurg itself does not have.
+	const terminal =
+		answers.host !== 'android' || routes.some(({ route: source }) => source.host === 'server');
+	if ((usesZurg || usesRex) && terminal) add(optional, 'remoteHelp');
 	if (!routeAvailable || !required.length) add(optional, 'sponsorBenefits');
 	add(optional, 'discord');
 
