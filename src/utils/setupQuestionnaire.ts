@@ -1410,11 +1410,16 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		if (bazarr) links(note('zurg/guides/subtitles', 'Subtitle setup notes'));
 	}
 	if (answers.needs.includes('mixed')) {
-		// Local files and an addon the player cannot use bring no cloud titles.
-		const cloudRoute = routes.some(
-			({ source, route: r }) => source !== 'http-local' && r.status === 'integrated'
-		);
-		const cloud = `cloud titles come from ${cloudRoute ? 'the routes above' : 'the route you choose'}.`;
+		// Local files and an addon the player cannot use bring no cloud titles; two accounts in
+		// one route (the Kodi addon, say) are still one route.
+		const cloudRoutes = new Set(
+			routes
+				.filter(
+					({ source, route: r }) => source !== 'http-local' && r.status === 'integrated'
+				)
+				.map(({ route: r }) => r.title)
+		).size;
+		const cloud = `cloud titles come from ${cloudRoutes > 1 ? 'the routes above' : cloudRoutes ? 'the route above' : 'the route you choose'}.`;
 		result.optionalNeeds.push(
 			rex
 				? 'Local files join rex through an HTTP source and a feed producer; each source supplies its own metadata and reachable HTTP bytes.'

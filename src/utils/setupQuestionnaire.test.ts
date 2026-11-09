@@ -1947,11 +1947,11 @@ describe('route copy stays on the player and source it is about', () => {
 	it.each([
 		[
 			{},
-			'Stremio needs a compatible addon for local files; cloud titles come from the routes above.',
+			'Stremio needs a compatible addon for local files; cloud titles come from the route above.',
 		],
 		[
 			{ player: 'webdav' },
-			'Local files stay in your player; cloud titles come from the routes above.',
+			'Local files stay in your player; cloud titles come from the route above.',
 		],
 		[
 			{ player: 'jellyfin' },
@@ -1975,7 +1975,7 @@ describe('route copy stays on the player and source it is about', () => {
 		],
 		[
 			{ player: 'kodi' },
-			'Local files stay in your player; cloud titles come from the routes above.',
+			'Local files stay in your player; cloud titles come from the route above.',
 		],
 	] satisfies [Partial<SetupAnswers>, string][])(
 		'says where local files stay for %o',
@@ -2015,10 +2015,13 @@ describe('route copy stays on the player and source it is about', () => {
 		[['url-addon'], 'the route you choose'],
 		[['http-local'], 'the route you choose'],
 		[['url-addon', 'http-local'], 'the route you choose'],
-		[['real-debrid'], 'the routes above'],
-		[['url-addon', 'real-debrid'], 'the routes above'],
+		[['real-debrid'], 'the route above'],
+		[['url-addon', 'real-debrid'], 'the route above'],
+		// Two accounts in the one Kodi addon are one route.
+		[['real-debrid', 'all-debrid'], 'the route above'],
+		[['real-debrid', 'usenet'], 'the routes above'],
 	] satisfies [SetupSource[], string][])(
-		'points Kodi at the routes above only when one brings cloud titles (%o)',
+		'points Kodi at the route or routes above only when one brings cloud titles (%o)',
 		(sources, routes) => {
 			expect(
 				recommendSetup(answers({ player: 'kodi', sources, needs: ['mixed'] })).optionalNeeds
