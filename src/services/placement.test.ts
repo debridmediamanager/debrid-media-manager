@@ -17,6 +17,7 @@ import answers from '@/test/fixtures/placement/answers.json';
 import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
 import filmsBeforeShows from '@/test/fixtures/placement/films-before-shows.json';
 import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
+import filmsOfEpisodes from '@/test/fixtures/placement/films-of-imdb-episodes.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
 import spelled from '@/test/fixtures/placement/identifier-titles-spelled.json';
 import imdbSeries from '@/test/fixtures/placement/imdb-series.json';
@@ -1280,9 +1281,6 @@ describe('a film neither the id sent nor the identifier names', () => {
 	it.each([
 		// TMDB lists two films of 1922 titled Pay Day
 		'Pay.Day.1922.1080p.HMAX.WEB-DL.DD2.0.H.264-alfaHD',
-		// TMDB's film names an IMDb episode of Live from Lincoln Center and Great Performances
-		'Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ',
-		'Macbeth.2010.1080p.AMZN.WEB-DL.DD.2.0.H.264-monkee',
 	])('leaves %s unnamed where TMDB names no one film of it', async (name) => {
 		const [placed, expected] = await ask(name);
 		expect([placed.kind, placed.imdbId, placed.tmdbId]).toEqual([null, null, null]);
@@ -1514,6 +1512,36 @@ describe('a film named by a show that first aired later', () => {
 			Infinity,
 			recordedSources(filmsBeforeShows.answers),
 			async () => [null]
+		);
+		expect([releases[0].kind, releases[0].imdbId, releases[0].tmdbId]).toEqual([
+			'movie',
+			imdbId,
+			tmdbId,
+		]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a film TMDB lists under an id IMDb lists as an episode', () => {
+	// zurg-usenet on fun (2026-11-09): stage recordings TMDB keeps as films and IMDb as episodes of
+	// Live from Lincoln Center and Great Performances (see the fixtures README)
+	it.each([
+		['Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ', 'tt7140738', 609261],
+		// a file named by a hash, as the release; the Polish Makbet of 2010 aside
+		['Macbeth.2010.1080p.AMZN.WEB-DL.DD.2.0.H.264-monkee', 'tt1570337', 133448],
+		[
+			'Rodgers.and.Hammersteins.Carousel.Live.From.Lincoln.Center.2013.1080p.WEBRip.x264-NGP',
+			'tt2845166',
+			408974,
+		],
+	])("names %s as TMDB's film", async (name, imdbId, tmdbId) => {
+		const c = filmsOfEpisodes.cases.find((c) => c.request.name === name)!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(filmsOfEpisodes.answers),
+			async (list) =>
+				list.map(({ name }) => (filmsOfEpisodes.answers.identify as any)[name] ?? null)
 		);
 		expect([releases[0].kind, releases[0].imdbId, releases[0].tmdbId]).toEqual([
 			'movie',

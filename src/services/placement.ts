@@ -921,10 +921,15 @@ async function filmByTitle(
 	if (found.length !== 1) return placed;
 	const imdbId = (await sources.movieIds(found[0].id))?.imdb_id;
 	if (typeof imdbId !== 'string' || !/^tt\d{7,}$/.test(imdbId)) return placed;
+	const files = release.files.map((file) => unplaced(file.path));
 	const film = await resolve(imdbId, 'movie', release, sources);
-	return film?.kind === 'movie' && film.tmdbId !== null
-		? { ...film, files: release.files.map((file) => unplaced(file.path)) }
-		: placed;
+	if (film?.kind === 'movie' && film.tmdbId !== null) return { ...film, files };
+	// TMDB's film of an IMDb id IMDb lists as an episode, which resolves to its series:
+	// `Falsettos.2017` is IMDb's episode of Live from Lincoln Center and TMDB's film of it alone
+	const own = ((await sources.find(imdbId))?.movie_results ?? []).some(
+		(row: any) => row?.id === found[0].id
+	);
+	return own ? { kind: 'movie', imdbId, tmdbId: found[0].id, files } : placed;
 }
 
 /**
