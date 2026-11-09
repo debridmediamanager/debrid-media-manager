@@ -1083,6 +1083,16 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				note('dmm/seerr', 'Seerr through DMM'),
 			],
 		});
+	// Only a route the selected sources can actually use without a host.
+	const noHostRoute = selected.some(
+		(source) => DEBRID_SOURCES.includes(source) || source === 'easynews'
+	)
+		? ', or use DMM Cast, the Kodi addon or DMM Watch with that account, which need no host'
+		: selected.includes('torbox-hosted')
+			? ', or use TorBox Cast, which needs no host'
+			: selected.includes('usenet')
+				? ", or switch to TorBox hosted NZBs or DMM's Real-Debrid transfer, which need no host"
+				: '';
 	if (
 		result.hostRequirement === 'server' &&
 		(answers.host === 'none' || answers.host === 'android')
@@ -1094,11 +1104,11 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				: answers.host === 'android'
 					? (hostChoiceReason(answers, answers.host) ??
 						`This route needs a normal host for ${rex ? 'rex' : playerLabel(player)}. The supported Android route runs zurg itself, not that whole server stack.`)
-					: `${rex ? 'rex and its source need' : `${player === 'plex' ? 'Plex Media Server' : playerLabel(player)} needs`} a machine that stays on. Choose a host, or use a compatible hosted Cast/direct-player route instead.`
+					: `${rex ? 'rex and its source need' : `${player === 'plex' ? 'Plex Media Server' : playerLabel(player)} needs`} a machine that stays on. Choose a host${noHostRoute}.`
 		);
 	if (result.hostRequirement === 'zurg' && answers.host === 'none')
 		result.conflicts.push(
-			'zurg needs a host that stays on while you watch. Choose a host or a supported Android device; otherwise use a compatible hosted Cast/direct-player route.'
+			`zurg needs a host that stays on while you watch. Choose a host or a supported Android device${noHostRoute}.`
 		);
 	if (result.hostRequirement === 'zurg' && answers.host === 'android') {
 		result.prerequisites.push(

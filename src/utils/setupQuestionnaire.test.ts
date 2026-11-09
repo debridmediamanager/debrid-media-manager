@@ -996,7 +996,7 @@ describe('host messages name the server that needs the host', () => {
 		);
 
 		expect(result.conflicts).toContain(
-			'Plex Media Server needs a machine that stays on. Choose a host, or use a compatible hosted Cast/direct-player route instead.'
+			'Plex Media Server needs a machine that stays on. Choose a host, or use DMM Cast, the Kodi addon or DMM Watch with that account, which need no host.'
 		);
 	});
 
@@ -1064,4 +1064,63 @@ describe('Kodi with TorBox hosted NZBs', () => {
 			expect(result.limits.join(' ')).toMatch(/finish and repair/);
 		}
 	);
+});
+
+describe('a no-host conflict names a route that exists for the sources', () => {
+	it.each([
+		{ player: 'stremio' },
+		{ player: 'kodi' },
+		{ player: 'plex', plexRoute: 'existing-server' },
+		{ player: 'plex', plexRoute: 'rex' },
+		{ player: 'plex', plexRoute: 'either' },
+		{ player: 'jellyfin' },
+		{ player: 'emby' },
+		{ player: 'webdav' },
+		{ player: 'external' },
+		{ player: 'unsure' },
+	] as const)('points own Usenet without a host at hosted routes (%o)', (mode) => {
+		const conflicts = recommendSetup(
+			answers({ ...mode, sources: ['usenet'], host: 'none' })
+		).conflicts.join(' ');
+
+		expect(conflicts).toContain(
+			", or switch to TorBox hosted NZBs or DMM's Real-Debrid transfer, which need no host."
+		);
+		expect(conflicts).not.toContain('Cast/direct-player');
+	});
+
+	it('points TorBox hosted NZBs at TorBox Cast', () => {
+		const result = recommendSetup(
+			answers({
+				player: 'plex',
+				plexRoute: 'existing-server',
+				sources: ['torbox-hosted'],
+				host: 'none',
+			})
+		);
+
+		expect(result.conflicts).toContain(
+			'Plex Media Server needs a machine that stays on. Choose a host, or use TorBox Cast, which needs no host.'
+		);
+	});
+
+	it('names no hosted route when none fits the sources', () => {
+		const result = recommendSetup(
+			answers({ player: 'plex', plexRoute: 'rex', sources: ['url-addon'], host: 'none' })
+		);
+
+		expect(result.conflicts).toContain(
+			'rex and its source need a machine that stays on. Choose a host.'
+		);
+	});
+
+	it('names the hosted routes in the zurg host conflict for a debrid account', () => {
+		const result = recommendSetup(
+			answers({ player: 'webdav', sources: ['offcloud'], host: 'none' })
+		);
+
+		expect(result.conflicts).toContain(
+			'zurg needs a host that stays on while you watch. Choose a host or a supported Android device, or use DMM Cast, the Kodi addon or DMM Watch with that account, which need no host.'
+		);
+	});
 });
