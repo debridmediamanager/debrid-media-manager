@@ -1402,7 +1402,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 					? 'rex offers Search Subtitles without Bazarr; with Sonarr/Radarr, Bazarr sidecar subtitles reach rex too.'
 					: 'rex offers Search Subtitles without Bazarr. Embedded/player subtitles may already be sufficient.'
 				: bazarr
-					? 'Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles.'
+					? `Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles.${unreachedRoutes ? ` They do not reach ${unreachedRoutes}.` : ''}`
 					: arr && unreachedRoutes
 						? `Bazarr sidecars live beside zurg's files and do not reach ${unreachedRoutes}; check embedded/player subtitle support.`
 						: 'Check embedded/player subtitle support in your player.'

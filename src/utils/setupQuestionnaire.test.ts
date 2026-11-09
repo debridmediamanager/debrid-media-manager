@@ -2128,6 +2128,29 @@ describe('route copy stays on the player and source it is about', () => {
 	});
 
 	it.each([
+		[{ player: 'kodi' }, 'the Kodi addon'],
+		[{ player: 'external' }, 'DMM Watch'],
+	] satisfies [Partial<SetupAnswers>, string][])(
+		'says which routes Bazarr sidecars miss when another source plays through zurg (%o)',
+		(overrides, routes) => {
+			const result = recommendSetup(
+				answers({
+					sources: ['real-debrid', 'usenet'],
+					host: 'existing',
+					preference: 'arr',
+					needs: ['subtitles'],
+					...overrides,
+				})
+			);
+
+			expect(result.optionalNeeds).toContain(
+				`Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles. They do not reach ${routes}.`
+			);
+			expect(result.setupLinks.map(({ href }) => href)).toContain(bazarr);
+		}
+	);
+
+	it.each([
 		[{}, 'DMM Cast'],
 		[{ player: 'kodi' }, 'the Kodi addon'],
 		[{ player: 'external' }, 'DMM Watch'],
