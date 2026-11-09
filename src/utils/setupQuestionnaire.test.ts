@@ -1053,6 +1053,16 @@ describe('Kodi can browse a provider WebDAV instead of the addon', () => {
 		);
 	});
 
+	// TorBox's WebDAV is not known to list hosted NZB downloads, which the addon plays.
+	it('leaves TorBox out when the addon plays TorBox hosted NZBs', () => {
+		expect(browse({ sources: ['torbox', 'torbox-hosted'], host: 'none' })).toBeUndefined();
+		expect(
+			browse({ sources: ['torbox', 'torbox-hosted', 'real-debrid'], host: 'none' })?.detail
+		).toBe(
+			'Kodi also reads WebDAV: add Real-Debrid WebDAV (https://dav.real-debrid.com/) with no host and sign in with the WebDAV credentials Real-Debrid documents for your account, or run zurg → WebDAV → Kodi on a host for exact naming and placement.'
+		);
+	});
+
 	it.each([
 		{ sources: ['offcloud'] },
 		{ sources: ['torbox-hosted'] },

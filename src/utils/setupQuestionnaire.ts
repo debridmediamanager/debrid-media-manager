@@ -1193,8 +1193,12 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				});
 		}
 	}
-	// Beside the Kodi addon, Kodi's own WebDAV source reads a provider WebDAV or zurg.
-	const kodiWebdav = selected.filter((source) => PROVIDER_WEBDAV[source]);
+	// Beside the Kodi addon, Kodi's own WebDAV source reads a provider WebDAV or zurg. TorBox's
+	// WebDAV is not known to list the hosted NZB downloads the addon plays, so it cannot replace it.
+	const kodiWebdav = selected.filter(
+		(source) =>
+			PROVIDER_WEBDAV[source] && (source !== 'torbox' || !selected.includes('torbox-hosted'))
+	);
 	// Sonarr/Radarr import into zurg's __magic__ folders, which only zurg's own WebDAV shows.
 	if (
 		player === 'kodi' &&
