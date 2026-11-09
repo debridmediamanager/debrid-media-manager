@@ -2024,6 +2024,11 @@ describe('route copy stays on the player and source it is about', () => {
 			{ player: 'jellyfin', sources: ['real-debrid', 'torbox-hosted'] },
 			"Add your debrid account to that zurg's mount instead of the plugin when Kodi, a WebDAV player or another server must read the same library.",
 		],
+		// Own Usenet and TorBox hosted NZBs each run their own zurg on Emby.
+		[
+			{ player: 'emby', sources: ['real-debrid', 'usenet', 'torbox-hosted'] },
+			"Add your debrid account to one of those zurgs' mounts instead of the plugin when Kodi, a WebDAV player or another server must read the same library.",
+		],
 		// That zurg already holds torbox_nzb, and one zurg takes either nzb or torbox_nzb, not both.
 		[
 			{ player: 'jellyfin', sources: ['usenet', 'torbox-hosted'] },
