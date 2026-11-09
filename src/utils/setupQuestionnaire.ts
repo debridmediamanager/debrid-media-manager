@@ -1295,9 +1295,9 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		result.alternatives.push({
 			title: `zurg → mount → ${playerLabel(player)} when other consumers need the files`,
 			detail: second
-				? `${join ? "Add your debrid account to that zurg's mount and run" : 'Run'} a second zurg with an nzb account and its own mount and data directory ${consumers}; one zurg takes only one NZB account.`
+				? `${join ? "Add your debrid account to that zurg's mount and run" : 'Run'} a second zurg with an nzb account and its own mount and data directory ${consumers}; one zurg takes only one NZB account.${TWO_ZURGS_WANTED}`
 				: `${join ? `Add your debrid account to ${backendKinds.size === 2 ? "one of those zurgs' mounts" : "that zurg's mount"}` : 'Run zurg with a filesystem mount'} instead of the plugin ${consumers}.`,
-			links: [ZURG],
+			links: second ? [ZURG, TWO_ZURGS] : [ZURG],
 		});
 	}
 	if (answers.preference === 'arr') {

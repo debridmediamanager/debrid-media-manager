@@ -2191,11 +2191,11 @@ describe('route copy stays on the player and source it is about', () => {
 		// That zurg already holds torbox_nzb, and one zurg takes either nzb or torbox_nzb, not both.
 		[
 			{ player: 'jellyfin', sources: ['usenet', 'torbox-hosted'] },
-			'Run a second zurg with an nzb account and its own mount and data directory when Kodi, a WebDAV player or another server must read the same library; one zurg takes only one NZB account.',
+			'Run a second zurg with an nzb account and its own mount and data directory when Kodi, a WebDAV player or another server must read the same library; one zurg takes only one NZB account. With dmm_api_key on both, turn the dmm-wanted source off on one, or every Wanted title is fetched twice.',
 		],
 		[
 			{ player: 'jellyfin', sources: ['real-debrid', 'usenet', 'torbox-hosted'] },
-			"Add your debrid account to that zurg's mount and run a second zurg with an nzb account and its own mount and data directory when Kodi, a WebDAV player or another server must read the same library; one zurg takes only one NZB account.",
+			"Add your debrid account to that zurg's mount and run a second zurg with an nzb account and its own mount and data directory when Kodi, a WebDAV player or another server must read the same library; one zurg takes only one NZB account. With dmm_api_key on both, turn the dmm-wanted source off on one, or every Wanted title is fetched twice.",
 		],
 	] satisfies [Partial<SetupAnswers>, string][])(
 		'points the mount alternative at the zurg another source already runs (%o)',
@@ -2207,6 +2207,25 @@ describe('route copy stays on the player and source it is about', () => {
 			).toBe(detail);
 		}
 	);
+
+	// Both zurgs read the Wanted list when they carry the same dmm_api_key.
+	it('links two zurgs on one DMM key from the second zurg beside the Jellyfin NZB plugin', () => {
+		expect(
+			recommendSetup(
+				answers({
+					player: 'jellyfin',
+					sources: ['usenet', 'torbox-hosted'],
+					host: 'existing',
+				})
+			).alternatives.find(({ title }) => title.startsWith('zurg → mount'))?.links
+		).toEqual([
+			{ label: 'zurg setup', href: 'https://notes.debridmediamanager.com/zurg/setup/' },
+			{
+				label: 'Two zurgs on one DMM key',
+				href: 'https://notes.debridmediamanager.com/zurg/guides/dmm-wanted/#two-zurgs-on-one-key',
+			},
+		]);
+	});
 
 	it('mentions the rex feed for separate Easynews only on a rex route', () => {
 		const requirements = (overrides: Partial<SetupAnswers>) =>
