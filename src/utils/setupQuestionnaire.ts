@@ -1292,7 +1292,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		);
 	if (result.hostRequirement === 'zurg' && answers.host === 'android') {
 		result.prerequisites.push(
-			'zurg Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and TorBox hosted NZBs are not available on Android.'
+			'zurg Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and zurg Android has no TorBox hosted NZB (torbox_nzb) backend.'
 		);
 		links(note('zurg/guides/android', 'zurg Android guide'));
 	}

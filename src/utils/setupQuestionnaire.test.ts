@@ -1999,12 +1999,13 @@ describe('zurg Android has no TorBox hosted NZB backend', () => {
 		}
 	);
 
-	it('says TorBox hosted NZBs are not available in the Android prerequisite', () => {
+	// TorBox hosted NZBs still play on that device through TorBox Cast or the Kodi addon.
+	it('says zurg Android lacks the torbox_nzb backend in the Android prerequisite', () => {
 		expect(
 			recommendSetup(answers({ player: 'kodi', sources: ['usenet'], host: 'android' }))
 				.prerequisites
 		).toContain(
-			'zurg Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and TorBox hosted NZBs are not available on Android.'
+			'zurg Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and zurg Android has no TorBox hosted NZB (torbox_nzb) backend.'
 		);
 	});
 });
