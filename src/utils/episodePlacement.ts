@@ -984,6 +984,24 @@ async function placeByRules(
 			const found = await placed([aligned.season, aligned.episode], 'aligned');
 			if (found) return { ...found, episodeEnd: aligned.episodeEnd };
 		}
+		// a file of TVDB's episodes that are every part of one of TMDB's: Freakazoid's
+		// `S01E14-E15-E16-E17-E18` is TMDB's S1E5, which TVDB lists as five segments
+		if (show.aligned && numbers.part === undefined && numbers.end !== null && season < 1900) {
+			const [first, last, next] = await Promise.all(
+				[episode, numbers.end, numbers.end + 1].map((n) => show.aligned!(season, n))
+			);
+			const same = (x?: AlignedEpisode | null, y?: AlignedEpisode | null) =>
+				Boolean(x && y && x.season === y.season && x.episode === y.episode);
+			if (
+				first?.part === 1 &&
+				same(first, last) &&
+				last!.part === numbers.end - episode + 1 &&
+				!same(last, next)
+			) {
+				const found = await placed([first.season, first.episode], 'aligned');
+				if (found) return { ...found, episodeEnd: null };
+			}
+		}
 		const named = await placed([season, episode], 'tmdb');
 		if (named) return named;
 		if (season >= 1900) {
@@ -1178,10 +1196,19 @@ function titled<T extends { name: string }>(
 			? [name.replace(/ /g, ''), name.replace(PART, '').replace(/ /g, ''), plain(name)]
 			: ['', '', ''];
 	});
+	// a first segment cut before the part its whole title numbers names no other part: Freakazoid's
+	// `The Chip (2)` is not TMDB's "The Chip: Part 1"
+	const part = (text: string) => / (?:part |pt )?(\d{1,2})$/.exec(words(text).join(' '))?.[1];
+	const own = part(title.whole);
 	for (const text of new Set([title.whole, title.first])) {
 		for (const form of [0, 1, 2]) {
 			const key = form === 2 ? plain(text) : text.replace(/ /g, '');
 			const found = candidates.filter((_, n) => keys[n][form] === key);
+			const other =
+				own &&
+				text !== title.whole &&
+				![own, undefined].includes(part(found[0]?.name ?? ''));
+			if (found.length === 1 && other) continue;
 			if (found.length) return found.length === 1 ? found[0] : null;
 		}
 	}
@@ -1568,7 +1595,7 @@ const holdsBoth = (whole: number | null, a: number | null, b: number | null) =>
  * dates, which TMDB gives Below Deck Mediterranean's season 6 a week after TVDB. Between two such
  * pairs, as many of each pair in order; otherwise they are read in runs of days a day or less
  * apart, where as many of each pair in order, two of TVDB's on one of TMDB's as long as both
- * (beside a titled pair too) are its two parts, and one of TVDB's as long as two of TMDB's spans
+ * (beside a titled pair too) are its two parts, as are TVDB's on one TMDB titles by as many segments, and one of TVDB's as long as two of TMDB's spans
  * them. An episode left over is a special on the other side when one is titled so within a day.
  * A season TVDB's mostly paired episodes do not cover maps nothing; where it is mapped, an
  * episode TMDB lacks is null if its number is another's on TMDB. Lists that agree map nothing.
@@ -1674,6 +1701,14 @@ export function alignTvdb(tvdb: ListedEpisode[], tmdb: ListedEpisode[]) {
 				holdsBoth(b[m[0]].runtime, a[t[0]].runtime, a[t[1]].runtime)
 			)
 				found.push([t[0], m[0], { part: 1 }], [t[1], m[0], { part: 2 }]);
+			// TMDB's one episode titled by as many segments as TVDB lists that day: Freakazoid's S1E1 "Five
+			// Day Forecast / Dance of Doom / Hand Man" is TVDB's S1E1-E3, one part each
+			else if (
+				m.length === 1 &&
+				t.length > 1 &&
+				b[m[0]].name.split(' / ').length === t.length
+			)
+				t.forEach((i, n) => found.push([i, m[0], { part: n + 1 }]));
 			else if (
 				t.length === 1 &&
 				m.length === 2 &&

@@ -44,6 +44,7 @@ import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import titleEpisodes from '@/test/fixtures/placement/title-episode-numbers.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
+import tvdbSegments from '@/test/fixtures/placement/tvdb-segments.json';
 import wwe from '@/test/fixtures/placement/wwe-air-dates.json';
 import { buildAnimeIndex } from '@/utils/episodePlacement';
 import { describe, expect, it, vi } from 'vitest';
@@ -1804,5 +1805,50 @@ describe('a segment letter joined to the episode number', () => {
 		// read as `B Plankton!`, it went to the half-hour's number, TMDB's S1E2 "Reef Blower"
 		expect(at('S01E02B Plankton!')).toEqual([1, 7]);
 		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe("TVDB's segments of one TMDB episode", () => {
+	// zurg on fun (2026-11-09): Freakazoid, which TVDB lists by segment (34 in season 1) and TMDB by
+	// half-hour, titling each by its segments (S1E1 "Five Day Forecast / Dance of Doom / Hand Man")
+	const placed = async (name: string, parts = true) => {
+		const c = tvdbSegments.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), ...(parts ? { parts: true as const } : {}) }],
+			Infinity,
+			recordedSources(tvdbSegments.answers),
+			async () => [null]
+		);
+		return { release: releases[0], expect: c.expect };
+	};
+	const at = (release: PlacedRelease, name: string) => {
+		const f = release.files.find((f) => f.path.includes(name))!;
+		return [f.season, f.episode, f.episodeEnd, f.part ?? null];
+	};
+
+	it('places each segment as its part of the half-hour', async () => {
+		const { release, expect: expected } = await placed('Freakazoid! (1995)');
+		expect(at(release, '1x01 - Five Day Forecast')).toEqual([1, 1, null, 1]);
+		expect(at(release, '1x02 - Dance of Doom')).toEqual([1, 1, null, 2]);
+		// a title TMDB spells otherwise ("Freak's French Lesson") by TVDB's number alone
+		expect(at(release, '1x13 - Frenching with Freakazoid')).toEqual([1, 4, null, 3]);
+		// its first segment cut before the part it names is not TMDB's "The Chip: Part 1"
+		expect(at(release, '1x20 - The Chip (2)')).toEqual([1, 7, null, 1]);
+		expect(at(release, '1x34 - The Wrath of Guitierrez')).toEqual([1, 13, null, null]);
+		expect(release).toEqual(expected);
+	});
+
+	it('places a file of every segment of a half-hour as that episode', async () => {
+		const five = await placed('Freakazoid.S01E14-E15-E16-E17-E18');
+		expect(at(five.release, 'S01E14')).toEqual([1, 5, null, null]);
+		const two = await placed('Freakazoid.S01E30-E31');
+		expect(at(two.release, 'S01E30')).toEqual([1, 11, null, null]);
+		expect(two.release).toEqual(two.expect);
+	});
+
+	it('leaves a later segment unplaced for a caller that does not read parts', async () => {
+		const { release } = await placed('Freakazoid! (1995)', false);
+		expect(at(release, '1x01 - Five Day Forecast')).toEqual([1, 1, null, null]);
+		expect(at(release, '1x02 - Dance of Doom')).toEqual([null, null, null, null]);
 	});
 });
