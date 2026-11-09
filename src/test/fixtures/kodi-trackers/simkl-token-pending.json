@@ -1,0 +1,7 @@
+{
+	"body": {
+		"error": "authorization_pending",
+		"error_description": "The user has not yet approved this device"
+	},
+	"status": 400
+}

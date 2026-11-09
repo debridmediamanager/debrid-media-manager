@@ -1,0 +1,7 @@
+{
+	"body": {
+		"error": "expired_token",
+		"error_description": "Device code is invalid or expired"
+	},
+	"status": 400
+}

@@ -1,0 +1,36 @@
+{
+	"body": {
+		"user": {
+			"email": "sean@example.com",
+			"username": "sean",
+			"private": false,
+			"name": "Sean Rudford",
+			"vip": true,
+			"vip_ep": false,
+			"director": false,
+			"ids": {
+				"slug": "sean",
+				"trakt": 1,
+				"uuid": "b6589fc6ab0dc82cf12099d1c2d40ab994e8410c"
+			},
+			"joined_at": "2010-09-25T17:49:25.000Z",
+			"location": "SF",
+			"about": "I have all your cassette tapes.",
+			"gender": "male",
+			"age": 35,
+			"images": {
+				"avatar": {
+					"full": "https://walter.trakt.tv/images/users/000/000/001/avatars/large/cf1f6e4f8d.jpg"
+				}
+			},
+			"vip_og": true,
+			"vip_years": 5
+		},
+		"permissions": {
+			"commenting": true,
+			"liking": true,
+			"following": true
+		}
+	},
+	"status": 200
+}

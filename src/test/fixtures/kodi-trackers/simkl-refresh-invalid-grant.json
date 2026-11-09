@@ -1,0 +1,7 @@
+{
+	"body": {
+		"error": "invalid_grant",
+		"error_description": "Refresh token is invalid or not issued to this client"
+	},
+	"status": 400
+}

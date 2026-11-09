@@ -1,0 +1,7 @@
+{
+	"body": {
+		"error": "invalid_client",
+		"error_description": "client not found"
+	},
+	"status": 401
+}

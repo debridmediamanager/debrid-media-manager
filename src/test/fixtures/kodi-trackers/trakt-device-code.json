@@ -1,0 +1,10 @@
+{
+	"body": {
+		"device_code": "-NxfVrk6c0JOpYax-WzH1w2cPll8p4LpsVzGUl34_KA",
+		"user_code": "RNYZXKVU",
+		"verification_url": "https://auth.trakt.tv/activate",
+		"expires_in": 600,
+		"interval": 6
+	},
+	"status": 200
+}

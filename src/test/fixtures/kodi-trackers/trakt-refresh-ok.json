@@ -1,0 +1,11 @@
+{
+	"body": {
+		"access_token": "9d6a4f3b0b1c2e8f7a5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3f",
+		"token_type": "bearer",
+		"expires_in": 604800,
+		"refresh_token": "1f2e3d4c5b6a7f8e9d0c1b2a3f4e5d6c7b8a9f0e1d2c3b4a5f6e7d8c9b0a1f2e",
+		"scope": "public",
+		"created_at": 1762650000
+	},
+	"status": 200
+}

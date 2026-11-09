@@ -111,6 +111,12 @@ export const RATE_LIMIT_CONFIGS = {
 	kodiPair: { name: 'kodiPair', rateLimit: 10, windowSeconds: 600 },
 	kodiApprove: { name: 'kodiApprove', rateLimit: 10, windowSeconds: 60 },
 	kodiPoll: { name: 'kodiPoll', rateLimit: 40, windowSeconds: 60 },
+	// Trakt/Simkl linking from Kodi (/api/kodi/tracker/*), same household reasoning. Each
+	// call spends DMM's app quota at the tracker; trackers ask for a poll every 5-6 s,
+	// and a link refreshes once a week, so refreshes are rare.
+	kodiTrackerStart: { name: 'kodiTrackerStart', rateLimit: 10, windowSeconds: 600 },
+	kodiTrackerPoll: { name: 'kodiTrackerPoll', rateLimit: 40, windowSeconds: 60 },
+	kodiTrackerRefresh: { name: 'kodiTrackerRefresh', rateLimit: 10, windowSeconds: 600 },
 	sponsor: { name: 'sponsor', rateLimit: 1, windowSeconds: 2 }, // 1 request per 2 seconds for sponsor status endpoints
 	// Each call verifies up to six provider logins; a restore is one POST and one PUT.
 	browserState: { name: 'browserState', rateLimit: 10, windowSeconds: 60 },
