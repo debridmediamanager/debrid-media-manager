@@ -667,12 +667,13 @@ function noHostClause(player: Player, selected: SetupSource[], undecided: boolea
 	const usenet = selected.includes('usenet');
 	/** "your Real-Debrid account", or "your Real-Debrid or Easynews accounts" for several. */
 	const yours = (sources: SetupSource[]) => {
-		const names = sources.map((source) =>
-			source === 'torbox-hosted' ? 'TorBox Pro' : SOURCE_LABELS.get(source)!
-		);
-		return names.length > 1
-			? `your ${names.slice(0, -1).join(', ')} or ${names[names.length - 1]} accounts`
-			: `your ${names[0]} account`;
+		// TorBox Pro is the TorBox account that also hosts NZBs, so it is named once.
+		const names = sources
+			.filter((source) => source !== 'torbox' || !sources.includes('torbox-hosted'))
+			.map((source) =>
+				source === 'torbox-hosted' ? 'TorBox Pro' : SOURCE_LABELS.get(source)!
+			);
+		return names.length > 1 ? `your ${orList(names)} accounts` : `your ${names[0]} account`;
 	};
 	if (player === 'stremio')
 		return account

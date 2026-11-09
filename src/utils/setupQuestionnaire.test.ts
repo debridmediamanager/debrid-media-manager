@@ -1199,6 +1199,10 @@ describe('a no-host conflict names a route the player can use', () => {
 			`${zurgHost}, or use the Kodi addon with your TorBox Pro account, which needs no host.`,
 		],
 		[
+			{ player: 'kodi', sources: ['torbox', 'usenet', 'torbox-hosted'] },
+			`${zurgHost}, or use the Kodi addon with your TorBox Pro account, which needs no host.`,
+		],
+		[
 			{ player: 'kodi', sources: ['real-debrid', 'easynews', 'usenet'] },
 			`${zurgHost}, or use the Kodi addon with your Real-Debrid or Easynews accounts, which needs no host.`,
 		],
