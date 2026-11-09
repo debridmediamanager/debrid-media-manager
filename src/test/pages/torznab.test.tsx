@@ -273,8 +273,9 @@ describe('Torznab setup page, the feed variants', () => {
 		render(<TorznabSetupPage />);
 
 		expect(document.body).toHaveTextContent(
-			'Debrid-Link is answered from the releases DMM has recorded as complete on it, because its own check would add the torrent and spend your quota.'
+			'For Debrid-Link that record is what DMM has seen complete on it, because its own check would add the torrent and spend your quota.'
 		);
+		expect(document.body).not.toHaveTextContent('Debrid-Link is answered from the releases');
 		expect(document.body).not.toHaveTextContent('Debrid-Link is not offered');
 	});
 

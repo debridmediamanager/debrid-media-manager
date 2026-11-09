@@ -261,9 +261,9 @@ function SetupGuide({
 						below rather than put in this URL, which ends up in config files, forum
 						posts and server logs. Those three answer a few hundred releases per search
 						and remember what they learn, so a title with thousands fills in over the
-						first few searches. Debrid-Link is answered from the releases DMM has
-						recorded as complete on it, because its own check would add the torrent and
-						spend your quota.
+						first few searches. For Debrid-Link that record is what DMM has seen
+						complete on it, because its own check would add the torrent and spend your
+						quota.
 					</span>
 				</div>
 
