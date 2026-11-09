@@ -1,0 +1,282 @@
+{
+	"answer": {
+		"releases": [
+			{
+				"kind": "tv",
+				"imdbId": "tt14923244",
+				"tmdbId": 128113,
+				"files": [
+					{
+						"path": "Deleted Scenes.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "The Winchesters (2022) - S01E01 - Pilot (1080p BluRay x265 Ghost).mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 3043699
+					},
+					{
+						"path": "The Winchesters (2022) - S01E02 - Teach Your Children Well (1080p BluRay x265 Ghost).mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 3947697
+					},
+					{
+						"path": "The Winchesters (2022) - S01E03 - You're Lost Little Girl (1080p BluRay x265 Ghost).mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 3947698
+					},
+					{
+						"path": "The Winchesters (2022) - S01E04 - Masters of War (1080p BluRay x265 Ghost).mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 3947699
+					},
+					{
+						"path": "The Winchesters (2022) - S01E05 - Legend of a Mind (1080p BluRay x265 Ghost).mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 3947700
+					},
+					{
+						"path": "The Winchesters (2022) - S01E06 - Art of Dying (1080p BluRay x265 Ghost).mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 3947701
+					},
+					{
+						"path": "The Winchesters (2022) - S01E07 - Reflections (1080p BluRay x265 Ghost).mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4058248
+					},
+					{
+						"path": "The Winchesters (2022) - S01E08 - Hang on to Your Life (1080p BluRay x265 Ghost).mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4080460
+					},
+					{
+						"path": "The Winchesters (2022) - S01E09 - Cast Your Fate to the Wind (1080p BluRay x265 Ghost).mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4158408
+					},
+					{
+						"path": "The Winchesters (2022) - S01E10 - Suspicious Minds (1080p BluRay x265 Ghost).mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4187097
+					},
+					{
+						"path": "The Winchesters (2022) - S01E11 - You've Got a Friend (1080p BluRay x265 Ghost).mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4212550
+					},
+					{
+						"path": "The Winchesters (2022) - S01E12 - The Tears of a Clown (1080p BluRay x265 Ghost).mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4224746
+					},
+					{
+						"path": "The Winchesters (2022) - S01E13 - Hey, That's No Way to Say Goodbye (1080p BluRay x265 Ghost).mkv",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4241529
+					}
+				],
+				"title": "The Winchesters",
+				"year": 2022,
+				"tvdbId": 420059,
+				"anime": false
+			},
+			{
+				"kind": null,
+				"imdbId": null,
+				"tmdbId": null,
+				"files": [
+					{
+						"path": "Yellow Mirror 2026 1080p DSNP WEB.DL DDP5.1 H.264-OldT.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			},
+			{
+				"kind": "tv",
+				"imdbId": "tt9055008",
+				"tmdbId": 86848,
+				"files": [
+					{
+						"path": "evil.s04e07.2160p.web.h265-successfulcrab.mkv",
+						"season": 4,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 5270155
+					}
+				],
+				"title": "Evil",
+				"year": 2019,
+				"tvdbId": 363955,
+				"anime": false
+			},
+			{
+				"kind": "movie",
+				"imdbId": "tt1270798",
+				"tmdbId": 49538,
+				"files": [
+					{
+						"path": "X-Men.First.Class.2011.2160p.BluRay.x265.10bit.SDR.DTS-HD.MA.5.1-SWTYBLZ.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				],
+				"title": "X-Men: First Class",
+				"year": 2011
+			}
+		],
+		"complete": true,
+		"rules": "2026-11-04.1"
+	},
+	"request": {
+		"releases": [
+			{
+				"name": "The Winchesters (2022) S01 (1080p BluRay x265 10bit EAC3 5.1 Ghost)",
+				"hash": "ab7af4a320c03a97f43e6009f49f2d44740c1699",
+				"files": [
+					{
+						"path": "Deleted Scenes.mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Winchesters (2022) - S01E01 - Pilot (1080p BluRay x265 Ghost).mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Winchesters (2022) - S01E02 - Teach Your Children Well (1080p BluRay x265 Ghost).mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Winchesters (2022) - S01E03 - You're Lost Little Girl (1080p BluRay x265 Ghost).mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Winchesters (2022) - S01E04 - Masters of War (1080p BluRay x265 Ghost).mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Winchesters (2022) - S01E05 - Legend of a Mind (1080p BluRay x265 Ghost).mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Winchesters (2022) - S01E06 - Art of Dying (1080p BluRay x265 Ghost).mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Winchesters (2022) - S01E07 - Reflections (1080p BluRay x265 Ghost).mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Winchesters (2022) - S01E08 - Hang on to Your Life (1080p BluRay x265 Ghost).mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Winchesters (2022) - S01E09 - Cast Your Fate to the Wind (1080p BluRay x265 Ghost).mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Winchesters (2022) - S01E10 - Suspicious Minds (1080p BluRay x265 Ghost).mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Winchesters (2022) - S01E11 - You've Got a Friend (1080p BluRay x265 Ghost).mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Winchesters (2022) - S01E12 - The Tears of a Clown (1080p BluRay x265 Ghost).mkv",
+						"folder": ""
+					},
+					{
+						"path": "The Winchesters (2022) - S01E13 - Hey, That's No Way to Say Goodbye (1080p BluRay x265 Ghost).mkv",
+						"folder": ""
+					}
+				],
+				"imdbId": "tt14923244"
+			},
+			{
+				"name": "Yellow Mirror 2026 1080p DSNP WEB.DL DDP5.1 H.264-OldT.mkv",
+				"hash": "58f03c741f8eb3012a2fbf3caa95c15556a255f8",
+				"files": [
+					{
+						"path": "Yellow Mirror 2026 1080p DSNP WEB.DL DDP5.1 H.264-OldT.mkv",
+						"folder": ""
+					}
+				]
+			},
+			{
+				"name": "Evil.S04E07.2160p.WEB.H265-SuccessfulCrab[TGx]",
+				"hash": "49fe2d7dd9fbee8e8c499f4d6ee50421aa336c17",
+				"files": [
+					{
+						"path": "evil.s04e07.2160p.web.h265-successfulcrab.mkv",
+						"folder": ""
+					}
+				],
+				"imdbId": "tt9066332"
+			},
+			{
+				"name": "X-Men.First.Class.2011.2160p.BluRay.x265.10bit.SDR.DTS-HD.MA.5.1-SWTYBLZ.mkv",
+				"hash": "bb58c702b7a86844e2a38e3bb59096a4253939f9",
+				"files": [
+					{
+						"path": "X-Men.First.Class.2011.2160p.BluRay.x265.10bit.SDR.DTS-HD.MA.5.1-SWTYBLZ.mkv",
+						"folder": ""
+					}
+				],
+				"imdbId": "tt1270798"
+			}
+		]
+	},
+	"source": "POST /api/sponsor/place on production, 2026-11-09, with fun's zurg sponsor key: four releases of fun's RD library as zurg asks them (video files, samples left out). DMM placed Evil's episode and X-Men: First Class, left The Winchesters' Deleted Scenes.mkv unnumbered and knew nothing of Yellow Mirror."
+}

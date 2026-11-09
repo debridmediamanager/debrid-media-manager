@@ -113,6 +113,10 @@ anime lists' titles when neither names it, when TMDB's Japanese show for the id 
 of its numbers, and when the id is a film's while the release is a fansub cour of numbered
 episodes (`Bleach Sennen Kessen Hen - Kashin Tan - E08`, filed under the Calamity's film).
 
+DMM keeps the releases it could not place, to improve its rules: a release's name, hash,
+the paths of its unplaced files and its answer's ids, with how often it was asked. Nothing
+says which sponsor asked. A release is dropped once a request places it whole.
+
 ```json
 {
 	"complete": true,

@@ -1,5 +1,6 @@
 import { identificationItem, identifyItems } from '@/pages/api/library/identify';
 import { sponsorOfDmmApiKeyHeader } from '@/pages/api/zurg/auth';
+import { PlacementMissService } from '@/services/database/placementMisses';
 import {
 	cachedSources,
 	PLACEMENT_RULES,
@@ -16,6 +17,7 @@ export const MAX_FILES = 2000;
 /** Releases still waiting past this are answered `skipped`, for zurg to ask again. */
 const BUDGET_MS = 25_000;
 const IMDB_ID = /^tt\d{7,}$/;
+const misses = new PlacementMissService();
 
 function parseReleases(body: unknown): PlaceRequest[] | null {
 	const { releases, parts } = (body ?? {}) as { releases?: unknown; parts?: unknown };
@@ -108,6 +110,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					: release;
 			})
 		);
+		// kept to improve the rules; never fails the answer
+		await misses
+			.record(releases, placed.releases, PLACEMENT_RULES)
+			.catch((error) => console.error('Failed to record placement misses', error));
 		return res.status(200).json({ ...placed, releases: named, rules: PLACEMENT_RULES });
 	} catch (error) {
 		console.error('Failed to place sponsor releases', error);

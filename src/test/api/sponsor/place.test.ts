@@ -8,6 +8,12 @@ import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
+const recordMisses = vi.hoisted(() => vi.fn());
+vi.mock('@/services/database/placementMisses', () => ({
+	PlacementMissService: class {
+		record = recordMisses;
+	},
+}));
 vi.mock('@/services/rateLimit/withRateLimit', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/rateLimit/withRateLimit')>()),
 	checkRateLimitFor: vi.fn(),
@@ -53,6 +59,7 @@ describe('/api/sponsor/place', () => {
 		mockRepository.getSponsorByDmmApiKey = vi.fn().mockResolvedValue(ACTIVE);
 		mockPlace.mockResolvedValue({ releases: [], complete: true });
 		vi.mocked(checkRateLimitFor).mockResolvedValue(true);
+		recordMisses.mockResolvedValue(undefined);
 	});
 
 	afterEach(() => {
@@ -69,6 +76,27 @@ describe('/api/sponsor/place', () => {
 		expect(res.json).toHaveBeenCalledWith(
 			expect.objectContaining({ releases: [{ ...placed, title: 'Titled' }], complete: true })
 		);
+	});
+
+	// kept to improve the rules: what was asked, DMM's untitled answers, and the rules version
+	it('records what it answered for the misses it keeps', async () => {
+		const placed = { kind: null, imdbId: null, tmdbId: null, files: [] };
+		mockPlace.mockResolvedValueOnce({ releases: [placed], complete: true });
+		await handler(post({ releases: [CONAN] }), createMockResponse());
+
+		expect(recordMisses).toHaveBeenCalledWith(
+			[expect.objectContaining({ name: CONAN.name, hash: null, imdbId: null })],
+			[placed],
+			'2026-10-23'
+		);
+	});
+
+	it('answers even when the misses cannot be written', async () => {
+		recordMisses.mockRejectedValueOnce(new Error('database down'));
+		vi.spyOn(console, 'error').mockImplementationOnce(() => {});
+		const res = createMockResponse();
+		await handler(post({ releases: [CONAN] }), res);
+		expect(res.status).toHaveBeenCalledWith(200);
 	});
 
 	// zurg files a show answered `anime` under `__anime__`: TMDB's captured record for Detective
