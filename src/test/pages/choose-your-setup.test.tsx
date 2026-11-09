@@ -151,7 +151,7 @@ describe('choose your setup page', () => {
 
 		expect(
 			within(screen.getByTestId('sponsorship-section')).getByText(
-				'Sponsorship is optional here; the benefits below are for other routes.'
+				'Sponsorship is optional here; the benefits below are for your accounts or other routes.'
 			)
 		).toBeInTheDocument();
 	});
@@ -170,7 +170,7 @@ describe('choose your setup page', () => {
 
 		expect(
 			within(screen.getByTestId('sponsorship-section')).getByText(
-				'Sponsorship is optional here; the benefits below are for other routes.'
+				'Sponsorship is optional here; the benefits below are for your accounts or other routes.'
 			)
 		).toBeInTheDocument();
 	});
