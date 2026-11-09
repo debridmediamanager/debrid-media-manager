@@ -6,11 +6,13 @@ import type { EasynewsCredentials, EasynewsResult } from '@/services/easynews';
 import { getLocalStorageItemOrDefault } from '@/utils/browserStorage';
 import { handleCastEasynews } from '@/utils/easynewsCastApiClient';
 import { easynewsCastKey } from '@/utils/easynewsCastKey';
+import { filenameFromDisposition, saveBlob } from '@/utils/nzbDownload';
+import { safeNzbName } from '@/utils/nzbName';
 import { defaultPlayer } from '@/utils/settings';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
 import { castToastOptions } from '@/utils/toastOptions';
 import { openWatchWith } from '@/utils/watchService';
-import { Cast, Download, Eye, Loader2, Send } from 'lucide-react';
+import { Cast, Eye, FileDown, Loader2, Send } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -47,9 +49,9 @@ export async function postEasynews<T>(
 }
 
 // Easynews beside the shared indexers, searched with the visitor's own account
-// (signed in under Settings): Easynews forbids sharing one. Its files download
-// straight from Easynews, so unlike the rows above nothing goes through nzb2rd
-// or Real-Debrid. "Send to zurg" pins a row on a sponsor's wanted list instead,
+// (signed in under Settings): Easynews forbids sharing one. Download NZB fetches
+// a row's NZB with that login; Watch and Cast play the file straight from
+// Easynews, so unlike the rows above nothing goes through nzb2rd or Real-Debrid. "Send to zurg" pins a row on a sponsor's wanted list instead,
 // for their zurg to grab that exact release.
 const ICON_BUTTON =
 	'haptic flex shrink-0 items-center rounded border border-gray-500 bg-gray-800/60 px-2 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60';
@@ -71,13 +73,14 @@ const EasynewsResults = ({
 	const [wanted, setWanted] = useState<WantedItemResponse | null>(null);
 	const [sending, setSending] = useState<string | null>(null);
 	const [account] = useLocalStorage<EasynewsCredentials>('en:account');
-	// Settings' "Show Send to zurg" box: on unless switched off, and off puts Download back as the main button.
+	// Settings' "Show Send to zurg" box: on unless switched off, and off makes Download NZB the main button.
 	const [sendToZurg] = useLocalStorage<boolean>('en:sendToZurg');
 	const showSend = sendToZurg !== false;
 	const [results, setResults] = useState<EasynewsResult[] | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [linking, setLinking] = useState<string | null>(null);
+	const [fetchingNzb, setFetchingNzb] = useState<string | null>(null);
 	const [casting, setCasting] = useState<string | null>(null);
 
 	const search = useCallback(
@@ -168,24 +171,30 @@ const EasynewsResults = ({
 		kind,
 	});
 
-	// A fresh signed link per click: it carries no login, and Easynews mints a new
-	// one every time, so there is nothing worth keeping.
-	const withLink = async (
-		result: EasynewsResult,
-		handle: (url: string) => void | Promise<void>
-	) => {
-		if (!account || linking) return;
-		setLinking(result.path);
+	// The row's NZB, cleaned on the server like the indexer rows' download, for the
+	// visitor's own SABnzbd or NZBGet.
+	const downloadNzb = async (result: EasynewsResult) => {
+		if (!account || fetchingNzb) return;
+		setFetchingNzb(result.path);
 		try {
-			const { url } = await postEasynews<{ url: string }>('/api/easynews/link', {
-				...account,
-				...keepNzb(result),
+			const response = await fetch('/api/easynews/nzb', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ ...account, ...keepNzb(result) }),
 			});
-			await handle(url);
+			if (!response.ok) {
+				const failure = await response.json().catch(() => null);
+				throw new Error(failure?.error || `NZB download failed (${response.status})`);
+			}
+			const name =
+				filenameFromDisposition(response.headers.get('Content-Disposition')) ??
+				safeNzbName(result.title);
+			saveBlob(await response.blob(), name);
+			toast.success(`${name} saved`);
 		} catch (e) {
-			toast.error(`Easynews: ${e instanceof Error ? e.message : 'no link'}`);
+			toast.error(`Easynews: ${e instanceof Error ? e.message : 'no NZB'}`);
 		} finally {
-			setLinking(null);
+			setFetchingNzb(null);
 		}
 	};
 
@@ -336,18 +345,18 @@ const EasynewsResults = ({
 						)}
 						<button
 							type="button"
-							onClick={() => withLink(result, (url) => window.location.assign(url))}
-							disabled={linking !== null}
-							title="Download from Easynews"
-							aria-label={`Download ${result.title} from Easynews`}
+							onClick={() => downloadNzb(result)}
+							disabled={fetchingNzb !== null}
+							title="Download NZB"
+							aria-label={`Download NZB for ${result.title}`}
 							className={showSend ? ICON_BUTTON : MAIN_BUTTON}
 						>
-							{linking === result.path ? (
+							{fetchingNzb === result.path ? (
 								<Loader2 className="h-3.5 w-3.5 animate-spin" />
 							) : (
-								<Download className="h-3.5 w-3.5" />
+								<FileDown className="h-3.5 w-3.5" />
 							)}
-							{!showSend && 'Download'}
+							{!showSend && 'Download NZB'}
 						</button>
 						{/* The video player chosen under Settings, as the torrent rows' Watch opens it. */}
 						<button

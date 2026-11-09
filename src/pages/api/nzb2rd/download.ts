@@ -3,7 +3,7 @@ import { fetchNzb, qualifyReleaseId } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { BLOCKED_MESSAGE, isNzbBlocked } from '@/services/takedown/blocklist';
 import { asTokens, orderCopies } from '@/services/usenetCopies';
-import { safeNzbName } from '@/utils/nzbName';
+import { nzbAttachment, safeNzbName } from '@/utils/nzbName';
 import { NzbSanitizeError, sanitizeNzbAsync, withAlternatesMeta } from '@/utils/nzbSanitize';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -76,10 +76,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	// rather than claiming a clean-up that may have found nothing to do.
 	res.setHeader('X-Nzb-Removed', cleaned.removed.join('; ').replace(/[^\x20-\x7e]/g, '') || '-');
 	res.setHeader('Content-Type', 'application/x-nzb; charset=utf-8');
-	res.setHeader(
-		'Content-Disposition',
-		`attachment; filename="${asciiFilename(name)}"; filename*=UTF-8''${encodeURIComponent(name)}`
-	);
+	res.setHeader('Content-Disposition', nzbAttachment(name));
 	// The cleaned file is byte-identical for every caller, and each miss spends an
 	// indexer grab from one shared account, so the edge is welcome to serve it; for
 	// ten minutes, so a swap for a copy or a changed meta is not an hour stale.
@@ -90,15 +87,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		? asTokens([copies.id, ...copies.alternates])
 		: [copies.id, ...copies.alternates];
 	return res.status(200).send(withAlternatesMeta(cleaned.xml, alternates, served));
-}
-
-/**
- * The `filename` fallback for clients that ignore `filename*`. Quotes and
- * backslashes would end the parameter early, and a non-ASCII byte is undefined
- * behaviour there, so both are folded away.
- */
-function asciiFilename(name: string): string {
-	return name.replace(/[\\"]/g, '').replace(/[^\x20-\x7e]/g, '_');
 }
 
 export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.nzbDownload);

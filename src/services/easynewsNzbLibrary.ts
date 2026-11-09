@@ -9,7 +9,7 @@ import { repository as db } from '@/services/repository';
 import { isNzbBlocked } from '@/services/takedown/blocklist';
 import { sanitizeNzbAsync } from '@/utils/nzbSanitize';
 
-// Easynews NZBs visitors fetch by clicking a row (Send to zurg, Download, Watch) are
+// Easynews NZBs visitors fetch by clicking a row (Send to zurg, Download NZB, Watch) are
 // kept: anonymized, stored under `en:<hash>` and listed with the title's Usenet
 // results, as an indexer's would be. Nothing is fetched that a visitor did not click.
 
@@ -41,13 +41,35 @@ export async function saveEasynewsNzb(
 	sig: string,
 	target: EasynewsNzbTarget
 ): Promise<SaveOutcome> {
-	const { hash, name } = splitEasynewsPath(path);
-	const season = listedSeason(target.kind, path.slice(path.indexOf('/') + 1));
+	const cleaned = await fetchCleanEasynewsNzb(credentials, path, sig);
+	if (!cleaned) return 'blocked';
+	return storeEasynewsNzb(path, cleaned.xml, target);
+}
+
+/**
+ * One result's NZB, rebuilt without anything that could name the download, or null
+ * when a takedown blocks it. Throws what fetchEasynewsNzb and sanitizeNzbAsync throw.
+ */
+export async function fetchCleanEasynewsNzb(
+	credentials: EasynewsCredentials,
+	path: string,
+	sig: string
+): Promise<Awaited<ReturnType<typeof sanitizeNzbAsync>> | null> {
 	const cleaned = await sanitizeNzbAsync(await fetchEasynewsNzb(credentials, path, sig));
 	// By the name the search lists it under, as withoutBlockedReleases judges it.
-	if (await isNzbBlocked(cleaned.xml, name)) return 'blocked';
+	return (await isNzbBlocked(cleaned.xml, splitEasynewsPath(path).name)) ? null : cleaned;
+}
+
+/** Stores an already cleaned NZB under `en:<hash>` and lists it with the title's Usenet results. */
+export async function storeEasynewsNzb(
+	path: string,
+	xml: string,
+	target: EasynewsNzbTarget
+): Promise<Exclude<SaveOutcome, 'blocked'>> {
+	const { hash, name } = splitEasynewsPath(path);
+	const season = listedSeason(target.kind, path.slice(path.indexOf('/') + 1));
 	try {
-		await putStoredNzb(EASYNEWS_NZB_PREFIX, hash, cleaned.xml);
+		await putStoredNzb(EASYNEWS_NZB_PREFIX, hash, xml);
 	} catch (error) {
 		console.error('Easynews NZB store write failed:', error);
 		return 'unstored';
@@ -68,7 +90,7 @@ export async function saveEasynewsNzb(
 const saving = new Set<string>();
 
 /**
- * For Download and Watch: saves a release once, after the click has its link, and
+ * For Watch: saves a release once, after the click has its link, and
  * never fails the click. A release already listed is not fetched again.
  */
 export function saveEasynewsNzbInBackground(
