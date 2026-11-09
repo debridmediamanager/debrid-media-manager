@@ -1449,6 +1449,23 @@ describe('a free Plex route for debrid accounts', () => {
 		});
 	});
 
+	it('names several debrid accounts in the plural', () => {
+		expect(
+			freeRoute(
+				recommendSetup(
+					answers({
+						player: 'plex',
+						plexRoute: 'rex',
+						sources: ['real-debrid', 'all-debrid'],
+						host: 'willing',
+					})
+				)
+			)?.detail
+		).toBe(
+			'Run rex and rex-stremio with a Stremio stream addon that returns links through your debrid accounts; no zurg and no sponsorship needed.'
+		);
+	});
+
 	it('leaves it out when URL addons are already the route', () => {
 		expect(
 			freeRoute(
@@ -2196,6 +2213,17 @@ describe('route copy stays on the player and source it is about', () => {
 		[
 			{ player: 'jellyfin', sources: ['real-debrid', 'usenet', 'torbox-hosted'] },
 			"Add your debrid account to that zurg's mount and run a second zurg with an nzb account and its own mount and data directory when Kodi, a WebDAV player or another server must read the same library; one zurg takes only one NZB account. With dmm_api_key on both, turn the dmm-wanted source off on one, or every Wanted title is fetched twice.",
+		],
+		[
+			{ player: 'emby', sources: ['real-debrid', 'all-debrid', 'usenet'] },
+			"Add your debrid accounts to that zurg's mount instead of the plugin when Kodi, a WebDAV player or another server must read the same library.",
+		],
+		[
+			{
+				player: 'jellyfin',
+				sources: ['real-debrid', 'all-debrid', 'usenet', 'torbox-hosted'],
+			},
+			"Add your debrid accounts to that zurg's mount and run a second zurg with an nzb account and its own mount and data directory when Kodi, a WebDAV player or another server must read the same library; one zurg takes only one NZB account. With dmm_api_key on both, turn the dmm-wanted source off on one, or every Wanted title is fetched twice.",
 		],
 	] satisfies [Partial<SetupAnswers>, string][])(
 		'points the mount alternative at the zurg another source already runs (%o)',

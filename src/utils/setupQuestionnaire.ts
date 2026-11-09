@@ -1189,6 +1189,10 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		result.sourceNotes.push(
 			'Easynews is a web account for HTTP files. NNTP credentials, if you have them, are a separate source configuration; an Easynews web login does not configure zurg.'
 		);
+	const debridAccounts =
+		selected.filter((source) => DEBRID_SOURCES.includes(source)).length > 1
+			? 'debrid accounts'
+			: 'debrid account';
 	const backendKinds = new Set(routes.map((x) => x.route.zurgNzb).filter(Boolean));
 	if (backendKinds.size === 2) {
 		result.prerequisites.push(
@@ -1207,7 +1211,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		)
 			result.alternatives.push({
 				title: 'Without zurg: rex-stremio with a debrid stream addon',
-				detail: 'Run rex and rex-stremio with a Stremio stream addon that returns links through your debrid account; no zurg and no sponsorship needed.',
+				detail: `Run rex and rex-stremio with a Stremio stream addon that returns links through your ${debridAccounts}; no zurg and no sponsorship needed.`,
 				links: [ADDON],
 			});
 		if (selected.includes('http-local'))
@@ -1255,10 +1259,6 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		});
 	else if (player === 'kodi' && answers.preference !== 'arr' && kodiWebdav.length) {
 		const severalWebdav = kodiWebdav.length > 1;
-		const debridAccounts =
-			selected.filter((source) => DEBRID_SOURCES.includes(source)).length > 1
-				? 'debrid accounts'
-				: 'debrid account';
 		result.alternatives.push({
 			title: 'Browse over WebDAV instead',
 			// Own Usenet is the only source Kodi plays through zurg; the addon plays TorBox hosted NZBs.
@@ -1297,8 +1297,8 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		result.alternatives.push({
 			title: `zurg → mount → ${playerLabel(player)} when other consumers need the files`,
 			detail: second
-				? `${join ? "Add your debrid account to that zurg's mount and run" : 'Run'} a second zurg with an nzb account and its own mount and data directory ${consumers}; one zurg takes only one NZB account.${TWO_ZURGS_WANTED}`
-				: `${join ? `Add your debrid account to ${backendKinds.size === 2 ? "one of those zurgs' mounts" : "that zurg's mount"}` : 'Run zurg with a filesystem mount'} instead of the plugin ${consumers}.`,
+				? `${join ? `Add your ${debridAccounts} to that zurg's mount and run` : 'Run'} a second zurg with an nzb account and its own mount and data directory ${consumers}; one zurg takes only one NZB account.${TWO_ZURGS_WANTED}`
+				: `${join ? `Add your ${debridAccounts} to ${backendKinds.size === 2 ? "one of those zurgs' mounts" : "that zurg's mount"}` : 'Run zurg with a filesystem mount'} instead of the plugin ${consumers}.`,
 			links: second ? [ZURG, TWO_ZURGS] : [ZURG],
 		});
 	}
