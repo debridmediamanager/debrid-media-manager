@@ -56,6 +56,26 @@ describe('/api/browser-state', () => {
 		expect(repository.getBrowserState).not.toHaveBeenCalled();
 	});
 
+	// The DMM Library app (dmm-mobile) syncs through this route on every login. A native
+	// client sends neither Sec-Fetch-Site nor Origin; a browser sends at least one.
+	it('serves a native app over https, which sends no browser headers', async () => {
+		const res = await call('POST', { identity: GOOD }, { 'x-forwarded-proto': 'https' });
+
+		expect(res._getStatusCode()).toBe(204);
+		expect(vi.mocked(verifyIdentity).mock.calls[0][0]).toEqual(GOOD);
+	});
+
+	it('refuses another site over https even when its browser sends no Sec-Fetch-Site', async () => {
+		const res = await call(
+			'PUT',
+			{ identities: [GOOD], state: STATE },
+			{ 'x-forwarded-proto': 'https', origin: 'https://evil.example' }
+		);
+
+		expect(res._getStatusCode()).toBe(403);
+		expect(verifyIdentity).not.toHaveBeenCalled();
+	});
+
 	describe('PUT', () => {
 		it('refuses when no login verifies', async () => {
 			const res = await call('PUT', { identities: [BAD], state: STATE });

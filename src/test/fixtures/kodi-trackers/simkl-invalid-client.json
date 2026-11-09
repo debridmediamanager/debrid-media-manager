@@ -1,0 +1,7 @@
+{
+	"body": {
+		"error": "invalid_client",
+		"error_description": "Unknown or missing client_id"
+	},
+	"status": 401
+}

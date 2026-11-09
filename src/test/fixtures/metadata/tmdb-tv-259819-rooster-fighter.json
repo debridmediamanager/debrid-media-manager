@@ -1,0 +1,880 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"results": [
+			{
+				"iso_3166_1": "BR",
+				"title": "Rooster Fighter: O Galo Lutador",
+				"type": "manga title"
+			},
+			{ "iso_3166_1": "CN", "title": "公鸡斗士", "type": "" },
+			{ "iso_3166_1": "CN", "title": "社会我鸡哥，人狠话不多", "type": "" },
+			{ "iso_3166_1": "JP", "title": "Niwatori Fighter", "type": "romaji" },
+			{ "iso_3166_1": "JP", "title": "Niwatori・Faitā", "type": "" },
+			{ "iso_3166_1": "JP", "title": "ROOSTER FIGHTER ニワトリ・ファイター", "type": "" },
+			{ "iso_3166_1": "JP", "title": "ROOSTER FIGHTER", "type": "" },
+			{ "iso_3166_1": "JP", "title": "Niwatori Faitâ", "type": "" },
+			{ "iso_3166_1": "TW", "title": "雞鬥士", "type": "" }
+		]
+	},
+	"backdrop_path": "/nTDL4UmMLDBCeMtYh8F1LZtgmLV.jpg",
+	"content_ratings": {
+		"results": [
+			{ "descriptors": [], "iso_3166_1": "US", "rating": "TV-MA" },
+			{ "descriptors": [], "iso_3166_1": "VI", "rating": "TV-MA" },
+			{ "descriptors": [], "iso_3166_1": "PR", "rating": "TV-MA" },
+			{ "descriptors": [], "iso_3166_1": "BR", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "AR", "rating": "SAM 16" },
+			{ "descriptors": [], "iso_3166_1": "DE", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "AU", "rating": "MA 15+" },
+			{ "descriptors": [], "iso_3166_1": "TW", "rating": "15+" },
+			{ "descriptors": [], "iso_3166_1": "SG", "rating": "M18" },
+			{ "descriptors": [], "iso_3166_1": "KR", "rating": "19" }
+		]
+	},
+	"created_by": [],
+	"credits": {
+		"cast": [
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 225603,
+				"known_for_department": "Acting",
+				"name": "Kenta Miyake",
+				"original_name": "三宅健太",
+				"popularity": 3.0466,
+				"profile_path": "/7YL8vM2KYzPMeQqTpHWmNj6s1AP.jpg",
+				"character": "Keiji (voice)",
+				"credit_id": "6714de50d5b7926e947014ea",
+				"order": 0
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 1254120,
+				"known_for_department": "Acting",
+				"name": "Mariko Honda",
+				"original_name": "本多真梨子",
+				"popularity": 1.0675,
+				"profile_path": "/29XsXfTmJ6dat7cBvQk6Wc96IC0.jpg",
+				"character": "Elizabeth (voice)",
+				"credit_id": "6716a5584a9fc06d25752263",
+				"order": 1
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 2431912,
+				"known_for_department": "Acting",
+				"name": "Hikaru Tono",
+				"original_name": "遠野ひかる",
+				"popularity": 1.5862,
+				"profile_path": "/mQ3BgehaQKedMbMkpnlz790U4fi.jpg",
+				"character": "Sarah (voice)",
+				"credit_id": "68a9e62592c1b40d406cdffe",
+				"order": 2
+			}
+		],
+		"crew": [
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1070680,
+				"known_for_department": "Production",
+				"name": "Joseph Chou",
+				"original_name": "Joseph Chou",
+				"popularity": 0.2639,
+				"profile_path": "/wr9LOQYIxHeijobikJCZD4gGqiv.jpg",
+				"credit_id": "66a2e72980e0e4c924088c18",
+				"department": "Production",
+				"job": "Producer"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 5617580,
+				"known_for_department": "Writing",
+				"name": "Shu Sakuratani",
+				"original_name": "桜谷シュウ",
+				"popularity": 0.0265,
+				"profile_path": null,
+				"credit_id": "689888a9147fe15bf75e32ac",
+				"department": "Writing",
+				"job": "Original Story"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1056783,
+				"known_for_department": "Production",
+				"name": "Jason DeMarco",
+				"original_name": "Jason DeMarco",
+				"popularity": 0.2442,
+				"profile_path": "/wmI5XbKcfcTkViJ8B8Chb0OnTon.jpg",
+				"credit_id": "69b68b551721293c22a6330b",
+				"department": "Production",
+				"job": "Executive Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 5946299,
+				"known_for_department": "Production",
+				"name": "Katsuya Shirai",
+				"original_name": "白井勝也",
+				"popularity": 0.0928,
+				"profile_path": null,
+				"credit_id": "69b68b654d3bc35add5a6e71",
+				"department": "Production",
+				"job": "Executive Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 2765679,
+				"known_for_department": "Production",
+				"name": "Sae Whan Song",
+				"original_name": "Sae Whan Song",
+				"popularity": 0.1197,
+				"profile_path": null,
+				"credit_id": "69b68b72d0e49c21eb01f753",
+				"department": "Production",
+				"job": "Executive Producer"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 2335497,
+				"known_for_department": "Production",
+				"name": "Max Nishi",
+				"original_name": "西雅太郎",
+				"popularity": 0.1302,
+				"profile_path": null,
+				"credit_id": "69b68b8ed4568864e35a7086",
+				"department": "Production",
+				"job": "Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 2723545,
+				"known_for_department": "Production",
+				"name": "Takenari Maeda",
+				"original_name": "Takenari Maeda",
+				"popularity": 0.0948,
+				"profile_path": null,
+				"credit_id": "69b68b97afbe36128908e91a",
+				"department": "Production",
+				"job": "Producer"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 2797729,
+				"known_for_department": "Production",
+				"name": "saechan",
+				"original_name": "saechan",
+				"popularity": 0.1643,
+				"profile_path": null,
+				"credit_id": "69b68ba0d1cf92ccee3b9150",
+				"department": "Production",
+				"job": "Producer"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 5867233,
+				"known_for_department": "Production",
+				"name": "Ryokushi Suzuki",
+				"original_name": "鈴木緑視",
+				"popularity": 0.071,
+				"profile_path": null,
+				"credit_id": "69b68bc980804128fd08e934",
+				"department": "Production",
+				"job": "Producer"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 6072853,
+				"known_for_department": "Production",
+				"name": "Emi Momiyama",
+				"original_name": "Emi Momiyama",
+				"popularity": 0.0812,
+				"profile_path": null,
+				"credit_id": "69b68be8559d902cd25a6db2",
+				"department": "Production",
+				"job": "Producer"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 5164067,
+				"known_for_department": "Production",
+				"name": "Rei Niizuma",
+				"original_name": "新妻れい",
+				"popularity": 0.085,
+				"profile_path": null,
+				"credit_id": "69b68c331721293c22a63314",
+				"department": "Production",
+				"job": "Associate Producer"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 6072854,
+				"known_for_department": "Production",
+				"name": "Amber Noe",
+				"original_name": "Amber Noe",
+				"popularity": 0.0247,
+				"profile_path": null,
+				"credit_id": "69b68c593e90b73afe95f227",
+				"department": "Production",
+				"job": "Associate Producer"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 4073027,
+				"known_for_department": "Directing",
+				"name": "Daisuke Suzuki",
+				"original_name": "鈴木大介",
+				"popularity": 0.0668,
+				"profile_path": null,
+				"credit_id": "69b68cd232bab72d1f95f4dd",
+				"department": "Directing",
+				"job": "Series Director"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 4153873,
+				"known_for_department": "Production",
+				"name": "Ken Sasaki",
+				"original_name": "Ken Sasaki",
+				"popularity": 0.06,
+				"profile_path": "/fVOGW8zVoRt0kykb89TS25Us1eg.jpg",
+				"credit_id": "69b695319e9086fa0a5a6d2f",
+				"department": "Crew",
+				"job": "Other"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 6325516,
+				"known_for_department": "Visual Effects",
+				"name": "Yuki Matsushita",
+				"original_name": "松下由佳",
+				"popularity": 0.0633,
+				"profile_path": null,
+				"credit_id": "6a487ba77d20164b7af4f5bf",
+				"department": "Visual Effects",
+				"job": "Color Designer"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 4672009,
+				"known_for_department": "Editing",
+				"name": "Hatsumi Hidaka",
+				"original_name": "日髙初美",
+				"popularity": 0.0928,
+				"profile_path": null,
+				"credit_id": "6a487d57472bf45b60fff4fd",
+				"department": "Editing",
+				"job": "Editor"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 16139,
+				"known_for_department": "Sound",
+				"name": "Yukio Nagasaki",
+				"original_name": "長崎行男",
+				"popularity": 0.6963,
+				"profile_path": "/3STXZUzqjcVbuHEIuWRpaWOrYEC.jpg",
+				"credit_id": "6a487de1af1df74e98280e2d",
+				"department": "Sound",
+				"job": "Sound Director"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 2337362,
+				"known_for_department": "Sound",
+				"name": "Kiyotaka Kawada",
+				"original_name": "川田清貴",
+				"popularity": 0.2714,
+				"profile_path": null,
+				"credit_id": "6a487df4224637f0a62d3ae2",
+				"department": "Sound",
+				"job": "Sound Effects"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 2160252,
+				"known_for_department": "Visual Effects",
+				"name": "Takuya Chanohara",
+				"original_name": "茶之原拓也",
+				"popularity": 0.1298,
+				"profile_path": null,
+				"credit_id": "6a48802a0f65ad81aef5048d",
+				"department": "Visual Effects",
+				"job": "Character Designer"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 5195669,
+				"known_for_department": "Visual Effects",
+				"name": "Joseph Shin",
+				"original_name": "Joseph Shin",
+				"popularity": 0.0568,
+				"profile_path": null,
+				"credit_id": "6a488035a91f0586e4f4f6ee",
+				"department": "Visual Effects",
+				"job": "Character Designer"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 6325526,
+				"known_for_department": "Camera",
+				"name": "Keisuke Watanabe",
+				"original_name": "渡辺啓介",
+				"popularity": 0.0527,
+				"profile_path": null,
+				"credit_id": "6a4880b3a91f0586e4f4f6f9",
+				"department": "Camera",
+				"job": "Director of Photography"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 4571779,
+				"known_for_department": "Art",
+				"name": "Yuji Noyama",
+				"original_name": "野山裕司",
+				"popularity": 0.1353,
+				"profile_path": null,
+				"credit_id": "6a488284652ae109da280e6b",
+				"department": "Art",
+				"job": "Art Direction"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 6234730,
+				"known_for_department": "Sound",
+				"name": "高橋哲也",
+				"original_name": "高橋哲也",
+				"popularity": 0.0658,
+				"profile_path": null,
+				"credit_id": "6a4882b8c39b709c3d280e65",
+				"department": "Sound",
+				"job": "Original Music Composer"
+			}
+		]
+	},
+	"episode_run_time": [],
+	"external_ids": {
+		"imdb_id": "tt33086804",
+		"freebase_mid": null,
+		"freebase_id": null,
+		"tvdb_id": 452575,
+		"tvrage_id": null,
+		"wikidata_id": "Q127863698",
+		"facebook_id": null,
+		"instagram_id": null,
+		"twitter_id": "RoosterFighter_"
+	},
+	"first_air_date": "2026-03-15",
+	"genres": [
+		{ "id": 16, "name": "Animation" },
+		{ "id": 10759, "name": "Action & Adventure" },
+		{ "id": 10765, "name": "Sci-Fi & Fantasy" },
+		{ "id": 35, "name": "Comedy" }
+	],
+	"homepage": "https://www.adultswim.com/videos/rooster-fighter",
+	"id": 259819,
+	"in_production": false,
+	"keywords": {
+		"results": [
+			{ "name": "parody", "id": 9755 },
+			{ "name": "giant monster", "id": 11100 },
+			{ "name": "miniseries", "id": 11162 },
+			{ "name": "rooster", "id": 11203 },
+			{ "name": "based on manga", "id": 13141 },
+			{ "name": "animals", "id": 18165 },
+			{ "name": "anime", "id": 210024 },
+			{ "name": "3d animation", "id": 278823 }
+		]
+	},
+	"languages": ["ja"],
+	"last_air_date": "2026-05-31",
+	"last_episode_to_air": {
+		"id": 6914600,
+		"name": "What the Birds, Beasts, and Trees Share",
+		"overview": "Keiji overwhelms Hikari with his new power, the Awakening of Ruin.",
+		"vote_average": 7.5,
+		"vote_count": 4,
+		"air_date": "2026-05-31",
+		"episode_number": 12,
+		"episode_type": "finale",
+		"production_code": "",
+		"runtime": 22,
+		"season_number": 1,
+		"show_id": 259819,
+		"still_path": "/lqRucqPGcJD4A2KEVs5rImaK5yL.jpg"
+	},
+	"name": "Rooster Fighter",
+	"networks": [
+		{
+			"id": 80,
+			"logo_path": "/tHZPHOLc6iF27G34cAZGPsMtMSy.png",
+			"name": "Adult Swim",
+			"origin_country": "US"
+		}
+	],
+	"next_episode_to_air": null,
+	"number_of_episodes": 12,
+	"number_of_seasons": 1,
+	"origin_country": ["US"],
+	"original_language": "en",
+	"original_name": "Rooster Fighter",
+	"overview": "Keiji is more than just an ordinary rooster—he's humanity's greatest defender! His opponents may be ten stories tall, but nothing is bigger than his stout heart and his fearsome battle cry—Kokekokko!",
+	"popularity": 7.0813,
+	"poster_path": "/iCtbr0sIdaKZjhQH3Wr7hW6A1IU.jpg",
+	"production_companies": [
+		{
+			"id": 169947,
+			"logo_path": "/sg9CIYwE3UFszpI4jMR4LmayLwc.png",
+			"name": "Sola Entertainment",
+			"origin_country": "JP"
+		},
+		{
+			"id": 6687,
+			"logo_path": "/qEypYzIjq1XfcD5tXuGPULyPSz3.png",
+			"name": "VIZ Media",
+			"origin_country": "US"
+		},
+		{
+			"id": 111065,
+			"logo_path": "/K9QBHRgi6PvVYByyKNmrPFa0G1.png",
+			"name": "HERO'S",
+			"origin_country": "JP"
+		},
+		{
+			"id": 43363,
+			"logo_path": "/ua3hvrsryhmCGFFWJu9sEBXj92b.png",
+			"name": "Sanzigen",
+			"origin_country": "JP"
+		}
+	],
+	"production_countries": [
+		{ "iso_3166_1": "JP", "name": "Japan" },
+		{ "iso_3166_1": "US", "name": "United States of America" }
+	],
+	"seasons": [
+		{
+			"air_date": "2026-03-15",
+			"episode_count": 12,
+			"id": 403603,
+			"name": "Season 1",
+			"overview": "",
+			"poster_path": "/r3QjgOOrqJMuogz3txixqaymFwB.jpg",
+			"season_number": 1,
+			"vote_average": 7.0
+		}
+	],
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "Japanese", "iso_639_1": "ja", "name": "日本語" }],
+	"status": "Ended",
+	"tagline": "One cock to save the world.",
+	"translations": {
+		"translations": [
+			{
+				"iso_3166_1": "US",
+				"iso_639_1": "en",
+				"name": "English",
+				"english_name": "English",
+				"data": {
+					"name": "",
+					"overview": "Keiji is more than just an ordinary rooster—he's humanity's greatest defender! His opponents may be ten stories tall, but nothing is bigger than his stout heart and his fearsome battle cry—Kokekokko!",
+					"homepage": "",
+					"tagline": "One cock to save the world."
+				}
+			},
+			{
+				"iso_3166_1": "JP",
+				"iso_639_1": "ja",
+				"name": "日本語",
+				"english_name": "Japanese",
+				"data": {
+					"name": "ニワトリ・ファイター",
+					"overview": "",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "CN",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "公鸡斗士",
+					"overview": "咯咯助（Keiji）绝非一只普通的公鸡——他是人类最伟大的捍卫者！他的对手或许高达十层楼，但没有什么能比得上他那颗勇敢无畏的心，以及那声威震四方的战斗怒吼——鸪鴂鹘䴔（Kokekokko）！",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "HK",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "ROOSTER FIGHTER 怒火雞頭",
+					"overview": "這是一個由「一隻公雞」來拯救人類的故事。有一群被稱為「鬼獸」的異形生物，突然出現在這世界上，並用壓倒性的力量開始攻擊人類。街道被摧毀，人們陷入絕望之中……就在所有人幾乎都要放棄的那一刻，一道身影挺身而出對抗鬼獸！「你們這些傢伙，我已經怒髮衝雞冠了！」在人類面前一絲微小的希望降臨。而那正是「一隻公雞」。前所未有的公雞戰鬥故事，開幕！",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "TW",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "雞鬥士",
+					"overview": "這是一個由「一隻公雞」來拯救人類的故事。有一群被稱為「鬼獸」的異形生物，突然出現在這世界上，並用壓倒性的力量開始攻擊人類。街道被摧毀，人們陷入絕望之中……就在所有人幾乎都要放棄的那一刻，一道身影挺身而出對抗鬼獸！「你們這些傢伙，我已經怒髮衝雞冠了！」在人類面前一絲微小的希望降臨。而那正是「一隻公雞」。前所未有的公雞戰鬥故事，開幕！",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SG",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": { "name": "", "overview": "", "homepage": "", "tagline": "" }
+			},
+			{
+				"iso_3166_1": "KR",
+				"iso_639_1": "ko",
+				"name": "한국어/조선말",
+				"english_name": "Korean",
+				"data": {
+					"name": "치킨 파이터",
+					"overview": "이것은 한 마리의 닭이 인류를 구하는 이야기다. 갑자기 나타나 압도적인 힘으로 인류를 공격하기 시작한 괴이한 형체의 '귀수'. 도시는 파괴되고 사람들은 절망에 빠진다. 모두가 포기하려던 찰나, 귀수에 맞선 하나의 그림자가 외친다. '분노로 볏이 들끓는구나!' 인류 앞에 강림한 자그마한 희망, 그것은 바로 한 마리의 닭이었다. 전대미문의 수탉 배틀 액션이 지금 시작된다.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "PT",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": { "name": "", "overview": "", "homepage": "", "tagline": "" }
+			},
+			{
+				"iso_3166_1": "BR",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"name": "",
+					"overview": "Quando criaturas estranhas atacam, Keiji as enfrenta cara a cara com seu grito de guerra: Kokekokko!",
+					"homepage": "",
+					"tagline": "Um galo para salvar o mundo."
+				}
+			},
+			{
+				"iso_3166_1": "MX",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"name": "",
+					"overview": "Cuando extrañas criaturas atacan, Keiji las enfrenta con su feroz grito de batalla: ¡Kokekokko!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "ES",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"name": "",
+					"overview": "Cuando extrañas criaturas atacan, Keiji las enfrenta con su feroz grito de batalla: ¡Kokekokko!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "FR",
+				"iso_639_1": "fr",
+				"name": "Français",
+				"english_name": "French",
+				"data": {
+					"name": "",
+					"overview": "D'étranges créatures attaquent, mais Keiji les affronte en poussant son cri de guerre : Kokekokko !",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "RU",
+				"iso_639_1": "ru",
+				"name": "Pусский",
+				"english_name": "Russian",
+				"data": {
+					"name": "Боевой петух",
+					"overview": "Мир в огне, гигантские монстры жрут города, а человечество уже готово выкинуть белый флаг. Но тут на горизонте появляется одинокий странник с идеальной укладкой гребня и стальным взглядом. Никаких супергероев в трико — спасать планету будет Кейдзи, самый пафосный и брутальный петух в истории!\n\nЭто не просто птичий двор, это яростный экшен, где одно мощное «КУ-КА-РЕ-КУ» разносит чудовищ на атомы. Кейдзи живет по законам суровых боевиков: он мстит за прошлое, защищает слабых и уходит в закат, не оборачиваясь на взрывы. Готовьтесь к самому абсурдному и драйвовому зрелищу года, где перья летят вместе с головами монстров!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "TH",
+				"iso_639_1": "th",
+				"name": "ภาษาไทย",
+				"english_name": "Thai",
+				"data": {
+					"name": "ยอดไก่นักสู้กู้โลก",
+					"overview": "ไคจูขนาดยักษ์ได้ปรากฎตัวขึ้น รุกรานมนุษยชาติ เรื่องราวของไก่พเนจรตนหนึ่งที่ยืนหยัดต่อสู้กับไคจูเหล่านั้น",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "VN",
+				"iso_639_1": "vi",
+				"name": "Tiếng Việt",
+				"english_name": "Vietnamese",
+				"data": {
+					"name": "Cự Kê Chiến Ký",
+					"overview": "Keiji không chỉ là một chú gà trống bình thường—cậu ấy là người bảo vệ vĩ đại nhất của nhân loại! Đối thủ của cậu ấy có thể cao đến mười tầng lầu, nhưng không gì lớn hơn trái tim dũng cảm và tiếng kêu chiến đấu đáng sợ của cậu ấy—Kokekokko!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "BE",
+				"iso_639_1": "nl",
+				"name": "Nederlands",
+				"english_name": "Dutch",
+				"data": {
+					"name": "",
+					"overview": "Keiji is meer dan zomaar een haan – hij is de grootste verdediger van de mensheid! Zijn tegenstanders mogen dan wel tien verdiepingen hoog zijn, maar niets is groter dan zijn dappere hart en zijn angstaanjagende strijdkreet: Kokekokko!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "NL",
+				"iso_639_1": "nl",
+				"name": "Nederlands",
+				"english_name": "Dutch",
+				"data": {
+					"name": "",
+					"overview": "Keiji is meer dan zomaar een haan – hij is de grootste verdediger van de mensheid! Zijn tegenstanders mogen dan wel tien verdiepingen hoog zijn, maar niets is groter dan zijn dappere hart en zijn angstaanjagende strijdkreet: Kokekokko!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IT",
+				"iso_639_1": "it",
+				"name": "Italiano",
+				"english_name": "Italian",
+				"data": {
+					"name": "",
+					"overview": "Keiji è più di un semplice gallo: è il più grande difensore dell'umanità! I suoi avversari saranno anche alti dieci piani, ma niente è più grande del suo cuore coraggioso e del suo temibile grido di battaglia: Kokekokko!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "DE",
+				"iso_639_1": "de",
+				"name": "Deutsch",
+				"english_name": "German",
+				"data": {
+					"name": "Rooster Fighter",
+					"overview": "Seltsame Monster greifen Städte an, doch der Hahn Keiji stellt sich ihnen mit seinem Ruf \"Kikeriki!“",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "TR",
+				"iso_639_1": "tr",
+				"name": "Türkçe",
+				"english_name": "Turkish",
+				"data": {
+					"name": "",
+					"overview": "Gezgin horoz Keiji yeni bir şehre iner ama aniden bir Şeytan ortaya çıkar!",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IL",
+				"iso_639_1": "he",
+				"name": "עִבְרִית",
+				"english_name": "Hebrew",
+				"data": {
+					"name": "התרנגול הלוחם",
+					"overview": "קייג'י הוא יותר מסתם תרנגול רגיל - הוא המגן הגדול ביותר של האנושות! יריביו אולי בני עשר קומות, אבל דבר לא גדול יותר מליבו החזק וקריאת הקרב המפחידה שלו.",
+					"homepage": "",
+					"tagline": "תרנגול אחד להציל את העולם."
+				}
+			},
+			{
+				"iso_3166_1": "ES",
+				"iso_639_1": "ca",
+				"name": "Català",
+				"english_name": "Catalan",
+				"data": {
+					"name": "Rooster fighter",
+					"overview": "El gall del barri és alguna cosa més que no pas un animal ordinari: és el defensor més gran de la humanitat! Els seus contrincants poden ser més grossos que ell, però el seu cor és encara més gros.",
+					"homepage": "",
+					"tagline": ""
+				}
+			}
+		]
+	},
+	"type": "Miniseries",
+	"videos": {
+		"results": [
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Anime Trailer #2 (English Dub)",
+				"key": "ICDmiq2bW8M",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "69a89c64e0909a201f36e55f",
+				"published_at": "2026-03-04T20:00:13.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Anime Trailer #2 [Subtitled]",
+				"key": "N3_Hc-nutLQ",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "69a9f3be3eb776c36a2f6cd2",
+				"published_at": "2026-03-02T18:05:00.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Trailer 2 (English Dub)",
+				"key": "pzPuxAcq81g",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "6999d84f0145191b0e6a31bb",
+				"published_at": "2026-02-21T16:01:08.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "March 14",
+				"key": "hvsCxN8olc8",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Teaser",
+				"official": true,
+				"id": "69836e5151e54062ee621246",
+				"published_at": "2026-02-04T15:01:39.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Opening: What's a Hero? by Daruma ROLLIN' [Subtitled]",
+				"key": "_bJIvk8Cg84",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Opening Credits",
+				"official": true,
+				"id": "68e98a1a110abb03e97865c6",
+				"published_at": "2025-10-10T19:23:22.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "English Dub Trailer",
+				"key": "57npK6frRoE",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "68e989e0fb417e765f9fd551",
+				"published_at": "2025-10-10T16:45:21.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Anime Trailer [Subtitled]",
+				"key": "5hRrvJ08ZSs",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "6869a84b2ac14e0b4c10325c",
+				"published_at": "2025-07-05T20:41:18.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Rooster Fighter Anime Voice Actors Announced! [Subtitled]",
+				"key": "loQnagMm5ac",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "6716a4af4a9fc06d25752215",
+				"published_at": "2024-10-19T20:30:08.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "The Rooster Fighter Anime is Coming Soon!",
+				"key": "vy2ammgAJpI",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Featurette",
+				"official": true,
+				"id": "66ff99849ebea19006f80358",
+				"published_at": "2024-10-03T15:01:06.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Teaser Trailer",
+				"key": "mMvdZxS2PDc",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "66a336845301d17f8dddc5f5",
+				"published_at": "2024-07-25T22:05:10.000Z"
+			}
+		]
+	},
+	"vote_average": 8.767,
+	"vote_count": 88
+}

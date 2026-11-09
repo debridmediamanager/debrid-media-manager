@@ -1,0 +1,63 @@
+{
+	"body": {
+		"user": {
+			"username": "yowmamasita",
+			"name": "yowmamasita",
+			"private": false,
+			"vip": false,
+			"ids": {
+				"slug": "yowmamasita",
+				"uuid": "e066c8b4b41f8cc26cde1f85cd1f65be047c25fc"
+			},
+			"joined_at": "2013-11-20T02:23:04.000Z"
+		},
+		"account": {
+			"timezone": "Europe/London",
+			"date_format": "mdy",
+			"time_24hr": false
+		},
+		"connections": {
+			"facebook": false,
+			"twitter": false,
+			"mastodon": false,
+			"google": false,
+			"tumblr": false,
+			"medium": false,
+			"slack": false,
+			"apple": false,
+			"dropbox": false,
+			"microsoft": false
+		},
+		"limits": {
+			"list": {
+				"count": 13,
+				"item_count": 1000
+			},
+			"watchlist": {
+				"item_count": 1000
+			},
+			"favorites": {
+				"item_count": 100
+			},
+			"search": {
+				"recent_count": 5
+			},
+			"collection": {
+				"item_count": 1000
+			},
+			"notes": {
+				"item_count": 100
+			},
+			"saved_filters": {
+				"count": 5
+			},
+			"streaming": {
+				"connection_count": 1
+			},
+			"recommendations": {
+				"item_count": 100
+			}
+		}
+	},
+	"status": 200
+}

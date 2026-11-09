@@ -34,6 +34,22 @@ export const SYNCED_KEYS = [
 	'en:account',
 ] as const;
 
+/**
+ * The provider sign-ins among them, as withAuth counts them (src/utils/withAuth.tsx).
+ * Easynews alone is not one: withAuth wants a debrid service.
+ */
+export const SIGN_IN_KEYS = [
+	'rd:accessToken',
+	'rd:refreshToken',
+	'ad:apiKey',
+	'tb:apiKey',
+	'pm:accessToken',
+	'pm:apiKey',
+	'oc:apiKey',
+	'dl:accessToken',
+	'dl:apiKey',
+] as const;
+
 /** Prefixes: every `settings:*` flag and the parked logins of the account switcher. */
 export const SYNCED_PREFIXES = ['settings:', 'dmm:accounts:'] as const;
 
@@ -67,3 +83,19 @@ export type SyncIdentity =
 	| { service: 'rd'; clientId: string; clientSecret: string; refreshToken: string }
 	| { service: 'rd'; apiKey: string }
 	| { service: Exclude<SyncService, 'rd'>; apiKey: string };
+
+/** The synced keys of a state someone sent, string values only; everything else is dropped. */
+export function pickSyncedState(sent: unknown): BrowserState {
+	const entries = sent && typeof sent === 'object' ? Object.entries(sent) : [];
+	return Object.fromEntries(
+		entries.filter(
+			(entry): entry is [string, string] =>
+				isSyncedKey(entry[0]) && typeof entry[1] === 'string'
+		)
+	);
+}
+
+/** The debrid services a state is signed in to, e.g. ['rd', 'pm']. */
+export function signedInServices(state: BrowserState): string[] {
+	return [...new Set(SIGN_IN_KEYS.filter((key) => state[key]).map((key) => key.split(':')[0]))];
+}

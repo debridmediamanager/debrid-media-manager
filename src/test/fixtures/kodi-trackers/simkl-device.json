@@ -1,0 +1,11 @@
+{
+	"body": {
+		"device_code": "e1d70db5227f140d30dfb9cc6d7ea6d1e91c2581786617c0f9e7edd67b266162",
+		"user_code": "E80A-7Q5A",
+		"verification_uri": "https://simkl.com/pin",
+		"verification_uri_complete": "https://simkl.com/pin?user_code=E80A-7Q5A",
+		"expires_in": 900,
+		"interval": 5
+	},
+	"status": 200
+}

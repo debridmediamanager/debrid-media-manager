@@ -8,6 +8,7 @@ import { useOffcloudCastToken } from '@/hooks/offcloudCastToken';
 import { usePremiumizeCastToken } from '@/hooks/premiumizeCastToken';
 import { useTorBoxCastToken } from '@/hooks/torboxCastToken';
 import { useSponsor } from '@/hooks/useSponsor';
+import { SIGN_IN_KEYS } from '@/utils/browserStateKeys';
 import { toasterPosition } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { CheckCircle2, Tv } from 'lucide-react';
@@ -46,19 +47,6 @@ const SERVICES = [
 	// No login page: its sign-in opens on this page (ServiceChips), then enrols in DMM Cast like the rest.
 	{ key: 'en', name: 'Easynews', chip: 'bg-[#2563eb] text-white', login: null },
 ] as const;
-
-/** What withAuth counts as a provider sign-in (src/utils/withAuth.tsx). */
-const SIGN_IN_KEYS = [
-	'rd:accessToken',
-	'rd:refreshToken',
-	'ad:apiKey',
-	'tb:apiKey',
-	'pm:accessToken',
-	'pm:apiKey',
-	'oc:apiKey',
-	'dl:accessToken',
-	'dl:apiKey',
-];
 
 /** The Easynews login Settings keeps. Not a sign-in to withAuth, which wants a debrid service. */
 const EASYNEWS_KEY = 'en:account';
@@ -325,6 +313,10 @@ function KodiPage() {
 						Browse and search films and shows in Kodi, and play the cached releases DMM
 						knows of and what members have cast, through your own debrid account, and
 						search your own Easynews account.
+					</p>
+					<p className="mt-2 text-sm text-gray-400">
+						Link Trakt or Simkl from the addon&apos;s Account menu to see what
+						you&apos;ve already watched; scrobbling works through their own Kodi addons.
 					</p>
 				</header>
 

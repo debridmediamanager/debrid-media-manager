@@ -1,0 +1,12 @@
+{
+	"body": {
+		"access_token": "<redacted>",
+		"expires_in": 604800,
+		"expires_at": 1794821447,
+		"token_type": "bearer",
+		"refresh_token": "<redacted>",
+		"scope": "public offline_access",
+		"created_at": 1794216647
+	},
+	"status": 200
+}

@@ -1,0 +1,1208 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"results": [
+			{ "iso_3166_1": "BR", "title": "Cyberpunk: Mercenários", "type": "" },
+			{ "iso_3166_1": "BR", "title": "Cyberpunk: Mercenários 2", "type": "season 2" },
+			{ "iso_3166_1": "BR", "title": "Cyberpunk: Mercenários II", "type": "season 2 logo" },
+			{ "iso_3166_1": "CN", "title": "赛博朋克：边缘行者", "type": "" },
+			{ "iso_3166_1": "CN", "title": "赛博朋克：边缘行者2", "type": "season 2" },
+			{ "iso_3166_1": "IL", "title": "סייברפאנק: אדג’ראנרס", "type": "" },
+			{
+				"iso_3166_1": "JP",
+				"title": "サイバーパンク: エッジランナーズ",
+				"type": "2022-2026"
+			},
+			{ "iso_3166_1": "JP", "title": "Saibāpanku Edjirannāzu", "type": "romaji" },
+			{
+				"iso_3166_1": "JP",
+				"title": "サイバーパンク: エッジランナーズ２",
+				"type": "season 2 alternative title"
+			},
+			{
+				"iso_3166_1": "JP",
+				"title": "Cyberpunk: Edgerunners II (サイバーパンク: エッジランナーズ２)",
+				"type": "season 2 logo"
+			},
+			{ "iso_3166_1": "JP", "title": "Saibāpanku Edjirannāzu２", "type": "season 2 romaji" },
+			{ "iso_3166_1": "RU", "title": "Киберпанк: Бегущие по краю", "type": "" },
+			{ "iso_3166_1": "RU", "title": "Киберпанк: Бегущие по краю 2", "type": "season 2" },
+			{ "iso_3166_1": "US", "title": "Cyberpunk: Edgerunners II", "type": "season 2 logo" },
+			{ "iso_3166_1": "US", "title": "Cyberpunk: Edgerunners 2", "type": "season 2" }
+		]
+	},
+	"backdrop_path": "/bknKZO7DWVYKeByuJMnGI46PFZg.jpg",
+	"content_ratings": {
+		"results": [
+			{ "descriptors": [], "iso_3166_1": "US", "rating": "TV-MA" },
+			{
+				"descriptors": ["Violence", "Sexuality", "Injury", "Threat"],
+				"iso_3166_1": "DE",
+				"rating": "16"
+			},
+			{ "descriptors": [], "iso_3166_1": "GB", "rating": "15" },
+			{ "descriptors": [], "iso_3166_1": "BR", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "IN", "rating": "A" },
+			{ "descriptors": [], "iso_3166_1": "MX", "rating": "C" },
+			{ "descriptors": [], "iso_3166_1": "KR", "rating": "19" },
+			{ "descriptors": [], "iso_3166_1": "ES", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "NZ", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "PL", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "AT", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "IE", "rating": "15" },
+			{ "descriptors": [], "iso_3166_1": "HU", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "CZ", "rating": "18+" },
+			{ "descriptors": [], "iso_3166_1": "RO", "rating": "AP" },
+			{ "descriptors": [], "iso_3166_1": "AR", "rating": "SAM 16" },
+			{ "descriptors": [], "iso_3166_1": "AU", "rating": "MA 15+" },
+			{ "descriptors": [], "iso_3166_1": "BG", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "CA", "rating": "18+" },
+			{ "descriptors": [], "iso_3166_1": "CH", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "FI", "rating": "K16" },
+			{ "descriptors": [], "iso_3166_1": "FR", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "GR", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "ID", "rating": "D" },
+			{ "descriptors": [], "iso_3166_1": "MY", "rating": "18" },
+			{ "descriptors": [], "iso_3166_1": "NL", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "PR", "rating": "TV-MA" },
+			{ "descriptors": [], "iso_3166_1": "PT", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "SG", "rating": "R21" },
+			{ "descriptors": [], "iso_3166_1": "TR", "rating": "18+" },
+			{ "descriptors": [], "iso_3166_1": "UA", "rating": "16+" },
+			{ "descriptors": [], "iso_3166_1": "VI", "rating": "TV-MA" },
+			{ "descriptors": [], "iso_3166_1": "ZA", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "RU", "rating": "18+" }
+		]
+	},
+	"created_by": [
+		{
+			"id": 3581622,
+			"credit_id": "62a13a03d2147c117cb82989",
+			"name": "Rafał Jaki",
+			"original_name": "Rafał Jaki",
+			"gender": 2,
+			"profile_path": "/tHZVhOPzQzzX0v5UuxI1X1qhNMa.jpg"
+		},
+		{
+			"id": 3581626,
+			"credit_id": "6ad80cf974a45286d6697551",
+			"name": "Bartosz Sztybor",
+			"original_name": "Bartosz Sztybor",
+			"gender": 2,
+			"profile_path": "/dHgWQMl7DTe26VRXWO5FgZM4bP6.jpg"
+		}
+	],
+	"credits": {
+		"cast": [
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1254052,
+				"known_for_department": "Acting",
+				"name": "Koki Uchiyama",
+				"original_name": "内山昂輝",
+				"popularity": 3.4624,
+				"profile_path": "/sllSm3iZZWVLTBrDZQRtWrZUfEj.jpg",
+				"character": "D (voice)",
+				"credit_id": "6abf4d20e35408285817e52a",
+				"order": 1
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 4206137,
+				"known_for_department": "Acting",
+				"name": "Momoka Terasawa",
+				"original_name": "寺澤百花",
+				"popularity": 1.5587,
+				"profile_path": "/lLS7b6k1653tiVwbi6pq9JXzMBW.jpg",
+				"character": "Roman (voice)",
+				"credit_id": "6abf4d11b1c32caa17aa0cb5",
+				"order": 2
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 1563442,
+				"known_for_department": "Acting",
+				"name": "Akari Kito",
+				"original_name": "鬼頭明里",
+				"popularity": 3.0846,
+				"profile_path": "/AoRQOZRC0yINB0WeKnM569rV1wF.jpg",
+				"character": "Talia (voice)",
+				"credit_id": "6abf4d183f4781e8aa655ee2",
+				"order": 3
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1845268,
+				"known_for_department": "Acting",
+				"name": "Kentaro Tone",
+				"original_name": "利根健太朗",
+				"popularity": 1.2473,
+				"profile_path": "/9IZ9SpSV0P4bJBN8ALll7IYMLG2.jpg",
+				"character": "Weak (voice)",
+				"credit_id": "6abf4d270b9bf50c80655e98",
+				"order": 4
+			}
+		],
+		"crew": [
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 3581626,
+				"known_for_department": "Writing",
+				"name": "Bartosz Sztybor",
+				"original_name": "Bartosz Sztybor",
+				"popularity": 0.2029,
+				"profile_path": "/dHgWQMl7DTe26VRXWO5FgZM4bP6.jpg",
+				"credit_id": "6ad8217a3a4979390269772f",
+				"department": "Writing",
+				"job": "Other"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 3052141,
+				"known_for_department": "Visual Effects",
+				"name": "Ichigo Kanno",
+				"original_name": "菅野一期",
+				"popularity": 0.5091,
+				"profile_path": null,
+				"credit_id": "6ad80bb11f748d309b6974b7",
+				"department": "Visual Effects",
+				"job": "Character Designer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 2884008,
+				"known_for_department": "Production",
+				"name": "Shunsuke Shida",
+				"original_name": "志太駿介",
+				"popularity": 0.107,
+				"profile_path": null,
+				"credit_id": "6ad80b53e2f80928086974b5",
+				"department": "Production",
+				"job": "Other"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 6564264,
+				"known_for_department": "Production",
+				"name": "Jan Rosner",
+				"original_name": "Jan Rosner",
+				"popularity": 0.0569,
+				"profile_path": null,
+				"credit_id": "6ad80b49ca832ef10d7271a1",
+				"department": "Production",
+				"job": "Producer"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 6564260,
+				"known_for_department": "Production",
+				"name": "Tetsuya Seya",
+				"original_name": "Tetsuya Seya",
+				"popularity": 0.0569,
+				"profile_path": null,
+				"credit_id": "6ad80af66435fbeab0b843a0",
+				"department": "Production",
+				"job": "Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 3581629,
+				"known_for_department": "Production",
+				"name": "Satoru Homma",
+				"original_name": "本間覚",
+				"popularity": 0.1843,
+				"profile_path": "/yPAG5r6oOoH5C2ckzSqpERUcnZc.jpg",
+				"credit_id": "6ad80aca1f748d309b6974b1",
+				"department": "Production",
+				"job": "Executive Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 3581626,
+				"known_for_department": "Writing",
+				"name": "Bartosz Sztybor",
+				"original_name": "Bartosz Sztybor",
+				"popularity": 0.2029,
+				"profile_path": "/dHgWQMl7DTe26VRXWO5FgZM4bP6.jpg",
+				"credit_id": "6ad80abd82f4cbf63e765854",
+				"department": "Production",
+				"job": "Executive Producer"
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 3581628,
+				"known_for_department": "Production",
+				"name": "Saya Elder",
+				"original_name": "Saya Elder",
+				"popularity": 0.072,
+				"profile_path": "/rVtsOEQ4lIuGlwz4FAqf1EFmpx3.jpg",
+				"credit_id": "6ad80aaaf5edaae07630be26",
+				"department": "Production",
+				"job": "Executive Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 206581,
+				"known_for_department": "Acting",
+				"name": "Robert Smith",
+				"original_name": "Robert Smith",
+				"popularity": 0.6439,
+				"profile_path": "/z3hlrpkEGX0sjih1cBPrvp8S0RR.jpg",
+				"credit_id": "6abf4d7a4e5d9113e3b09502",
+				"department": "Sound",
+				"job": "Theme Song Performance"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 5707041,
+				"known_for_department": "Acting",
+				"name": "Michael Dempsey",
+				"original_name": "Michael Dempsey",
+				"popularity": 0.1615,
+				"profile_path": null,
+				"credit_id": "6abf4d72a4e5869bf3d76c8d",
+				"department": "Sound",
+				"job": "Theme Song Performance"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1523784,
+				"known_for_department": "Acting",
+				"name": "Laurence Tolhurst",
+				"original_name": "Laurence Tolhurst",
+				"popularity": 0.1038,
+				"profile_path": "/aqno5RKeI3LcKsnYRhWbGXZ2V3p.jpg",
+				"credit_id": "6abf4d58640e65c6f81d2e1a",
+				"department": "Sound",
+				"job": "Theme Song Performance"
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 5514037,
+				"known_for_department": "Acting",
+				"name": "Petite Meller",
+				"original_name": "Petite Meller",
+				"popularity": 0.0637,
+				"profile_path": null,
+				"credit_id": "6abf4d51609e35904dda425e",
+				"department": "Sound",
+				"job": "Songs"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1793268,
+				"known_for_department": "Sound",
+				"name": "Tsuneo Imahori",
+				"original_name": "今堀恒雄",
+				"popularity": 0.0895,
+				"profile_path": null,
+				"credit_id": "6abf4d4be37b9e066fc4af51",
+				"department": "Sound",
+				"job": "Original Music Composer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1970560,
+				"known_for_department": "Directing",
+				"name": "Kai Ikarashi",
+				"original_name": "五十嵐海",
+				"popularity": 0.8219,
+				"profile_path": null,
+				"credit_id": "6abf4d35740512816aaa0c4f",
+				"department": "Directing",
+				"job": "Series Director"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1164927,
+				"known_for_department": "Directing",
+				"name": "Masahiko Otsuka",
+				"original_name": "大塚雅彦",
+				"popularity": 0.5956,
+				"profile_path": "/qg6UQWWQPU7TJBgq66Nu7J8hmvK.jpg",
+				"credit_id": "6a44a390669d473ed65d1cd8",
+				"department": "Writing",
+				"job": "Other"
+			},
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 2395221,
+				"known_for_department": "Sound",
+				"name": "Hiroki Urakari",
+				"original_name": "浦狩裕樹",
+				"popularity": 0.1176,
+				"profile_path": null,
+				"credit_id": "62c0f04071f095007cc37402",
+				"department": "Sound",
+				"job": "Sound Director"
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 1506173,
+				"known_for_department": "Visual Effects",
+				"name": "Yukiko Kakita",
+				"original_name": "垣田由紀子",
+				"popularity": 0.2362,
+				"profile_path": null,
+				"credit_id": "62c0f00e71f095007cc373da",
+				"department": "Visual Effects",
+				"job": "Color Designer"
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 3212168,
+				"known_for_department": "Sound",
+				"name": "Airi Kobayashi",
+				"original_name": "小林亜依里",
+				"popularity": 0.2547,
+				"profile_path": null,
+				"credit_id": "62c0f051532acb0327a8a616",
+				"department": "Sound",
+				"job": "Sound Effects"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1579844,
+				"known_for_department": "Sound",
+				"name": "Hiroki Nozaki",
+				"original_name": "野崎博樹",
+				"popularity": 0.2781,
+				"profile_path": null,
+				"credit_id": "62c0f04ac2bcc6007c87b5c6",
+				"department": "Sound",
+				"job": "Sound Effects"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1182783,
+				"known_for_department": "Editing",
+				"name": "Masato Yoshitake",
+				"original_name": "吉武将人",
+				"popularity": 0.4586,
+				"profile_path": null,
+				"credit_id": "62c0f037325a5100c1fb494d",
+				"department": "Editing",
+				"job": "Editor"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1647650,
+				"known_for_department": "Production",
+				"name": "Yoshiki Usa",
+				"original_name": "宇佐義大",
+				"popularity": 0.3193,
+				"profile_path": null,
+				"credit_id": "62a13b8edc1cb40fb4ec8214",
+				"department": "Production",
+				"job": "Executive Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 3581630,
+				"known_for_department": "Writing",
+				"name": "Mike Pondsmith",
+				"original_name": "Mike Pondsmith",
+				"popularity": 0.0934,
+				"profile_path": "/5yTmpNPAayy1I3JzR2vrvCyL9NB.jpg",
+				"credit_id": "675a7ff7a7abcc38d13832a9",
+				"department": "Writing",
+				"job": "Original Concept"
+			}
+		]
+	},
+	"episode_run_time": [],
+	"external_ids": {
+		"imdb_id": "tt12590266",
+		"freebase_mid": null,
+		"freebase_id": null,
+		"tvdb_id": 384541,
+		"tvrage_id": null,
+		"wikidata_id": "Q96677963",
+		"facebook_id": "edgerunners",
+		"instagram_id": "edgerunners",
+		"twitter_id": "edgerunners"
+	},
+	"first_air_date": "2022-09-13",
+	"genres": [
+		{ "id": 16, "name": "Animation" },
+		{ "id": 10759, "name": "Action & Adventure" },
+		{ "id": 10765, "name": "Sci-Fi & Fantasy" },
+		{ "id": 80, "name": "Crime" }
+	],
+	"homepage": "https://www.cyberpunk.net/en/edgerunners",
+	"id": 105248,
+	"in_production": true,
+	"keywords": {
+		"results": [
+			{ "name": "technology", "id": 1576 },
+			{ "name": "mercenary", "id": 3070 },
+			{ "name": "dystopia", "id": 4565 },
+			{ "name": "anthology", "id": 9706 },
+			{ "name": "revenge", "id": 9748 },
+			{ "name": "conspiracy", "id": 10410 },
+			{ "name": "cyberpunk", "id": 12190 },
+			{ "name": "based on video game", "id": 41645 },
+			{ "name": "futuristic society", "id": 192260 },
+			{ "name": "anime", "id": 210024 },
+			{ "name": "gritty", "id": 286125 },
+			{ "name": "original net animation (ona)", "id": 323096 },
+			{ "name": "tragic", "id": 325854 },
+			{ "name": "dystopian future", "id": 377678 }
+		]
+	},
+	"languages": ["ja"],
+	"last_air_date": "2026-10-20",
+	"last_episode_to_air": {
+		"id": 7900186,
+		"name": "Then Everyone Went Home",
+		"overview": "A chilling transformation turns the city into a war zone, erupting in an explosive confrontation.",
+		"vote_average": 7.9,
+		"vote_count": 10,
+		"air_date": "2026-10-20",
+		"episode_number": 10,
+		"episode_type": "finale",
+		"production_code": "",
+		"runtime": 31,
+		"season_number": 2,
+		"show_id": 105248,
+		"still_path": "/lMYYI8BzJk90iKfem7MGvkXEO9T.jpg"
+	},
+	"name": "Cyberpunk: Edgerunners",
+	"networks": [
+		{
+			"id": 213,
+			"logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+			"name": "Netflix",
+			"origin_country": ""
+		}
+	],
+	"next_episode_to_air": null,
+	"number_of_episodes": 20,
+	"number_of_seasons": 2,
+	"origin_country": ["JP", "PL", "US"],
+	"original_language": "en",
+	"original_name": "Cyberpunk: Edgerunners",
+	"overview": "In a dystopia riddled with corruption and cybernetic implants, a talented but reckless street kid strives to become a mercenary outlaw — an edgerunner.",
+	"popularity": 71.399,
+	"poster_path": "/v3JuB15WybKmxDeT1hWdK3j6eSJ.jpg",
+	"production_companies": [
+		{
+			"id": 50908,
+			"logo_path": "/g96SufLc3lXtaU73tAvEbTbXymY.png",
+			"name": "TRIGGER",
+			"origin_country": "JP"
+		},
+		{
+			"id": 117187,
+			"logo_path": "/9XnbaSeD1REQ04dJCQcJpBqSP8B.png",
+			"name": "CD PROJEKT RED",
+			"origin_country": "PL"
+		},
+		{
+			"id": 185004,
+			"logo_path": "/tyHnxjQJLH6h4iDQKhN5iqebWmX.png",
+			"name": "Netflix",
+			"origin_country": "JP"
+		},
+		{
+			"id": 178464,
+			"logo_path": "/tyHnxjQJLH6h4iDQKhN5iqebWmX.png",
+			"name": "Netflix",
+			"origin_country": "US"
+		}
+	],
+	"production_countries": [
+		{ "iso_3166_1": "JP", "name": "Japan" },
+		{ "iso_3166_1": "PL", "name": "Poland" },
+		{ "iso_3166_1": "US", "name": "United States of America" }
+	],
+	"seasons": [
+		{
+			"air_date": "2022-09-13",
+			"episode_count": 10,
+			"id": 154580,
+			"name": "Cyberpunk: Edgerunners",
+			"overview": "In a dystopia riddled with corruption and cybernetic implants, a talented but reckless street kid strives to become a mercenary outlaw — an edgerunner.",
+			"poster_path": "/6MMjX9T0L7eoRfZFTnzC6WXYZLK.jpg",
+			"season_number": 1,
+			"vote_average": 8.3
+		},
+		{
+			"air_date": "2026-10-20",
+			"episode_count": 10,
+			"id": 547653,
+			"name": "Cyberpunk: Edgerunners 2",
+			"overview": "Weak, a washed-up cyberpunk legend, is now forced to live without chrome as he searches for a sense of purpose in a world that’s passed him by. Meanwhile, the deadly nomad D sets out on a path to revenge that brings him close to corpo secrets never meant to be found.",
+			"poster_path": "/w3XGb8zwhiq9sUEGWCPY0ZNOWmh.jpg",
+			"season_number": 2,
+			"vote_average": 7.7
+		}
+	],
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "Japanese", "iso_639_1": "ja", "name": "日本語" }],
+	"status": "Returning Series",
+	"tagline": "New legends. Same Night City.",
+	"translations": {
+		"translations": [
+			{
+				"iso_3166_1": "ES",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"name": "",
+					"overview": "En una distopía plagada de corrupción e implantes cibernéticos, un chico prodigioso pero temerario trata de convertirse en un mercenario proscrito: un ‘edgerunner’.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "BR",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"name": "Cyberpunk: Mercenários",
+					"overview": "Para sobreviver em uma realidade distópica na qual a corrupção e os implantes cibernéticos controlam tudo, um jovem talentoso e impulsivo decide se tornar um mercenário.",
+					"homepage": "",
+					"tagline": "Continue correndo."
+				}
+			},
+			{
+				"iso_3166_1": "MX",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"name": "",
+					"overview": "En una realidad distópica repleta de corrupción e implantes cibernéticos, un joven talentoso e impulsivo intenta convertirse en un mercenario.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "US",
+				"iso_639_1": "en",
+				"name": "English",
+				"english_name": "English",
+				"data": {
+					"name": "",
+					"overview": "In a dystopia riddled with corruption and cybernetic implants, a talented but reckless street kid strives to become a mercenary outlaw — an edgerunner.",
+					"homepage": "",
+					"tagline": "New legends. Same Night City."
+				}
+			},
+			{
+				"iso_3166_1": "FR",
+				"iso_639_1": "fr",
+				"name": "Français",
+				"english_name": "French",
+				"data": {
+					"name": "",
+					"overview": "L'histoire d'un gamin des rues qui tente de survivre dans Night City, une ville du futur obsédée par la technologie et la transformation du corps. Démuni, mais pas totalement désespéré, le jeune garçon parvient à rester en vie en devenant un \"edgerunner\", un mercenaire hors-la-loi également connu sous le nom de \"cyberpunk\".",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "GR",
+				"iso_639_1": "el",
+				"name": "ελληνικά",
+				"english_name": "Greek",
+				"data": {
+					"name": "",
+					"overview": "Σε μια δυστοπία γεμάτη διαφθορά και κυβερνοεμφυτεύματα, ένα ταλαντούχο αλλά απερίσκεπτο παιδί του δρόμου προσπαθεί να γίνει παράνομος μισθοφόρος – ένας edgerunner.",
+					"homepage": "",
+					"tagline": "Νέοι θρύλοι. Ίδια Night City."
+				}
+			},
+			{
+				"iso_3166_1": "RU",
+				"iso_639_1": "ru",
+				"name": "Pусский",
+				"english_name": "Russian",
+				"data": {
+					"name": "",
+					"overview": "В мире будущего, где царит коррупция, а люди одержимы киберимплантами, одаренный, но безрассудный парень мечтает стать наемником вне закона — «бегущим по краю».",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "JP",
+				"iso_639_1": "ja",
+				"name": "日本語",
+				"english_name": "Japanese",
+				"data": {
+					"name": "",
+					"overview": "ナイトシティ、ここは不正にまみれた大企業の関係者と、サイバーウェアで肉体を改造した者たちが幅を利かせる未来の街。それ以外の人間が成功するためには、自らの力ではい上がるしか道はない。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "CN",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "赛博朋克：边缘行者",
+					"overview": "夜之城每一季都有新故事，也总有一群特立独行的新角色登场，讲述属于他们的传奇。",
+					"homepage": "",
+					"tagline": "只管奔跑"
+				}
+			},
+			{
+				"iso_3166_1": "KR",
+				"iso_639_1": "ko",
+				"name": "한국어/조선말",
+				"english_name": "Korean",
+				"data": {
+					"name": "사이버펑크: 엣지러너",
+					"overview": "부패와 사이보그 임플란트로 가득한 디스토피아 세상. 재능은 넘치지만 무모한 길거리 소년이 무법의 용병, 엣지러너가 되기 위해 사투를 벌인다.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "TW",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "電馭叛客：邊緣行者",
+					"overview": "在貪墨成風的反烏托邦世界中，四處都是生化改造植入體。一個在街頭長大的魯莽天才少年努力想成為邊緣行者：拿錢辦事的法外之徒。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "TR",
+				"iso_639_1": "tr",
+				"name": "Türkçe",
+				"english_name": "Turkish",
+				"data": {
+					"name": "",
+					"overview": "Yolsuzlukla ve sibernetik implantlarla dolu bir distopyada yetenekli ancak umursamaz bir sokak çocuğu, edgerunner denen kanun kaçağı paralı askerlerden olmak için uğraşır.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "TH",
+				"iso_639_1": "th",
+				"name": "ภาษาไทย",
+				"english_name": "Thai",
+				"data": {
+					"name": "CYBERPUNK: อาชญากรแดนเถื่อน",
+					"overview": "ในโลกอนาคตอันเสื่อมทรามที่เต็มไปด้วยการทุจริตและการปลูกถ่ายชิ้นส่วนไซเบอร์ เด็กข้างถนนที่มีพรสวรรค์แต่ใจร้อนบุ่มบ่าม มุ่งมั่นที่จะเป็นเอดจ์รันเนอร์ ทหารรับจ้างนอกกฎหมาย",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "PT",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"name": "",
+					"overview": "Numa distopia mergulhada em corrupção e paixão pelos implantes corporais, um miúdo talentoso, mas imprudente, esforça-se para se tornar um mercenário fora da lei.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "PL",
+				"iso_639_1": "pl",
+				"name": "Polski",
+				"english_name": "Polish",
+				"data": {
+					"name": "",
+					"overview": "W dystopijnym mieście, w którym cybernetyczne modyfikacje organizmu to norma, zdolny chłopak z ulicy chce zostać wyjętym spod prawa najemnikiem – edgerunnerem.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IT",
+				"iso_639_1": "it",
+				"name": "Italiano",
+				"english_name": "Italian",
+				"data": {
+					"name": "",
+					"overview": "Nella spietata Night City, una metropoli ossessionata da tecnologia e potenziamenti corporei, il giovane David Martinez cerca di sopravvivere tra ristrettezze economiche e soprusi. Travolto da un'improvvisa tragedia personale, David si fa impiantare il Sandevistan, un innesto cibernetico militare estremamente pericoloso. L'incontro con la misteriosa netrunner Lucy lo spingerà nel mondo della criminalità, trasformandolo in un mercenario fuorilegge pronto a tutto.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "CA",
+				"iso_639_1": "fr",
+				"name": "Français",
+				"english_name": "French",
+				"data": {
+					"name": "",
+					"overview": "Dans une dystopie pleine de corruption et d'implants cybernétiques, un enfant de la rue doué et téméraire tente de devenir un mercenaire hors-la-loi : un edgerunner.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "HK",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "電馭叛客：邊緣行者",
+					"overview": "在貪墨成風的反烏托邦世界中，四處都是生化改造植入體。一個在街頭長大的魯莽天才少年努力想成為邊緣行者：拿錢辦事的法外之徒。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SG",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "赛博浪客",
+					"overview": "在腐败成风、电子生化植入体盛行的反乌托邦世界里，一个天赋异禀、无所顾忌的街头流浪儿立志成为人称“浪客”的法外佣兵。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "NL",
+				"iso_639_1": "nl",
+				"name": "Nederlands",
+				"english_name": "Dutch",
+				"data": {
+					"name": "",
+					"overview": "In een corrupte toekomst vol cybernetische implantaten wil een getalenteerde, maar roekeloze straatjongen een vogelvrij verklaarde huurling worden: een edgerunner.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "VN",
+				"iso_639_1": "vi",
+				"name": "Tiếng Việt",
+				"english_name": "Vietnamese",
+				"data": {
+					"name": "",
+					"overview": "Giữa cảnh loạn lạc đầy sự thối nát và siêu thiết bị điều khiển, tên nhóc đường phố tài ba mà liều lĩnh cố gắng trở thành edgerunner, lính đánh thuê ngoài vòng pháp luật.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "DE",
+				"iso_639_1": "de",
+				"name": "Deutsch",
+				"english_name": "German",
+				"data": {
+					"name": "",
+					"overview": "Nach einem tragischen Schicksalsschlag lässt sich der mittellose Jugendliche David Martinez ein hochgefährliches, militärisches Cyberware-Implantat einbauen, um in der von Verbrechen und Technologie besessenen Metropole Night City zu überleben. Er schließt sich der geheimnisvollen Netrunnerin Lucy sowie einer Truppe von Söldnern um den Anführer Maine und die abgedrehte Rebecca an, um als gesetzloser Söldner seinen eigenen Weg zu gehen. Gemeinsam absolvieren sie immer riskantere Aufträge in der Unterwelt, während der zunehmende Einsatz von Cyber-Upgrades eine ständige Bedrohung für ihren Verstand und ihr Leben darstellt.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "RO",
+				"iso_639_1": "ro",
+				"name": "Română",
+				"english_name": "Romanian",
+				"data": {
+					"name": "",
+					"overview": "Într-o lume distopică aflată sub stăpânirea corupției și a implanturilor cibernetice, un puști talentat, dar nechibzuit încearcă să devină edgerunner, un rebel mercenar.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "ID",
+				"iso_639_1": "id",
+				"name": "Bahasa indonesia",
+				"english_name": "Indonesian",
+				"data": {
+					"name": "",
+					"overview": "Di dunia distopia yang dipenuhi implan sibernetika dan korupsi, seorang anak jalanan berbakat, tetapi ceroboh, berjuang menjadi tentara bayaran yang disebut edgerunner.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SA",
+				"iso_639_1": "ar",
+				"name": "العربية",
+				"english_name": "Arabic",
+				"data": {
+					"name": "",
+					"overview": "في واقع مستقبلي بائس يغزوه الفساد والأعضاء الإلكترونية، يسعى فتًى مشرّد موهوب، لكنّه مندفع، ليصبح مرتزقًا خارجًا على القانون... أي مُجازفًا.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "UA",
+				"iso_639_1": "uk",
+				"name": "Український",
+				"english_name": "Ukrainian",
+				"data": {
+					"name": "",
+					"overview": "В антиутопічному місті, де все зав’язано на корупції та зловживанні кіберімплантами, здібний вуличний хлопчина намагається стати найманим злочинцем — межовиком.",
+					"homepage": "",
+					"tagline": "Просто біжи далі."
+				}
+			},
+			{
+				"iso_3166_1": "CZ",
+				"iso_639_1": "cs",
+				"name": "Český",
+				"english_name": "Czech",
+				"data": {
+					"name": "",
+					"overview": "V dystopickém světě prolezlém korupcí a plném kybernetických implantátů se nadaný, ale lehkomyslný kluk z ulice snaží stát žoldákem a renegátem v jednom a žít na hraně.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SE",
+				"iso_639_1": "sv",
+				"name": "svenska",
+				"english_name": "Swedish",
+				"data": {
+					"name": "",
+					"overview": "I en dyster framtid full av korruption och cybernetiska implantat kämpar en fattig tonåring för att överleva genom att bli en kriminell supermänniska – en edgerunner.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IL",
+				"iso_639_1": "he",
+				"name": "עִבְרִית",
+				"english_name": "Hebrew",
+				"data": {
+					"name": "",
+					"overview": "במציאות דיסטופית עתירת שחיתות ושתלים קיברנטיים, ילד רחוב מוכשר אך פרוע שואף להפוך לשכיר חרב פורע חוק – אדג'ראנר.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "HU",
+				"iso_639_1": "hu",
+				"name": "Magyar",
+				"english_name": "Hungarian",
+				"data": {
+					"name": "",
+					"overview": "A korrupcióban és kibernetikus implantátumokban bővelkedő disztópiában a tehetséges, de vakmerő utcagyerek törvényen kívüli zsoldos – edgerunner – akar lenni.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "MY",
+				"iso_639_1": "my",
+				"name": "",
+				"english_name": "Burmese",
+				"data": {
+					"name": "",
+					"overview": "Gamer​တွေကြား အ​မျှော်လင့်ကြီး ​မျှော်လင့်ထားသလို မသိသူမရှိ​လောက်တဲ့ Cyberpunk : Edgerunners Animeက Cyberpunk 2077 မတိုင်ခင် တစ်နှစ်မှာ ဖြစ်ခဲ့တဲ့ ကိစ္စ​တွေကို Prequel အ​နေနဲ့ ရိုက်ကူးထားတာပါ။Animationနဲ့Effect​တွေကလည်း ​ပြော​စရာမလို​အောင် ရှယ်လှပါတယ်။ခေတ်​ရှေ့​ပြေးလွန်းပြီး ​သိပ္ပံနည်းပညာ​တွေ ထွန်းကားလွန်းသလို​ငွေနဲ့ပဲ အရာရာလည်ပတ်နေတဲ့ အနာဂတ် မြို့​တော်ကြီးတစ်ခုမှာဒေးဗစ်လို့​​ခေါ်တဲ့ ဂျစ်ကန်ကန်​ကောင်​လေးဟာ ​​ဆင်းရဲနွမ်းပါးမှုကြောင့် လူရာသွင်းမခံရသလို ဘယ်​လောက်ပဲ ကြိုးစားကြိုးစားအရှုံးနဲ့ ရင်ဆိုင်​ရတဲ့ ဘဝပိုင်ရှင်လို့ပဲ ​ပြောရမှာပါ။ကံအ​ကြောင်းမလှရတဲ့အထဲ တစ်​​နေ့မှာသူ့ဘဝတစ်ခုလုံးကို ​ဇောက်ထိုးမိုး​မျှော်ဖြစ်စေမယ့် ဖြစ်ရပ်ဆိုးကြီးဖြစ်လာတဲ့အခါ ဘဝ​ပေးကံကြမ္မာကို​ခြေစုံကန်ပြီး ​ငွေရဖို့အတွက် ဘာမဆိုအကုန်လုပ်မယ့် ​ဝရမ်း​ပြေး​ကြေးစား Edgerunnerဘဝကို ​ရောက်သွားပါ​တော့တယ်။",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SK",
+				"iso_639_1": "sk",
+				"name": "Slovenčina",
+				"english_name": "Slovak",
+				"data": {
+					"name": "",
+					"overview": "V dystopickom svete prešpikovanom korupciou a plnom kybernetických implantátov sa nadaný, no bezohľadný chlapec z ulice snaží stať žoldnierom a odpadlíkom v jednom a žiť na hrane.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "NO",
+				"iso_639_1": "no",
+				"name": "Norsk",
+				"english_name": "Norwegian",
+				"data": {
+					"name": "",
+					"overview": "I et dystopisk samfunn gjennomsyret av korrupsjon og kybernetiske implantater, streber en talentfull og uvøren gategutt etter å bli en lovløs leiesoldat – en edgerunner.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "FI",
+				"iso_639_1": "fi",
+				"name": "suomi",
+				"english_name": "Finnish",
+				"data": {
+					"name": "",
+					"overview": "Lahjakas mutta hurjapäinen katulapsi haluaa lainsuojattomaksi palkkasoturiksi – edgerunneriksi – dystopiassa, jossa lahjonta ja kyberimplantit ovat arkipäivää.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "AE",
+				"iso_639_1": "ar",
+				"name": "العربية",
+				"english_name": "Arabic",
+				"data": {
+					"name": "",
+					"overview": "في واقع مستقبلي بائس يغزوه الفساد والأعضاء الإلكترونية، يسعى فتًى مشرّد موهوب، لكنّه مندفع، ليصبح مرتزقًا خارجًا على القانون... أي مُجازفًا.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "HR",
+				"iso_639_1": "hr",
+				"name": "Hrvatski",
+				"english_name": "Croatian",
+				"data": {
+					"name": "",
+					"overview": "U distopijskom svijetu prepunom korupcije i kibernetičkih implantata talentirani, ali nepromišljeni klinac s ulice nastoji postati odmetnički plaćenik, tzv. edgerunner.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "DK",
+				"iso_639_1": "da",
+				"name": "Dansk",
+				"english_name": "Danish",
+				"data": {
+					"name": "",
+					"overview": "I en dystopisk fremtid plaget af korruption og kybernetiske implantater stræber et talentfuldt men dumdristigt gadebarn efter at blive edgerunner – en lovløs lejesoldat.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IN",
+				"iso_639_1": "hi",
+				"name": "हिन्दी",
+				"english_name": "Hindi",
+				"data": { "name": "", "overview": "", "homepage": "", "tagline": "" }
+			},
+			{
+				"iso_3166_1": "MY",
+				"iso_639_1": "ms",
+				"name": "Bahasa melayu",
+				"english_name": "Malay",
+				"data": {
+					"name": "",
+					"overview": "Dalam distopia yang dipenuhi rasuah dan implan sibernetik, seorang budak jalanan berbakat tetapi semberono berusaha untuk menjadi penjahat upahan — seorang edgerunner.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "PH",
+				"iso_639_1": "tl",
+				"name": "",
+				"english_name": "Tagalog",
+				"data": {
+					"name": "",
+					"overview": "Sa isang dystopia kung saan talamak ang korapsyon at cybernetic implants, may talentado pero mapusok na batang kalye na gustong maging mersenaryo — isang edgerunner.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "LT",
+				"iso_639_1": "lt",
+				"name": "Lietuvių",
+				"english_name": "Lithuanian",
+				"data": {
+					"name": "",
+					"overview": "Gatvės vaikis mėgina išgyventi ateities mieste, apsėstame technologijų ir kūno modifikacijų. Galėdamas viską prarasti, jis nusprendžia išlikti gyvas tampant edžraneriu, samdomu ir įstatymų nepaisančiu asmeniu, dar žinomu kaip Kiberpankas.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "ES",
+				"iso_639_1": "ca",
+				"name": "Català",
+				"english_name": "Catalan",
+				"data": {
+					"name": "",
+					"overview": "En una distopia plena de corrupció i implants cibernètics, un noi prodigiós però temerari intenta convertir-se en un mercenari proscrit: un edgerunner.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IR",
+				"iso_639_1": "fa",
+				"name": "فارسی",
+				"english_name": "Persian",
+				"data": {
+					"name": "سایبرپانک: اج رانرز",
+					"overview": "",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "BE",
+				"iso_639_1": "nl",
+				"name": "Nederlands",
+				"english_name": "Dutch",
+				"data": { "name": "", "overview": "", "homepage": "", "tagline": "" }
+			},
+			{
+				"iso_3166_1": "BD",
+				"iso_639_1": "bn",
+				"name": "বাংলা",
+				"english_name": "Bengali",
+				"data": {
+					"name": "সাইবারপাঙ্ক: এজরানারস",
+					"overview": "",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "BG",
+				"iso_639_1": "bg",
+				"name": "български език",
+				"english_name": "Bulgarian",
+				"data": {
+					"name": "Киберпънк: Еджрънърс",
+					"overview": "В антиутопия, изпълнена с корупция и кибернетични импланти, талантливо, но безразсъдно улично хлапе се бори да стане наемник извън закона – еджрънър.",
+					"homepage": "",
+					"tagline": ""
+				}
+			}
+		]
+	},
+	"type": "Scripted",
+	"videos": {
+		"results": [
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Masahiko Otsuka Interview [Subtitled]",
+				"key": "xw-eT2R4l9g",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Behind the Scenes",
+				"official": true,
+				"id": "6325e81c9f1be7007febbb54",
+				"published_at": "2022-09-17T10:00:00.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official NSFW Trailer [Subtitled]",
+				"key": "JtqIas3bYhg",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "630e89a71d3563007a18f001",
+				"published_at": "2022-08-30T18:00:00.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "TRIGGER & CDPR Interview [Subtitled]",
+				"key": "DvKO-ji_q7Q",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Behind the Scenes",
+				"official": true,
+				"id": "62e81e15357c000060be0d0c",
+				"published_at": "2022-08-01T17:00:00.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Trailer (Studio Trigger Version) [Subtitled]",
+				"key": "ax5YUmkWf_Y",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "62e7fe7a1bf266005da3e356",
+				"published_at": "2022-08-01T16:00:00.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Opening Credits",
+				"key": "OifiVCnFKzM",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Opening Credits",
+				"official": true,
+				"id": "62c0f048e16e5a004e8ff8fb",
+				"published_at": "2022-07-03T01:00:00.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Exclusive Clip — Maelstrom Gang",
+				"key": "FPDJJIPuCgE",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Clip",
+				"official": true,
+				"id": "62a13d60b87aec007167ef2e",
+				"published_at": "2022-06-08T23:52:00.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Teaser",
+				"key": "x4ztgjvfU60",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Teaser",
+				"official": true,
+				"id": "62a139247e12f06e0563b180",
+				"published_at": "2022-06-08T23:43:01.000Z"
+			}
+		]
+	},
+	"vote_average": 8.506,
+	"vote_count": 2142
+}

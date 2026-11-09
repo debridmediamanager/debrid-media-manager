@@ -1,0 +1,73 @@
+{
+	"account": {
+		"settings_at": "2013-11-20T02:23:04.000Z",
+		"followed_at": "2013-11-20T02:23:04.000Z",
+		"following_at": "2013-11-20T02:23:04.000Z",
+		"pending_at": "2013-11-20T02:23:04.000Z",
+		"requested_at": "2013-11-20T02:23:04.000Z"
+	},
+	"all": "2026-10-26T15:55:28.000Z",
+	"collaborations": {
+		"updated_at": "2013-11-20T02:23:04.000Z"
+	},
+	"comments": {
+		"liked_at": "2013-11-20T02:23:04.000Z",
+		"reacted_at": "2013-11-20T02:23:04.000Z",
+		"blocked_at": "2013-11-20T02:23:04.000Z"
+	},
+	"episodes": {
+		"watched_at": "2026-10-26T15:55:28.000Z",
+		"collected_at": "2022-04-09T23:38:57.000Z",
+		"rated_at": "2013-11-20T02:23:04.000Z",
+		"watchlisted_at": "2013-11-20T02:23:04.000Z",
+		"commented_at": "2013-11-20T02:23:04.000Z",
+		"paused_at": "2026-08-15T07:02:59.000Z"
+	},
+	"favorites": {
+		"updated_at": "2020-07-24T23:15:52.000Z"
+	},
+	"lists": {
+		"liked_at": "2024-12-23T08:13:32.000Z",
+		"reacted_at": "2013-11-20T02:23:04.000Z",
+		"updated_at": "2024-02-03T20:44:28.000Z",
+		"commented_at": "2013-11-20T02:23:04.000Z"
+	},
+	"movies": {
+		"watched_at": "2025-04-13T12:20:43.000Z",
+		"collected_at": "2022-07-02T12:53:48.000Z",
+		"rated_at": "2020-05-30T17:22:13.000Z",
+		"watchlisted_at": "2026-02-02T21:24:07.000Z",
+		"favorited_at": "2013-11-20T02:23:04.000Z",
+		"recommendations_at": "2013-11-20T02:23:04.000Z",
+		"commented_at": "2013-11-20T02:23:04.000Z",
+		"paused_at": "2026-10-17T07:04:11.000Z",
+		"hidden_at": "2013-11-20T02:23:04.000Z"
+	},
+	"notes": {
+		"updated_at": "2013-11-20T02:23:04.000Z"
+	},
+	"recommendations": {
+		"updated_at": "2020-07-24T23:15:52.000Z"
+	},
+	"saved_filters": {
+		"updated_at": "2013-11-20T02:23:04.000Z"
+	},
+	"seasons": {
+		"rated_at": "2013-11-20T02:23:04.000Z",
+		"watchlisted_at": "2013-11-20T02:23:04.000Z",
+		"commented_at": "2013-11-20T02:23:04.000Z",
+		"hidden_at": "2013-11-20T02:23:04.000Z"
+	},
+	"shows": {
+		"rated_at": "2013-11-20T02:23:04.000Z",
+		"watchlisted_at": "2017-02-10T05:40:23.000Z",
+		"favorited_at": "2013-11-20T02:23:04.000Z",
+		"recommendations_at": "2013-11-20T02:23:04.000Z",
+		"commented_at": "2013-11-20T02:23:04.000Z",
+		"hidden_at": "2022-04-09T23:03:44.000Z",
+		"dropped_at": "2026-07-27T17:39:08.000Z"
+	},
+	"watchlist": {
+		"updated_at": "2026-02-02T21:24:07.000Z"
+	}
+}

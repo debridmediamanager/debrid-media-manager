@@ -1,0 +1,7 @@
+{
+	"body": {
+		"error_description": "session not found",
+		"error": "invalid_grant"
+	},
+	"status": 400
+}

@@ -6,6 +6,7 @@ import { useBrowserStateSync } from '@/hooks/useBrowserStateSync';
 import { runBackgroundCdnCheck } from '@/lib/observability/torboxCdnProbe';
 import '@/styles/globals.css';
 import { markHydrated } from '@/utils/bootGuard';
+import { redeemBrowserHandoff } from '@/utils/browserHandoff';
 import { bridgePageCache } from '@/utils/pageCacheBridge';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -23,6 +24,7 @@ export default function App({ Component, pageProps }: AppWithProvidersProps) {
 	useBrowserStateSync();
 
 	useEffect(markHydrated, []);
+	useEffect(() => void redeemBrowserHandoff(), []);
 
 	useEffect(() => {
 		if (process.env.NODE_ENV !== 'production' || !('serviceWorker' in navigator)) return;

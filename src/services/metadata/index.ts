@@ -20,9 +20,11 @@ import UserAgent from 'user-agents';
 export const TMDB_MOVIE_APPEND =
 	'videos,release_dates,external_ids,alternative_titles,translations,credits';
 // `credits` and `content_ratings` for the sponsor API's callers: rex shows a title's cast and
-// rating from them, and asking once keeps one cached row per title.
+// rating from them, and asking once keeps one cached row per title. `keywords` for the anime
+// answer of `/api/sponsor/place`. The string is part of the cache key: a change here fetches each
+// show once more.
 export const TMDB_TV_APPEND =
-	'videos,external_ids,alternative_titles,translations,credits,content_ratings';
+	'videos,external_ids,alternative_titles,translations,credits,content_ratings,keywords';
 
 /**
  * A provider's answer, or null when it failed — including a synchronous throw.

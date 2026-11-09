@@ -124,6 +124,7 @@ episodes (`Bleach Sennen Kessen Hen - Kashin Tan - E08`, filed under the Calamit
 			"title": "Sound! Euphonium",
 			"year": 2015,
 			"tvdbId": 289884,
+			"anime": true,
 			"files": [
 				{
 					"path": "[Erai-raws] Hibike Euphonium 3 - 01 [1080p][Multiple Subtitle][F15A9CDD].mkv",
@@ -159,6 +160,14 @@ the show's, never an episode's. `title` and `year` are TMDB's title and first ye
 movie or show, for naming a folder after it (`Sound! Euphonium (2015)`); both are absent where
 `tmdbId` is `null` or TMDB gives none. `tvdbId` is a show's TheTVDB id as TMDB records it, which
 Plex's show rows carry as `tvdb://<id>`; it is absent for a movie and where TMDB records none, except for a show TVDB files under another series (`how` `tvdbSeries`).
+`anime` is `true` for a show that is anime, which zurg files under `__anime__`: TMDB lists it as
+Japanese animation (the Animation genre, `original_language` `ja` and `JP` in
+`origin_country`, all three), or tags it with the `anime` keyword, which catches Cyberpunk:
+Edgerunners (`en`, from Japan, Poland and the US) and One Piece Log: Fish-Man Island Saga
+(Action & Adventure, no Animation genre). Any other show is `false` (The Simpsons is Animation
+from the US, Alice in Borderland Japanese live action, LINK CLICK Chinese animation). It is
+absent for a movie and where `tmdbId` is `null` or TMDB's record of the show could not be read;
+read absent as unknown.
 A film placed inside a show's release carries its own `title` and `year` beside its ids. `season` and `episode` are TMDB's numbering, so you can
 ask TMDB (or `/api/metadata/tmdb:tv:<tmdbId>?season=N`) for that exact episode;
 Files placed by `how` `tvdbSeries` carry TVDB's numbering of the series `tvdbId` names instead. With `tmdbId` `null` they are IMDb's numbering of the show `imdbId` names, for a series TMDB cannot use (`how` `imdb`).

@@ -28,3 +28,13 @@ export function validateOwnPageRequest(req: NextApiRequest, res: NextApiResponse
 	});
 	return false;
 }
+
+/**
+ * A native app rather than a browser: it sends neither `Sec-Fetch-Site` nor `Origin`,
+ * while a browser sends at least one on any write, and every write a page can make to
+ * another site carries `Origin`. Only for routes that hand a caller its own state back
+ * after it proves a provider login (browser-state); never for the data the sponsor API sells.
+ */
+export function isNativeAppRequest(req: NextApiRequest): boolean {
+	return req.headers['sec-fetch-site'] === undefined && req.headers.origin === undefined;
+}

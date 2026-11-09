@@ -33,8 +33,9 @@ class HttpError(Exception):
         self.body = body
 
 
-def http_json(url, data=None, headers=None, method=None, timeout=TIMEOUT):
-    """GET (or POST `data` as JSON) and decode JSON; HttpError carries the status and any JSON body."""
+def http_json(url, data=None, headers=None, method=None, timeout=TIMEOUT, response_headers=None):
+    """GET (or POST `data` as JSON) and decode JSON; HttpError carries the status and any JSON body. A dict passed
+    as `response_headers` receives the answer's headers, names in lower case."""
     body = None if data is None else json.dumps(data).encode()
     req = urllib.request.Request(url, data=body, method=method)
     req.add_header('User-Agent', USER_AGENT)
@@ -46,6 +47,8 @@ def http_json(url, data=None, headers=None, method=None, timeout=TIMEOUT):
     try:
         with urllib.request.urlopen(req, timeout=timeout) as res:
             raw = res.read()
+            if response_headers is not None:
+                response_headers.update((k.lower(), v) for k, v in res.headers.items())
             return res.status, (json.loads(raw) if raw else None)
     except urllib.error.HTTPError as e:
         try:

@@ -1,0 +1,76 @@
+{
+	"movies": [
+		{
+			"added_to_watchlist_at": "2023-10-26T02:04:16Z",
+			"last_watched_at": "2023-10-26T02:04:16Z",
+			"user_rated_at": null,
+			"user_rating": null,
+			"status": "completed",
+			"watched_episodes_count": 0,
+			"total_episodes_count": 0,
+			"not_aired_episodes_count": 0,
+			"movie": {
+				"title": "The Dark Knight",
+				"poster": "78/78195185129f87e6a",
+				"year": 2008,
+				"ids": {
+					"simkl": 53282,
+					"slug": "the-dark-knight",
+					"imdb": "tt0468569",
+					"tmdb": "155",
+					"tvdb": "116",
+					"tvdbslug": "the-dark-knight",
+					"traktslug": "the-dark-knight-2008",
+					"letterboxd": "the-dark-knight"
+				}
+			}
+		},
+		{
+			"added_to_watchlist_at": "2022-02-12T23:18:27Z",
+			"last_watched_at": "2022-02-12T23:18:27Z",
+			"user_rated_at": null,
+			"user_rating": null,
+			"status": "completed",
+			"watched_episodes_count": 0,
+			"total_episodes_count": 0,
+			"not_aired_episodes_count": 0,
+			"movie": {
+				"title": "Wreck-It Ralph",
+				"poster": "94/94136081453fbdbf6",
+				"year": 2012,
+				"ids": {
+					"simkl": 172768,
+					"slug": "wreck-it-ralph",
+					"imdb": "tt1772341",
+					"tmdb": "82690",
+					"tvdb": "237",
+					"tvdbslug": "wreck-it-ralph",
+					"traktslug": "wreck-it-ralph-2012",
+					"letterboxd": "wreck-it-ralph"
+				}
+			}
+		},
+		{
+			"added_to_watchlist_at": "2023-10-09T22:12:04Z",
+			"last_watched_at": "2023-10-09T22:12:04Z",
+			"user_rated_at": null,
+			"user_rating": null,
+			"status": "completed",
+			"watched_episodes_count": 0,
+			"total_episodes_count": 0,
+			"not_aired_episodes_count": 0,
+			"movie": {
+				"title": "Episode 1",
+				"poster": null,
+				"year": 2003,
+				"ids": {
+					"simkl": 1441972,
+					"slug": "episode-1",
+					"tmdb": "497784",
+					"traktslug": "episode-1-2003",
+					"letterboxd": "episode-1"
+				}
+			}
+		}
+	]
+}

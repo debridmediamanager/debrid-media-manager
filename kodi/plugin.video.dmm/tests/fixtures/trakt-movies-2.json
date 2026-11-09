@@ -1,0 +1,62 @@
+[
+	{
+		"last_updated_at": "2022-02-12T23:18:00.000Z",
+		"last_watched_at": "2022-02-12T23:18:00.000Z",
+		"movie": {
+			"ids": {
+				"imdb": "tt1772341",
+				"plex": {
+					"guid": "5d7768c99ab54400214eb7c9",
+					"slug": "wreck-it-ralph"
+				},
+				"slug": "wreck-it-ralph-2012",
+				"tmdb": 82690,
+				"trakt": 61864
+			},
+			"year": 2012,
+			"title": "Wreck-It Ralph"
+		},
+		"plays": 1,
+		"total_count": 165
+	},
+	{
+		"last_updated_at": "2022-02-05T05:34:00.000Z",
+		"last_watched_at": "2022-02-05T05:34:00.000Z",
+		"movie": {
+			"ids": {
+				"imdb": "tt9032400",
+				"plex": {
+					"guid": "5d77704efb0d55001f5ed3a0",
+					"slug": "eternals-2021"
+				},
+				"slug": "eternals-2021",
+				"tmdb": 524434,
+				"trakt": 372798
+			},
+			"year": 2021,
+			"title": "Eternals"
+		},
+		"plays": 1,
+		"total_count": 165
+	},
+	{
+		"last_updated_at": "2021-12-23T18:30:00.000Z",
+		"last_watched_at": "2021-12-23T18:30:00.000Z",
+		"movie": {
+			"ids": {
+				"imdb": "tt13288678",
+				"plex": {
+					"guid": "5e9184230ec8a60043ee9e04",
+					"slug": "mobile-suit-gundam-hathaway"
+				},
+				"slug": "mobile-suit-gundam-hathaway-2021",
+				"tmdb": 685274,
+				"trakt": 529472
+			},
+			"year": 2021,
+			"title": "Mobile Suit Gundam Hathaway"
+		},
+		"plays": 1,
+		"total_count": 165
+	}
+]

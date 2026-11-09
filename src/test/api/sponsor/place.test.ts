@@ -1,8 +1,9 @@
 import { identifyItems } from '@/pages/api/library/identify';
 import handler, { MAX_FILES, MAX_RELEASES } from '@/pages/api/sponsor/place';
-import { placeReleases } from '@/services/placement';
+import { cachedSources, placeReleases, titled } from '@/services/placement';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
+import detectiveConan from '@/test/fixtures/metadata/tmdb-tv-30983-detective-conan.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -14,7 +15,7 @@ vi.mock('@/services/rateLimit/withRateLimit', async (importOriginal) => ({
 vi.mock('@/services/placement', () => ({
 	placeReleases: vi.fn(),
 	titled: vi.fn(async (release: object) => ({ ...release, title: 'Titled' })),
-	cachedSources: {},
+	cachedSources: { show: vi.fn(async () => null), find: vi.fn(async () => null) },
 	PLACEMENT_RULES: '2026-10-23',
 }));
 vi.mock('@/pages/api/library/identify', () => ({
@@ -67,6 +68,28 @@ describe('/api/sponsor/place', () => {
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.json).toHaveBeenCalledWith(
 			expect.objectContaining({ releases: [{ ...placed, title: 'Titled' }], complete: true })
+		);
+	});
+
+	// zurg files a show answered `anime` under `__anime__`: TMDB's captured record for Detective
+	// Conan (Animation, ja, JP), read by the real `titled` as the route hands it DMM's sources
+	it('answers whether a placed show is Japanese animation', async () => {
+		const actual =
+			await vi.importActual<typeof import('@/services/placement')>('@/services/placement');
+		vi.mocked(titled).mockImplementationOnce(actual.titled);
+		vi.mocked(cachedSources.show).mockResolvedValueOnce(detectiveConan);
+		const placed = { kind: 'tv' as const, imdbId: 'tt0131179', tmdbId: 30983, files: [] };
+		mockPlace.mockResolvedValueOnce({ releases: [placed], complete: true });
+		const res = createMockResponse();
+		await handler(post({ releases: [CONAN] }), res);
+
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.json).toHaveBeenCalledWith(
+			expect.objectContaining({
+				releases: [
+					{ ...placed, title: 'Detective Conan', year: 1996, tvdbId: 72454, anime: true },
+				],
+			})
 		);
 	});
 

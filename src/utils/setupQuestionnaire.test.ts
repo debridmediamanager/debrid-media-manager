@@ -447,6 +447,14 @@ describe('sponsorship benefits follow the selected route', () => {
 		}
 	);
 
+	it('offers the ten-stream perk to Kodi debrid and Easynews users, who read the Cast stream list', () => {
+		const kodi = recommendSetup(answers({ player: 'kodi', sources: ['real-debrid'] }));
+		expect(ids('optional', kodi)).toContain('cast-streams');
+
+		const easynews = recommendSetup(answers({ player: 'kodi', sources: ['easynews'] }));
+		expect(ids('optional', easynews)).toContain('cast-streams');
+	});
+
 	it('keeps rex and rex-stremio free when no sponsor-only backend is selected', () => {
 		const result = recommendSetup(
 			answers({

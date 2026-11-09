@@ -1,0 +1,458 @@
+{
+	"shows": [
+		{
+			"added_to_watchlist_at": "2023-04-09T08:50:16Z",
+			"last_watched_at": "2023-04-09T08:50:16Z",
+			"user_rated_at": null,
+			"user_rating": null,
+			"status": "watching",
+			"last_watched": "S04E14",
+			"next_to_watch": "S04E15",
+			"watched_episodes_count": 21,
+			"total_episodes_count": 195,
+			"not_aired_episodes_count": 0,
+			"show": {
+				"title": "The Office (US)",
+				"poster": "17/17116970ef26add",
+				"year": 2005,
+				"runtime": 22,
+				"ids": {
+					"simkl": 2753,
+					"slug": "the-office-us",
+					"imdb": "tt0386676",
+					"tmdb": "2316",
+					"tvdb": "73244",
+					"tvdbslug": "the-office-us",
+					"traktslug": "the-office"
+				}
+			},
+			"seasons": [
+				{
+					"number": 1,
+					"episodes": [
+						{
+							"number": 1,
+							"watched_at": "2022-10-01T13:18:13Z"
+						},
+						{
+							"number": 2,
+							"watched_at": "2022-10-01T13:39:58Z"
+						},
+						{
+							"number": 3,
+							"watched_at": "2022-10-01T14:01:58Z"
+						},
+						{
+							"number": 4,
+							"watched_at": "2022-10-01T14:22:17Z"
+						},
+						{
+							"number": 5,
+							"watched_at": "2022-10-01T14:46:14Z"
+						},
+						{
+							"number": 6,
+							"watched_at": "2022-10-01T15:08:14Z"
+						}
+					]
+				},
+				{
+					"number": 2,
+					"episodes": [
+						{
+							"number": 1,
+							"watched_at": "2022-10-01T15:29:13Z"
+						},
+						{
+							"number": 2,
+							"watched_at": "2022-10-01T15:55:19Z"
+						},
+						{
+							"number": 3,
+							"watched_at": "2022-10-01T16:16:31Z"
+						},
+						{
+							"number": 4,
+							"watched_at": "2022-10-01T17:24:37Z"
+						},
+						{
+							"number": 5,
+							"watched_at": "2022-10-01T17:46:05Z"
+						},
+						{
+							"number": 6,
+							"watched_at": "2022-10-01T18:08:24Z"
+						},
+						{
+							"number": 7,
+							"watched_at": "2022-10-01T18:42:29Z"
+						},
+						{
+							"number": 8,
+							"watched_at": "2022-10-01T19:07:25Z"
+						}
+					]
+				},
+				{
+					"number": 4,
+					"episodes": [
+						{
+							"number": 1,
+							"watched_at": "2022-10-04T18:36:57Z"
+						},
+						{
+							"number": 5,
+							"watched_at": "2022-10-18T20:05:45Z"
+						},
+						{
+							"number": 6,
+							"watched_at": "2022-10-18T20:27:26Z"
+						},
+						{
+							"number": 7,
+							"watched_at": "2022-10-18T20:48:21Z"
+						},
+						{
+							"number": 8,
+							"watched_at": "2022-10-18T21:09:38Z"
+						},
+						{
+							"number": 11,
+							"watched_at": "2023-04-09T08:22:37Z"
+						},
+						{
+							"number": 14,
+							"watched_at": "2023-04-09T08:50:16Z"
+						}
+					]
+				}
+			]
+		},
+		{
+			"added_to_watchlist_at": "2019-07-21T15:43:16Z",
+			"last_watched_at": "2019-07-21T15:43:16Z",
+			"user_rated_at": null,
+			"user_rating": null,
+			"status": "completed",
+			"last_watched": null,
+			"next_to_watch": "S01E01",
+			"watched_episodes_count": 9,
+			"total_episodes_count": 9,
+			"not_aired_episodes_count": 0,
+			"show": {
+				"title": "Heimsendir",
+				"poster": "84/843567b24a7c93e",
+				"year": 2012,
+				"runtime": 35,
+				"ids": {
+					"simkl": 28281,
+					"slug": "heimsendir",
+					"imdb": "tt2354851",
+					"tmdb": "69772",
+					"tvdb": "252831",
+					"tvdbslug": "heimsendir",
+					"traktslug": "world-s-end-2011"
+				}
+			},
+			"seasons": [
+				{
+					"number": 1,
+					"episodes": [
+						{
+							"number": 1,
+							"watched_at": "2019-07-21T15:43:16Z"
+						},
+						{
+							"number": 2,
+							"watched_at": "2019-07-21T15:43:16Z"
+						},
+						{
+							"number": 3,
+							"watched_at": "2019-07-21T15:43:16Z"
+						},
+						{
+							"number": 4,
+							"watched_at": "2019-07-21T15:43:16Z"
+						},
+						{
+							"number": 5,
+							"watched_at": "2019-07-21T15:43:16Z"
+						},
+						{
+							"number": 6,
+							"watched_at": "2019-07-21T15:43:16Z"
+						},
+						{
+							"number": 7,
+							"watched_at": "2019-07-21T15:43:16Z"
+						},
+						{
+							"number": 8,
+							"watched_at": "2019-07-21T15:43:16Z"
+						},
+						{
+							"number": 9,
+							"watched_at": "2019-07-21T15:43:16Z"
+						}
+					]
+				}
+			]
+		},
+		{
+			"added_to_watchlist_at": "2024-04-20T11:38:54Z",
+			"last_watched_at": "2024-04-20T11:38:54Z",
+			"user_rated_at": null,
+			"user_rating": null,
+			"status": "watching",
+			"last_watched": "S03E48",
+			"next_to_watch": "S03E49",
+			"watched_episodes_count": 53,
+			"total_episodes_count": 154,
+			"not_aired_episodes_count": 0,
+			"show": {
+				"title": "Bluey",
+				"poster": "12/12858161ad22c3ed04",
+				"year": 2018,
+				"runtime": 7,
+				"ids": {
+					"simkl": 922016,
+					"slug": "bluey",
+					"imdb": "tt7678620",
+					"tmdb": "82728",
+					"tvdb": "353546",
+					"tvdbslug": "bluey-2018",
+					"traktslug": "bluey"
+				}
+			},
+			"seasons": [
+				{
+					"number": 1,
+					"episodes": [
+						{
+							"number": 38,
+							"watched_at": "2024-03-11T06:16:18Z"
+						},
+						{
+							"number": 39,
+							"watched_at": "2024-03-11T06:26:05Z"
+						},
+						{
+							"number": 40,
+							"watched_at": "2024-03-11T06:55:51Z"
+						},
+						{
+							"number": 41,
+							"watched_at": "2024-03-11T07:03:11Z"
+						},
+						{
+							"number": 42,
+							"watched_at": "2024-03-11T07:11:21Z"
+						},
+						{
+							"number": 43,
+							"watched_at": "2024-03-11T07:21:15Z"
+						},
+						{
+							"number": 45,
+							"watched_at": "2023-10-09T06:09:41Z"
+						},
+						{
+							"number": 46,
+							"watched_at": "2023-10-09T06:19:24Z"
+						},
+						{
+							"number": 47,
+							"watched_at": "2023-10-09T06:26:44Z"
+						},
+						{
+							"number": 48,
+							"watched_at": "2023-10-10T05:08:03Z"
+						},
+						{
+							"number": 49,
+							"watched_at": "2023-10-10T05:18:00Z"
+						},
+						{
+							"number": 50,
+							"watched_at": "2023-10-10T05:25:19Z"
+						},
+						{
+							"number": 51,
+							"watched_at": "2023-10-10T05:32:28Z"
+						},
+						{
+							"number": 52,
+							"watched_at": "2023-10-10T05:42:10Z"
+						}
+					]
+				},
+				{
+					"number": 2,
+					"episodes": [
+						{
+							"number": 1,
+							"watched_at": "2023-10-10T05:52:11Z"
+						},
+						{
+							"number": 2,
+							"watched_at": "2023-10-10T05:59:28Z"
+						},
+						{
+							"number": 3,
+							"watched_at": "2023-10-10T06:06:49Z"
+						},
+						{
+							"number": 40,
+							"watched_at": "2023-11-27T17:51:24Z"
+						}
+					]
+				},
+				{
+					"number": 3,
+					"episodes": [
+						{
+							"number": 1,
+							"watched_at": "2024-02-01T06:15:46Z"
+						},
+						{
+							"number": 2,
+							"watched_at": "2024-02-01T06:23:17Z"
+						},
+						{
+							"number": 3,
+							"watched_at": "2023-10-16T11:58:48Z"
+						},
+						{
+							"number": 4,
+							"watched_at": "2024-02-01T06:34:05Z"
+						},
+						{
+							"number": 5,
+							"watched_at": "2024-02-01T06:41:53Z"
+						},
+						{
+							"number": 6,
+							"watched_at": "2024-02-01T06:49:52Z"
+						},
+						{
+							"number": 7,
+							"watched_at": "2024-02-01T06:57:20Z"
+						},
+						{
+							"number": 8,
+							"watched_at": "2023-10-16T12:35:33Z"
+						},
+						{
+							"number": 9,
+							"watched_at": "2024-02-01T07:12:29Z"
+						},
+						{
+							"number": 10,
+							"watched_at": "2024-02-01T07:20:06Z"
+						},
+						{
+							"number": 11,
+							"watched_at": "2024-02-01T07:27:51Z"
+						},
+						{
+							"number": 12,
+							"watched_at": "2023-10-16T13:05:01Z"
+						},
+						{
+							"number": 13,
+							"watched_at": "2023-10-16T13:12:07Z"
+						},
+						{
+							"number": 14,
+							"watched_at": "2023-10-16T13:20:35Z"
+						},
+						{
+							"number": 15,
+							"watched_at": "2023-10-16T13:27:53Z"
+						},
+						{
+							"number": 16,
+							"watched_at": "2023-10-16T13:35:15Z"
+						},
+						{
+							"number": 17,
+							"watched_at": "2023-10-16T13:42:38Z"
+						},
+						{
+							"number": 19,
+							"watched_at": "2024-02-01T07:38:38Z"
+						},
+						{
+							"number": 20,
+							"watched_at": "2023-10-16T13:58:59Z"
+						},
+						{
+							"number": 21,
+							"watched_at": "2024-02-01T07:54:16Z"
+						},
+						{
+							"number": 22,
+							"watched_at": "2024-02-01T08:00:41Z"
+						},
+						{
+							"number": 23,
+							"watched_at": "2024-04-20T11:38:54Z"
+						},
+						{
+							"number": 24,
+							"watched_at": "2024-02-01T08:15:27Z"
+						},
+						{
+							"number": 25,
+							"watched_at": "2024-02-01T08:23:46Z"
+						},
+						{
+							"number": 26,
+							"watched_at": "2024-02-01T08:31:16Z"
+						},
+						{
+							"number": 28,
+							"watched_at": "2024-02-01T08:45:42Z"
+						},
+						{
+							"number": 29,
+							"watched_at": "2024-02-01T08:52:52Z"
+						},
+						{
+							"number": 30,
+							"watched_at": "2024-02-01T09:00:02Z"
+						},
+						{
+							"number": 31,
+							"watched_at": "2024-02-01T09:07:09Z"
+						},
+						{
+							"number": 33,
+							"watched_at": "2024-02-01T09:22:33Z"
+						},
+						{
+							"number": 35,
+							"watched_at": "2024-02-01T09:36:59Z"
+						},
+						{
+							"number": 36,
+							"watched_at": "2024-02-01T09:44:13Z"
+						},
+						{
+							"number": 37,
+							"watched_at": "2024-02-01T09:51:22Z"
+						},
+						{
+							"number": 38,
+							"watched_at": "2024-02-01T09:58:22Z"
+						},
+						{
+							"number": 48,
+							"watched_at": "2024-04-20T11:02:02Z"
+						}
+					]
+				}
+			]
+		}
+	]
+}

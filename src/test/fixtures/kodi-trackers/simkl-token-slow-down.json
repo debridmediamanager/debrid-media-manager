@@ -1,0 +1,7 @@
+{
+	"body": {
+		"error": "slow_down",
+		"error_description": "Polling too fast; add 5 seconds to your interval"
+	},
+	"status": 400
+}

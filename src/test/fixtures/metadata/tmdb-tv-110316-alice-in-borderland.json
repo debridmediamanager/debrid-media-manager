@@ -1,0 +1,926 @@
+{
+	"adult": false,
+	"alternative_titles": {
+		"results": [
+			{ "iso_3166_1": "BD", "title": "এলিস ইন বর্ডারল্যান্ড", "type": "" },
+			{ "iso_3166_1": "CN", "title": "今际之国的闯关者", "type": "Netflix官方中文名" },
+			{ "iso_3166_1": "CN", "title": "彌留之國的愛麗絲", "type": "" },
+			{ "iso_3166_1": "CN", "title": "弥留之国的爱丽丝", "type": "" },
+			{ "iso_3166_1": "DE", "title": "Alice in Borderland", "type": "" },
+			{ "iso_3166_1": "ES", "title": "Alice in Borderland", "type": "" },
+			{ "iso_3166_1": "GR", "title": "Η Αλίκη στη Χώρα των Εσχάτων", "type": "" },
+			{ "iso_3166_1": "HK", "title": "今际之国的有栖", "type": "" },
+			{ "iso_3166_1": "IL", "title": "אליס בבורדרלנד", "type": "" },
+			{ "iso_3166_1": "IR", "title": "آلیس در منطقه مرزی", "type": "" },
+			{
+				"iso_3166_1": "JP",
+				"title": "Imawa no Kuni no Alice",
+				"type": "alternative modified Hepburn romanization"
+			},
+			{
+				"iso_3166_1": "JP",
+				"title": "Imawa no Kuni no Arisu",
+				"type": "modified Hepburn romanization"
+			},
+			{ "iso_3166_1": "KR", "title": "아리스 인 보더랜드", "type": "" },
+			{ "iso_3166_1": "SE", "title": "Alice in Borderland", "type": "" },
+			{ "iso_3166_1": "SK", "title": "Alice in Borderland", "type": "" },
+			{ "iso_3166_1": "UA", "title": "Аліса в Бордерленді", "type": "" },
+			{ "iso_3166_1": "UA", "title": "Аліса в Ігрокраї", "type": "" },
+			{ "iso_3166_1": "US", "title": "Alice in Borderland", "type": "" },
+			{ "iso_3166_1": "UZ", "title": "Ajal o'yini", "type": "" },
+			{ "iso_3166_1": "UZ", "title": "Alisa chegara ortida", "type": "" },
+			{ "iso_3166_1": "VN", "title": "Thế Giới Không Lối Thoát", "type": "" }
+		]
+	},
+	"backdrop_path": "/QZaPkNUvhdcKONuO2fXuqtcQRo.jpg",
+	"content_ratings": {
+		"results": [
+			{ "descriptors": [], "iso_3166_1": "US", "rating": "TV-MA" },
+			{ "descriptors": [], "iso_3166_1": "AU", "rating": "MA15+" },
+			{ "descriptors": [], "iso_3166_1": "DE", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "KR", "rating": "19" },
+			{ "descriptors": [], "iso_3166_1": "GB", "rating": "15" },
+			{ "descriptors": [], "iso_3166_1": "BR", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "ES", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "TR", "rating": "18+" },
+			{ "descriptors": [], "iso_3166_1": "SG", "rating": "R21" },
+			{ "descriptors": [], "iso_3166_1": "IN", "rating": "A" },
+			{ "descriptors": [], "iso_3166_1": "NL", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "FI", "rating": "K16" },
+			{ "descriptors": [], "iso_3166_1": "FR", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "GR", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "HU", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "MY", "rating": "18" },
+			{ "descriptors": [], "iso_3166_1": "PL", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "PT", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "RU", "rating": "16+" },
+			{ "descriptors": [], "iso_3166_1": "BR", "rating": "18" },
+			{ "descriptors": [], "iso_3166_1": "AT", "rating": "16" },
+			{ "descriptors": [], "iso_3166_1": "IE", "rating": "15" },
+			{ "descriptors": [], "iso_3166_1": "CZ", "rating": "18+" },
+			{ "descriptors": [], "iso_3166_1": "RO", "rating": "AP" },
+			{ "descriptors": [], "iso_3166_1": "CA", "rating": "18+" },
+			{ "descriptors": [], "iso_3166_1": "ID", "rating": "D" },
+			{ "descriptors": [], "iso_3166_1": "MX", "rating": "C" },
+			{ "descriptors": [], "iso_3166_1": "UA", "rating": "16+" }
+		]
+	},
+	"created_by": [],
+	"credits": {
+		"cast": [
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1177942,
+				"known_for_department": "Acting",
+				"name": "Kento Yamazaki",
+				"original_name": "山﨑賢人",
+				"popularity": 4.0334,
+				"profile_path": "/nUWXgjDfRxFJ3P20lyMJr8qDIJ0.jpg",
+				"character": "Arisu Ryohei / Alice",
+				"credit_id": "5f67a619770700003812a8fd",
+				"order": 0
+			},
+			{
+				"adult": false,
+				"gender": 1,
+				"id": 1076363,
+				"known_for_department": "Acting",
+				"name": "Tao Tsuchiya",
+				"original_name": "土屋太鳳",
+				"popularity": 2.1259,
+				"profile_path": "/n2665l3bguzDTm5CnyP99ipU9Z0.jpg",
+				"character": "Usagi Yuzuha / “Rabbit”",
+				"credit_id": "5f67a6405f2db100333c9ecb",
+				"order": 1
+			}
+		],
+		"crew": [
+			{
+				"adult": false,
+				"gender": 0,
+				"id": 1176810,
+				"known_for_department": "Visual Effects",
+				"name": "Atsushi Doi",
+				"original_name": "土井淳",
+				"popularity": 0.1974,
+				"profile_path": null,
+				"credit_id": "5f67a855fbe36f00373f216f",
+				"department": "Visual Effects",
+				"job": "Visual Effects Supervisor"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 2026855,
+				"known_for_department": "Production",
+				"name": "Kaata Sakamoto",
+				"original_name": "坂本和隆",
+				"popularity": 0.3239,
+				"profile_path": "/zck9r8jCyKqcr5vCcqbhU78i8e4.jpg",
+				"credit_id": "5f67a80084448e0037783fb9",
+				"department": "Production",
+				"job": "Executive Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1123053,
+				"known_for_department": "Camera",
+				"name": "Taro Kawazu",
+				"original_name": "河津太郎",
+				"popularity": 0.2851,
+				"profile_path": null,
+				"credit_id": "5f67a876a0b6900038412d9c",
+				"department": "Camera",
+				"job": "Director of Photography"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1919620,
+				"known_for_department": "Sound",
+				"name": "Yutaka Yamada",
+				"original_name": "山田豊",
+				"popularity": 0.9655,
+				"profile_path": "/yFzOAzF9UeToYaD78ODkosdfP9u.jpg",
+				"credit_id": "620f8957d100b6006a60b7e1",
+				"department": "Sound",
+				"job": "Original Music Composer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1823987,
+				"known_for_department": "Writing",
+				"name": "Haro Aso",
+				"original_name": "麻生羽呂",
+				"popularity": 0.345,
+				"profile_path": null,
+				"credit_id": "660cbfa5da9ef2017d579a90",
+				"department": "Writing",
+				"job": "Graphic Novel"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1389629,
+				"known_for_department": "Production",
+				"name": "Akira Morii",
+				"original_name": "森井輝",
+				"popularity": 0.4926,
+				"profile_path": "/1Wt5S8urMtwHpe0tjGMuGSHHcBO.jpg",
+				"credit_id": "678729c1bd793c03544f1aae",
+				"department": "Production",
+				"job": "Producer"
+			},
+			{
+				"adult": false,
+				"gender": 2,
+				"id": 1823987,
+				"known_for_department": "Writing",
+				"name": "Haro Aso",
+				"original_name": "麻生羽呂",
+				"popularity": 0.345,
+				"profile_path": null,
+				"credit_id": "6a0a2e1aa202ae508a76802a",
+				"department": "Writing",
+				"job": "Original Story"
+			}
+		]
+	},
+	"episode_run_time": [],
+	"external_ids": {
+		"imdb_id": "tt10795658",
+		"freebase_mid": null,
+		"freebase_id": null,
+		"tvdb_id": 376472,
+		"tvrage_id": null,
+		"wikidata_id": "Q103967305",
+		"facebook_id": null,
+		"instagram_id": null,
+		"twitter_id": null
+	},
+	"first_air_date": "2020-12-10",
+	"genres": [
+		{ "id": 9648, "name": "Mystery" },
+		{ "id": 18, "name": "Drama" },
+		{ "id": 10759, "name": "Action & Adventure" }
+	],
+	"homepage": "https://www.netflix.com/title/80200575",
+	"id": 110316,
+	"in_production": false,
+	"keywords": {
+		"results": [
+			{ "name": "dystopia", "id": 4565 },
+			{ "name": "supernatural", "id": 6152 },
+			{ "name": "survival", "id": 10349 },
+			{ "name": "tokyo, japan", "id": 12369 },
+			{ "name": "psychological thriller", "id": 12565 },
+			{ "name": "based on manga", "id": 13141 },
+			{ "name": "game", "id": 18249 },
+			{ "name": "survival horror", "id": 50009 },
+			{ "name": "wonder", "id": 240422 },
+			{ "name": "suspense", "id": 288394 },
+			{ "name": "death game", "id": 295702 },
+			{ "name": "suspenseful", "id": 314730 },
+			{ "name": "horror", "id": 315058 },
+			{ "name": "brisk", "id": 325779 },
+			{ "name": "urgent", "id": 325855 }
+		]
+	},
+	"languages": ["ja"],
+	"last_air_date": "2025-09-25",
+	"last_episode_to_air": {
+		"id": 6527743,
+		"name": "Episode 6",
+		"overview": "Haunted by a devastating glimpse into the future, Arisu crumples under the pressure to save everyone. Will he, Usagi and the team make it to the exit?",
+		"vote_average": 6.972,
+		"vote_count": 36,
+		"air_date": "2025-09-25",
+		"episode_number": 6,
+		"episode_type": "finale",
+		"production_code": "",
+		"runtime": 77,
+		"season_number": 3,
+		"show_id": 110316,
+		"still_path": "/pqFBVKZq4ooy5bDjN2HnLsKbOJt.jpg"
+	},
+	"name": "Alice in Borderland",
+	"networks": [
+		{
+			"id": 213,
+			"logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+			"name": "Netflix",
+			"origin_country": ""
+		}
+	],
+	"next_episode_to_air": null,
+	"number_of_episodes": 22,
+	"number_of_seasons": 3,
+	"origin_country": ["JP"],
+	"original_language": "ja",
+	"original_name": "今際の国のアリス",
+	"overview": "With his two friends, a video-game-obsessed young man finds himself in a strange version of Tokyo where they must compete in dangerous games to win.",
+	"popularity": 39.9524,
+	"poster_path": "/Ac8ruycRXzgcsndTZFK6ouGA0FA.jpg",
+	"production_companies": [
+		{
+			"id": 12386,
+			"logo_path": "/oxvw2Mrq3GcTxFc2mlT7E5tpek7.png",
+			"name": "Robot Communications",
+			"origin_country": "JP"
+		}
+	],
+	"production_countries": [{ "iso_3166_1": "JP", "name": "Japan" }],
+	"seasons": [
+		{
+			"air_date": "2020-12-10",
+			"episode_count": 8,
+			"id": 163454,
+			"name": "Season 1",
+			"overview": "An aimless gamer and his two friends find themselves in a parallel Tokyo, where they're forced to compete in a series of sadistic games to survive.",
+			"poster_path": "/kXAd0if2gba1nLAkeozRT93Qgg7.jpg",
+			"season_number": 1,
+			"vote_average": 7.8
+		},
+		{
+			"air_date": "2022-12-22",
+			"episode_count": 8,
+			"id": 173431,
+			"name": "Season 2",
+			"overview": "The games are deadlier, this world more wild and cruel; but will Arisu ever make it back to the real world — and will it be worth everything he's lost?",
+			"poster_path": "/s3ZAS0AGLQ668sFveVFinAd2zVy.jpg",
+			"season_number": 2,
+			"vote_average": 7.9
+		},
+		{
+			"air_date": "2025-09-25",
+			"episode_count": 6,
+			"id": 434616,
+			"name": "Season 3",
+			"overview": "",
+			"poster_path": "/1P25bUZ2LrwbjqeT4BNQLEtTat3.jpg",
+			"season_number": 3,
+			"vote_average": 7.1
+		}
+	],
+	"softcore": false,
+	"spoken_languages": [{ "english_name": "Japanese", "iso_639_1": "ja", "name": "日本語" }],
+	"status": "Ended",
+	"tagline": "Life is a game, you should enjoy it more.",
+	"translations": {
+		"translations": [
+			{
+				"iso_3166_1": "ES",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Un aficionado a los videojuegos y sus dos amigos se ven atrapados en una versión paralela de Tokio, donde deben competir en sádicos juegos para sobrevivir.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IT",
+				"iso_639_1": "it",
+				"name": "Italiano",
+				"english_name": "Italian",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Un appassionato di videogiochi e i suoi due amici si ritrovano in una Tokyo parallela, dove per sopravvivere sono costretti a partecipare a una serie di giochi sadici.",
+					"homepage": "",
+					"tagline": "Un gioco che vale la vita... vera"
+				}
+			},
+			{
+				"iso_3166_1": "US",
+				"iso_639_1": "en",
+				"name": "English",
+				"english_name": "English",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "With his two friends, a video-game-obsessed young man finds himself in a strange version of Tokyo where they must compete in dangerous games to win.",
+					"homepage": "",
+					"tagline": "Life is a game, you should enjoy it more."
+				}
+			},
+			{
+				"iso_3166_1": "BR",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Um gamer e seus dois amigos são transportados para uma versão paralela de Tóquio, onde precisam participar de diversos jogos mortais caso queiram sobreviver.",
+					"homepage": "",
+					"tagline": "A vida é um jogo, você deveria aproveitá-la mais."
+				}
+			},
+			{
+				"iso_3166_1": "FR",
+				"iso_639_1": "fr",
+				"name": "Français",
+				"english_name": "French",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Un gamer paumé et ses deux amis se retrouvent dans un Tokyo parallèle, où ils sont contraints de participer à une série de jeux sadiques pour survivre.",
+					"homepage": "",
+					"tagline": "La vie est un jeu qui a ses propres règles."
+				}
+			},
+			{
+				"iso_3166_1": "MX",
+				"iso_639_1": "es",
+				"name": "Español",
+				"english_name": "Spanish",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Un chico obsesionado con los videojuegos se transporta con dos amigos a una realidad paralela y postapocalíptica de Tokio donde cada nivel es de vida o muerte.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "KR",
+				"iso_639_1": "ko",
+				"name": "한국어/조선말",
+				"english_name": "Korean",
+				"data": {
+					"name": "아리스 인 보더랜드",
+					"overview": "이곳은 또 다른 도쿄, 치명적인 게임의 배경. 그 세계로 세 청년이 던져진다. 무의미한 세월을 보내던 게이머와 두 친구. 선택의 여지는 없다. 살고 싶다면 싸워야 한다.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "CZ",
+				"iso_639_1": "cs",
+				"name": "Český",
+				"english_name": "Czech",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Mladík posedlý videohrami a jeho dva kamarádi se ocitnou v alternativní verzi Tokia, kde se musí účastnit krutých her, aby přežili.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "RU",
+				"iso_639_1": "ru",
+				"name": "Pусский",
+				"english_name": "Russian",
+				"data": {
+					"name": "Алиса в Пограничье",
+					"overview": "Непутёвый геймер вместе с двумя друзьями попадают в альтернативную версию Токио, где им приходится бороться за свои жизни в жестоких соревнованиях.",
+					"homepage": "",
+					"tagline": "«Жизнь - это игра, нужно больше ею наслаждаться»"
+				}
+			},
+			{
+				"iso_3166_1": "JP",
+				"iso_639_1": "ja",
+				"name": "日本語",
+				"english_name": "Japanese",
+				"data": {
+					"name": "",
+					"overview": "2人の悪友とともに街をぶらつく青年が迷い込んだ、危険渦巻く不思議な世界。死を免れる方法はただ一つ。命がけの難題をクリアし、滞在許可を手に入れること。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "DE",
+				"iso_639_1": "de",
+				"name": "Deutsch",
+				"english_name": "German",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Ein planloser Gamer und seine zwei Freunde landen in einem parallelen Tokio, wo sie in einer Reihe sadistischer Spiele gegeneinander antreten müssen, um zu überleben.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "HU",
+				"iso_639_1": "hu",
+				"name": "Magyar",
+				"english_name": "Hungarian",
+				"data": {
+					"name": "Alice Határországban",
+					"overview": "A céltalan gamer két barátjával együtt egy alternatív Tokióban találja magát, ahol az életben maradásért kénytelenek egy sor szadista játékban részt venni.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "TW",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "今際之國的闖關者",
+					"overview": "一名無所事事的遊戲玩家和兩名好友發現自己身處在平行時空的東京，被迫參加一系列暴虐無情的遊戲，唯有過關才能存活。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "CN",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "弥留之国的爱丽丝",
+					"overview": "一位漫无目标的游戏玩家和两位好友发现他们身处平行世界中的东京。为了生存下来，他们必须在一系列残忍的游戏中展开较量。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "DK",
+				"iso_639_1": "da",
+				"name": "Dansk",
+				"english_name": "Danish",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "En planløs gamer og hans to venner befinder sig i en parallel verden i Tokyo, hvor de bliver tvunget til at konkurrere i en række sadistiske lege for at overleve.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "GR",
+				"iso_639_1": "el",
+				"name": "ελληνικά",
+				"english_name": "Greek",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Ένας gamer χωρίς σκοπό και οι φίλοι του βρίσκονται σε ένα εναλλακτικό Τόκιο, όπου υποχρεώνονται να αγωνιστούν σε μια σειρά σαδιστικών παιχνιδιών επιβίωσης.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "UA",
+				"iso_639_1": "uk",
+				"name": "Український",
+				"english_name": "Ukrainian",
+				"data": {
+					"name": "Аліса в Прикордонні",
+					"overview": "Недолугий геймер і двоє його друзів потрапляють у паралельний світ. Вони змушені брати участь у жорстоких іграх заради виживання.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "CA",
+				"iso_639_1": "fr",
+				"name": "Français",
+				"english_name": "French",
+				"data": {
+					"name": "Alice In Borderland",
+					"overview": "Un maniaque de jeux vidéo et ses deux amis se retrouvent dans une version parallèle de Tokyo où ils sont forcés, pour survivre, de prendre part à des jeux sadiques.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IL",
+				"iso_639_1": "he",
+				"name": "עִבְרִית",
+				"english_name": "Hebrew",
+				"data": {
+					"name": "בורדרלנד",
+					"overview": "גיימר חסר מעש ושני חבריו מוצאים את עצמם בממד מקביל של טוקיו שבו עליהם להשלים סדרת משחקים סדיסטיים כדי להישאר בחיים.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "TH",
+				"iso_639_1": "th",
+				"name": "ภาษาไทย",
+				"english_name": "Thai",
+				"data": {
+					"name": "อลิสในแดนมรณะ",
+					"overview": "นักเล่นเกมผู้ไร้เป้าหมายชีวิตและเพื่อน 2 คนได้หลุดเข้าไปในโลกคู่ขนานของโตเกียว ซึ่งบีบให้พวกเขาต้องเล่นเกมเสี่ยงตายเพื่อเอาชีวิตรอด",
+					"homepage": "",
+					"tagline": "พวกเขาต้องเล่นเกมเสี่ยงตายเพื่อเอาชีวิตรอด"
+				}
+			},
+			{
+				"iso_3166_1": "VN",
+				"iso_639_1": "vi",
+				"name": "Tiếng Việt",
+				"english_name": "Vietnamese",
+				"data": {
+					"name": "Thế Giới Không Lối Thoát",
+					"overview": "Một game thủ lông bông cùng hai người bạn nhận ra họ đã lọt vào thế giới Tokyo song song, nơi họ buộc phải thi đấu trong một loạt trò chơi tàn bạo để tồn tại.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "HK",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "今際之國的有栖",
+					"overview": "一名無所事事的遊戲玩家和兩名好友發現自己身處在平行時空的東京，被迫參加一系列暴虐無情的遊戲，唯有過關才能存活。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SK",
+				"iso_639_1": "sk",
+				"name": "Slovenčina",
+				"english_name": "Slovak",
+				"data": {
+					"name": "",
+					"overview": "Mladík posadnutý hraním videohier sa spoločne s dvoma kamarátmi ocitne v zvláštnej verzii Tokia, kde všetci musia hrať nebezpečné hry o prežitie.",
+					"homepage": "",
+					"tagline": "Život je hra, mal by si si ho viac užívať."
+				}
+			},
+			{
+				"iso_3166_1": "RO",
+				"iso_639_1": "ro",
+				"name": "Română",
+				"english_name": "Romanian",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Un jucător fără căpătâi se trezește alături de doi prieteni într-un Tokyo dintr-o lume paralelă, unde toți luptă pentru propria viață într-un șir de jocuri sadice.",
+					"homepage": "",
+					"tagline": "Viața este un joc, ar trebui să te bucuri mai mult de ea."
+				}
+			},
+			{
+				"iso_3166_1": "NL",
+				"iso_639_1": "nl",
+				"name": "Nederlands",
+				"english_name": "Dutch",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Een doelloze gamer en zijn twee vrienden zitten in een parallelle versie van Tokio, waar ze moeten strijden in een reeks sadistische games om te overleven.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "ID",
+				"iso_639_1": "id",
+				"name": "Bahasa indonesia",
+				"english_name": "Indonesian",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Seorang gamer tanpa tujuan dan dua temannya terdampar di Tokyo paralel. Di sana, mereka dipaksa bertanding dalam serangkaian permainan sadis agar bisa bertahan hidup.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "TR",
+				"iso_639_1": "tr",
+				"name": "Türkçe",
+				"english_name": "Turkish",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Amaçsız bir bilgisayar oyuncusu ve iki arkadaşı kendilerini paralel evrendeki Tokyo'da bulur. Burada hayatta kalmak için bir dizi acımasız oyuna katılmaları gerekir.",
+					"homepage": "",
+					"tagline": "Hayat bir oyundur, daha çok keyfini çıkarmalısın."
+				}
+			},
+			{
+				"iso_3166_1": "PT",
+				"iso_639_1": "pt",
+				"name": "Português",
+				"english_name": "Portuguese",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Um jogador  sem objetivos e os seus dois amigos dão por si numa versão paralela de Tóquio, onde são obrigados a competir em vários jogos sádicos para sobreviver.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SA",
+				"iso_639_1": "ar",
+				"name": "العربية",
+				"english_name": "Arabic",
+				"data": {
+					"name": "أوراق الموت",
+					"overview": "يجد لاعب ألعاب فيديو بلا هدف وصديقاه أنفسهم في \"طوكيو\" الموازية، حيث يُضطرّون إلى التنافس في سلسلة من الألعاب السادية لأجل النجاة بحياتهم.",
+					"homepage": "",
+					"tagline": "الحياة لعبة، يجب أن تستمتع بها أكثر."
+				}
+			},
+			{
+				"iso_3166_1": "IR",
+				"iso_639_1": "fa",
+				"name": "فارسی",
+				"english_name": "Persian",
+				"data": {
+					"name": "آلیس در سرزمین مرزی",
+					"overview": "آریسو ریوهی، جوانی بی‌حال، بیکار و شیفته بازی‌های ویدئویی، ناگهان خود را در نسخه‌ای عجیب و خالی از سکنه از توکیو می‌بیند که در آن او و دوستانش برای زنده ماندن باید در بازی‌های خطرناکی رقابت کنند. در این دنیای عجیب، آریسو با اوساگی، زن جوانی که به‌تنهایی بازی‌ها را پیش می‌برد، ملاقات می‌کند. پس از یک بازی خطرناک که محدودیت‌های آریسو را آزمایش می‌کند، این دو با هم شروع به کشف رمز و راز یکی پس از دیگری می‌کنند درحالیکه جان خود را به خطر می‌اندازند و با معنای زندگی‌ کردن روبرو می‌شوند.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SE",
+				"iso_639_1": "sv",
+				"name": "svenska",
+				"english_name": "Swedish",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "En vilsen gamer och hans två kompisar hamnar i ett parallellt Tokyo, där de tvingas ställa upp i en rad sadistiska tävlingar för att överleva.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "PL",
+				"iso_639_1": "pl",
+				"name": "Polski",
+				"english_name": "Polish",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Gracz bez planu na życie i jego dwóch przyjaciół trafiają do Tokio w równoległym świecie, gdzie są zmuszeni do rywalizowania w serii sadystycznych gier, aby przeżyć.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "PH",
+				"iso_639_1": "tl",
+				"name": "",
+				"english_name": "Tagalog",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Isang gamer at dalawang kaibigan niya ang nakarating sa lugar na parang Tokyo, kung saan sila napilitang makipaglaban sa mga brutal na games para maka-survive.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "RS",
+				"iso_639_1": "sr",
+				"name": "Srpski",
+				"english_name": "Serbian",
+				"data": {
+					"name": "Алиса у земљи чудеса",
+					"overview": "Са своја два пријатеља, младић опседнут видео играма налази се у чудној верзији Токија где морају да се такмиче у опасним играма да би победили.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "MY",
+				"iso_639_1": "my",
+				"name": "",
+				"english_name": "Burmese",
+				"data": {
+					"name": "",
+					"overview": "ဂိမ်းချည်းပဲဆော့နေလို့အဆူခံရပြီး အိမ်ပေါ်ကဆင်းလာရတဲ့အချိန်မျိုးအလုပ်ပြုတ်လာတဲ့အချိန်မျိုး စိတ်ညစ်ညူးနေရတဲ့အချိန်မျိုးတွေမှာလူတွေအကုန်မရှိတော့ဘဲ တစ်မြို့လုံးမှာ ကိုယ်နဲ့ ကိုယ့်သူငယ်ချင်းတွေပဲ ကျန်တော့တယ်ဆိုရင် ပျော်မိမှာပဲဟုတ်တယ်မို့လား?????ဒါပေမယ့် အဲ့လိုကျန်နေခဲ့တာကအသက်နဲ့ရင်းပြီးဆော့ရတဲ့ဂိမ်းအတွက်ဆိုတာသိရင်တော့ဆက်ပျော်နေနိုင်မှာမဟုတ်ပါဘူးဒီဇာတ်လမ်းတွဲထဲမှာလည်း ဘူနေတဲ့သူငယ်ချင်းသုံးယောက်ကအရက်သောက်ဖို့ အရက်ဆိုင်လိုက်ရှာနေရင်းကဘုမသိဘမသိနဲ့ ရှင်သန်ခြင်းနဲ့သေဆုံးခြင်းဂိမ်းကို ဆော့လိုက်ရပါတယ်ဉာဏ်လေး ဆိုစလောက်ကောင်းပြီး တစ်ခေါက်လောက်နိုင်လိုက်ပေမယ့်သူတို့ရှေ့မှာတင် တစ်ယောက်ပြီးတစ်ယောက်သေကုန်တာကို တွေ့ရတဲ့အခါမှာသူတို့တွေ ဘယ်လိုဆက်လုပ်ကြမလဲ?????ပြေးလိုက်လွှားလိုက်နဲ့သေရေးရှင်ရေးဖြစ်နေကြတဲ့ကြားထဲကသူငယ်ချင်းအချင်းချင်းကြားထဲက သံယောဇဉ်လေးတွေကိုလည်းမြင်ရမှာပါဒီကားကို အိမ်ကလူကြီးတွေကိုလည်းပြပေးသင့်ပါတယ်အလုပ်မလုပ်ဘဲ ဂိမ်းပဲဆော့နေတာက သေရေးရှင်ရေးကြုံလာတဲ့အခါမှာအထောက်အကူပြုပါတယ်ဆိုတာလေးသိရအောင်ပေါ့လေ",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "GE",
+				"iso_639_1": "ka",
+				"name": "ქართული",
+				"english_name": "Georgian",
+				"data": {
+					"name": "ელისი ზღვარს მიღმა სამყაროში",
+					"overview": "არისუ უმუშევარი მამაკაცია დიდი ფულისა და იღბლის გარეშე. ერთ დღეს მას ლურჯი დამაბრმავებელი შუქი შთანთქავს, რის შემდეგაც ტოკიო მთელ მოსახლეობას კარგავს, გარდა არისუსა და მისი ორი მეგობრისა. ეს არის საშიში და პოტენციურად ფატალური თამაში გადარჩენისთვის, რომელშიც ისინი იძულებულნი არიან მონაწილეობა მიიღონ.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "LT",
+				"iso_639_1": "lt",
+				"name": "Lietuvių",
+				"english_name": "Lithuanian",
+				"data": {
+					"name": "Alisa pasienyje",
+					"overview": "Grupė nuobodžiaujančių nusikaltėlių dėl išgyvenimo žaidimo perkeliami į paralelinę dykvietę.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "HR",
+				"iso_639_1": "hr",
+				"name": "Hrvatski",
+				"english_name": "Croatian",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Besciljni gejmer i njegova dvojica prijatelja nađu se u paralelnom Tokiju, gdje se moraju natjecati u nizu sadističkih igara da bi preživjeli.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "BE",
+				"iso_639_1": "nl",
+				"name": "Nederlands",
+				"english_name": "Dutch",
+				"data": { "name": "", "overview": "", "homepage": "", "tagline": "" }
+			},
+			{
+				"iso_3166_1": "AE",
+				"iso_639_1": "ar",
+				"name": "العربية",
+				"english_name": "Arabic",
+				"data": {
+					"name": "أوراق الموت",
+					"overview": "يجد لاعب ألعاب فيديو بلا هدف وصديقاه أنفسهم في \"طوكيو\" الموازية، حيث يُضطرّون إلى التنافس في سلسلة من الألعاب السادية لأجل النجاة بحياتهم.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "SG",
+				"iso_639_1": "zh",
+				"name": "普通话",
+				"english_name": "Mandarin",
+				"data": {
+					"name": "今际之国的闯关者",
+					"overview": "一位漫无目标的游戏玩家和两位好友发现他们身处平行世界中的东京。为了生存下来，他们必须在一系列残忍的游戏中展开较量。",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "FI",
+				"iso_639_1": "fi",
+				"name": "suomi",
+				"english_name": "Finnish",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Päämäärätön pelaaja ja hänen kaksi kaveriaan päätyvät rinnakkaistodellisuuden toiseen Tokioon, jossa he joutuvat kilpailemaan sadistisissa peleissä pysyäkseen hengissä",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IN",
+				"iso_639_1": "hi",
+				"name": "हिन्दी",
+				"english_name": "Hindi",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "एक दिशाहीन गेमर और उसके दो दोस्त खुद को एक समानांतर टोक्यो में पाते हैं. ज़िंदा रहने के लिए, उन्हें वहां दूसरों को नुकसान पहुंचाने वाले कुछ गेम्स में मजबूरन मुकाबला करना पड़ता है.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "MY",
+				"iso_639_1": "ms",
+				"name": "Bahasa melayu",
+				"english_name": "Malay",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "Seorang pemain tanpa hala tuju bersama dua rakan mendapati diri mereka di Tokyo selari. Di sana, mereka terpaksa bertanding dalam siri permainan sadis untuk terus hidup.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "NO",
+				"iso_639_1": "no",
+				"name": "Norsk",
+				"english_name": "Norwegian",
+				"data": {
+					"name": "Alice in Borderland",
+					"overview": "En planløs gamer og de to vennene hans havner i et parallelt Tokyo, der de blir tvunget til å konkurrere i en rekke sadistiske spill for å overleve.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "BG",
+				"iso_639_1": "bg",
+				"name": "български език",
+				"english_name": "Bulgarian",
+				"data": {
+					"name": "Алис в граничната земя",
+					"overview": "Рьохей Арису и Юзуха Усаги преследват мистерията на „граничната земя“, рискувайки живота си в игри, за да оцелеят и да се върнат в своя свят. Двамата се сблъскват с приятели, врагове и мозъка, който контролира играта на място, за което се смята, че е ключът към разплитането на мистерията. Те са събирали номерираните карти всеки път, когато са спечелили игра. Всичко, което остава, са картите вале, дама и поп. Игрите, пред които са изправени този кръг, ще бъдат с по-голяма трудност от предишните…",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "UZ",
+				"iso_639_1": "uz",
+				"name": "ozbek",
+				"english_name": "Uzbek",
+				"data": {
+					"name": "Ajal o'yini",
+					"overview": "Arisu, Karube va Segava — uch nafar maktabdagi bezorilar, o‘z hozirgi hayotidan zerikib qolishgan. Fayerverk namoyishi chog‘ida Arisu hayoti qiziqarliroq bo‘ladigan boshqa dunyoda yashashni orzu qiladi. Natijada, uning orzusi amalga oshib, ular go‘yo apokaliptikadan keyingi paralel dunyoga ko‘chib qolishadi. Bo‘sh festival maydoniga qadam qo‘yishgach, ularni bir ayol kutib oladi va ularga “o‘yinlariga kirib bo‘lishganini” aytadi. O‘yinni tugatgach, ayol ularga “Borderland”da tirik qolish uchun o‘yinlarda qatnashishlari kerakligini oshkor qiladi.",
+					"homepage": "",
+					"tagline": ""
+				}
+			},
+			{
+				"iso_3166_1": "IN",
+				"iso_639_1": "ml",
+				"name": "",
+				"english_name": "Malayalam",
+				"data": { "name": "", "overview": "", "homepage": "", "tagline": "" }
+			}
+		]
+	},
+	"type": "Scripted",
+	"videos": {
+		"results": [
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Trailer #2",
+				"key": "EEJ7nUvXUYA",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "620c7aef63d713004260c9ca",
+				"published_at": "2020-11-17T23:00:00.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Trailer",
+				"key": "49_44FFKZ1M",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Trailer",
+				"official": true,
+				"id": "620c7af3124c8d001b8bbb33",
+				"published_at": "2020-10-28T23:00:00.000Z"
+			},
+			{
+				"iso_639_1": "en",
+				"iso_3166_1": "US",
+				"name": "Official Teaser",
+				"key": "rQePKoNiPxw",
+				"site": "YouTube",
+				"size": 1080,
+				"type": "Teaser",
+				"official": true,
+				"id": "5f7fe0dffdfc9f0036ba6503",
+				"published_at": "2020-10-08T20:00:02.000Z"
+			}
+		]
+	},
+	"vote_average": 8.089,
+	"vote_count": 2889
+}
