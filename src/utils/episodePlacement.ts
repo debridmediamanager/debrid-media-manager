@@ -1668,6 +1668,24 @@ export function alignTvdb(tvdb: ListedEpisode[], tmdb: ListedEpisode[]) {
 			break;
 		}
 	}
+	// an episode between two pairs is the one between theirs, aired within days of it: TVDB dates
+	// Bleach's S2E13 two days before TMDB's S1E33, which the pairs before and after them hold between
+	// them (Diners, Drive-Ins and Dives' S11E1 "From Pork to Tofu" is two weeks off TMDB's, another)
+	a.forEach((row, i) => {
+		const [before, after] = [pairs.get(i - 1), pairs.get(i + 1)];
+		if (pairs.has(i) || !before || !after || before.part || after.part) return;
+		if (before.end !== undefined || after.end !== undefined) return;
+		const at = before.at + 1;
+		const [x, y] = [dayOf(row.airDate), dayOf(b[at]?.airDate ?? null)];
+		if (
+			after.at === at + 1 &&
+			!taken.has(at) &&
+			x !== null &&
+			y !== null &&
+			Math.abs(x - y) <= 3
+		)
+			pair(i, at);
+	});
 	const key = (row: { season: number; episode: number }) => `${row.season}|${row.episode}`;
 	const one = (
 		row: ListedEpisode,

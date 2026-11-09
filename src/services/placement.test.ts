@@ -17,6 +17,7 @@ import pastCour from '@/test/fixtures/placement/anime-past-cour.json';
 import answers from '@/test/fixtures/placement/answers.json';
 import betweenTitled from '@/test/fixtures/placement/between-titled-files.json';
 import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
+import betweenPairs from '@/test/fixtures/placement/episodes-between-aligned-pairs.json';
 import filmsBeforeShows from '@/test/fixtures/placement/films-before-shows.json';
 import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
 import filmsOfEpisodes from '@/test/fixtures/placement/films-of-imdb-episodes.json';
@@ -1689,5 +1690,44 @@ describe('files between two files their titles placed', () => {
 			Array.from({ length: 21 }, (_, n) => [1, n + 21])
 		);
 		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('an episode TVDB and TMDB date apart, between two they pair', () => {
+	// zurg on fun (2026-11-09): TVDB dates Bleach's S2E13 two days before TMDB's S1E33, so the
+	// alignment of the two lists paired neither (see the fixtures README)
+	const ask = async (name: string) => {
+		const c = betweenPairs.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			{
+				...recordedSources(betweenPairs.answers),
+				anime: async () =>
+					buildAnimeIndex(
+						buildFranchiseIndex(betweenPairs.answers.anime.fribb as FribbAnimeEntry[]),
+						betweenPairs.answers.anime.titles
+					),
+			},
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return releases[0];
+	};
+
+	it('places it between them', async () => {
+		const placed = await ask('Bleach.2004.S02E13');
+		expect([placed.files[0].season, placed.files[0].episode, placed.files[0].how]).toEqual([
+			1,
+			33,
+			'aligned',
+		]);
+	});
+
+	it('leaves one aired two weeks off the episode between them where it is', async () => {
+		// TVDB's S11E1 "From Pork to Tofu" is not TMDB's S11E1 "Pub Grub and More"
+		const placed = await ask('Diners Drive-Ins and Dives Collection');
+		const file = placed.files.find((f) => f.path.includes('From Pork to Tofu'))!;
+		expect(file.season).toBe(null);
 	});
 });
