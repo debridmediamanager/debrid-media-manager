@@ -585,6 +585,10 @@ describe('sponsorship benefits follow the selected route', () => {
 		).toBe(
 			'Add a film or show to your DMM Wanted list from the Kodi addon for zurg to fetch; this needs a running zurg host.'
 		);
+		// Pairing Kodi on /kodi is what gives the addon a sponsor's Wanted list.
+		expect(
+			result.sponsorship.optional.find((benefit) => benefit.id === 'wanted-kodi')?.href
+		).toBe('/kodi');
 	});
 
 	it('offers DMM Newznab to non-arr Usenet routes', () => {

@@ -511,7 +511,7 @@ const SPONSOR_BENEFITS = {
 		id: 'wanted-kodi',
 		title: 'DMM Wanted from Kodi',
 		detail: 'Add a film or show to your DMM Wanted list from the Kodi addon for zurg to fetch; this needs a running zurg host.',
-		href: '/wanted',
+		href: '/kodi',
 	},
 	seerr: {
 		id: 'seerr',
