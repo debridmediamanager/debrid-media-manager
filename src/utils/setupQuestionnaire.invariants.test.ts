@@ -258,6 +258,18 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	it('gives the same result whatever order two sources were picked in', () => {
+		expect(
+			breaking(
+				(answers, result) =>
+					answers.sources.length === 2 &&
+					JSON.stringify(
+						recommendSetup({ ...answers, sources: [...answers.sources].reverse() })
+					) !== JSON.stringify(result)
+			)
+		).toEqual([]);
+	});
+
 	it('offers no TorBox WebDAV beside TorBox hosted NZBs', () => {
 		expect(
 			breaking(

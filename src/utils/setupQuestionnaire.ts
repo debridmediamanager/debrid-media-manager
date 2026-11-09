@@ -1101,7 +1101,10 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 	return zurgRoute(source, player, answers.plexRoute);
 }
 export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
-	const selected = [...new Set(answers.sources)].filter((s) => s !== 'none');
+	// In SOURCE_OPTIONS order, so the order sources were picked in changes no route, link or sentence.
+	const selected = SOURCE_OPTIONS.map(({ value }) => value).filter(
+		(source) => source !== 'none' && answers.sources.includes(source)
+	);
 	const player = resolvePlayer({ player: answers.player, sources: selected });
 	const rex =
 		player === 'plex' && (answers.plexRoute === 'rex' || answers.plexRoute === 'either');

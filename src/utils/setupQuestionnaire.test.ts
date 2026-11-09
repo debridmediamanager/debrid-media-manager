@@ -2822,3 +2822,28 @@ describe('Cast names the account each source needs', () => {
 		).toEqual([sentence]);
 	});
 });
+
+describe('the order sources were picked in changes nothing', () => {
+	it.each([
+		// DMM Cast or TorBox Cast as the primary route.
+		{ sources: ['torbox', 'torbox-hosted'] },
+		// Which label the one /jellyfin link keeps.
+		{ player: 'jellyfin', sources: ['real-debrid', 'usenet'], host: 'existing' },
+		// The title when no selected source works with the player.
+		{
+			player: 'plex',
+			plexRoute: 'existing-server',
+			sources: ['easynews', 'url-addon'],
+			host: 'existing',
+		},
+		{ player: 'jellyfin', sources: ['easynews', 'url-addon'], host: 'existing' },
+		{ player: 'emby', sources: ['easynews', 'url-addon'], host: 'existing' },
+		{ player: 'webdav', sources: ['easynews', 'url-addon'] },
+	] satisfies Partial<SetupAnswers>[])('gives one result for %o in either order', (overrides) => {
+		const input = answers(overrides);
+
+		expect(recommendSetup({ ...input, sources: [...input.sources].reverse() })).toEqual(
+			recommendSetup(input)
+		);
+	});
+});
