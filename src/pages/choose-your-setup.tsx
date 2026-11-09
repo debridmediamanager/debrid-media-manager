@@ -474,7 +474,7 @@ function SponsorBenefits({
 			</p>
 			{sponsorship.freeFeatures.includes('cast') ? (
 				<p className="mt-2 text-xs text-gray-400">
-					DMM Cast itself does not require sponsorship; sponsoring increases the
+					DMM Cast and the Kodi addon do not require sponsorship; sponsoring raises the
 					per-profile limit from five to ten other streams.
 				</p>
 			) : null}

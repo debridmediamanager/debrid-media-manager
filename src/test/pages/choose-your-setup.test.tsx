@@ -57,7 +57,9 @@ describe('choose your setup page', () => {
 			'https://gatekeeper.debridmediamanager.com'
 		);
 		expect(
-			screen.getByText(/DMM Cast itself does not require sponsorship/)
+			screen.getByText(
+				'DMM Cast and the Kodi addon do not require sponsorship; sponsoring raises the per-profile limit from five to ten other streams.'
+			)
 		).toBeInTheDocument();
 		expect(screen.getByRole('heading', { name: 'Your answers' })).toBeInTheDocument();
 		expect(screen.getByRole('button', { name: 'Reset' })).toBeInTheDocument();
