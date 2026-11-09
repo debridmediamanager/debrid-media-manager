@@ -265,7 +265,14 @@ describe('setup copy and benefits for every combination of up to two sources', (
 					[
 						...result.conflicts,
 						...result.alternatives.flatMap(({ title, detail }) => [title, detail]),
-					].some((text) => text.includes('TorBox WebDAV'))
+						...result.components,
+						...result.prerequisites,
+						...result.limits,
+						...result.sourceCoverage.flatMap(({ integration, requirements }) => [
+							integration,
+							...requirements,
+						]),
+					].some((text) => /TorBox WebDAV|webdav\.torbox\.app/.test(text))
 			)
 		).toEqual([]);
 	});

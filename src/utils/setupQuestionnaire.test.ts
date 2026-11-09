@@ -1067,6 +1067,26 @@ describe('provider WebDAV follows the chosen provider', () => {
 		expect(skip(['torbox', 'torbox-hosted'])).toBeUndefined();
 		expect(skip(['torbox'])).toBeDefined();
 	});
+
+	// With no host, TorBox beside its hosted NZBs goes through zurg too, so the host conflict covers it.
+	it('sends TorBox through zurg, not its WebDAV, beside TorBox hosted NZBs with no host', () => {
+		const result = recommendSetup(
+			answers({ player: 'webdav', sources: ['torbox', 'torbox-hosted'], host: 'none' })
+		);
+
+		expect(result.sourceCoverage.map(({ integration }) => integration)).toEqual([
+			'TorBox → zurg → your WebDAV or SMB player',
+			'TorBox Pro hosted NZBs → zurg → your WebDAV or SMB player',
+		]);
+		expect(
+			[
+				...result.components,
+				...result.prerequisites,
+				...result.limits,
+				...result.sourceCoverage.flatMap(({ requirements }) => requirements),
+			].filter((text) => /TorBox WebDAV|webdav\.torbox\.app|zurg is not involved/.test(text))
+		).toEqual([]);
+	});
 });
 
 describe('Kodi can browse a provider WebDAV instead of the addon', () => {

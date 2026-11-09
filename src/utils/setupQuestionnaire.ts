@@ -1065,7 +1065,7 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 			]
 		);
 	}
-	const webdav = PROVIDER_WEBDAV[source];
+	const webdav = providerWebdav(answers.sources).includes(source) && PROVIDER_WEBDAV[source];
 	if (player === 'webdav' && webdav && answers.host === 'none' && answers.preference !== 'arr') {
 		const name = SOURCE_LABELS.get(source)!;
 		return route(
