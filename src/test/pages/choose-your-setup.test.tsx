@@ -411,6 +411,43 @@ describe('choose your setup page', () => {
 		expectArrReset();
 	});
 
+	// The notice's reason is stale once the sources allow arr again, though the choice stays reset.
+	it('drops the arr reset notice once the sources allow arr again', () => {
+		reachStremioRecommendation(ARR);
+		editAnswer('What do you already have?');
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: /Existing Stremio URL addons/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		expect(screen.getByRole('status')).toHaveTextContent(
+			/Automation with Sonarr\/Radarr was reset to/
+		);
+		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		expect(
+			screen.getByRole('heading', { name: 'How do you want to choose titles?' })
+		).toBeInTheDocument();
+		expect(screen.queryByRole('status')).not.toBeInTheDocument();
+		expect(screen.getByRole('button', { name: ARR })).not.toBeDisabled();
+	});
+
+	// A notice set on the host step still holds while the host is unchanged, whatever the sources say.
+	it('keeps a host-step arr reset notice when only the sources step is passed again', () => {
+		reachStremioRecommendation(ARR);
+		editAnswer('Can a machine stay on while you watch?');
+		fireEvent.click(screen.getByRole('button', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		expect(screen.getByRole('status')).toHaveTextContent(
+			/Automation with Sonarr\/Radarr was reset to/
+		);
+	});
+
 	it('keeps arr when a new player drops the Android host that is asked again later', () => {
 		reachStremioRecommendation(ARR);
 		editAnswer('Can a machine stay on while you watch?');

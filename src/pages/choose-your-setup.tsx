@@ -700,11 +700,18 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 								'arr'
 							)
 						: undefined;
-				// Only a reset sets the notice; a later step's Next must not clear it.
+				// Only a reset sets the notice. It stays through later steps until arr is
+				// allowed again, judged on the host too once it has been answered.
 				if (resetReason) {
 					setCompatibilityNotice(arrResetNotice(resetReason));
 					setAnswers((current) => ({ ...current, preference: 'unsure' }));
-				}
+				} else if (
+					!preferenceChoiceReason(
+						hostAnswered ? answers : { host: 'existing', sources: answers.sources },
+						'arr'
+					)
+				)
+					setCompatibilityNotice(null);
 			}
 			setCurrentStep((step) => step + 1);
 			return;
