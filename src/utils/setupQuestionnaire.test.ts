@@ -1731,6 +1731,24 @@ describe('route copy stays on the player and source it is about', () => {
 		expect(mount({ sources: ['easynews'] })).toBeUndefined();
 	});
 
+	it('offers a zurg mount beside the Jellyfin NZB plugin for other consumers', () => {
+		const mount = (overrides: Partial<SetupAnswers>) =>
+			recommendSetup(
+				answers({ player: 'jellyfin', sources: ['usenet'], host: 'existing', ...overrides })
+			).alternatives.find(({ title }) => title.startsWith('zurg → mount'));
+
+		expect(mount({})).toEqual({
+			title: 'zurg → mount → Jellyfin when other consumers need the files',
+			detail: 'Run zurg with a filesystem mount instead of the plugin when Kodi, a WebDAV player or another server must read the same library.',
+			links: [
+				{ label: 'zurg setup', href: 'https://notes.debridmediamanager.com/zurg/setup/' },
+			],
+		});
+		expect(mount({ preference: 'arr' })).toBeUndefined();
+		// Emby has no NZB plugin, so own Usenet already goes through a zurg mount there.
+		expect(mount({ player: 'emby' })).toBeUndefined();
+	});
+
 	it('mentions the rex feed for separate Easynews only on a rex route', () => {
 		const requirements = (overrides: Partial<SetupAnswers>) =>
 			recommendSetup(answers({ sources: ['easynews'], host: 'existing', ...overrides }))
