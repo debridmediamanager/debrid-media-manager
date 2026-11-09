@@ -1371,7 +1371,11 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		if (bazarr) links(note('zurg/guides/subtitles', 'Subtitle setup notes'));
 	}
 	if (answers.needs.includes('mixed')) {
-		const cloud = `cloud titles come from ${selected.length ? 'the routes above' : 'the route you choose'}.`;
+		// Local files and an addon the player cannot use bring no cloud titles.
+		const cloudRoute = routes.some(
+			({ source, route: r }) => source !== 'http-local' && r.status === 'integrated'
+		);
+		const cloud = `cloud titles come from ${cloudRoute ? 'the routes above' : 'the route you choose'}.`;
 		result.optionalNeeds.push(
 			rex
 				? 'Local files join rex through an HTTP source and a feed producer; each source supplies its own metadata and reachable HTTP bytes.'

@@ -1862,6 +1862,21 @@ describe('route copy stays on the player and source it is about', () => {
 	);
 
 	it.each([
+		[['url-addon'], 'the route you choose'],
+		[['http-local'], 'the route you choose'],
+		[['url-addon', 'http-local'], 'the route you choose'],
+		[['real-debrid'], 'the routes above'],
+		[['url-addon', 'real-debrid'], 'the routes above'],
+	] satisfies [SetupSource[], string][])(
+		'points Kodi at the routes above only when one brings cloud titles (%o)',
+		(sources, routes) => {
+			expect(
+				recommendSetup(answers({ player: 'kodi', sources, needs: ['mixed'] })).optionalNeeds
+			).toEqual([`Local files stay in your player; cloud titles come from ${routes}.`]);
+		}
+	);
+
+	it.each([
 		[
 			{ host: 'existing', preference: 'arr' },
 			'Hosted Cast/direct playback avoids exposing a home server; any NAS or file server still needs a secure reachable connection for remote use.',
