@@ -30,7 +30,7 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	{
 		href: '/torznab',
 		name: 'Torrent indexer',
-		what: "DMM's torrent library as a Torznab indexer, with live cache feeds for Real-Debrid, AllDebrid, TorBox, Premiumize and Offcloud",
+		what: "DMM's torrent library as a Torznab indexer, with cached-only feeds for Real-Debrid, AllDebrid, Debrid-Link, TorBox, Premiumize and Offcloud",
 	},
 	{
 		href: '/wanted',
@@ -76,12 +76,12 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	},
 	{
 		name: 'zurg with your key',
-		what: 'set as dmm_api_key, DMM names every release for rex and Plex, sorts the __magic__ folders, and hands out working Usenet copies first once yours finds one with missing parts',
+		what: "set as dmm_api_key, DMM names every release for rex and Plex, sorts the __magic__ folders when you turn them on, and zurg searches DMM's indexers for your Wanted list when you have none of your own",
 	},
 	{
 		href: 'https://notes.debridmediamanager.com/rex/stremio/',
 		name: 'rex-stremio with your key',
-		what: 'streams DMM already knows start without being probed first',
+		what: 'titles DMM already knows reach rex in seconds instead of being probed one by one',
 	},
 	{
 		href: '/api-docs',
@@ -200,11 +200,11 @@ export const SponsorPanel: FC = () => {
 				))}
 			</ul>
 			<p className="mt-2">
-				Or earn them: every {SENDS_PER_BLOCK} requests you fill on the{' '}
+				Or earn the DMM ones: every {SENDS_PER_BLOCK} requests you fill on the{' '}
 				<Link href="/requests" className="text-blue-400 hover:underline">
 					request board
 				</Link>{' '}
-				give {DAYS_PER_BLOCK} days.{' '}
+				give {DAYS_PER_BLOCK} days, counting one per person a day.{' '}
 				<a
 					href="https://notes.debridmediamanager.com/guides/sponsorship/"
 					target="_blank"
