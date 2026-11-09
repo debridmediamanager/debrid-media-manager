@@ -533,6 +533,61 @@ describe('choose your setup page', () => {
 		).not.toBeInTheDocument();
 	});
 
+	function showArrResetNotice() {
+		reachStremioRecommendation(ARR);
+		editAnswer('Can a machine stay on while you watch?');
+		fireEvent.click(screen.getByRole('radio', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		expect(screen.getByRole('status')).toHaveTextContent(
+			/Automation with Sonarr\/Radarr was reset to/
+		);
+	}
+
+	it('drops the arr reset notice on Reset', () => {
+		showArrResetNotice();
+		fireEvent.click(screen.getByRole('button', { name: 'Reset' }));
+
+		expect(
+			screen.getByRole('heading', { name: 'Where do you want to watch?' })
+		).toBeInTheDocument();
+		expect(screen.queryByRole('status')).not.toBeInTheDocument();
+	});
+
+	it('drops the arr reset notice once another workflow is picked', () => {
+		showArrResetNotice();
+		fireEvent.click(screen.getByRole('radio', { name: /A managed library/ }));
+
+		expect(screen.queryByRole('status')).not.toBeInTheDocument();
+	});
+
+	// The host is asked again, so the dropped Android host no longer rules arr out.
+	it('drops the arr reset notice when leaving the sources step drops the Android host', () => {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('radio', { name: /WebDAV or SMB player/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('radio', { name: ARR }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+
+		editAnswer('Can a machine stay on while you watch?');
+		fireEvent.click(screen.getByRole('radio', { name: /No host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+		fireEvent.click(screen.getByRole('radio', { name: /Android \/ Google TV/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+		fireEvent.click(screen.getByRole('button', { name: /TorBox Pro hosted NZBs/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+
+		expect(
+			screen.getByRole('heading', { name: 'Can a machine stay on while you watch?' })
+		).toBeInTheDocument();
+		expect(screen.queryByRole('status')).not.toBeInTheDocument();
+	});
+
 	it('keeps arr enabled and executable when a full host is selected', () => {
 		render(<ChooseYourSetupPage />);
 		fireEvent.click(screen.getByRole('radio', { name: /Stremio/ }));
@@ -929,6 +984,15 @@ describe('choose your setup page', () => {
 		expect(within(group).getAllByText('Select all that apply')[0]).toHaveClass('text-gray-400');
 	});
 
+	it('presents the needs step as a group named by its question', () => {
+		reachStremioRecommendation();
+		editAnswer('Anything else that matters?');
+
+		expect(
+			screen.getByRole('group', { name: 'Anything else that matters?' })
+		).toBeInTheDocument();
+	});
+
 	it('toggles cards with Enter and Space and reaches an unavailable card with Tab', async () => {
 		const user = userEvent.setup();
 		render(<ChooseYourSetupPage />);
@@ -968,6 +1032,11 @@ describe('choose your setup page', () => {
 		const stremio = screen.getByRole('radio', { name: /Stremio/ });
 		const kodi = screen.getByRole('radio', { name: /Kodi/ });
 		stremio.focus();
+		// A modified arrow belongs to the browser or screen reader, not the radio group.
+		for (const modifier of ['Alt', 'Control', 'Meta'])
+			await user.keyboard(`{${modifier}>}{ArrowRight}{/${modifier}}`);
+		expect(document.activeElement).toBe(stremio);
+		expect(kodi).toHaveAttribute('aria-checked', 'false');
 		await user.keyboard('{ArrowRight}');
 		expect(document.activeElement).toBe(kodi);
 		expect(kodi).toHaveAttribute('aria-checked', 'true');
