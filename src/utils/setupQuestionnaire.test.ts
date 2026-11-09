@@ -1903,10 +1903,14 @@ describe('route copy stays on the player and source it is about', () => {
 			{ player: 'jellyfin', sources: ['real-debrid', 'torbox-hosted'] },
 			"Add your debrid account to that zurg's mount instead of the plugin when Kodi, a WebDAV player or another server must read the same library.",
 		],
-		// No debrid account to add, and one zurg takes either nzb or torbox_nzb, not both.
+		// That zurg already holds torbox_nzb, and one zurg takes either nzb or torbox_nzb, not both.
 		[
 			{ player: 'jellyfin', sources: ['usenet', 'torbox-hosted'] },
-			'Run zurg with a filesystem mount instead of the plugin when Kodi, a WebDAV player or another server must read the same library.',
+			'Run a second zurg with an nzb account and its own mount and data directory when Kodi, a WebDAV player or another server must read the same library; one zurg takes only one NZB account.',
+		],
+		[
+			{ player: 'jellyfin', sources: ['real-debrid', 'usenet', 'torbox-hosted'] },
+			"Add your debrid account to that zurg's mount and run a second zurg with an nzb account and its own mount and data directory when Kodi, a WebDAV player or another server must read the same library; one zurg takes only one NZB account.",
 		],
 	] satisfies [Partial<SetupAnswers>, string][])(
 		'points the mount alternative at the zurg another source already runs (%o)',

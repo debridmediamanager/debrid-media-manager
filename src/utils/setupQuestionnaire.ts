@@ -1206,13 +1206,25 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			(source) =>
 				DEBRID_SOURCES.includes(source) || (player === 'jellyfin' && source === 'usenet')
 		)
-	)
+	) {
+		// Another source already runs zurg; a debrid account joins it, an nzb account cannot.
+		const join =
+			routes.some(({ route: r }) => r.usesZurg) &&
+			selected.some((source) => DEBRID_SOURCES.includes(source));
+		// TorBox hosted NZBs hold that zurg's one NZB account, so the plugin's own Usenet needs another.
+		const second =
+			player === 'jellyfin' &&
+			selected.includes('usenet') &&
+			selected.includes('torbox-hosted');
+		const consumers = 'when Kodi, a WebDAV player or another server must read the same library';
 		result.alternatives.push({
 			title: `zurg → mount → ${playerLabel(player)} when other consumers need the files`,
-			// Another source already runs zurg; a debrid account joins it, an nzb account cannot.
-			detail: `${routes.some(({ route: r }) => r.usesZurg) && selected.some((source) => DEBRID_SOURCES.includes(source)) ? "Add your debrid account to that zurg's mount" : 'Run zurg with a filesystem mount'} instead of the plugin when Kodi, a WebDAV player or another server must read the same library.`,
+			detail: second
+				? `${join ? "Add your debrid account to that zurg's mount and run" : 'Run'} a second zurg with an nzb account and its own mount and data directory ${consumers}; one zurg takes only one NZB account.`
+				: `${join ? "Add your debrid account to that zurg's mount" : 'Run zurg with a filesystem mount'} instead of the plugin ${consumers}.`,
 			links: [ZURG],
 		});
+	}
 	if (answers.preference === 'arr') {
 		host('server');
 		result.primaryRoute = {
