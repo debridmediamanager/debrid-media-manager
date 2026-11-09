@@ -208,8 +208,8 @@ describe('titleText', () => {
 		expect(titleText(' Letâ\u0080\u0099s Go Home.mkv')?.whole).toBe('lets go home');
 		expect(titleText(' LetÃ¢Â\u0080Â\u0099s Go Home')?.whole).toBe('lets go home');
 		expect(titleText(' You Look Wellâ\u0080¦.mkv')?.whole).toBe('you look well');
-		// Latin-1 that is no UTF-8 stays as it is
-		expect(titleText(' Pokémon Fan Club.mkv')?.whole).toBe('pokémon fan club');
+		// Latin-1 that is no UTF-8 stays as it is, its accent aside
+		expect(titleText(' Pokémon Fan Club.mkv')?.whole).toBe('pokemon fan club');
 	});
 });
 

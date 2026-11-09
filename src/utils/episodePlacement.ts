@@ -1050,9 +1050,11 @@ async function ofYear(
 }
 
 /** A title's words: lowercase letters and digits, apostrophes dropped (`Don't` is `dont`). */
-// `Gary & Spot` is `Gary.and.Spot`, `Hulk vs the World` "Hulk Versus the World"
+// `Gary & Spot` is `Gary.and.Spot`, `Hulk vs the World` "Hulk Versus the World", `Pokemon` "Pokémon"
 const words = (text: string) =>
 	text
+		.normalize('NFD')
+		.replace(/\p{M}/gu, '')
 		.toLowerCase()
 		.replace(/['’`]/g, '')
 		.replace(/&/g, ' and ')

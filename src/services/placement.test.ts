@@ -12,6 +12,7 @@ import {
 	type PlaceRequest,
 } from '@/services/placement';
 import onePaceFun from '@/test/fixtures/onepace/fun-releases-2026-11-09.json';
+import accented from '@/test/fixtures/placement/accented-titles.json';
 import pastCour from '@/test/fixtures/placement/anime-past-cour.json';
 import answers from '@/test/fixtures/placement/answers.json';
 import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
@@ -1643,6 +1644,23 @@ describe('a year-numbered episode titled otherwise than TMDB titles it', () => {
 		);
 		const file = releases[0].files.find((f) => f.path === path)!;
 		expect([file.season, file.episode]).toEqual([season, episode]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a title TMDB writes with an accent', () => {
+	// zurg on fun (2026-11-09): `Pokemon Ultimate Journeys S25 1080p`'s last file, numbered E53 and
+	// titled as TMDB's S25E57 "The Rainbow and the Pokémon Master!" (see the fixtures README)
+	it('places the file by its title', async () => {
+		const [c] = accented.cases;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(accented.answers),
+			async () => [null]
+		);
+		const file = releases[0].files.find((f) => f.path.startsWith('S25E53'))!;
+		expect([file.season, file.episode, file.how]).toEqual([25, 57, 'tmdb']);
 		expect(releases[0]).toEqual(c.expect);
 	});
 });
