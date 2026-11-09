@@ -306,10 +306,10 @@ const ACCOUNTS_FOR_PLAYER: Record<Exclude<Player, 'unsure'>, string> = {
 	external:
 		'A debrid or Easynews account works through DMM Watch with no host; your own Usenet account needs zurg on a host. TorBox Pro hosted NZBs need zurg on a normal host, not Android.',
 	webdav: 'Real-Debrid, AllDebrid, Premiumize, TorBox and Debrid-Link serve their own WebDAV with no host; Offcloud and Usenet need zurg on a host. TorBox Pro hosted NZBs need zurg on a normal host, not Android.',
-	plex: 'Any debrid account or your own Usenet account works through zurg on a host; files you already have stay in the server.',
+	plex: 'Any debrid account or your own Usenet account works through zurg on a host; files you already have stay in the server. TorBox Pro hosted NZBs work through zurg on a host too.',
 	jellyfin:
-		'Any debrid account works through a provider plugin or zurg on a host; your own Usenet account through the NZB plugin or zurg; files you already have stay in the server.',
-	emby: 'Any debrid account works through a provider plugin or zurg on a host; your own Usenet account through zurg; files you already have stay in the server.',
+		'Any debrid account works through a provider plugin or zurg on a host; your own Usenet account through the NZB plugin or zurg; files you already have stay in the server. TorBox Pro hosted NZBs work through zurg on a host too.',
+	emby: 'Any debrid account works through a provider plugin or zurg on a host; your own Usenet account through zurg; files you already have stay in the server. TorBox Pro hosted NZBs work through zurg on a host too.',
 };
 const REX_ACCOUNTS =
 	'Any debrid or Usenet account works through zurg → rex on a host; Stremio URL addons through rex-stremio; local files need a feed producer.';

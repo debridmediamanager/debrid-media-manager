@@ -1677,9 +1677,10 @@ describe('"None yet" shows which accounts work with the player', () => {
 	});
 
 	const bytes = ' DMM does not supply video bytes by itself.';
-	const plex = `Any debrid account or your own Usenet account works through zurg on a host; files you already have stay in the server.${bytes}`;
-	const jellyfin = `Any debrid account works through a provider plugin or zurg on a host; your own Usenet account through the NZB plugin or zurg; files you already have stay in the server.${bytes}`;
-	const emby = `Any debrid account works through a provider plugin or zurg on a host; your own Usenet account through zurg; files you already have stay in the server.${bytes}`;
+	const hosted = ' TorBox Pro hosted NZBs work through zurg on a host too.';
+	const plex = `Any debrid account or your own Usenet account works through zurg on a host; files you already have stay in the server.${hosted}${bytes}`;
+	const jellyfin = `Any debrid account works through a provider plugin or zurg on a host; your own Usenet account through the NZB plugin or zurg; files you already have stay in the server.${hosted}${bytes}`;
+	const emby = `Any debrid account works through a provider plugin or zurg on a host; your own Usenet account through zurg; files you already have stay in the server.${hosted}${bytes}`;
 	const rex =
 		'Any debrid or Usenet account works through zurg → rex on a host; Stremio URL addons through rex-stremio; local files need a feed producer. DMM does not supply video bytes by itself.';
 
