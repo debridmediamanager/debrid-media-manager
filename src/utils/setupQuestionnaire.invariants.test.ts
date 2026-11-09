@@ -376,6 +376,32 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	const hostedNzbThroughZurg = (result: SetupRecommendation) =>
+		result.components.some((component) => component.includes('hosted NZB backend'));
+
+	it('never leaves a zurg hosted NZB route on Android without a conflict', () => {
+		expect(
+			breaking(
+				(answers, result) =>
+					answers.host === 'android' &&
+					hostedNzbThroughZurg(result) &&
+					!result.conflicts.length
+			)
+		).toEqual([]);
+	});
+
+	it('never offers an Android device for a zurg hosted NZB route', () => {
+		expect(
+			breaking(
+				(_, result) =>
+					hostedNzbThroughZurg(result) &&
+					result.conflicts.some((conflict) =>
+						conflict.includes('supported Android device')
+					)
+			)
+		).toEqual([]);
+	});
+
 	it('names a no-host route that exists instead of a generic one', () => {
 		expect(
 			breaking((_, result) =>
