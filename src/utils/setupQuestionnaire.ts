@@ -1225,9 +1225,12 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	}
 	if (answers.needs.includes('remote'))
 		result.optionalNeeds.push(
-			result.hostRequirement !== 'none'
-				? 'Self-hosted playback needs a securely reachable address; a LAN address works only at home.'
-				: 'Hosted Cast/direct playback avoids exposing a home server; any NAS or file server still needs a secure reachable connection for remote use.'
+			// The arr download client's host does not serve playback.
+			!routes.some(({ route: r }) => r.host !== 'none')
+				? 'Hosted Cast/direct playback avoids exposing a home server; any NAS or file server still needs a secure reachable connection for remote use.'
+				: answers.host === 'android' && !routes.some(({ route: r }) => r.host === 'server')
+					? 'zurg runs on the device you watch on, so away from home it travels with you; a NAS or file server at home still needs a secure reachable connection.'
+					: 'Self-hosted playback needs a securely reachable address; a LAN address works only at home.'
 		);
 	if (answers.needs.includes('family') || answers.needs.includes('remote'))
 		result.optionalNeeds.push(

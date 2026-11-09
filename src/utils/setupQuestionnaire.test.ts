@@ -683,7 +683,7 @@ describe('bounded recommendation compatibility matrix', () => {
 	const structuralCaseCount =
 		sourceSubsets.length * playerModes.length * hostValues.length * preferenceValues.length;
 	const needEvidence: Record<Need, RegExp> = {
-		remote: /securely reachable|Hosted Cast\/direct playback/i,
+		remote: /secure(ly)? reachable|Hosted Cast\/direct playback/i,
 		family: /provider IP and concurrency/i,
 		offline: /offline copies/i,
 		subtitles: /subtitle/i,
@@ -1590,6 +1590,28 @@ describe('route copy stays on the player and source it is about', () => {
 			);
 
 			expect(result.optionalNeeds).toEqual([text]);
+		}
+	);
+
+	it.each([
+		[
+			{ host: 'existing', preference: 'arr' },
+			'Hosted Cast/direct playback avoids exposing a home server; any NAS or file server still needs a secure reachable connection for remote use.',
+		],
+		[
+			{ player: 'webdav', host: 'existing' },
+			'Self-hosted playback needs a securely reachable address; a LAN address works only at home.',
+		],
+		[
+			{ player: 'kodi', sources: ['usenet'], host: 'android' },
+			'zurg runs on the device you watch on, so away from home it travels with you; a NAS or file server at home still needs a secure reachable connection.',
+		],
+	] satisfies [Partial<SetupAnswers>, string][])(
+		'says what remote playback needs for %o',
+		(overrides, text) => {
+			expect(
+				recommendSetup(answers({ ...overrides, needs: ['remote'] })).optionalNeeds[0]
+			).toBe(text);
 		}
 	);
 
