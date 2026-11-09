@@ -93,8 +93,8 @@ export const SOURCE_OPTIONS = [
 	},
 	{
 		value: 'url-addon',
-		label: 'Existing URL stream addons',
-		description: 'Addons that already return playable HTTP streams.',
+		label: 'Existing Stremio URL addons',
+		description: 'Stremio addons that already return playable HTTP streams.',
 	},
 	{
 		value: 'http-local',

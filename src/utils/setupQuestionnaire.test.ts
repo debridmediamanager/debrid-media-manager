@@ -339,6 +339,19 @@ describe('recommendSetup', () => {
 	});
 });
 
+describe('URL addons are named as Stremio addons', () => {
+	it('labels and describes the source as Stremio URL addons', () => {
+		expect(SOURCE_OPTIONS.find(({ value }) => value === 'url-addon')).toEqual({
+			value: 'url-addon',
+			label: 'Existing Stremio URL addons',
+			description: 'Stremio addons that already return playable HTTP streams.',
+		});
+		expect(recommendSetup(answers({ sources: ['url-addon'] })).sourceCoverage[0].label).toBe(
+			'Existing Stremio URL addons'
+		);
+	});
+});
+
 describe('source coverage follows routes, not explanation wording', () => {
 	it.each(['kodi', 'external'] as const)('uses a debrid account in %s', (player) => {
 		expect(recommendSetup(answers({ player })).sourceCoverage[0].status).toBe('integrated');
