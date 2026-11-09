@@ -1639,11 +1639,23 @@ describe('Sonarr/Radarr results explain the zurg they hand releases to', () => {
 		const sab = { label: 'DMM SABnzbd endpoint', href: '/sabnzbd' };
 
 		expect(transfer('arr')?.detail).toBe(
-			"DMM can transfer a Usenet result into your Real-Debrid library, subject to its transfer allowance and queue. This is a hosted transfer, not native NNTP in Real-Debrid. Sonarr and Radarr can hand NZBs to DMM's SABnzbd-compatible endpoint, which transfers them into your Real-Debrid account."
+			"DMM can transfer a Usenet result into your Real-Debrid library, subject to its transfer allowance and queue. This is a hosted transfer, not native NNTP in Real-Debrid. Sonarr and Radarr can hand NZBs to DMM's SABnzbd-compatible endpoint, which transfers them into your Real-Debrid account; Sonarr/Radarr still need a Usenet indexer such as DMM's Newznab."
 		);
 		expect(transfer('arr')?.links).toContainEqual(sab);
 		expect(transfer('managed')?.detail).not.toMatch(/SABnzbd/);
 		expect(transfer('managed')?.links).not.toContainEqual(sab);
+	});
+
+	// DMM's SABnzbd endpoint takes the NZB; Sonarr/Radarr still grab it from a Usenet indexer.
+	it('offers DMM Newznab to Sonarr/Radarr users with Real-Debrid for the SABnzbd route', () => {
+		const result = (preference: Preference) =>
+			recommendSetup(answers({ host: 'existing', preference }));
+		const newznab = { label: 'DMM Newznab setup', href: '/newznab' };
+
+		expect(result('arr').sponsorship.optional.map(({ id }) => id)).toContain('newznab');
+		expect(result('arr').setupLinks).toContainEqual(newznab);
+		expect(result('managed').sponsorship.optional.map(({ id }) => id)).not.toContain('newznab');
+		expect(result('managed').setupLinks).not.toContainEqual(newznab);
 	});
 
 	it('says to give zurg an nzb account for own Usenet', () => {

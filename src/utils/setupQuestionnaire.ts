@@ -613,8 +613,9 @@ function sponsorshipFor(
 	if (usesCast) add(optional, 'cast');
 	if (answers.preference === 'arr' && debrid) add(optional, 'torznab');
 	// zurg acquisition searches Newznab with either NZB backend; TorBox Cast and the Kodi addon do not.
+	// Sonarr/Radarr handing NZBs to DMM's SABnzbd endpoint for Real-Debrid still search an indexer.
 	if (
-		(answers.preference === 'arr' && hasNzb) ||
+		(answers.preference === 'arr' && (hasNzb || selected.has('real-debrid'))) ||
 		routes.some(({ route: source }) => source.zurgNzb)
 	)
 		add(optional, 'newznab');
@@ -1257,11 +1258,10 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				{ label: 'DMM Torznab setup', href: '/torznab' },
 				note('zurg/guides/sonarr-radarr-torrents', 'Sonarr/Radarr torrent setup')
 			);
-		if (nzb)
-			links(
-				{ label: 'DMM Newznab setup', href: '/newznab' },
-				note('zurg/guides/sonarr-radarr', 'Sonarr/Radarr NZB setup')
-			);
+		// DMM's SABnzbd endpoint for Real-Debrid takes NZBs from a Usenet indexer too.
+		if (nzb || selected.includes('real-debrid'))
+			links({ label: 'DMM Newznab setup', href: '/newznab' });
+		if (nzb) links(note('zurg/guides/sonarr-radarr', 'Sonarr/Radarr NZB setup'));
 		links(note('zurg/guides/acquisition', 'Acquisition options'));
 		if (player === 'stremio' && selected.includes('usenet'))
 			result.limits.push(
@@ -1280,7 +1280,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		const arr = answers.preference === 'arr';
 		result.alternatives.push({
 			title: 'NZBs without your own news account',
-			detail: `DMM can transfer a Usenet result into your Real-Debrid library, subject to its transfer allowance and queue. This is a hosted transfer, not native NNTP in Real-Debrid.${arr ? " Sonarr and Radarr can hand NZBs to DMM's SABnzbd-compatible endpoint, which transfers them into your Real-Debrid account." : ''}`,
+			detail: `DMM can transfer a Usenet result into your Real-Debrid library, subject to its transfer allowance and queue. This is a hosted transfer, not native NNTP in Real-Debrid.${arr ? " Sonarr and Radarr can hand NZBs to DMM's SABnzbd-compatible endpoint, which transfers them into your Real-Debrid account; Sonarr/Radarr still need a Usenet indexer such as DMM's Newznab." : ''}`,
 			links: [
 				{ label: 'DMM Transfers', href: '/transfers' },
 				...(arr ? [{ label: 'DMM SABnzbd endpoint', href: '/sabnzbd' }] : []),
