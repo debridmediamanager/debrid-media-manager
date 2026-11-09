@@ -502,7 +502,7 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
-	it('names the account a Cast route needs instead of a generic one', () => {
+	it("never brings back the generic 'A supported provider account or Easynews account.' wording", () => {
 		expect(
 			breaking((_, result) =>
 				texts(result).includes('A supported provider account or Easynews account.')
@@ -551,7 +551,7 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
-	it('names a no-host route that exists instead of a generic one', () => {
+	it("never brings back the generic no-host 'Cast/direct-player' wording", () => {
 		expect(
 			breaking((_, result) =>
 				result.conflicts.some((conflict) => conflict.includes('Cast/direct-player'))

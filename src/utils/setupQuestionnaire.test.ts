@@ -1090,18 +1090,28 @@ describe('a source the player cannot use stays beside the route', () => {
 describe('Easynews alone is not offered zurg benefits', () => {
 	const optional = (result: ReturnType<typeof recommendSetup>) =>
 		result.sponsorship.optional.map((benefit) => benefit.id);
+	const offered = (result: ReturnType<typeof recommendSetup>) =>
+		[...result.sponsorship.required, ...result.sponsorship.optional].map(
+			(benefit) => benefit.id
+		);
+	// A host that runs zurg and a managed library would bring Wanted in, so only the source keeps it out.
+	const easynewsOnly: Partial<SetupAnswers> = {
+		sources: ['easynews'],
+		host: 'existing',
+		preference: 'managed',
+	};
 
 	it('offers no zurg, Wanted, API or remote help for Stremio with Easynews only', () => {
-		const ids = optional(recommendSetup(answers({ sources: ['easynews'] })));
+		const ids = offered(recommendSetup(answers(easynewsOnly)));
 
 		for (const id of ['zurg-nightly', 'zurg-api-key', 'wanted', 'sponsor-api', 'remote-help'])
 			expect(ids).not.toContain(id);
 	});
 
 	it('offers no Kodi Wanted pinning for Easynews only', () => {
-		expect(
-			optional(recommendSetup(answers({ player: 'kodi', sources: ['easynews'] })))
-		).not.toContain('wanted-kodi');
+		expect(offered(recommendSetup(answers({ ...easynewsOnly, player: 'kodi' })))).not.toContain(
+			'wanted-kodi'
+		);
 	});
 
 	it.each(['on-demand', 'managed'] as const)(
