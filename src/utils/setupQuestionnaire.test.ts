@@ -1240,11 +1240,11 @@ describe('a no-host conflict names a route the player can use', () => {
 	it.each([
 		[
 			{ player: 'stremio' },
-			`${zurgHost}, or switch to TorBox hosted NZBs through TorBox Cast or DMM's Real-Debrid transfer, which need no host.`,
+			`${zurgHost}, or switch to TorBox hosted NZBs through TorBox Cast, or to DMM's Real-Debrid transfer, which need no host.`,
 		],
 		[
 			{ player: 'kodi' },
-			`${zurgHost}, or switch to TorBox hosted NZBs through the Kodi addon or DMM's Real-Debrid transfer, which need no host.`,
+			`${zurgHost}, or switch to TorBox hosted NZBs through the Kodi addon, or to DMM's Real-Debrid transfer, which need no host.`,
 		],
 		[
 			{ player: 'external' },
@@ -1253,7 +1253,7 @@ describe('a no-host conflict names a route the player can use', () => {
 		[{ player: 'webdav' }, `${zurgHost}.`],
 		[
 			{ player: 'unsure' },
-			`${zurgHost}, or switch to TorBox hosted NZBs through TorBox Cast in Stremio or DMM's Real-Debrid transfer, which need no host.`,
+			`${zurgHost}, or switch to TorBox hosted NZBs through TorBox Cast in Stremio, or to DMM's Real-Debrid transfer, which need no host.`,
 		],
 		[
 			{ player: 'plex', plexRoute: 'existing-server' },

@@ -699,7 +699,7 @@ function noHostClause(player: Player, selected: SetupSource[], undecided: boolea
 			: hosted
 				? ', or use TorBox Cast, which needs no host'
 				: usenet
-					? ", or switch to TorBox hosted NZBs through TorBox Cast or DMM's Real-Debrid transfer, which need no host"
+					? ", or switch to TorBox hosted NZBs through TorBox Cast, or to DMM's Real-Debrid transfer, which need no host"
 					: '';
 	if (player === 'kodi') {
 		// The Kodi addon also plays TorBox Pro hosted NZBs from the TorBox library.
@@ -709,7 +709,7 @@ function noHostClause(player: Player, selected: SetupSource[], undecided: boolea
 		return kodi.length
 			? `, or use the Kodi addon with ${yours(kodi)}, which needs no host`
 			: usenet
-				? ", or switch to TorBox hosted NZBs through the Kodi addon or DMM's Real-Debrid transfer, which need no host"
+				? ", or switch to TorBox hosted NZBs through the Kodi addon, or to DMM's Real-Debrid transfer, which need no host"
 				: '';
 	}
 	if (player === 'external')
@@ -724,7 +724,7 @@ function noHostClause(player: Player, selected: SetupSource[], undecided: boolea
 			return `, or use ${orList(webdav.map((source) => SOURCE_LABELS.get(source)!))} WebDAV, which needs no host`;
 		// An undecided player started on WebDAV for own Usenet can still pick Stremio.
 		return undecided && usenet
-			? ", or switch to TorBox hosted NZBs through TorBox Cast in Stremio or DMM's Real-Debrid transfer, which need no host"
+			? ", or switch to TorBox hosted NZBs through TorBox Cast in Stremio, or to DMM's Real-Debrid transfer, which need no host"
 			: '';
 	}
 	// Plex Media Server, Jellyfin, Emby and rex always need a host.
