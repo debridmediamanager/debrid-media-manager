@@ -1466,6 +1466,25 @@ describe('a free Plex route for debrid accounts', () => {
 		);
 	});
 
+	// Under Sonarr/Radarr zurg is the download client, so a route without zurg does not fit.
+	it('leaves it out under Sonarr/Radarr', () => {
+		const free = (preference: Preference) =>
+			freeRoute(
+				recommendSetup(
+					answers({
+						player: 'plex',
+						plexRoute: 'rex',
+						sources: ['real-debrid'],
+						host: 'existing',
+						preference,
+					})
+				)
+			);
+
+		expect(free('arr')).toBeUndefined();
+		expect(free('on-demand')).toBeDefined();
+	});
+
 	it('leaves it out when URL addons are already the route', () => {
 		expect(
 			freeRoute(

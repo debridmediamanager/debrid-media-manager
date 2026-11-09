@@ -1205,7 +1205,9 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. rex and rex-stremio do not require sponsorship.'
 		);
 		links(note('rex/faq', 'rex compatibility and limits'));
+		// Under Sonarr/Radarr zurg is the download client, so a route without zurg does not fit.
 		if (
+			answers.preference !== 'arr' &&
 			selected.some((source) => DEBRID_SOURCES.includes(source)) &&
 			!selected.includes('url-addon')
 		)
