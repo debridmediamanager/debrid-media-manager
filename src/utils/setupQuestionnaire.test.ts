@@ -2427,7 +2427,6 @@ describe('route copy stays on the player and source it is about', () => {
 		[['url-addon', 'real-debrid'], 'the route above'],
 		// Two accounts in the one Kodi addon are one route.
 		[['real-debrid', 'all-debrid'], 'the route above'],
-		[['real-debrid', 'usenet'], 'the routes above'],
 	] satisfies [SetupSource[], string][])(
 		'points Kodi at the route or routes above only when one brings cloud titles (%o)',
 		(sources, routes) => {
@@ -2436,6 +2435,26 @@ describe('route copy stays on the player and source it is about', () => {
 			).toEqual([`Local files stay in your player; cloud titles come from ${routes}.`]);
 		}
 	);
+
+	// Own Usenet's zurg needs a host, so with none the routes above are not a setup yet.
+	it('points at the route still to choose while a conflict stands', () => {
+		const need = (host: Host) =>
+			recommendSetup(
+				answers({
+					player: 'kodi',
+					sources: ['real-debrid', 'usenet'],
+					host,
+					needs: ['mixed'],
+				})
+			).optionalNeeds;
+
+		expect(need('none')).toEqual([
+			'Local files stay in your player; cloud titles come from the route you choose.',
+		]);
+		expect(need('existing')).toEqual([
+			'Local files stay in your player; cloud titles come from the routes above.',
+		]);
+	});
 
 	// In Stremio, TorBox and its hosted NZBs are one addon, /stremio-torbox.
 	it('counts the Stremio TorBox addon once for local files', () => {

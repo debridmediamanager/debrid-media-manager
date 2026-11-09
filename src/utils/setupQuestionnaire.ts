@@ -1520,7 +1520,8 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				)
 				.map(({ route: r }) => r.title)
 		).size;
-		const cloud = `cloud titles come from ${cloudRoutes > 1 ? 'the routes above' : cloudRoutes ? 'the route above' : 'the route you choose'}.`;
+		// Under a conflict the routes above are not a setup yet.
+		const cloud = `cloud titles come from ${result.conflicts.length ? 'the route you choose' : cloudRoutes > 1 ? 'the routes above' : cloudRoutes ? 'the route above' : 'the route you choose'}.`;
 		result.optionalNeeds.push(
 			rex
 				? 'Local files join rex through an HTTP source and a feed producer; each source supplies its own metadata and reachable HTTP bytes.'
