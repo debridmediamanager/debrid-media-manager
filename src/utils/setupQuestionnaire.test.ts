@@ -1833,15 +1833,32 @@ describe('route copy stays on the player and source it is about', () => {
 		expect(result.setupLinks.map(({ href }) => href)).toContain(bazarr);
 	});
 
-	it('keeps the Bazarr note for Sonarr/Radarr, whose imports Bazarr works from', () => {
+	it('keeps the Bazarr note for Sonarr/Radarr when playback reads zurg', () => {
 		const result = recommendSetup(
-			answers({ host: 'willing', preference: 'arr', needs: ['subtitles'] })
+			answers({
+				player: 'plex',
+				plexRoute: 'existing-server',
+				host: 'existing',
+				preference: 'arr',
+				needs: ['subtitles'],
+			})
 		);
 
 		expect(result.optionalNeeds).toContain(
 			'Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles.'
 		);
 		expect(result.setupLinks.map(({ href }) => href)).toContain(bazarr);
+	});
+
+	it('tells Sonarr/Radarr users on Cast that Bazarr sidecars do not reach it', () => {
+		const result = recommendSetup(
+			answers({ host: 'existing', preference: 'arr', needs: ['subtitles'] })
+		);
+
+		expect(result.optionalNeeds).toContain(
+			"Bazarr sidecars live beside zurg's files and do not reach DMM Cast, the Kodi addon or DMM Watch; check embedded/player subtitle support."
+		);
+		expect(result.setupLinks.map(({ href }) => href)).not.toContain(bazarr);
 	});
 });
 

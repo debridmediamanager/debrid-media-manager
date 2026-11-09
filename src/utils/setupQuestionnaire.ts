@@ -1285,8 +1285,12 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			'Download or copy complete files and verify playback without the network. Virtual files, .strm links and debrid catalogs are not offline copies.'
 		);
 	if (answers.needs.includes('subtitles')) {
-		// Bazarr works off Sonarr/Radarr imports only.
-		const bazarr = answers.preference === 'arr';
+		// Bazarr works off Sonarr/Radarr imports; its sidecars sit in zurg's folders, read only by zurg or rex playback.
+		const arr = answers.preference === 'arr';
+		const bazarr = arr && (rex || routes.some(({ route: r }) => r.usesZurg));
+		const fromProvider = routes.some(
+			({ route: r }) => r.usesCast || r.id === 'external-player'
+		);
 		result.optionalNeeds.push(
 			rex
 				? bazarr
@@ -1294,7 +1298,9 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 					: 'rex offers Search Subtitles without Bazarr. Embedded/player subtitles may already be sufficient.'
 				: bazarr
 					? 'Check embedded/player subtitle support. For arr and zurg, Bazarr can store local sidecar subtitles.'
-					: 'Check embedded/player subtitle support in your player.'
+					: arr && fromProvider
+						? "Bazarr sidecars live beside zurg's files and do not reach DMM Cast, the Kodi addon or DMM Watch; check embedded/player subtitle support."
+						: 'Check embedded/player subtitle support in your player.'
 		);
 		if (bazarr) links(note('zurg/guides/subtitles', 'Subtitle setup notes'));
 	}
