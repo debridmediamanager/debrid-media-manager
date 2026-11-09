@@ -1276,14 +1276,11 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			links: [ZURG, note('rex/from-plex', 'Choosing between Plex Media Server and rex')],
 		});
 	// A provider or NZB plugin serves only that server; a mount serves every consumer on the host.
-	if (
-		(player === 'jellyfin' || player === 'emby') &&
-		answers.preference !== 'arr' &&
-		selected.some(
-			(source) =>
-				DEBRID_SOURCES.includes(source) || (player === 'jellyfin' && source === 'usenet')
-		)
-	) {
+	const plugins = selected.filter(
+		(source) =>
+			DEBRID_SOURCES.includes(source) || (player === 'jellyfin' && source === 'usenet')
+	).length;
+	if ((player === 'jellyfin' || player === 'emby') && answers.preference !== 'arr' && plugins) {
 		// Another source already runs zurg; a debrid account joins it, an nzb account cannot.
 		// With no host that zurg is not running yet, so there is none to join.
 		const join =
@@ -1300,7 +1297,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			title: `zurg → mount → ${playerLabel(player)} when other consumers need the files`,
 			detail: second
 				? `${join ? `Add your ${debridAccounts} to that zurg's mount and run` : 'Run'} a second zurg with an nzb account and its own mount and data directory ${consumers}; one zurg takes only one NZB account.${TWO_ZURGS_WANTED}`
-				: `${join ? `Add your ${debridAccounts} to ${backendKinds.size === 2 ? "one of those zurgs' mounts" : "that zurg's mount"}` : 'Run zurg with a filesystem mount'} instead of the plugin ${consumers}.`,
+				: `${join ? `Add your ${debridAccounts} to ${backendKinds.size === 2 ? "one of those zurgs' mounts" : "that zurg's mount"}` : 'Run zurg with a filesystem mount'} instead of the plugin${plugins > 1 ? 's' : ''} ${consumers}.`,
 			links: second ? [ZURG, TWO_ZURGS] : [ZURG],
 		});
 	}

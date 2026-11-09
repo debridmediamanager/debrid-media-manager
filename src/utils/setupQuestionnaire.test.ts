@@ -2235,7 +2235,7 @@ describe('route copy stays on the player and source it is about', () => {
 		],
 		[
 			{ player: 'emby', sources: ['real-debrid', 'all-debrid', 'usenet'] },
-			"Add your debrid accounts to that zurg's mount instead of the plugin when Kodi, a WebDAV player or another server must read the same library.",
+			"Add your debrid accounts to that zurg's mount instead of the plugins when Kodi, a WebDAV player or another server must read the same library.",
 		],
 		[
 			{
@@ -2252,6 +2252,24 @@ describe('route copy stays on the player and source it is about', () => {
 					({ title }) => title.startsWith('zurg → mount')
 				)?.detail
 			).toBe(detail);
+		}
+	);
+
+	// Each debrid account is its own provider plugin, and Jellyfin's own Usenet is the NZB plugin.
+	it.each([
+		[{ player: 'jellyfin', sources: ['real-debrid', 'all-debrid'] }, 'plugins'],
+		[{ player: 'jellyfin', sources: ['real-debrid', 'usenet'] }, 'plugins'],
+		[{ player: 'emby', sources: ['real-debrid'] }, 'plugin'],
+	] satisfies [Partial<SetupAnswers>, string][])(
+		'names the plugin or plugins the mount replaces (%o)',
+		(overrides, plugins) => {
+			expect(
+				recommendSetup(answers({ host: 'existing', ...overrides })).alternatives.find(
+					({ title }) => title.startsWith('zurg → mount')
+				)?.detail
+			).toBe(
+				`Run zurg with a filesystem mount instead of the ${plugins} when Kodi, a WebDAV player or another server must read the same library.`
+			);
 		}
 	);
 
