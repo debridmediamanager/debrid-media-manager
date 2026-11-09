@@ -106423,11 +106423,11 @@
 				"files": [
 					{
 						"path": "Fate Grand Order - Absolute Demonic Front Babylonia S01E00 Initium Iter.mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 1,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1873268
 					},
 					{
 						"path": "Fate Grand Order - Absolute Demonic Front Babylonia S01E01 Absolute Demonic Front Babylonia.mkv",

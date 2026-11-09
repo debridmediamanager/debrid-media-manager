@@ -43,6 +43,7 @@ import segmentLetters from '@/test/fixtures/placement/segment-letters.json';
 import segmentTitles from '@/test/fixtures/placement/segment-titles.json';
 import showsByTitle from '@/test/fixtures/placement/shows-named-by-title.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
+import specialsByTitle from '@/test/fixtures/placement/specials-by-title.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import titleEpisodes from '@/test/fixtures/placement/title-episode-numbers.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
@@ -1923,5 +1924,46 @@ describe('a file holding segments TMDB lists one by one', () => {
 		const bluey = await placed('Bluey season 3');
 		expect(at(bluey.release, 'S3E01 - Идеально')).toEqual([3, 1, null]);
 		expect(bluey.release).toEqual(bluey.expect);
+	});
+});
+
+describe('a special named by its title', () => {
+	// zurg on fun and DMM's PlacementMiss (2026-11-09): specials numbered as a season's E00, named
+	// after a season alone, or titled by the segments TMDB titles them by (see the fixtures README)
+	const placed = async (name: string) => {
+		const c = specialsByTitle.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(specialsByTitle.answers),
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return (part: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(part))!;
+			return [f.season, f.episode];
+		};
+	};
+
+	it("places a season's E00 by the title after it", async () => {
+		const archer = await placed('Archer.2009.S01-S14');
+		// TMDB's S0E3-E5 "Heart of Archness (1)"-"(3)"
+		expect(archer('S03E00.Heart.of.Archness,Pt.1')).toEqual([0, 3]);
+		expect(archer('S03E00.Heart.of.Archness,Pt.3')).toEqual([0, 5]);
+		const who = await placed('Doctor.Who.2023.S02E00.Joy.to.the.World');
+		expect(who('S02E00')).toEqual([0, 5]);
+	});
+
+	it('places a special named after a season alone by the title after it', async () => {
+		const wilty = await placed('Would I Lie to You');
+		// TMDB's S0E5 "Children in Need (Series 10)"
+		expect(wilty('S10 - Children in Need Special')).toEqual([0, 5]);
+	});
+
+	it('places a special titled by its segments', async () => {
+		const darkness = await placed('[KH] To Love-Ru Darkness');
+		expect(darkness('OVA - 01 - Prologue - Pollen Plan - Body touch')).toEqual([0, 7]);
+		expect(darkness('OVA - 02 - Nostalgia - The Changing Heart - Flower')).toEqual([0, 8]);
+		expect(darkness('OVA - 03 - Exchange - It feels')).toEqual([0, 9]);
 	});
 });

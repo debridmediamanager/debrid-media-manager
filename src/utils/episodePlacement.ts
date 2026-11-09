@@ -1460,18 +1460,65 @@ export async function specialOf(
 	release: string,
 	path: string
 ): Promise<Placement | null> {
-	if (!show.seasons.some((row) => row.season === 0)) return null;
+	// a sample is no special: `rob.and.romesh.vs.s05e00.christmas.on.ice…sample.mkv`
+	if (!show.seasons.some((row) => row.season === 0) || SAMPLE.test(path)) return null;
 	const shows = [...show.names, parseName(release).title]
 		.map((name) => specialKey(name, []))
 		.sort((a, b) => b.length - a.length);
 	const key = specialKey((path.split('/').pop() ?? path).replace(EXTENSION, ''), shows);
 	if (key.length < 6) return null;
-	const found = ((await show.episodes(0)) ?? []).filter(
-		(row) => !GENERIC.test(words(row.name).join(' ')) && specialKey(row.name, shows) === key
+	const specials = ((await show.episodes(0)) ?? []).filter(
+		(row) => !GENERIC.test(words(row.name).join(' '))
 	);
-	return found.length === 1
-		? { season: 0, episode: found[0].episode, episodeEnd: null, how: 'tmdb', titled: true }
-		: null;
+	const found = specials.filter((row) => specialKey(row.name, shows) === key);
+	const at = (row: { episode: number }): Placement => ({
+		season: 0,
+		episode: row.episode,
+		episodeEnd: null,
+		how: 'tmdb',
+		titled: true,
+	});
+	if (found.length) return found.length === 1 ? at(found[0]) : null;
+	const stem = (path.split('/').pop() ?? path).replace(EXTENSION, '');
+	// the title after a season's special number or a season alone, up to the release's tags, its part
+	// as a number: Archer's `S03E00.Heart.of.Archness,Pt.1.1080p.WEB…` is S0E3 "Heart of Archness (1)",
+	// Would I Lie to You's `S10 - Children in Need Special` S0E5 "Children in Need (Series 10)"
+	const token = SCENE_TOKEN.exec(stem) ?? /(?:^|[\s._-])s\d{1,2}(?=[\s._-])/i.exec(stem);
+	// what TMDB puts in parentheses may be a part (`Heart of Archness (1)`) or not (`Children in Need
+	// (Series 10)`); a file's are its tags
+	const titledAs = (text: string, tagged = false) =>
+		plain(
+			words(titleText(tagged ? text.replace(BRACKETS, ' ') : text)?.whole ?? '')
+				.filter((word) => !SPECIAL_WORDS.test(word))
+				.join(' ')
+		);
+	const own = token ? titledAs(stem.slice(token.index + token[0].length), true) : '';
+	const named =
+		own.length >= 6
+			? specials.filter((row) =>
+					[false, true].some((tagged) => titledAs(row.name, tagged) === own)
+				)
+			: [];
+	if (named.length) return named.length === 1 ? at(named[0]) : null;
+	// a special TMDB titles by its segments, the file by the same at its end: To Love-Ru Darkness'
+	// `OVA - 01 - Prologue - Pollen Plan - Body touch` is S0E7 "Prologue ~Commence Project~ / Pollen
+	// Plan ~Dangerous Sister Love~ / Body Touch? ~Nyanderful~"
+	const tail = stem
+		.replace(LEADING_GROUPS, '')
+		.split(/\s+-\s+/)
+		.map((part) => fold(part));
+	const segmented = specials.filter((row) => {
+		const parts = row.name
+			.replace(/~[^~]*~/g, ' ')
+			.split(' / ')
+			.map((part) => fold(part));
+		return (
+			parts.length >= 2 &&
+			parts.every(Boolean) &&
+			parts.join('|') === tail.slice(-parts.length).join('|')
+		);
+	});
+	return segmented.length === 1 ? at(segmented[0]) : null;
 }
 
 /**
