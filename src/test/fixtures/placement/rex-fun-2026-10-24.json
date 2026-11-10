@@ -91368,11 +91368,11 @@
 					},
 					{
 						"path": "the.crocodile.hunter.s02e07.where.devils.run.wild.avi",
-						"season": null,
-						"episode": null,
+						"season": 2,
+						"episode": 6,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 120229
 					},
 					{
 						"path": "the.crocodile.hunter.s02e08.last.waterholes.of.the.outback.avi",
@@ -91448,11 +91448,11 @@
 					},
 					{
 						"path": "the.crocodile.hunter.s08e05.tigers.of.shark.bay.avi",
-						"season": null,
-						"episode": null,
+						"season": 5,
+						"episode": 10,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 120183
 					},
 					{
 						"path": "the.crocodile.hunter.s08e06.ice.breaker.avi",

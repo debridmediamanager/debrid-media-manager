@@ -25688,11 +25688,11 @@
 					},
 					{
 						"path": "the.crocodile.hunter.s02e07.where.devils.run.wild.avi",
-						"season": null,
-						"episode": null,
+						"season": 2,
+						"episode": 6,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 120229
 					},
 					{
 						"path": "the.crocodile.hunter.s02e08.last.waterholes.of.the.outback.avi",

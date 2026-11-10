@@ -65,6 +65,7 @@ import specialsByTitle from '@/test/fixtures/placement/specials-by-title.json';
 import spellingVariants from '@/test/fixtures/placement/spelling-variants.json';
 import subtitledSpecials from '@/test/fixtures/placement/subtitled-specials.json';
 import tagsBeforeTitles from '@/test/fixtures/placement/tags-before-titles.json';
+import splitShowGenericTitles from '@/test/fixtures/placement/split-show-generic-titles.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import titleEpisodes from '@/test/fixtures/placement/title-episode-numbers.json';
 import titleParts from '@/test/fixtures/placement/title-parts.json';
@@ -2762,6 +2763,74 @@ describe("a director's cut's prime after a fansub's number", () => {
 		};
 		expect(at("Evangelion - 21' [MULTI]")).toEqual([1, 21]);
 		expect(at("Evangelion - 24' [MULTI]")).toEqual([1, 24]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a title whose last word is as short as an extension', () => {
+	// zurg on fun (2026-11-10): the title reader took the last word of a name already cut from its
+	// extension for another one, so `the.crocodile.hunter.s02e07.where.devils.run.wild` read "Where
+	// Devils Run", TMDB's S2E6 "Where the Devils Run Wild" nothing, and `s08e05.tigers.of.shark.bay`
+	// "Tigers of Shark", which IMDb's numbers placed on S5E6 "They Shoot Crocodiles, Don't They?"
+	const at = async (fixture: any, name: string, path: string, parts: boolean) => {
+		const c = fixture.cases.find((c: any) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[parts ? { ...(c.request as PlaceRequest), parts: true } : (c.request as PlaceRequest)],
+			Infinity,
+			recordedSources(fixture.answers),
+			async (list) => list.map(({ name }) => fixture.answers.identify?.[name] ?? null)
+		);
+		const f = releases[0].files.find((f) => f.path === path)!;
+		return [f.season, f.episode];
+	};
+
+	it('reads the whole title', async () => {
+		const croc = 'The Crocodile Hunter';
+		expect(
+			await at(
+				spellingVariants,
+				croc,
+				'the.crocodile.hunter.s02e07.where.devils.run.wild.avi',
+				true
+			)
+		).toEqual([2, 6]);
+		expect(
+			await at(
+				siblingShows,
+				croc,
+				'the.crocodile.hunter.s08e05.tigers.of.shark.bay.avi',
+				false
+			)
+		).toEqual([5, 10]);
+		expect(
+			await at(
+				siblingShows,
+				croc,
+				'the.crocodile.hunter.s08e08.they.shoot.crocodiles.dont.they.avi',
+				false
+			)
+		).toEqual([5, 6]);
+		expect(
+			await at(siblingShows, croc, 'the.crocodile.hunter.s08e03.crocs.in.the.city.avi', false)
+		).toEqual([5, 8]);
+	});
+
+	it("takes no title of the show aired before the release's year", async () => {
+		// DMM's PlacementMiss (2026-11-10): Channel 4's 2023 series, which TMDB lists apart (87012),
+		// asked with the BBC show's id (34549); read whole, `S14E02-Biscuit.Week` is TMDB's 2016 S7E2
+		// "Biscuit Week" by title alone, where the name says 2023
+		const name = 'The.Great.British.Bake.Off-S14';
+		const c = splitShowGenericTitles.cases.find((c: any) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[c.request as PlaceRequest],
+			Infinity,
+			recordedSources(splitShowGenericTitles.answers),
+			async () => [null]
+		);
+		const placed = releases[0].files.filter(
+			(f) => f.season === 7 && releases[0].tmdbId === 34549
+		);
+		expect(placed).toEqual([]);
 		expect(releases[0]).toEqual(c.expect);
 	});
 });

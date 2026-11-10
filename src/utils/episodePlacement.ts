@@ -271,6 +271,8 @@ const OVA_NUMBER = /(?:^|[^a-z\d])(?:ova|oad|ona)[\s._-]*(?:ep[\s._-]*)?\d/i;
 const BRACKETS = /[[(][^\])]*[\])]/g;
 const SAMPLE = /(?:^|[\s._-])sample(?:[\s._-]|$)/i;
 const EXTENSION = /\.[a-z0-9]{2,4}$/i;
+const MEDIA_EXTENSION =
+	/\.(?:mkv|mp4|m4v|avi|mov|wmv|ts|m2ts|mts|mpg|mpeg|webm|flv|vob|iso|divx|ogm|3gp|rmvb|asf|srt|ass|ssa|sub|idx)$/i;
 const RESOLUTIONS = new Set([480, 576, 720, 1080, 2160]);
 
 // A daily show's air date: `WWE.RAW.2026.10.05`, `RAW 2026.09.14 1080`, `Saturday Night Live 2018 12.04`.
@@ -914,7 +916,7 @@ async function placeByRules(
 	const mapped = anime?.byShow.has(show.tmdbId) ? anime : null;
 
 	// a file's own title outranks its numbers: Firefly's DVD-ordered `S01E01.Serenity` is TMDB's S1E11
-	const titledAt = byTitle ? await byName(show, numbers, file) : null;
+	const titledAt = byTitle ? await byName(show, numbers, file, release) : null;
 	// a later part only for a caller that reads `part`: one that does not files it as a copy
 	const part = titledAt?.[3];
 	if (part && part > 1 && !show.parts) return null;
@@ -1260,7 +1262,9 @@ export function titleText(raw: string): { whole: string; first: string } | null 
 		while (title.length > 1 && SCENE_WORDS.test(title.at(-1)!)) title.pop();
 		return title.join(' ');
 	};
-	const rest = utf8(raw).replace(EXTENSION, '').replace(LEADING_MARKS, '');
+	// a video's or a subtitle's extension only: a title its name was cut to keeps its last short
+	// word (`the.crocodile.hunter.s02e07.where.devils.run.wild` is "Where the Devils Run Wild")
+	const rest = utf8(raw).replace(MEDIA_EXTENSION, '').replace(LEADING_MARKS, '');
 	const whole = cut(rest);
 	return whole ? { whole, first: cut(rest.split(SEGMENT)[0]) } : null;
 }
@@ -1642,7 +1646,8 @@ export async function numberedByTvdb(
 async function byName(
 	show: PlacementShow,
 	numbers: FileNumbers,
-	file: string
+	file: string,
+	release = ''
 ): Promise<[number, number, number?, number?] | null> {
 	const title = titleOf(file, numbers);
 	if (!title) return null;
@@ -1671,8 +1676,13 @@ async function byName(
 	// Myth Evolution` (TVDB's "Myth Evolution!" of 2007) is not TMDB's S7E18 "Myth Evolution" of
 	// 2009, TVDB's "Myth Evolution 2", nor `S2008E20 Viewer Special Threequel` its S0E17, the 2010
 	// Buster's Cut of S0E11
+	// nor a title of the show aired before the year the release's name gives: `The.Great.British.Bake.Off-
+	// S14-…-2023` is Channel 4's 2023 series, which TMDB lists apart, and its `S14E02-Biscuit.Week`
+	// is no "Biscuit Week" of the BBC's 2016 series
+	const since = parseName(release).year;
 	const aired = (item: { airDate: string | null }) =>
-		season === null || season < 1900 || Boolean(item.airDate?.startsWith(String(season)));
+		(season === null || season < 1900 || Boolean(item.airDate?.startsWith(String(season)))) &&
+		!(since && item.airDate && Number(item.airDate.slice(0, 4)) < since);
 	const others = await Promise.all(
 		show.seasons
 			.filter((row) => row.season !== season)
