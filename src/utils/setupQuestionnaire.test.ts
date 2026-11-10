@@ -1458,7 +1458,7 @@ describe('host messages name the server that needs the host', () => {
 		'names TorBox hosted NZBs beside %o in the rex on Android reason (%s)',
 		(sources, plexRoute, needs) => {
 			const input = answers({ player: 'plex', plexRoute, sources });
-			const reason = `zurg+rex Android feeds rex from zurg only; ${needs} need rex on a normal host, and it has no TorBox hosted NZB (torbox_nzb) backend.`;
+			const reason = `zurg+rex Android feeds rex from zurg only; ${needs} need rex on a normal host, and zurg+rex Android has no TorBox hosted NZB (torbox_nzb) backend.`;
 
 			expect(hostChoiceReason(input, 'android')).toBe(reason);
 			expect(recommendSetup({ ...input, host: 'android' }).conflicts).toEqual([reason]);

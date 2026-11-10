@@ -408,7 +408,7 @@ export function hostChoiceReason(
 		answers.sources.includes('http-local') && 'HTTP files',
 	].filter(Boolean);
 	if (rex && notZurg.length)
-		return `zurg+rex Android feeds rex from zurg only; ${notZurg.join(' and ')} need rex on a normal host${answers.sources.includes('torbox-hosted') ? ', and it has no TorBox hosted NZB (torbox_nzb) backend' : ''}.`;
+		return `zurg+rex Android feeds rex from zurg only; ${notZurg.join(' and ')} need rex on a normal host${answers.sources.includes('torbox-hosted') ? ', and zurg+rex Android has no TorBox hosted NZB (torbox_nzb) backend' : ''}.`;
 	// Stremio and Kodi play TorBox hosted NZBs without zurg; WebDAV, external players and rex need it.
 	if (
 		answers.sources.includes('torbox-hosted') &&
