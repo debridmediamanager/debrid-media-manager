@@ -31,6 +31,7 @@ import {
 	fileNumbers,
 	keepImdbOrder,
 	lookupAnime,
+	normalizeTitle,
 	numberedByTvdb,
 	parseName,
 	placeFile,
@@ -183,6 +184,8 @@ export interface PlacementSources {
 	show(tmdbId: number): Promise<any | null>;
 	/** TMDB's list of one season (`tv/{id}/season/{n}`). */
 	season(tmdbId: number, season: number): Promise<any | null>;
+	/** TMDB's names of one season in other languages (`tv/{id}/season/{n}/translations`); absent or null where it cannot be asked. */
+	seasonTranslations?(tmdbId: number, season: number): Promise<any | null>;
 	/** The show an IMDb episode id belongs to. */
 	episodeShow(imdbId: string): Promise<string | null>;
 	/** TMDB's episode groups of a show (`tv/{id}/episode_groups`). */
@@ -1562,6 +1565,7 @@ async function placeOnShow(
 	if (DUBBED.test(release.name)) placement.dubOrder = tvdbOrderLookup(showId, sources, DUB_ORDER);
 	placement.packOrder = await packOrderLookup(release, placement.seasons, showId, sources);
 	placement.namedRun = await namedRunLookup(release, placement.seasons, episodes);
+	placement.subtitled = subtitledLookup(release, details, showId, placement.seasons, sources);
 	const imdb = imdbId ? imdbLookup(imdbId, tmdbId, sources) : null;
 	return placeFiles(release, placement, anime, imdb, (files) => answer(files));
 }
@@ -1841,6 +1845,56 @@ async function groupSeasons(
 		);
 	}
 	return seasons;
+}
+
+/**
+ * The season a release names after the show, each by a name TMDB gives it in some language:
+ * `[ANi] 小書痴的下剋上 為了成為圖書管理員不擇手段！領主的養女 - 21` is Ascendance of a Bookworm,
+ * as Taiwan's TMDB names it, and then 領主的養女, Hong Kong's name for its season 2. Null where
+ * not exactly one season is named; the seasons' names are read only when asked for.
+ */
+function subtitledLookup(
+	release: PlaceRequest,
+	details: any,
+	tmdbId: number,
+	seasons: TmdbSeason[],
+	sources: PlacementSources
+): PlacementShow['subtitled'] {
+	const ask = sources.seasonTranslations;
+	if (!ask) return undefined;
+	const title = normalizeTitle(parseName(release.name).title);
+	const shows = [
+		details.name,
+		details.original_name,
+		...(details.translations?.translations ?? []).map((row: any) => row?.data?.name),
+	].flatMap((name) => (typeof name === 'string' ? [normalizeTitle(name)] : []));
+	const rests = shows.flatMap((name) =>
+		name && title.startsWith(`${name} `) ? [title.slice(name.length + 1)] : []
+	);
+	if (rests.length === 0) return undefined;
+	let found: Promise<number | null> | null = null;
+	const read = async () => {
+		const named = await Promise.all(
+			seasons
+				.filter((row) => row.season > 0)
+				.map(async (row) => {
+					const names = [
+						row.name,
+						...((await ask(tmdbId, row.season))?.translations ?? []).map(
+							(t: any) => t?.data?.name
+						),
+					];
+					return names.some(
+						(name) => typeof name === 'string' && rests.includes(normalizeTitle(name))
+					)
+						? [row.season]
+						: [];
+				})
+		);
+		const hits = named.flat();
+		return hits.length === 1 ? hits[0] : null;
+	};
+	return () => (found ??= read());
 }
 
 /**
@@ -2187,6 +2241,15 @@ export const cachedSources: PlacementSources = {
 		getTmdbAuth()
 			? settle(() =>
 					getMetadataCache().getTmdbPassthrough(`tv/${tmdbId}/season/${season}`, {})
+				)
+			: Promise.resolve(null),
+	seasonTranslations: (tmdbId, season) =>
+		getTmdbAuth()
+			? settle(() =>
+					getMetadataCache().getTmdbPassthrough(
+						`tv/${tmdbId}/season/${season}/translations`,
+						{}
+					)
 				)
 			: Promise.resolve(null),
 	episodeGroups: (tmdbId) =>

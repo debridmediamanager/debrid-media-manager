@@ -1,0 +1,1381 @@
+{
+	"answers": {
+		"find": {
+			"tt10885406": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 91768,
+						"name": "Ascendance of a Bookworm",
+						"first_air_date": "2019-10-03"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"91768": {
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "O Sonho de uma Apaixonada por Livros",
+							"iso_3166_1": "BR"
+						},
+						{
+							"title": "小書痴",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "小書痴的下剋上",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "爱书的下克上",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "小書痴的下剋上：為了成為圖書管理員不擇手段！",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "小书痴的下克上：为了成为图书管理员不择手段",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "小书痴的下克上",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "小书痴的下克上 〜为了成为图书管理员而不择手段〜",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Ascendance of a Bookworm",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "El ratón de Biblioteca",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Ascenderé de ratón de biblioteca",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "El Ratón De Biblioteca: Haré cualquier cosa para convertirme en bibliotecaria",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Ascendance of a Bookworm",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Honzuki no Gekokujō",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "本好きの下剋上",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Honzuki no Gekokujou",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "本好きの下剋上 司書になるためには手段を選んでいられません 第3期",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "本好きの下剋上～司書になるためには手段を選んでいられません～ 第3部",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Honzuki no Gekokujou: Ryoushu no Youjo",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "本好きの下剋上 領主の養女",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "本好きの下剋上〜司書になるためには手段を選んでられません〜 領主の養女",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "책벌레의 하극상",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "책벌레의 하극상 ~사서가 되기 위해서라면 뭐든지 할 수 있어~ 영주의 양녀",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Власть книжного червя: Я пойду на всё, чтоб стать библиотекарем",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "小書痴的下剋上",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "小書痴的下剋上第三季",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "小書痴的下剋上為了成為圖書管理員不擇手段第三季",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "小書痴的下剋上為了成為圖書管理員不擇手段",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "Історія буквоїжки: Стати бібліотекарем за будь-яку ціну",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "Ascendance of a Bookworm: Adopted Daughter of an Archduke",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt10885406",
+					"tvdb_id": 366263
+				},
+				"first_air_date": "2019-10-03",
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"id": 91768,
+				"keywords": {
+					"results": [
+						{
+							"id": 2343,
+							"name": "magic"
+						},
+						{
+							"id": 3640,
+							"name": "work"
+						},
+						{
+							"id": 5484,
+							"name": "reincarnation"
+						},
+						{
+							"id": 9914,
+							"name": "slice of life"
+						},
+						{
+							"id": 11001,
+							"name": "religion"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 161257,
+							"name": "medieval"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 229074,
+							"name": "josei"
+						},
+						{
+							"id": 237451,
+							"name": "isekai"
+						},
+						{
+							"id": 319900,
+							"name": "based on light novel"
+						}
+					]
+				},
+				"name": "Ascendance of a Bookworm",
+				"networks": [
+					{
+						"id": 57,
+						"name": "Nippon TV"
+					},
+					{
+						"id": 172,
+						"name": "WOWOW Prime"
+					},
+					{
+						"id": 569,
+						"name": "YTV"
+					},
+					{
+						"id": 1410,
+						"name": "ABC TV"
+					},
+					{
+						"id": 1896,
+						"name": "FBS"
+					},
+					{
+						"id": 2727,
+						"name": "Chukyo TV"
+					},
+					{
+						"id": 2728,
+						"name": "RNB"
+					},
+					{
+						"id": 3201,
+						"name": "HTV"
+					},
+					{
+						"id": 3644,
+						"name": "FCT"
+					},
+					{
+						"id": 3698,
+						"name": "STV"
+					},
+					{
+						"id": 3741,
+						"name": "KNB"
+					},
+					{
+						"id": 4791,
+						"name": "KTK"
+					},
+					{
+						"id": 4815,
+						"name": "RAB"
+					},
+					{
+						"id": 4816,
+						"name": "TVI"
+					},
+					{
+						"id": 4817,
+						"name": "MMT"
+					},
+					{
+						"id": 4818,
+						"name": "ABS"
+					},
+					{
+						"id": 4822,
+						"name": "JRT"
+					},
+					{
+						"id": 4825,
+						"name": "TOS"
+					},
+					{
+						"id": 6155,
+						"name": "YBC"
+					},
+					{
+						"id": 6156,
+						"name": "UMK TV Miyazaki"
+					},
+					{
+						"id": 6668,
+						"name": "TeNY"
+					},
+					{
+						"id": 6669,
+						"name": "RNC"
+					},
+					{
+						"id": 6670,
+						"name": "NIB"
+					},
+					{
+						"id": 6671,
+						"name": "KKT"
+					},
+					{
+						"id": 7076,
+						"name": "Daiichi-TV"
+					},
+					{
+						"id": 7077,
+						"name": "FBC"
+					},
+					{
+						"id": 7078,
+						"name": "RKC"
+					},
+					{
+						"id": 7079,
+						"name": "KYT"
+					},
+					{
+						"id": 7092,
+						"name": "KRY"
+					}
+				],
+				"origin_country": ["JP"],
+				"original_language": "ja",
+				"original_name": "本好きの下剋上 司書になるためには手段を選んでいられません",
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 4,
+						"air_date": "2020-03-10",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 36,
+						"air_date": "2019-10-03",
+						"name": "Ascendance of a Bookworm"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 24,
+						"air_date": "2026-04-04",
+						"name": "Adopted Daughter of an Archduke"
+					}
+				],
+				"translations": {
+					"translations": [
+						{
+							"data": {
+								"name": "Ascendance of a Bookworm"
+							}
+						},
+						{
+							"data": {
+								"name": "Ascendance of a Bookworm"
+							}
+						},
+						{
+							"data": {
+								"name": "Власть книжного червя"
+							}
+						},
+						{
+							"data": {
+								"name": "Ascendance of a Bookworm"
+							}
+						},
+						{
+							"data": {
+								"name": "爱书的下克上：为了成为图书管理员不择手段！"
+							}
+						},
+						{
+							"data": {
+								"name": "Ascendance of a Bookworm"
+							}
+						},
+						{
+							"data": {
+								"name": "Ascendance of a Bookworm"
+							}
+						},
+						{
+							"data": {
+								"name": "책벌레의 하극상 ~사서가 되기 위해서라면 뭐든지 할 수 있어~"
+							}
+						},
+						{
+							"data": {
+								"name": "Ascendance of a Bookworm"
+							}
+						},
+						{
+							"data": {
+								"name": "Ascendance of a Bookworm"
+							}
+						},
+						{
+							"data": {
+								"name": "هيمنة عثة كتب"
+							}
+						},
+						{
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"data": {
+								"name": "Історія буквоїжки"
+							}
+						},
+						{
+							"data": {
+								"name": "หนอนหนังสือยึดอำนาจ"
+							}
+						},
+						{
+							"data": {
+								"name": "小書痴的下剋上：為了成為圖書管理員不擇手段！"
+							}
+						},
+						{
+							"data": {
+								"name": "Ascendance of a Bookworm"
+							}
+						},
+						{
+							"data": {
+								"name": "小書痴的下剋上：為了成為圖書管理員不擇手段！"
+							}
+						},
+						{
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"data": {
+								"name": "Honzuki no Gekokujou"
+							}
+						},
+						{
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"data": {
+								"name": "Honzuki no Gekokujou"
+							}
+						},
+						{
+							"data": {
+								"name": "עלייתה של תולעת ספרים"
+							}
+						},
+						{
+							"data": {
+								"name": "Cuộc nổi dậy của cô gái mọt sách"
+							}
+						}
+					]
+				}
+			}
+		},
+		"season": {
+			"91768/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "I've Become a Noble",
+						"air_date": "2026-04-04",
+						"id": 7111408
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Lower City Family Reunion",
+						"air_date": "2026-04-11",
+						"id": 7111409
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Archduke's Castle and Italian Restaurant",
+						"air_date": "2026-04-18",
+						"id": 7136939
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "How to Collect Donations",
+						"air_date": "2026-04-25",
+						"id": 7136941
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Concert Preparations",
+						"air_date": "2026-05-09",
+						"id": 7136942
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Harspiel Concert",
+						"air_date": "2026-05-16",
+						"id": 7136944
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Hasse's Monastery",
+						"air_date": "2026-05-23",
+						"id": 7136945
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Ferdinand's Task",
+						"air_date": "2026-05-30",
+						"id": 7136947
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Wilfried's Day as High Bishop",
+						"air_date": "2026-06-06",
+						"id": 7136948
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "First Material Gathering",
+						"air_date": "2026-06-13",
+						"id": 7136950
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "The Gathering of Gutenbergs",
+						"air_date": "2026-06-20",
+						"id": 7136951
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "The Winter Social Season and Debut",
+						"air_date": "2026-06-27",
+						"id": 7136953
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "Winter Material Gathering",
+						"air_date": "2026-07-11",
+						"id": 7427037
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "Hasse's Punishment",
+						"air_date": "2026-07-18",
+						"id": 7431905
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "Night of Fruhtrane",
+						"air_date": "2026-07-25",
+						"id": 7431906
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "New Dress and Printing Press",
+						"air_date": "2026-08-01",
+						"id": 7431907
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "Holding the Fort During the Archduke Conference",
+						"air_date": "2026-08-08",
+						"id": 7431908
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "Damuel's Proposal",
+						"air_date": "2026-08-15",
+						"id": 7431909
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "Inspection of Illgner and Gathering of Summer",
+						"air_date": "2026-08-22",
+						"id": 7431910
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "Georgine's Visit",
+						"air_date": "2026-09-05",
+						"id": 7431911
+					},
+					{
+						"episode_number": 21,
+						"season_number": 2,
+						"name": "Ruelle Rechallenge",
+						"air_date": "2026-09-12",
+						"id": 7431912
+					},
+					{
+						"episode_number": 22,
+						"season_number": 2,
+						"name": "Wilfried's Actions",
+						"air_date": "2026-09-19",
+						"id": 7431913
+					},
+					{
+						"episode_number": 23,
+						"season_number": 2,
+						"name": "Charlotte's Baptism",
+						"air_date": "2026-09-26",
+						"id": 7431914
+					},
+					{
+						"episode_number": 24,
+						"season_number": 2,
+						"name": "Rescue",
+						"air_date": "2026-10-03",
+						"id": 7431915
+					}
+				]
+			}
+		},
+		"seasonTranslations": {
+			"91768/2": {
+				"translations": [
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": "Adopted Daughter of an Archduke"
+						}
+					},
+					{
+						"data": {
+							"name": "领主的养女"
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": "시즌 2: 영주의 양녀"
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": "領主の養女"
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": "領主的養女"
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					}
+				]
+			},
+			"91768/1": {
+				"translations": [
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": "Ascendance of a Bookworm"
+						}
+					},
+					{
+						"data": {
+							"name": "小书痴的下克上"
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": "本好きの下剋上 司書になるためには手段を選んでいられません"
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": "小書痴的下克上"
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt10885406": null
+		},
+		"seasonEpisodes": {},
+		"anime": {
+			"fribb": [
+				{
+					"type": "TV",
+					"anidb_id": 14727,
+					"anilist_id": 108268,
+					"animecountdown_id": 1055017,
+					"animenewsnetwork_id": 22255,
+					"anime-planet_id": "ascendance-of-a-bookworm-ill-do-anything-to-become-a-librarian",
+					"anisearch_id": 14237,
+					"imdb_id": ["tt10885406"],
+					"kitsu_id": 42241,
+					"livechart_id": 9258,
+					"mal_id": 39468,
+					"simkl_id": 1055017,
+					"themoviedb_id": {
+						"tv": 91768
+					},
+					"tvdb_id": 366263,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 1
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 15293,
+					"anilist_id": 113693,
+					"animecountdown_id": 1221807,
+					"animenewsnetwork_id": 23026,
+					"anime-planet_id": "ascendance-of-a-bookworm-season-2-ill-do-anything-to-become-a-librarian",
+					"anisearch_id": 14813,
+					"imdb_id": ["tt10885406"],
+					"kitsu_id": 42838,
+					"livechart_id": 9703,
+					"mal_id": 40815,
+					"simkl_id": 1221807,
+					"themoviedb_id": {
+						"tv": 91768
+					},
+					"tvdb_id": 366263,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 1
+					},
+					"episode_offset": {
+						"tvdb": 14,
+						"tmdb": 14
+					}
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 15300,
+					"anilist_id": 113811,
+					"animecountdown_id": 1223565,
+					"animenewsnetwork_id": 23166,
+					"anime-planet_id": "ascendance-of-a-bookworm-ova",
+					"anisearch_id": 15064,
+					"imdb_id": ["tt10885406"],
+					"kitsu_id": 43048,
+					"livechart_id": 9708,
+					"mal_id": 40841,
+					"simkl_id": 1223565,
+					"themoviedb_id": {
+						"tv": 91768
+					},
+					"tvdb_id": 366263,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 15634,
+					"anilist_id": 121176,
+					"animecountdown_id": 1406099,
+					"animenewsnetwork_id": 24606,
+					"anime-planet_id": "ascendance-of-a-bookworm-season-3-ill-do-anything-to-become-a-librarian",
+					"anisearch_id": 15391,
+					"imdb_id": ["tt10885406"],
+					"kitsu_id": 43607,
+					"livechart_id": 10065,
+					"mal_id": 42429,
+					"simkl_id": 1406099,
+					"themoviedb_id": {
+						"tv": 91768
+					},
+					"tvdb_id": 366263,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 1
+					},
+					"episode_offset": {
+						"tvdb": 26,
+						"tmdb": 26
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 18302,
+					"anilist_id": 171110,
+					"animecountdown_id": 2316218,
+					"animenewsnetwork_id": 30955,
+					"anime-planet_id": "ascendance-of-a-bookworm-season-4-adopted-daughter-of-an-archduke",
+					"anisearch_id": 18911,
+					"imdb_id": ["tt10885406"],
+					"kitsu_id": 48293,
+					"livechart_id": 12439,
+					"mal_id": 57466,
+					"simkl_id": 2316218,
+					"themoviedb_id": {
+						"tv": 91768
+					},
+					"tvdb_id": 366263,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 2
+					},
+					"episode_offset": {
+						"tvdb": 36
+					}
+				}
+			],
+			"titles": [
+				{
+					"anidbId": 14727,
+					"names": [
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen",
+						"هيمنة عثة كتب",
+						"Ascendance of a Bookworm",
+						"本好きの下剋上 司書になるためには手段を選んでいられません",
+						"책벌레의 하극상: 사서가 되기 위해서라면 뭐든지 할 수 있어",
+						"Власть книжного червя",
+						"书虫的下克上～为了成为图书管理员而不择手段～",
+						"Honzuki no Gekokujou",
+						"Honzuki",
+						"Ascendance of a Bookworm: I`ll Do Anything to Become a Librarian!"
+					]
+				},
+				{
+					"anidbId": 15293,
+					"names": [
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen (2020)",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen (2020)",
+						"هيمنة عثة كتب (2020)",
+						"Ascendance of a Bookworm (2020)",
+						"本好きの下剋上 司書になるためには手段を選んでいられません (2020)",
+						"책벌레의 하극상: 사서가 되기 위해서라면 뭐든지 할 수 있어 (2020)",
+						"小书痴的下克上～为了成为图书管理员而不择手段～ 第2部",
+						"Honzuki 2",
+						"Honzuki no Gekokujou 2",
+						"Honzuki s2",
+						"Ascendance of a Bookworm 2",
+						"本好きの下剋上 司書になるためには手段を選んでいられません 第二部",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen 2",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen Dainibu"
+					]
+				},
+				{
+					"anidbId": 15300,
+					"names": [
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen - Eustachius no Shitamachi Sennyuu Daisakusen / Corinna-sama no Otaku Houmon",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen - Eustachius no Shitamachi Sennyuu Daisakusen / Corinna-sama no Otaku Houmon",
+						"هيمنة عثة كتب: عمليّة إيوستاكيوس السرّية في مركز المدينة \\ زيارة السيّدة كورينا",
+						"Ascendance of a Bookworm: Eustachius`s Incognito Operation Downtown / Visiting Missus Corinna",
+						"本好きの下剋上 司書になるためには手段を選んでいられません ユストクスの下町潜入大作戦 / コリンナ様のお宅訪問",
+						"Honzuki OVA"
+					]
+				},
+				{
+					"anidbId": 15634,
+					"names": [
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen (2022)",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen (2022)",
+						"Ascendance of a Bookworm (2022)",
+						"本好きの下剋上 司書になるためには手段を選んでいられません (2022)",
+						"Власть книжного червя (2022)",
+						"小书痴的下克上～为了成为图书管理员而不择手段～ 第3部",
+						"Honzuki 3",
+						"Honzuki s3",
+						"Honzuki no Gekokujou 3",
+						"小书痴的下克上：为了成为图书管理员不择手段！ 第三季",
+						"小書痴的下剋上：為了成為圖書管理員不擇手段！第三季"
+					]
+				},
+				{
+					"anidbId": 18302,
+					"names": [
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen - Ryoushu no Youjo",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen - Ryoushu no Youjo",
+						"本好きの下剋上 司書になるためには手段を選んでいられません 領主の養女",
+						"Ascendance of a Bookworm: Adopted Daughter of an Archduke"
+					]
+				},
+				{
+					"anidbId": 14727,
+					"names": [
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen",
+						"Ascendance of a Bookworm",
+						"Ascendance of a Bookworm: I'll do anything to become a librarian",
+						"Ascendance of a Bookworm: I’ll Do Anything to Become a Librarian!",
+						"Ascendance of a Bookworm: Stop at Nothing to be a Librarian",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erande Iraremasen",
+						"Honzuki no Gekokujō",
+						"Honzuki no Gekokujō: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen",
+						"Власть книжного червя",
+						"هيمنة عثة كتب",
+						"หนอนหนังสือยึดอำนาจ",
+						"书虫的下克上～为了成为图书管理员而不择手段～",
+						"本好きの下剋上",
+						"本好きの下剋上 司書になるためには手段を選んでいられません",
+						"本好きの下剋上 ～司書になるためには手段を選んでいられません～",
+						"本好きの下剋上~司書になるためには手段を選んでいられません~",
+						"本好きの下剋上〜司書になるためには手段を選んでられません〜",
+						"爱书的下克上：为了成为图书管理员不择手段！",
+						"책벌레의 하극상: 사서가 되기 위해서라면 뭐든지 할 수 있어"
+					]
+				},
+				{
+					"anidbId": 15293,
+					"names": [
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2nd Season",
+						"Ascendance of a Bookworm",
+						"Ascendance of a Bookworm (2020)",
+						"Ascendance of a Bookworm (2da Parte)",
+						"Ascendance of a Bookworm (Part 2)",
+						"Ascendance of a Bookworm (Season 2)",
+						"Ascendance of a Bookworm (Staffel 2)",
+						"Ascendance of a Bookworm (Teil 2)",
+						"Ascendance of a Bookworm 2",
+						"Ascendance of a Bookworm 2nd Season",
+						"Ascendance of a Bookworm Part 2",
+						"Ascendance of a Bookworm S2",
+						"Ascendance of a Bookworm Saison 2",
+						"Ascendance of a Bookworm Season 2",
+						"Ascendance of a Bookworm Staffel 2",
+						"Ascendance of a Bookworm Temporada 2",
+						"Honzuki 2",
+						"Honzuki no Gekokujou 2",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen (2020)",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen 2",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen Dai 2 Bu (本好きの下剋上 司書になるためには手段を選んでいられません 第2部)",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen Dai Ni Bu",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen Dainibu",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen Part 2",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen Season 2",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erande Iraremasen",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erande Iraremasen Dai 2 Bu (本好きの下剋上 司書になるためには手段を選んでいられません 第2部)",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erande Iraremasen Dai Ni Bu",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erande Iraremasen Part 2",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 2",
+						"Honzuki no Gekokujō",
+						"Honzuki no Gekokujō: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen Dai Ni Bu",
+						"Honzuki s2",
+						"Власть книжного червя 2",
+						"هيمنة عثة كتب (2020)",
+						"หนอนหนังสือยึดอำนาจ ภาค 2",
+						"小书痴的下克上～为了成为图书管理员而不择手段～ 第2部",
+						"本好きの下剋上 司書になるためには手段を選んでいられません",
+						"本好きの下剋上 司書になるためには手段を選んでいられません (2020)",
+						"本好きの下剋上 司書になるためには手段を選んでいられません 2",
+						"本好きの下剋上 司書になるためには手段を選んでいられません 第2期",
+						"本好きの下剋上 司書になるためには手段を選んでいられません 第二部",
+						"本好きの下剋上 司書になるためには手段を選んでられません",
+						"本好きの下剋上 ～司書になるためには手段を選んでいられません～ 第2期",
+						"本好きの下剋上〜司書になるためには手段を選んでられません〜 第2期",
+						"爱书的下克上：为了成为图书管理员不择手段！2",
+						"책벌레의 하극상: 사서가 되기 위해서라면 뭐든지 할 수 있어 (2020)"
+					]
+				},
+				{
+					"anidbId": 15300,
+					"names": [
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen OVA",
+						"Ascendance of a Bookworm Episode 14.5",
+						"Ascendance of a Bookworm OVA",
+						"Ascendance of a Bookworm Side Story",
+						"Ascendance of a Bookworm Side Story One: Eustachius's Incognito Operation Downtown",
+						"Ascendance of a Bookworm Side Story Two: Visiting Missus Corinna",
+						"Ascendance of a Bookworm: Eustachius's Incognito Operation Downtown / Visiting Missus Corinna",
+						"Ascendance of a Bookworm: Eustachius’s Incognito Operation Downtown / Visiting Missus Corinna",
+						"Ascendance of a Bookworm: Histoire annexe",
+						"Ascendance of a Bookworm: Side Story",
+						"Ascendance of a Bookworm: Side Story One, Ascendance of a Bookworm: Side Story Two",
+						"Honzuki OVA",
+						"Honzuki no Gekokujou Episode 14.5",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen - Eustachius no Shitamachi Sennyuu Daisakusen / Corinna-sama no Otaku Houmon",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen OVA",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erande Iraremasen OVA",
+						"Honzuki no Gekokujō: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen OVA",
+						"в гости к миссис Корине",
+						"ласть книжного червя",
+						"هيمنة عثة كتب: عمليّة إيوستاكيوس السرّية في مركز المدينة \\ زيارة السيّدة كورينا",
+						"หนอนหนังสือยึดอำนาจ OVA",
+						"本好きの下剋上 司書になるためには手段を選んでいられません OVA",
+						"本好きの下剋上 司書になるためには手段を選んでいられません ユストクスの下町潜入大作戦 / コリンナ様のお宅訪問",
+						"本好きの下剋上 ～司書になるためには手段を選んでいられません～ OVA",
+						"本好きの下剋上〜司書になるためには手段を選んでられません〜 OVA",
+						"책벌레의 하극상: 사서가 되기 위해서라면 뭐든지 할 수 있어 - 유스톡스의 평민촌 잠입 대작전 / 코린나 댁을 방문하다"
+					]
+				},
+				{
+					"anidbId": 15634,
+					"names": [
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 3rd Season",
+						"Ascendance of a Bookworm",
+						"Ascendance of a Bookworm (2022)",
+						"Ascendance of a Bookworm (Part 3)",
+						"Ascendance of a Bookworm (Parte 3)",
+						"Ascendance of a Bookworm (Partie 3)",
+						"Ascendance of a Bookworm (Teil 3)",
+						"Ascendance of a Bookworm 3rd Season",
+						"Ascendance of a Bookworm S3",
+						"Ascendance of a Bookworm Season 3",
+						"Honzuki 3",
+						"Honzuki no Gekokujou 3",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen (2022)",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen 3",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen Dai 3 Ki",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erande Iraremasen 3",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erande Iraremasen Dai 3 Ki",
+						"Honzuki no Gekokujō - Shisho ni Naru Tame niwa Shudan o Erandeiramasen",
+						"Honzuki no Gekokujō: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen Dai 3 Ki",
+						"Honzuki s3",
+						"Sự Nổi Dậy Của Cô Gái Mọt Sách: Mình Sẽ Làm Mọi Cách Để Trở Thành Thủ Thư 3",
+						"Власть книжного червя",
+						"Власть книжного червя (2022)",
+						"การปฏิวัติของสาวน้อยหนอนหนังสือ ภาค 3",
+						"หนอนหนังสือยึดอำนาจ ภาค 3",
+						"小书痴的下克上：为了成为图书管理员不择手段！ 第三季",
+						"小书痴的下克上～为了成为图书管理员而不择手段～ 第3部",
+						"小書痴的下剋上：為了成為圖書管理員不擇手段！第三季",
+						"本好きの下剋上 司書になるためには手段を選んでいられません",
+						"本好きの下剋上 司書になるためには手段を選んでいられません (2022)",
+						"本好きの下剋上 司書になるためには手段を選んでいられません 3",
+						"本好きの下剋上 司書になるためには手段を選んでいられません 第3期",
+						"本好きの下剋上 ～司書になるためには手段を選んでいられません～",
+						"本好きの下剋上 ～司書になるためには手段を選んでいられません～ 第3期",
+						"本好きの下剋上〜司書になるためには手段を選んでられません〜 第3期",
+						"爱书的下克上：为了成为图书管理员不择手段！3",
+						"책벌레의 하극상: 사서가 되기 위해서라면 뭐든지 할 수 있어 3기"
+					]
+				},
+				{
+					"anidbId": 18302,
+					"names": [
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen - Ryoushu no Youjo",
+						"Ascendance of a Bookworm 4th Season",
+						"Ascendance of a Bookworm S4",
+						"Ascendance of a Bookworm Season 4",
+						"Ascendance of a Bookworm Staffel 4",
+						"Ascendance of a Bookworm: Adopted Daughter of an Archduke",
+						"Honzuki no Gekokujou 4th Season",
+						"Honzuki no Gekokujou S4",
+						"Honzuki no Gekokujou ~Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen~ Ryushu no Youjo",
+						"Honzuki no Gekokujou: Ryoushu no Youjo",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen - Ryoushu no Youjo",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erande Iraremasen - Ryoushu no Youjo",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 4th Season",
+						"Honzuki no Gekokujou: Shisho ni Naru Tame ni wa Shudan wo Erandeiraremasen 4th Season - Ryoushu no Youjo",
+						"Honzuki no Gekokujō: Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen - Ryōshu no Yōjo",
+						"هيمنة عثة كتب: ابنة أرشيدوق بالتبني",
+						"小书痴的下克上 〜为了成为图书管理员而不择手段〜 第四季",
+						"本好きの下剋上 司書になるためには手段を選んでいられません 第4期",
+						"本好きの下剋上 司書になるためには手段を選んでいられません 領主の養女",
+						"本好きの下剋上 領主の養女",
+						"本好きの下剋上 ～司書になるためには手段を選んでいられません～ 第4期 領主の養女",
+						"本好きの下剋上 ～司書になるためには手段を選んでいられません～ 領主の養女",
+						"本好きの下剋上〜司書になるためには手段を選んでられません〜 領主の養女",
+						"책벌레의 하극상: 사서가 되기 위해서라면 뭐든지 할 수 있어 영주의 양녀"
+					]
+				}
+			]
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg-usenet on fun, 2026-11-10 (the .zurgtorrent's name, its IMDb id and its one video file as zurg asks; no hash, a Usenet copy)",
+			"request": {
+				"name": "[ANi].小書痴的下剋上.為了成為圖書管理員不擇手段！領主的養女.-.21.[1080P][Baha][WEB-DL][AAC.AVC][CHT]",
+				"hash": null,
+				"imdbId": "tt10885406",
+				"files": [
+					{
+						"path": "[ANi] 小書痴的下剋上 為了成為圖書管理員不擇手段！領主的養女 - 21 [1080P][Baha][WEB-DL][AAC AVC][CHT].mp4",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt10885406",
+				"tmdbId": 91768,
+				"files": [
+					{
+						"path": "[ANi] 小書痴的下剋上 為了成為圖書管理員不擇手段！領主的養女 - 21 [1080P][Baha][WEB-DL][AAC AVC][CHT].mp4",
+						"season": 2,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 7431912
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-10 (the .zurgtorrent's name, its IMDb id and its one video file as zurg asks; no hash, a Usenet copy)",
+			"request": {
+				"name": "[ANi].小書痴的下剋上.為了成為圖書管理員不擇手段！領主的養女.-.22.[1080P][Baha][WEB-DL][AAC.AVC][CHT]",
+				"hash": null,
+				"imdbId": "tt10885406",
+				"files": [
+					{
+						"path": "[ANi] 小書痴的下剋上 為了成為圖書管理員不擇手段！領主的養女 - 22 [1080P][Baha][WEB-DL][AAC AVC][CHT].mp4",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt10885406",
+				"tmdbId": 91768,
+				"files": [
+					{
+						"path": "[ANi] 小書痴的下剋上 為了成為圖書管理員不擇手段！領主的養女 - 22 [1080P][Baha][WEB-DL][AAC AVC][CHT].mp4",
+						"season": 2,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 7431913
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-10 (the .zurgtorrent's name, its IMDb id and its one video file as zurg asks; no hash, a Usenet copy)",
+			"request": {
+				"name": "[ANi].小書痴的下剋上.為了成為圖書管理員不擇手段！領主的養女.-.24.[1080P][Baha][WEB-DL][AAC.AVC][CHT]",
+				"hash": null,
+				"imdbId": "tt10885406",
+				"files": [
+					{
+						"path": "[ANi] 小書痴的下剋上 為了成為圖書管理員不擇手段！領主的養女 - 24 [1080P][Baha][WEB-DL][AAC AVC][CHT].mp4",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt10885406",
+				"tmdbId": 91768,
+				"files": [
+					{
+						"path": "[ANi] 小書痴的下剋上 為了成為圖書管理員不擇手段！領主的養女 - 24 [1080P][Baha][WEB-DL][AAC AVC][CHT].mp4",
+						"season": 2,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 7431915
+					}
+				]
+			}
+		}
+	]
+}

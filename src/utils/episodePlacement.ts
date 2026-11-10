@@ -86,6 +86,8 @@ export interface PlacementShow {
 	packOrder?: (season: number, episode: number) => Promise<[number, number] | null>;
 	/** TMDB's episode for a release's season and episode, by the run TMDB names after the release. */
 	namedRun?: (season: number, episode: number) => Promise<[number, number] | null>;
+	/** The season the release names by its name after the show's, or null. */
+	subtitled?: () => Promise<number | null>;
 	/**
 	 * TMDB's episode for TVDB's season and episode where the two list the show otherwise
 	 * (`alignTvdb`): undefined where they agree or cannot tell, null where TMDB has none.
@@ -1059,6 +1061,12 @@ async function placeByRules(
 		const coded = lists.flat().filter((item) => code.test(item.name));
 		const found =
 			coded.length === 1 && (await placed([coded[0].season, coded[0].episode], 'tmdb'));
+		if (found) return found;
+	}
+	// a bare number of a release titled the show and then one of its seasons is that season's
+	if (season === null && show.subtitled) {
+		const named = await show.subtitled();
+		const found = named !== null && (await placed([named, episode], 'tmdb'));
 		if (found) return found;
 	}
 	return counted && !numbers.fromStart

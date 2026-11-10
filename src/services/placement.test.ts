@@ -44,6 +44,7 @@ import fun1024 from '@/test/fixtures/placement/rex-fun-2026-10-24.json';
 import fun1025 from '@/test/fixtures/placement/rex-fun-2026-10-25.json';
 import fun1101 from '@/test/fixtures/placement/rex-fun-2026-11-01.json';
 import saga from '@/test/fixtures/placement/saga-titles.json';
+import seasonSubtitles from '@/test/fixtures/placement/season-subtitles.json';
 import segmentLetters from '@/test/fixtures/placement/segment-letters.json';
 import segmentTitles from '@/test/fixtures/placement/segment-titles.json';
 import showNamedTitles from '@/test/fixtures/placement/show-named-titles.json';
@@ -109,6 +110,7 @@ const recordedSources = (r: any): PlacementSources => ({
 	find: async (id) => r.find[id] ?? null,
 	show: async (id) => r.show[id] ?? null,
 	season: async (id, n) => r.season[`${id}/${n}`] ?? null,
+	seasonTranslations: async (id, n) => r.seasonTranslations?.[`${id}/${n}`] ?? null,
 	episodeGroups: async (id) => r.episodeGroups?.[id] ?? null,
 	episodeGroup: async (id) => r.episodeGroup?.[id] ?? null,
 	episodeShow: async (id) => r.episodeShow[id] ?? null,
@@ -1666,6 +1668,38 @@ describe('a release DMM names nothing, on the show TMDB titles as it', () => {
 	])('leaves %s unnamed where nothing tells the shows apart', async (name) => {
 		expect((await ask(name)).kind).toBe(null);
 	});
+});
+
+describe('a fansub episode titled the show and then one of its seasons', () => {
+	// zurg-usenet on fun (2026-11-10): [ANi]'s Ascendance of a Bookworm episodes, titled as TMDB
+	// names the show in Taiwan and its season 2 in Hong Kong, which the anime index does not know;
+	// season 1's 36 episodes hold an E21 too (see the fixtures README)
+	const from: PlacementSources = {
+		...recordedSources(seasonSubtitles.answers),
+		anime: async () =>
+			buildAnimeIndex(
+				buildFranchiseIndex(seasonSubtitles.answers.anime.fribb as FribbAnimeEntry[]),
+				seasonSubtitles.answers.anime.titles
+			),
+	};
+
+	it.each(seasonSubtitles.cases.map((c) => [c.request.name, c] as const))(
+		'places %s in that season',
+		async (_, c) => {
+			const { releases } = await place(
+				[{ ...(c.request as PlaceRequest), parts: true }],
+				Infinity,
+				from
+			);
+			expect(releases[0]).toEqual(c.expect);
+			const episode = Number(/ - (\d+) \[/.exec(c.request.files[0].path)![1]);
+			expect([
+				releases[0].tmdbId,
+				releases[0].files[0].season,
+				releases[0].files[0].episode,
+			]).toEqual([91768, 2, episode]);
+		}
+	);
 });
 
 describe('a year-numbered episode titled otherwise than TMDB titles it', () => {
