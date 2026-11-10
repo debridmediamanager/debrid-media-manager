@@ -2931,6 +2931,13 @@ describe("QI's numbered specials", () => {
 		// "Series 1 Bonus Bits & Bloopers"
 		expect(await placedAt('QI - s00e10 - Series 01')).toEqual([0, 14]);
 	});
+
+	it('agrees no title by the one word its first segment keeps before a number', async () => {
+		// `Series 03` is no "Series 2 Banter Part 1" (S0E12): "Series 3 Bonus Bits & Bloopers"
+		expect(await placedAt('QI - s00e12 - Series 03')).toEqual([0, 16]);
+		// `Series 02` is no "Series 1 Bonus Bits & Bloopers" (S0E14): "Series 2 Banter Part 2"
+		expect(await placedAt('QI - s00e14 - Series 02 - Banter (Part 2)')).toEqual([0, 13]);
+	});
 });
 
 describe('a title TMDB spells otherwise', () => {

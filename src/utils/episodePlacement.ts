@@ -1460,7 +1460,10 @@ function agrees(title: { whole: string; first: string }, name: string): boolean 
 	const part = (text: string) => / (?:part |pt )?(\d{1,2})$/.exec(text)?.[1];
 	const [mine, theirs] = [part(title.whole), part(words(name).join(' '))];
 	if (mine && theirs && mine !== theirs) return false;
-	const usable = (text: string) => text.replace(/ /g, '').length >= 3;
+	// and never one word left of a number: QI's `s00e12 - Series 03 - Bonus Bits & Bloopers`, first
+	// segment `Series 03`, is not S0E12 "Series 2 Banter Part 1"
+	const usable = (text: string) =>
+		text.replace(/ /g, '').length >= 3 && (!PART.test(text) || bare(text).trim().includes(' '));
 	// the file's title inside TMDB's, or TMDB's inside the file's first segment: a pack file's
 	// second segment (`102a-b - The Fast and the Phineas; Lawn Gnome Beach Party of Terror`) is
 	// not the episode at its number
