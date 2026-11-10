@@ -1032,6 +1032,9 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 		return r;
 	}
 	if (source === 'easynews' && !['stremio', 'kodi', 'external'].includes(player)) {
+		const zurgNzb = answers.sources.some(
+			(other) => other === 'usenet' || other === 'torbox-hosted'
+		);
 		const r = route(
 			'separate-easynews',
 			'Use Easynews through Cast, Kodi or Watch',
@@ -1039,8 +1042,9 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 			'none',
 			[],
 			[
-				// A release sent to zurg is an NZB, so only zurg's own Usenet account fetches it for rex.
-				`Keep Easynews in a compatible player.${rex && answers.host === 'android' ? ` For rex on Android${answers.sources.includes('usenet') ? ', only releases you send to zurg reach it' : ' there is no feed for it'}; a normal host can take a compatible URL addon or feed producer.` : rex ? ' For rex, a compatible URL addon or feed producer must supply streams and metadata.' : ''}`,
+				// A release sent to zurg is an NZB, so only zurg's NZB account (own Usenet, or TorBox
+				// hosted off Android) fetches it for rex.
+				`Keep Easynews in a compatible player.${rex && answers.host === 'android' ? ` For rex on Android${answers.sources.includes('usenet') ? ', only releases you send to zurg reach it' : ' there is no feed for it'}; a normal host can take a compatible URL addon or feed producer.` : rex ? (zurgNzb ? " For rex, releases you send to zurg reach it through zurg's NZB account; a compatible URL addon or feed producer can supply the rest." : ' For rex, a compatible URL addon or feed producer must supply streams and metadata.') : ''}`,
 			],
 			[
 				DMM_CAST_LINKS.easynews,

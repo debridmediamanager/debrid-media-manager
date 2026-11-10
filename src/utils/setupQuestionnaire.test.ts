@@ -2570,6 +2570,36 @@ describe('route copy stays on the player and source it is about', () => {
 		]);
 	});
 
+	// An Easynews release sent to zurg is an NZB, which zurg's own NZB account fetches for rex.
+	it.each([
+		[
+			['real-debrid'],
+			'a compatible URL addon or feed producer must supply streams and metadata.',
+		],
+		[
+			['usenet'],
+			"releases you send to zurg reach it through zurg's NZB account; a compatible URL addon or feed producer can supply the rest.",
+		],
+		[
+			['torbox-hosted'],
+			"releases you send to zurg reach it through zurg's NZB account; a compatible URL addon or feed producer can supply the rest.",
+		],
+	] satisfies [SetupSource[], string][])(
+		'says which Easynews releases reach rex on a normal host beside %o',
+		(sources, rest) => {
+			expect(
+				recommendSetup(
+					answers({
+						player: 'plex',
+						plexRoute: 'rex',
+						sources: ['easynews', ...sources],
+						host: 'existing',
+					})
+				).sourceCoverage.find(({ source }) => source === 'easynews')?.requirements
+			).toEqual([`Keep Easynews in a compatible player. For rex, ${rest}`]);
+		}
+	);
+
 	it.each([
 		[
 			'stremio',
