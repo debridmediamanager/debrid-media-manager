@@ -70,7 +70,11 @@ export interface PlaceRequest {
 	hash: string | null;
 	imdbId: string | null;
 	/** `folder`: where the provider lists the file inside the release, `""` at its top, null when unknown. */
-	files: { path: string; folder: string | null }[];
+	/**
+	 * `duration`: the file's length in seconds, where the caller has probed it; it tells apart
+	 * same-named shows whose episodes run differently.
+	 */
+	files: { path: string; folder: string | null; duration?: number }[];
 	/** The caller reads `part`: a file may be placed as one part of TMDB's episode. */
 	parts?: true;
 	/** The caller reads a file's own show (`kind` `tv` on a file): a file may be placed on another show than its release's. */
@@ -901,7 +905,8 @@ async function namesakeLook(
 		if (!there.skipped && count(there) > count(placed)) better.push(there);
 	}
 	const most = better.filter((there) => count(there) === Math.max(...better.map(count)));
-	const [best, ...tied] = most.length > 1 ? await streamedOn(release, most, sources) : most;
+	const made = most.length > 1 ? await streamedOn(release, most, sources) : most;
+	const [best, ...tied] = made.length > 1 ? await runsAsLong(release, made, sources) : made;
 	return best && !tied.length ? best : placed;
 }
 
@@ -941,6 +946,46 @@ async function tvdbNameLook(
 	const imdbId = typeof external === 'string' && /^tt\d{7,}$/.test(external) ? external : null;
 	const there = await placeOnShow(release, { kind: 'tv', imdbId, tmdbId }, false, sources, anime);
 	return !there.skipped && placesFiles(there) ? there : placed;
+}
+
+/** How far a file's length may be from its episode's runtime on TMDB and still be that episode. */
+const RUNTIME_SHARE = 0.2;
+
+/**
+ * Of shows a release places as well on, the one whose episodes run as long as its files, by the
+ * lengths the caller sent: TMDB's two JoJo's Bizarre Adventure both hold an E01, and
+ * `JoJos.Bizarre.Adventure.E01…`'s 24.2 minutes are the 2012 series' 24, not the 1993 OVA's 35
+ * (zurg-usenet on fun, 2026-11-10). Narrowed only where every other show has a file running
+ * further than RUNTIME_SHARE from the runtime TMDB lists for its episode (or episodes); a show
+ * with no such runtime, a file sent without a length, or one placed as a part, rules out nothing.
+ */
+async function runsAsLong(
+	release: PlaceRequest,
+	shows: PlacedRelease[],
+	sources: PlacementSources
+): Promise<PlacedRelease[]> {
+	const verdicts = await Promise.all(
+		shows.map(async (there) => {
+			let fits: boolean | null = null;
+			for (const [at, file] of there.files.entries()) {
+				const seconds = release.files[at]?.duration;
+				if (!seconds || file.season === null || file.episode === null || file.part)
+					continue;
+				const list = (await sources.season(there.tmdbId!, file.season))?.episodes ?? [];
+				let minutes = 0;
+				for (let e = file.episode; e <= (file.episodeEnd ?? file.episode); e++) {
+					const runtime = list.find((row: any) => row?.episode_number === e)?.runtime;
+					if (typeof runtime !== 'number' || runtime <= 0) return null;
+					minutes += runtime;
+				}
+				if (Math.abs(seconds / 60 - minutes) > RUNTIME_SHARE * minutes) return false;
+				fits = true;
+			}
+			return fits;
+		})
+	);
+	const fitting = shows.filter((_, at) => verdicts[at]);
+	return fitting.length === 1 && verdicts.every((v) => v !== null) ? fitting : shows;
 }
 
 const SHORT_DATE = /(?<!\d)\d{2}([\s._-])(?:0[1-9]|1[0-2])\1(?:0[1-9]|[12]\d|3[01])(?!\d)/;

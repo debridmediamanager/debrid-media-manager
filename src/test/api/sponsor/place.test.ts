@@ -200,6 +200,27 @@ describe('/api/sponsor/place', () => {
 		expect(mockPlace.mock.calls[1][0][0]).not.toHaveProperty('shows');
 	});
 
+	it("hands a file's probed length over, and none where it is zero", async () => {
+		await handler(
+			post({
+				releases: [
+					{
+						name: 'Show',
+						files: [
+							{ path: 'Show.E01.mkv', folder: '', duration: 1454.208 },
+							{ path: 'Show.E02.mkv', folder: '', duration: 0 },
+						],
+					},
+				],
+			}),
+			createMockResponse()
+		);
+		expect(mockPlace.mock.calls[0][0][0].files).toEqual([
+			{ path: 'Show.E01.mkv', folder: '', duration: 1454.208 },
+			{ path: 'Show.E02.mkv', folder: '' },
+		]);
+	});
+
 	// zurg keeps a placement until it asks again a day or a week on, so a fix to the rules
 	// reached rex-fun's releases only that much later (2026-10-22); a caller holding answers
 	// from older rules asks about them again
@@ -244,6 +265,10 @@ describe('/api/sponsor/place', () => {
 		['a numeric imdbId', { releases: [{ ...CONAN, imdbId: 131179 }] }],
 		['parts that is no boolean', { releases: [CONAN], parts: 'yes' }],
 		['shows that is no boolean', { releases: [CONAN], shows: 1 }],
+		[
+			'a duration that is no number',
+			{ releases: [{ name: 'Show', files: [{ path: 'Show.E01.mkv', duration: '1454' }] }] },
+		],
 	])('refuses %s', async (_, body) => {
 		const res = createMockResponse();
 		await handler(post(body), res);

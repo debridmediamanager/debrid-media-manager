@@ -51,6 +51,7 @@ import segmentLetters from '@/test/fixtures/placement/segment-letters.json';
 import segmentTitles from '@/test/fixtures/placement/segment-titles.json';
 import showNamedTitles from '@/test/fixtures/placement/show-named-titles.json';
 import showsByTitle from '@/test/fixtures/placement/shows-named-by-title.json';
+import byRuntime from '@/test/fixtures/placement/shows-told-apart-by-runtime.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import specialsByTitle from '@/test/fixtures/placement/specials-by-title.json';
 import spellingVariants from '@/test/fixtures/placement/spelling-variants.json';
@@ -1721,6 +1722,45 @@ describe('a fansub episode titled the show and then one of its seasons', () => {
 			]).toEqual([91768, 2, episode]);
 		}
 	);
+});
+
+describe('same-named shows told apart by how long their episodes run', () => {
+	// zurg-usenet on fun (2026-11-10): `JoJos.Bizarre.Adventure.E01…` to `E12`, which both of TMDB's
+	// JoJo's Bizarre Adventure hold, sent with each video's length from zurg's stored probe (E06's
+	// probe failed); see the fixtures README
+	const ask = async (c: (typeof byRuntime.cases)[number]) =>
+		(
+			await place(
+				[c.request as PlaceRequest],
+				Infinity,
+				recordedSources(byRuntime.answers),
+				async (list) =>
+					list.map(({ name }) => (byRuntime.answers.identify as any)[name] ?? null)
+			)
+		).releases[0];
+
+	it.each(byRuntime.cases.map((c) => [c.request.name, c] as const))('%s', async (_, c) => {
+		expect(await ask(c)).toEqual(c.expect);
+	});
+
+	it("places the 24-minute files on the 2012 series, not the 1993 OVA's 35-minute episodes", async () => {
+		const timed = byRuntime.cases.filter((c) => 'duration' in c.request.files[0]);
+		expect(timed).toHaveLength(11);
+		for (const c of timed) {
+			const placed = await ask(c);
+			const episode = Number(/\.E(\d+)\./.exec(c.request.name)![1]);
+			expect([placed.tmdbId, placed.files[0].season, placed.files[0].episode]).toEqual([
+				45790,
+				1,
+				episode,
+			]);
+		}
+	});
+
+	it('leaves a file sent without its length unnamed', async () => {
+		const [e06] = byRuntime.cases.filter((c) => !('duration' in c.request.files[0]));
+		expect((await ask(e06)).kind).toBe(null);
+	});
 });
 
 describe('a year-numbered episode titled otherwise than TMDB titles it', () => {

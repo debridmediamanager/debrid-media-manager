@@ -42,10 +42,16 @@ function parseReleases(body: unknown): PlaceRequest[] | null {
 		if (files > MAX_FILES) return null;
 		const parsed: PlaceRequest['files'] = [];
 		for (const file of list) {
-			const { path, folder } = (file ?? {}) as Record<string, unknown>;
+			const { path, folder, duration } = (file ?? {}) as Record<string, unknown>;
 			if (typeof path !== 'string' || !path || path.length > 1024) return null;
 			if (folder != null && (typeof folder !== 'string' || folder.length > 1024)) return null;
-			parsed.push({ path, folder: typeof folder === 'string' ? folder : null });
+			if (duration != null && (typeof duration !== 'number' || !Number.isFinite(duration)))
+				return null;
+			parsed.push({
+				path,
+				folder: typeof folder === 'string' ? folder : null,
+				...(typeof duration === 'number' && duration > 0 ? { duration } : {}),
+			});
 		}
 		out.push({
 			name: name.trim(),
@@ -67,7 +73,7 @@ function parseReleases(body: unknown): PlaceRequest[] | null {
 
 /**
  * What each release of a sponsor's library is, and its files' TMDB season and episode:
- * `{"releases": [{name, hash?, imdbId?, files: [{path, folder}]}], "parts"?: true, "shows"?: true}` answers
+ * `{"releases": [{name, hash?, imdbId?, files: [{path, folder, duration?}]}], "parts"?: true, "shows"?: true}` answers
  * `{"releases": [{kind, imdbId, tmdbId, series?, files: [{path, season, episode, episodeEnd, how, part?, series?}]}],
  * "complete", "rules"}` in request order; every file carries `part` when `parts` was sent, a file of
  * another show its own `kind` `tv` and ids when `shows` was, and a One Pace release `series` (a show
@@ -92,7 +98,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const releases = parseReleases(req.body);
 	if (!releases) {
 		return res.status(400).json({
-			error: `Expected {"releases": [{"name": string, "hash"?: string, "imdbId"?: string, "files": [{"path": string, "folder"?: string}]}], "parts"?: boolean, "shows"?: boolean} with 1-${MAX_RELEASES} releases and at most ${MAX_FILES} files`,
+			error: `Expected {"releases": [{"name": string, "hash"?: string, "imdbId"?: string, "files": [{"path": string, "folder"?: string, "duration"?: number}]}], "parts"?: boolean, "shows"?: boolean} with 1-${MAX_RELEASES} releases and at most ${MAX_FILES} files`,
 		});
 	}
 

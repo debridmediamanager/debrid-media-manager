@@ -1,0 +1,1702 @@
+{
+	"answers": {
+		"find": {
+			"tt2359704": {
+				"tv_results": [
+					{
+						"id": 45790
+					}
+				],
+				"movie_results": []
+			},
+			"tt0248119": {
+				"tv_results": [
+					{
+						"id": 60862
+					}
+				],
+				"movie_results": []
+			}
+		},
+		"show": {
+			"45790": {
+				"name": "JoJo's Bizarre Adventure",
+				"seasons": [
+					{
+						"name": "Specials",
+						"air_date": "2017-09-20",
+						"episode_count": 7,
+						"season_number": 0
+					},
+					{
+						"name": "Phantom Blood & Battle Tendency",
+						"air_date": "2012-10-06",
+						"episode_count": 26,
+						"season_number": 1
+					},
+					{
+						"name": "Stardust Crusaders",
+						"air_date": "2014-04-05",
+						"episode_count": 48,
+						"season_number": 2
+					},
+					{
+						"name": "Diamond Is Unbreakable",
+						"air_date": "2016-04-02",
+						"episode_count": 39,
+						"season_number": 3
+					},
+					{
+						"name": "Golden Wind",
+						"air_date": "2018-10-06",
+						"episode_count": 39,
+						"season_number": 4
+					},
+					{
+						"name": "STONE OCEAN",
+						"air_date": "2022-01-08",
+						"episode_count": 38,
+						"season_number": 5
+					},
+					{
+						"name": "STEEL BALL RUN",
+						"air_date": "2026-03-19",
+						"episode_count": 12,
+						"season_number": 6
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt2359704",
+					"tvdb_id": 262954
+				},
+				"original_name": "ジョジョの奇妙な冒険"
+			},
+			"60862": {
+				"name": "JoJo's Bizarre Adventure",
+				"seasons": [
+					{
+						"name": "Season 1",
+						"air_date": "1993-11-17",
+						"episode_count": 6,
+						"season_number": 1
+					},
+					{
+						"name": "Season 2",
+						"air_date": "2000-05-04",
+						"episode_count": 7,
+						"season_number": 2
+					}
+				],
+				"external_ids": {
+					"imdb_id": "tt0248119",
+					"tvdb_id": 83950
+				},
+				"original_name": "ジョジョの奇妙な冒険"
+			}
+		},
+		"season": {
+			"45790/1": {
+				"episodes": [
+					{
+						"id": 904520,
+						"name": "Dio the Invader",
+						"runtime": 24,
+						"air_date": "2012-10-06",
+						"episode_number": 1
+					},
+					{
+						"id": 904517,
+						"name": "A Letter from the Past",
+						"runtime": 24,
+						"air_date": "2012-10-13",
+						"episode_number": 2
+					},
+					{
+						"id": 904518,
+						"name": "Youth with Dio",
+						"runtime": 24,
+						"air_date": "2012-10-20",
+						"episode_number": 3
+					},
+					{
+						"id": 904515,
+						"name": "Overdrive",
+						"runtime": 24,
+						"air_date": "2012-10-27",
+						"episode_number": 4
+					},
+					{
+						"id": 904516,
+						"name": "The Dark Knights",
+						"runtime": 24,
+						"air_date": "2012-11-03",
+						"episode_number": 5
+					},
+					{
+						"id": 904514,
+						"name": "Tomorrow's Courage",
+						"runtime": 24,
+						"air_date": "2012-11-10",
+						"episode_number": 6
+					},
+					{
+						"id": 904521,
+						"name": "Sorrowful Successor",
+						"runtime": 24,
+						"air_date": "2012-11-17",
+						"episode_number": 7
+					},
+					{
+						"id": 986250,
+						"name": "Bloody Battle! JoJo & Dio",
+						"runtime": 24,
+						"air_date": "2012-11-24",
+						"episode_number": 8
+					},
+					{
+						"id": 904519,
+						"name": "The Final Ripple!",
+						"runtime": 24,
+						"air_date": "2012-12-01",
+						"episode_number": 9
+					},
+					{
+						"id": 904513,
+						"name": "New York's JoJo",
+						"runtime": 24,
+						"air_date": "2012-12-08",
+						"episode_number": 10
+					},
+					{
+						"id": 904525,
+						"name": "The Game Master",
+						"runtime": 24,
+						"air_date": "2012-12-15",
+						"episode_number": 11
+					},
+					{
+						"id": 904512,
+						"name": "The Pillar Man",
+						"runtime": 24,
+						"air_date": "2012-12-22",
+						"episode_number": 12
+					},
+					{
+						"id": 904503,
+						"name": "JoJo vs. the Ultimate Lifeform",
+						"runtime": 24,
+						"air_date": "2013-01-05",
+						"episode_number": 13
+					},
+					{
+						"id": 904504,
+						"name": "Ultimate Warriors from Ancient Times",
+						"runtime": 24,
+						"air_date": "2013-01-12",
+						"episode_number": 14
+					},
+					{
+						"id": 904522,
+						"name": "A Hero's Proof",
+						"runtime": 24,
+						"air_date": "2013-01-19",
+						"episode_number": 15
+					},
+					{
+						"id": 904502,
+						"name": "Lisa Lisa, Hamon Coach",
+						"runtime": 24,
+						"air_date": "2013-01-26",
+						"episode_number": 16
+					},
+					{
+						"id": 904501,
+						"name": "The Deeper Plan",
+						"runtime": 24,
+						"air_date": "2013-02-02",
+						"episode_number": 17
+					},
+					{
+						"id": 904510,
+						"name": "Von Stroheim's Revenge",
+						"runtime": 24,
+						"air_date": "2013-02-09",
+						"episode_number": 18
+					},
+					{
+						"id": 904511,
+						"name": "A Race Toward the Brink",
+						"runtime": 24,
+						"air_date": "2013-02-16",
+						"episode_number": 19
+					},
+					{
+						"id": 904508,
+						"name": "Young Caesar",
+						"runtime": 24,
+						"air_date": "2013-02-23",
+						"episode_number": 20
+					},
+					{
+						"id": 904509,
+						"name": "A Hundred Against Two",
+						"runtime": 24,
+						"air_date": "2013-03-02",
+						"episode_number": 21
+					},
+					{
+						"id": 904523,
+						"name": "A True Warrior",
+						"runtime": 24,
+						"air_date": "2013-03-09",
+						"episode_number": 22
+					},
+					{
+						"id": 904507,
+						"name": "The Warrior of Wind",
+						"runtime": 24,
+						"air_date": "2013-03-16",
+						"episode_number": 23
+					},
+					{
+						"id": 904505,
+						"name": "The Ties That Bind JoJo",
+						"runtime": 24,
+						"air_date": "2013-03-23",
+						"episode_number": 24
+					},
+					{
+						"id": 904506,
+						"name": "The Birth of a Superbeing",
+						"runtime": 24,
+						"air_date": "2013-03-30",
+						"episode_number": 25
+					},
+					{
+						"id": 904524,
+						"name": "The Ascendant One",
+						"runtime": 23,
+						"air_date": "2013-04-06",
+						"episode_number": 26
+					}
+				]
+			},
+			"60862/1": {
+				"episodes": [
+					{
+						"id": 986162,
+						"name": "Iggy the Fool and N'Dool the GEB (Part I)",
+						"runtime": 35,
+						"air_date": "1993-11-19",
+						"episode_number": 1
+					},
+					{
+						"id": 986161,
+						"name": "Iggy the Fool and N'Dool the GEB (Part. II)",
+						"runtime": 35,
+						"air_date": "1993-12-17",
+						"episode_number": 2
+					},
+					{
+						"id": 986160,
+						"name": "D'Arby the Gambler",
+						"runtime": 35,
+						"air_date": "1994-07-21",
+						"episode_number": 3
+					},
+					{
+						"id": 986159,
+						"name": "Dio's World: The Warrior of the Void: Vanilla Ice",
+						"runtime": 35,
+						"air_date": "1994-08-09",
+						"episode_number": 4
+					},
+					{
+						"id": 986164,
+						"name": "Dio's World: Kakyoin - Duel in the Barrier",
+						"runtime": 35,
+						"air_date": "1994-10-21",
+						"episode_number": 5
+					},
+					{
+						"id": 986158,
+						"name": "Dio's World: Farewell, My Friends",
+						"runtime": 35,
+						"air_date": "1994-11-18",
+						"episode_number": 6
+					}
+				]
+			},
+			"60862/2": {
+				"episodes": [
+					{
+						"id": 986156,
+						"name": "The Evil Spirit",
+						"runtime": 35,
+						"air_date": "2000-05-05",
+						"episode_number": 1
+					},
+					{
+						"id": 986155,
+						"name": "Hierophant Green",
+						"runtime": 35,
+						"air_date": "2000-08-25",
+						"episode_number": 2
+					},
+					{
+						"id": 986154,
+						"name": "Silver Chariot and Strength",
+						"runtime": 35,
+						"air_date": "2000-10-27",
+						"episode_number": 3
+					},
+					{
+						"id": 986153,
+						"name": "The Emperor and the Hanged Man",
+						"runtime": 35,
+						"air_date": "2001-04-27",
+						"episode_number": 4
+					},
+					{
+						"id": 986152,
+						"name": "The Judgement",
+						"runtime": 35,
+						"air_date": "2001-07-27",
+						"episode_number": 5
+					},
+					{
+						"id": 986151,
+						"name": "The Mist of Vengeance",
+						"runtime": 35,
+						"air_date": "2001-09-28",
+						"episode_number": 6
+					},
+					{
+						"id": 986150,
+						"name": "Justice",
+						"runtime": 35,
+						"air_date": "2002-01-25",
+						"episode_number": 7
+					}
+				]
+			}
+		},
+		"searchTv": {
+			"JoJos Bizarre Adventure": {
+				"results": [
+					{
+						"id": 45790
+					},
+					{
+						"id": 60862
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt2359704": null,
+			"tt0248119": null
+		},
+		"identify": {
+			"JoJos.Bizarre.Adventure.E01.MULTi.1080p.WEB.x264-AMB3R": null,
+			"JoJos.Bizarre.Adventure.E02.MULTi.1080p.WEB.x264-AMB3R": null,
+			"JoJos.Bizarre.Adventure.E03.MULTi.1080p.WEB.x264-AMB3R": null,
+			"JoJos.Bizarre.Adventure.E04.MULTi.1080p.WEB.x264-AMB3R": null,
+			"JoJos.Bizarre.Adventure.E05.MULTi.1080p.WEB.x264-AMB3R": null,
+			"JoJos.Bizarre.Adventure.E06.MULTi.1080p.WEB.x264-AMB3R": null,
+			"JoJos.Bizarre.Adventure.E07.MULTi.1080p.WEB.x264-AMB3R": null,
+			"JoJos.Bizarre.Adventure.E08.MULTi.1080p.WEB.x264-AMB3R": null,
+			"JoJos.Bizarre.Adventure.E09.MULTi.1080p.WEB.x264-AMB3R": null,
+			"JoJos.Bizarre.Adventure.E10.MULTi.1080p.WEB.x264-AMB3R": null,
+			"JoJos.Bizarre.Adventure.E11.MULTi.1080p.WEB.x264-AMB3R": null,
+			"JoJos.Bizarre.Adventure.E12.MULTi.1080p.WEB.x264-AMB3R": null
+		},
+		"identifier": {
+			"JoJos.Bizarre.Adventure.E01.MULTi.1080p.WEB.x264-AMB3R": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6105880",
+						"score": 2.4705,
+						"title": "JoJo's Bizarre Adventure: Diamond Is Unbreakable - Chapter 1",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt6490990",
+						"score": -1.923,
+						"title": "JoJo's Bizarre Adventure: Phantom Blood",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt0037494",
+						"score": -2.6942,
+						"title": "Adventure",
+						"year": 1945
+					},
+					{
+						"imdbId": "tt0093789",
+						"score": -3.2667,
+						"title": "Bizarre",
+						"year": 1987
+					},
+					{
+						"imdbId": "tt1653648",
+						"score": -3.2713,
+						"title": "Adventure",
+						"year": 2010
+					}
+				],
+				"parsedTitle": "JoJos Bizarre Adventure",
+				"parsedYear": null,
+				"probability": 0.4287
+			},
+			"jojos.bizarre.adventure.e01.multi.1080p.web.x264-amb3r": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6105880",
+						"score": 2.4705,
+						"title": "JoJo's Bizarre Adventure: Diamond Is Unbreakable - Chapter 1",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt6490990",
+						"score": -1.923,
+						"title": "JoJo's Bizarre Adventure: Phantom Blood",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt0037494",
+						"score": -2.6942,
+						"title": "Adventure",
+						"year": 1945
+					},
+					{
+						"imdbId": "tt0093789",
+						"score": -3.2667,
+						"title": "Bizarre",
+						"year": 1987
+					},
+					{
+						"imdbId": "tt1653648",
+						"score": -3.2713,
+						"title": "Adventure",
+						"year": 2010
+					}
+				],
+				"parsedTitle": "jojos bizarre adventure",
+				"parsedYear": null,
+				"probability": 0.4287
+			},
+			"JoJos.Bizarre.Adventure.E02.MULTi.1080p.WEB.x264-AMB3R": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.4805,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.609,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.305,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.3378,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt14175564",
+						"score": -3.8934,
+						"title": "JoJo's Bizarre Adventure: Abridged",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "JoJos Bizarre Adventure",
+				"parsedYear": null,
+				"probability": 0.393
+			},
+			"jojos.bizarre.adventure.e02.multi.1080p.web.x264-amb3r": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.4805,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.609,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.305,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.3378,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt14175564",
+						"score": -3.8934,
+						"title": "JoJo's Bizarre Adventure: Abridged",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "jojos bizarre adventure",
+				"parsedYear": null,
+				"probability": 0.393
+			},
+			"JoJos.Bizarre.Adventure.E03.MULTi.1080p.WEB.x264-AMB3R": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.5902,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.505,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.6105,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.4423,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt38268282",
+						"score": -3.7094,
+						"title": "Steel Ball Run: JoJo's Bizarre Adventure",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "JoJos Bizarre Adventure",
+				"parsedYear": null,
+				"probability": 0.4064
+			},
+			"jojos.bizarre.adventure.e03.multi.1080p.web.x264-amb3r": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.5902,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.505,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.6105,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.4423,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt38268282",
+						"score": -3.7094,
+						"title": "Steel Ball Run: JoJo's Bizarre Adventure",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "jojos bizarre adventure",
+				"parsedYear": null,
+				"probability": 0.4064
+			},
+			"JoJos.Bizarre.Adventure.E04.MULTi.1080p.WEB.x264-AMB3R": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.4805,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.609,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.305,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.3378,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt14175564",
+						"score": -3.8934,
+						"title": "JoJo's Bizarre Adventure: Abridged",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "JoJos Bizarre Adventure",
+				"parsedYear": null,
+				"probability": 0.393
+			},
+			"jojos.bizarre.adventure.e04.multi.1080p.web.x264-amb3r": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.4805,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.609,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.305,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.3378,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt14175564",
+						"score": -3.8934,
+						"title": "JoJo's Bizarre Adventure: Abridged",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "jojos bizarre adventure",
+				"parsedYear": null,
+				"probability": 0.393
+			},
+			"JoJos.Bizarre.Adventure.E05.MULTi.1080p.WEB.x264-AMB3R": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.5902,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.505,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.6105,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.4423,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt38268282",
+						"score": -3.7264,
+						"title": "Steel Ball Run: JoJo's Bizarre Adventure",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "JoJos Bizarre Adventure",
+				"parsedYear": null,
+				"probability": 0.4064
+			},
+			"jojos.bizarre.adventure.e05.multi.1080p.web.x264-amb3r": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.5902,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.505,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.6105,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.4423,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt38268282",
+						"score": -3.7264,
+						"title": "Steel Ball Run: JoJo's Bizarre Adventure",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "jojos bizarre adventure",
+				"parsedYear": null,
+				"probability": 0.4064
+			},
+			"JoJos.Bizarre.Adventure.E06.MULTi.1080p.WEB.x264-AMB3R": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.4805,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.609,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.305,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.3378,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt14175564",
+						"score": -3.8934,
+						"title": "JoJo's Bizarre Adventure: Abridged",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "JoJos Bizarre Adventure",
+				"parsedYear": null,
+				"probability": 0.393
+			},
+			"jojos.bizarre.adventure.e06.multi.1080p.web.x264-amb3r": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.4805,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.609,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.305,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.3378,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt14175564",
+						"score": -3.8934,
+						"title": "JoJo's Bizarre Adventure: Abridged",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "jojos bizarre adventure",
+				"parsedYear": null,
+				"probability": 0.393
+			},
+			"JoJos.Bizarre.Adventure.E07.MULTi.1080p.WEB.x264-AMB3R": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.5902,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.505,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.6105,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.4423,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt38268282",
+						"score": -3.7094,
+						"title": "Steel Ball Run: JoJo's Bizarre Adventure",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "JoJos Bizarre Adventure",
+				"parsedYear": null,
+				"probability": 0.4064
+			},
+			"jojos.bizarre.adventure.e07.multi.1080p.web.x264-amb3r": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.5902,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.505,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.6105,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.4423,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt38268282",
+						"score": -3.7094,
+						"title": "Steel Ball Run: JoJo's Bizarre Adventure",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "jojos bizarre adventure",
+				"parsedYear": null,
+				"probability": 0.4064
+			},
+			"JoJos.Bizarre.Adventure.E08.MULTi.1080p.WEB.x264-AMB3R": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.5902,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.505,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.6105,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.4423,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt38268282",
+						"score": -3.7094,
+						"title": "Steel Ball Run: JoJo's Bizarre Adventure",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "JoJos Bizarre Adventure",
+				"parsedYear": null,
+				"probability": 0.4064
+			},
+			"jojos.bizarre.adventure.e08.multi.1080p.web.x264-amb3r": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.5902,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.505,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.6105,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.4423,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt38268282",
+						"score": -3.7094,
+						"title": "Steel Ball Run: JoJo's Bizarre Adventure",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "jojos bizarre adventure",
+				"parsedYear": null,
+				"probability": 0.4064
+			},
+			"JoJos.Bizarre.Adventure.E09.MULTi.1080p.WEB.x264-AMB3R": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.5902,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.505,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.6105,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.4423,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt38268282",
+						"score": -3.7264,
+						"title": "Steel Ball Run: JoJo's Bizarre Adventure",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "JoJos Bizarre Adventure",
+				"parsedYear": null,
+				"probability": 0.4084
+			},
+			"jojos.bizarre.adventure.e09.multi.1080p.web.x264-amb3r": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.5902,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.505,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.6105,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.4423,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt38268282",
+						"score": -3.7264,
+						"title": "Steel Ball Run: JoJo's Bizarre Adventure",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "jojos bizarre adventure",
+				"parsedYear": null,
+				"probability": 0.4084
+			},
+			"JoJos.Bizarre.Adventure.E10.MULTi.1080p.WEB.x264-AMB3R": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.5101,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.5391,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.5826,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.3704,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt38268282",
+						"score": -3.7018,
+						"title": "Steel Ball Run: JoJo's Bizarre Adventure",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "JoJos Bizarre Adventure",
+				"parsedYear": null,
+				"probability": 0.4082
+			},
+			"jojos.bizarre.adventure.e10.multi.1080p.web.x264-amb3r": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2359704",
+						"score": 4.5101,
+						"title": "JoJo's Bizarre Adventure",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0248119",
+						"score": 1.5391,
+						"title": "Jojo's Bizarre Adventure",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt4202274",
+						"score": -1.5826,
+						"title": "The Filthy Frank Show",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0075592",
+						"score": -3.3704,
+						"title": "Tales of the Unexpected",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt38268282",
+						"score": -3.7018,
+						"title": "Steel Ball Run: JoJo's Bizarre Adventure",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "jojos bizarre adventure",
+				"parsedYear": null,
+				"probability": 0.4082
+			},
+			"JoJos.Bizarre.Adventure.E11.MULTi.1080p.WEB.x264-AMB3R": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6105880",
+						"score": 2.8066,
+						"title": "JoJo's Bizarre Adventure: Diamond Is Unbreakable - Chapter 1",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt6490990",
+						"score": -2.0656,
+						"title": "JoJo's Bizarre Adventure: Phantom Blood",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt0037494",
+						"score": -2.4371,
+						"title": "Adventure",
+						"year": 1945
+					},
+					{
+						"imdbId": "tt1653648",
+						"score": -3.1982,
+						"title": "Adventure",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt0093789",
+						"score": -3.2857,
+						"title": "Bizarre",
+						"year": 1987
+					}
+				],
+				"parsedTitle": "JoJos Bizarre Adventure",
+				"parsedYear": null,
+				"probability": 0.3877
+			},
+			"jojos.bizarre.adventure.e11.multi.1080p.web.x264-amb3r": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6105880",
+						"score": 2.8066,
+						"title": "JoJo's Bizarre Adventure: Diamond Is Unbreakable - Chapter 1",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt6490990",
+						"score": -2.0656,
+						"title": "JoJo's Bizarre Adventure: Phantom Blood",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt0037494",
+						"score": -2.4371,
+						"title": "Adventure",
+						"year": 1945
+					},
+					{
+						"imdbId": "tt1653648",
+						"score": -3.1982,
+						"title": "Adventure",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt0093789",
+						"score": -3.2857,
+						"title": "Bizarre",
+						"year": 1987
+					}
+				],
+				"parsedTitle": "jojos bizarre adventure",
+				"parsedYear": null,
+				"probability": 0.3877
+			},
+			"JoJos.Bizarre.Adventure.E12.MULTi.1080p.WEB.x264-AMB3R": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6105880",
+						"score": 2.4705,
+						"title": "JoJo's Bizarre Adventure: Diamond Is Unbreakable - Chapter 1",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt6490990",
+						"score": -2.024,
+						"title": "JoJo's Bizarre Adventure: Phantom Blood",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt0037494",
+						"score": -2.6942,
+						"title": "Adventure",
+						"year": 1945
+					},
+					{
+						"imdbId": "tt0093789",
+						"score": -3.2655,
+						"title": "Bizarre",
+						"year": 1987
+					},
+					{
+						"imdbId": "tt1653648",
+						"score": -3.3635,
+						"title": "Adventure",
+						"year": 2010
+					}
+				],
+				"parsedTitle": "JoJos Bizarre Adventure",
+				"parsedYear": null,
+				"probability": 0.4065
+			},
+			"jojos.bizarre.adventure.e12.multi.1080p.web.x264-amb3r": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6105880",
+						"score": 2.4705,
+						"title": "JoJo's Bizarre Adventure: Diamond Is Unbreakable - Chapter 1",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt6490990",
+						"score": -2.024,
+						"title": "JoJo's Bizarre Adventure: Phantom Blood",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt0037494",
+						"score": -2.6942,
+						"title": "Adventure",
+						"year": 1945
+					},
+					{
+						"imdbId": "tt0093789",
+						"score": -3.2655,
+						"title": "Bizarre",
+						"year": 1987
+					},
+					{
+						"imdbId": "tt1653648",
+						"score": -3.3635,
+						"title": "Adventure",
+						"year": 2010
+					}
+				],
+				"parsedTitle": "jojos bizarre adventure",
+				"parsedYear": null,
+				"probability": 0.4065
+			}
+		}
+	},
+	"cases": [
+		{
+			"request": {
+				"name": "JoJos.Bizarre.Adventure.E01.MULTi.1080p.WEB.x264-AMB3R",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e01.multi.1080p.web.x264-amb3r.mkv",
+						"folder": "",
+						"duration": 1454.208
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2359704",
+				"tmdbId": 45790,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e01.multi.1080p.web.x264-amb3r.mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 904520
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "JoJos.Bizarre.Adventure.E02.MULTi.1080p.WEB.x264-AMB3R",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e02.multi.1080p.web.x264-amb3r.mkv",
+						"folder": "",
+						"duration": 1453.483
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2359704",
+				"tmdbId": 45790,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e02.multi.1080p.web.x264-amb3r.mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 904517
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "JoJos.Bizarre.Adventure.E03.MULTi.1080p.WEB.x264-AMB3R",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e03.multi.1080p.web.x264-amb3r.mkv",
+						"folder": "",
+						"duration": 1529.174
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2359704",
+				"tmdbId": 45790,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e03.multi.1080p.web.x264-amb3r.mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 904518
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "JoJos.Bizarre.Adventure.E04.MULTi.1080p.WEB.x264-AMB3R",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e04.multi.1080p.web.x264-amb3r.mkv",
+						"folder": "",
+						"duration": 1438.848
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2359704",
+				"tmdbId": 45790,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e04.multi.1080p.web.x264-amb3r.mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 904515
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "JoJos.Bizarre.Adventure.E05.MULTi.1080p.WEB.x264-AMB3R",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e05.multi.1080p.web.x264-amb3r.mkv",
+						"folder": "",
+						"duration": 1438.763
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2359704",
+				"tmdbId": 45790,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e05.multi.1080p.web.x264-amb3r.mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 904516
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "JoJos.Bizarre.Adventure.E06.MULTi.1080p.WEB.x264-AMB3R",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e06.multi.1080p.web.x264-amb3r.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": null,
+				"imdbId": null,
+				"tmdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e06.multi.1080p.web.x264-amb3r.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "JoJos.Bizarre.Adventure.E07.MULTi.1080p.WEB.x264-AMB3R",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e07.multi.1080p.web.x264-amb3r.mkv",
+						"folder": "",
+						"duration": 1453.782
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2359704",
+				"tmdbId": 45790,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e07.multi.1080p.web.x264-amb3r.mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 904521
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "JoJos.Bizarre.Adventure.E08.MULTi.1080p.WEB.x264-AMB3R",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e08.multi.1080p.web.x264-amb3r.mkv",
+						"folder": "",
+						"duration": 1454.08
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2359704",
+				"tmdbId": 45790,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e08.multi.1080p.web.x264-amb3r.mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 986250
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "JoJos.Bizarre.Adventure.E09.MULTi.1080p.WEB.x264-AMB3R",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e09.multi.1080p.web.x264-amb3r.mkv",
+						"folder": "",
+						"duration": 1453.27
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2359704",
+				"tmdbId": 45790,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e09.multi.1080p.web.x264-amb3r.mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 904519
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "JoJos.Bizarre.Adventure.E10.MULTi.1080p.WEB.x264-AMB3R",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e10.multi.1080p.web.x264-amb3r.mkv",
+						"folder": "",
+						"duration": 1439.147
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2359704",
+				"tmdbId": 45790,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e10.multi.1080p.web.x264-amb3r.mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 904513
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "JoJos.Bizarre.Adventure.E11.MULTi.1080p.WEB.x264-AMB3R",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e11.multi.1080p.web.x264-amb3r.mkv",
+						"folder": "",
+						"duration": 1438.635
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2359704",
+				"tmdbId": 45790,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e11.multi.1080p.web.x264-amb3r.mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 904525
+					}
+				]
+			}
+		},
+		{
+			"request": {
+				"name": "JoJos.Bizarre.Adventure.E12.MULTi.1080p.WEB.x264-AMB3R",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e12.multi.1080p.web.x264-amb3r.mkv",
+						"folder": "",
+						"duration": 1453.867
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2359704",
+				"tmdbId": 45790,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e12.multi.1080p.web.x264-amb3r.mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 904512
+					}
+				]
+			}
+		}
+	]
+}

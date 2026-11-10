@@ -884,6 +884,11 @@ export const openApiDocument = {
 														description:
 															'The folder inside the release, "" at the top',
 													},
+													duration: {
+														type: 'number',
+														description:
+															"The file's length in seconds, where the caller has probed it; tells apart same-named shows whose episodes run differently",
+													},
 												},
 											},
 										},
