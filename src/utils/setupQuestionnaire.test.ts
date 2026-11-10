@@ -1531,29 +1531,32 @@ describe('Kodi with TorBox hosted NZBs', () => {
 describe('a no-host conflict names a route the player can use', () => {
 	const zurgHost =
 		'zurg needs a host that stays on while you watch. Choose a host or a supported Android device';
+	// Direct Usenet needs 64-bit Android.
+	const usenetHost =
+		'zurg needs a host that stays on while you watch. Choose a host or a supported 64-bit Android device';
 	const conflicts = (overrides: Partial<SetupAnswers>) =>
 		recommendSetup(answers({ host: 'none', ...overrides })).conflicts;
 
 	it.each([
 		[
 			{ player: 'stremio' },
-			`${zurgHost}, or switch to TorBox hosted NZBs through TorBox Cast, or to DMM's Real-Debrid transfer, which need no host.`,
+			`${usenetHost}, or switch to TorBox hosted NZBs through TorBox Cast, or to DMM's Real-Debrid transfer, which need no host.`,
 		],
 		[
 			{ player: 'kodi' },
-			`${zurgHost}, or switch to TorBox hosted NZBs through the Kodi addon, or to DMM's Real-Debrid transfer, which need no host.`,
+			`${usenetHost}, or switch to TorBox hosted NZBs through the Kodi addon, or to DMM's Real-Debrid transfer, which need no host.`,
 		],
 		[
 			{ player: 'external' },
-			`${zurgHost}, or switch to Real-Debrid and use DMM's transfer with DMM Watch, which needs no host.`,
+			`${usenetHost}, or switch to Real-Debrid and use DMM's transfer with DMM Watch, which needs no host.`,
 		],
 		[
 			{ player: 'webdav' },
-			`${zurgHost}, or switch to Real-Debrid and use DMM's transfer with Real-Debrid WebDAV, which needs no host.`,
+			`${usenetHost}, or switch to Real-Debrid and use DMM's transfer with Real-Debrid WebDAV, which needs no host.`,
 		],
 		[
 			{ player: 'unsure' },
-			`${zurgHost}, or switch to TorBox hosted NZBs through TorBox Cast in Stremio, or to DMM's Real-Debrid transfer, which need no host.`,
+			`${usenetHost}, or switch to TorBox hosted NZBs through TorBox Cast in Stremio, or to DMM's Real-Debrid transfer, which need no host.`,
 		],
 		[
 			{ player: 'plex', plexRoute: 'existing-server' },
@@ -1579,32 +1582,32 @@ describe('a no-host conflict names a route the player can use', () => {
 	it.each([
 		[
 			{ player: 'stremio', sources: ['real-debrid', 'usenet'] },
-			`${zurgHost}, or use DMM Cast with your Real-Debrid account, which needs no host.`,
+			`${usenetHost}, or use DMM Cast with your Real-Debrid account, which needs no host.`,
 		],
 		[
 			{ player: 'stremio', sources: ['torbox-hosted', 'usenet'] },
-			`${zurgHost}, or use TorBox Cast, which needs no host.`,
+			`${usenetHost}, or use TorBox Cast, which needs no host.`,
 		],
 		// TorBox Cast is DMM's Cast for TorBox, so DMM Cast names TorBox Pro beside a debrid account.
 		[
 			{ player: 'stremio', sources: ['real-debrid', 'usenet', 'torbox-hosted'] },
-			`${zurgHost}, or use DMM Cast with your Real-Debrid or TorBox Pro accounts, which needs no host.`,
+			`${usenetHost}, or use DMM Cast with your Real-Debrid or TorBox Pro accounts, which needs no host.`,
 		],
 		[
 			{ player: 'kodi', sources: ['usenet', 'torbox-hosted'] },
-			`${zurgHost}, or use the Kodi addon with your TorBox Pro account, which needs no host.`,
+			`${usenetHost}, or use the Kodi addon with your TorBox Pro account, which needs no host.`,
 		],
 		[
 			{ player: 'kodi', sources: ['torbox', 'usenet', 'torbox-hosted'] },
-			`${zurgHost}, or use the Kodi addon with your TorBox Pro account, which needs no host.`,
+			`${usenetHost}, or use the Kodi addon with your TorBox Pro account, which needs no host.`,
 		],
 		[
 			{ player: 'kodi', sources: ['real-debrid', 'easynews', 'usenet'] },
-			`${zurgHost}, or use the Kodi addon with your Real-Debrid or Easynews accounts, which needs no host.`,
+			`${usenetHost}, or use the Kodi addon with your Real-Debrid or Easynews accounts, which needs no host.`,
 		],
 		[
 			{ player: 'external', sources: ['easynews', 'usenet'] },
-			`${zurgHost}, or use DMM Watch with your Easynews account, which needs no host.`,
+			`${usenetHost}, or use DMM Watch with your Easynews account, which needs no host.`,
 		],
 		[
 			{ player: 'external', sources: ['torbox-hosted'] },
@@ -1612,7 +1615,7 @@ describe('a no-host conflict names a route the player can use', () => {
 		],
 		[
 			{ player: 'webdav', sources: ['usenet', 'real-debrid'] },
-			`${zurgHost}, or use Real-Debrid WebDAV, which needs no host.`,
+			`${usenetHost}, or use Real-Debrid WebDAV, which needs no host.`,
 		],
 		[
 			{ player: 'webdav', sources: ['real-debrid', 'all-debrid', 'offcloud'] },
@@ -1621,7 +1624,7 @@ describe('a no-host conflict names a route the player can use', () => {
 		[{ player: 'webdav', sources: ['offcloud'] }, `${zurgHost}.`],
 		[
 			{ player: 'webdav', sources: ['offcloud', 'usenet'] },
-			`${zurgHost}, or switch to Real-Debrid and use DMM's transfer with Real-Debrid WebDAV, which needs no host.`,
+			`${usenetHost}, or switch to Real-Debrid and use DMM's transfer with Real-Debrid WebDAV, which needs no host.`,
 		],
 		[
 			{ player: 'plex', plexRoute: 'existing-server', sources: ['torbox-hosted'] },

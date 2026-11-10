@@ -1510,9 +1510,11 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		);
 	const hostedNzb = routes.some(({ route: r }) => r.zurgNzb === 'hosted');
 	if (answers.host === 'android' && hostedNzb) result.conflicts.push(ANDROID_HOSTED_NZB);
+	// Direct Usenet needs 64-bit Android.
+	const android64 = routes.some(({ route: r }) => r.zurgNzb === 'direct') ? '64-bit ' : '';
 	if (result.hostRequirement === 'zurg' && answers.host === 'none')
 		result.conflicts.push(
-			`zurg needs a host that stays on while you watch. Choose a host${hostedNzb ? '' : ' or a supported Android device'}${noHostClause(player, selected, answers.player === 'unsure')}.`
+			`zurg needs a host that stays on while you watch. Choose a host${hostedNzb ? '' : ` or a supported ${android64}Android device`}${noHostClause(player, selected, answers.player === 'unsure')}.`
 		);
 	const androidZurg =
 		answers.host === 'android' && (result.hostRequirement === 'zurg' || androidRex);
