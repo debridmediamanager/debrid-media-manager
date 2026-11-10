@@ -363,6 +363,25 @@ function runsOnAndroid(r: SourceRoute): boolean {
 	return r.host !== 'server' || (!!r.usesZurg && !!r.usesRex);
 }
 
+/** Plex apps on rex that zurg+rex Android runs: zurg feeds it from a debrid account or own
+ * Usenet, never arr, URL addons, HTTP files or TorBox hosted NZBs. */
+function androidRunsRex({
+	player,
+	plexRoute,
+	sources,
+	host,
+	preference,
+}: Pick<SetupAnswers, 'player' | 'plexRoute' | 'sources' | 'host' | 'preference'>): boolean {
+	return (
+		player === 'plex' &&
+		(plexRoute === 'rex' || plexRoute === 'either') &&
+		host === 'android' &&
+		preference !== 'arr' &&
+		sources.some((source) => DEBRID_SOURCES.includes(source) || source === 'usenet') &&
+		!sources.some((source) => ['url-addon', 'http-local', 'torbox-hosted'].includes(source))
+	);
+}
+
 /** Shared by the host choices and defensive recommendation validation. */
 export function hostChoiceReason(
 	answers: Pick<SetupAnswers, 'player' | 'plexRoute' | 'sources'>,
@@ -1014,7 +1033,7 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 			'none',
 			[],
 			[
-				`Keep Easynews in a compatible player.${rex ? ' For rex, a compatible URL addon or feed producer must supply streams and metadata.' : ''}`,
+				`Keep Easynews in a compatible player.${androidRunsRex(answers) ? ' For rex on Android there is no feed for it; a normal host can take a compatible URL addon or feed producer.' : rex ? ' For rex, a compatible URL addon or feed producer must supply streams and metadata.' : ''}`,
 			],
 			[
 				DMM_CAST_LINKS.easynews,
@@ -1465,12 +1484,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				],
 			});
 	}
-	// zurg+rex Android runs zurg and the rex zurg feeds, but no arr, mounted server or other rex feed.
-	const androidRex =
-		result.hostRequirement === 'server' &&
-		answers.host === 'android' &&
-		answers.preference !== 'arr' &&
-		routes.every(({ route: r }) => runsOnAndroid(r));
+	const androidRex = androidRunsRex(answers);
 	if (
 		result.hostRequirement === 'server' &&
 		(answers.host === 'none' || (answers.host === 'android' && !androidRex))
@@ -1580,13 +1594,15 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		// Under a conflict the routes above are not a setup yet.
 		const cloud = `cloud titles come from ${result.conflicts.length ? 'the route you choose' : cloudRoutes > 1 ? 'the routes above' : cloudRoutes ? 'the route above' : 'the route you choose'}.`;
 		result.optionalNeeds.push(
-			rex
-				? 'Local files join rex through an HTTP source and a feed producer; each source supplies its own metadata and reachable HTTP bytes.'
-				: playerNeedsFullHost(player)
-					? 'Keep local files in your existing media server alongside cloud integrations.'
-					: player === 'stremio'
-						? `Stremio needs a compatible addon for local files; ${cloud}`
-						: `Local files stay in your player; ${cloud}`
+			androidRex
+				? 'zurg+rex Android feeds rex from zurg only; local files need rex on a normal host, or a player on the device.'
+				: rex
+					? 'Local files join rex through an HTTP source and a feed producer; each source supplies its own metadata and reachable HTTP bytes.'
+					: playerNeedsFullHost(player)
+						? 'Keep local files in your existing media server alongside cloud integrations.'
+						: player === 'stremio'
+							? `Stremio needs a compatible addon for local files; ${cloud}`
+							: `Local files stay in your player; ${cloud}`
 		);
 	}
 	links(GUIDE);

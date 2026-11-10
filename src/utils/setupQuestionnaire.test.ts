@@ -2960,6 +2960,25 @@ describe('zurg+rex Android serves the Plex apps', () => {
 		expect(onAndroid().sponsorship.optional.map(({ id }) => id)).not.toContain('remote-help');
 	});
 
+	it('sends local files, which the device cannot feed to rex, to a normal host or a player', () => {
+		expect(
+			onAndroid({ plexRoute: 'either', preference: 'managed', needs: ['mixed'] })
+				.optionalNeeds
+		).toContain(
+			'zurg+rex Android feeds rex from zurg only; local files need rex on a normal host, or a player on the device.'
+		);
+	});
+
+	it('says rex on Android has no feed for Easynews', () => {
+		expect(
+			onAndroid({ sources: ['real-debrid', 'easynews'] }).sourceCoverage.find(
+				({ source }) => source === 'easynews'
+			)?.requirements
+		).toEqual([
+			'Keep Easynews in a compatible player. For rex on Android there is no feed for it; a normal host can take a compatible URL addon or feed producer.',
+		]);
+	});
+
 	it('keeps the arr conflict, which zurg+rex Android cannot run', () => {
 		expect(onAndroid({ preference: 'arr' }).conflicts).toEqual([
 			'The arr workflow needs an existing or willing full host for Sonarr/Radarr and zurg. Android and no host cannot run this workflow.',
