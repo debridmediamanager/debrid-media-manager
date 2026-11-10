@@ -124,6 +124,12 @@ describe('SponsorPanel', () => {
 			screen.getByText(/cached-only feeds for Real-Debrid, AllDebrid, Debrid-Link, TorBox/)
 		).toBeInTheDocument();
 		expect(screen.getByText('Easynews to zurg')).toBeInTheDocument();
+		// The Wanted page imports a Radarr or Sonarr backup; it does not connect to a running one.
+		expect(
+			screen.getByText(
+				/from DMM, Kodi, Trakt and MDBList lists or a Radarr or Sonarr backup$/
+			)
+		).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: 'SABnzbd for Sonarr and Radarr' })).toHaveAttribute(
 			'href',
 			'/sabnzbd'
