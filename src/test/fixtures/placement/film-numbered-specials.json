@@ -1,0 +1,1535 @@
+{
+	"answers": {
+		"episodeShow": {
+			"tt0286336": null,
+			"tt0105986": null
+		},
+		"find": {
+			"tt0286336": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 188,
+						"name": "The Animals of Farthing Wood",
+						"first_air_date": "1993-01-03"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0105986": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 2625,
+						"name": "Diagnosis: Murder",
+						"first_air_date": "1993-10-29"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"188": {
+				"id": 188,
+				"name": "The Animals of Farthing Wood",
+				"original_name": "The Animals of Farthing Wood",
+				"first_air_date": "1993-01-03",
+				"original_language": "en",
+				"origin_country": ["GB"],
+				"genres": [
+					{
+						"id": 10751,
+						"name": "Family"
+					},
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10762,
+						"name": "Kids"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 2527,
+							"name": "fox"
+						},
+						{
+							"id": 15101,
+							"name": "based on children's book"
+						},
+						{
+							"id": 224071,
+							"name": "woodlands"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0286336",
+					"tvdb_id": 74638
+				},
+				"networks": [
+					{
+						"id": 4,
+						"name": "BBC One"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "AT",
+							"title": "Als die Tiere den Wald verließen",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "BE",
+							"title": "Les Animaux du Bois de Quat'sous",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "BE",
+							"title": "Beestenbos is boos",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "CH",
+							"title": "De Fuchs, de Dachs und iri Fründ",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "CH",
+							"title": "D’Tier vom grosse Wald",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "DE",
+							"title": "Als die Tiere den Wald verließen",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "DK",
+							"title": "Dyrene fra Lilleskoven",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "ES",
+							"title": "Los animales del bosque",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "FI",
+							"title": "De vilda djurens flykt",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "FI",
+							"title": "Kaukametsän pakolaiset",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "FR",
+							"title": "Les Animaux du Bois de Quat'sous",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "HR",
+							"title": "Pustolovine šumske družine",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "IE",
+							"title": "Cairde na Coile",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "IR",
+							"title": "گوزن سفید",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "IT",
+							"title": "Volpe, Tasso e compagnia",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "IT",
+							"title": "Le avventure del bosco piccolo",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "NL",
+							"title": "Beestenbos is boos",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "NO",
+							"title": "Flukta frå Dyreskogen",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "SE",
+							"title": "De vilda djurens flykt",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "TR",
+							"title": "Gürültülü orman hayvanları",
+							"type": ""
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": null,
+						"episode_count": 3,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "1993-01-03",
+						"episode_count": 13,
+						"name": "Series 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "1994-01-07",
+						"episode_count": 13,
+						"name": "Series 2",
+						"season_number": 2
+					},
+					{
+						"air_date": "1995-09-28",
+						"episode_count": 13,
+						"name": "Series 3",
+						"season_number": 3
+					}
+				]
+			},
+			"2625": {
+				"id": 2625,
+				"name": "Diagnosis: Murder",
+				"original_name": "Diagnosis: Murder",
+				"first_air_date": "1993-10-29",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 10751,
+						"name": "Family"
+					},
+					{
+						"id": 9648,
+						"name": "Mystery"
+					},
+					{
+						"id": 80,
+						"name": "Crime"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 970,
+							"name": "parent child relationship"
+						},
+						{
+							"id": 6149,
+							"name": "police"
+						},
+						{
+							"id": 13005,
+							"name": "doctor"
+						},
+						{
+							"id": 180668,
+							"name": "homicide detective"
+						},
+						{
+							"id": 212513,
+							"name": "criminal consultant"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0105986",
+					"tvdb_id": 72484
+				},
+				"networks": [
+					{
+						"id": 16,
+						"name": "CBS"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "GR",
+							"title": "Διάγνωση: Φόνος",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "HU",
+							"title": "Nyomoz a professzor",
+							"type": ""
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "1992-01-05",
+						"episode_count": 5,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "1993-10-29",
+						"episode_count": 19,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "1994-09-16",
+						"episode_count": 22,
+						"name": "Season 2",
+						"season_number": 2
+					},
+					{
+						"air_date": "1995-12-08",
+						"episode_count": 18,
+						"name": "Season 3",
+						"season_number": 3
+					},
+					{
+						"air_date": "1996-09-19",
+						"episode_count": 26,
+						"name": "Season 4",
+						"season_number": 4
+					},
+					{
+						"air_date": "1997-09-18",
+						"episode_count": 25,
+						"name": "Season 5",
+						"season_number": 5
+					},
+					{
+						"air_date": "1998-09-24",
+						"episode_count": 22,
+						"name": "Season 6",
+						"season_number": 6
+					},
+					{
+						"air_date": "1999-09-23",
+						"episode_count": 24,
+						"name": "Season 7",
+						"season_number": 7
+					},
+					{
+						"air_date": "2000-10-12",
+						"episode_count": 22,
+						"name": "Season 8",
+						"season_number": 8
+					}
+				]
+			}
+		},
+		"tvdbEpisodes": {
+			"74638": {
+				"data": {
+					"episodes": [
+						{
+							"id": 4513105,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "The Journey Begins",
+							"aired": "1993-02-02",
+							"runtime": 25
+						},
+						{
+							"id": 4513106,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": "From Copse to Quarry",
+							"aired": "1993-03-02",
+							"runtime": 25
+						},
+						{
+							"id": 4513107,
+							"seasonNumber": 0,
+							"number": 3,
+							"name": "On to White Deer Park",
+							"aired": "1993-03-31",
+							"runtime": 25
+						},
+						{
+							"id": 7826076,
+							"seasonNumber": 0,
+							"number": 4,
+							"name": "Journey Home: The Animals of Farthing Wood (US Version)",
+							"aired": null,
+							"runtime": null
+						},
+						{
+							"id": 150687,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "The Wood in Danger",
+							"aired": "1993-01-06",
+							"runtime": 25
+						},
+						{
+							"id": 150688,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "The Journey Begins",
+							"aired": "1993-01-13",
+							"runtime": 25
+						},
+						{
+							"id": 150689,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "Through Fire and Through Water",
+							"aired": "1993-01-20",
+							"runtime": 25
+						},
+						{
+							"id": 150690,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "False Haven",
+							"aired": "1993-01-27",
+							"runtime": 25
+						},
+						{
+							"id": 150691,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "Snare for the Unwary",
+							"aired": "1993-02-03",
+							"runtime": 25
+						},
+						{
+							"id": 150692,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "Who Shall Wear the Crown",
+							"aired": "1993-02-10",
+							"runtime": 25
+						},
+						{
+							"id": 150693,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "New Friends, Old Enemies",
+							"aired": "1993-02-17",
+							"runtime": 25
+						},
+						{
+							"id": 150694,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "Friends in Need",
+							"aired": "1993-02-24",
+							"runtime": 25
+						},
+						{
+							"id": 150695,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "Whistler's Quarry",
+							"aired": "1993-03-03",
+							"runtime": 25
+						},
+						{
+							"id": 150696,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "Between Two Evils",
+							"aired": "1993-03-10",
+							"runtime": 25
+						},
+						{
+							"id": 150697,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "A Deathly Calm",
+							"aired": "1993-03-17",
+							"runtime": 25
+						},
+						{
+							"id": 150698,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "Pandemonium",
+							"aired": "1993-03-24",
+							"runtime": 21
+						},
+						{
+							"id": 150699,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "So Near and Yet So Far",
+							"aired": "1993-03-31",
+							"runtime": 25
+						},
+						{
+							"id": 150700,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "A Heroes Welcome",
+							"aired": "1994-01-07",
+							"runtime": 25
+						},
+						{
+							"id": 150701,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "Winter",
+							"aired": "1994-01-14",
+							"runtime": 25
+						},
+						{
+							"id": 150702,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "Survival",
+							"aired": "1994-01-21",
+							"runtime": 25
+						},
+						{
+							"id": 150703,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "New Enemies",
+							"aired": "1994-01-28",
+							"runtime": 25
+						},
+						{
+							"id": 150704,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "A Joke Backfires",
+							"aired": "1994-02-04",
+							"runtime": 25
+						},
+						{
+							"id": 150705,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "Home Is Where the Heart Is",
+							"aired": "1994-02-11",
+							"runtime": 25
+						},
+						{
+							"id": 150706,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "The Feud Begins",
+							"aired": "1994-02-18",
+							"runtime": 25
+						},
+						{
+							"id": 150707,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "Like Father, Like Son",
+							"aired": "1994-02-25",
+							"runtime": 25
+						},
+						{
+							"id": 150708,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "Narrow Escapes",
+							"aired": "1994-03-04",
+							"runtime": 25
+						},
+						{
+							"id": 150709,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "Shadows",
+							"aired": "1994-03-11",
+							"runtime": 25
+						},
+						{
+							"id": 150710,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "A Time of Reckoning",
+							"aired": "1994-03-18",
+							"runtime": 25
+						},
+						{
+							"id": 150711,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "Blood Is Thicker Than Water",
+							"aired": "1994-03-25",
+							"runtime": 25
+						},
+						{
+							"id": 150712,
+							"seasonNumber": 2,
+							"number": 13,
+							"name": "Reconciliation",
+							"aired": "1994-03-30",
+							"runtime": 25
+						},
+						{
+							"id": 150713,
+							"seasonNumber": 3,
+							"number": 1,
+							"name": "Comings and Goings",
+							"aired": "1995-09-28",
+							"runtime": 25
+						},
+						{
+							"id": 150714,
+							"seasonNumber": 3,
+							"number": 2,
+							"name": "Out and About",
+							"aired": "1995-10-05",
+							"runtime": 25
+						},
+						{
+							"id": 150715,
+							"seasonNumber": 3,
+							"number": 3,
+							"name": "Water, Water",
+							"aired": "1995-10-12",
+							"runtime": 25
+						},
+						{
+							"id": 150716,
+							"seasonNumber": 3,
+							"number": 4,
+							"name": "The Missing Fox's Friend",
+							"aired": "1995-10-19",
+							"runtime": 25
+						},
+						{
+							"id": 150717,
+							"seasonNumber": 3,
+							"number": 5,
+							"name": "Tiffs and Tempers",
+							"aired": "1995-10-26",
+							"runtime": 25
+						},
+						{
+							"id": 150718,
+							"seasonNumber": 3,
+							"number": 6,
+							"name": "Adventure for the Birds",
+							"aired": "1995-11-02",
+							"runtime": 25
+						},
+						{
+							"id": 150719,
+							"seasonNumber": 3,
+							"number": 7,
+							"name": "The Long-Tailed Visitor",
+							"aired": "1995-11-09",
+							"runtime": 25
+						},
+						{
+							"id": 150720,
+							"seasonNumber": 3,
+							"number": 8,
+							"name": "Scared Silly By Snakes",
+							"aired": "1995-11-16",
+							"runtime": 25
+						},
+						{
+							"id": 150721,
+							"seasonNumber": 3,
+							"number": 9,
+							"name": "A Bigger Oink",
+							"aired": "1995-11-23",
+							"runtime": 25
+						},
+						{
+							"id": 150722,
+							"seasonNumber": 3,
+							"number": 10,
+							"name": "The Mole Game",
+							"aired": "1995-11-30",
+							"runtime": 25
+						},
+						{
+							"id": 150723,
+							"seasonNumber": 3,
+							"number": 11,
+							"name": "The Worst Kind of Hurricane",
+							"aired": "1995-12-07",
+							"runtime": 25
+						},
+						{
+							"id": 150724,
+							"seasonNumber": 3,
+							"number": 12,
+							"name": "Homeward Bound",
+							"aired": "1995-12-14",
+							"runtime": 25
+						},
+						{
+							"id": 150725,
+							"seasonNumber": 3,
+							"number": 13,
+							"name": "Bully-Bully-Bully",
+							"aired": "1995-12-21",
+							"runtime": 25
+						}
+					]
+				}
+			}
+		},
+		"season": {
+			"188/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "The Journey Begins",
+						"air_date": null,
+						"runtime": 25,
+						"id": 3382076
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "From copse to quarry",
+						"air_date": null,
+						"runtime": 25,
+						"id": 11698
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "On to White Deep Park",
+						"air_date": null,
+						"runtime": 25,
+						"id": 11699
+					}
+				]
+			},
+			"188/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "The Wood In Danger",
+						"air_date": "1993-01-03",
+						"runtime": 24,
+						"id": 11661
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "The Journey Begins",
+						"air_date": "1993-01-10",
+						"runtime": 24,
+						"id": 11662
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Through Fire And Water",
+						"air_date": "1993-01-17",
+						"runtime": 24,
+						"id": 11663
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "False Haven",
+						"air_date": "1993-01-24",
+						"runtime": 24,
+						"id": 11664
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Snare For The Unwary",
+						"air_date": "1993-01-31",
+						"runtime": 24,
+						"id": 11665
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Who Shall Wear The Crown",
+						"air_date": "1993-02-07",
+						"runtime": 24,
+						"id": 11666
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "New Friends, Old Enemies",
+						"air_date": "1993-02-14",
+						"runtime": 24,
+						"id": 11667
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Friends In Need",
+						"air_date": "1993-02-21",
+						"runtime": 24,
+						"id": 11668
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Whistler's Quarry",
+						"air_date": "1993-02-28",
+						"runtime": 24,
+						"id": 11669
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Between Two Evils",
+						"air_date": "1993-03-07",
+						"runtime": 24,
+						"id": 11670
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "A Deathly Calm",
+						"air_date": "1993-03-14",
+						"runtime": 24,
+						"id": 11671
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Pandemonium",
+						"air_date": "1993-03-21",
+						"runtime": 24,
+						"id": 11672
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "So Near And Yet So Far",
+						"air_date": "1993-03-28",
+						"runtime": 24,
+						"id": 11673
+					}
+				]
+			},
+			"188/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "A Heroes Welcome",
+						"air_date": "1994-01-07",
+						"runtime": 25,
+						"id": 11674
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Winter",
+						"air_date": "1994-01-14",
+						"runtime": 25,
+						"id": 11675
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Survival",
+						"air_date": "1994-01-21",
+						"runtime": 25,
+						"id": 11676
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "New Enemies",
+						"air_date": "1994-01-01",
+						"runtime": 25,
+						"id": 11659
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "A Joke Backfires",
+						"air_date": "1994-02-04",
+						"runtime": 25,
+						"id": 11677
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Home Is Where The Heart Is",
+						"air_date": "1994-02-11",
+						"runtime": 25,
+						"id": 11678
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "The Feud Begins",
+						"air_date": "1994-02-18",
+						"runtime": 25,
+						"id": 11679
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Like Father, Like Son",
+						"air_date": "1994-02-25",
+						"runtime": 25,
+						"id": 11680
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Narrow Escapes",
+						"air_date": "1994-03-04",
+						"runtime": 25,
+						"id": 11681
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "Shadows",
+						"air_date": "1994-03-11",
+						"runtime": 25,
+						"id": 11682
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "A Time Of Reckoning",
+						"air_date": "1994-03-18",
+						"runtime": 25,
+						"id": 11683
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Blood Is Thicker Than Water",
+						"air_date": "1994-03-25",
+						"runtime": 25,
+						"id": 11684
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "Reconciliation",
+						"air_date": "1994-03-30",
+						"runtime": 25,
+						"id": 11685
+					}
+				]
+			},
+			"188/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "Comings And Goings",
+						"air_date": "1995-09-28",
+						"runtime": 25,
+						"id": 11686
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "Out and About",
+						"air_date": "1995-10-05",
+						"runtime": 25,
+						"id": 11660
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Water, Water",
+						"air_date": "1995-10-12",
+						"runtime": 25,
+						"id": 11687
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "The Missing Fox's Friend",
+						"air_date": "1995-10-19",
+						"runtime": 25,
+						"id": 11688
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Tiffs And Tempers",
+						"air_date": "1995-10-26",
+						"runtime": 25,
+						"id": 11689
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "Adventure For The Birds",
+						"air_date": "1995-11-02",
+						"runtime": 25,
+						"id": 11690
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "The Long-Tailed Visitor",
+						"air_date": "1995-11-09",
+						"runtime": 25,
+						"id": 11691
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "Scared Silly By Snakes",
+						"air_date": "1995-11-16",
+						"runtime": 25,
+						"id": 11692
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "A Bigger Oink",
+						"air_date": "1995-11-23",
+						"runtime": 25,
+						"id": 11693
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "The Mole Game",
+						"air_date": "1995-11-30",
+						"runtime": 25,
+						"id": 11694
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "The Worst Kind of Hurricane",
+						"air_date": "1995-12-07",
+						"runtime": 25,
+						"id": 11695
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "Homeward Bound",
+						"air_date": "1995-12-14",
+						"runtime": 25,
+						"id": 11696
+					},
+					{
+						"episode_number": 13,
+						"season_number": 3,
+						"name": "Bully-Bully-Bully",
+						"air_date": "1995-12-21",
+						"runtime": 25,
+						"id": 11697
+					}
+				]
+			},
+			"2625/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Diagnosis of Murder",
+						"air_date": "1992-01-05",
+						"runtime": 120,
+						"id": 202605
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "The House on Sycamore Street",
+						"air_date": "1992-05-01",
+						"runtime": 120,
+						"id": 202607
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "A Twist of the Knife",
+						"air_date": "1993-02-13",
+						"runtime": 120,
+						"id": 202608
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "Town Without Pity",
+						"air_date": "2002-02-06",
+						"runtime": 120,
+						"id": 202610
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "Without Warning",
+						"air_date": "2002-04-26",
+						"runtime": 120,
+						"id": 202611
+					}
+				]
+			}
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun (RD), 2026-11-10: the .zurgtorrent's name, hash, IMDb id and every video file with its folder, as zurg asks",
+			"request": {
+				"name": "The Animals of Farthing Wood",
+				"hash": "64a34f3997dbd344c41bf7815fb4821ae1f2485c",
+				"files": [
+					{
+						"path": "S1M1 - The Journey Begins.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S1M2 - From Copse to Quarry.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S1M3  - On to White Deep Park.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S2E01 - A Heroes Welcome.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S2E02 - Winter.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S2E03 - Survival.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S2E04 - New Enemies.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S2E05 - A Joke Backfires.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S2E06 - Home is where the Heart is.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S2E07 - The Feud Begins.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S2E08 - Like Father Like Son.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S2E09 - Narrow Escapes.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S2E10 - Shadows.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S2E11 - A Time of Reckoning.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S2E12 - Blood is thicker than Water.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S2E13 - Reconciliation.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S3E01 - Comings and Goings.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S3E02 - Out and About.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S3E03 - Water Water.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S3E04 - The Missing Fox's Friend.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S3E05 - Tiffs and Tempers.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S3E06 - Adventure for the Birds.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S3E07 - The Long-Tailed Visitor.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S3E08 - Scared Silly by Snakes.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S3E09 - A Bigger Oink.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S3E10 - The Mole Game.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S3E11 - The Worst Kind of Hurricane.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S3E12 - Homeward Bound.mp4",
+						"folder": ""
+					},
+					{
+						"path": "S3E13 - Bully-Bully-Bully.mp4",
+						"folder": ""
+					}
+				],
+				"imdbId": "tt0286336"
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0286336",
+				"tmdbId": 188,
+				"files": [
+					{
+						"path": "S1M1 - The Journey Begins.mp4",
+						"season": 0,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 3382076
+					},
+					{
+						"path": "S1M2 - From Copse to Quarry.mp4",
+						"season": 0,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11698
+					},
+					{
+						"path": "S1M3  - On to White Deep Park.mp4",
+						"season": 0,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11699
+					},
+					{
+						"path": "S2E01 - A Heroes Welcome.mp4",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11674
+					},
+					{
+						"path": "S2E02 - Winter.mp4",
+						"season": 2,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11675
+					},
+					{
+						"path": "S2E03 - Survival.mp4",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11676
+					},
+					{
+						"path": "S2E04 - New Enemies.mp4",
+						"season": 2,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11659
+					},
+					{
+						"path": "S2E05 - A Joke Backfires.mp4",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11677
+					},
+					{
+						"path": "S2E06 - Home is where the Heart is.mp4",
+						"season": 2,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11678
+					},
+					{
+						"path": "S2E07 - The Feud Begins.mp4",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11679
+					},
+					{
+						"path": "S2E08 - Like Father Like Son.mp4",
+						"season": 2,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11680
+					},
+					{
+						"path": "S2E09 - Narrow Escapes.mp4",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11681
+					},
+					{
+						"path": "S2E10 - Shadows.mp4",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11682
+					},
+					{
+						"path": "S2E11 - A Time of Reckoning.mp4",
+						"season": 2,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11683
+					},
+					{
+						"path": "S2E12 - Blood is thicker than Water.mp4",
+						"season": 2,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11684
+					},
+					{
+						"path": "S2E13 - Reconciliation.mp4",
+						"season": 2,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11685
+					},
+					{
+						"path": "S3E01 - Comings and Goings.mp4",
+						"season": 3,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11686
+					},
+					{
+						"path": "S3E02 - Out and About.mp4",
+						"season": 3,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11660
+					},
+					{
+						"path": "S3E03 - Water Water.mp4",
+						"season": 3,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11687
+					},
+					{
+						"path": "S3E04 - The Missing Fox's Friend.mp4",
+						"season": 3,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11688
+					},
+					{
+						"path": "S3E05 - Tiffs and Tempers.mp4",
+						"season": 3,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11689
+					},
+					{
+						"path": "S3E06 - Adventure for the Birds.mp4",
+						"season": 3,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11690
+					},
+					{
+						"path": "S3E07 - The Long-Tailed Visitor.mp4",
+						"season": 3,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11691
+					},
+					{
+						"path": "S3E08 - Scared Silly by Snakes.mp4",
+						"season": 3,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11692
+					},
+					{
+						"path": "S3E09 - A Bigger Oink.mp4",
+						"season": 3,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11693
+					},
+					{
+						"path": "S3E10 - The Mole Game.mp4",
+						"season": 3,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11694
+					},
+					{
+						"path": "S3E11 - The Worst Kind of Hurricane.mp4",
+						"season": 3,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11695
+					},
+					{
+						"path": "S3E12 - Homeward Bound.mp4",
+						"season": 3,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11696
+					},
+					{
+						"path": "S3E13 - Bully-Bully-Bully.mp4",
+						"season": 3,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 11697
+					}
+				]
+			}
+		},
+		{
+			"from": "DMM's PlacementMiss, 2026-11-10: the release's name, IMDb id and the files it left unplaced (no folders)",
+			"request": {
+				"name": "Diagnosis Murder S01-S08 (1993-) + TV Movies",
+				"imdbId": "tt0105986",
+				"files": [
+					{
+						"path": "Diagnosis Murder S00M02 The House On Sycamore Street.mp4",
+						"folder": null
+					},
+					{
+						"path": "Diagnosis Murder S00M03 A Twist Of The Knife.mp4",
+						"folder": null
+					},
+					{
+						"path": "Diagnosis Murder S00M01 Diagnosis of Murder.mp4",
+						"folder": null
+					},
+					{
+						"path": "Diagnosis Murder S08M01 Town Without Pity.mp4",
+						"folder": null
+					},
+					{
+						"path": "Diagnosis Murder S08M02 Without Warning.mp4",
+						"folder": null
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0105986",
+				"tmdbId": 2625,
+				"files": [
+					{
+						"path": "Diagnosis Murder S00M02 The House On Sycamore Street.mp4",
+						"season": 0,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 202607
+					},
+					{
+						"path": "Diagnosis Murder S00M03 A Twist Of The Knife.mp4",
+						"season": 0,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 202608
+					},
+					{
+						"path": "Diagnosis Murder S00M01 Diagnosis of Murder.mp4",
+						"season": 0,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 202605
+					},
+					{
+						"path": "Diagnosis Murder S08M01 Town Without Pity.mp4",
+						"season": 0,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 202610
+					},
+					{
+						"path": "Diagnosis Murder S08M02 Without Warning.mp4",
+						"season": 0,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 202611
+					}
+				]
+			}
+		}
+	]
+}

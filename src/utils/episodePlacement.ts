@@ -1751,8 +1751,11 @@ export async function specialOf(
 	if (found.length || short) return found.length === 1 ? at(found[0]) : null;
 	// the title after a season's special number or a season alone, up to the release's tags, its part
 	// as a number: Archer's `S03E00.Heart.of.Archness,Pt.1.1080p.WEB…` is S0E3 "Heart of Archness (1)",
-	// Would I Lie to You's `S10 - Children in Need Special` S0E5 "Children in Need (Series 10)"
-	const token = SCENE_TOKEN.exec(stem) ?? /(?:^|[\s._-])s\d{1,2}(?=[\s._-])/i.exec(stem);
+	// Would I Lie to You's `S10 - Children in Need Special` S0E5 "Children in Need (Series 10)", or
+	// after a season's film number: The Animals of Farthing Wood's `S1M1 - The Journey Begins` is S0E1
+	// "The Journey Begins", Diagnosis Murder's `S08M01 Town Without Pity` S0E4
+	const token =
+		SCENE_TOKEN.exec(stem) ?? /(?:^|[\s._-])s\d{1,2}(?:m\d{1,2})?(?=[\s._-])/i.exec(stem);
 	// what TMDB puts in parentheses may be a part (`Heart of Archness (1)`) or not (`Children in Need
 	// (Series 10)`); a file's are its tags
 	const titledAs = (text: string, tagged = false) =>

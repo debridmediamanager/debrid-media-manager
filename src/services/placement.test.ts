@@ -22,6 +22,7 @@ import cjkSeasons from '@/test/fixtures/placement/cjk-season-titles.json';
 import directorsCuts from '@/test/fixtures/placement/directors-cut-primes.json';
 import betweenPairs from '@/test/fixtures/placement/episodes-between-aligned-pairs.json';
 import fairyTail from '@/test/fixtures/placement/fairy-tail-ovas.json';
+import filmNumbered from '@/test/fixtures/placement/film-numbered-specials.json';
 import filmsBeforeShows from '@/test/fixtures/placement/films-before-shows.json';
 import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
 import filmsInShows from '@/test/fixtures/placement/films-in-show-releases.json';
@@ -2196,6 +2197,35 @@ describe('segment titles run together with no mark between them', () => {
 		expect(thirteen('S13E12.Welcome.to.Binary.Bottom')).toEqual([13, 34, 36]);
 		// on S13E10 "Squidward's Sick Daze" before
 		expect(thirteen('S13E10.Captain.Pipsqueak.Plane.to.Sea')).toEqual([13, 30, 31]);
+	});
+});
+
+describe("a special numbered as a season's film", () => {
+	// zurg on fun and DMM's PlacementMiss (2026-11-10): one uploader numbers a show's TV films and
+	// compilations `S1M1`, `S08M01`, which name no episode, before the film's title
+	const placed = async (name: string) => {
+		const c = filmNumbered.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true, shows: true }],
+			Infinity,
+			recordedSources(filmNumbered.answers),
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return (part: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(part))!;
+			return [f.season, f.episode, f.episodeEnd];
+		};
+	};
+	it('places it by the title after the number among the specials', async () => {
+		const wood = await placed('The Animals of Farthing Wood');
+		// TMDB's S0E1-E3, the video compilations of season 1 (82-87 minutes each)
+		expect(wood('S1M1 - The Journey Begins')).toEqual([0, 1, null]);
+		expect(wood('S1M3  - On to White Deep Park')).toEqual([0, 3, null]);
+		const murder = await placed('Diagnosis Murder');
+		// TMDB's S0E4 "Town Without Pity", a TV film after season 8
+		expect(murder('S08M01 Town Without Pity')).toEqual([0, 4, null]);
+		expect(murder('S00M01 Diagnosis of Murder')).toEqual([0, 1, null]);
 	});
 });
 
