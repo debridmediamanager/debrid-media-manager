@@ -435,6 +435,17 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	it('never offers Seerr on Android, where no media server runs', () => {
+		expect(
+			breaking(
+				(answers, result) =>
+					answers.host === 'android' &&
+					(offered(result).includes('seerr') ||
+						texts(result).some((text) => text.includes('dmm/seerr')))
+			)
+		).toEqual([]);
+	});
+
 	it('suggests Bazarr only for Sonarr/Radarr, whose imports it works from', () => {
 		expect(
 			breaking(

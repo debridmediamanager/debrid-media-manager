@@ -2969,6 +2969,13 @@ describe('zurg+rex Android serves the Plex apps', () => {
 		);
 	});
 
+	it('offers no Seerr, which needs a media server the device does not run', () => {
+		const result = onAndroid({ plexRoute: 'either', preference: 'managed' });
+
+		expect(result.sponsorship.optional.map(({ id }) => id)).not.toContain('seerr');
+		expect(result.alternatives.map(({ title }) => title)).toContain('DMM Wanted requests');
+	});
+
 	it('says rex on Android has no feed for Easynews', () => {
 		expect(
 			onAndroid({ sources: ['real-debrid', 'easynews'] }).sourceCoverage.find(

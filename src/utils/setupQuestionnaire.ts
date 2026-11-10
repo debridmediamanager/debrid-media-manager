@@ -282,9 +282,12 @@ export function playerNeedsFullHost(player: Player): boolean {
 	return FULL_HOST_PLAYERS.includes(player);
 }
 
-/** Seerr is set up against a Plex, Jellyfin or Emby server; rex is not one. */
-function seerrFits(player: Player, plexRoute: PlexRoute | undefined): boolean {
-	return player === 'plex' ? plexRoute !== 'rex' : player === 'jellyfin' || player === 'emby';
+/** Seerr is set up against a Plex, Jellyfin or Emby server; rex is not one, and an Android host runs none. */
+function seerrFits(player: Player, plexRoute: PlexRoute | undefined, host: Host): boolean {
+	return (
+		host !== 'android' &&
+		(player === 'plex' ? plexRoute !== 'rex' : player === 'jellyfin' || player === 'emby')
+	);
 }
 
 function playerLabel(player: Player): string {
@@ -695,7 +698,7 @@ function sponsorshipFor(
 		add(optional, 'jellyfin');
 	if (player === 'emby' && answers.preference === 'arr' && debrid) add(optional, 'emby');
 	if (player === 'kodi' && (debrid || hasNzb) && zurgRuns) add(optional, 'wantedKodi');
-	const seerr = seerrFits(player, answers.plexRoute);
+	const seerr = seerrFits(player, answers.plexRoute, answers.host);
 	if (
 		zurgRuns &&
 		(answers.preference === 'managed' || answers.preference === 'arr') &&
@@ -1462,7 +1465,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			routes.some(({ route: r }) => r.usesZurg) ||
 			hostRunsZurg(answers))
 	) {
-		const seerr = seerrFits(player, answers.plexRoute);
+		const seerr = seerrFits(player, answers.plexRoute, answers.host);
 		// Stremio and Kodi browse a hosted Cast library; an external player browses DMM's library
 		// pages. Own Usenet and zurg's hosted NZBs have neither.
 		const browsable =
