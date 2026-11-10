@@ -1,0 +1,3321 @@
+{
+	"answers": {
+		"episodeShow": {
+			"tt0117579": null,
+			"tt4378456": null,
+			"tt0162108": null
+		},
+		"find": {
+			"tt0117579": {
+				"tv_results": [],
+				"movie_results": [
+					{
+						"id": 369091,
+						"adult": false,
+						"title": "Second Chance",
+						"video": false,
+						"overview": "Three scientists invent a youth serum, but they're forced to flee their lab as a group of mercenaries try to take it for the wealthy old man who hired them, capturing the head of the lab in the process.",
+						"softcore": false,
+						"genre_ids": [35, 878],
+						"media_type": "movie",
+						"popularity": 0.909,
+						"vote_count": 4,
+						"poster_path": "/a91TXpV1wxv88cnXGsDMrW87HGy.jpg",
+						"release_date": "1996-07-12",
+						"vote_average": 6,
+						"backdrop_path": null,
+						"original_title": "Second Chance",
+						"original_language": "en"
+					}
+				],
+				"person_results": [],
+				"tv_season_results": [],
+				"tv_episode_results": []
+			},
+			"tt4378456": {
+				"tv_results": [
+					{
+						"id": 64434,
+						"name": "Second Chance",
+						"adult": false,
+						"overview": "A disgraced, 75-year-old ex-sheriff, whose life ends at the hands of corrupt cops, is brought back to life and given a second chance by a pair of young tech scientists, as a 35-year-old with unpredictable near-superhuman abilities.",
+						"softcore": false,
+						"genre_ids": [18, 10765],
+						"media_type": "tv",
+						"popularity": 12.5695,
+						"vote_count": 191,
+						"poster_path": "/vXQXjPQ0qq5caOSvTElc9UMp6Rf.jpg",
+						"vote_average": 6.8,
+						"backdrop_path": "/cVjcq52suVSKlPAW8cfJqvQfFuL.jpg",
+						"original_name": "Second Chance",
+						"first_air_date": "2016-01-13",
+						"origin_country": ["US"],
+						"original_language": "en"
+					}
+				],
+				"movie_results": [],
+				"person_results": [],
+				"tv_season_results": [],
+				"tv_episode_results": []
+			},
+			"tt0162108": {
+				"tv_results": [
+					{
+						"id": 335977,
+						"name": "Second Chance",
+						"adult": false,
+						"overview": "Middle aged couple, Chris and Kate Hurst, face up to divorce.",
+						"softcore": false,
+						"genre_ids": [18],
+						"media_type": "tv",
+						"popularity": 1.5159,
+						"vote_count": 0,
+						"poster_path": null,
+						"vote_average": 0,
+						"backdrop_path": null,
+						"original_name": "Second Chance",
+						"first_air_date": "1981-01-23",
+						"origin_country": ["GB"],
+						"original_language": "en"
+					}
+				],
+				"movie_results": [],
+				"person_results": [],
+				"tv_season_results": [],
+				"tv_episode_results": []
+			}
+		},
+		"imdbSeries": {
+			"tt0117579": {
+				"titleType": "video",
+				"title": "Second Chance",
+				"episodes": []
+			}
+		},
+		"identify": {
+			"Second.Chance.1995.dvdrip-xpost": null
+		},
+		"namesakeSeries": {
+			"tt0117579": []
+		},
+		"identifier": {
+			"Second.Chance.1995.dvdrip-xpost": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt4378456",
+						"score": 1.8938,
+						"title": "Second Chance",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt0162108",
+						"score": -0.5109,
+						"title": "Second Chance",
+						"year": 1981
+					},
+					{
+						"imdbId": "tt0459683",
+						"score": -1.4209,
+						"title": "El Cuerpo del Deseo",
+						"year": 2005
+					},
+					{
+						"imdbId": "tt0092447",
+						"score": -1.7031,
+						"title": "Boys Will Be Boys",
+						"year": 1987
+					},
+					{
+						"imdbId": "tt1324069",
+						"score": -2.131,
+						"title": "Second Chance",
+						"year": 2008
+					}
+				],
+				"parsedTitle": "Second Chance",
+				"parsedYear": 1995,
+				"probability": 0.2577
+			},
+			"Second.Chance.01": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0046288",
+						"score": 1.4075,
+						"title": "Second Chance",
+						"year": 1953
+					},
+					{
+						"imdbId": "tt0039807",
+						"score": -0.5498,
+						"title": "Second Chance",
+						"year": 1947
+					},
+					{
+						"imdbId": "tt0075215",
+						"score": -1.4153,
+						"title": "Second Chance",
+						"year": 1976
+					},
+					{
+						"imdbId": "tt0306057",
+						"score": -1.8946,
+						"title": "Second Chance",
+						"year": 1950
+					},
+					{
+						"imdbId": "tt0117579",
+						"score": -1.9629,
+						"title": "Second Chance",
+						"year": 1996
+					}
+				],
+				"parsedTitle": "Second Chance 01",
+				"parsedYear": null,
+				"probability": 0.1786
+			}
+		},
+		"show": {
+			"64434": {
+				"id": 64434,
+				"name": "Second Chance",
+				"type": "Scripted",
+				"adult": false,
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"status": "Canceled",
+				"videos": {
+					"results": []
+				},
+				"credits": {
+					"cast": [
+						{
+							"id": 1038379,
+							"name": "Robert Kazinsky",
+							"adult": false,
+							"order": 0,
+							"gender": 2,
+							"character": "Jimmy Pritchard",
+							"credit_id": "564a4840c3a368602600072c",
+							"popularity": 0.8022,
+							"profile_path": "/nYWfalUgOSnc8VLIrFMnBwmI1QG.jpg",
+							"original_name": "Robert Kazinsky",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 76001,
+							"name": "Tim DeKay",
+							"adult": false,
+							"order": 1,
+							"gender": 2,
+							"character": "Duval Pritchard",
+							"credit_id": "564a487e92514163b4000328",
+							"popularity": 1.0007,
+							"profile_path": "/m62gS0B5fcQfFpoq2tmJVfpE43x.jpg",
+							"original_name": "Tim DeKay",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 207985,
+							"name": "Dilshad Vadsaria",
+							"adult": false,
+							"order": 2,
+							"gender": 1,
+							"character": "Mary Goodwin",
+							"credit_id": "564a48619251414dcd0006ad",
+							"popularity": 1.103,
+							"profile_path": "/yWCQLnykpfAfvTCukcj8WQTBMPc.jpg",
+							"original_name": "Dilshad Vadsaria",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 440306,
+							"name": "Adhir Kalyan",
+							"adult": false,
+							"order": 3,
+							"gender": 2,
+							"character": "Otto Goodwin",
+							"credit_id": "564a48509251414dcb000710",
+							"popularity": 0.6574,
+							"profile_path": "/4AY2qSCB9EtzKwDOPEHS3E1lA8t.jpg",
+							"original_name": "Adhir Kalyan",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 113916,
+							"name": "Scott Menville",
+							"adult": false,
+							"order": 4,
+							"gender": 2,
+							"character": "Arthur (voice)",
+							"credit_id": "5ffd695077d23b003cfbec4c",
+							"popularity": 1.5143,
+							"profile_path": "/iLoApH8LbyJSKFmdgWxNR314GGa.jpg",
+							"original_name": "Scott Menville",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 4492,
+							"name": "Philip Baker Hall",
+							"adult": false,
+							"order": 5,
+							"gender": 2,
+							"character": "Jimmy Pritchard (75 years old)",
+							"credit_id": "5ffd68fae9da690042850712",
+							"popularity": 1.1839,
+							"profile_path": "/mC1wmuGSCyIQ7ABkfRe1jJV1FGV.jpg",
+							"original_name": "Philip Baker Hall",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 144216,
+							"name": "Ciara Bravo",
+							"adult": false,
+							"order": 6,
+							"gender": 1,
+							"character": "Gracie Pritchard",
+							"credit_id": "564a48719251414dc20006b0",
+							"popularity": 1.693,
+							"profile_path": "/vCr9ndoyWyo5JjtmVGGzjFBiW9E.jpg",
+							"original_name": "Ciara Bravo",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 52938,
+							"name": "Vanessa Lengies",
+							"adult": false,
+							"order": 7,
+							"gender": 1,
+							"character": "Alexa",
+							"credit_id": "5ffd6d12fdc4fa003e20726a",
+							"popularity": 1.3907,
+							"profile_path": "/yqnNHJsTQGVlkSN5phh9QShoXTm.jpg",
+							"original_name": "Vanessa Lengies",
+							"known_for_department": "Acting"
+						}
+					],
+					"crew": [
+						{
+							"id": 1515082,
+							"job": "Special Effects Makeup Artist",
+							"name": "Caitlin Groves",
+							"adult": false,
+							"gender": 1,
+							"credit_id": "67aea496811fc2db87d0e401",
+							"department": "Costume & Make-Up",
+							"popularity": 0.256,
+							"profile_path": null,
+							"original_name": "Caitlin Groves",
+							"known_for_department": "Costume & Make-Up"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"id": 72029,
+						"name": "Season 1",
+						"air_date": "2016-01-13",
+						"overview": "",
+						"poster_path": "/lXvdWCTLlU6sga107V1sxQSPjhs.jpg",
+						"vote_average": 7.8,
+						"episode_count": 11,
+						"season_number": 1
+					}
+				],
+				"tagline": "Death gave him a second chance at life.",
+				"homepage": "http://www.fox.com/second-chance",
+				"keywords": {
+					"results": [
+						{
+							"id": 798,
+							"name": "sheriff"
+						},
+						{
+							"id": 970,
+							"name": "parent child relationship"
+						},
+						{
+							"id": 10122,
+							"name": "reanimation"
+						},
+						{
+							"id": 10440,
+							"name": "second life"
+						},
+						{
+							"id": 10761,
+							"name": "superhuman"
+						},
+						{
+							"id": 207694,
+							"name": "procedural"
+						}
+					]
+				},
+				"networks": [
+					{
+						"id": 19,
+						"name": "FOX",
+						"logo_path": "/1DSpHrWyOORkL9N2QHX7Adt31mQ.png",
+						"origin_country": "US"
+					}
+				],
+				"overview": "A disgraced, 75-year-old ex-sheriff, whose life ends at the hands of corrupt cops, is brought back to life and given a second chance by a pair of young tech scientists, as a 35-year-old with unpredictable near-superhuman abilities.",
+				"softcore": false,
+				"languages": ["en"],
+				"created_by": [
+					{
+						"id": 29524,
+						"name": "Rand Ravich",
+						"gender": 2,
+						"credit_id": "5659f93992514161be0008d3",
+						"profile_path": "/4kklMTTo2MTA7MBB49aZha7l56Y.jpg",
+						"original_name": "Rand Ravich"
+					}
+				],
+				"popularity": 4.7614,
+				"vote_count": 191,
+				"poster_path": "/vXQXjPQ0qq5caOSvTElc9UMp6Rf.jpg",
+				"external_ids": {
+					"imdb_id": "tt4378456",
+					"tvdb_id": 295684,
+					"tvrage_id": 45795,
+					"twitter_id": null,
+					"facebook_id": "SecondChanceFOX",
+					"freebase_id": null,
+					"wikidata_id": "Q19900623",
+					"freebase_mid": null,
+					"instagram_id": null
+				},
+				"translations": {
+					"translations": [
+						{
+							"data": {
+								"name": "",
+								"tagline": "Death gave him a second chance at life.",
+								"homepage": "",
+								"overview": "A disgraced, 75-year-old ex-sheriff, whose life ends at the hands of corrupt cops, is brought back to life and given a second chance by a pair of young tech scientists, as a 35-year-old with unpredictable near-superhuman abilities."
+							},
+							"name": "English",
+							"iso_639_1": "en",
+							"iso_3166_1": "US",
+							"english_name": "English"
+						},
+						{
+							"data": {
+								"name": "Второй шанс",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Когда 75-летнего шерифа убивают, он обретает шанс на новую жизнь. Учёные возвращают его в мир живых — он становится своеобразной версией Франкенштейна, получившей сверхсилу и вернувшей молодость. Теперь главному герою этой истории предстоит разобраться в том, по какой причине и кто именно его убил."
+							},
+							"name": "Pусский",
+							"iso_639_1": "ru",
+							"iso_3166_1": "RU",
+							"english_name": "Russian"
+						},
+						{
+							"data": {
+								"name": "Second Chance",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Se centra en Ray Pritchard, un policía retirado, de moral distraída, que tiene una segunda oportunidad cuando se levanta de entre los muertos. Ahora, más joven y fuerte, Pritachard deberá elegir entre sus viejas tentaciones o cumplir con su deber como policía."
+							},
+							"name": "Español",
+							"iso_639_1": "es",
+							"iso_3166_1": "ES",
+							"english_name": "Spanish"
+						},
+						{
+							"data": {
+								"name": "Drugie życie",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Ray Pritchard dostaje drugą szansę od życia, kiedy zostaje wskrzeszony po śmierci. „Potwór” jest wysportowany, silny i przystojny – to ożywiona wersja znacznie starszego Pritcharda, byłego żołnierza marynarki wojennej, który niedawno został zamordowany. Ciało Pritcharda może być nowe, ale w jego umyśle nadal tkwi 75-letni gbur."
+							},
+							"name": "Polski",
+							"iso_639_1": "pl",
+							"iso_3166_1": "PL",
+							"english_name": "Polish"
+						},
+						{
+							"data": {
+								"name": "",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Serija govori o 75.-godišnjem Džimiju Pričardu, bivšem šerifu koji je bio korumpriran i zbog toga natjeran da se penzioniše. Nakon što bude ubijen, u život ga vraćaju bogataši bioinženjeri Meri i Oto Gudvin."
+							},
+							"name": "Bosanski",
+							"iso_639_1": "bs",
+							"iso_3166_1": "BS",
+							"english_name": "Bosnian"
+						},
+						{
+							"data": {
+								"name": "",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Um corrupto, ex-xerife de 75 anos, cuja vida termina nas mãos de policiais corruptos, é trazido de volta do mundo dos mortos, em um corpo mais jovem, e precisa escolher entre suas antigas tentações e um novo propósito em sua vida. Além disso, ele terá de lidar com as pessoas que o ressuscitaram, um anti-social bilionário da internet e sua irmã gêmea, uma engenheira biológica."
+							},
+							"name": "Português",
+							"iso_639_1": "pt",
+							"iso_3166_1": "PT",
+							"english_name": "Portuguese"
+						},
+						{
+							"data": {
+								"name": "Frankenstein Code",
+								"tagline": "Une deuxième chance pour faire le bien… ou pas !",
+								"homepage": "",
+								"overview": "Quinze ans après avoir été forcé de démissionner de la police à cause d'un scandale de corruption, Jimmy Pritchard n'est plus que l'ombre de l'homme qu'il était autrefois. Un jour, alors qu'il surprend un cambriolage dans la maison d'un de ses deux enfants, l'agent du FBI Duval Pritchard, Jimmy est tué, mais sa mort est de bien courte durée. Ramené à la vie, dans une version rajeunie et améliorée de lui-même, par Mary et Otto Goodwin, deux scientifiques milliardaires, l'ancien shérif du comté se voit offrir une seconde chance. Saura-t-il la saisir et ainsi réparer le mal qu'il a fait à sa famille ? Ou va-t-il chercher à se venger de ceux qui sont responsables de sa mort ? Et surtout, parviendra-t-il à éviter les tentations de son passé, qui lui ont déjà tant coûté ?"
+							},
+							"name": "Français",
+							"iso_639_1": "fr",
+							"iso_3166_1": "FR",
+							"english_name": "French"
+						},
+						{
+							"data": {
+								"name": "Antras šansas",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Gėdingas, septyniasdešimt penkerių metų buvęs šerifas, kurio gyvenimas pasibaigė korumpuotų farų dėka, sugrąžintas atgal į gyvenimą ir gavęs antrą šansą poros jaunų technologijos mokslininkų dėka, tampa trisdešimt penkerių metų žmogumi su neprognozuojamomis beveik kaip super herojaus galiomis."
+							},
+							"name": "Lietuvių",
+							"iso_639_1": "lt",
+							"iso_3166_1": "LT",
+							"english_name": "Lithuanian"
+						},
+						{
+							"data": {
+								"name": "A doua șansă",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Descris într-o singură frază, Second Chance sună cam aşa: când casa îi este jefuită, iar hoţii îl ucid, poliţistul căzut în dizgraţie Jimmy Pritchard are parte de o nouă şansă când devine cobai pentru tehnologia revoluţionară inventată de un antreprenor genial."
+							},
+							"name": "Română",
+							"iso_639_1": "ro",
+							"iso_3166_1": "RO",
+							"english_name": "Romanian"
+						},
+						{
+							"data": {
+								"name": "",
+								"tagline": "Ο θάνατος του έδωσε μια δεύτερη ευκαιρία στη ζωή.",
+								"homepage": "",
+								"overview": "Ένας δισεκατομμυριούχος και ένας μηχανικός επαναφέρουν στη ζωή ένα νεκρό αστυνομικό πίσω στη ζωή με σκοπό να τους σώσει από μία απειλή….."
+							},
+							"name": "ελληνικά",
+							"iso_639_1": "el",
+							"iso_3166_1": "GR",
+							"english_name": "Greek"
+						},
+						{
+							"data": {
+								"name": "Втори шанс",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Алкохолик, женкар и баща, който винаги поставя работата преди семейството си, Джими Причард няма много причини да се гордее със себе си. Преди 15 години той е принуден да подаде оставка като шериф в Ел Ей заради обвинение в корупция. А сега намира смъртта си, след като случайно се натъква на обир в дома на сина си."
+							},
+							"name": "български език",
+							"iso_639_1": "bg",
+							"iso_3166_1": "BG",
+							"english_name": "Bulgarian"
+						},
+						{
+							"data": {
+								"name": "Második esély",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Otto, a kivételes IQ-val rendelkező zseni az emberi kapcsolatok terén súlyos nehézségekkel küzd - ikernővére nélkül nem boldogulna a világban. Amikor kiderül, hogy Mary gyógyíthatatlan beteg, kidolgoz egy módszert, amellyel életre kelthet egy donort. Az ehhez szükséges DNS-sel egy hetvenes, lezüllött, valaha hatékonyan, de kétes módszerekkel dolgozó rendőrfőnök rendelkezik, akit betörők öltek meg. A kísérletek még csak kezdeti fázisban vannak, de az idő sürget. A volt rendőr, Jimmy Pritchard fiatalemberként, de minden emlékével együtt éled újjá, és csakhamar megjelenik a fiánál, hogy segítsen neki egy nyomozásban."
+							},
+							"name": "Magyar",
+							"iso_639_1": "hu",
+							"iso_3166_1": "HU",
+							"english_name": "Hungarian"
+						},
+						{
+							"data": {
+								"name": "Druhá šance",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Seriál sleduje příběh Jimmyho Pritcharda, 75-letého šerifa z Washingtonu v důchodu. Následkem morálního selhání při jednom případu byl znemožněný a donucený k odchodu z funkce. Aby toho nebylo málo, zaplete se do přepadení domova jeho syna, kde ho zloději na místě zabijí. Tím se ovšem příběh nekončí: moderní technologie vyvinutá génii a miliardáři Mary a Ottem Goodwinovými přivede Pritcharda zpět k životu v těle mladšího muže. Dostává tak druhou šanci na nový život a poslání..."
+							},
+							"name": "Český",
+							"iso_639_1": "cs",
+							"iso_3166_1": "CZ",
+							"english_name": "Czech"
+						},
+						{
+							"data": {
+								"name": "Другий шанс",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Коли 75-річного шерифа вбивають, він знаходить шанс на нове життя. Вчені повертають його в світ живих - він стає своєрідною версією Франкенштейна, що отримав велику силу і повернула молодість. Тепер головному герою цієї історії належить розібратися в тому, чому і хто саме його вбив."
+							},
+							"name": "Український",
+							"iso_639_1": "uk",
+							"iso_3166_1": "UA",
+							"english_name": "Ukrainian"
+						},
+						{
+							"data": {
+								"name": "Seconda Chance",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Um corrupto, ex-xerife de 75 anos, cuja vida termina nas mãos de policiais corruptos, é trazido de volta do mundo dos mortos, em um corpo mais jovem, e precisa escolher entre suas antigas tentações e um novo propósito em sua vida. Além disso, ele terá de lidar com as pessoas que o ressuscitaram, um anti-social bilionário da internet e sua irmã gêmea, uma engenheira biológica."
+							},
+							"name": "Português",
+							"iso_639_1": "pt",
+							"iso_3166_1": "BR",
+							"english_name": "Portuguese"
+						},
+						{
+							"data": {
+								"name": "",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Jimmy Pritchard wird von zwei gewissenlosen Verbrechern von einer Brücke gestoßen und stirbt. Die Polizei geht von Selbstmord aus und stellt die Ermittlungen nach kurzer Zeit ein. Daraufhin wird der ehemalige Sheriff von Mary und Otto Goodwin wiederbelebt. Als er aufwacht, traut Jimmy seinen Augen kaum: Die Goodwins haben einen jungen attraktiven Mann mit unglaublichen Kräften aus ihm gemacht. Um seine Familie zu schützen, sucht Jimmy nach den beiden Mördern …"
+							},
+							"name": "Deutsch",
+							"iso_639_1": "de",
+							"iso_3166_1": "DE",
+							"english_name": "German"
+						},
+						{
+							"data": {
+								"name": "",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Sci-fi drama om Jimmy Pritchard, en 75-årig tidligere sherif, som dør i hænderne på korrupte politifolk. Et par bioingeniører formår at genoplive ham, og Pritchard får en ny chance i livet - denne gang som 35-årig mand med overmenneskelige evner."
+							},
+							"name": "Dansk",
+							"iso_639_1": "da",
+							"iso_3166_1": "DK",
+							"english_name": "Danish"
+						},
+						{
+							"data": {
+								"name": "Second Chance",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Il settantacinquenne Jimmy Pritchard è un ex sceriffo della contea di Los Angeles ormai in pensione, che quindici anni fa è stato coinvolto in un caso di corruzione. Una notte rimane ucciso durante una rapina a casa del figlio Duval Pritchard, agente dell'FBI. Pritchard viene riportato in vita dai gemelli miliardari Mary e Otto Goodwin, geni delle biotecnologie e fondatori di un impero dei social network chiamato Lookinglass. Pritchard si \"rianima\" in una versione più giovane di se stesso, con capacità fisiche amplificate. A questo punto Pritchard dovrà scegliere se condurre la vita dissoluta di un tempo, di poliziotto corrotto e donnaiolo, o redimersi."
+							},
+							"name": "Italiano",
+							"iso_639_1": "it",
+							"iso_3166_1": "IT",
+							"english_name": "Italian"
+						},
+						{
+							"data": {
+								"name": "",
+								"tagline": "",
+								"homepage": "",
+								"overview": "De 75-jarige Jimmy Pritchard, een zuiplap, womanizer en slechte vader wordt gedwongen ontslag te nemen als L.A. County Sheriff omdat hij corrupt was. 15 jaar later komt hij te overlijden tijdens een overval in het huis van FBI-agent Duval Pritchard, een van zijn kinderen. De dood duurt echter niet lang voor Jimmy, hij wordt snel weer tot leven gewekt door de biljonairs Mary Goodwin en haar tweelingbroer Otto. Jimmy krijgt een tweede kans, deze keer als een jongere versie van zichzelf, met onvoorspelbare superkrachten."
+							},
+							"name": "Nederlands",
+							"iso_639_1": "nl",
+							"iso_3166_1": "NL",
+							"english_name": "Dutch"
+						},
+						{
+							"data": {
+								"name": "重生",
+								"tagline": "",
+								"homepage": "",
+								"overview": "75岁的前警长吉米·普里查德遭杀害后，被两名亿万富豪科学家以年轻身体复活，并获得超常体能。他必须选择拥抱新的人生目标，还是重蹈覆辙。"
+							},
+							"name": "普通话",
+							"iso_639_1": "zh",
+							"iso_3166_1": "CN",
+							"english_name": "Mandarin"
+						},
+						{
+							"data": {
+								"name": "세컨드 찬스",
+								"tagline": "",
+								"homepage": "",
+								"overview": "부패 경찰로서 명예를 실추하고 퇴직했던 주인공이 강도에게 살해당한 후 백만장자인 쌍둥이 남매 과학자들에 의해 젊은 모습으로 부활해 범죄와 싸우는 새로운 삶을 시작하게 되는 내용의 드라마"
+							},
+							"name": "한국어/조선말",
+							"iso_639_1": "ko",
+							"iso_3166_1": "KR",
+							"english_name": "Korean"
+						},
+						{
+							"data": {
+								"name": "重生機會",
+								"tagline": "",
+								"homepage": "",
+								"overview": "一個被謀殺的75歲警長，被一個百萬富翁和他的天才科學家妹妹重新賦予了第二次生命，復活之後變得比之前年輕了四十歲，而且擁有超強能力，不過也有個小問題，就是晚上必須回到聲明培養液中，否則重生立即完結。"
+							},
+							"name": "普通话",
+							"iso_639_1": "zh",
+							"iso_3166_1": "TW",
+							"english_name": "Mandarin"
+						},
+						{
+							"data": {
+								"name": "",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Un multimillonario y bioingeniero regresa a la vida a un oficial de policía muerto."
+							},
+							"name": "Español",
+							"iso_639_1": "es",
+							"iso_3166_1": "MX",
+							"english_name": "Spanish"
+						},
+						{
+							"data": {
+								"name": "重生機會",
+								"tagline": "",
+								"homepage": "",
+								"overview": "一個被謀殺的 75 歲警長，被一個百萬富翁和他的天才科學家妹妹重新賦豫了第二次生命，復活之後變得比之前年輕了四十歲，而且擁有超強能力，不過也有個小問題，就是晚上必須回到聲明培養液中，否則重生立即完結。"
+							},
+							"name": "普通话",
+							"iso_639_1": "zh",
+							"iso_3166_1": "HK",
+							"english_name": "Mandarin"
+						},
+						{
+							"data": {
+								"name": "セカンド・チャンス 造られた男",
+								"tagline": "",
+								"homepage": "",
+								"overview": ""
+							},
+							"name": "日本語",
+							"iso_639_1": "ja",
+							"iso_3166_1": "JP",
+							"english_name": "Japanese"
+						}
+					]
+				},
+				"vote_average": 6.8,
+				"backdrop_path": "/cVjcq52suVSKlPAW8cfJqvQfFuL.jpg",
+				"in_production": false,
+				"last_air_date": "2016-03-25",
+				"original_name": "Second Chance",
+				"first_air_date": "2016-01-13",
+				"origin_country": ["US"],
+				"content_ratings": {
+					"results": [
+						{
+							"rating": "TV-14",
+							"iso_3166_1": "US",
+							"descriptors": []
+						},
+						{
+							"rating": "16",
+							"iso_3166_1": "DE",
+							"descriptors": []
+						},
+						{
+							"rating": "PG",
+							"iso_3166_1": "PH",
+							"descriptors": []
+						},
+						{
+							"rating": "10",
+							"iso_3166_1": "FR",
+							"descriptors": []
+						},
+						{
+							"rating": "K12",
+							"iso_3166_1": "FI",
+							"descriptors": []
+						},
+						{
+							"rating": "12",
+							"iso_3166_1": "ES",
+							"descriptors": []
+						},
+						{
+							"rating": "U",
+							"iso_3166_1": "IN",
+							"descriptors": []
+						}
+					]
+				},
+				"episode_run_time": [44],
+				"spoken_languages": [
+					{
+						"name": "English",
+						"iso_639_1": "en",
+						"english_name": "English"
+					}
+				],
+				"number_of_seasons": 1,
+				"original_language": "en",
+				"alternative_titles": {
+					"results": [
+						{
+							"type": "",
+							"title": "重生机会",
+							"iso_3166_1": "CN"
+						},
+						{
+							"type": "",
+							"title": "窥视重生",
+							"iso_3166_1": "CN"
+						},
+						{
+							"type": "",
+							"title": "再一世",
+							"iso_3166_1": "CN"
+						},
+						{
+							"type": "Science-fiction",
+							"title": "Second chance (2016)",
+							"iso_3166_1": "FR"
+						},
+						{
+							"type": "working title",
+							"title": "Lookinglass",
+							"iso_3166_1": "US"
+						},
+						{
+							"type": "working title",
+							"title": "The Frankenstein Code",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"number_of_episodes": 11,
+				"last_episode_to_air": {
+					"id": 1176692,
+					"name": "Gelassenheit",
+					"runtime": 44,
+					"show_id": 64434,
+					"air_date": "2016-03-25",
+					"overview": "Gracie's life is in danger unless Pritchard and Duval can reach her in time and rescue her from Connor and Otto's experiment. Meanwhile, Mary and Alexa search for a way to save Pritchard since he can no longer regenerate in the tank; and Otto struggles to come to grips with his decisions that have touched so many lives.",
+					"still_path": "/mPNoiwOmyGRBf3D9GqF1pzX1hS7.jpg",
+					"vote_count": 1,
+					"episode_type": "finale",
+					"vote_average": 10,
+					"season_number": 1,
+					"episode_number": 11,
+					"production_code": ""
+				},
+				"next_episode_to_air": null,
+				"production_companies": [
+					{
+						"id": 1556,
+						"name": "20th Century Fox Television",
+						"logo_path": "/31h94rG9hzjprXoYNy3L1ErUya2.png",
+						"origin_country": "US"
+					},
+					{
+						"id": 10850,
+						"name": "Teakwood Lane Productions",
+						"logo_path": null,
+						"origin_country": "US"
+					}
+				],
+				"production_countries": [
+					{
+						"name": "United States of America",
+						"iso_3166_1": "US"
+					}
+				]
+			},
+			"130211": {
+				"id": 130211,
+				"name": "セカンド．チャンス",
+				"type": "Scripted",
+				"adult": false,
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"status": "Returning Series",
+				"videos": {
+					"results": []
+				},
+				"credits": {
+					"cast": [
+						{
+							"id": 1237839,
+							"name": "Misako Tanaka",
+							"adult": false,
+							"order": 0,
+							"gender": 1,
+							"character": "Fujii Haruko",
+							"credit_id": "610505934f33ad007ed1014b",
+							"popularity": 1.4598,
+							"profile_path": "/b9eCtwWzrVPOLvt4o6ljtIvBzPx.jpg",
+							"original_name": "田中美佐子",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 1241568,
+							"name": "Tsuyoshi Domoto",
+							"adult": false,
+							"order": 1,
+							"gender": 2,
+							"character": "Fujii Wataru",
+							"credit_id": "61050563ad87f700461b4d4e",
+							"popularity": 0.7393,
+							"profile_path": "/fsPenXgw6Zm2Wds2ws8HG6GnB8m.jpg",
+							"original_name": "堂本剛",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 553122,
+							"name": "Hidekazu Akai",
+							"adult": false,
+							"order": 2,
+							"gender": 2,
+							"character": "Noda Tsutomu",
+							"credit_id": "610505b32a210c007e1627e7",
+							"popularity": 1.0306,
+							"profile_path": "/iyOWLfVdRu73vxwwf51lj0G0Evy.jpg",
+							"original_name": "赤井英和",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 1136345,
+							"name": "Yuki Kuroda",
+							"adult": false,
+							"order": 3,
+							"gender": 2,
+							"character": "Fujii Ritsu",
+							"credit_id": "64dd2e9337109700ffb89631",
+							"popularity": 0.3898,
+							"profile_path": "/3Xwebh83vyNE6Y3c8Yv5QUFlO6x.jpg",
+							"original_name": "黒田勇樹",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 1402803,
+							"name": "Yoshihiko Inohara",
+							"adult": false,
+							"order": 4,
+							"gender": 2,
+							"character": "",
+							"credit_id": "64dd2eb6a3b5e600ff4cea8a",
+							"popularity": 0.7717,
+							"profile_path": "/q48PxkZGbge3zUkPicB61XyYfR9.jpg",
+							"original_name": "井ノ原快彦",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 1171071,
+							"name": "Miyuki Matsuda",
+							"adult": false,
+							"order": 5,
+							"gender": 1,
+							"character": "",
+							"credit_id": "64dd2ebea3b5e60139003b1a",
+							"popularity": 0.5729,
+							"profile_path": "/zQlUkXpbDaDvfA6ULXYGfkifXVk.jpg",
+							"original_name": "松田美由紀",
+							"known_for_department": "Acting"
+						}
+					],
+					"crew": [
+						{
+							"id": 3776481,
+							"job": "Theme Song Performance",
+							"name": "Mayo Okamoto",
+							"adult": false,
+							"gender": 1,
+							"credit_id": "636ab969350398007ace0f57",
+							"department": "Sound",
+							"popularity": 0.0645,
+							"profile_path": "/o36O3vABBKiZrfpNyVxBDcannVu.jpg",
+							"original_name": "岡本真夜",
+							"known_for_department": "Sound"
+						},
+						{
+							"id": 1369118,
+							"job": "Screenplay",
+							"name": "Eriko Komatsu",
+							"adult": false,
+							"gender": 1,
+							"credit_id": "64dd2a88371097011c526256",
+							"department": "Writing",
+							"popularity": 0.5381,
+							"profile_path": "/sIRgWzNFGQW7jzEmxSMGE7iCPUN.jpg",
+							"original_name": "小松江里子",
+							"known_for_department": "Writing"
+						},
+						{
+							"id": 553935,
+							"job": "Music",
+							"name": "Toru Hasebe",
+							"adult": false,
+							"gender": 2,
+							"credit_id": "64dd2a95a3b5e60139003a2b",
+							"department": "Sound",
+							"popularity": 0.2819,
+							"profile_path": null,
+							"original_name": "長谷部徹",
+							"known_for_department": "Sound"
+						},
+						{
+							"id": 1560851,
+							"job": "Producer",
+							"name": "Kazuhiro Ito",
+							"adult": false,
+							"gender": 0,
+							"credit_id": "64dd2aacb54002013ad7d2b3",
+							"department": "Production",
+							"popularity": 0.3265,
+							"profile_path": null,
+							"original_name": "伊藤一尋",
+							"known_for_department": "Production"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"id": 352959,
+						"name": "Specials",
+						"air_date": "1996-12-20",
+						"overview": "",
+						"poster_path": null,
+						"vote_average": 0,
+						"episode_count": 1,
+						"season_number": 0
+					},
+					{
+						"id": 204196,
+						"name": "Season 1",
+						"air_date": "1995-04-14",
+						"overview": "",
+						"poster_path": null,
+						"vote_average": 0,
+						"episode_count": 12,
+						"season_number": 1
+					}
+				],
+				"tagline": "",
+				"homepage": "",
+				"keywords": {
+					"results": []
+				},
+				"networks": [
+					{
+						"id": 160,
+						"name": "TBS",
+						"logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+						"origin_country": "JP"
+					}
+				],
+				"overview": "",
+				"softcore": false,
+				"languages": ["ja"],
+				"created_by": [],
+				"popularity": 1.6312,
+				"vote_count": 2,
+				"poster_path": "/8mtVz69oiPqIH4xLPPpIrxuABqF.jpg",
+				"external_ids": {
+					"imdb_id": null,
+					"tvdb_id": null,
+					"tvrage_id": null,
+					"twitter_id": null,
+					"facebook_id": null,
+					"freebase_id": null,
+					"wikidata_id": null,
+					"freebase_mid": null,
+					"instagram_id": null
+				},
+				"translations": {
+					"translations": [
+						{
+							"data": {
+								"name": "第二春之祸",
+								"tagline": "",
+								"homepage": "",
+								"overview": "一位带着三个小孩的寡妇，在一个偶然的机会中认识了一位因妻子离家出走后独自扶养女儿的男人。此剧描述这对佳偶如何展开他们的恋情，如何为他们的小孩建立一个温馨的家。自丈夫去世后，藤井春子[田中美佐子]便负起一家之主的责任，为抚养三个小孩，每天须至超市工作，但因其对金钱毫无概念，常使全家的经济状况呈现混乱的情形，迫使儿子们不得不没收母亲的提款卡以控制其不当的开销。此外，春子并以低血压为由，将大小家事丢给二儿子藤井律（黑田勇树）负责，至於大儿子藤井渡（堂本刚)，个性倔强，同时亦有着强烈的恋母情结。另一方面，野田勤（赤井英和）因妻子逃家，只好带著女儿搬到东京的旧公寓居住，父女两相依为命，野田勤虽遭叛离之痛，却不因妻子的离弃而怨天尤人，反而积极尽责地与独女重新开始生活，其女野田君子（宫城秋叶）因同情父亲的遭遇，更加无微不至的照顾父亲。某日，藤井春子和野田勤二人戏剧性地在超市相遇，也因此改变了两个人的平静家庭生活。"
+							},
+							"name": "普通话",
+							"iso_639_1": "zh",
+							"iso_3166_1": "CN",
+							"english_name": "Mandarin"
+						},
+						{
+							"data": {
+								"name": "",
+								"tagline": "",
+								"homepage": "",
+								"overview": "春子は2年前に事故で夫を亡くし、渡、律ら3人の子供を育てていた。ある日、スーパーで働く春子は野田と出会う。野田は妻に逃げられ、娘の君子を連れて大阪から上京した男。だが、春子の野田に対する第一印象はよくなかった。そんな春子の気も知らずに野田は春子に対して好意を抱く。"
+							},
+							"name": "日本語",
+							"iso_639_1": "ja",
+							"iso_3166_1": "JP",
+							"english_name": "Japanese"
+						},
+						{
+							"data": {
+								"name": "",
+								"tagline": "",
+								"homepage": "",
+								"overview": ""
+							},
+							"name": "English",
+							"iso_639_1": "en",
+							"iso_3166_1": "US",
+							"english_name": "English"
+						}
+					]
+				},
+				"vote_average": 8,
+				"backdrop_path": null,
+				"in_production": true,
+				"last_air_date": "1995-06-30",
+				"original_name": "セカンド．チャンス",
+				"first_air_date": "1995-04-14",
+				"origin_country": ["JP"],
+				"content_ratings": {
+					"results": []
+				},
+				"episode_run_time": [],
+				"spoken_languages": [
+					{
+						"name": "日本語",
+						"iso_639_1": "ja",
+						"english_name": "Japanese"
+					}
+				],
+				"number_of_seasons": 1,
+				"original_language": "ja",
+				"alternative_titles": {
+					"results": []
+				},
+				"number_of_episodes": 12,
+				"last_episode_to_air": {
+					"id": 3099732,
+					"name": "Episode 12",
+					"runtime": 54,
+					"show_id": 130211,
+					"air_date": "1995-06-30",
+					"overview": "",
+					"still_path": null,
+					"vote_count": 0,
+					"episode_type": "finale",
+					"vote_average": 0,
+					"season_number": 1,
+					"episode_number": 12,
+					"production_code": ""
+				},
+				"next_episode_to_air": null,
+				"production_companies": [],
+				"production_countries": []
+			},
+			"335977": {
+				"id": 335977,
+				"name": "Second Chance",
+				"type": "Scripted",
+				"adult": false,
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"status": "Ended",
+				"videos": {
+					"results": []
+				},
+				"credits": {
+					"cast": [
+						{
+							"id": 13326,
+							"name": "Susannah York",
+							"adult": false,
+							"order": 0,
+							"gender": 1,
+							"character": "Kate Hurst",
+							"credit_id": "6ab1409edf5fc793cac8cb0e",
+							"popularity": 1.2093,
+							"profile_path": "/v5Q3guQyQwWtfG1dOFBZ4fG0SEc.jpg",
+							"original_name": "Susannah York",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 101533,
+							"name": "Ralph Bates",
+							"adult": false,
+							"order": 1,
+							"gender": 2,
+							"character": "Chris Hurst",
+							"credit_id": "6ab140a536b4f785c1e6535c",
+							"popularity": 0.6453,
+							"profile_path": "/9H7QrcyGE0HBYAFTYg2phJ13C74.jpg",
+							"original_name": "Ralph Bates",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 1250067,
+							"name": "Kate Dorning",
+							"adult": false,
+							"order": 2,
+							"gender": 1,
+							"character": "Jill Hurst",
+							"credit_id": "6ab140ad2b56fc815e634185",
+							"popularity": 0.2547,
+							"profile_path": null,
+							"original_name": "Kate Dorning",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 1793760,
+							"name": "Mark Eadie",
+							"adult": false,
+							"order": 3,
+							"gender": 0,
+							"character": "Martin Hurst",
+							"credit_id": "6ab140b5f840d21efc2b5984",
+							"popularity": 0.076,
+							"profile_path": null,
+							"original_name": "Mark Eadie",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 53591,
+							"name": "Steven Grives",
+							"adult": false,
+							"order": 4,
+							"gender": 2,
+							"character": "Trevor Fuller",
+							"credit_id": "6ab140c008d4c013c6f667d4",
+							"popularity": 0.4997,
+							"profile_path": "/dfvkwfLtq88zQREzodPXKFUp7QR.jpg",
+							"original_name": "Steven Grives",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 1241986,
+							"name": "Carole Nimmons",
+							"adult": false,
+							"order": 5,
+							"gender": 1,
+							"character": "Pat Thorne",
+							"credit_id": "6ab140c7b257b3c05e634164",
+							"popularity": 0.2971,
+							"profile_path": "/b1k6H35HH1UsitdQQw6D4N2Eiut.jpg",
+							"original_name": "Carole Nimmons",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 1049414,
+							"name": "Gwen Cherrell",
+							"adult": false,
+							"order": 6,
+							"gender": 1,
+							"character": "Bunty Gilpin",
+							"credit_id": "6ab140cfe426236eae634368",
+							"popularity": 0.2962,
+							"profile_path": "/bqRSn34UlVsOCwieqSFH1ewK9JU.jpg",
+							"original_name": "Gwen Cherrell",
+							"known_for_department": "Acting"
+						},
+						{
+							"id": 1211884,
+							"name": "Jan Harvey",
+							"adult": false,
+							"order": 7,
+							"gender": 1,
+							"character": "Frances Sterling",
+							"credit_id": "6ab140dc1ecc97d706e653d2",
+							"popularity": 0.3704,
+							"profile_path": "/2PVGazr9qJKtSCVgAALH5tUHSOr.jpg",
+							"original_name": "Jan Harvey",
+							"known_for_department": "Acting"
+						}
+					],
+					"crew": [
+						{
+							"id": 1231173,
+							"job": "Writer",
+							"name": "Adele Rose",
+							"adult": false,
+							"gender": 1,
+							"credit_id": "6ab140fbef2d2c0067f667d0",
+							"department": "Writing",
+							"popularity": 0.125,
+							"profile_path": null,
+							"original_name": "Adele Rose",
+							"known_for_department": "Writing"
+						},
+						{
+							"id": 239462,
+							"job": "Producer",
+							"name": "Keith Richardson",
+							"adult": false,
+							"gender": 2,
+							"credit_id": "6ab1410786e89a079a6341b0",
+							"department": "Production",
+							"popularity": 0.1801,
+							"profile_path": "/fvYo9r6Nylb9QnH4UmMhLh5hPSU.jpg",
+							"original_name": "Keith Richardson",
+							"known_for_department": "Production"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"id": 545256,
+						"name": "Season 1",
+						"air_date": "1981-01-23",
+						"overview": "",
+						"poster_path": null,
+						"vote_average": 0,
+						"episode_count": 6,
+						"season_number": 1
+					}
+				],
+				"tagline": "",
+				"homepage": "",
+				"keywords": {
+					"results": []
+				},
+				"networks": [],
+				"overview": "Middle aged couple, Chris and Kate Hurst, face up to divorce.",
+				"softcore": false,
+				"languages": [],
+				"created_by": [],
+				"popularity": 1.5159,
+				"vote_count": 0,
+				"poster_path": null,
+				"external_ids": {
+					"imdb_id": "tt0162108",
+					"tvdb_id": null,
+					"tvrage_id": null,
+					"twitter_id": null,
+					"facebook_id": null,
+					"freebase_id": null,
+					"wikidata_id": "Q134978496",
+					"freebase_mid": null,
+					"instagram_id": null
+				},
+				"translations": {
+					"translations": [
+						{
+							"data": {
+								"name": "",
+								"tagline": "",
+								"homepage": "",
+								"overview": "Middle aged couple, Chris and Kate Hurst, face up to divorce."
+							},
+							"name": "English",
+							"iso_639_1": "en",
+							"iso_3166_1": "US",
+							"english_name": "English"
+						}
+					]
+				},
+				"vote_average": 0,
+				"backdrop_path": null,
+				"in_production": false,
+				"last_air_date": "1981-02-27",
+				"original_name": "Second Chance",
+				"first_air_date": "1981-01-23",
+				"origin_country": ["GB"],
+				"content_ratings": {
+					"results": []
+				},
+				"episode_run_time": [],
+				"spoken_languages": [],
+				"number_of_seasons": 1,
+				"original_language": "en",
+				"alternative_titles": {
+					"results": []
+				},
+				"number_of_episodes": 6,
+				"last_episode_to_air": {
+					"id": 7833262,
+					"name": "April II",
+					"runtime": null,
+					"show_id": 335977,
+					"air_date": "1981-02-27",
+					"overview": "",
+					"still_path": null,
+					"vote_count": 0,
+					"episode_type": "standard",
+					"vote_average": 0,
+					"season_number": 1,
+					"episode_number": 6,
+					"production_code": ""
+				},
+				"next_episode_to_air": null,
+				"production_companies": [],
+				"production_countries": [
+					{
+						"name": "United Kingdom",
+						"iso_3166_1": "GB"
+					}
+				]
+			}
+		},
+		"season": {
+			"64434/1": {
+				"id": 72029,
+				"_id": "564a47f09251414dc80006fb",
+				"air_date": "2016-01-13",
+				"episodes": [
+					{
+						"air_date": "2016-01-13",
+						"episode_number": 1,
+						"episode_type": "standard",
+						"id": 1136941,
+						"name": "A Suitable Donor",
+						"overview": "After Jimmy Pritchard is killed in a robbery at his son's home, Pritchard is brought back to life in the body of a younger man by a billionaire and a bioengineer.",
+						"production_code": "1AYF01",
+						"runtime": 46,
+						"season_number": 1,
+						"show_id": 64434,
+						"still_path": "/i79WhMOdxdZh6nd1VAwv96zGAu3.jpg",
+						"vote_average": 8.1,
+						"vote_count": 19,
+						"crew": [
+							{
+								"job": "Writer",
+								"department": "Writing",
+								"credit_id": "5ffd6f81de11e5003ef39719",
+								"adult": false,
+								"gender": 2,
+								"id": 29524,
+								"known_for_department": "Writing",
+								"name": "Rand Ravich",
+								"original_name": "Rand Ravich",
+								"popularity": 0.4469,
+								"profile_path": "/4kklMTTo2MTA7MBB49aZha7l56Y.jpg"
+							},
+							{
+								"job": "Director",
+								"department": "Directing",
+								"credit_id": "5ffd6f5b0fb17f003b41dc6e",
+								"adult": false,
+								"gender": 2,
+								"id": 84931,
+								"known_for_department": "Directing",
+								"name": "Michael Cuesta",
+								"original_name": "Michael Cuesta",
+								"popularity": 0.669,
+								"profile_path": "/6P49lCnJAj8koyUCgiXfe2ZxeBc.jpg"
+							}
+						],
+						"guest_stars": [
+							{
+								"character": "Jittery Burglar",
+								"credit_id": "5feaf24d8c22c0003d12eb3b",
+								"order": 506,
+								"adult": false,
+								"gender": 2,
+								"id": 1504537,
+								"known_for_department": "Acting",
+								"name": "Adam Dietrich",
+								"original_name": "Adam Dietrich",
+								"popularity": 0.2669,
+								"profile_path": "/cmbAF3wGE23oqHYT2OARAZPqgjo.jpg"
+							},
+							{
+								"character": "Piers Morgan",
+								"credit_id": "5ffd6e28fdc4fa004120277f",
+								"order": 521,
+								"adult": false,
+								"gender": 2,
+								"id": 1220147,
+								"known_for_department": "Acting",
+								"name": "Piers Morgan",
+								"original_name": "Piers Morgan",
+								"popularity": 0.7239,
+								"profile_path": "/gQ5I0N8rrvxIqnKdh7eBcbTphB8.jpg"
+							},
+							{
+								"character": "Agent Strayburn",
+								"credit_id": "5ffd6e49de11e5003ef3960d",
+								"order": 522,
+								"adult": false,
+								"gender": 2,
+								"id": 157029,
+								"known_for_department": "Acting",
+								"name": "Derek Webster",
+								"original_name": "Derek Webster",
+								"popularity": 1.0065,
+								"profile_path": "/q2wo9lI656Chxejpqov5i8EU1ZO.jpg"
+							},
+							{
+								"character": "Bettina",
+								"credit_id": "5ffd6e58e9da690042850d5f",
+								"order": 523,
+								"adult": false,
+								"gender": 1,
+								"id": 212833,
+								"known_for_department": "Acting",
+								"name": "Nicky Whelan",
+								"original_name": "Nicky Whelan",
+								"popularity": 2.0739,
+								"profile_path": "/eHoAP5fj7p5FKfZPadO5Emtrfy0.jpg"
+							},
+							{
+								"character": "Agent Bech",
+								"credit_id": "5ffd6e74e9da69004084a5ca",
+								"order": 524,
+								"adult": false,
+								"gender": 0,
+								"id": 2933155,
+								"known_for_department": "Acting",
+								"name": "John McIntosh",
+								"original_name": "John McIntosh",
+								"popularity": 0.1192,
+								"profile_path": null
+							},
+							{
+								"character": "FBI Interviewer",
+								"credit_id": "5ffd6ea66611b4003f621b4c",
+								"order": 525,
+								"adult": false,
+								"gender": 2,
+								"id": 20496,
+								"known_for_department": "Acting",
+								"name": "Jason Douglas",
+								"original_name": "Jason Douglas",
+								"popularity": 0.6375,
+								"profile_path": "/9vvygaziqPt23AafWHJY8TlUK8d.jpg"
+							},
+							{
+								"character": "Jimmy Pritchard (in 1985)",
+								"credit_id": "5ffd6ecd77d23b003efaa155",
+								"order": 526,
+								"adult": false,
+								"gender": 2,
+								"id": 1750225,
+								"known_for_department": "Acting",
+								"name": "Jason Skeen",
+								"original_name": "Jason Skeen",
+								"popularity": 0.2146,
+								"profile_path": "/5UPk6nhcNTj3rEoaI0kVPNxORGb.jpg"
+							},
+							{
+								"character": "Helen Pritchard",
+								"credit_id": "6006ab7d47c9fb003fa255d2",
+								"order": 542,
+								"adult": false,
+								"gender": 1,
+								"id": 19275,
+								"known_for_department": "Acting",
+								"name": "Amanda Detmer",
+								"original_name": "Amanda Detmer",
+								"popularity": 1.2656,
+								"profile_path": "/gEfxlgMGN7bZdu3A0vgeBp1hVHy.jpg"
+							}
+						]
+					},
+					{
+						"air_date": "2016-01-20",
+						"episode_number": 2,
+						"episode_type": "standard",
+						"id": 1149674,
+						"name": "One More Notch",
+						"overview": "Due to the power surge that Mary and Otto caused in bringing Pritchard back to life, two notorious murderers escape from prison. Still determined that this is his city to protect, Pritchard goes on the hunt for them, and Mary - who believes she's partially responsible for the fugitives' escape - offers assistance.",
+						"production_code": "1AYF02",
+						"runtime": 43,
+						"season_number": 1,
+						"show_id": 64434,
+						"still_path": "/ebdMTWOBSadcc89rlth9dX344RN.jpg",
+						"vote_average": 7.5,
+						"vote_count": 15,
+						"crew": [
+							{
+								"job": "Writer",
+								"department": "Writing",
+								"credit_id": "5ffd6f81de11e5003ef39719",
+								"adult": false,
+								"gender": 2,
+								"id": 29524,
+								"known_for_department": "Writing",
+								"name": "Rand Ravich",
+								"original_name": "Rand Ravich",
+								"popularity": 0.4469,
+								"profile_path": "/4kklMTTo2MTA7MBB49aZha7l56Y.jpg"
+							},
+							{
+								"job": "Director",
+								"department": "Directing",
+								"credit_id": "5ffd6fdd8b959e003b40d6ee",
+								"adult": false,
+								"gender": 2,
+								"id": 23881,
+								"known_for_department": "Acting",
+								"name": "Timothy Busfield",
+								"original_name": "Timothy Busfield",
+								"popularity": 1.1886,
+								"profile_path": "/r2VQ4Ar1WCISJoTqOOcO3HEgN4p.jpg"
+							},
+							{
+								"job": "Production Assistant",
+								"department": "Production",
+								"credit_id": "653d834050733c00adbc27d4",
+								"adult": false,
+								"gender": 2,
+								"id": 1516583,
+								"known_for_department": "Directing",
+								"name": "Thomas Ma",
+								"original_name": "Thomas Ma",
+								"popularity": 0.2846,
+								"profile_path": null
+							}
+						],
+						"guest_stars": [
+							{
+								"character": "Lisa",
+								"credit_id": "6636abaa9590e30129bc657a",
+								"order": 544,
+								"adult": false,
+								"gender": 1,
+								"id": 1358988,
+								"known_for_department": "Acting",
+								"name": "Kennedi Clements",
+								"original_name": "Kennedi Clements",
+								"popularity": 0.59,
+								"profile_path": "/ip0u2lxJILzYQHzvWgYmwqlCBET.jpg"
+							}
+						]
+					},
+					{
+						"air_date": "2016-01-29",
+						"episode_number": 3,
+						"episode_type": "standard",
+						"id": 1149675,
+						"name": "From Darkness the Sun",
+						"overview": "Jimmy attempts to prove that he was a better police officer and man than Duval ever realized. A deadly psycho and another father-son duo cause problems.",
+						"production_code": "1AYF03",
+						"runtime": 43,
+						"season_number": 1,
+						"show_id": 64434,
+						"still_path": "/qbxt9khMy0SyLAhX6yVhZRon1Ut.jpg",
+						"vote_average": 7.4,
+						"vote_count": 13,
+						"crew": [
+							{
+								"job": "Director",
+								"department": "Directing",
+								"credit_id": "5ffd7094470ead0040ba7718",
+								"adult": false,
+								"gender": 2,
+								"id": 18695,
+								"known_for_department": "Directing",
+								"name": "Adam Kane",
+								"original_name": "Adam Kane",
+								"popularity": 0.4064,
+								"profile_path": "/afZRRvWpElgeiHTw0ECyJ3UdOa.jpg"
+							},
+							{
+								"job": "Writer",
+								"department": "Writing",
+								"credit_id": "5ffd70a1c8a5ac003eb262bb",
+								"adult": false,
+								"gender": 2,
+								"id": 1227485,
+								"known_for_department": "Writing",
+								"name": "Donald Todd",
+								"original_name": "Donald Todd",
+								"popularity": 0.5587,
+								"profile_path": "/emepEul99VREpkZY6NehZlpoZ1r.jpg"
+							},
+							{
+								"job": "Production Assistant",
+								"department": "Production",
+								"credit_id": "653d834050733c00adbc27d4",
+								"adult": false,
+								"gender": 2,
+								"id": 1516583,
+								"known_for_department": "Directing",
+								"name": "Thomas Ma",
+								"original_name": "Thomas Ma",
+								"popularity": 0.2846,
+								"profile_path": null
+							}
+						],
+						"guest_stars": [
+							{
+								"character": "Gloria",
+								"credit_id": "57f67ba09251413605006f58",
+								"order": 502,
+								"adult": false,
+								"gender": 1,
+								"id": 79351,
+								"known_for_department": "Acting",
+								"name": "Alison Araya",
+								"original_name": "Alison Araya",
+								"popularity": 0.8776,
+								"profile_path": "/gOQv2rkXLRBvVXVoXYERnjcSKAk.jpg"
+							},
+							{
+								"character": "Asher Davis",
+								"credit_id": "595505b49251412b310515c9",
+								"order": 504,
+								"adult": false,
+								"gender": 2,
+								"id": 936932,
+								"known_for_department": "Acting",
+								"name": "Adam DiMarco",
+								"original_name": "Adam DiMarco",
+								"popularity": 2.2623,
+								"profile_path": "/eYEgtlwO7aelRf8PqCh50YEAZU2.jpg"
+							}
+						]
+					},
+					{
+						"air_date": "2016-02-05",
+						"episode_number": 4,
+						"episode_type": "standard",
+						"id": 1160185,
+						"name": "Admissions",
+						"overview": "A former case ends up becoming relevant as Pritchard and Duval take a look into some murders involving young prodigies.",
+						"production_code": "1AYF04",
+						"runtime": 44,
+						"season_number": 1,
+						"show_id": 64434,
+						"still_path": "/xlDmiERu277x1p4CMDYeu9YANDD.jpg",
+						"vote_average": 7.8,
+						"vote_count": 13,
+						"crew": [
+							{
+								"job": "Director",
+								"department": "Directing",
+								"credit_id": "5ffd70b90fb17f003c4338de",
+								"adult": false,
+								"gender": 2,
+								"id": 25882,
+								"known_for_department": "Directing",
+								"name": "Brad Turner",
+								"original_name": "Brad Turner",
+								"popularity": 0.809,
+								"profile_path": null
+							},
+							{
+								"job": "Writer",
+								"department": "Writing",
+								"credit_id": "5ffd70c9fcec2e00401bde75",
+								"adult": false,
+								"gender": 1,
+								"id": 1359342,
+								"known_for_department": "Writing",
+								"name": "Gwendolyn M. Parker",
+								"original_name": "Gwendolyn M. Parker",
+								"popularity": 0.6076,
+								"profile_path": null
+							},
+							{
+								"job": "Production Assistant",
+								"department": "Production",
+								"credit_id": "653d834050733c00adbc27d4",
+								"adult": false,
+								"gender": 2,
+								"id": 1516583,
+								"known_for_department": "Directing",
+								"name": "Thomas Ma",
+								"original_name": "Thomas Ma",
+								"popularity": 0.2846,
+								"profile_path": null
+							}
+						],
+						"guest_stars": []
+					},
+					{
+						"air_date": "2016-02-12",
+						"episode_number": 5,
+						"episode_type": "standard",
+						"id": 1160186,
+						"name": "Scratch That Glitch",
+						"overview": "A dead pool makes a prediction that Mary will die on the same day as the launch of an important Lookinglass product. Pritchard ends up at the hospital following a brawl.",
+						"production_code": "1AYF05",
+						"runtime": 44,
+						"season_number": 1,
+						"show_id": 64434,
+						"still_path": "/iB1g5RFUp3FN6S1QuxZQKvG2Vqc.jpg",
+						"vote_average": 7.4,
+						"vote_count": 12,
+						"crew": [
+							{
+								"job": "Director",
+								"department": "Directing",
+								"credit_id": "5ffd70e5e9da69004184e3b1",
+								"adult": false,
+								"gender": 2,
+								"id": 77211,
+								"known_for_department": "Directing",
+								"name": "Félix Alcalá",
+								"original_name": "Félix Alcalá",
+								"popularity": 0.6623,
+								"profile_path": "/rlnSbY7tueXmlyjI8St7ee1PniI.jpg"
+							},
+							{
+								"job": "Writer",
+								"department": "Writing",
+								"credit_id": "5ffd70f394d8a8004128de24",
+								"adult": false,
+								"gender": 2,
+								"id": 27548,
+								"known_for_department": "Writing",
+								"name": "Richard Hatem",
+								"original_name": "Richard Hatem",
+								"popularity": 0.2789,
+								"profile_path": null
+							}
+						],
+						"guest_stars": [
+							{
+								"character": "Connor Graff",
+								"credit_id": "5a1823090e0a264ccd014812",
+								"order": 505,
+								"adult": false,
+								"gender": 2,
+								"id": 1010189,
+								"known_for_department": "Acting",
+								"name": "Adan Canto",
+								"original_name": "Adan Canto",
+								"popularity": 1.0545,
+								"profile_path": "/d6ZcywTmeR9UWAcdeDMJwpuBwQN.jpg"
+							},
+							{
+								"character": "Malcolm Sprague",
+								"credit_id": "5ffd675be19de90040189550",
+								"order": 507,
+								"adult": false,
+								"gender": 2,
+								"id": 1884448,
+								"known_for_department": "Acting",
+								"name": "Preston Vanderslice",
+								"original_name": "Preston Vanderslice",
+								"popularity": 0.5136,
+								"profile_path": "/31ez5K7HFj1IHp781b6r27xMnzt.jpg"
+							},
+							{
+								"character": "FBI Agent #1",
+								"credit_id": "5ffd6b8047c9fb003f79e740",
+								"order": 508,
+								"adult": false,
+								"gender": 2,
+								"id": 91405,
+								"known_for_department": "Acting",
+								"name": "Donny Lucas",
+								"original_name": "Donny Lucas",
+								"popularity": 0.5318,
+								"profile_path": "/rynuhYTEpG1POHkPfpkxtbNIFvI.jpg"
+							},
+							{
+								"character": "Kelly Crane",
+								"credit_id": "5ffd6b996611b4003d61f0c7",
+								"order": 509,
+								"adult": false,
+								"gender": 1,
+								"id": 1210617,
+								"known_for_department": "Acting",
+								"name": "Natalie Grace",
+								"original_name": "Natalie Grace",
+								"popularity": 0.2145,
+								"profile_path": "/dN7zKZHdCXE76D2KQQgVXJL63cu.jpg"
+							},
+							{
+								"character": "Cranston",
+								"credit_id": "5ffd6ba80fb17f003b41d811",
+								"order": 510,
+								"adult": false,
+								"gender": 2,
+								"id": 1405540,
+								"known_for_department": "Acting",
+								"name": "Alex Rose",
+								"original_name": "Alex Rose",
+								"popularity": 0.2969,
+								"profile_path": "/ocMTZGOPHosBwIwIdzwBHeFRtQO.jpg"
+							},
+							{
+								"character": "Finch",
+								"credit_id": "5ffd6bcb6611b4003f621697",
+								"order": 511,
+								"adult": false,
+								"gender": 2,
+								"id": 1426774,
+								"known_for_department": "Crew",
+								"name": "David Jacox",
+								"original_name": "David Jacox",
+								"popularity": 0.5871,
+								"profile_path": "/c3cKOEB1jgFJkiDblugf1zuxwbg.jpg"
+							},
+							{
+								"character": "Dr. Pearson",
+								"credit_id": "5ffd6bdee9da69004184de1f",
+								"order": 512,
+								"adult": false,
+								"gender": 2,
+								"id": 583052,
+								"known_for_department": "Acting",
+								"name": "Sean Carey",
+								"original_name": "Sean Carey",
+								"popularity": 0.3383,
+								"profile_path": null
+							},
+							{
+								"character": "Garodnick",
+								"credit_id": "5ffd6bf0fcec2e00401bd9fa",
+								"order": 513,
+								"adult": false,
+								"gender": 2,
+								"id": 1457268,
+								"known_for_department": "Acting",
+								"name": "Steve Baran",
+								"original_name": "Steve Baran",
+								"popularity": 0.2757,
+								"profile_path": "/mG7DDdwZYFcuaZiteedn7rVuNlw.jpg"
+							},
+							{
+								"character": "Stritzke",
+								"credit_id": "5ffd6c07470ead003ebab1ed",
+								"order": 514,
+								"adult": false,
+								"gender": 2,
+								"id": 1373713,
+								"known_for_department": "Acting",
+								"name": "Jeff Gladstone",
+								"original_name": "Jeff Gladstone",
+								"popularity": 0.311,
+								"profile_path": "/6c7SI78xkhMrre8Vq9a2ZKCEaeP.jpg"
+							},
+							{
+								"character": "FBI Agent Grigs",
+								"credit_id": "5ffd6c4be19de9003e19af00",
+								"order": 515,
+								"adult": false,
+								"gender": 2,
+								"id": 124313,
+								"known_for_department": "Acting",
+								"name": "Kevin Mundy",
+								"original_name": "Kevin Mundy",
+								"popularity": 0.3241,
+								"profile_path": "/l9IvOrqB7FVCQUR3pjMTZxzw7ey.jpg"
+							},
+							{
+								"character": "Dr. Lee",
+								"credit_id": "5ffd6c6694d8a80040284f7d",
+								"order": 516,
+								"adult": false,
+								"gender": 2,
+								"id": 1369072,
+								"known_for_department": "Acting",
+								"name": "Mark Gash",
+								"original_name": "Mark Gash",
+								"popularity": 0.1562,
+								"profile_path": null
+							},
+							{
+								"character": "ER Nurse",
+								"credit_id": "5ffd6c786611b4004061aa49",
+								"order": 517,
+								"adult": false,
+								"gender": 2,
+								"id": 2654852,
+								"known_for_department": "Acting",
+								"name": "Jason Bempong",
+								"original_name": "Jason Bempong",
+								"popularity": 0.1254,
+								"profile_path": "/cH5vuEL8mC04z2g42oKOK1uvOEL.jpg"
+							},
+							{
+								"character": "News Anchor",
+								"credit_id": "5ffd6c8777d23b003dfb8f5e",
+								"order": 518,
+								"adult": false,
+								"gender": 0,
+								"id": 1638917,
+								"known_for_department": "Acting",
+								"name": "Erin Cebula",
+								"original_name": "Erin Cebula",
+								"popularity": 0.115,
+								"profile_path": null
+							},
+							{
+								"character": "Jimmy Pritchard (young)",
+								"credit_id": "5ffd6cbec8a5ac003eb261a7",
+								"order": 519,
+								"adult": false,
+								"gender": 0,
+								"id": 2933150,
+								"known_for_department": "Acting",
+								"name": "Chris Cope",
+								"original_name": "Chris Cope",
+								"popularity": 0.0735,
+								"profile_path": null
+							},
+							{
+								"character": "Reporter",
+								"credit_id": "5ffd6ccbc3c891004171a177",
+								"order": 520,
+								"adult": false,
+								"gender": 2,
+								"id": 1475809,
+								"known_for_department": "Acting",
+								"name": "Michael Meneer",
+								"original_name": "Michael Meneer",
+								"popularity": 0.2638,
+								"profile_path": "/8hLphbp7EaJXrJxHyV7387y1xvn.jpg"
+							},
+							{
+								"character": "Agent Sue Adair",
+								"credit_id": "5ffd6b4e6611b4004061a93d",
+								"order": 531,
+								"adult": false,
+								"gender": 1,
+								"id": 152823,
+								"known_for_department": "Acting",
+								"name": "Carmen Moore",
+								"original_name": "Carmen Moore",
+								"popularity": 0.5422,
+								"profile_path": "/cPUNFyRPEbgNpBfEVYKWNZtoGML.jpg"
+							}
+						]
+					},
+					{
+						"air_date": "2016-02-19",
+						"episode_number": 6,
+						"episode_type": "standard",
+						"id": 1163167,
+						"name": "Palimpsest",
+						"overview": "Pritchard and Duval attempt to catch a killer who mutilates and disfigures victims.",
+						"production_code": "1AYF06",
+						"runtime": 44,
+						"season_number": 1,
+						"show_id": 64434,
+						"still_path": "/tf3D9xzIGP5uT4sOuWcMKOKyuE6.jpg",
+						"vote_average": 7.2,
+						"vote_count": 11,
+						"crew": [
+							{
+								"job": "Writer",
+								"department": "Writing",
+								"credit_id": "5ffd7119e19de9003f1806ad",
+								"adult": false,
+								"gender": 1,
+								"id": 1257451,
+								"known_for_department": "Writing",
+								"name": "Allison Miller",
+								"original_name": "Allison Miller",
+								"popularity": 0.1709,
+								"profile_path": null
+							},
+							{
+								"job": "Director",
+								"department": "Directing",
+								"credit_id": "5ffd710777d23b003ffb21d2",
+								"adult": false,
+								"gender": 1,
+								"id": 152076,
+								"known_for_department": "Directing",
+								"name": "Sarah Pia Anderson",
+								"original_name": "Sarah Pia Anderson",
+								"popularity": 0.8534,
+								"profile_path": "/oOKCyZjPNK5KSMzkWRAKBiDD1aB.jpg"
+							},
+							{
+								"job": "Production Assistant",
+								"department": "Production",
+								"credit_id": "653d834050733c00adbc27d4",
+								"adult": false,
+								"gender": 2,
+								"id": 1516583,
+								"known_for_department": "Directing",
+								"name": "Thomas Ma",
+								"original_name": "Thomas Ma",
+								"popularity": 0.2846,
+								"profile_path": null
+							}
+						],
+						"guest_stars": [
+							{
+								"character": "Caleb",
+								"credit_id": "5787ceb392514131c4001250",
+								"order": 500,
+								"adult": false,
+								"gender": 2,
+								"id": 58508,
+								"known_for_department": "Acting",
+								"name": "Joseph Gatt",
+								"original_name": "Joseph Gatt",
+								"popularity": 0.846,
+								"profile_path": "/ufXNVj0gOpGOB6uUnNuTIzk5rpb.jpg"
+							},
+							{
+								"character": "Connor Graff",
+								"credit_id": "5a1823090e0a264ccd014812",
+								"order": 505,
+								"adult": false,
+								"gender": 2,
+								"id": 1010189,
+								"known_for_department": "Acting",
+								"name": "Adan Canto",
+								"original_name": "Adan Canto",
+								"popularity": 1.0545,
+								"profile_path": "/d6ZcywTmeR9UWAcdeDMJwpuBwQN.jpg"
+							}
+						]
+					},
+					{
+						"air_date": "2016-02-26",
+						"episode_number": 7,
+						"episode_type": "standard",
+						"id": 1163168,
+						"name": "That Time in the Car",
+						"overview": "Pritchard needs to try and hide his history with Wally, who is now dating his daughter, Helen, after it is discovered that Wally is being coerced by a prisoner planning an escape.",
+						"production_code": "",
+						"runtime": 43,
+						"season_number": 1,
+						"show_id": 64434,
+						"still_path": "/s7IIAE1jMvwV5kkcyqGFjomem4t.jpg",
+						"vote_average": 7.4,
+						"vote_count": 11,
+						"crew": [
+							{
+								"job": "Director",
+								"department": "Directing",
+								"credit_id": "5ffd714bc8a5ac0041b38a3d",
+								"adult": false,
+								"gender": 2,
+								"id": 194227,
+								"known_for_department": "Directing",
+								"name": "John Scott",
+								"original_name": "John Scott",
+								"popularity": 0.4049,
+								"profile_path": "/fh0fGZZFKGgxzLua48wU6rG9Ilv.jpg"
+							},
+							{
+								"job": "Writer",
+								"department": "Writing",
+								"credit_id": "5ffd715c47c9fb00417ae370",
+								"adult": false,
+								"gender": 2,
+								"id": 1234871,
+								"known_for_department": "Production",
+								"name": "Far Shariat",
+								"original_name": "Far Shariat",
+								"popularity": 0.143,
+								"profile_path": null
+							}
+						],
+						"guest_stars": [
+							{
+								"character": "C.O. Biggs",
+								"credit_id": "57915d849251416ba10023f6",
+								"order": 501,
+								"adult": false,
+								"gender": 2,
+								"id": 172873,
+								"known_for_department": "Acting",
+								"name": "Dean Redman",
+								"original_name": "Dean Redman",
+								"popularity": 0.6398,
+								"profile_path": "/7mzn5HzN2tnYypbYGZvgbybb1aE.jpg"
+							},
+							{
+								"character": "Jasper",
+								"credit_id": "6006ab9bbe4b36003acd98e4",
+								"order": 527,
+								"adult": false,
+								"gender": 2,
+								"id": 558918,
+								"known_for_department": "Acting",
+								"name": "Daniel Buran",
+								"original_name": "Daniel Buran",
+								"popularity": 0.4036,
+								"profile_path": "/lcjwXzxYU0XhulW54g59J5evES7.jpg"
+							},
+							{
+								"character": "Mellenburg",
+								"credit_id": "6006abbf869e75003e84de8a",
+								"order": 528,
+								"adult": false,
+								"gender": 2,
+								"id": 134708,
+								"known_for_department": "Acting",
+								"name": "Michael J. Rogers",
+								"original_name": "Michael J. Rogers",
+								"popularity": 0.4208,
+								"profile_path": "/w54Lpwm3BCsgOXebF8jafKNgAzi.jpg"
+							},
+							{
+								"character": "George",
+								"credit_id": "6006abd8420228003ef2d66a",
+								"order": 529,
+								"adult": false,
+								"gender": 2,
+								"id": 100650,
+								"known_for_department": "Acting",
+								"name": "Francis X. McCarthy",
+								"original_name": "Francis X. McCarthy",
+								"popularity": 0.6684,
+								"profile_path": "/4DyZhRmxGrwhr2UNc1CTZHdvZ0R.jpg"
+							},
+							{
+								"character": "Wally Luskin",
+								"credit_id": "6006abf3edeb43003d473d43",
+								"order": 530,
+								"adult": false,
+								"gender": 2,
+								"id": 33654,
+								"known_for_department": "Acting",
+								"name": "Breckin Meyer",
+								"original_name": "Breckin Meyer",
+								"popularity": 1.5629,
+								"profile_path": "/lKzhwW7qqQF4ZMGtRqakqrKrxzm.jpg"
+							},
+							{
+								"character": "Agent Sue Adair",
+								"credit_id": "5ffd6b4e6611b4004061a93d",
+								"order": 531,
+								"adult": false,
+								"gender": 1,
+								"id": 152823,
+								"known_for_department": "Acting",
+								"name": "Carmen Moore",
+								"original_name": "Carmen Moore",
+								"popularity": 0.5422,
+								"profile_path": "/cPUNFyRPEbgNpBfEVYKWNZtoGML.jpg"
+							},
+							{
+								"character": "Carson",
+								"credit_id": "6006ac23a76ac5003eaf23d4",
+								"order": 532,
+								"adult": false,
+								"gender": 2,
+								"id": 1224795,
+								"known_for_department": "Acting",
+								"name": "Stephen Spender",
+								"original_name": "Stephen Spender",
+								"popularity": 0.2475,
+								"profile_path": "/64uyduM3GZ2E718qXLtRiQ5xyMh.jpg"
+							},
+							{
+								"character": "Benji",
+								"credit_id": "6006ac37869e750040850f19",
+								"order": 533,
+								"adult": false,
+								"gender": 2,
+								"id": 1396999,
+								"known_for_department": "Acting",
+								"name": "Trevor Carroll",
+								"original_name": "Trevor Carroll",
+								"popularity": 0.4512,
+								"profile_path": "/pnnApOIQbj2cnnpT4yqKfDqtANR.jpg"
+							},
+							{
+								"character": "Mary Goodwin (Age 7)",
+								"credit_id": "6006ac66edeb43003c46b5ed",
+								"order": 534,
+								"adult": false,
+								"gender": 0,
+								"id": 2942861,
+								"known_for_department": "Acting",
+								"name": "Jia Bains",
+								"original_name": "Jia Bains",
+								"popularity": 0.0412,
+								"profile_path": null
+							},
+							{
+								"character": "Otto Goodwin (Age 7)",
+								"credit_id": "6006ac81a76ac5003db0ef26",
+								"order": 535,
+								"adult": false,
+								"gender": 0,
+								"id": 2942864,
+								"known_for_department": "Acting",
+								"name": "Amaree Samnani",
+								"original_name": "Amaree Samnani",
+								"popularity": 0.097,
+								"profile_path": null
+							},
+							{
+								"character": "Father Goodwin",
+								"credit_id": "6006ac98869e750040850f72",
+								"order": 536,
+								"adult": false,
+								"gender": 2,
+								"id": 1366824,
+								"known_for_department": "Acting",
+								"name": "Parm Soor",
+								"original_name": "Parm Soor",
+								"popularity": 0.178,
+								"profile_path": "/fOpd3S11cC39Rl6MT2HCreG1LbQ.jpg"
+							},
+							{
+								"character": "Mother Goodwin",
+								"credit_id": "6006acad706b9f003e269332",
+								"order": 537,
+								"adult": false,
+								"gender": 1,
+								"id": 2448799,
+								"known_for_department": "Acting",
+								"name": "Camillia Mahal",
+								"original_name": "Camillia Mahal",
+								"popularity": 0.2457,
+								"profile_path": null
+							},
+							{
+								"character": "Tammy",
+								"credit_id": "6006acc1edeb43003f45e61e",
+								"order": 538,
+								"adult": false,
+								"gender": 1,
+								"id": 2225815,
+								"known_for_department": "Acting",
+								"name": "Yvonne Chapman",
+								"original_name": "Yvonne Chapman",
+								"popularity": 0.5131,
+								"profile_path": "/rDbiwuGvzd8WOgyQNo5RTmbwvF1.jpg"
+							},
+							{
+								"character": "Judge",
+								"credit_id": "6006acd41108a80040945fdf",
+								"order": 539,
+								"adult": false,
+								"gender": 2,
+								"id": 185277,
+								"known_for_department": "Acting",
+								"name": "Gerry Rousseau",
+								"original_name": "Gerry Rousseau",
+								"popularity": 0.2309,
+								"profile_path": "/nI9K7NNRf8SOGXET43xN9BbYoIn.jpg"
+							},
+							{
+								"character": "Car Owner",
+								"credit_id": "6006ace3a76ac5003cb01df1",
+								"order": 540,
+								"adult": false,
+								"gender": 2,
+								"id": 72098,
+								"known_for_department": "Acting",
+								"name": "Boyan Vukelic",
+								"original_name": "Boyan Vukelic",
+								"popularity": 0.1941,
+								"profile_path": "/8H5EAEPbkXh0HkMY9L3rX7KATWA.jpg"
+							},
+							{
+								"character": "Peng's Bartender",
+								"credit_id": "6006ad019a358d003fc463e2",
+								"order": 541,
+								"adult": false,
+								"gender": 2,
+								"id": 1597841,
+								"known_for_department": "Acting",
+								"name": "David Lyle",
+								"original_name": "David Lyle",
+								"popularity": 0.1524,
+								"profile_path": "/cO8sSlW2PTPOPDXPv56A88eRRq2.jpg"
+							},
+							{
+								"character": "Helen Pritchard",
+								"credit_id": "6006ab7d47c9fb003fa255d2",
+								"order": 542,
+								"adult": false,
+								"gender": 1,
+								"id": 19275,
+								"known_for_department": "Acting",
+								"name": "Amanda Detmer",
+								"original_name": "Amanda Detmer",
+								"popularity": 1.2656,
+								"profile_path": "/gEfxlgMGN7bZdu3A0vgeBp1hVHy.jpg"
+							},
+							{
+								"character": "SWAT Commander (uncredited)",
+								"credit_id": "6006ad1651f99a003d6c0d04",
+								"order": 543,
+								"adult": false,
+								"gender": 2,
+								"id": 1397000,
+								"known_for_department": "Acting",
+								"name": "Troy Rudolph",
+								"original_name": "Troy Rudolph",
+								"popularity": 0.2555,
+								"profile_path": "/sUja9tOlwBz0eLV36tIR6HLtqfN.jpg"
+							}
+						]
+					},
+					{
+						"air_date": "2016-03-04",
+						"episode_number": 8,
+						"episode_type": "standard",
+						"id": 1169620,
+						"name": "May Old Acquaintance Be Forgot",
+						"overview": "An important drug dealer is responsible for a murder 20 years before, which Pritchard helped to cover up.",
+						"production_code": "",
+						"runtime": 42,
+						"season_number": 1,
+						"show_id": 64434,
+						"still_path": "/viEhdRqVAIjeHFRf0VRCGEKQdEv.jpg",
+						"vote_average": 7.4,
+						"vote_count": 9,
+						"crew": [
+							{
+								"job": "Writer",
+								"department": "Writing",
+								"credit_id": "5ffd7185470ead0040ba7795",
+								"adult": false,
+								"gender": 2,
+								"id": 1379193,
+								"known_for_department": "Writing",
+								"name": "Gabriel Llanas",
+								"original_name": "Gabriel Llanas",
+								"popularity": 0.2043,
+								"profile_path": "/zyoO4ha6SoMLboPAur222XEYD2O.jpg"
+							},
+							{
+								"job": "Director",
+								"department": "Directing",
+								"credit_id": "5ffd7177de11e5003ef39847",
+								"adult": false,
+								"gender": 1,
+								"id": 14800,
+								"known_for_department": "Directing",
+								"name": "Jennifer Lynch",
+								"original_name": "Jennifer Lynch",
+								"popularity": 1.0396,
+								"profile_path": "/gdrZU7gTBo8dvWV9wxXqJ305QNW.jpg"
+							}
+						],
+						"guest_stars": []
+					},
+					{
+						"air_date": "2016-03-11",
+						"episode_number": 9,
+						"episode_type": "standard",
+						"id": 1169621,
+						"name": "When You Have to Go There, They Have to Take You In",
+						"overview": "Pritchard and Duval team up to chase a serial killer. Meanwhile, Mary and Pritchard's bond grows stronger, but Otto wants to make sure she'll always be by his side; and Gracie tries to get to the bottom of Pritchard's identity.",
+						"production_code": "",
+						"runtime": 44,
+						"season_number": 1,
+						"show_id": 64434,
+						"still_path": "/5EoAPZiVb8crV2SAQqVyPbsSuFx.jpg",
+						"vote_average": 7.7,
+						"vote_count": 9,
+						"crew": [
+							{
+								"job": "Writer",
+								"department": "Writing",
+								"credit_id": "5ffd6f81de11e5003ef39719",
+								"adult": false,
+								"gender": 2,
+								"id": 29524,
+								"known_for_department": "Writing",
+								"name": "Rand Ravich",
+								"original_name": "Rand Ravich",
+								"popularity": 0.4469,
+								"profile_path": "/4kklMTTo2MTA7MBB49aZha7l56Y.jpg"
+							},
+							{
+								"job": "Director",
+								"department": "Directing",
+								"credit_id": "5ffd719ac8a5ac0041b38a8f",
+								"adult": false,
+								"gender": 1,
+								"id": 213229,
+								"known_for_department": "Directing",
+								"name": "Kate Dennis",
+								"original_name": "Kate Dennis",
+								"popularity": 0.3767,
+								"profile_path": "/33a49WWNL9ORObjOAwvph5SrI0v.jpg"
+							},
+							{
+								"job": "Production Assistant",
+								"department": "Production",
+								"credit_id": "653d834050733c00adbc27d4",
+								"adult": false,
+								"gender": 2,
+								"id": 1516583,
+								"known_for_department": "Directing",
+								"name": "Thomas Ma",
+								"original_name": "Thomas Ma",
+								"popularity": 0.2846,
+								"profile_path": null
+							}
+						],
+						"guest_stars": [
+							{
+								"character": "Connor Graff",
+								"credit_id": "5a1823090e0a264ccd014812",
+								"order": 505,
+								"adult": false,
+								"gender": 2,
+								"id": 1010189,
+								"known_for_department": "Acting",
+								"name": "Adan Canto",
+								"original_name": "Adan Canto",
+								"popularity": 1.0545,
+								"profile_path": "/d6ZcywTmeR9UWAcdeDMJwpuBwQN.jpg"
+							}
+						]
+					},
+					{
+						"air_date": "2016-03-18",
+						"episode_number": 10,
+						"episode_type": "standard",
+						"id": 1169622,
+						"name": "Geworfenheit",
+						"overview": "Albert Lin's real identity and who created him present a dilemma for Pritchard and Duval, who also frantically search for Gracie after she goes missing. Meanwhile, Otto's relationship with Mary is strained by the investigation, and he mulls the risk of destroying everything they've built, including Pritchard, by siding with Connor Graff.",
+						"production_code": "",
+						"runtime": 44,
+						"season_number": 1,
+						"show_id": 64434,
+						"still_path": "/qRdGKGNYGXXACFfwtqdr6OGEFdq.jpg",
+						"vote_average": 7.8,
+						"vote_count": 9,
+						"crew": [
+							{
+								"job": "Writer",
+								"department": "Writing",
+								"credit_id": "5ffd7119e19de9003f1806ad",
+								"adult": false,
+								"gender": 1,
+								"id": 1257451,
+								"known_for_department": "Writing",
+								"name": "Allison Miller",
+								"original_name": "Allison Miller",
+								"popularity": 0.1709,
+								"profile_path": null
+							},
+							{
+								"job": "Director",
+								"department": "Directing",
+								"credit_id": "5ffd71c394d8a8003e287539",
+								"adult": false,
+								"gender": 2,
+								"id": 1402095,
+								"known_for_department": "Directing",
+								"name": "Paul A. Edwards",
+								"original_name": "Paul A. Edwards",
+								"popularity": 0.4674,
+								"profile_path": "/px41H7ZyuJK2I6rKRFjU400C0TJ.jpg"
+							},
+							{
+								"job": "Writer",
+								"department": "Writing",
+								"credit_id": "5ffd70f394d8a8004128de24",
+								"adult": false,
+								"gender": 2,
+								"id": 27548,
+								"known_for_department": "Writing",
+								"name": "Richard Hatem",
+								"original_name": "Richard Hatem",
+								"popularity": 0.2789,
+								"profile_path": null
+							},
+							{
+								"job": "Production Assistant",
+								"department": "Production",
+								"credit_id": "653d834050733c00adbc27d4",
+								"adult": false,
+								"gender": 2,
+								"id": 1516583,
+								"known_for_department": "Directing",
+								"name": "Thomas Ma",
+								"original_name": "Thomas Ma",
+								"popularity": 0.2846,
+								"profile_path": null
+							}
+						],
+						"guest_stars": [
+							{
+								"character": "Connor Graff",
+								"credit_id": "5a1823090e0a264ccd014812",
+								"order": 505,
+								"adult": false,
+								"gender": 2,
+								"id": 1010189,
+								"known_for_department": "Acting",
+								"name": "Adan Canto",
+								"original_name": "Adan Canto",
+								"popularity": 1.0545,
+								"profile_path": "/d6ZcywTmeR9UWAcdeDMJwpuBwQN.jpg"
+							}
+						]
+					},
+					{
+						"air_date": "2016-03-25",
+						"episode_number": 11,
+						"episode_type": "finale",
+						"id": 1176692,
+						"name": "Gelassenheit",
+						"overview": "Gracie's life is in danger unless Pritchard and Duval can reach her in time and rescue her from Connor and Otto's experiment. Meanwhile, Mary and Alexa search for a way to save Pritchard since he can no longer regenerate in the tank; and Otto struggles to come to grips with his decisions that have touched so many lives.",
+						"production_code": "",
+						"runtime": 44,
+						"season_number": 1,
+						"show_id": 64434,
+						"still_path": "/mPNoiwOmyGRBf3D9GqF1pzX1hS7.jpg",
+						"vote_average": 10,
+						"vote_count": 1,
+						"crew": [
+							{
+								"job": "Teleplay",
+								"department": "Writing",
+								"credit_id": "5ffd720de19de9003e19b3de",
+								"adult": false,
+								"gender": 2,
+								"id": 29524,
+								"known_for_department": "Writing",
+								"name": "Rand Ravich",
+								"original_name": "Rand Ravich",
+								"popularity": 0.4469,
+								"profile_path": "/4kklMTTo2MTA7MBB49aZha7l56Y.jpg"
+							},
+							{
+								"job": "Director",
+								"department": "Directing",
+								"credit_id": "5ffd70b90fb17f003c4338de",
+								"adult": false,
+								"gender": 2,
+								"id": 25882,
+								"known_for_department": "Directing",
+								"name": "Brad Turner",
+								"original_name": "Brad Turner",
+								"popularity": 0.809,
+								"profile_path": null
+							},
+							{
+								"job": "Story",
+								"department": "Writing",
+								"credit_id": "5ffd72238b959e003c410ba2",
+								"adult": false,
+								"gender": 2,
+								"id": 29524,
+								"known_for_department": "Writing",
+								"name": "Rand Ravich",
+								"original_name": "Rand Ravich",
+								"popularity": 0.4469,
+								"profile_path": "/4kklMTTo2MTA7MBB49aZha7l56Y.jpg"
+							},
+							{
+								"job": "Story",
+								"department": "Writing",
+								"credit_id": "5ffd723f6611b4003d61f49b",
+								"adult": false,
+								"gender": 2,
+								"id": 1221664,
+								"known_for_department": "Writing",
+								"name": "Howard Gordon",
+								"original_name": "Howard Gordon",
+								"popularity": 0.721,
+								"profile_path": null
+							},
+							{
+								"job": "Production Assistant",
+								"department": "Production",
+								"credit_id": "653d834050733c00adbc27d4",
+								"adult": false,
+								"gender": 2,
+								"id": 1516583,
+								"known_for_department": "Directing",
+								"name": "Thomas Ma",
+								"original_name": "Thomas Ma",
+								"popularity": 0.2846,
+								"profile_path": null
+							}
+						],
+						"guest_stars": [
+							{
+								"character": "Emma",
+								"credit_id": "594a3df5925141459b00abc0",
+								"order": 503,
+								"adult": false,
+								"gender": 1,
+								"id": 583051,
+								"known_for_department": "Acting",
+								"name": "Diana Bang",
+								"original_name": "Diana Bang",
+								"popularity": 1.2015,
+								"profile_path": "/8DTmzeUY4R1x8tYj1e1rvHZbB4y.jpg"
+							},
+							{
+								"character": "Connor Graff",
+								"credit_id": "5a1823090e0a264ccd014812",
+								"order": 505,
+								"adult": false,
+								"gender": 2,
+								"id": 1010189,
+								"known_for_department": "Acting",
+								"name": "Adan Canto",
+								"original_name": "Adan Canto",
+								"popularity": 1.0545,
+								"profile_path": "/d6ZcywTmeR9UWAcdeDMJwpuBwQN.jpg"
+							}
+						]
+					}
+				],
+				"name": "Season 1",
+				"networks": [
+					{
+						"id": 19,
+						"logo_path": "/1DSpHrWyOORkL9N2QHX7Adt31mQ.png",
+						"name": "FOX",
+						"origin_country": "US"
+					}
+				],
+				"overview": "",
+				"poster_path": "/lXvdWCTLlU6sga107V1sxQSPjhs.jpg",
+				"season_number": 1,
+				"vote_average": 7.8
+			},
+			"335977/1": {
+				"id": 545256,
+				"_id": "6ab14067295ea58753fa4b15",
+				"air_date": "1981-01-23",
+				"episodes": [
+					{
+						"air_date": "1981-01-23",
+						"episode_number": 1,
+						"episode_type": "standard",
+						"id": 7833256,
+						"name": "April",
+						"overview": "",
+						"production_code": "",
+						"runtime": null,
+						"season_number": 1,
+						"show_id": 335977,
+						"still_path": null,
+						"vote_average": 0,
+						"vote_count": 0,
+						"crew": [],
+						"guest_stars": []
+					},
+					{
+						"air_date": "1981-01-30",
+						"episode_number": 2,
+						"episode_type": "standard",
+						"id": 7833257,
+						"name": "June",
+						"overview": "",
+						"production_code": "",
+						"runtime": null,
+						"season_number": 1,
+						"show_id": 335977,
+						"still_path": null,
+						"vote_average": 0,
+						"vote_count": 0,
+						"crew": [],
+						"guest_stars": []
+					},
+					{
+						"air_date": "1981-02-06",
+						"episode_number": 3,
+						"episode_type": "standard",
+						"id": 7833259,
+						"name": "August",
+						"overview": "",
+						"production_code": "",
+						"runtime": null,
+						"season_number": 1,
+						"show_id": 335977,
+						"still_path": null,
+						"vote_average": 0,
+						"vote_count": 0,
+						"crew": [],
+						"guest_stars": []
+					},
+					{
+						"air_date": "1981-02-13",
+						"episode_number": 4,
+						"episode_type": "standard",
+						"id": 7833260,
+						"name": "October",
+						"overview": "",
+						"production_code": "",
+						"runtime": null,
+						"season_number": 1,
+						"show_id": 335977,
+						"still_path": null,
+						"vote_average": 0,
+						"vote_count": 0,
+						"crew": [],
+						"guest_stars": [
+							{
+								"character": "Sarah Fletcher",
+								"credit_id": "6ad8d12f3d7b918453b85345",
+								"order": 500,
+								"adult": false,
+								"gender": 1,
+								"id": 183201,
+								"known_for_department": "Acting",
+								"name": "Barbara Flynn",
+								"original_name": "Barbara Flynn",
+								"popularity": 1.2141,
+								"profile_path": "/55Y6mkAYwYUQY0imraEwJg2gtn5.jpg"
+							}
+						]
+					},
+					{
+						"air_date": "1981-02-20",
+						"episode_number": 5,
+						"episode_type": "standard",
+						"id": 7833261,
+						"name": "January",
+						"overview": "",
+						"production_code": "",
+						"runtime": null,
+						"season_number": 1,
+						"show_id": 335977,
+						"still_path": null,
+						"vote_average": 0,
+						"vote_count": 0,
+						"crew": [],
+						"guest_stars": []
+					},
+					{
+						"air_date": "1981-02-27",
+						"episode_number": 6,
+						"episode_type": "standard",
+						"id": 7833262,
+						"name": "April II",
+						"overview": "",
+						"production_code": "",
+						"runtime": null,
+						"season_number": 1,
+						"show_id": 335977,
+						"still_path": null,
+						"vote_average": 0,
+						"vote_count": 0,
+						"crew": [],
+						"guest_stars": []
+					}
+				],
+				"name": "Season 1",
+				"networks": [],
+				"overview": "",
+				"poster_path": null,
+				"season_number": 1,
+				"vote_average": 0
+			},
+			"130211/1": {
+				"id": 204196,
+				"_id": "6105050ea76ac5005c12d84b",
+				"name": "Season 1",
+				"air_date": "1995-04-14",
+				"episodes": [
+					{
+						"id": 3099720,
+						"crew": [],
+						"name": "Episode 1",
+						"runtime": 54,
+						"show_id": 130211,
+						"air_date": "1995-04-14",
+						"overview": "",
+						"still_path": null,
+						"vote_count": 0,
+						"guest_stars": [],
+						"episode_type": "standard",
+						"vote_average": 0,
+						"season_number": 1,
+						"episode_number": 1,
+						"production_code": ""
+					},
+					{
+						"id": 3099722,
+						"crew": [],
+						"name": "Episode 2",
+						"runtime": 54,
+						"show_id": 130211,
+						"air_date": "1995-04-21",
+						"overview": "",
+						"still_path": null,
+						"vote_count": 0,
+						"guest_stars": [],
+						"episode_type": "standard",
+						"vote_average": 0,
+						"season_number": 1,
+						"episode_number": 2,
+						"production_code": ""
+					},
+					{
+						"id": 3099723,
+						"crew": [],
+						"name": "Episode 3",
+						"runtime": 54,
+						"show_id": 130211,
+						"air_date": "1995-04-28",
+						"overview": "",
+						"still_path": null,
+						"vote_count": 0,
+						"guest_stars": [],
+						"episode_type": "standard",
+						"vote_average": 0,
+						"season_number": 1,
+						"episode_number": 3,
+						"production_code": ""
+					},
+					{
+						"id": 3099724,
+						"crew": [],
+						"name": "Episode 4",
+						"runtime": 54,
+						"show_id": 130211,
+						"air_date": "1995-05-05",
+						"overview": "",
+						"still_path": null,
+						"vote_count": 0,
+						"guest_stars": [],
+						"episode_type": "standard",
+						"vote_average": 0,
+						"season_number": 1,
+						"episode_number": 4,
+						"production_code": ""
+					},
+					{
+						"id": 3099725,
+						"crew": [],
+						"name": "Episode 5",
+						"runtime": 54,
+						"show_id": 130211,
+						"air_date": "1995-05-12",
+						"overview": "",
+						"still_path": null,
+						"vote_count": 0,
+						"guest_stars": [],
+						"episode_type": "standard",
+						"vote_average": 0,
+						"season_number": 1,
+						"episode_number": 5,
+						"production_code": ""
+					},
+					{
+						"id": 3099726,
+						"crew": [],
+						"name": "Episode 6",
+						"runtime": 54,
+						"show_id": 130211,
+						"air_date": "1995-05-19",
+						"overview": "",
+						"still_path": null,
+						"vote_count": 0,
+						"guest_stars": [],
+						"episode_type": "standard",
+						"vote_average": 0,
+						"season_number": 1,
+						"episode_number": 6,
+						"production_code": ""
+					},
+					{
+						"id": 3099727,
+						"crew": [],
+						"name": "Episode 7",
+						"runtime": 54,
+						"show_id": 130211,
+						"air_date": "1995-05-26",
+						"overview": "",
+						"still_path": null,
+						"vote_count": 0,
+						"guest_stars": [],
+						"episode_type": "standard",
+						"vote_average": 0,
+						"season_number": 1,
+						"episode_number": 7,
+						"production_code": ""
+					},
+					{
+						"id": 3099728,
+						"crew": [],
+						"name": "Episode 8",
+						"runtime": 54,
+						"show_id": 130211,
+						"air_date": "1995-06-02",
+						"overview": "",
+						"still_path": null,
+						"vote_count": 0,
+						"guest_stars": [],
+						"episode_type": "standard",
+						"vote_average": 0,
+						"season_number": 1,
+						"episode_number": 8,
+						"production_code": ""
+					},
+					{
+						"id": 3099729,
+						"crew": [],
+						"name": "Episode 9",
+						"runtime": 54,
+						"show_id": 130211,
+						"air_date": "1995-06-09",
+						"overview": "",
+						"still_path": null,
+						"vote_count": 0,
+						"guest_stars": [],
+						"episode_type": "standard",
+						"vote_average": 0,
+						"season_number": 1,
+						"episode_number": 9,
+						"production_code": ""
+					},
+					{
+						"id": 3099730,
+						"crew": [],
+						"name": "Episode 10",
+						"runtime": 54,
+						"show_id": 130211,
+						"air_date": "1995-06-16",
+						"overview": "",
+						"still_path": null,
+						"vote_count": 0,
+						"guest_stars": [],
+						"episode_type": "standard",
+						"vote_average": 0,
+						"season_number": 1,
+						"episode_number": 10,
+						"production_code": ""
+					},
+					{
+						"id": 3099731,
+						"crew": [],
+						"name": "Episode 11",
+						"runtime": 54,
+						"show_id": 130211,
+						"air_date": "1995-06-23",
+						"overview": "",
+						"still_path": null,
+						"vote_count": 0,
+						"guest_stars": [],
+						"episode_type": "standard",
+						"vote_average": 0,
+						"season_number": 1,
+						"episode_number": 11,
+						"production_code": ""
+					},
+					{
+						"id": 3099732,
+						"crew": [],
+						"name": "Episode 12",
+						"runtime": 54,
+						"show_id": 130211,
+						"air_date": "1995-06-30",
+						"overview": "",
+						"still_path": null,
+						"vote_count": 0,
+						"guest_stars": [],
+						"episode_type": "finale",
+						"vote_average": 0,
+						"season_number": 1,
+						"episode_number": 12,
+						"production_code": ""
+					}
+				],
+				"networks": [
+					{
+						"id": 160,
+						"name": "TBS",
+						"logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+						"origin_country": "JP"
+					}
+				],
+				"overview": "",
+				"poster_path": null,
+				"vote_average": 0,
+				"season_number": 1
+			},
+			"130211/0": {
+				"id": 352959,
+				"_id": "64dd2bf8d100b614b4cc5c50",
+				"air_date": "1996-12-20",
+				"episodes": [
+					{
+						"air_date": "1996-12-20",
+						"episode_number": 1,
+						"episode_type": "standard",
+						"id": 4658401,
+						"name": "Episode 1",
+						"overview": "",
+						"production_code": "",
+						"runtime": null,
+						"season_number": 0,
+						"show_id": 130211,
+						"still_path": null,
+						"vote_average": 0,
+						"vote_count": 0,
+						"crew": [],
+						"guest_stars": []
+					}
+				],
+				"name": "Specials",
+				"networks": [
+					{
+						"id": 160,
+						"logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+						"name": "TBS",
+						"origin_country": "JP"
+					}
+				],
+				"overview": "",
+				"poster_path": null,
+				"season_number": 0,
+				"vote_average": 0
+			}
+		},
+		"searchTvdb": {
+			"Second Chance|1995": [
+				{
+					"objectID": "series-342780",
+					"country": "jpn",
+					"id": "series-342780",
+					"image_url": "https://artworks.thetvdb.com/banners/posters/342780-1.jpg",
+					"name": "セカンド・チャンス",
+					"first_air_time": "1995-04-14",
+					"overview": "シングルマザーとシングルファザーが出会い、次第に惹かれあう様になり、周囲の反対を乗り越えながら結婚するまでを描いたコメディドラマ。",
+					"primary_language": "jpn",
+					"primary_type": "series",
+					"status": "Ended",
+					"type": "series",
+					"tvdb_id": "342780",
+					"year": "1995",
+					"slug": "342780-show",
+					"overviews": {
+						"ces": "Bývalého šerifa Jimmyho Pritcharda zavraždili zkorumpovaní agenti FBI. Geniálním dvojčatům se ho díky nejnovější technologii nakonec podařilo znovu oživit. Jimmy tak dostal druhou šanci. A v mladším těle...",
+						"eng": "The widowed mother of three boys has fallen in love with a widower who has a daughter in junior high school. The journey of their developing romance is sensitively interwoven with their struggles to do their best for their children.",
+						"jpn": "シングルマザーとシングルファザーが出会い、次第に惹かれあう様になり、周囲の反対を乗り越えながら結婚するまでを描いたコメディドラマ。"
+					},
+					"translations": {
+						"ces": "Druhá šance",
+						"eng": "Second Chance",
+						"jpn": "セカンド・チャンス"
+					},
+					"network": "TBS (JP)",
+					"remote_ids": [
+						{
+							"id": "130211",
+							"type": 12,
+							"sourceName": "TheMovieDB.com"
+						}
+					],
+					"thumbnail": "https://artworks.thetvdb.com/banners/posters/342780-1_t.jpg"
+				}
+			]
+		},
+		"searchTv": {
+			"セカンド．チャンス": {
+				"page": 1,
+				"results": [
+					{
+						"adult": false,
+						"backdrop_path": null,
+						"genre_ids": [18],
+						"id": 130211,
+						"origin_country": ["JP"],
+						"original_language": "ja",
+						"original_name": "セカンド．チャンス",
+						"overview": "",
+						"popularity": 1.6312,
+						"poster_path": "/8mtVz69oiPqIH4xLPPpIrxuABqF.jpg",
+						"first_air_date": "1995-04-14",
+						"softcore": false,
+						"name": "セカンド．チャンス",
+						"vote_average": 8,
+						"vote_count": 2
+					},
+					{
+						"adult": false,
+						"backdrop_path": "/cVjcq52suVSKlPAW8cfJqvQfFuL.jpg",
+						"genre_ids": [18, 10765],
+						"id": 64434,
+						"origin_country": ["US"],
+						"original_language": "en",
+						"original_name": "Second Chance",
+						"overview": "A disgraced, 75-year-old ex-sheriff, whose life ends at the hands of corrupt cops, is brought back to life and given a second chance by a pair of young tech scientists, as a 35-year-old with unpredictable near-superhuman abilities.",
+						"popularity": 4.5196,
+						"poster_path": "/vXQXjPQ0qq5caOSvTElc9UMp6Rf.jpg",
+						"first_air_date": "2016-01-13",
+						"softcore": false,
+						"name": "Second Chance",
+						"vote_average": 6.8,
+						"vote_count": 191
+					}
+				],
+				"total_pages": 1,
+				"total_results": 2
+			}
+		}
+	},
+	"cases": [
+		{
+			"request": {
+				"name": "Second.Chance.1995.dvdrip-xpost",
+				"hash": null,
+				"imdbId": "tt0117579",
+				"files": [
+					{
+						"path": "Second.Chance.01.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Second.Chance.02.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Second.Chance.03.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Second.Chance.04.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Second.Chance.05.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Second.Chance.06.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Second.Chance.07.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Second.Chance.08.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Second.Chance.09.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Second.Chance.10.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Second.Chance.11.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Second.Chance.12.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Second.Chance.SP.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": null,
+				"tmdbId": 130211,
+				"files": [
+					{
+						"path": "Second.Chance.01.mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 3099720
+					},
+					{
+						"path": "Second.Chance.02.mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 3099722
+					},
+					{
+						"path": "Second.Chance.03.mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 3099723
+					},
+					{
+						"path": "Second.Chance.04.mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 3099724
+					},
+					{
+						"path": "Second.Chance.05.mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 3099725
+					},
+					{
+						"path": "Second.Chance.06.mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 3099726
+					},
+					{
+						"path": "Second.Chance.07.mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 3099727
+					},
+					{
+						"path": "Second.Chance.08.mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 3099728
+					},
+					{
+						"path": "Second.Chance.09.mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 3099729
+					},
+					{
+						"path": "Second.Chance.10.mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 3099730
+					},
+					{
+						"path": "Second.Chance.11.mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 3099731
+					},
+					{
+						"path": "Second.Chance.12.mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 3099732
+					},
+					{
+						"path": "Second.Chance.SP.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		}
+	]
+}

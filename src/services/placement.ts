@@ -209,6 +209,8 @@ export interface PlacementSources {
 	identifier(names: string[]): Promise<Map<string, IdentifierResult> | null>;
 	/** TheTVDB's series for an IMDb id (`search/remoteid`); absent or null where TVDB cannot be asked. */
 	tvdbSeriesOf?(imdbId: string): Promise<number[] | null>;
+	/** TheTVDB's series search for a title first aired in a year (`search`); absent or null where TVDB cannot be asked. */
+	searchTvdb?(query: string, year: number): Promise<any[] | null>;
 	/** A TheTVDB series' episodes in its default (aired) order, which Plex numbers by, or its DVD order. */
 	tvdbEpisodes?(tvdbId: number, order?: 'dvd'): Promise<any[] | null>;
 	/** TMDB's `/find` for a TheTVDB episode id; absent or null where it cannot be asked. */
@@ -313,6 +315,7 @@ export async function placeReleases(
 			if (!waits) out[at] = await filmByTitle(release, out[at], sources);
 			if (!waits) out[at] = await siblingLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await namesakeLook(release, out[at], sources, anime);
+			if (!waits) out[at] = await tvdbNameLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await filmLook(release, out[at], sources);
 			if (!waits) out[at] = await tvdbLook(out[at], sources);
 			if (!waits) out[at] = await revivalLook(release, out[at], sources);
@@ -900,6 +903,44 @@ async function namesakeLook(
 	const most = better.filter((there) => count(there) === Math.max(...better.map(count)));
 	const [best, ...tied] = most.length > 1 ? await streamedOn(release, most, sources) : most;
 	return best && !tied.length ? best : placed;
+}
+
+/**
+ * A show TVDB finds by the release's title and year where TMDB's search cannot: TMDB names the
+ * 1995 TBS drama Second Chance (130211) only `セカンド．チャンス`, with no English title, so
+ * `Second.Chance.1995.dvdrip-xpost`'s `Second.Chance.01`-`12` found no show, while TVDB (342780)
+ * names it Second Chance in English and links TMDB's id. Taken only for a release that places
+ * nothing and whose name gives a year, where one TMDB show is linked from the TVDB series of that
+ * title first aired that year, and that show places its files.
+ */
+async function tvdbNameLook(
+	release: PlaceRequest,
+	placed: PlacedRelease,
+	sources: PlacementSources,
+	anime: AnimeIndex | null
+): Promise<PlacedRelease> {
+	if (placed.skipped || placed.tmdbId !== null || placesFiles(placed) || !sources.searchTvdb)
+		return placed;
+	const { title, year } = parseName(release.name);
+	if (!year || letters(title).length < 4) return placed;
+	const shows = new Set<number>();
+	for (const row of (await sources.searchTvdb(title, year)) ?? []) {
+		const names = [row?.name, ...Object.values(row?.translations ?? {})];
+		if (
+			Number(row?.year) !== year ||
+			!names.some((name) => typeof name === 'string' && letters(name) === letters(title))
+		)
+			continue;
+		for (const remote of row?.remote_ids ?? [])
+			if (remote?.sourceName === 'TheMovieDB.com' && Number(remote.id) > 0)
+				shows.add(Number(remote.id));
+	}
+	if (shows.size !== 1) return placed;
+	const [tmdbId] = shows;
+	const external = (await sources.show(tmdbId))?.external_ids?.imdb_id;
+	const imdbId = typeof external === 'string' && /^tt\d{7,}$/.test(external) ? external : null;
+	const there = await placeOnShow(release, { kind: 'tv', imdbId, tmdbId }, false, sources, anime);
+	return !there.skipped && placesFiles(there) ? there : placed;
 }
 
 const SHORT_DATE = /(?<!\d)\d{2}([\s._-])(?:0[1-9]|1[0-2])\1(?:0[1-9]|[12]\d|3[01])(?!\d)/;
@@ -2288,6 +2329,12 @@ export const cachedSources: PlacementSources = {
 					.map((row: any) => row?.series?.id)
 					.filter((id: unknown) => typeof id === 'number')
 		),
+	searchTvdb: (query, year) =>
+		settle(() =>
+			getMetadataCache().getTvdb(
+				`search?query=${encodeURIComponent(query)}&type=series&year=${year}`
+			)
+		).then((answer) => answer && (answer.data ?? [])),
 	onePace: () => onePaceCatalogue(),
 	findTvdbEpisode: (id) =>
 		getTmdbAuth()

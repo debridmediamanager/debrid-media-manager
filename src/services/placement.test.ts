@@ -46,6 +46,7 @@ import fun1025 from '@/test/fixtures/placement/rex-fun-2026-10-25.json';
 import fun1101 from '@/test/fixtures/placement/rex-fun-2026-11-01.json';
 import saga from '@/test/fixtures/placement/saga-titles.json';
 import seasonSubtitles from '@/test/fixtures/placement/season-subtitles.json';
+import secondChanceTvdb from '@/test/fixtures/placement/second-chance-tvdb-name.json';
 import segmentLetters from '@/test/fixtures/placement/segment-letters.json';
 import segmentTitles from '@/test/fixtures/placement/segment-titles.json';
 import showNamedTitles from '@/test/fixtures/placement/show-named-titles.json';
@@ -136,6 +137,7 @@ const recordedSources = (r: any): PlacementSources => ({
 	tvdbEpisodes: async (id, order) =>
 		r.tvdbEpisodes?.[order ? `${id}/${order}` : id]?.data.episodes ?? null,
 	findTvdbEpisode: async (id) => r.findTvdbEpisode?.[id] ?? null,
+	searchTvdb: async (query, year) => r.searchTvdb?.[`${query}|${year}`] ?? null,
 });
 
 describe('a daily show named by its air date', () => {
@@ -1261,6 +1263,24 @@ describe('a film id sent for a release of numbered episodes', () => {
 		expect(complete).toBe(true);
 		expect(releases[0].kind).toBeNull();
 		expect(releases[0]).toEqual(secondChance.expect);
+	});
+
+	it('places them on the show TVDB names by its title and year where TMDB names it only in Japanese', async () => {
+		// TMDB titles the 1995 TBS drama (130211) only `セカンド．チャンス`; TVDB (342780) names it
+		// Second Chance in English and links TMDB's id (2026-11-10)
+		const [real] = secondChanceTvdb.cases;
+		const { releases } = await place(
+			[real.request as PlaceRequest],
+			Infinity,
+			recordedSources(secondChanceTvdb.answers),
+			async (list) =>
+				list.map(({ name }) => (secondChanceTvdb.answers.identify as any)?.[name] ?? null)
+		);
+		expect(releases[0].files.map((f) => [f.path.slice(14, -4), f.season, f.episode])).toEqual([
+			...Array.from({ length: 12 }, (_, n) => [String(n + 1).padStart(2, '0'), 1, n + 1]),
+			['SP', null, null],
+		]);
+		expect(releases[0]).toEqual(real.expect);
 	});
 });
 
