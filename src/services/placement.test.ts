@@ -64,6 +64,7 @@ import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import specialsByTitle from '@/test/fixtures/placement/specials-by-title.json';
 import spellingVariants from '@/test/fixtures/placement/spelling-variants.json';
 import subtitledSpecials from '@/test/fixtures/placement/subtitled-specials.json';
+import tagsBeforeTitles from '@/test/fixtures/placement/tags-before-titles.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import titleEpisodes from '@/test/fixtures/placement/title-episode-numbers.json';
 import titleParts from '@/test/fixtures/placement/title-parts.json';
@@ -2276,6 +2277,33 @@ describe("a special TMDB titles with an article before the show's name", () => {
 	it('places the file on it', async () => {
 		const chicken = await placed('Robot Chicken (2005-2020)');
 		expect(chicken('S07E16 Bitch Pudding Special')).toEqual([0, 14, null]);
+	});
+});
+
+describe("a title after the release's tags in parentheses", () => {
+	// zurg on fun (2026-11-10): `Star.Wars.The.Clone.Wars.-.S01E01.-.PGor.-.(BD-Rip.1080p…).Ambush`
+	// read as titled `PGor`, which names no episode, so the pack numbered as TheTVDB does and two
+	// files were unplaced, two others on runs they do not hold
+	const placed = async (name: string) => {
+		const c = tagsBeforeTitles.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true, shows: true }],
+			Infinity,
+			recordedSources(tagsBeforeTitles.answers),
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return (part: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(part))!;
+			return [f.season, f.episode, f.episodeEnd];
+		};
+	};
+	it('places the file where that title names the episode at its number', async () => {
+		const wars = await placed('Star.Wars.The.Clone.Wars.-.S01');
+		expect(wars('S01E01.-.PGor')).toEqual([1, 1, null]);
+		expect(wars('S01E17.-.PGor')).toEqual([1, 17, null]);
+		// on S1E1-E2 before
+		expect(wars('S01E02.-.PGor')).toEqual([1, 2, null]);
 	});
 });
 

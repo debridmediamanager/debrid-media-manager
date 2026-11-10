@@ -1,0 +1,3488 @@
+{
+	"answers": {
+		"episodeShow": {
+			"tt1288767": "tt0458290"
+		},
+		"find": {
+			"tt0458290": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 4194,
+						"name": "Star Wars: The Clone Wars",
+						"first_air_date": "2008-10-03"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"4194": {
+				"id": 4194,
+				"name": "Star Wars: The Clone Wars",
+				"original_name": "Star Wars: The Clone Wars",
+				"first_air_date": "2008-10-03",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					},
+					{
+						"id": 16,
+						"name": "Animation"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 161176,
+							"name": "space opera"
+						},
+						{
+							"id": 278823,
+							"name": "3d animation"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0458290",
+					"tvdb_id": 83268
+				},
+				"networks": [
+					{
+						"id": 56,
+						"name": "Cartoon Network"
+					},
+					{
+						"id": 213,
+						"name": "Netflix"
+					},
+					{
+						"id": 2739,
+						"name": "Disney+"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "AU",
+							"title": "Star Wars: The Clone Wars—The Animated Series",
+							"type": "DVD"
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "星球大战：克隆人战争",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "FR",
+							"title": "Star Wars, La Guerre des Clones",
+							"type": "Main"
+						},
+						{
+							"iso_3166_1": "GR",
+							"title": "Ο πόλεμος των άστρων: Ο πόλεμος των κλώνων",
+							"type": "Main"
+						},
+						{
+							"iso_3166_1": "HK",
+							"title": "星球大战：复制战纪",
+							"type": "Main"
+						},
+						{
+							"iso_3166_1": "HR",
+							"title": "Ratovi Zvijezda: Ratovi Klonova",
+							"type": "Main"
+						},
+						{
+							"iso_3166_1": "IL",
+							"title": "מלחמת הכוכבים: מלחמת המשובטים",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "IS",
+							"title": "Stjörnustríð: Klónastríðin",
+							"type": "Main"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "スター・ウォーズ クローン・ウォーズ",
+							"type": "Main"
+						},
+						{
+							"iso_3166_1": "PL",
+							"title": "Gwiezdne Wojny: Wojny Klonów",
+							"type": "Main"
+						},
+						{
+							"iso_3166_1": "PT",
+							"title": "Star Wars: A Guerra dos Clones",
+							"type": "Animação"
+						},
+						{
+							"iso_3166_1": "RS",
+							"title": "Звездани ратови: Ратови клонова",
+							"type": "Main"
+						},
+						{
+							"iso_3166_1": "RS",
+							"title": "Ратови звезда: Ратови клонова",
+							"type": "Alternate"
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "Звёздные войны",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "Войны клонов",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "SK",
+							"title": "Star Wars: Klonové Vojny",
+							"type": "Main"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Star Wars: The Clone Wars—The Lost Missions",
+							"type": "Season 6"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Star Wars: The Clone Wars—The Final Season",
+							"type": "Season 7"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Star Wars: The Clone Wars—Rise of the Bounty Hunters",
+							"type": "Season 2"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Star Wars: The Clone Wars—Secrets Revealed",
+							"type": "Season 3"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Star Wars: The Clone Wars—Battle Lines",
+							"type": "Season 4"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "The Clone Wars",
+							"type": "Main"
+						},
+						{
+							"iso_3166_1": "VE",
+							"title": "La Guerra de las Galaxias: La Guerra de los Clones",
+							"type": "Main"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2014-09-25",
+						"episode_count": 60,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "2008-10-03",
+						"episode_count": 22,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "2009-10-02",
+						"episode_count": 22,
+						"name": "Season 2",
+						"season_number": 2
+					},
+					{
+						"air_date": "2010-09-17",
+						"episode_count": 22,
+						"name": "Season 3",
+						"season_number": 3
+					},
+					{
+						"air_date": "2011-09-16",
+						"episode_count": 22,
+						"name": "Season 4",
+						"season_number": 4
+					},
+					{
+						"air_date": "2012-09-29",
+						"episode_count": 20,
+						"name": "Season 5",
+						"season_number": 5
+					},
+					{
+						"air_date": "2014-03-07",
+						"episode_count": 13,
+						"name": "Season 6",
+						"season_number": 6
+					},
+					{
+						"air_date": "2020-02-21",
+						"episode_count": 12,
+						"name": "Season 7",
+						"season_number": 7
+					}
+				]
+			}
+		},
+		"season": {
+			"4194/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Story Reel: A Death on Utapau",
+						"air_date": "2014-09-25",
+						"runtime": 23,
+						"id": 1449832
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Story Reel: In Search of the Crystal",
+						"air_date": "2014-09-25",
+						"runtime": 23,
+						"id": 1449833
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "Story Reel: Crystal Crisis",
+						"air_date": "2014-09-25",
+						"runtime": 24,
+						"id": 1449834
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "Story Reel: The Big Bang",
+						"air_date": "2014-09-25",
+						"runtime": 23,
+						"id": 1449835
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "Story Reel: The Bad Batch",
+						"air_date": "2015-04-17",
+						"runtime": 23,
+						"id": 1449836
+					},
+					{
+						"episode_number": 6,
+						"season_number": 0,
+						"name": "Story Reel: A Distant Echo",
+						"air_date": "2015-04-17",
+						"runtime": 23,
+						"id": 1449837
+					},
+					{
+						"episode_number": 7,
+						"season_number": 0,
+						"name": "Story Reel: On the Wings of Keeradaks",
+						"air_date": "2015-04-17",
+						"runtime": 22,
+						"id": 1449845
+					},
+					{
+						"episode_number": 8,
+						"season_number": 0,
+						"name": "Story Reel: Unfinished Business",
+						"air_date": "2015-04-17",
+						"runtime": 23,
+						"id": 1449846
+					},
+					{
+						"episode_number": 9,
+						"season_number": 0,
+						"name": "Story Reel: Dark Disciple",
+						"air_date": "2015-04-25",
+						"runtime": 4,
+						"id": 3052740
+					},
+					{
+						"episode_number": 10,
+						"season_number": 0,
+						"name": "Story Reel: Bad Batch & Wookies on Kashyyyk",
+						"air_date": "2015-04-29",
+						"runtime": 2,
+						"id": 3052739
+					},
+					{
+						"episode_number": 11,
+						"season_number": 0,
+						"name": "Story Reel: Ahsoka on a Speeder",
+						"air_date": "2015-04-29",
+						"runtime": 3,
+						"id": 3052741
+					},
+					{
+						"episode_number": 12,
+						"season_number": 0,
+						"name": "Story Reel: Ahsoka & Nyx in the Underworld",
+						"air_date": "2016-07-15",
+						"runtime": 2,
+						"id": 3052742
+					},
+					{
+						"episode_number": 13,
+						"season_number": 0,
+						"name": "Story Reel: Ahsoka meets the 332nd Legion",
+						"air_date": "2019-04-14",
+						"runtime": 2,
+						"id": 3052744
+					},
+					{
+						"episode_number": 14,
+						"season_number": 0,
+						"name": "Story Reel: Cad Bane & Boba Fett vs. Tusken Raiders",
+						"air_date": "2015-04-29",
+						"runtime": 2,
+						"id": 3052745
+					},
+					{
+						"episode_number": 15,
+						"season_number": 0,
+						"name": "Story Reel: Cad Bane vs. Boba Fett",
+						"air_date": "2017-05-16",
+						"runtime": 3,
+						"id": 3052743
+					},
+					{
+						"episode_number": 16,
+						"season_number": 0,
+						"name": "Story Reel: Boba Fett vs. Anakin Skywalker",
+						"air_date": "2025-04-18",
+						"runtime": 3,
+						"id": 6902875
+					},
+					{
+						"episode_number": 17,
+						"season_number": 0,
+						"name": "The Clone Wars preview",
+						"air_date": "2008-09-26",
+						"runtime": 26,
+						"id": 286636
+					},
+					{
+						"episode_number": 18,
+						"season_number": 0,
+						"name": "Season 3 Sneak Peek",
+						"air_date": null,
+						"runtime": null,
+						"id": 286564
+					},
+					{
+						"episode_number": 19,
+						"season_number": 0,
+						"name": "Red Carpet Interviews and Season 5 Sneak Peek",
+						"air_date": null,
+						"runtime": null,
+						"id": 286656
+					},
+					{
+						"episode_number": 20,
+						"season_number": 0,
+						"name": "Clone Wars Download: The Bad Batch",
+						"air_date": "2020-02-24",
+						"runtime": 4,
+						"id": 3051373
+					},
+					{
+						"episode_number": 21,
+						"season_number": 0,
+						"name": "Clone Wars Download: A Distant Echo",
+						"air_date": "2020-03-02",
+						"runtime": 7,
+						"id": 3051374
+					},
+					{
+						"episode_number": 22,
+						"season_number": 0,
+						"name": "Clone Wars Download: On the Wings of Keeradaks",
+						"air_date": "2020-03-09",
+						"runtime": 5,
+						"id": 3051375
+					},
+					{
+						"episode_number": 23,
+						"season_number": 0,
+						"name": "Clone Wars Download: Unfinished Business",
+						"air_date": "2020-03-16",
+						"runtime": 5,
+						"id": 3051378
+					},
+					{
+						"episode_number": 24,
+						"season_number": 0,
+						"name": "Clone Wars Download: Gone with a Trace",
+						"air_date": "2020-03-23",
+						"runtime": 6,
+						"id": 3051379
+					},
+					{
+						"episode_number": 25,
+						"season_number": 0,
+						"name": "Clone Wars Download: Deal No Deal",
+						"air_date": "2020-03-30",
+						"runtime": 5,
+						"id": 3051381
+					},
+					{
+						"episode_number": 26,
+						"season_number": 0,
+						"name": "Clone Wars Download: Dangerous Debt",
+						"air_date": "2020-04-06",
+						"runtime": 5,
+						"id": 3051384
+					},
+					{
+						"episode_number": 27,
+						"season_number": 0,
+						"name": "Clone Wars Download: Together Again",
+						"air_date": "2020-04-13",
+						"runtime": 5,
+						"id": 3051386
+					},
+					{
+						"episode_number": 28,
+						"season_number": 0,
+						"name": "Clone Wars Download: Old Friends Not Forgotten",
+						"air_date": "2020-04-20",
+						"runtime": 6,
+						"id": 3051388
+					},
+					{
+						"episode_number": 29,
+						"season_number": 0,
+						"name": "Clone Wars Download: The Phantom Apprentice",
+						"air_date": "2020-04-28",
+						"runtime": 7,
+						"id": 3051391
+					},
+					{
+						"episode_number": 30,
+						"season_number": 0,
+						"name": "Clone Wars Download: Shattered",
+						"air_date": "2020-05-04",
+						"runtime": 6,
+						"id": 3051393
+					},
+					{
+						"episode_number": 31,
+						"season_number": 0,
+						"name": "Clone Wars Download: Victory and Death",
+						"air_date": "2020-05-08",
+						"runtime": 6,
+						"id": 3051396
+					},
+					{
+						"episode_number": 32,
+						"season_number": 0,
+						"name": "The Untold Stories",
+						"air_date": null,
+						"runtime": 25,
+						"id": 286637
+					},
+					{
+						"episode_number": 33,
+						"season_number": 0,
+						"name": "A New Score",
+						"air_date": null,
+						"runtime": 11,
+						"id": 286638
+					},
+					{
+						"episode_number": 34,
+						"season_number": 0,
+						"name": "The Voices of The Clone Wars",
+						"air_date": null,
+						"runtime": 10,
+						"id": 286639
+					},
+					{
+						"episode_number": 35,
+						"season_number": 0,
+						"name": "Webisode 1: Introducing Star Wars The Clone Wars",
+						"air_date": null,
+						"runtime": 4,
+						"id": 286645
+					},
+					{
+						"episode_number": 36,
+						"season_number": 0,
+						"name": "Webisode 2: Epic Battles",
+						"air_date": null,
+						"runtime": 3,
+						"id": 286646
+					},
+					{
+						"episode_number": 37,
+						"season_number": 0,
+						"name": "Webisode 3: The Clones are Coming",
+						"air_date": null,
+						"runtime": 4,
+						"id": 286647
+					},
+					{
+						"episode_number": 38,
+						"season_number": 0,
+						"name": "Webisode 4: Heroes",
+						"air_date": null,
+						"runtime": 4,
+						"id": 286648
+					},
+					{
+						"episode_number": 39,
+						"season_number": 0,
+						"name": "Webisode 5: Villains",
+						"air_date": null,
+						"runtime": 4,
+						"id": 286649
+					},
+					{
+						"episode_number": 40,
+						"season_number": 0,
+						"name": "Webisode 6: Anakin's Padawan",
+						"air_date": null,
+						"runtime": 4,
+						"id": 286650
+					},
+					{
+						"episode_number": 41,
+						"season_number": 0,
+						"name": "Return to Genosis",
+						"air_date": "2010-10-26",
+						"runtime": 18,
+						"id": 286652
+					},
+					{
+						"episode_number": 42,
+						"season_number": 0,
+						"name": "Magic of the Holocron",
+						"air_date": "2010-10-26",
+						"runtime": 13,
+						"id": 286651
+					},
+					{
+						"episode_number": 43,
+						"season_number": 0,
+						"name": "Creating Mandalore",
+						"air_date": "2010-10-26",
+						"runtime": 19,
+						"id": 286653
+					},
+					{
+						"episode_number": 44,
+						"season_number": 0,
+						"name": "Attack of the Zillo Beast",
+						"air_date": "2010-10-26",
+						"runtime": 16,
+						"id": 286654
+					},
+					{
+						"episode_number": 45,
+						"season_number": 0,
+						"name": "Creating Kamino",
+						"air_date": "2011-10-18",
+						"runtime": 14,
+						"id": 286663
+					},
+					{
+						"episode_number": 46,
+						"season_number": 0,
+						"name": "Hutts and the Underworld",
+						"air_date": "2011-10-18",
+						"runtime": 16,
+						"id": 286664
+					},
+					{
+						"episode_number": 47,
+						"season_number": 0,
+						"name": "Witches and Monsters",
+						"air_date": "2011-10-18",
+						"runtime": 17,
+						"id": 286566
+					},
+					{
+						"episode_number": 48,
+						"season_number": 0,
+						"name": "Secrets of Mortis",
+						"air_date": "2011-10-18",
+						"runtime": 3,
+						"id": 286665
+					},
+					{
+						"episode_number": 49,
+						"season_number": 0,
+						"name": "Chewbacca Returns",
+						"air_date": "2011-10-18",
+						"runtime": 19,
+						"id": 286662
+					},
+					{
+						"episode_number": 50,
+						"season_number": 0,
+						"name": "The Battle of Mon Cala",
+						"air_date": "2012-10-23",
+						"runtime": 23,
+						"id": 286658
+					},
+					{
+						"episode_number": 51,
+						"season_number": 0,
+						"name": "Darkened World of Umbara",
+						"air_date": "2012-10-23",
+						"runtime": 26,
+						"id": 286659
+					},
+					{
+						"episode_number": 52,
+						"season_number": 0,
+						"name": "The Slaves of Zygerria",
+						"air_date": "2012-10-23",
+						"runtime": 22,
+						"id": 286660
+					},
+					{
+						"episode_number": 53,
+						"season_number": 0,
+						"name": "Obi-Wan Undercover",
+						"air_date": "2012-10-23",
+						"runtime": 25,
+						"id": 286661
+					},
+					{
+						"episode_number": 54,
+						"season_number": 0,
+						"name": "Darth Maul Returns",
+						"air_date": "2012-10-23",
+						"runtime": 19,
+						"id": 286657
+					},
+					{
+						"episode_number": 55,
+						"season_number": 0,
+						"name": "Video Commentary",
+						"air_date": null,
+						"runtime": null,
+						"id": 286640
+					},
+					{
+						"episode_number": 56,
+						"season_number": 0,
+						"name": "Deleted Scene 1: Through the Tanks",
+						"air_date": null,
+						"runtime": null,
+						"id": 286561
+					},
+					{
+						"episode_number": 57,
+						"season_number": 0,
+						"name": "Deleted Scene 2: Rancor Pit",
+						"air_date": null,
+						"runtime": null,
+						"id": 286641
+					},
+					{
+						"episode_number": 58,
+						"season_number": 0,
+						"name": "Deleted Scene 3: Platform Droid Fight",
+						"air_date": null,
+						"runtime": null,
+						"id": 286642
+					},
+					{
+						"episode_number": 59,
+						"season_number": 0,
+						"name": "Deleted Scene 4: Cargo Bay",
+						"air_date": null,
+						"runtime": null,
+						"id": 286643
+					},
+					{
+						"episode_number": 60,
+						"season_number": 0,
+						"name": "Declassified",
+						"air_date": "2014-01-01",
+						"runtime": 17,
+						"id": 2060170
+					}
+				]
+			},
+			"4194/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Ambush",
+						"air_date": "2008-10-03",
+						"runtime": 23,
+						"id": 286576
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Rising Malevolence",
+						"air_date": "2008-10-03",
+						"runtime": 24,
+						"id": 286570
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Shadow of Malevolence",
+						"air_date": "2008-10-10",
+						"runtime": 23,
+						"id": 286559
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Destroy Malevolence",
+						"air_date": "2008-10-17",
+						"runtime": 22,
+						"id": 286575
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Rookies",
+						"air_date": "2008-10-24",
+						"runtime": 23,
+						"id": 286573
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Downfall of a Droid",
+						"air_date": "2008-11-07",
+						"runtime": 21,
+						"id": 286568
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Duel of the Droids",
+						"air_date": "2008-11-14",
+						"runtime": 22,
+						"id": 286567
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Bombad Jedi",
+						"air_date": "2008-11-21",
+						"runtime": 22,
+						"id": 286572
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Cloak of Darkness",
+						"air_date": "2008-12-05",
+						"runtime": 22,
+						"id": 286569
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Lair of Grievous",
+						"air_date": "2008-12-12",
+						"runtime": 23,
+						"id": 286574
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Dooku Captured",
+						"air_date": "2009-01-02",
+						"runtime": 23,
+						"id": 286578
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "The Gungan General",
+						"air_date": "2009-01-09",
+						"runtime": 23,
+						"id": 286580
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Jedi Crash",
+						"air_date": "2009-01-16",
+						"runtime": 23,
+						"id": 286582
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Defenders of Peace",
+						"air_date": "2009-01-23",
+						"runtime": 23,
+						"id": 286583
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Trespass",
+						"air_date": "2009-01-30",
+						"runtime": 22,
+						"id": 286579
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "The Hidden Enemy",
+						"air_date": "2009-02-06",
+						"runtime": 22,
+						"id": 286581
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "Blue Shadow Virus",
+						"air_date": "2009-02-13",
+						"runtime": 23,
+						"id": 286577
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Mystery of a Thousand Moons",
+						"air_date": "2009-02-13",
+						"runtime": 22,
+						"id": 286584
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Storm Over Ryloth",
+						"air_date": "2009-02-27",
+						"runtime": 24,
+						"id": 286585
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Innocents of Ryloth",
+						"air_date": "2009-03-06",
+						"runtime": 24,
+						"id": 286586
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Liberty on Ryloth",
+						"air_date": "2009-03-13",
+						"runtime": 24,
+						"id": 286587
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Hostage Crisis",
+						"air_date": "2009-03-20",
+						"runtime": 22,
+						"id": 286588
+					}
+				]
+			},
+			"4194/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Holocron Heist",
+						"air_date": "2009-10-02",
+						"runtime": 22,
+						"id": 286589
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Cargo of Doom",
+						"air_date": "2009-10-02",
+						"runtime": 22,
+						"id": 286609
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Children of the Force",
+						"air_date": "2009-10-09",
+						"runtime": 22,
+						"id": 286590
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Senate Spy",
+						"air_date": "2009-10-16",
+						"runtime": 22,
+						"id": 286591
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Landing at Point Rain",
+						"air_date": "2009-11-04",
+						"runtime": 22,
+						"id": 286592
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Weapons Factory",
+						"air_date": "2009-11-13",
+						"runtime": 22,
+						"id": 286593
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Legacy of Terror",
+						"air_date": "2009-11-20",
+						"runtime": 23,
+						"id": 286594
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Brain Invaders",
+						"air_date": "2009-12-04",
+						"runtime": 22,
+						"id": 286595
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Grievous Intrigue",
+						"air_date": "2010-01-01",
+						"runtime": 22,
+						"id": 286597
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "The Deserter",
+						"air_date": "2010-01-01",
+						"runtime": 22,
+						"id": 286598
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "Lightsaber Lost",
+						"air_date": "2010-01-22",
+						"runtime": 23,
+						"id": 286599
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "The Mandalore Plot",
+						"air_date": "2010-01-29",
+						"runtime": 22,
+						"id": 286600
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "Voyage of Temptation",
+						"air_date": "2010-02-05",
+						"runtime": 23,
+						"id": 286610
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "Duchess of Mandalore",
+						"air_date": "2010-02-12",
+						"runtime": 22,
+						"id": 286611
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "Senate Murders",
+						"air_date": "2010-03-19",
+						"runtime": 22,
+						"id": 286601
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "Cat and Mouse",
+						"air_date": "2010-03-26",
+						"runtime": 22,
+						"id": 286602
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "Bounty Hunters",
+						"air_date": "2010-04-02",
+						"runtime": 22,
+						"id": 286603
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "The Zillo Beast",
+						"air_date": "2010-04-09",
+						"runtime": 22,
+						"id": 286604
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "The Zillo Beast Strikes Back",
+						"air_date": "2010-04-16",
+						"runtime": 22,
+						"id": 286605
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "Death Trap",
+						"air_date": "2010-04-23",
+						"runtime": 22,
+						"id": 286606
+					},
+					{
+						"episode_number": 21,
+						"season_number": 2,
+						"name": "R2 Come Home",
+						"air_date": "2010-04-30",
+						"runtime": 22,
+						"id": 286607
+					},
+					{
+						"episode_number": 22,
+						"season_number": 2,
+						"name": "Lethal Trackdown",
+						"air_date": "2010-04-30",
+						"runtime": 22,
+						"id": 286608
+					}
+				]
+			},
+			"4194/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "Clone Cadets",
+						"air_date": "2010-09-17",
+						"runtime": 23,
+						"id": 286631
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "ARC Troopers",
+						"air_date": "2010-09-17",
+						"runtime": 21,
+						"id": 286632
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Supply Lines",
+						"air_date": "2010-09-24",
+						"runtime": 22,
+						"id": 286624
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "Sphere of Influence",
+						"air_date": "2010-10-01",
+						"runtime": 22,
+						"id": 286612
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Corruption",
+						"air_date": "2010-10-08",
+						"runtime": 22,
+						"id": 286616
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "The Academy",
+						"air_date": "2010-10-15",
+						"runtime": 22,
+						"id": 286617
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "Assassin",
+						"air_date": "2010-10-22",
+						"runtime": 22,
+						"id": 286633
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "Evil Plans",
+						"air_date": "2010-11-05",
+						"runtime": 22,
+						"id": 286622
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "Hunt for Ziro",
+						"air_date": "2010-11-12",
+						"runtime": 21,
+						"id": 286623
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "Heroes on Both Sides",
+						"air_date": "2010-11-19",
+						"runtime": 22,
+						"id": 286613
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "Pursuit of Peace",
+						"air_date": "2010-12-03",
+						"runtime": 22,
+						"id": 971362
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "Nightsisters",
+						"air_date": "2011-01-07",
+						"runtime": 22,
+						"id": 286620
+					},
+					{
+						"episode_number": 13,
+						"season_number": 3,
+						"name": "Monster",
+						"air_date": "2011-01-14",
+						"runtime": 23,
+						"id": 286634
+					},
+					{
+						"episode_number": 14,
+						"season_number": 3,
+						"name": "Witches of the Mist",
+						"air_date": "2011-01-21",
+						"runtime": 22,
+						"id": 286621
+					},
+					{
+						"episode_number": 15,
+						"season_number": 3,
+						"name": "Overlords",
+						"air_date": "2011-01-28",
+						"runtime": 23,
+						"id": 286618
+					},
+					{
+						"episode_number": 16,
+						"season_number": 3,
+						"name": "Altar of Mortis",
+						"air_date": "2011-02-04",
+						"runtime": 22,
+						"id": 286619
+					},
+					{
+						"episode_number": 17,
+						"season_number": 3,
+						"name": "Ghosts of Mortis",
+						"air_date": "2011-02-11",
+						"runtime": 22,
+						"id": 286625
+					},
+					{
+						"episode_number": 18,
+						"season_number": 3,
+						"name": "The Citadel",
+						"air_date": "2011-02-18",
+						"runtime": 22,
+						"id": 286626
+					},
+					{
+						"episode_number": 19,
+						"season_number": 3,
+						"name": "Counterattack",
+						"air_date": "2011-03-04",
+						"runtime": 22,
+						"id": 286627
+					},
+					{
+						"episode_number": 20,
+						"season_number": 3,
+						"name": "Citadel Rescue",
+						"air_date": "2011-03-11",
+						"runtime": 22,
+						"id": 286628
+					},
+					{
+						"episode_number": 21,
+						"season_number": 3,
+						"name": "Padawan Lost",
+						"air_date": "2011-03-18",
+						"runtime": 23,
+						"id": 286629
+					},
+					{
+						"episode_number": 22,
+						"season_number": 3,
+						"name": "Wookiee Hunt",
+						"air_date": "2011-03-25",
+						"runtime": 22,
+						"id": 286630
+					}
+				]
+			},
+			"4194/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 4,
+						"name": "Water War",
+						"air_date": "2011-09-16",
+						"runtime": 22,
+						"id": 286666
+					},
+					{
+						"episode_number": 2,
+						"season_number": 4,
+						"name": "Gungan Attack",
+						"air_date": "2011-09-16",
+						"runtime": 23,
+						"id": 286667
+					},
+					{
+						"episode_number": 3,
+						"season_number": 4,
+						"name": "Prisoners",
+						"air_date": "2011-09-23",
+						"runtime": 22,
+						"id": 286668
+					},
+					{
+						"episode_number": 4,
+						"season_number": 4,
+						"name": "Shadow Warrior",
+						"air_date": "2011-09-30",
+						"runtime": 22,
+						"id": 286670
+					},
+					{
+						"episode_number": 5,
+						"season_number": 4,
+						"name": "Mercy Mission",
+						"air_date": "2011-10-07",
+						"runtime": 22,
+						"id": 286669
+					},
+					{
+						"episode_number": 6,
+						"season_number": 4,
+						"name": "Nomad Droids",
+						"air_date": "2011-10-14",
+						"runtime": 22,
+						"id": 286671
+					},
+					{
+						"episode_number": 7,
+						"season_number": 4,
+						"name": "Darkness on Umbara",
+						"air_date": "2011-10-28",
+						"runtime": 22,
+						"id": 286672
+					},
+					{
+						"episode_number": 8,
+						"season_number": 4,
+						"name": "The General",
+						"air_date": "2011-11-04",
+						"runtime": 23,
+						"id": 286673
+					},
+					{
+						"episode_number": 9,
+						"season_number": 4,
+						"name": "Plan of Dissent",
+						"air_date": "2011-11-11",
+						"runtime": 23,
+						"id": 286674
+					},
+					{
+						"episode_number": 10,
+						"season_number": 4,
+						"name": "Carnage of Krell",
+						"air_date": "2011-11-18",
+						"runtime": 22,
+						"id": 286675
+					},
+					{
+						"episode_number": 11,
+						"season_number": 4,
+						"name": "Kidnapped",
+						"air_date": "2011-11-25",
+						"runtime": 22,
+						"id": 286676
+					},
+					{
+						"episode_number": 12,
+						"season_number": 4,
+						"name": "Slaves of the Republic",
+						"air_date": "2011-12-02",
+						"runtime": 21,
+						"id": 286677
+					},
+					{
+						"episode_number": 13,
+						"season_number": 4,
+						"name": "Escape from Kadavo",
+						"air_date": "2012-01-06",
+						"runtime": 22,
+						"id": 286678
+					},
+					{
+						"episode_number": 14,
+						"season_number": 4,
+						"name": "A Friend in Need",
+						"air_date": "2012-01-13",
+						"runtime": 22,
+						"id": 286679
+					},
+					{
+						"episode_number": 15,
+						"season_number": 4,
+						"name": "Deception",
+						"air_date": "2012-01-20",
+						"runtime": 22,
+						"id": 286680
+					},
+					{
+						"episode_number": 16,
+						"season_number": 4,
+						"name": "Friends and Enemies",
+						"air_date": "2012-01-27",
+						"runtime": 22,
+						"id": 286681
+					},
+					{
+						"episode_number": 17,
+						"season_number": 4,
+						"name": "The Box",
+						"air_date": "2012-02-03",
+						"runtime": 22,
+						"id": 286682
+					},
+					{
+						"episode_number": 18,
+						"season_number": 4,
+						"name": "Crisis on Naboo",
+						"air_date": "2012-02-10",
+						"runtime": 22,
+						"id": 286683
+					},
+					{
+						"episode_number": 19,
+						"season_number": 4,
+						"name": "Massacre",
+						"air_date": "2012-02-24",
+						"runtime": 22,
+						"id": 286684
+					},
+					{
+						"episode_number": 20,
+						"season_number": 4,
+						"name": "Bounty",
+						"air_date": "2012-03-02",
+						"runtime": 22,
+						"id": 286685
+					},
+					{
+						"episode_number": 21,
+						"season_number": 4,
+						"name": "Brothers",
+						"air_date": "2012-03-09",
+						"runtime": 22,
+						"id": 286686
+					},
+					{
+						"episode_number": 22,
+						"season_number": 4,
+						"name": "Revenge",
+						"air_date": "2012-03-16",
+						"runtime": 22,
+						"id": 1010398
+					}
+				]
+			},
+			"4194/5": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 5,
+						"name": "Revival",
+						"air_date": "2012-09-29",
+						"runtime": 22,
+						"id": 1010340
+					},
+					{
+						"episode_number": 2,
+						"season_number": 5,
+						"name": "A War on Two Fronts",
+						"air_date": "2012-10-06",
+						"runtime": 22,
+						"id": 1010346
+					},
+					{
+						"episode_number": 3,
+						"season_number": 5,
+						"name": "Front Runners",
+						"air_date": "2012-10-13",
+						"runtime": 22,
+						"id": 1010347
+					},
+					{
+						"episode_number": 4,
+						"season_number": 5,
+						"name": "The Soft War",
+						"air_date": "2012-10-20",
+						"runtime": 22,
+						"id": 1010365
+					},
+					{
+						"episode_number": 5,
+						"season_number": 5,
+						"name": "Tipping Points",
+						"air_date": "2012-10-27",
+						"runtime": 22,
+						"id": 1010366
+					},
+					{
+						"episode_number": 6,
+						"season_number": 5,
+						"name": "The Gathering",
+						"air_date": "2012-11-03",
+						"runtime": 22,
+						"id": 1010367
+					},
+					{
+						"episode_number": 7,
+						"season_number": 5,
+						"name": "A Test of Strength",
+						"air_date": "2012-11-10",
+						"runtime": 22,
+						"id": 1010368
+					},
+					{
+						"episode_number": 8,
+						"season_number": 5,
+						"name": "Bound for Rescue",
+						"air_date": "2012-11-17",
+						"runtime": 22,
+						"id": 1010369
+					},
+					{
+						"episode_number": 9,
+						"season_number": 5,
+						"name": "A Necessary Bond",
+						"air_date": "2012-11-24",
+						"runtime": 22,
+						"id": 1010370
+					},
+					{
+						"episode_number": 10,
+						"season_number": 5,
+						"name": "Secret Weapons",
+						"air_date": "2012-12-01",
+						"runtime": 22,
+						"id": 1010371
+					},
+					{
+						"episode_number": 11,
+						"season_number": 5,
+						"name": "A Sunny Day in the Void",
+						"air_date": "2012-12-08",
+						"runtime": 22,
+						"id": 1010372
+					},
+					{
+						"episode_number": 12,
+						"season_number": 5,
+						"name": "Missing in Action",
+						"air_date": "2013-01-05",
+						"runtime": 22,
+						"id": 1010373
+					},
+					{
+						"episode_number": 13,
+						"season_number": 5,
+						"name": "Point of No Return",
+						"air_date": "2013-01-12",
+						"runtime": 22,
+						"id": 1010374
+					},
+					{
+						"episode_number": 14,
+						"season_number": 5,
+						"name": "Eminence",
+						"air_date": "2013-01-19",
+						"runtime": 22,
+						"id": 1010375
+					},
+					{
+						"episode_number": 15,
+						"season_number": 5,
+						"name": "Shades of Reason",
+						"air_date": "2013-01-26",
+						"runtime": 22,
+						"id": 1010376
+					},
+					{
+						"episode_number": 16,
+						"season_number": 5,
+						"name": "The Lawless",
+						"air_date": "2013-02-02",
+						"runtime": 22,
+						"id": 1010377
+					},
+					{
+						"episode_number": 17,
+						"season_number": 5,
+						"name": "Sabotage",
+						"air_date": "2013-02-09",
+						"runtime": 22,
+						"id": 1010378
+					},
+					{
+						"episode_number": 18,
+						"season_number": 5,
+						"name": "The Jedi Who Knew Too Much",
+						"air_date": "2013-02-16",
+						"runtime": 22,
+						"id": 1010379
+					},
+					{
+						"episode_number": 19,
+						"season_number": 5,
+						"name": "To Catch a Jedi",
+						"air_date": "2013-02-23",
+						"runtime": 22,
+						"id": 1010380
+					},
+					{
+						"episode_number": 20,
+						"season_number": 5,
+						"name": "The Wrong Jedi",
+						"air_date": "2013-03-02",
+						"runtime": 22,
+						"id": 1010381
+					}
+				]
+			},
+			"4194/6": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 6,
+						"name": "The Unknown",
+						"air_date": "2014-03-07",
+						"runtime": 22,
+						"id": 1010394
+					},
+					{
+						"episode_number": 2,
+						"season_number": 6,
+						"name": "Conspiracy",
+						"air_date": "2014-03-07",
+						"runtime": 22,
+						"id": 1010383
+					},
+					{
+						"episode_number": 3,
+						"season_number": 6,
+						"name": "Fugitive",
+						"air_date": "2014-03-07",
+						"runtime": 22,
+						"id": 1010384
+					},
+					{
+						"episode_number": 4,
+						"season_number": 6,
+						"name": "Orders",
+						"air_date": "2014-03-07",
+						"runtime": 22,
+						"id": 1010385
+					},
+					{
+						"episode_number": 5,
+						"season_number": 6,
+						"name": "An Old Friend",
+						"air_date": "2014-03-07",
+						"runtime": 22,
+						"id": 1010386
+					},
+					{
+						"episode_number": 6,
+						"season_number": 6,
+						"name": "The Rise of Clovis",
+						"air_date": "2014-03-07",
+						"runtime": 22,
+						"id": 1010387
+					},
+					{
+						"episode_number": 7,
+						"season_number": 6,
+						"name": "Crisis at the Heart",
+						"air_date": "2014-03-07",
+						"runtime": 22,
+						"id": 1010388
+					},
+					{
+						"episode_number": 8,
+						"season_number": 6,
+						"name": "The Disappeared (1)",
+						"air_date": "2014-03-07",
+						"runtime": 22,
+						"id": 1010389
+					},
+					{
+						"episode_number": 9,
+						"season_number": 6,
+						"name": "The Disappeared (2)",
+						"air_date": "2014-03-07",
+						"runtime": 22,
+						"id": 1010390
+					},
+					{
+						"episode_number": 10,
+						"season_number": 6,
+						"name": "The Lost One",
+						"air_date": "2014-03-07",
+						"runtime": 22,
+						"id": 1010395
+					},
+					{
+						"episode_number": 11,
+						"season_number": 6,
+						"name": "Voices",
+						"air_date": "2014-03-07",
+						"runtime": 22,
+						"id": 1010391
+					},
+					{
+						"episode_number": 12,
+						"season_number": 6,
+						"name": "Destiny",
+						"air_date": "2014-03-07",
+						"runtime": 22,
+						"id": 1010396
+					},
+					{
+						"episode_number": 13,
+						"season_number": 6,
+						"name": "Sacrifice",
+						"air_date": "2014-03-07",
+						"runtime": 22,
+						"id": 1010397
+					}
+				]
+			},
+			"4194/7": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 7,
+						"name": "The Bad Batch",
+						"air_date": "2020-02-21",
+						"runtime": 28,
+						"id": 2040570
+					},
+					{
+						"episode_number": 2,
+						"season_number": 7,
+						"name": "A Distant Echo",
+						"air_date": "2020-02-28",
+						"runtime": 27,
+						"id": 2170499
+					},
+					{
+						"episode_number": 3,
+						"season_number": 7,
+						"name": "On the Wings of Keeradaks",
+						"air_date": "2020-03-06",
+						"runtime": 22,
+						"id": 2170500
+					},
+					{
+						"episode_number": 4,
+						"season_number": 7,
+						"name": "Unfinished Business",
+						"air_date": "2020-03-13",
+						"runtime": 27,
+						"id": 2170501
+					},
+					{
+						"episode_number": 5,
+						"season_number": 7,
+						"name": "Gone With a Trace",
+						"air_date": "2020-03-20",
+						"runtime": 26,
+						"id": 2170502
+					},
+					{
+						"episode_number": 6,
+						"season_number": 7,
+						"name": "Deal No Deal",
+						"air_date": "2020-03-27",
+						"runtime": 28,
+						"id": 2170503
+					},
+					{
+						"episode_number": 7,
+						"season_number": 7,
+						"name": "Dangerous Debt",
+						"air_date": "2020-04-03",
+						"runtime": 25,
+						"id": 2201892
+					},
+					{
+						"episode_number": 8,
+						"season_number": 7,
+						"name": "Together Again",
+						"air_date": "2020-04-10",
+						"runtime": 27,
+						"id": 2201893
+					},
+					{
+						"episode_number": 9,
+						"season_number": 7,
+						"name": "Old Friends Not Forgotten",
+						"air_date": "2020-04-17",
+						"runtime": 32,
+						"id": 2201894
+					},
+					{
+						"episode_number": 10,
+						"season_number": 7,
+						"name": "The Phantom Apprentice",
+						"air_date": "2020-04-24",
+						"runtime": 29,
+						"id": 2201895
+					},
+					{
+						"episode_number": 11,
+						"season_number": 7,
+						"name": "Shattered",
+						"air_date": "2020-05-01",
+						"runtime": 28,
+						"id": 2231674
+					},
+					{
+						"episode_number": 12,
+						"season_number": 7,
+						"name": "Victory and Death",
+						"air_date": "2020-05-04",
+						"runtime": 25,
+						"id": 2231675
+					}
+				]
+			}
+		},
+		"tvdbEpisodes": {
+			"83268": {
+				"data": {
+					"episodes": [
+						{
+							"id": 402119,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "Star Wars: The Clone Wars",
+							"aired": "2008-08-05",
+							"runtime": 98
+						},
+						{
+							"id": 5044296,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": "Story Reel: A Death on Utapau",
+							"aired": "2014-09-25",
+							"runtime": 25
+						},
+						{
+							"id": 5044297,
+							"seasonNumber": 0,
+							"number": 3,
+							"name": "Story Reel: In Search of the Crystal",
+							"aired": "2014-09-25",
+							"runtime": 25
+						},
+						{
+							"id": 5044298,
+							"seasonNumber": 0,
+							"number": 4,
+							"name": "Story Reel: Crystal Crisis",
+							"aired": "2014-09-25",
+							"runtime": 25
+						},
+						{
+							"id": 5044299,
+							"seasonNumber": 0,
+							"number": 5,
+							"name": "Story Reel: The Big Bang",
+							"aired": "2014-09-25",
+							"runtime": 25
+						},
+						{
+							"id": 5218081,
+							"seasonNumber": 0,
+							"number": 6,
+							"name": "Story Reel: The Bad Batch",
+							"aired": "2015-04-17",
+							"runtime": 25
+						},
+						{
+							"id": 5218082,
+							"seasonNumber": 0,
+							"number": 7,
+							"name": "Story Reel: A Distant Echo",
+							"aired": "2015-04-17",
+							"runtime": 25
+						},
+						{
+							"id": 5218084,
+							"seasonNumber": 0,
+							"number": 8,
+							"name": "Story Reel: On the Wings of Keeradaks",
+							"aired": "2015-04-17",
+							"runtime": 25
+						},
+						{
+							"id": 5218085,
+							"seasonNumber": 0,
+							"number": 9,
+							"name": "Story Reel: Unfinished Business",
+							"aired": "2015-04-17",
+							"runtime": 25
+						},
+						{
+							"id": 7747557,
+							"seasonNumber": 0,
+							"number": 10,
+							"name": "Clone Wars Download: The Bad Batch",
+							"aired": "2020-02-24",
+							"runtime": 3
+						},
+						{
+							"id": 7747577,
+							"seasonNumber": 0,
+							"number": 11,
+							"name": "Clone Wars Download: A Distant Echo",
+							"aired": "2020-03-02",
+							"runtime": 6
+						},
+						{
+							"id": 7747583,
+							"seasonNumber": 0,
+							"number": 12,
+							"name": "Clone Wars Download: On the Wings of Keeradaks",
+							"aired": "2020-03-09",
+							"runtime": 4
+						},
+						{
+							"id": 7747587,
+							"seasonNumber": 0,
+							"number": 13,
+							"name": "Clone Wars Download: Unfinished Business",
+							"aired": "2020-03-16",
+							"runtime": 4
+						},
+						{
+							"id": 7747590,
+							"seasonNumber": 0,
+							"number": 14,
+							"name": "Clone Wars Download: Gone with a Trace",
+							"aired": "2020-03-23",
+							"runtime": 5
+						},
+						{
+							"id": 7747598,
+							"seasonNumber": 0,
+							"number": 15,
+							"name": "Clone Wars Download: Deal No Deal",
+							"aired": "2020-03-30",
+							"runtime": 4
+						},
+						{
+							"id": 7761842,
+							"seasonNumber": 0,
+							"number": 16,
+							"name": "Clone Wars Download: Dangerous Debt",
+							"aired": "2020-04-06",
+							"runtime": 4
+						},
+						{
+							"id": 7761843,
+							"seasonNumber": 0,
+							"number": 17,
+							"name": "Clone Wars Download: Together Again",
+							"aired": "2020-04-13",
+							"runtime": 4
+						},
+						{
+							"id": 7761844,
+							"seasonNumber": 0,
+							"number": 18,
+							"name": "Clone Wars Download: Old Friends Not Forgotten",
+							"aired": "2020-04-20",
+							"runtime": 5
+						},
+						{
+							"id": 7761846,
+							"seasonNumber": 0,
+							"number": 19,
+							"name": "Clone Wars Download: The Phantom Apprentice",
+							"aired": "2020-04-28",
+							"runtime": 6
+						},
+						{
+							"id": 7761847,
+							"seasonNumber": 0,
+							"number": 20,
+							"name": "Clone Wars Download: Shattered",
+							"aired": "2020-05-04",
+							"runtime": 5
+						},
+						{
+							"id": 7761848,
+							"seasonNumber": 0,
+							"number": 21,
+							"name": "Clone Wars Download: Victory and Death",
+							"aired": "2020-05-08",
+							"runtime": 5
+						},
+						{
+							"id": 393903,
+							"seasonNumber": 0,
+							"number": 22,
+							"name": "Preview Special",
+							"aired": "2008-09-26",
+							"runtime": 25
+						},
+						{
+							"id": 1281351,
+							"seasonNumber": 0,
+							"number": 23,
+							"name": "The Untold Stories",
+							"aired": null,
+							"runtime": 25
+						},
+						{
+							"id": 1281361,
+							"seasonNumber": 0,
+							"number": 24,
+							"name": "A New Score",
+							"aired": null,
+							"runtime": 11
+						},
+						{
+							"id": 1281371,
+							"seasonNumber": 0,
+							"number": 25,
+							"name": "The Voices of The Clone Wars",
+							"aired": null,
+							"runtime": 10
+						},
+						{
+							"id": 1281481,
+							"seasonNumber": 0,
+							"number": 26,
+							"name": "Webisode 1: Introducing Star Wars The Clone Wars",
+							"aired": null,
+							"runtime": 3
+						},
+						{
+							"id": 1281491,
+							"seasonNumber": 0,
+							"number": 27,
+							"name": "Webisode 2: Epic Battles",
+							"aired": null,
+							"runtime": 3
+						},
+						{
+							"id": 1281501,
+							"seasonNumber": 0,
+							"number": 28,
+							"name": "Webisode 3: The Clones are Coming",
+							"aired": null,
+							"runtime": 3
+						},
+						{
+							"id": 1281511,
+							"seasonNumber": 0,
+							"number": 29,
+							"name": "Webisode 4: Heroes",
+							"aired": null,
+							"runtime": 4
+						},
+						{
+							"id": 1281521,
+							"seasonNumber": 0,
+							"number": 30,
+							"name": "Webisode 5: Villains",
+							"aired": null,
+							"runtime": 4
+						},
+						{
+							"id": 1281531,
+							"seasonNumber": 0,
+							"number": 31,
+							"name": "Webisode 6: Anakin's Padawan",
+							"aired": null,
+							"runtime": 4
+						},
+						{
+							"id": 2825811,
+							"seasonNumber": 0,
+							"number": 32,
+							"name": "Season 3 Sneak Peek",
+							"aired": "2008-09-04",
+							"runtime": 25
+						},
+						{
+							"id": 8100696,
+							"seasonNumber": 0,
+							"number": 33,
+							"name": "Cad Bane & Boba Fett vs Tusken Raiders",
+							"aired": "2015-04-29",
+							"runtime": 2
+						},
+						{
+							"id": 8100701,
+							"seasonNumber": 0,
+							"number": 34,
+							"name": "Bad Batch & Wookies on Kashyyyk",
+							"aired": "2015-04-29",
+							"runtime": 2
+						},
+						{
+							"id": 8100704,
+							"seasonNumber": 0,
+							"number": 35,
+							"name": "Dark Disciple",
+							"aired": "2015-04-25",
+							"runtime": 4
+						},
+						{
+							"id": 8100708,
+							"seasonNumber": 0,
+							"number": 36,
+							"name": "Ahsoka on a Speeder",
+							"aired": "2015-04-29",
+							"runtime": 2
+						},
+						{
+							"id": 8100715,
+							"seasonNumber": 0,
+							"number": 37,
+							"name": "Ahsoka & Nyx in the Underworld",
+							"aired": "2016-07-15",
+							"runtime": 2
+						},
+						{
+							"id": 8100718,
+							"seasonNumber": 0,
+							"number": 38,
+							"name": "Cad Bane vs Boba Fett",
+							"aired": "2017-05-16",
+							"runtime": 2
+						},
+						{
+							"id": 8100722,
+							"seasonNumber": 0,
+							"number": 39,
+							"name": "Ahsoka meets the 332nd Legion",
+							"aired": "2019-04-14",
+							"runtime": 2
+						},
+						{
+							"id": 393233,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "Ambush",
+							"aired": "2008-10-03",
+							"runtime": 23
+						},
+						{
+							"id": 393234,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "Rising Malevolence (1)",
+							"aired": "2008-10-03",
+							"runtime": 24
+						},
+						{
+							"id": 393235,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "Shadow of Malevolence (2)",
+							"aired": "2008-10-10",
+							"runtime": 23
+						},
+						{
+							"id": 393236,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "Destroy Malevolence (3)",
+							"aired": "2008-10-17",
+							"runtime": 23
+						},
+						{
+							"id": 393711,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "Rookies",
+							"aired": "2008-10-24",
+							"runtime": 24
+						},
+						{
+							"id": 393712,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "Downfall of a Droid (1)",
+							"aired": "2008-11-07",
+							"runtime": 21
+						},
+						{
+							"id": 403518,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "Duel of the Droids (2)",
+							"aired": "2008-11-14",
+							"runtime": 22
+						},
+						{
+							"id": 403519,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "Bombad Jedi (1)",
+							"aired": "2008-11-21",
+							"runtime": 22
+						},
+						{
+							"id": 403520,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "Cloak of Darkness (2)",
+							"aired": "2008-12-05",
+							"runtime": 22
+						},
+						{
+							"id": 403521,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "Lair of Grievous (3)",
+							"aired": "2008-12-12",
+							"runtime": 23
+						},
+						{
+							"id": 417298,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "Dooku Captured (1)",
+							"aired": "2009-01-02",
+							"runtime": 23
+						},
+						{
+							"id": 419505,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "The Gungan General (2)",
+							"aired": "2009-01-09",
+							"runtime": 23
+						},
+						{
+							"id": 423943,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "Jedi Crash (1)",
+							"aired": "2009-01-16",
+							"runtime": 23
+						},
+						{
+							"id": 423944,
+							"seasonNumber": 1,
+							"number": 14,
+							"name": "Defenders of Peace (2)",
+							"aired": "2009-01-23",
+							"runtime": 22
+						},
+						{
+							"id": 423945,
+							"seasonNumber": 1,
+							"number": 15,
+							"name": "Trespass",
+							"aired": "2009-01-30",
+							"runtime": 23
+						},
+						{
+							"id": 431037,
+							"seasonNumber": 1,
+							"number": 16,
+							"name": "The Hidden Enemy",
+							"aired": "2009-02-06",
+							"runtime": 22
+						},
+						{
+							"id": 431038,
+							"seasonNumber": 1,
+							"number": 17,
+							"name": "Blue Shadow Virus (1)",
+							"aired": "2009-02-13",
+							"runtime": 23
+						},
+						{
+							"id": 435753,
+							"seasonNumber": 1,
+							"number": 18,
+							"name": "Mystery of a Thousand Moons (2)",
+							"aired": "2009-02-13",
+							"runtime": 23
+						},
+						{
+							"id": 435903,
+							"seasonNumber": 1,
+							"number": 19,
+							"name": "Storm Over Ryloth (1)",
+							"aired": "2009-02-27",
+							"runtime": 24
+						},
+						{
+							"id": 435904,
+							"seasonNumber": 1,
+							"number": 20,
+							"name": "Innocents of Ryloth (2)",
+							"aired": "2009-03-06",
+							"runtime": 24
+						},
+						{
+							"id": 435905,
+							"seasonNumber": 1,
+							"number": 21,
+							"name": "Liberty on Ryloth (3)",
+							"aired": "2009-03-13",
+							"runtime": 24
+						},
+						{
+							"id": 435906,
+							"seasonNumber": 1,
+							"number": 22,
+							"name": "Hostage Crisis",
+							"aired": "2009-03-20",
+							"runtime": 22
+						},
+						{
+							"id": 532351,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "Holocron Heist (1)",
+							"aired": "2009-10-02",
+							"runtime": 22
+						},
+						{
+							"id": 532361,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "Cargo of Doom (2)",
+							"aired": "2009-10-02",
+							"runtime": 22
+						},
+						{
+							"id": 1147951,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "Children of the Force (3)",
+							"aired": "2009-10-09",
+							"runtime": 23
+						},
+						{
+							"id": 1186351,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "Senate Spy (1)",
+							"aired": "2009-10-16",
+							"runtime": 23
+						},
+						{
+							"id": 1191431,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "Landing at Point Rain (2)",
+							"aired": "2009-11-04",
+							"runtime": 22
+						},
+						{
+							"id": 1258111,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "Weapons Factory (3)",
+							"aired": "2009-11-13",
+							"runtime": 23
+						},
+						{
+							"id": 1271141,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "Legacy of Terror (4)",
+							"aired": "2009-11-20",
+							"runtime": 23
+						},
+						{
+							"id": 1366491,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "Brain Invaders (5)",
+							"aired": "2009-12-04",
+							"runtime": 22
+						},
+						{
+							"id": 1371171,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "Grievous Intrigue (1)",
+							"aired": "2010-01-01",
+							"runtime": 22
+						},
+						{
+							"id": 1412531,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "The Deserter (2)",
+							"aired": "2010-01-01",
+							"runtime": 23
+						},
+						{
+							"id": 1550581,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "Lightsaber Lost",
+							"aired": "2010-01-22",
+							"runtime": 23
+						},
+						{
+							"id": 1550591,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "The Mandalore Plot (1)",
+							"aired": "2010-01-29",
+							"runtime": 23
+						},
+						{
+							"id": 1668181,
+							"seasonNumber": 2,
+							"number": 13,
+							"name": "Voyage of Temptation (2)",
+							"aired": "2010-02-05",
+							"runtime": 23
+						},
+						{
+							"id": 1668191,
+							"seasonNumber": 2,
+							"number": 14,
+							"name": "Duchess of Mandalore (3)",
+							"aired": "2010-02-12",
+							"runtime": 22
+						},
+						{
+							"id": 1668201,
+							"seasonNumber": 2,
+							"number": 15,
+							"name": "Senate Murders",
+							"aired": "2010-03-19",
+							"runtime": 22
+						},
+						{
+							"id": 1725761,
+							"seasonNumber": 2,
+							"number": 16,
+							"name": "Cat and Mouse",
+							"aired": "2010-03-26",
+							"runtime": 22
+						},
+						{
+							"id": 1771741,
+							"seasonNumber": 2,
+							"number": 17,
+							"name": "Bounty Hunters",
+							"aired": "2010-04-02",
+							"runtime": 23
+						},
+						{
+							"id": 1992481,
+							"seasonNumber": 2,
+							"number": 18,
+							"name": "The Zillo Beast (1)",
+							"aired": "2010-04-09",
+							"runtime": 22
+						},
+						{
+							"id": 1992491,
+							"seasonNumber": 2,
+							"number": 19,
+							"name": "The Zillo Beast Strikes Back (2)",
+							"aired": "2010-04-16",
+							"runtime": 23
+						},
+						{
+							"id": 1992501,
+							"seasonNumber": 2,
+							"number": 20,
+							"name": "Death Trap (1)",
+							"aired": "2010-04-23",
+							"runtime": 22
+						},
+						{
+							"id": 1992511,
+							"seasonNumber": 2,
+							"number": 21,
+							"name": "R2 Come Home (2)",
+							"aired": "2010-04-30",
+							"runtime": 22
+						},
+						{
+							"id": 1992521,
+							"seasonNumber": 2,
+							"number": 22,
+							"name": "Lethal Trackdown (3)",
+							"aired": "2010-04-30",
+							"runtime": 22
+						},
+						{
+							"id": 2240111,
+							"seasonNumber": 3,
+							"number": 1,
+							"name": "Clone Cadets (1)",
+							"aired": "2010-09-17",
+							"runtime": 23
+						},
+						{
+							"id": 2825051,
+							"seasonNumber": 3,
+							"number": 2,
+							"name": "ARC Troopers (2)",
+							"aired": "2010-09-17",
+							"runtime": 21
+						},
+						{
+							"id": 2825061,
+							"seasonNumber": 3,
+							"number": 3,
+							"name": "Supply Lines",
+							"aired": "2010-09-24",
+							"runtime": 22
+						},
+						{
+							"id": 2825071,
+							"seasonNumber": 3,
+							"number": 4,
+							"name": "Sphere of Influence",
+							"aired": "2010-10-01",
+							"runtime": 22
+						},
+						{
+							"id": 2858561,
+							"seasonNumber": 3,
+							"number": 5,
+							"name": "Corruption (1)",
+							"aired": "2010-10-08",
+							"runtime": 22
+						},
+						{
+							"id": 2858571,
+							"seasonNumber": 3,
+							"number": 6,
+							"name": "The Academy (2)",
+							"aired": "2010-10-15",
+							"runtime": 23
+						},
+						{
+							"id": 2858581,
+							"seasonNumber": 3,
+							"number": 7,
+							"name": "Assassin",
+							"aired": "2010-10-22",
+							"runtime": 23
+						},
+						{
+							"id": 3040671,
+							"seasonNumber": 3,
+							"number": 8,
+							"name": "Evil Plans (1)",
+							"aired": "2010-11-05",
+							"runtime": 22
+						},
+						{
+							"id": 3040681,
+							"seasonNumber": 3,
+							"number": 9,
+							"name": "Hunt for Ziro (2)",
+							"aired": "2010-11-12",
+							"runtime": 21
+						},
+						{
+							"id": 3040691,
+							"seasonNumber": 3,
+							"number": 10,
+							"name": "Heroes on Both Sides (1)",
+							"aired": "2010-11-19",
+							"runtime": 22
+						},
+						{
+							"id": 3040701,
+							"seasonNumber": 3,
+							"number": 11,
+							"name": "Pursuit of Peace (2)",
+							"aired": "2010-12-03",
+							"runtime": 22
+						},
+						{
+							"id": 3436841,
+							"seasonNumber": 3,
+							"number": 12,
+							"name": "Nightsisters (1)",
+							"aired": "2011-01-07",
+							"runtime": 23
+						},
+						{
+							"id": 3472601,
+							"seasonNumber": 3,
+							"number": 13,
+							"name": "Monster (2)",
+							"aired": "2011-01-14",
+							"runtime": 23
+						},
+						{
+							"id": 3472721,
+							"seasonNumber": 3,
+							"number": 14,
+							"name": "Witches of the Mist (3)",
+							"aired": "2011-01-21",
+							"runtime": 22
+						},
+						{
+							"id": 3472731,
+							"seasonNumber": 3,
+							"number": 15,
+							"name": "Overlords (1)",
+							"aired": "2011-01-28",
+							"runtime": 23
+						},
+						{
+							"id": 3472751,
+							"seasonNumber": 3,
+							"number": 16,
+							"name": "Altar of Mortis (2)",
+							"aired": "2011-02-04",
+							"runtime": 22
+						},
+						{
+							"id": 3674851,
+							"seasonNumber": 3,
+							"number": 17,
+							"name": "Ghosts of Mortis (3)",
+							"aired": "2011-02-11",
+							"runtime": 22
+						},
+						{
+							"id": 3674861,
+							"seasonNumber": 3,
+							"number": 18,
+							"name": "The Citadel (1)",
+							"aired": "2011-02-18",
+							"runtime": 22
+						},
+						{
+							"id": 3674871,
+							"seasonNumber": 3,
+							"number": 19,
+							"name": "Counterattack (2)",
+							"aired": "2011-03-04",
+							"runtime": 22
+						},
+						{
+							"id": 3674881,
+							"seasonNumber": 3,
+							"number": 20,
+							"name": "Citadel Rescue (3)",
+							"aired": "2011-03-11",
+							"runtime": 22
+						},
+						{
+							"id": 3674891,
+							"seasonNumber": 3,
+							"number": 21,
+							"name": "Padawan Lost (1)",
+							"aired": "2011-04-01",
+							"runtime": 23
+						},
+						{
+							"id": 3674901,
+							"seasonNumber": 3,
+							"number": 22,
+							"name": "Wookiee Hunt (2)",
+							"aired": "2011-04-01",
+							"runtime": 23
+						},
+						{
+							"id": 4153384,
+							"seasonNumber": 4,
+							"number": 1,
+							"name": "Water War (1)",
+							"aired": "2011-09-16",
+							"runtime": 21
+						},
+						{
+							"id": 4153385,
+							"seasonNumber": 4,
+							"number": 2,
+							"name": "Gungan Attack (2)",
+							"aired": "2011-09-16",
+							"runtime": 23
+						},
+						{
+							"id": 4153386,
+							"seasonNumber": 4,
+							"number": 3,
+							"name": "Prisoners (3)",
+							"aired": "2011-09-23",
+							"runtime": 22
+						},
+						{
+							"id": 4153387,
+							"seasonNumber": 4,
+							"number": 4,
+							"name": "Shadow Warrior",
+							"aired": "2011-09-30",
+							"runtime": 23
+						},
+						{
+							"id": 4153388,
+							"seasonNumber": 4,
+							"number": 5,
+							"name": "Mercy Mission (1)",
+							"aired": "2011-10-07",
+							"runtime": 23
+						},
+						{
+							"id": 4153389,
+							"seasonNumber": 4,
+							"number": 6,
+							"name": "Nomad Droids (2)",
+							"aired": "2011-10-14",
+							"runtime": 23
+						},
+						{
+							"id": 4153390,
+							"seasonNumber": 4,
+							"number": 7,
+							"name": "Darkness on Umbara (1)",
+							"aired": "2011-10-28",
+							"runtime": 22
+						},
+						{
+							"id": 4153391,
+							"seasonNumber": 4,
+							"number": 8,
+							"name": "The General (2)",
+							"aired": "2011-11-04",
+							"runtime": 23
+						},
+						{
+							"id": 4153392,
+							"seasonNumber": 4,
+							"number": 9,
+							"name": "Plan of Dissent (3)",
+							"aired": "2011-11-11",
+							"runtime": 23
+						},
+						{
+							"id": 4153393,
+							"seasonNumber": 4,
+							"number": 10,
+							"name": "Carnage of Krell (4)",
+							"aired": "2011-11-18",
+							"runtime": 23
+						},
+						{
+							"id": 4153394,
+							"seasonNumber": 4,
+							"number": 11,
+							"name": "Kidnapped (1)",
+							"aired": "2011-11-25",
+							"runtime": 22
+						},
+						{
+							"id": 4153395,
+							"seasonNumber": 4,
+							"number": 12,
+							"name": "Slaves of the Republic (2)",
+							"aired": "2011-12-02",
+							"runtime": 21
+						},
+						{
+							"id": 4153396,
+							"seasonNumber": 4,
+							"number": 13,
+							"name": "Escape from Kadavo (3)",
+							"aired": "2012-01-06",
+							"runtime": 22
+						},
+						{
+							"id": 4153397,
+							"seasonNumber": 4,
+							"number": 14,
+							"name": "A Friend in Need",
+							"aired": "2012-01-13",
+							"runtime": 22
+						},
+						{
+							"id": 4153398,
+							"seasonNumber": 4,
+							"number": 15,
+							"name": "Deception (1)",
+							"aired": "2012-01-20",
+							"runtime": 23
+						},
+						{
+							"id": 4153399,
+							"seasonNumber": 4,
+							"number": 16,
+							"name": "Friends and Enemies (2)",
+							"aired": "2012-01-27",
+							"runtime": 23
+						},
+						{
+							"id": 4153400,
+							"seasonNumber": 4,
+							"number": 17,
+							"name": "The Box (3)",
+							"aired": "2012-02-03",
+							"runtime": 22
+						},
+						{
+							"id": 4153401,
+							"seasonNumber": 4,
+							"number": 18,
+							"name": "Crisis on Naboo (4)",
+							"aired": "2012-02-10",
+							"runtime": 22
+						},
+						{
+							"id": 4153402,
+							"seasonNumber": 4,
+							"number": 19,
+							"name": "Massacre (1)",
+							"aired": "2012-02-24",
+							"runtime": 23
+						},
+						{
+							"id": 4153403,
+							"seasonNumber": 4,
+							"number": 20,
+							"name": "Bounty (2)",
+							"aired": "2012-03-02",
+							"runtime": 22
+						},
+						{
+							"id": 4153404,
+							"seasonNumber": 4,
+							"number": 21,
+							"name": "Brothers (3)",
+							"aired": "2012-03-09",
+							"runtime": 21
+						},
+						{
+							"id": 4153405,
+							"seasonNumber": 4,
+							"number": 22,
+							"name": "Revenge (4)",
+							"aired": "2012-03-16",
+							"runtime": 23
+						},
+						{
+							"id": 4382250,
+							"seasonNumber": 5,
+							"number": 1,
+							"name": "Revival",
+							"aired": "2012-09-29",
+							"runtime": 22
+						},
+						{
+							"id": 4382251,
+							"seasonNumber": 5,
+							"number": 2,
+							"name": "A War on Two Fronts (1)",
+							"aired": "2012-10-06",
+							"runtime": 22
+						},
+						{
+							"id": 4382252,
+							"seasonNumber": 5,
+							"number": 3,
+							"name": "Front Runners (2)",
+							"aired": "2012-10-13",
+							"runtime": 22
+						},
+						{
+							"id": 4382253,
+							"seasonNumber": 5,
+							"number": 4,
+							"name": "The Soft War (3)",
+							"aired": "2012-10-20",
+							"runtime": 22
+						},
+						{
+							"id": 4382254,
+							"seasonNumber": 5,
+							"number": 5,
+							"name": "Tipping Points (4)",
+							"aired": "2012-10-27",
+							"runtime": 22
+						},
+						{
+							"id": 4382255,
+							"seasonNumber": 5,
+							"number": 6,
+							"name": "The Gathering (1)",
+							"aired": "2012-11-03",
+							"runtime": 22
+						},
+						{
+							"id": 4382256,
+							"seasonNumber": 5,
+							"number": 7,
+							"name": "A Test of Strength (2)",
+							"aired": "2012-11-10",
+							"runtime": 22
+						},
+						{
+							"id": 4382257,
+							"seasonNumber": 5,
+							"number": 8,
+							"name": "Bound for Rescue (3)",
+							"aired": "2012-11-17",
+							"runtime": 22
+						},
+						{
+							"id": 4403102,
+							"seasonNumber": 5,
+							"number": 9,
+							"name": "A Necessary Bond (4)",
+							"aired": "2012-11-24",
+							"runtime": 22
+						},
+						{
+							"id": 4403103,
+							"seasonNumber": 5,
+							"number": 10,
+							"name": "Secret Weapons (1)",
+							"aired": "2012-12-01",
+							"runtime": 22
+						},
+						{
+							"id": 4403104,
+							"seasonNumber": 5,
+							"number": 11,
+							"name": "A Sunny Day in the Void (2)",
+							"aired": "2012-12-08",
+							"runtime": 22
+						},
+						{
+							"id": 4403105,
+							"seasonNumber": 5,
+							"number": 12,
+							"name": "Missing in Action (3)",
+							"aired": "2013-01-05",
+							"runtime": 22
+						},
+						{
+							"id": 4403106,
+							"seasonNumber": 5,
+							"number": 13,
+							"name": "Point of No Return (4)",
+							"aired": "2013-01-12",
+							"runtime": 22
+						},
+						{
+							"id": 4403107,
+							"seasonNumber": 5,
+							"number": 14,
+							"name": "Eminence (1)",
+							"aired": "2013-01-19",
+							"runtime": 22
+						},
+						{
+							"id": 4403108,
+							"seasonNumber": 5,
+							"number": 15,
+							"name": "Shades of Reason (2)",
+							"aired": "2013-01-26",
+							"runtime": 23
+						},
+						{
+							"id": 4403109,
+							"seasonNumber": 5,
+							"number": 16,
+							"name": "The Lawless (3)",
+							"aired": "2013-02-02",
+							"runtime": 23
+						},
+						{
+							"id": 4403110,
+							"seasonNumber": 5,
+							"number": 17,
+							"name": "Sabotage (1)",
+							"aired": "2013-02-09",
+							"runtime": 22
+						},
+						{
+							"id": 4403111,
+							"seasonNumber": 5,
+							"number": 18,
+							"name": "The Jedi Who Knew Too Much (2)",
+							"aired": "2013-02-16",
+							"runtime": 22
+						},
+						{
+							"id": 4403112,
+							"seasonNumber": 5,
+							"number": 19,
+							"name": "To Catch a Jedi (3)",
+							"aired": "2013-02-23",
+							"runtime": 22
+						},
+						{
+							"id": 4403113,
+							"seasonNumber": 5,
+							"number": 20,
+							"name": "The Wrong Jedi (4)",
+							"aired": "2013-03-02",
+							"runtime": 23
+						},
+						{
+							"id": 4776584,
+							"seasonNumber": 6,
+							"number": 1,
+							"name": "The Unknown (1)",
+							"aired": "2014-03-07",
+							"runtime": 22
+						},
+						{
+							"id": 4776585,
+							"seasonNumber": 6,
+							"number": 2,
+							"name": "Conspiracy (2)",
+							"aired": "2014-03-07",
+							"runtime": 23
+						},
+						{
+							"id": 4776586,
+							"seasonNumber": 6,
+							"number": 3,
+							"name": "Fugitive (3)",
+							"aired": "2014-03-07",
+							"runtime": 22
+						},
+						{
+							"id": 4776587,
+							"seasonNumber": 6,
+							"number": 4,
+							"name": "Orders (4)",
+							"aired": "2014-03-07",
+							"runtime": 23
+						},
+						{
+							"id": 4776588,
+							"seasonNumber": 6,
+							"number": 5,
+							"name": "An Old Friend (1)",
+							"aired": "2014-03-07",
+							"runtime": 22
+						},
+						{
+							"id": 4776589,
+							"seasonNumber": 6,
+							"number": 6,
+							"name": "The Rise of Clovis (2)",
+							"aired": "2014-03-07",
+							"runtime": 22
+						},
+						{
+							"id": 4776590,
+							"seasonNumber": 6,
+							"number": 7,
+							"name": "Crisis at the Heart (3)",
+							"aired": "2014-03-07",
+							"runtime": 22
+						},
+						{
+							"id": 4776592,
+							"seasonNumber": 6,
+							"number": 8,
+							"name": "The Disappeared (1)",
+							"aired": "2014-03-07",
+							"runtime": 22
+						},
+						{
+							"id": 4776593,
+							"seasonNumber": 6,
+							"number": 9,
+							"name": "The Disappeared (2)",
+							"aired": "2014-03-07",
+							"runtime": 20
+						},
+						{
+							"id": 4776594,
+							"seasonNumber": 6,
+							"number": 10,
+							"name": "The Lost One (1)",
+							"aired": "2014-03-07",
+							"runtime": 23
+						},
+						{
+							"id": 4776595,
+							"seasonNumber": 6,
+							"number": 11,
+							"name": "Voices (2)",
+							"aired": "2014-03-07",
+							"runtime": 22
+						},
+						{
+							"id": 4776596,
+							"seasonNumber": 6,
+							"number": 12,
+							"name": "Destiny (3)",
+							"aired": "2014-03-07",
+							"runtime": 22
+						},
+						{
+							"id": 4776599,
+							"seasonNumber": 6,
+							"number": 13,
+							"name": "Sacrifice (4)",
+							"aired": "2014-03-07",
+							"runtime": 22
+						},
+						{
+							"id": 7332041,
+							"seasonNumber": 7,
+							"number": 1,
+							"name": "The Bad Batch (1)",
+							"aired": "2020-02-21",
+							"runtime": 24
+						},
+						{
+							"id": 7573473,
+							"seasonNumber": 7,
+							"number": 2,
+							"name": "A Distant Echo (2)",
+							"aired": "2020-02-28",
+							"runtime": 24
+						},
+						{
+							"id": 7600112,
+							"seasonNumber": 7,
+							"number": 3,
+							"name": "On the Wings of Keeradaks (3)",
+							"aired": "2020-03-06",
+							"runtime": 18
+						},
+						{
+							"id": 7600116,
+							"seasonNumber": 7,
+							"number": 4,
+							"name": "Unfinished Business (4)",
+							"aired": "2020-03-13",
+							"runtime": 23
+						},
+						{
+							"id": 7600125,
+							"seasonNumber": 7,
+							"number": 5,
+							"name": "Gone with a Trace (1)",
+							"aired": "2020-03-20",
+							"runtime": 22
+						},
+						{
+							"id": 7600135,
+							"seasonNumber": 7,
+							"number": 6,
+							"name": "Deal No Deal (2)",
+							"aired": "2020-03-27",
+							"runtime": 24
+						},
+						{
+							"id": 7640571,
+							"seasonNumber": 7,
+							"number": 7,
+							"name": "Dangerous Debt (3)",
+							"aired": "2020-04-03",
+							"runtime": 21
+						},
+						{
+							"id": 7640578,
+							"seasonNumber": 7,
+							"number": 8,
+							"name": "Together Again (4)",
+							"aired": "2020-04-10",
+							"runtime": 23
+						},
+						{
+							"id": 7640583,
+							"seasonNumber": 7,
+							"number": 9,
+							"name": "Old Friends Not Forgotten (1)",
+							"aired": "2020-04-17",
+							"runtime": 27
+						},
+						{
+							"id": 7640587,
+							"seasonNumber": 7,
+							"number": 10,
+							"name": "The Phantom Apprentice (2)",
+							"aired": "2020-04-24",
+							"runtime": 25
+						},
+						{
+							"id": 7688817,
+							"seasonNumber": 7,
+							"number": 11,
+							"name": "Shattered (3)",
+							"aired": "2020-05-01",
+							"runtime": 24
+						},
+						{
+							"id": 7688832,
+							"seasonNumber": 7,
+							"number": 12,
+							"name": "Victory and Death (4)",
+							"aired": "2020-05-04",
+							"runtime": 22
+						}
+					]
+				}
+			}
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun (RD), 2026-11-10: the .zurgtorrent's name, hash, IMDb id and every video file with its folder, as zurg asks",
+			"request": {
+				"name": "Star.Wars.The.Clone.Wars.-.S01.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1)",
+				"hash": "6a44fa80cb85185b7236b5bbbfd8941f5723b7cb",
+				"files": [
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E01.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Ambush.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E02.-.PGor.-.(HD-Rip.1080i.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Rising.Malevolence.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E03.-.PGor.-.(HD-Rip.1080i.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Shadow.Malevolence.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E04.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Destroy.Malevolence.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E05.-.PGor.-.(HD-Rip.1080i.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Rookies.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E06.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Downfall.Of.A.Droid.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E07.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Duel.Of.The.Droids.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E08.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Bombad.Jedi.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E09.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Cloak.Of.Darkness.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E10.-.PGor.-.(HD-Rip.1080i.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Lair.Of.Grievous.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E11.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Dooku.Captured.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E12.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).The.Gungan.General.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E13.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Jedi.Crash.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E14.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Defenders.Of.Peace.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E15.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Trespass.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E16.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Hidden.Enemy.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E17.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Blue.Shadow.Virus.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E18.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Mystery.Of.A.Thousand.Moons.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E19.-.PGor.-.(HD-Rip.1080i.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Storm.Over.Ryloth.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E20.-.PGor.-.(HD-Rip.1080i.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Innocents.Of.Ryloth.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E21.-.PGor.-.(HD-Rip.1080i.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Liberty.On.Ryloth.mkv",
+						"folder": ""
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E22.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Hostage.Crisis.mkv",
+						"folder": ""
+					}
+				],
+				"imdbId": "tt1288767"
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0458290",
+				"tmdbId": 4194,
+				"files": [
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E01.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Ambush.mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286576
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E02.-.PGor.-.(HD-Rip.1080i.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Rising.Malevolence.mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286570
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E03.-.PGor.-.(HD-Rip.1080i.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Shadow.Malevolence.mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286559
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E04.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Destroy.Malevolence.mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286575
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E05.-.PGor.-.(HD-Rip.1080i.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Rookies.mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286573
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E06.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Downfall.Of.A.Droid.mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286568
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E07.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Duel.Of.The.Droids.mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286567
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E08.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Bombad.Jedi.mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286572
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E09.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Cloak.Of.Darkness.mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286569
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E10.-.PGor.-.(HD-Rip.1080i.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Lair.Of.Grievous.mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286574
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E11.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Dooku.Captured.mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286578
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E12.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).The.Gungan.General.mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286580
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E13.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Jedi.Crash.mkv",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286582
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E14.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Defenders.Of.Peace.mkv",
+						"season": 1,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286583
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E15.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Trespass.mkv",
+						"season": 1,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286579
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E16.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Hidden.Enemy.mkv",
+						"season": 1,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286581
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E17.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Blue.Shadow.Virus.mkv",
+						"season": 1,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286577
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E18.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Mystery.Of.A.Thousand.Moons.mkv",
+						"season": 1,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286584
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E19.-.PGor.-.(HD-Rip.1080i.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Storm.Over.Ryloth.mkv",
+						"season": 1,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286585
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E20.-.PGor.-.(HD-Rip.1080i.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Innocents.Of.Ryloth.mkv",
+						"season": 1,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286586
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E21.-.PGor.-.(HD-Rip.1080i.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Liberty.On.Ryloth.mkv",
+						"season": 1,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286587
+					},
+					{
+						"path": "Star.Wars.The.Clone.Wars.-.S01E22.-.PGor.-.(BD-Rip.1080p.MPEG-4.AVC.Russian.AC3-2.0.English.AC3-5.1).Hostage.Crisis.mkv",
+						"season": 1,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 286588
+					}
+				]
+			}
+		}
+	]
+}

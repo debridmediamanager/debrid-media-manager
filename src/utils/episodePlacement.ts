@@ -1609,6 +1609,11 @@ async function byName(
 	const listed = season === null ? null : await show.episodes(season);
 	const at = listed?.find((row) => row.episode === episode);
 	if (at && agrees(title, at.name)) return [season!, episode];
+	// or the title after the release's tags in parentheses, where it names the episode at the file's
+	// number: `Star.Wars.The.Clone.Wars.-.S01E01.-.PGor.-.(BD-Rip.1080p…AC3-5.1).Ambush` is S1E1 "Ambush"
+	const after = /\(([^()]*)\)[\s._-]*([^()]+)$/.exec(file.replace(EXTENSION, ''));
+	const tail = after && !titleText(after[1]) ? titleText(after[2]) : null;
+	if (at && tail && agrees(tail, at.name)) return [season!, episode];
 	const run =
 		listed &&
 		(await bySegments(
