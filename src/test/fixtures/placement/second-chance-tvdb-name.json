@@ -3308,11 +3308,11 @@
 					},
 					{
 						"path": "Second.Chance.SP.mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 1,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 4658401
 					}
 				]
 			}

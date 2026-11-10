@@ -1281,7 +1281,8 @@ describe('a film id sent for a release of numbered episodes', () => {
 		);
 		expect(releases[0].files.map((f) => [f.path.slice(14, -4), f.season, f.episode])).toEqual([
 			...Array.from({ length: 12 }, (_, n) => [String(n + 1).padStart(2, '0'), 1, n + 1]),
-			['SP', null, null],
+			// naming no number or title, the one special TMDB lists (1996-12-20)
+			['SP', 0, 1],
 		]);
 		expect(releases[0]).toEqual(real.expect);
 	});

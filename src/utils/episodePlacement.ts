@@ -1641,7 +1641,8 @@ function specialKey(text: string, shows: string[]): string {
  * Teasing Master Takagi-san's `[KH] Teasing Master Takagi-san - OVA - Water Slide` is TMDB's
  * S0E1 "Water Slide", Robot Chicken's `Robot Chicken DC Comics Special II Villains in Paradise`
  * its S0E13 "DC Comics Special II: Villains in Paradise". Only one special titled so, and a title
- * of six letters or more, or the show's name with it: `Clean Opening A` names no special.
+ * of six letters or more, or the show's name with it: `Clean Opening A` names no special. A file
+ * naming only the show and a special word is the show's one special, where TMDB lists one.
  */
 export async function specialOf(
 	show: PlacementShow,
@@ -1656,6 +1657,20 @@ export async function specialOf(
 	// a title is a title under zurg's mark: `Fairy_Tail_x_Rave_OVA_-_06_[DVD]…-other` is S0E6
 	const stem = (path.split('/').pop() ?? path).replace(EXTENSION, '').replace(ZURG_EXTRA, '');
 	const key = specialKey(stem, shows);
+	// a file naming the show and a special word alone, no number, is the one special TMDB lists where
+	// it lists one: `Second.Chance.SP` is S0E1, `[Judas] Upotte!! - OVA` S0E1 "Behold! Laugh!"
+	const said = words(stem.replace(LEADING_GROUPS, '').replace(BRACKETS, ' ')).filter(
+		(word) => !TAGS.test(word)
+	);
+	if (
+		shows.includes(key) &&
+		said.some((word) => NUMBERED_SPECIAL.test(word)) &&
+		!said.some((word) => /^\d+$/.test(word))
+	) {
+		const all = (await show.episodes(0)) ?? [];
+		if (all.length === 1)
+			return { season: 0, episode: all[0].episode, episodeEnd: null, how: 'tmdb' };
+	}
 	// a title too short alone past the show's name, where TMDB's holds the name: Fairy Tail's
 	// `Fairy_Tail_x_Rave_OVA_-_06` is S0E6 "Fairy Tail x Rave"; never the show's name alone
 	const whole = specialKey(stem, []);
