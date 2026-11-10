@@ -1296,6 +1296,16 @@ describe('Kodi can browse a provider WebDAV instead of the addon', () => {
 		});
 	});
 
+	// zurg on the Android device follows the app's guide, not the desktop zurg setup.
+	it('links the zurg+rex Android guide for the zurg on the device', () => {
+		expect(browse({ sources: ['real-debrid', 'usenet'], host: 'android' })?.links).toEqual([
+			{
+				label: 'zurg+rex Android guide',
+				href: 'https://notes.debridmediamanager.com/zurg/guides/android/',
+			},
+		]);
+	});
+
 	it('lists every selected provider WebDAV', () => {
 		expect(browse({ sources: ['real-debrid', 'all-debrid'], host: 'existing' })?.detail).toBe(
 			'Kodi also reads WebDAV: add Real-Debrid WebDAV (https://dav.real-debrid.com/) or AllDebrid WebDAV (https://webdav.debrid.it/) with no host and sign in with the WebDAV credentials Real-Debrid or AllDebrid documents for your accounts, or run zurg → WebDAV → Kodi on a host for exact naming and placement.'
@@ -1800,6 +1810,24 @@ describe('Wanted and Seerr need a zurg that can run', () => {
 			);
 		}
 	);
+
+	// zurg on the Android device follows the app's guide, not the desktop zurg setup.
+	it('links the zurg+rex Android guide beside Wanted when zurg runs on the device', () => {
+		expect(
+			recommendSetup(answers({ host: 'android', preference: 'managed' })).alternatives.find(
+				({ title }) => title === 'DMM Wanted requests'
+			)?.links
+		).toEqual([
+			{
+				label: 'DMM Wanted setup',
+				href: 'https://notes.debridmediamanager.com/zurg/guides/dmm-wanted/',
+			},
+			{
+				label: 'zurg+rex Android guide',
+				href: 'https://notes.debridmediamanager.com/zurg/guides/android/',
+			},
+		]);
+	});
 
 	it('offers no Kodi Wanted to the Kodi addon with no host', () => {
 		expect(offered(recommendSetup(answers({ player: 'kodi', host: 'none' })))).not.toContain(

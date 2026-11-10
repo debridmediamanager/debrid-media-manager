@@ -478,6 +478,7 @@ const note = (path: string, label: string): SetupLink => {
 };
 const ZURG = note('zurg/setup', 'zurg setup');
 const REX = note('rex/with-zurg', 'rex with zurg');
+const ANDROID = note('zurg/guides/android', 'zurg+rex Android guide');
 const HTTP = note('rex/any-source', 'rex with any source');
 const ADDON = note('rex/stremio', 'rex with Stremio addons');
 const STREMIO = note('zurg/guides/stremio', 'zurg Stremio setup');
@@ -1326,6 +1327,8 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				});
 		}
 	}
+	// zurg on the Android device itself follows the app's guide, not the desktop zurg setup.
+	const androidZurgHost = answers.host === 'android' && hostRunsZurg(answers);
 	// Beside the Kodi addon, Kodi's own WebDAV source reads a provider WebDAV or zurg.
 	const kodiWebdav = providerWebdav(selected);
 	// A zurg route for Kodi already ends in WebDAV → Kodi.
@@ -1349,7 +1352,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			// Own Usenet is the only source Kodi plays through zurg; the addon plays TorBox hosted NZBs.
 			// With no host that zurg is not running yet, so there is none to join.
 			detail: `Kodi also reads WebDAV: add ${orList(kodiWebdav.map((source) => `${SOURCE_LABELS.get(source)} WebDAV (${PROVIDER_WEBDAV[source]})`))} with no host and sign in with the WebDAV credentials ${orList(kodiWebdav.map((source) => SOURCE_LABELS.get(source)!))} documents for your account${severalWebdav ? 's' : ''}, or ${kodiReadsZurg && answers.host !== 'none' ? `add your ${debridAccounts} to the zurg your Usenet account runs on and browse it over its WebDAV` : 'run zurg → WebDAV → Kodi on a host for exact naming and placement'}.`,
-			links: [ZURG],
+			links: [androidZurgHost ? ANDROID : ZURG],
 		});
 	}
 	if (answers.player === 'plex' && answers.plexRoute === 'either')
@@ -1495,6 +1498,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				links: [
 					note('zurg/guides/dmm-wanted', 'DMM Wanted setup'),
 					...(seerr ? [note('dmm/seerr', 'Seerr through DMM')] : []),
+					...(androidZurgHost ? [ANDROID] : []),
 				],
 			});
 	}
@@ -1536,7 +1540,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	// source chosen yet it is still where rex on Android starts.
 	if (androidZurg || (answers.host === 'android' && rex && !selected.length))
 		result.setupLinks = [
-			note('zurg/guides/android', 'zurg+rex Android guide'),
+			ANDROID,
 			...result.setupLinks.filter((link) => link !== ZURG && link !== REX),
 		];
 	if (answers.needs.includes('remote')) {
