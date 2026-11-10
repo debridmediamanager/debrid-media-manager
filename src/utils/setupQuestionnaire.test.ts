@@ -1561,11 +1561,11 @@ describe('a no-host conflict names a route the player can use', () => {
 		],
 		[
 			{ player: 'plex', plexRoute: 'rex' },
-			'rex and its source need a machine that stays on. Choose a host.',
+			'rex and its source need a machine that stays on. Choose a host or a supported 64-bit Android device.',
 		],
 		[
 			{ player: 'plex', plexRoute: 'either' },
-			'rex and its source need a machine that stays on. Choose a host.',
+			'rex and its source need a machine that stays on. Choose a host or a supported 64-bit Android device.',
 		],
 		[{ player: 'jellyfin' }, 'Jellyfin needs a machine that stays on. Choose a host.'],
 		[{ player: 'emby' }, 'Emby needs a machine that stays on. Choose a host.'],
@@ -1629,6 +1629,15 @@ describe('a no-host conflict names a route the player can use', () => {
 		],
 		[
 			{ player: 'plex', plexRoute: 'rex', sources: ['url-addon'] },
+			'rex and its source need a machine that stays on. Choose a host.',
+		],
+		// zurg+rex Android feeds rex from a debrid account, but not from TorBox hosted NZBs.
+		[
+			{ player: 'plex', plexRoute: 'rex', sources: ['real-debrid'] },
+			'rex and its source need a machine that stays on. Choose a host or a supported 64-bit Android device.',
+		],
+		[
+			{ player: 'plex', plexRoute: 'rex', sources: ['torbox-hosted'] },
 			'rex and its source need a machine that stays on. Choose a host.',
 		],
 	] satisfies [Partial<SetupAnswers>, string][])(

@@ -595,7 +595,7 @@ describe('setup copy and benefits for every combination of up to two sources', (
 				(_, result) =>
 					hostedNzbThroughZurg(result) &&
 					result.conflicts.some((conflict) =>
-						conflict.includes('supported Android device')
+						/supported (64-bit )?Android device/.test(conflict)
 					)
 			)
 		).toEqual([]);

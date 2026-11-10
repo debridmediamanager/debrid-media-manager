@@ -1505,7 +1505,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				: answers.host === 'android'
 					? (hostChoiceReason(answers, answers.host) ??
 						`This route needs a normal host for ${rex ? 'rex' : playerLabel(player)}. zurg+rex Android runs zurg and the rex zurg feeds, not that whole server stack.`)
-					: `${rex ? 'rex and its source need' : `${player === 'plex' ? 'Plex Media Server' : playerLabel(player)} needs`} a machine that stays on. Choose a host.`
+					: `${rex ? 'rex and its source need' : `${player === 'plex' ? 'Plex Media Server' : playerLabel(player)} needs`} a machine that stays on. Choose a host${androidRunsRex({ ...answers, host: 'android' }) ? ' or a supported 64-bit Android device' : ''}.`
 		);
 	const hostedNzb = routes.some(({ route: r }) => r.zurgNzb === 'hosted');
 	if (answers.host === 'android' && hostedNzb) result.conflicts.push(ANDROID_HOSTED_NZB);
