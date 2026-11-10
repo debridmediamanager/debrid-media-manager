@@ -3020,6 +3020,20 @@ describe('zurg+rex Android serves the Plex apps', () => {
 		expect(ids(onAndroid({ sources: ['usenet'] }))).not.toContain('rex-stremio-key');
 	});
 
+	it.each(['rex', 'either'] as const)(
+		'names the accounts zurg+rex Android takes when no source is chosen (%s)',
+		(plexRoute) => {
+			const result = onAndroid({ plexRoute, sources: [] });
+
+			expect(result.primaryRoute.summary).toBe(
+				'Any debrid account or your own Usenet account works through zurg → rex on the device; Stremio URL addons, local files and TorBox Pro hosted NZBs need rex or zurg on a normal host. DMM does not supply video bytes by itself.'
+			);
+			expect(result.sponsorship.optional.map(({ id }) => id)).not.toContain(
+				'rex-stremio-key'
+			);
+		}
+	);
+
 	it('says rex on Android has no feed for Easynews', () => {
 		expect(
 			onAndroid({ sources: ['real-debrid', 'easynews'] }).sourceCoverage.find(

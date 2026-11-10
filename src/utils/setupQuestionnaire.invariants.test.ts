@@ -180,6 +180,14 @@ function check(answers: SetupAnswers, result: SetupRecommendation) {
 			`rex-stremio-key offered=${rexStremioKey} but rex-stremio free=${rexStremioFree} on host ${answers.host}`
 		);
 
+	if (
+		answers.host === 'android' &&
+		rexStremioKey &&
+		!selected.includes('url-addon') &&
+		!result.alternatives.some(({ title }) => title.startsWith('Without zurg'))
+	)
+		fail('rex-stremio-key is offered on Android with no rex-stremio route or alternative');
+
 	if (selected.length === 1 && selected[0] === 'easynews') {
 		const offered = [...result.sponsorship.required, ...result.sponsorship.optional].map(
 			({ id }) => id

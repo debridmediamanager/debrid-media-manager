@@ -320,6 +320,8 @@ const ACCOUNTS_FOR_PLAYER: Record<Exclude<Player, 'unsure'>, string> = {
 };
 const REX_ACCOUNTS =
 	'Any debrid or Usenet account works through zurg → rex on a host; Stremio URL addons through rex-stremio; local files need a feed producer. TorBox Pro hosted NZBs work through zurg on a host too.';
+const REX_ANDROID_ACCOUNTS =
+	'Any debrid account or your own Usenet account works through zurg → rex on the device; Stremio URL addons, local files and TorBox Pro hosted NZBs need rex or zurg on a normal host.';
 
 /** "A", "A or B", "A, B or C". */
 const orList = (names: string[]) =>
@@ -1170,9 +1172,12 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		answers.preference !== 'arr' &&
 		selected.some((source) => DEBRID_SOURCES.includes(source)) &&
 		!selected.includes('url-addon');
-	// rex-stremio is on the URL addon route, in the alternative without zurg, or, with no source, in the summary.
+	// rex-stremio is on the URL addon route, in the alternative without zurg, or, with no source, in the
+	// summary for a normal host; the Android summary leaves it to a normal host.
 	const rexStremio =
-		rexWithoutZurg || (rex && (selected.includes('url-addon') || !selected.length));
+		rexWithoutZurg ||
+		(rex &&
+			(selected.includes('url-addon') || (!selected.length && answers.host !== 'android')));
 	const chosenPlayer =
 		player === 'webdav'
 			? 'a WebDAV or SMB player'
@@ -1195,7 +1200,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			: {
 					id: 'choose-source-first',
 					title: `Choose a source for ${PLAYER_PHRASES[player]}`,
-					summary: `${rex ? REX_ACCOUNTS : ACCOUNTS_FOR_PLAYER[player]} DMM does not supply video bytes by itself.`,
+					summary: `${rex ? (answers.host === 'android' ? REX_ANDROID_ACCOUNTS : REX_ACCOUNTS) : ACCOUNTS_FOR_PLAYER[player]} DMM does not supply video bytes by itself.`,
 				},
 		whyMatched: [
 			answers.player === 'unsure'
