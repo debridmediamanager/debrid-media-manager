@@ -205,6 +205,8 @@ export interface PlacementSources {
 	searchMovie?(query: string, year?: number): Promise<any | null>;
 	/** TMDB's external ids of a movie (`movie/{id}/external_ids`); absent or null where it cannot be asked. */
 	movieIds?(tmdbId: number): Promise<any | null>;
+	/** TMDB's other titles of a movie (`movie/{id}/alternative_titles`); absent or null where it cannot be asked. */
+	movieTitles?(tmdbId: number): Promise<any | null>;
 	/** A series and its episodes as IMDb lists them (dmmdb's imdb_title_*); null when IMDb has no such title. */
 	imdbSeries(imdbId: string): Promise<ImdbSeries | null>;
 	/** The series IMDb titles exactly as this film or TV film (dmmdb's imdb_title_basics); absent or null where it cannot be asked. */
@@ -1055,15 +1057,19 @@ async function filmLook(
 			FILM_YEAR.test(stem) ||
 			FILM_FOLDER.test(folder ?? '') ||
 			release.files.length === 1;
-		if (!shaped) return [];
+		// or any of a release that says it holds a film, asked of TMDB's search alone (below):
+		// `[Tsuki-Hatsuyuki-Kaitou]_Fairy_Tail_OVA-Movie`'s `Fairy_Tail_-_The_Phoenix_Priestess`
+		if (!shaped && !FILM_WORD.test(release.name)) return [];
 		const own = stem.replace(/^\s*(?:\[[^\]]*\][\s._-]*)+/, '');
 		const name = letters(own).includes(letters(show)) ? own : `${show} ${own}`;
-		return [{ at, name }];
+		return [{ at, name, shaped }];
 	});
 	if (!asked.length) return placed;
-	const answers = await sources.identifier([...new Set(asked.map((a) => a.name))]);
+	const names = [...new Set(asked.flatMap((a) => (a.shaped ? [a.name] : [])))];
+	const answers = names.length ? await sources.identifier(names) : null;
 	const files = [...placed.files];
-	for (const { at, name } of asked) {
+	for (const { at, name, shaped } of asked) {
+		if (!shaped) continue;
 		const answer = answers?.get(name);
 		const top = answer?.matches[0];
 		if (!answer || !top || answer.kind !== 'movie' || refused(name, answer)) continue;
@@ -1097,8 +1103,7 @@ async function filmLook(
 			.replace(/\.[a-z0-9]{2,4}$/i, '')
 			.replace(/^\s*(?:\[[^\]]*\][\s._-]*)+/, '');
 		const dashed = fansubShaped(release.files[at].path) ? stem.split(' - ') : [];
-		const own = filmWords(dashed.length > 1 ? dashed.slice(1).join(' - ') : stem, show);
-		if (letters(own).length < 4) continue;
+		const named = dashed.length > 1 ? dashed.slice(1).join(' - ') : stem;
 		const { year } = parseName(stem);
 		const yearOf = (row: any) => Number(String(row?.release_date ?? '').slice(0, 4));
 		// a name with no year that says no film names only one titled with the show's name too:
@@ -1107,19 +1112,39 @@ async function filmLook(
 			const all = new Set(titleText(title)?.whole.split(' ') ?? []);
 			return (titleText(show)?.whole.split(' ') ?? []).every((word) => all.has(word));
 		};
-		const found = (
-			(await sources.searchMovie(`${show} ${own}`, year ?? undefined))?.results ?? []
-		).filter(
-			(row: any) =>
-				typeof row?.title === 'string' &&
-				filmWords(row.title, show) === own &&
-				(year
-					? Math.abs(yearOf(row) - year) <= 1
-					: FILM_WORD.test(stem) || withShow(row.title))
-		);
-		const imdbId = found.length === 1 ? (await sources.movieIds(found[0].id))?.imdb_id : null;
-		if (typeof imdbId === 'string' && /^tt\d{7,}$/.test(imdbId))
-			files[at] = { ...files[at], kind: 'movie', imdbId, tmdbId: found[0].id };
+		// words in parentheses may be the title's (`The_Phoenix_Priestess_(Prologue)`) or not
+		// (`(iTunes)`): asked with them first, and without them where TMDB finds nothing so named
+		for (const own of new Set([filmWords(named, show, true), filmWords(named, show)])) {
+			if (letters(own).length < 4) continue;
+			const rows = (
+				(await sources.searchMovie(`${show} ${own}`, year ?? undefined))?.results ?? []
+			).filter(
+				(row: any) =>
+					typeof row?.title === 'string' &&
+					(year
+						? Math.abs(yearOf(row) - year) <= 1
+						: FILM_WORD.test(stem) || withShow(row.title))
+			);
+			if (!rows.length) continue;
+			let found = rows.filter((row: any) => filmWords(row.title, show) === own);
+			// else the one film the search finds, where TMDB titles it elsewhere with every word the
+			// name gives: `Fairy_Tail_-_The_Phoenix_Priestess_(Prologue)` is "Fairy Tail: Phoenix
+			// Priestess - The First Morning", in the US "Fairy Tail the Movie Prologue: Phoenix
+			// Priestess - The First Morning"
+			if (!found.length && rows.length === 1 && sources.movieTitles) {
+				const titles = (await sources.movieTitles(rows[0].id))?.titles ?? [];
+				const held = titles.some((other: any) => {
+					const all = filmWords(String(other?.title ?? ''), show).split(' ');
+					return own.split(' ').every((word) => all.includes(word));
+				});
+				if (held) found = rows;
+			}
+			const imdbId =
+				found.length === 1 ? (await sources.movieIds(found[0].id))?.imdb_id : null;
+			if (typeof imdbId === 'string' && /^tt\d{7,}$/.test(imdbId))
+				files[at] = { ...files[at], kind: 'movie', imdbId, tmdbId: found[0].id };
+			break;
+		}
 	}
 	return { ...placed, files };
 }
@@ -1127,11 +1152,12 @@ async function filmLook(
 /**
  * A film's title as words, the show's, a film's words and its number in the series, an episode token
  * and the release's tags left out: `Movie 01 - Dragon Cry` and "Fairy Tail: Dragon Cry" are both
- * `dragon cry` beside Fairy Tail.
+ * `dragon cry` beside Fairy Tail. `parenthesized` keeps the words in parentheses.
  */
-function filmWords(text: string, show: string): string {
+function filmWords(text: string, show: string, parenthesized = false): string {
 	const shown = new Set(titleText(show)?.whole.split(' ') ?? []);
-	const list = (titleText(text.replace(/[[(][^\])]*[\])]/g, ' '))?.whole ?? '').split(' ');
+	const tags = parenthesized ? /\[[^\]]*\]/g : /[[(][^\])]*[\])]/g;
+	const list = (titleText(text.replace(tags, ' '))?.whole ?? '').split(' ');
 	return list
 		.filter(
 			(word, n) =>
@@ -2362,6 +2388,12 @@ export const cachedSources: PlacementSources = {
 	movieIds: (tmdbId) =>
 		getTmdbAuth()
 			? settle(() => getMetadataCache().getTmdbExternalIds(tmdbId, 'movie'))
+			: Promise.resolve(null),
+	movieTitles: (tmdbId) =>
+		getTmdbAuth()
+			? settle(() =>
+					getMetadataCache().getTmdbPassthrough(`movie/${tmdbId}/alternative_titles`, {})
+				)
 			: Promise.resolve(null),
 	// asks about at most 300 names it has not answered today: zurg asks again daily
 	identifier: (names) =>

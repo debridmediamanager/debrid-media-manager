@@ -63,6 +63,38 @@
 						"show_id": 46261
 					}
 				]
+			},
+			"tt8324472": {
+				"movie_results": [],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt3957196": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 61461,
+						"name": "Yona of the Dawn",
+						"first_air_date": "2014-10-07"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt28728531": {
+				"movie_results": [],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt6472710": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 70880,
+						"name": "Tsukigakirei",
+						"first_air_date": "2017-04-07"
+					}
+				],
+				"tv_episode_results": []
 			}
 		},
 		"show": {
@@ -311,6 +343,383 @@
 						"episode_count": 51,
 						"name": "Final Series",
 						"season_number": 8
+					}
+				]
+			},
+			"61461": {
+				"id": 61461,
+				"name": "Yona of the Dawn",
+				"original_name": "暁のヨナ",
+				"first_air_date": "2014-10-07",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 6078,
+							"name": "politics"
+						},
+						{
+							"id": 7376,
+							"name": "princess"
+						},
+						{
+							"id": 9748,
+							"name": "revenge"
+						},
+						{
+							"id": 9840,
+							"name": "romance"
+						},
+						{
+							"id": 9920,
+							"name": "royalty"
+						},
+						{
+							"id": 9935,
+							"name": "travel"
+						},
+						{
+							"id": 10085,
+							"name": "betrayal"
+						},
+						{
+							"id": 10683,
+							"name": "coming of age"
+						},
+						{
+							"id": 11322,
+							"name": "female protagonist"
+						},
+						{
+							"id": 12554,
+							"name": "dragon"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 15126,
+							"name": "historical"
+						},
+						{
+							"id": 206437,
+							"name": "shoujo"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 214604,
+							"name": "bishounen"
+						},
+						{
+							"id": 322942,
+							"name": "adventure"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt3957196",
+					"tvdb_id": 283942
+				},
+				"networks": [
+					{
+						"id": 614,
+						"name": "TOKYO MX"
+					},
+					{
+						"id": 817,
+						"name": "Sun TV"
+					},
+					{
+						"id": 252,
+						"name": "TV Aichi"
+					},
+					{
+						"id": 861,
+						"name": "BS11"
+					},
+					{
+						"id": 173,
+						"name": "AT-X"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"type": "manga title",
+							"title": "Yona: A Princesa do Alvorecer",
+							"iso_3166_1": "BR"
+						},
+						{
+							"type": "",
+							"title": "拂晓的尤娜",
+							"iso_3166_1": "CN"
+						},
+						{
+							"type": "",
+							"title": "Akatsuki no Yona - Prinzessin der Morgendämmerung",
+							"iso_3166_1": "DE"
+						},
+						{
+							"type": "",
+							"title": "Yona, Princesse de l'Aube",
+							"iso_3166_1": "FR"
+						},
+						{
+							"type": "",
+							"title": "יונה אוף דה דאון",
+							"iso_3166_1": "IL"
+						},
+						{
+							"type": "Kurdish language - زمانی کوردی - اللغة الكردية",
+							"title": "ئەو کچەی لە سوریی خۆرهەڵاتندا دەوەستێت - کازیوەی یۆنا",
+							"iso_3166_1": "IQ"
+						},
+						{
+							"type": "Romaji",
+							"title": "Akatsuki no Yona",
+							"iso_3166_1": "JP"
+						},
+						{
+							"type": "",
+							"title": "Yona of the Dawn",
+							"iso_3166_1": "PL"
+						},
+						{
+							"type": "",
+							"title": "Йона на заре",
+							"iso_3166_1": "RU"
+						},
+						{
+							"type": "",
+							"title": "Рассвет Йоны",
+							"iso_3166_1": "RU"
+						},
+						{
+							"type": "",
+							"title": "Yona of the Dawn - The Girl Standing in the Blush of Dawn",
+							"iso_3166_1": "US"
+						},
+						{
+							"type": "",
+							"title": "Yona của Bình minh",
+							"iso_3166_1": "VN"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2015-09-18",
+						"episode_count": 4,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "2014-10-07",
+						"episode_count": 24,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": null,
+						"episode_count": 0,
+						"name": "Yona of the Dawn (Sequel)",
+						"season_number": 2
+					}
+				]
+			},
+			"70880": {
+				"id": 70880,
+				"name": "Tsukigakirei",
+				"original_name": "月がきれい",
+				"first_air_date": "2017-04-07",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 704,
+							"name": "adolescence"
+						},
+						{
+							"id": 6054,
+							"name": "friendship"
+						},
+						{
+							"id": 9840,
+							"name": "romance"
+						},
+						{
+							"id": 9914,
+							"name": "slice of life"
+						},
+						{
+							"id": 10683,
+							"name": "coming of age"
+						},
+						{
+							"id": 10873,
+							"name": "school"
+						},
+						{
+							"id": 13035,
+							"name": "middle school"
+						},
+						{
+							"id": 157303,
+							"name": "first love"
+						},
+						{
+							"id": 190116,
+							"name": "school life"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 312313,
+							"name": "japanese junior high schooler"
+						},
+						{
+							"id": 369638,
+							"name": "kawagoe, saitama, japan"
+						},
+						{
+							"id": 385015,
+							"name": "saitama, japan"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt6472710",
+					"tvdb_id": 325197
+				},
+				"networks": [
+					{
+						"id": 614,
+						"name": "TOKYO MX"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"type": "romaji",
+							"title": "Tsuki ga Kirei",
+							"iso_3166_1": "JP"
+						},
+						{
+							"type": "",
+							"title": "Tsukigakirei",
+							"iso_3166_1": "JP"
+						},
+						{
+							"type": "",
+							"title": "달이아름답다",
+							"iso_3166_1": "KR"
+						},
+						{
+							"type": "",
+							"title": "달이예쁘다",
+							"iso_3166_1": "KR"
+						},
+						{
+							"type": "",
+							"title": "달이 예쁘다",
+							"iso_3166_1": "KR"
+						},
+						{
+							"type": "",
+							"title": "Прекрасна, как Луна",
+							"iso_3166_1": "RU"
+						},
+						{
+							"type": "",
+							"title": "Какая красивая луна!",
+							"iso_3166_1": "RU"
+						},
+						{
+							"type": "",
+							"title": "สึกิงะคิเระอิ",
+							"iso_3166_1": "TH"
+						},
+						{
+							"type": "",
+							"title": "สึกิ งะ คิเรอิ",
+							"iso_3166_1": "TH"
+						},
+						{
+							"type": "",
+							"title": "Цукіґакірей",
+							"iso_3166_1": "UA"
+						},
+						{
+							"type": "",
+							"title": "Цукі ґа кірей",
+							"iso_3166_1": "UA"
+						},
+						{
+							"type": "",
+							"title": "Чарівна, як Місяць",
+							"iso_3166_1": "UA"
+						},
+						{
+							"type": "",
+							"title": "Місяць прекрасний",
+							"iso_3166_1": "UA"
+						},
+						{
+							"type": "",
+							"title": "As the Moon, So Beautiful",
+							"iso_3166_1": "US"
+						},
+						{
+							"type": "",
+							"title": "The Moon is Beautiful",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2017-05-19",
+						"episode_count": 2,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "2017-04-07",
+						"episode_count": 12,
+						"name": "Season 1",
+						"season_number": 1
 					}
 				]
 			}
@@ -3048,7 +3457,362 @@
 					}
 				]
 			},
-			"46261/9": null
+			"46261/9": null,
+			"61461/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "On That Back",
+						"air_date": "2015-09-18",
+						"runtime": 24,
+						"id": 1216270
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "The Yellow Dragon's (Zeno's) Past, Part 1: The Starting Dragon",
+						"air_date": "2016-08-19",
+						"runtime": 29,
+						"id": 1216271
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "The Yellow Dragon's (Zeno's) Past, Part 2: The Red Star Rises",
+						"air_date": "2016-12-20",
+						"runtime": 24,
+						"id": 1395373
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "Good Night for Today",
+						"air_date": "2016-12-20",
+						"runtime": 4,
+						"id": 1395374
+					}
+				]
+			},
+			"61461/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "The Princess Yona",
+						"air_date": "2014-10-07",
+						"runtime": 24,
+						"id": 1011046
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Torn Bonds",
+						"air_date": "2014-10-14",
+						"runtime": 24,
+						"id": 1021765
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "The Distant Sky",
+						"air_date": "2014-10-21",
+						"runtime": 24,
+						"id": 1029013
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "The Wind Clan",
+						"air_date": "2014-10-28",
+						"runtime": 24,
+						"id": 1029015
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Howl",
+						"air_date": "2014-11-04",
+						"runtime": 24,
+						"id": 1029017
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Red Hair",
+						"air_date": "2014-11-11",
+						"runtime": 24,
+						"id": 1029018
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Destiny",
+						"air_date": "2014-11-18",
+						"runtime": 24,
+						"id": 1029020
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "The Chosen Door",
+						"air_date": "2014-11-25",
+						"runtime": 24,
+						"id": 1029024
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Shaking Resolve",
+						"air_date": "2014-12-02",
+						"runtime": 24,
+						"id": 1029027
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Anticipation",
+						"air_date": "2014-12-09",
+						"runtime": 24,
+						"id": 1029029
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "The Dragon's Claw",
+						"air_date": "2014-12-16",
+						"runtime": 24,
+						"id": 1029031
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Blindfolded Dragon",
+						"air_date": "2014-12-23",
+						"runtime": 24,
+						"id": 1029033
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Echoing Fear",
+						"air_date": "2015-01-06",
+						"runtime": 24,
+						"id": 1029037
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Light",
+						"air_date": "2015-01-13",
+						"runtime": 24,
+						"id": 1029041
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "To a New Land",
+						"air_date": "2015-01-20",
+						"runtime": 24,
+						"id": 1029076
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "War Games",
+						"air_date": "2015-01-27",
+						"runtime": 24,
+						"id": 1029078
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "The pirates of Awa",
+						"air_date": "2015-02-03",
+						"runtime": 24,
+						"id": 1029083
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Tides",
+						"air_date": "2015-02-10",
+						"runtime": 24,
+						"id": 1029084
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "The Senjuso Test",
+						"air_date": "2015-02-17",
+						"runtime": 24,
+						"id": 1060620
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Chain of Courage",
+						"air_date": "2015-02-24",
+						"runtime": 24,
+						"id": 1060621
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Spark",
+						"air_date": "2015-03-03",
+						"runtime": 24,
+						"id": 1060622
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "The Night History Is Made",
+						"air_date": "2015-03-10",
+						"runtime": 24,
+						"id": 1060623
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Morning of Promise",
+						"air_date": "2015-03-17",
+						"runtime": 24,
+						"id": 1060624
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "From Now On",
+						"air_date": "2015-03-24",
+						"runtime": 24,
+						"id": 1060625
+					}
+				]
+			},
+			"61461/2": {
+				"episodes": []
+			},
+			"70880/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "First Half: The Road So Far",
+						"air_date": "2017-05-19",
+						"runtime": 24,
+						"id": 1318837
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Special",
+						"air_date": "2017-09-27",
+						"runtime": 15,
+						"id": 1477981
+					}
+				]
+			},
+			"70880/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Spring and Hard Times",
+						"air_date": "2017-04-07",
+						"runtime": 24,
+						"id": 1292222
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "A Handful of Sand",
+						"air_date": "2017-04-14",
+						"runtime": 24,
+						"id": 1303258
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Howling at the Moon",
+						"air_date": "2017-04-21",
+						"runtime": 24,
+						"id": 1305997
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Passing Shower",
+						"air_date": "2017-04-28",
+						"runtime": 24,
+						"id": 1310891
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Kokoro",
+						"air_date": "2017-05-05",
+						"runtime": 24,
+						"id": 1311935
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Run, Melos!",
+						"air_date": "2017-05-12",
+						"runtime": 24,
+						"id": 1316686
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Hold Back Nothing When Taking Love",
+						"air_date": "2017-05-26",
+						"runtime": 24,
+						"id": 1320967
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Vita Sexualis",
+						"air_date": "2017-06-02",
+						"runtime": 24,
+						"id": 1323254
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "The Wind Rises",
+						"air_date": "2017-06-09",
+						"runtime": 24,
+						"id": 1326091
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "The Setting Sun",
+						"air_date": "2017-06-16",
+						"runtime": 24,
+						"id": 1329494
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "An Encouragement of Learning",
+						"air_date": "2017-06-23",
+						"runtime": 24,
+						"id": 1331206
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "And Then",
+						"air_date": "2017-06-30",
+						"runtime": 24,
+						"id": 1332975
+					}
+				]
+			}
 		},
 		"episodeGroups": {
 			"46261": {
@@ -6138,6 +6902,16 @@
 						"release_date": "2013-02-15"
 					}
 				]
+			},
+			"Fairy Tail phoenix priestess prologue|undefined": {
+				"results": [
+					{
+						"id": 592072,
+						"title": "Fairy Tail: Phoenix Priestess - The First Morning",
+						"original_title": "フェアリーテイル: 序章「はじまりの朝」",
+						"release_date": "2013-02-15"
+					}
+				]
 			}
 		},
 		"movieIds": {
@@ -6148,6 +6922,10 @@
 			"433422": {
 				"id": 433422,
 				"imdb_id": "tt6548966"
+			},
+			"592072": {
+				"id": 592072,
+				"imdb_id": "tt16606636"
 			}
 		},
 		"anime": {
@@ -6415,6 +7193,156 @@
 					]
 				}
 			]
+		},
+		"searchTv": {
+			"fairy tail ova": {
+				"results": []
+			},
+			"fairy tail": {
+				"results": [
+					{
+						"id": 46261,
+						"name": "Fairy Tail",
+						"original_name": "FAIRY TAIL",
+						"first_air_date": "2009-10-12"
+					},
+					{
+						"id": 248947,
+						"name": "FAIRY TAIL 100 YEARS QUEST",
+						"original_name": "FAIRY TAIL 100年クエスト",
+						"first_air_date": "2024-07-07"
+					}
+				]
+			}
+		},
+		"movieTitles": {
+			"592072": {
+				"id": 592072,
+				"titles": [
+					{
+						"title": "Fairy Tail the Movie Prologue: Phoenix Priestess - The First Morning"
+					}
+				]
+			}
+		},
+		"identifier": {
+			"[Tsuki-Hatsuyuki-Kaitou]_Fairy_Tail_OVA-Movie": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt1528406",
+						"score": 0.5761,
+						"title": "Fairy Tail",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt8324472",
+						"score": 0.5338,
+						"title": "Fairy Tail OVA Series",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt3957196",
+						"score": -4.2418,
+						"title": "Yona of the Dawn",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt28728531",
+						"score": -4.8528,
+						"title": "Fairy Tale",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt6472710",
+						"score": -6.2112,
+						"title": "As the Moon, So Beautiful",
+						"year": 2017
+					}
+				],
+				"parsedTitle": "Fairy Tail OVA-Movie",
+				"parsedYear": null,
+				"probability": 0.2255
+			},
+			"Fairy_Tail_-_The_Phoenix_Priestess_(Prologue)_[10bit][BD][1080p_H264_FLAC][D3EF4EAC]": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt1528406",
+						"score": 3.196,
+						"title": "Fairy Tail",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt8324472",
+						"score": -1.1914,
+						"title": "Fairy Tail OVA Series",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt28728531",
+						"score": -3.0169,
+						"title": "Fairy Tale",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt15414478",
+						"score": -3.5173,
+						"title": "Fairy Tail: 100 Years Quest",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt11561800",
+						"score": -3.8591,
+						"title": "The Phoenix",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "Fairy Tail",
+				"parsedYear": null,
+				"probability": 0.6724
+			},
+			"Fairy_Tail_-_The_Phoenix_Priestess_[10bit][BD][1080p_H264_FLAC_AC3][842F0DA3]": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt1528406",
+						"score": 3.4034,
+						"title": "Fairy Tail",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt8324472",
+						"score": -1.2292,
+						"title": "Fairy Tail OVA Series",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt28728531",
+						"score": -3.0169,
+						"title": "Fairy Tale",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt15414478",
+						"score": -3.5173,
+						"title": "Fairy Tail: 100 Years Quest",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt11561800",
+						"score": -3.8591,
+						"title": "The Phoenix",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "Fairy Tail",
+				"parsedYear": null,
+				"probability": 0.7054
+			}
 		}
 	},
 	"cases": [
@@ -11181,11 +12109,11 @@
 				"files": [
 					{
 						"path": "[Hatsuyuki-Kaitou]_Fairy_Tail_x_Rave_OVA_-_06_[DVD][1024x576_10bit_AC3_2ch][436FFB18]-other.mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 6,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 908353
 					},
 					{
 						"path": "[Hatsuyuki]_Fairy_Tail_-_The_Phoenix_Priestess_(Prologue)_[10bit][BD][1080p_H264_FLAC][D3EF4EAC].mkv",
@@ -11193,7 +12121,10 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null,
-						"tmdbEpisodeId": null
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt16606636",
+						"tmdbId": 592072
 					},
 					{
 						"path": "[Hatsuyuki]_Fairy_Tail_-_The_Phoenix_Priestess_[10bit][BD][1080p_H264_FLAC_AC3][842F0DA3].mkv",
@@ -11201,47 +12132,50 @@
 						"episode": null,
 						"episodeEnd": null,
 						"how": null,
-						"tmdbEpisodeId": null
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt2085795",
+						"tmdbId": 135531
 					},
 					{
 						"path": "[Tsuki-Hatsuyuki]_Fairy_Tail_OVA_-_01_[DVD][848x480][39885D76]-other.mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 1,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1198844
 					},
 					{
 						"path": "[Tsuki-Hatsuyuki]_Fairy_Tail_OVA_-_02_[DVD][848x480][2DBCDE13]-other.mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 2,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1198845
 					},
 					{
 						"path": "[Tsuki-Hatsuyuki]_Fairy_Tail_OVA_-_03_[DVD][848x480][6CA9C8F8]-other.mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 3,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1198846
 					},
 					{
 						"path": "[Tsuki-Hatsuyuki]_Fairy_Tail_OVA_-_04_[10bit][DVD][1024x576][B2A6ED19]-other.mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 4,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 1198848
 					},
 					{
 						"path": "[Tsuki-Hatsuyuki]_Fairy_Tail_OVA_-_05_[10bit][DVD][1024x576][38CC3C92]-other.mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 5,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "anime",
+						"tmdbEpisodeId": 908354
 					}
 				]
 			}

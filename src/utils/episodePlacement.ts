@@ -255,6 +255,12 @@ const NOT_EPISODE =
 // Plex's local-extra suffixes: `002 - Deleted Scene Episodes 2-4 [iKaos]-deleted`.
 const EXTRA_SUFFIX =
 	/-(?:behindthescenes|deleted|featurette|interview|scene|short|trailer|other)$/i;
+// zurg's own `-other` on a file its season map could not number, asked about under that name: an
+// OVA's number still counts (`[Tsuki-Hatsuyuki]_Fairy_Tail_OVA_-_01_[DVD]…-other`), a music video's
+// never (Beavis and Butt-Head's `01 ~ Nirvana - I Hate Myself And Want To Die-other`), nor one
+// before the word (`Durarara!!x2 - 19.5 - Ketsu OVA`)
+const ZURG_EXTRA = /-other$/;
+const OVA_NUMBER = /(?:^|[^a-z\d])(?:ova|oad|ona)[\s._-]*(?:ep[\s._-]*)?\d/i;
 const BRACKETS = /[[(][^\])]*[\])]/g;
 const SAMPLE = /(?:^|[\s._-])sample(?:[\s._-]|$)/i;
 const EXTENSION = /\.[a-z0-9]{2,4}$/i;
@@ -466,7 +472,8 @@ export function fileNumbers(
 	single: boolean
 ): FileNumbers | null {
 	const file = path.split('/').pop() ?? path;
-	const stem = file.replace(EXTENSION, '');
+	const named = file.replace(EXTENSION, '');
+	const stem = OVA_NUMBER.test(named) ? named.replace(ZURG_EXTRA, '') : named;
 	if (SAMPLE.test(stem) || EXTRA_SUFFIX.test(stem)) return null;
 	const below = (folder?.split('/').pop() ?? '').trim();
 	const folderSeason =
@@ -1634,7 +1641,7 @@ function specialKey(text: string, shows: string[]): string {
  * Teasing Master Takagi-san's `[KH] Teasing Master Takagi-san - OVA - Water Slide` is TMDB's
  * S0E1 "Water Slide", Robot Chicken's `Robot Chicken DC Comics Special II Villains in Paradise`
  * its S0E13 "DC Comics Special II: Villains in Paradise". Only one special titled so, and a title
- * of six letters or more: `Clean Opening A` names no special.
+ * of six letters or more, or the show's name with it: `Clean Opening A` names no special.
  */
 export async function specialOf(
 	show: PlacementShow,
@@ -1646,17 +1653,24 @@ export async function specialOf(
 	const shows = [...show.names, parseName(release).title]
 		.map((name) => specialKey(name, []))
 		.sort((a, b) => b.length - a.length);
-	const key = specialKey((path.split('/').pop() ?? path).replace(EXTENSION, ''), shows);
-	if (key.length < 6) return null;
+	// a title is a title under zurg's mark: `Fairy_Tail_x_Rave_OVA_-_06_[DVD]…-other` is S0E6
+	const stem = (path.split('/').pop() ?? path).replace(EXTENSION, '').replace(ZURG_EXTRA, '');
+	const key = specialKey(stem, shows);
+	// a title too short alone past the show's name, where TMDB's holds the name: Fairy Tail's
+	// `Fairy_Tail_x_Rave_OVA_-_06` is S0E6 "Fairy Tail x Rave"; never the show's name alone
+	const whole = specialKey(stem, []);
+	const short = key.length < 6;
+	if (short && (whole === key || shows.includes(whole))) return null;
 	const specials = ((await show.episodes(0)) ?? []).filter(
 		(row) => !GENERIC.test(words(row.name).join(' '))
 	);
 	// TMDB's title with the show's name in it, the file's after the show's name: Fairy Tail's `OVA 6
 	// - Fairy Tail x Rave` is S0E6 "Fairy Tail x Rave"; never the show's name alone
-	const found = specials.filter(
-		(row) =>
-			specialKey(row.name, shows) === key ||
-			(!shows.includes(key) && specialKey(row.name, []) === key)
+	const found = specials.filter((row) =>
+		short
+			? specialKey(row.name, []) === whole
+			: specialKey(row.name, shows) === key ||
+				(!shows.includes(key) && specialKey(row.name, []) === key)
 	);
 	const at = (row: { episode: number }): Placement => ({
 		season: 0,
@@ -1665,8 +1679,7 @@ export async function specialOf(
 		how: 'tmdb',
 		titled: true,
 	});
-	if (found.length) return found.length === 1 ? at(found[0]) : null;
-	const stem = (path.split('/').pop() ?? path).replace(EXTENSION, '');
+	if (found.length || short) return found.length === 1 ? at(found[0]) : null;
 	// the title after a season's special number or a season alone, up to the release's tags, its part
 	// as a number: Archer's `S03E00.Heart.of.Archness,Pt.1.1080p.WEB…` is S0E3 "Heart of Archness (1)",
 	// Would I Lie to You's `S10 - Children in Need Special` S0E5 "Children in Need (Series 10)"

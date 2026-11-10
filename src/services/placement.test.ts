@@ -130,6 +130,7 @@ const recordedSources = (r: any): PlacementSources => ({
 	searchTv: async (query) => r.searchTv?.[query] ?? null,
 	searchMovie: async (query, year) => r.searchMovie?.[`${query}|${year}`] ?? null,
 	movieIds: async (id) => r.movieIds?.[id] ?? null,
+	movieTitles: async (id) => r.movieTitles?.[id] ?? null,
 	imdbSeries: async (id) => r.imdbSeries?.[id] ?? null,
 	namesakeSeries: async (id) => r.namesakeSeries?.[id] ?? null,
 	tvdbSeriesOf: async (id) =>
@@ -2160,10 +2161,32 @@ describe('an OVA numbered and titled', () => {
 		expect(pack('OVA 2 - Fairy Academy Yankee-Kun To Yankee-Chan')).toEqual([0, 2]);
 	});
 
-	it('places no OVA by its number alone, nor a prologue TMDB lists no special for', async () => {
+	// the Tsuki release as zurg asks it: the OVAs its season map could not number carry its `-other`
+	it("places OVAs under zurg's mark by the numbers the anime dataset gives Fairy Tail OVA", async () => {
+		// anidb 8132 "Fairy Tail OVA" is TMDB's season 0 from its first episode
 		const ova = await placed('[Tsuki-Hatsuyuki-Kaitou]_Fairy_Tail_OVA-Movie');
-		expect(ova('OVA_-_01_')).toEqual([null, null]);
-		expect(ova('Phoenix_Priestess_(Prologue)')).toEqual([null, null]);
+		expect(ova('OVA_-_01_')).toEqual([0, 1]);
+		expect(ova('OVA_-_05_')).toEqual([0, 5]);
+	});
+
+	it("places one under zurg's mark titled with the show's name before the word", async () => {
+		// `Fairy_Tail_x_Rave_OVA_-_06_[DVD]…-other` is TMDB's S0E6 "Fairy Tail x Rave"
+		const ova = await placed('[Tsuki-Hatsuyuki-Kaitou]_Fairy_Tail_OVA-Movie');
+		expect(ova('Fairy_Tail_x_Rave_OVA_-_06_')).toEqual([0, 6]);
+	});
+
+	it("answers the film and its prologue in the release as TMDB's two films", async () => {
+		// the release names a film and its files no film word or year; TMDB titles the 12-minute
+		// prologue "Phoenix Priestess - The First Morning", in the US "…Movie Prologue: Phoenix Priestess…"
+		await placed('[Tsuki-Hatsuyuki-Kaitou]_Fairy_Tail_OVA-Movie');
+		const c = fairyTail.cases.find((c) => c.request.name.startsWith('[Tsuki'))!;
+		const films = c.expect.files.filter((f) => f.path.includes('Phoenix_Priestess'));
+		expect(
+			films.map((f) => [f.path.includes('(Prologue)'), (f as any).tmdbId, (f as any).imdbId])
+		).toEqual([
+			[true, 592072, 'tt16606636'],
+			[false, 135531, 'tt2085795'],
+		]);
 	});
 });
 
