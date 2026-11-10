@@ -566,7 +566,9 @@ describe('setup copy and benefits for every combination of up to two sources', (
 	it("never brings back the generic 'A supported provider account or Easynews account.' wording", () => {
 		expect(
 			breaking((_, result) =>
-				texts(result).includes('A supported provider account or Easynews account.')
+				texts(result).some((t) =>
+					t.startsWith('A supported provider account or Easynews account')
+				)
 			)
 		).toEqual([]);
 	});
