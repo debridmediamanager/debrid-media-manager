@@ -15,5 +15,9 @@ ENTRYPOINT sh -c "/etc/tor/renew-tor.sh"
 
 EXPOSE 9050/tcp
 
+# Ask Tor itself whether it has a circuit rather than fetch check.torproject.org
+# through it: that outside site's answer had Swarm kill Tor 4 times in 3 days
+# (2026-11-08 to 11-10), each restart costing a minute of bootstrap. A Tor the
+# network refuses (stale 0.4.8.16, 2026-10-30) builds no circuit and still fails.
 HEALTHCHECK --interval=60s --timeout=15s --start-period=20s \
-    CMD curl -s --socks5 127.0.0.1:9050 'https://check.torproject.org/api/ip' | grep -qm1 -E '"IsTor"\s*:\s*true'
+    CMD printf 'AUTHENTICATE ""\r\nGETINFO status/circuit-established\r\nQUIT\r\n' | nc -w 5 127.0.0.1 9051 | grep -q 'circuit-established=1'
