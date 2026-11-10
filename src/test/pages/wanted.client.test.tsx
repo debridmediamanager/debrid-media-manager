@@ -70,6 +70,54 @@ describe('/wanted', () => {
 		expect(screen.getByText('dmm_api_key')).toBeInTheDocument();
 	});
 
+	// Live on 2026-11-10: zurg read the TEST list every minute, but with nothing on it
+	// the page said no zurg had read it, since the read was kept only on rows.
+	it('shows a read of an empty list', async () => {
+		global.fetch = vi.fn(async (url: string) =>
+			url === '/api/wanted/lists'
+				? listsAnswer()
+				: new Response(
+						JSON.stringify({
+							items: [],
+							lastPolledAt: new Date(Date.now() - 30_000).toISOString(),
+						})
+					)
+		) as any;
+		render(<WantedPage />);
+		expect(await screen.findByText(/^zurg read it /)).toBeInTheDocument();
+		expect(screen.queryByText(/has not read this list yet/)).toBeNull();
+	});
+
+	// YGYE's 1,099 titles rendered 1,099 posters at once.
+	it('shows the list a page at a time', async () => {
+		const many = Array.from({ length: 250 }, (_, i) => ({
+			...fresh,
+			id: `id${i}`,
+			imdbId: `tt${1000000 + i}`,
+			title: `Film ${String(i).padStart(3, '0')}`,
+		}));
+		global.fetch = vi.fn(async (url: string) =>
+			url === '/api/wanted/lists'
+				? listsAnswer()
+				: new Response(JSON.stringify({ items: many }))
+		) as any;
+		Element.prototype.scrollIntoView = vi.fn();
+		render(<WantedPage />);
+		await screen.findAllByText('1–120 of 250');
+		expect(screen.getAllByRole('checkbox', { name: /^Select (?!all)/ })).toHaveLength(120);
+		fireEvent.click(screen.getAllByRole('button', { name: 'Next' })[0]);
+		fireEvent.click(screen.getAllByRole('button', { name: 'Next' })[0]);
+		expect(screen.getAllByText('241–250 of 250')).toHaveLength(2);
+		expect(screen.getAllByRole('checkbox', { name: /^Select (?!all)/ })).toHaveLength(10);
+		expect(screen.getAllByRole('button', { name: 'Next' })[0]).toBeDisabled();
+
+		// A search starts over at its first page.
+		fireEvent.change(screen.getByRole('searchbox', { name: 'Search titles' }), {
+			target: { value: 'Film' },
+		});
+		expect(screen.getAllByText('1–120 of 250')).toHaveLength(2);
+	});
+
 	it('shows when zurg last read it and what it fetched', async () => {
 		global.fetch = vi.fn(async (url: string) =>
 			url === '/api/wanted/lists'

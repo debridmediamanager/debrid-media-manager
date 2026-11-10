@@ -23,10 +23,13 @@ import {
 } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
 
 const when = (iso: string) => new Date(iso).toLocaleString();
+
+/** Posters a page shows: a whole number of rows at 3, 4, 6 and 8 columns. */
+const PAGE_SIZE = 120;
 
 const STATUSES = {
 	all: ['All', () => true],
@@ -83,6 +86,10 @@ function importSummary(r: WantedImportResponse): string {
 export default function WantedPage() {
 	const { isSponsor } = useSponsor();
 	const [items, setItems] = useState<WantedItemResponse[] | null>(null);
+	/** When zurg last read the list, empty or not. */
+	const [polledAt, setPolledAt] = useState<string | null>(null);
+	const [page, setPage] = useState(0);
+	const gridRef = useRef<HTMLDivElement>(null);
 	const [error, setError] = useState('');
 	const [busy, setBusy] = useState<string | null>(null);
 	const [importing, setImporting] = useState(false);
@@ -105,6 +112,7 @@ export default function WantedPage() {
 			const data = await res.json();
 			if (!res.ok) throw new Error(data.error || res.statusText);
 			setItems(data.items);
+			setPolledAt(data.lastPolledAt ?? null);
 			const listsRes = await fetch('/api/wanted/lists', { headers: sponsorHeaders() });
 			const listsData = listsRes.ok ? await listsRes.json() : {};
 			setLists(Array.isArray(listsData.lists) ? listsData.lists : []);
@@ -224,8 +232,7 @@ export default function WantedPage() {
 		}
 	};
 
-	const lastPolled = items
-		?.map((i) => i.lastPolledAt)
+	const lastPolled = [polledAt, ...(items ?? []).map((i) => i.lastPolledAt)]
 		.filter((d): d is string => !!d)
 		.sort()
 		.at(-1);
@@ -245,6 +252,42 @@ export default function WantedPage() {
 	// Only what is on screen can be removed, so a filter change never removes a title out of sight.
 	const picked = shown?.filter((i) => selected.has(i.imdbId)) ?? [];
 	const allPicked = !!shown?.length && picked.length === shown.length;
+	const pages = Math.max(1, Math.ceil((shown?.length ?? 0) / PAGE_SIZE));
+	const at = Math.min(page, pages - 1);
+	const visible = shown?.slice(at * PAGE_SIZE, (at + 1) * PAGE_SIZE);
+	// A new tab, search, filter or order starts at its first page.
+	useEffect(() => setPage(0), [tab, needle, status, sort]);
+	const goTo = (next: number) => {
+		setPage(next);
+		gridRef.current?.scrollIntoView({ block: 'start' });
+	};
+	const pager =
+		pages > 1 && shown ? (
+			<nav
+				aria-label="Pages"
+				className="my-3 flex flex-wrap items-center justify-center gap-2 text-xs text-gray-300"
+			>
+				<button
+					onClick={() => goTo(at - 1)}
+					disabled={at === 0}
+					className="haptic-sm rounded border-2 border-gray-600 bg-gray-800/40 px-2 py-1 transition-colors hover:bg-gray-700/50 disabled:cursor-not-allowed disabled:opacity-40"
+				>
+					Previous
+				</button>
+				<span>
+					{(at * PAGE_SIZE + 1).toLocaleString()}–
+					{Math.min((at + 1) * PAGE_SIZE, shown.length).toLocaleString()} of{' '}
+					{shown.length.toLocaleString()}
+				</span>
+				<button
+					onClick={() => goTo(at + 1)}
+					disabled={at >= pages - 1}
+					className="haptic-sm rounded border-2 border-gray-600 bg-gray-800/40 px-2 py-1 transition-colors hover:bg-gray-700/50 disabled:cursor-not-allowed disabled:opacity-40"
+				>
+					Next
+				</button>
+			</nav>
+		) : null;
 
 	return (
 		<div className="flex min-h-screen flex-col items-center bg-gray-900 p-4">
@@ -607,70 +650,74 @@ export default function WantedPage() {
 						{!!ofKind?.length && shown?.length === 0 && (
 							<p className="text-center text-sm text-gray-400">Nothing matches.</p>
 						)}
-						<ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
-							{shown?.map((item) => (
-								<li key={item.id} className="group relative min-w-0">
-									<input
-										type="checkbox"
-										checked={selected.has(item.imdbId)}
-										onChange={() => toggle(item.imdbId)}
-										aria-label={`Select ${item.title}`}
-										className="absolute top-1.5 left-1.5 z-10 h-4 w-4 cursor-pointer accent-rose-500"
-									/>
-									<Link
-										href={
-											item.kind === 'movie'
-												? `/movie/${item.imdbId}`
-												: `/show/${item.imdbId}/${item.seasons?.[0] ?? 1}`
-										}
-										className="block"
-									>
-										<div
-											className={
-												selected.has(item.imdbId)
-													? 'rounded-t ring-2 ring-rose-400'
-													: undefined
-											}
-										>
-											<Poster imdbId={item.imdbId} title={item.title} />
-										</div>
-										{/* Radarr/Sonarr's bar under the poster: green once zurg fetched it. */}
-										<div
-											className={`h-1 rounded-b ${item.fulfilledAt ? 'bg-green-500' : 'bg-rose-500'}`}
+						<div ref={gridRef} className="scroll-mt-2">
+							{pager}
+							<ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
+								{visible?.map((item) => (
+									<li key={item.id} className="group relative min-w-0">
+										<input
+											type="checkbox"
+											checked={selected.has(item.imdbId)}
+											onChange={() => toggle(item.imdbId)}
+											aria-label={`Select ${item.title}`}
+											className="absolute top-1.5 left-1.5 z-10 h-4 w-4 cursor-pointer accent-rose-500"
 										/>
-										<span className="mt-1 block truncate text-xs text-white group-hover:underline">
-											{item.title}
-										</span>
-									</Link>
-									<span className="block truncate text-[11px] text-gray-400">
-										{item.kind === 'show' && <>{seasonsLabel(item)} · </>}
-										<span
-											title={[
-												when(item.fulfilledAt ?? item.createdAt),
-												item.fulfilled?.release,
-											]
-												.filter(Boolean)
-												.join('\n')}
+										<Link
+											href={
+												item.kind === 'movie'
+													? `/movie/${item.imdbId}`
+													: `/show/${item.imdbId}/${item.seasons?.[0] ?? 1}`
+											}
+											className="block"
 										>
-											{item.fulfilledAt
-												? `fetched ${shortDate(item.fulfilledAt)}`
-												: `since ${shortDate(item.createdAt)}`}
-											{item.fulfilled?.upgradeTo &&
-												` · waiting for ${item.fulfilled.upgradeTo}`}
+											<div
+												className={
+													selected.has(item.imdbId)
+														? 'rounded-t ring-2 ring-rose-400'
+														: undefined
+												}
+											>
+												<Poster imdbId={item.imdbId} title={item.title} />
+											</div>
+											{/* Radarr/Sonarr's bar under the poster: green once zurg fetched it. */}
+											<div
+												className={`h-1 rounded-b ${item.fulfilledAt ? 'bg-green-500' : 'bg-rose-500'}`}
+											/>
+											<span className="mt-1 block truncate text-xs text-white group-hover:underline">
+												{item.title}
+											</span>
+										</Link>
+										<span className="block truncate text-[11px] text-gray-400">
+											{item.kind === 'show' && <>{seasonsLabel(item)} · </>}
+											<span
+												title={[
+													when(item.fulfilledAt ?? item.createdAt),
+													item.fulfilled?.release,
+												]
+													.filter(Boolean)
+													.join('\n')}
+											>
+												{item.fulfilledAt
+													? `fetched ${shortDate(item.fulfilledAt)}`
+													: `since ${shortDate(item.createdAt)}`}
+												{item.fulfilled?.upgradeTo &&
+													` · waiting for ${item.fulfilled.upgradeTo}`}
+											</span>
 										</span>
-									</span>
-									<button
-										onClick={() => remove(item)}
-										disabled={busy !== null}
-										className="haptic-sm absolute top-1 right-1 rounded border-2 border-red-600 bg-red-900/80 p-1 text-red-100 transition-colors hover:bg-red-800 disabled:opacity-50"
-										title="Remove from your wanted list"
-										aria-label={`Remove ${item.title}`}
-									>
-										<Trash2 className="h-3.5 w-3.5" />
-									</button>
-								</li>
-							))}
-						</ul>
+										<button
+											onClick={() => remove(item)}
+											disabled={busy !== null}
+											className="haptic-sm absolute top-1 right-1 rounded border-2 border-red-600 bg-red-900/80 p-1 text-red-100 transition-colors hover:bg-red-800 disabled:opacity-50"
+											title="Remove from your wanted list"
+											aria-label={`Remove ${item.title}`}
+										>
+											<Trash2 className="h-3.5 w-3.5" />
+										</button>
+									</li>
+								))}
+							</ul>
+						</div>
+						{pager}
 					</>
 				)}
 			</div>
