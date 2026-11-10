@@ -1536,9 +1536,10 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				: `${app} ${android64 ? 'direct Usenet requires 64-bit Android, and zurg+rex Android' : 'it'} ${noHostedNzb}`
 		);
 	}
-	// The app stands in for the desktop zurg and rex guides, so its own guide leads; with no
-	// source chosen yet it is still where rex on Android starts.
-	if (androidZurg || (answers.host === 'android' && rex && !selected.length))
+	// The app stands in for the desktop zurg and rex guides, so its own guide leads. rex on Android
+	// with no source zurg feeds it (none, or Easynews alone) is still the app the rex limit names;
+	// a rex route with a conflict needs a normal host, whose guides stay.
+	if (androidZurg || (answers.host === 'android' && rex && !result.conflicts.length))
 		result.setupLinks = [
 			ANDROID,
 			...result.setupLinks.filter((link) => link !== ZURG && link !== REX),
@@ -1548,7 +1549,8 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			'Self-hosted playback needs a securely reachable address; a LAN address works only at home.';
 		result.optionalNeeds.push(
 			// A media server or rex is always self-hosted; the arr download client's host does not serve playback.
-			androidRex
+			// rex on Android is the zurg+rex app, whatever source feeds it, as in the local files note.
+			rex && answers.host === 'android'
 				? 'zurg+rex runs on the Android device itself; the Plex apps on it play anywhere, while other devices reach it over your home network.'
 				: playerNeedsFullHost(player)
 					? selfHosted

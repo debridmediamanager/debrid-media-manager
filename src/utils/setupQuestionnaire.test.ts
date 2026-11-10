@@ -3098,6 +3098,32 @@ describe('zurg+rex Android serves the Plex apps', () => {
 		]);
 	});
 
+	// Without a source zurg feeds it, rex on Android is still the zurg+rex app the rex limit names.
+	it.each([
+		{ sources: ['easynews'] },
+		{ sources: ['none'] },
+		{ sources: [] },
+	] satisfies Partial<SetupAnswers>[])(
+		'gives rex on Android the Android remote wording with %o',
+		(overrides) => {
+			expect(onAndroid({ ...overrides, needs: ['remote'] }).optionalNeeds[0]).toBe(
+				'zurg+rex runs on the Android device itself; the Plex apps on it play anywhere, while other devices reach it over your home network.'
+			);
+		}
+	);
+
+	it('links the zurg+rex Android guide the rex limit names for Easynews alone', () => {
+		const result = onAndroid({ sources: ['easynews'] });
+
+		expect(result.limits).toContain(
+			'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. On Android, rex comes inside the sponsor-only zurg+rex app.'
+		);
+		expect(result.setupLinks[0]).toEqual({
+			label: 'zurg+rex Android guide',
+			href: 'https://notes.debridmediamanager.com/zurg/guides/android/',
+		});
+	});
+
 	it('gives no source the Android wording for local files', () => {
 		expect(onAndroid({ sources: ['none'], needs: ['mixed'] }).optionalNeeds).toContain(
 			'zurg+rex Android feeds rex from zurg only; local files need rex on a normal host, or a player on the device.'
