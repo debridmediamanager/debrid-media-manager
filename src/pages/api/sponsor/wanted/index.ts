@@ -70,10 +70,13 @@ function pinsOf(row: WantedItemRow, apiKey: string): WantedForZurg['pins'] {
 	}));
 }
 
+/** A film's id as the Newznab sweep records its posts (`imdb:133093`). */
+const postsId = (imdbId: string) => `imdb:${Number(imdbId.replace(/^tt/i, ''))}`;
+
 /**
  * A sponsor's wanted list, for their zurg to fetch: `{"items": [{id, kind, title,
  * imdb, year?, tmdb?, tvdb?, titles?, released?, seasons?: [{season, episodes,
- * airing?, aired?}], upgrade?}]}`. Films zurg
+ * airing?, aired?}], upgrade?, posted?}]}`. Films zurg
  * already acknowledged are left out unless it wants a better release; shows stay,
  * so new episodes are fetched as they air. With `?bands=` a film is left out only once
  * every band holds a copy zurg wants no better than, and carries `bands` instead of
@@ -111,15 +114,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				!row.fulfilledAt ||
 				(!row.pins && (bands ? !bandsDone(row, bands) : upgradeOf(row)))
 		);
+		// Read on every poll, like upgradeOf, so zurg hears of a new post within the sweep's quarter hour.
+		const posts = await db.newznabFreshPosts(
+			rows.filter((row) => row.kind === 'movie').map((row) => postsId(row.imdbId))
+		);
 		const items: WantedForZurg[] = [];
 		for (let i = 0; i < rows.length; i += RESOLVE_AT_ONCE) {
 			items.push(
 				...(await Promise.all(
 					rows.slice(i, i + RESOLVE_AT_ONCE).map(async (row) => {
 						const pins = pinsOf(row, apiKey);
+						const posted =
+							row.kind === 'movie' ? posts.get(postsId(row.imdbId)) : undefined;
 						const resolved = {
 							...(await resolveWantedReused(row)),
 							...(pins && { pins }),
+							...(posted && { posted: posted.toISOString() }),
 						};
 						if (bands) {
 							const held = bandsOf(row, bands);

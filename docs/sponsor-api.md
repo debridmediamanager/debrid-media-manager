@@ -340,7 +340,8 @@ acquisition reads it. Both calls share 30 a minute per sponsorship.
 			"titles": ["The Matrix", "Matrix", "Матрица"],
 			"released": "1999-09-21",
 			"runtime": 136,
-			"upgrade": { "grab": "<info hash>", "resolution": "1080p", "to": "2160p" }
+			"upgrade": { "grab": "<info hash>", "resolution": "1080p", "to": "2160p" },
+			"posted": "2026-11-10T07:22:05.000Z"
 		},
 		{
 			"id": "5d1e…",
@@ -371,6 +372,10 @@ names another film; it is absent when TMDB could not be asked.
 `seasons` is absent when TMDB could not be asked this time, which means ask again
 later, not that nothing aired. `year`, `tmdb` and `tvdb` are absent where TMDB does
 not know the title.
+`posted` is when a post naming the film last appeared on DMM's Newznab upstreams, as
+ISO 8601; DMM reads their newest posts every quarter hour. A fetcher can search again
+for a film once `posted` is newer than its last search. It is absent when no post has
+been seen, and shows never carry it.
 `upgrade` is on a film fetched already whose fetcher wants a better release: `grab` and
 `resolution` are what it said it holds, `to` the resolution it wants. DMM only echoes
 what the last acknowledgement said.

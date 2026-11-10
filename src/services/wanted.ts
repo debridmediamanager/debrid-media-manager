@@ -50,6 +50,12 @@ export interface WantedForZurg {
 	 */
 	upgrade?: { grab: string; resolution: string; to: string };
 	/**
+	 * Films only: when a post last named the film on DMM's Newznab upstreams, as
+	 * ISO 8601, so zurg searches again after it; absent when none was seen.
+	 * Read on every poll, never reused.
+	 */
+	posted?: string;
+	/**
 	 * Films only, when zurg asked for `?bands=`: what it holds at each of those
 	 * resolutions it fetched already, with `to` while it wants a better copy there.
 	 */

@@ -47,6 +47,7 @@ describe('/api/sponsor/wanted', () => {
 	beforeEach(() => {
 		mockRepository.getSponsorByDmmApiKey = vi.fn().mockResolvedValue(ACTIVE);
 		mockRepository.touchWantedPolled = vi.fn().mockResolvedValue(undefined);
+		mockRepository.newznabFreshPosts = vi.fn().mockResolvedValue(new Map());
 		vi.mocked(checkRateLimitFor).mockResolvedValue(true);
 		vi.mocked(resolveWantedReused).mockImplementation(async (r) => ({
 			id: r.id,
@@ -217,6 +218,40 @@ describe('/api/sponsor/wanted', () => {
 			to: '2160p',
 		});
 		expect(await poll(better)).toEqual([]);
+	});
+
+	// 348 wanted films had a new post on 2026-11-10 that zurg, retrying each a week
+	// apart, had not searched for: `posted` tells it when to search again.
+	it('says when a post last named each film, read on every poll', async () => {
+		mockRepository.listWanted = vi
+			.fn()
+			.mockResolvedValue([
+				row({ id: 'a' }),
+				row({ id: 'b', imdbId: 'tt0234215', title: 'Reloaded' }),
+				row({ id: 'c', kind: 'show', imdbId: 'tt0115082' }),
+			]);
+		const poll = async (at: string) => {
+			mockRepository.newznabFreshPosts = vi.fn().mockResolvedValue(
+				new Map([
+					['imdb:133093', new Date(at)],
+					['imdb:115082', new Date(at)],
+				])
+			);
+			const res = createMockResponse();
+			await listHandler(get(), res);
+			return vi.mocked(res.json).mock.calls[0][0].items;
+		};
+
+		const items = await poll('2026-11-10T07:22:05.000Z');
+		expect(mockRepository.newznabFreshPosts).toHaveBeenCalledTimes(1);
+		expect(mockRepository.newznabFreshPosts).toHaveBeenCalledWith([
+			'imdb:133093',
+			'imdb:234215',
+		]);
+		expect(items[0].posted).toBe('2026-11-10T07:22:05.000Z');
+		expect(items[1]).not.toHaveProperty('posted');
+		expect(items[2]).not.toHaveProperty('posted');
+		expect((await poll('2026-11-10T09:41:00.000Z'))[0].posted).toBe('2026-11-10T09:41:00.000Z');
 	});
 
 	// zurg keeps a 1080p and a 2160p copy of each film: a film stays listed until

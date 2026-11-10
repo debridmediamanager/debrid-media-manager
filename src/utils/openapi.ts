@@ -1018,7 +1018,7 @@ export const openApiDocument = {
 				tags: ['Sponsors'],
 				operationId: 'wantedList',
 				summary: 'Your wanted list',
-				description: `The titles you added to your wanted list on DMM, for a tool that fetches them. A film leaves the list once it is acknowledged as fetched; a show stays so new episodes are fetched.\n\n\`seasons\` lists, per season wanted, the episodes aired so far as TMDB numbers them, with \`airing: true\` while more are to come. \`released\` is a film's first home release day (never a cinema date). \`titles\` is every title TMDB knows a film by. \`upgrade\` is on a fetched film whose fetcher asked for a better copy. Fields TMDB does not know are absent.\n\n**Limit:** ${per(sponsorWanted, 'calls')} per key, shared with acknowledging.`,
+				description: `The titles you added to your wanted list on DMM, for a tool that fetches them. A film leaves the list once it is acknowledged as fetched; a show stays so new episodes are fetched.\n\n\`seasons\` lists, per season wanted, the episodes aired so far as TMDB numbers them, with \`airing: true\` while more are to come. \`released\` is a film's first home release day (never a cinema date). \`titles\` is every title TMDB knows a film by. \`upgrade\` is on a fetched film whose fetcher asked for a better copy. \`posted\` is when a post last named a film on DMM's Newznab upstreams. Fields TMDB does not know are absent.\n\n**Limit:** ${per(sponsorWanted, 'calls')} per key, shared with acknowledging.`,
 				externalDocs: {
 					url: `${REPO}/sponsor-api.md#wanted-list`,
 					description: 'Wanted list',
@@ -1080,6 +1080,7 @@ export const openApiDocument = {
 												},
 											},
 											bands: { type: 'object' },
+											posted: { type: 'string', format: 'date-time' },
 											pins: {
 												type: 'array',
 												description:
