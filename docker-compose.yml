@@ -17,7 +17,9 @@ services:
       replicas: 1
 
   web:
-    image: dmm-prod:latest
+    # CI sets the commit, so `docker service rollback dmm_web` returns to the
+    # previous build. By hand, :latest is the newest build.
+    image: dmm-prod:${DMM_IMAGE_TAG:-latest}
     ports:
       - 3000:3000
     env_file:
@@ -25,9 +27,11 @@ services:
       - .env.local
     environment:
       - REDIS_URL=redis://redis:6379
-    depends_on:
-      - tor
-      - redis
+      # The V8 heap is ~150-300 MB; RSS reached 3.4 GB in 3 h, ~700 MB of it in
+      # glibc's 64 MB per-thread malloc arenas (2026-11-10).
+      - MALLOC_ARENA_MAX=2
+    # Next finishes in-flight requests on SIGTERM; give slow ones time.
+    stop_grace_period: 30s
     # Docker's embedded DNS forwards to Hetzner's resolvers, which time out on
     # a share of lookups and broke every RD call through /api/anticors (#276).
     dns:
@@ -53,6 +57,19 @@ services:
         # A health kill ends in SIGTERM and a clean exit 0, which on-failure
         # never restarts.
         condition: any
+      # Start each new replica before stopping an old one; a replica that fails
+      # within 30 s rolls the whole service back to the previous image.
+      update_config:
+        order: start-first
+        failure_action: rollback
+        monitor: 30s
+      rollback_config:
+        order: start-first
+      # Native memory is outside V8's heap limit; this kills one runaway replica
+      # rather than letting the host's OOM killer pick a process.
+      resources:
+        limits:
+          memory: 5G
 
   # Swarm deletes a container's log with its task, five tasks per replica, so
   # a busy deploy day left about four hours of history. This copies every

@@ -197,3 +197,70 @@ describe('dmm_web log retention', () => {
 		);
 	});
 });
+
+// 2026-11-10 review of dmm-01's deploy: every build was dmm-prod:latest, so a
+// rollback was a revert plus a 9-minute rebuild; replicas stopped before their
+// replacement started; RSS grew to 3.4 GB per replica with no bound outside V8's
+// heap; lint ran inside the build for ~180 of its 330 s.
+describe('production rollout', () => {
+	const workflow = readFileSync(join(root, '.github/workflows/build-and-push.yml'), 'utf8');
+	const dockerfile = readFileSync(join(root, 'Dockerfile'), 'utf8');
+	const deployStep = workflow.slice(workflow.indexOf('- name: Deploy to Docker Swarm\n'));
+
+	it('tags each build by commit and deploys that tag', () => {
+		expect(webServiceBlock()).toMatch(/^\s+image: dmm-prod:\$\{DMM_IMAGE_TAG:-latest\}$/m);
+		expect(workflow).toContain(
+			'docker build -t dmm-prod:${{ github.sha }} -t dmm-prod:latest .'
+		);
+		expect(deployStep).toMatch(/DMM_IMAGE_TAG: \$\{\{ github\.sha \}\}/);
+	});
+
+	// A forced update after stack deploy restarted every replica a second time.
+	it('rolls the replicas once and fails the job when Swarm rolls back', () => {
+		expect(workflow).not.toMatch(/service update[^\n]*--force[^\n]*dmm_web/);
+		expect(deployStep).toContain('rolled back');
+	});
+
+	it('starts a replacement before stopping a replica and rolls back a failed update', () => {
+		const web = webServiceBlock();
+		expect(web).toMatch(
+			/update_config:\n(?:\s*#.*\n)*(?:\s+\w+: \S+\n)*\s+order: start-first\n/
+		);
+		expect(web).toMatch(/failure_action: rollback/);
+		expect(seconds(web.match(/^\s+monitor: (\S+)$/m)?.[1] ?? '0s')).toBeGreaterThanOrEqual(30);
+		expect(web).toMatch(/rollback_config:\n\s+order: start-first\n/);
+	});
+
+	it('bounds each replica, native memory included', () => {
+		expect(webServiceBlock()).toMatch(/resources:\n\s+limits:\n\s+memory: \d+G\n/);
+		expect(webServiceBlock()).toContain('- MALLOC_ARENA_MAX=2');
+	});
+
+	it('lints beside the build and still fails the image on a lint error', () => {
+		expect(dockerfile).toMatch(/^FROM base AS lint$/m);
+		expect(dockerfile).toContain('COPY --from=lint /lint-passed');
+		// npm run build would run the prebuild lint a second time, in series.
+		expect(dockerfile).not.toMatch(/npm run build/);
+	});
+
+	it('copies the standalone server once', () => {
+		expect(dockerfile).toContain('mv .next/standalone /standalone');
+		expect(dockerfile).not.toContain('/app/.next/standalone');
+	});
+
+	// debridmediamanager.com is not proxied by Cloudflare; the purge only
+	// emptied the cache of the zone's other hosts.
+	it('does not purge the Cloudflare zone', () => {
+		expect(workflow).not.toContain('purge_everything');
+	});
+});
+
+describe('tor health check', () => {
+	it('asks Tor for a circuit instead of fetching an outside site', () => {
+		const healthcheck = readFileSync(join(root, 'tor.Dockerfile'), 'utf8').slice(
+			readFileSync(join(root, 'tor.Dockerfile'), 'utf8').indexOf('HEALTHCHECK')
+		);
+		expect(healthcheck).toContain('GETINFO status/circuit-established');
+		expect(healthcheck).not.toContain('check.torproject.org');
+	});
+});

@@ -12,11 +12,23 @@ COPY vendor ./vendor
 RUN --mount=type=cache,target=/root/.npm \
     npm ci
 
+# Lint runs beside the build rather than before it (npm's prebuild), which
+# took ~180 s of a 330 s build. The deploy stage copies its marker, so a lint
+# failure still fails the image.
+FROM base AS lint
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npx prisma generate && npm run lint && touch /lint-passed
+
 # Build stage
 FROM base AS build
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npx prisma generate && npm run build
+# next.config.js points webpack's cache at node_modules/.cache; keep it between builds.
+# standalone moves out of .next so the deploy stage does not copy it twice (~500 MB).
+RUN --mount=type=cache,target=/app/node_modules/.cache \
+    --mount=type=cache,target=/app/.next/cache \
+    npx prisma generate && npx next build && mv .next/standalone /standalone
 
 # Deploy stage
 FROM base AS deploy
@@ -25,10 +37,10 @@ WORKDIR /app
 COPY --from=build /app/public ./public
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/prisma ./prisma
-COPY --from=build /app/.next/static ./.next/static
-# Copy the entire .next directory to ensure PWA files are included
+# All of .next, not only static: it holds server chunks and manifests standalone leaves out.
 COPY --from=build /app/.next ./.next
-COPY --from=build /app/.next/standalone .
+COPY --from=build /standalone .
+COPY --from=lint /lint-passed /tmp/lint-passed
 RUN apt-get update && apt-get install -y curl grep && rm -rf /var/lib/apt/lists/*
 EXPOSE 3000
 ENV PORT=3000

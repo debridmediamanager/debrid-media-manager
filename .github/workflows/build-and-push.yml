@@ -45,7 +45,7 @@ jobs:
 
             - name: Build Docker image
               run: |
-                  docker build -t dmm-prod:latest .
+                  docker build -t dmm-prod:${{ github.sha }} -t dmm-prod:latest .
 
             # Built here, from a fresh Alpine, rather than pulled: the Docker Hub
             # image went stale at Tor 0.4.8.16, which the network's consensus
@@ -66,11 +66,26 @@ jobs:
                   mkdir -p /home/ben/dmm/logship
                   cp scripts/ops/logship/vector.yaml scripts/ops/logship/maintain.sh /home/ben/dmm/logship/
 
+            # The compose file names the image by commit, so stack deploy starts the
+            # rollout itself. It returns at once (Docker 24), so wait here until every
+            # replica runs this commit, and fail if Swarm rolled it back.
             - name: Deploy to Docker Swarm
+              env:
+                  DMM_IMAGE_TAG: ${{ github.sha }}
               run: |
                   cp docker-compose.yml /home/ben/dmm/docker-compose.yml
                   cd /home/ben/dmm && docker stack deploy -c docker-compose.yml dmm --resolve-image always
-                  docker service update --image dmm-prod:latest --force dmm_web
+                  want="dmm-prod:$DMM_IMAGE_TAG"
+                  for i in $(seq 120); do
+                      spec=$(docker service inspect dmm_web --format '{{.Spec.TaskTemplate.ContainerSpec.Image}}')
+                      [ "${spec%@*}" = "$want" ] || { echo "dmm_web rolled back to $spec"; exit 1; }
+                      state=$(docker service inspect dmm_web --format '{{if .UpdateStatus}}{{.UpdateStatus.State}}{{end}}')
+                      case "$state" in paused|rollback_*) echo "dmm_web update $state"; exit 1 ;; esac
+                      stale=$(docker service ps dmm_web -f desired-state=running --format '{{.Image}} {{.CurrentState}}' | grep -vc "^$want Running" || true)
+                      [ "$stale" = 0 ] && [ "$state" != updating ] && break
+                      [ "$i" = 120 ] && { echo "dmm_web did not converge in 10 minutes"; exit 1; }
+                      sleep 5
+                  done
                   # Restart Tor only when its image changed: a restart costs a minute of bootstrap.
                   running=$(docker inspect --format '{{.Image}}' "$(docker ps -q -f name=dmm_tor | head -1)" 2>/dev/null || true)
                   [ "$running" = "$(docker image inspect --format '{{.Id}}' dmm-tor:latest)" ] || docker service update --image dmm-tor:latest --force dmm_tor
@@ -79,13 +94,6 @@ jobs:
               run: |
                   install -m 755 scripts/ops/dmm-watchdog.sh /home/ben/dmm/dmm-watchdog.sh
                   (crontab -l 2>/dev/null | grep -v dmm-watchdog.sh; echo '* * * * * /home/ben/dmm/dmm-watchdog.sh') | crontab -
-
-            - name: Purge Cloudflare Cache
-              run: |
-                  curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache" \
-                  -H "Authorization: Bearer ${{ secrets.CF_API_KEY }}" \
-                  -H "Content-Type: application/json" \
-                  --data '{"purge_everything":true}'
 
             - name: Cleanup Docker
               if: always()
