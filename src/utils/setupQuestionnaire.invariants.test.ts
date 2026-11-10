@@ -573,6 +573,34 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	// Ben, 2026-11-10: wherever the zurg+rex Android app is mentioned, say it is a Plex server on your phone.
+	it('calls the zurg+rex Android app a Plex server on your phone wherever the result mentions it', () => {
+		expect(
+			breaking((_, result) => {
+				// Link labels name a page, the sponsor box has its own wording, and a conflict only
+				// repeats the disabled host card's short reason.
+				const body: string[] = [];
+				walk(
+					result,
+					'result',
+					(text, path) => {
+						if (
+							!path.startsWith('result.sponsorship') &&
+							!path.startsWith('result.conflicts') &&
+							!path.endsWith('.label')
+						)
+							body.push(text);
+					},
+					() => undefined
+				);
+				return (
+					body.some((text) => /zurg\+rex (Android|app)/.test(text)) &&
+					!body.some((text) => text.includes('Plex server on your phone'))
+				);
+			})
+		).toEqual([]);
+	});
+
 	it('labels every link to the setup guide "Read the full setup guide"', () => {
 		expect(
 			breaking((_, result) =>

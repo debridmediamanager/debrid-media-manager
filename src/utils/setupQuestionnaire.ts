@@ -516,7 +516,7 @@ const SPONSOR_BENEFITS = {
 	zurg: {
 		id: 'zurg-nightly',
 		title: 'zurg nightly access',
-		detail: 'Access the current zurg nightly builds, source code, Docker image and Android app for this route.',
+		detail: 'Access the current zurg nightly builds, source code, Docker image and Android app (a Plex server on your phone) for this route.',
 		href: 'https://zurg.debridmediamanager.com/',
 	},
 	zurgKey: {
@@ -1296,7 +1296,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	}
 	if (rex) {
 		result.limits.push(
-			`rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. ${answers.host === 'android' ? 'On Android, rex comes inside the sponsor-only zurg+rex app.' : `${rexStremio ? 'rex and rex-stremio do not' : 'rex does not'} require sponsorship.`}`
+			`rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. ${answers.host === 'android' ? 'On Android, rex comes inside the sponsor-only zurg+rex app, your own Plex server on your phone or TV box.' : `${rexStremio ? 'rex and rex-stremio do not' : 'rex does not'} require sponsorship.`}`
 		);
 		links(note('rex/faq', 'rex compatibility and limits'));
 		if (rexWithoutZurg)
@@ -1313,7 +1313,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	if (player === 'webdav') {
 		result.alternatives.push({
 			title: 'For an SMB-only player',
-			detail: 'Use an existing SMB share, or zurg → filesystem mount → host SMB share → player. The host provides SMB; zurg itself does not. This bridge needs a normal host, not just the zurg+rex Android app.',
+			detail: 'Use an existing SMB share, or zurg → filesystem mount → host SMB share → player. The host provides SMB; zurg itself does not. This bridge needs a normal host, not just the zurg+rex Android app (a Plex server on your phone, not an SMB server).',
 			links: [ZURG],
 		});
 		const skipZurg = providerWebdav(selected);
@@ -1538,13 +1538,13 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	const androidZurg =
 		answers.host === 'android' && (result.hostRequirement === 'zurg' || androidRex);
 	if (androidZurg) {
-		const app =
-			'zurg+rex Android needs sponsor access, a supported device and background operation;';
+		const app = 'needs sponsor access, a supported device and background operation;';
 		const noHostedNzb = 'has no TorBox hosted NZB (torbox_nzb) backend.';
+		// The rex limit already calls the app a Plex server on your phone on rex routes.
 		result.prerequisites.push(
 			androidRex
-				? `${app} it runs zurg and rex on the device, your own Plex server on your phone or TV box, so the Plex apps play from it. ${android64 ? 'Direct Usenet requires 64-bit Android, and the app' : 'It'} ${noHostedNzb}`
-				: `${app} ${android64 ? 'direct Usenet requires 64-bit Android, and zurg+rex Android' : 'it'} ${noHostedNzb}`
+				? `zurg+rex Android ${app} it runs zurg and rex on the device, so the Plex apps play from it. ${android64 ? 'Direct Usenet requires 64-bit Android, and the app' : 'It'} ${noHostedNzb}`
+				: `zurg+rex Android, your own Plex server on your phone or TV box, ${app} ${android64 ? 'direct Usenet requires 64-bit Android, and zurg+rex Android' : 'it'} ${noHostedNzb}`
 		);
 	}
 	// The app stands in for the desktop zurg and rex guides, so its own guide leads. rex on Android

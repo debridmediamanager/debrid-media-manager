@@ -1843,7 +1843,7 @@ describe('Wanted and Seerr need a zurg that can run', () => {
 					({ id }) => id === 'zurg-nightly'
 				)?.detail
 			).toBe(
-				`Access the current zurg nightly builds, source code, Docker image and Android app ${ending}`
+				`Access the current zurg nightly builds, source code, Docker image and Android app (a Plex server on your phone) ${ending}`
 			);
 		}
 	);
@@ -3052,7 +3052,7 @@ describe('zurg+rex Android serves the Plex apps', () => {
 			expect(result.conflicts).toEqual([]);
 			expect(result.primaryRoute.id).toBe('zurg-rex-plex');
 			expect(result.prerequisites).toContain(
-				'zurg+rex Android needs sponsor access, a supported device and background operation; it runs zurg and rex on the device, your own Plex server on your phone or TV box, so the Plex apps play from it. It has no TorBox hosted NZB (torbox_nzb) backend.'
+				'zurg+rex Android needs sponsor access, a supported device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. It has no TorBox hosted NZB (torbox_nzb) backend.'
 			);
 			expect(result.setupLinks).toContainEqual({
 				label: 'zurg+rex Android guide',
@@ -3084,7 +3084,7 @@ describe('zurg+rex Android serves the Plex apps', () => {
 	// rex runs on 32-bit Android too; only direct Usenet needs 64-bit.
 	it('asks for 64-bit Android only for own Usenet', () => {
 		expect(onAndroid({ sources: ['real-debrid', 'usenet'] }).prerequisites).toContain(
-			'zurg+rex Android needs sponsor access, a supported device and background operation; it runs zurg and rex on the device, your own Plex server on your phone or TV box, so the Plex apps play from it. Direct Usenet requires 64-bit Android, and the app has no TorBox hosted NZB (torbox_nzb) backend.'
+			'zurg+rex Android needs sponsor access, a supported device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. Direct Usenet requires 64-bit Android, and the app has no TorBox hosted NZB (torbox_nzb) backend.'
 		);
 	});
 
@@ -3153,7 +3153,7 @@ describe('zurg+rex Android serves the Plex apps', () => {
 		const result = onAndroid({ sources: ['easynews'] });
 
 		expect(result.limits).toContain(
-			'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. On Android, rex comes inside the sponsor-only zurg+rex app.'
+			'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. On Android, rex comes inside the sponsor-only zurg+rex app, your own Plex server on your phone or TV box.'
 		);
 		expect(result.setupLinks[0]).toEqual({
 			label: 'zurg+rex Android guide',
@@ -3180,7 +3180,7 @@ describe('zurg+rex Android serves the Plex apps', () => {
 			const result = onAndroid({ plexRoute });
 
 			expect(result.limits).toContain(
-				'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. On Android, rex comes inside the sponsor-only zurg+rex app.'
+				'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. On Android, rex comes inside the sponsor-only zurg+rex app, your own Plex server on your phone or TV box.'
 			);
 			expect(result.sponsorship.freeFeatures).toEqual([]);
 		}
@@ -3303,7 +3303,7 @@ describe('zurg+rex Android has no TorBox hosted NZB backend', () => {
 		);
 
 		expect(result.prerequisites).toContain(
-			'zurg+rex Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and zurg+rex Android has no TorBox hosted NZB (torbox_nzb) backend.'
+			'zurg+rex Android, your own Plex server on your phone or TV box, needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and zurg+rex Android has no TorBox hosted NZB (torbox_nzb) backend.'
 		);
 		expect(result.setupLinks).toContainEqual({
 			label: 'zurg+rex Android guide',
@@ -3316,7 +3316,7 @@ describe('zurg+rex Android has no TorBox hosted NZB backend', () => {
 			recommendSetup(answers({ player: 'webdav', sources: ['offcloud'], host: 'android' }))
 				.prerequisites
 		).toContain(
-			'zurg+rex Android needs sponsor access, a supported device and background operation; it has no TorBox hosted NZB (torbox_nzb) backend.'
+			'zurg+rex Android, your own Plex server on your phone or TV box, needs sponsor access, a supported device and background operation; it has no TorBox hosted NZB (torbox_nzb) backend.'
 		);
 	});
 
@@ -3326,7 +3326,7 @@ describe('zurg+rex Android has no TorBox hosted NZB backend', () => {
 				answers({ player: 'webdav', sources: ['offcloud'], host: 'android' })
 			).alternatives.find(({ title }) => title === 'For an SMB-only player')?.detail
 		).toBe(
-			'Use an existing SMB share, or zurg → filesystem mount → host SMB share → player. The host provides SMB; zurg itself does not. This bridge needs a normal host, not just the zurg+rex Android app.'
+			'Use an existing SMB share, or zurg → filesystem mount → host SMB share → player. The host provides SMB; zurg itself does not. This bridge needs a normal host, not just the zurg+rex Android app (a Plex server on your phone, not an SMB server).'
 		);
 	});
 });

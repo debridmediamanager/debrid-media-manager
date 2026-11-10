@@ -114,6 +114,9 @@ describe('SponsorPanel', () => {
 			'https://notes.debridmediamanager.com/guides/remote-help/'
 		);
 		expect(screen.getByText('Sponsor role on Discord')).toBeInTheDocument();
+		expect(
+			screen.getByText(/Docker and the Android app, a Plex server on your phone/)
+		).toBeInTheDocument();
 		expect(screen.getByText(/seven plugins/)).toBeInTheDocument();
 		expect(screen.getByText(/six plugins/)).toBeInTheDocument();
 		expect(screen.getByText(/2 TB of Usenet a day instead of 300 GB/)).toBeInTheDocument();
