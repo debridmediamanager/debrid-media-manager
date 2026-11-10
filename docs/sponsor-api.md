@@ -307,7 +307,8 @@ the manga chapters its name covers (`[340-342]`, `Chapter 700-701` in a release 
 arc), which are unique to an episode, in its arc. A file of an older cut is the episode it
 became: the one now on its chapters under another number, else the one under its number whose
 chapters hold its own or are held by them, unless the file holds another episode whole; a cut on
-other chapters under another number matches nothing. A release none of whose
+other chapters under another number matches nothing. A file naming no chapters, its arc and
+number (`[One Pace] Paced One Piece - Thriller Bark Episode 01`), is that episode. A release none of whose
 files is matched answers without `series` and `anime`. Artwork is onepace.net's own. DMM reads
 One Pace's list off onepace.net once a day, keeping the list it has when the page cannot be
 read, so a new episode is placed within a day of One Pace publishing it.

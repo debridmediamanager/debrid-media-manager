@@ -117,7 +117,7 @@ describe("fun's One Pace releases", () => {
 	it('place each file whose chapters, arc and number name one of its episodes', () => {
 		const placed = all();
 		expect(Object.keys(placed)).toHaveLength(464);
-		expect(Object.values(placed).filter(Boolean)).toHaveLength(430);
+		expect(Object.values(placed).filter(Boolean)).toHaveLength(452);
 		expect(placed).toMatchObject({
 			'[One Pace][340-342] Water Seven 08 [1080p][6E2DB1B9].mkv': 'S16E08',
 			'[One Pace][1] Romance Dawn 01 [1080p][FB72C13F].mkv': 'S01E01',
@@ -137,6 +137,10 @@ describe("fun's One Pace releases", () => {
 			'[One Pace][83-119] The Trials of Koby-Meppo [1080p][4B56844F].mkv': 'S00E02',
 			'[One Pace][543-560] If You Could Go Anywhere... The Adventures of the Straw Hats [1080p][2BC41092].mkv':
 				'S00E03',
+			// its arc and number, no chapters: One Pace's own Thriller Bark 01 still is of this file
+			'[One Pace] Paced One Piece - Thriller Bark Episode 01 [720p][30D0916C].mkv': 'S19E01',
+			'[One Pace] Paced One Piece - Thriller Bark Episode 21 [v2][720p][22E58F96].mkv':
+				'S19E21',
 			// in a release of One Pace's specials
 			'[One Pace][823-824] Whole Cake Island 01 [720p][EDB72EE5].mp4': 'S30E01',
 		});
@@ -168,7 +172,6 @@ describe("fun's One Pace releases", () => {
 			'[One Pace][433-435] Post-Enies Lobby 02 [720p][344EA844].mkv': null,
 			'[One Pace][35-39] Syrup Village 05 [480p][5498C538].mkv': null,
 			// no chapters in the name
-			'[One Pace] Paced One Piece - Thriller Bark Episode 01 [720p][30D0916C].mkv': null,
 			'[One Pace][Romance Dawn v2] Romance Dawn v2 [1080p][5E77445F].mkv': null,
 			'[One Pace] Straw Hat Theatre [720p][415455AE].mkv': null,
 			'[One Pace][0] Strong World [480p][76B2C869].mkv': null,
@@ -222,7 +225,7 @@ describe("fun's One Pace releases", () => {
 	it('answer a release whose files the list numbers none of as one DMM cannot place', () => {
 		for (const name of [
 			'[One Pace] Tournament of Power.mp4',
-			'[One Pace] Paced One Piece - Thriller Bark [720p]',
+			'[One Pace][Romance Dawn v2] Romance Dawn v2 [1080p][5E77445F].mkv',
 		]) {
 			const answer = placeOnePace(
 				releases.find((r) => r.name === name)!,

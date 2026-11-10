@@ -194,6 +194,14 @@ const CHAPTERS = new RegExp(
 	'i'
 );
 
+/**
+ * Thriller Bark's `[One Pace] Paced One Piece - Thriller Bark Episode 01 [720p][30D0916C].mkv`,
+ * which names its arc and number and no chapters: One Pace's own Thriller Bark 01 and 02 stills
+ * are snapshots of `Thriller_Bark_01_720p30D0916C.mkv` and `…_02_720pEA100F0C.mkv`, these files.
+ */
+const EPISODE =
+	/^\[One Pace\]\s*(?:Paced One Piece\s*-\s*)?([^[]+?)\s+Episode\s+(\d{1,3})\s*(?:\[|\.[a-z0-9]+$|$)/i;
+
 const basename = (path: string) => path.slice(path.lastIndexOf('/') + 1);
 
 /** A release One Pace published: its name, or every file of it, carries One Pace's tag. */
@@ -263,6 +271,17 @@ function episodeOf(catalogue: OnePaceCatalogue, path: string, releaseArc?: strin
 	const name = basename(path);
 	const named = NAMED.exec(name);
 	const chapters = named ? null : CHAPTERS.exec(name);
+	const episode = named || chapters ? null : EPISODE.exec(name);
+	if (episode) {
+		const hits = catalogue.arcs.flatMap((at) =>
+			arcName(at.title) === arcName(episode[1])
+				? at.episodes.flatMap((e) =>
+						e.number === Number(episode[2]) ? [{ arc: at, episode: e }] : []
+					)
+				: []
+		);
+		return hits.length === 1 ? hits[0] : null;
+	}
 	const arc = named ? named[2].trim() : releaseArc;
 	if (!(named || chapters) || !arc) return null;
 	const number = named?.[3] ? Number(named[3]) : null;
