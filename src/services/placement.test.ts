@@ -47,6 +47,7 @@ import fun1024 from '@/test/fixtures/placement/rex-fun-2026-10-24.json';
 import fun1025 from '@/test/fixtures/placement/rex-fun-2026-10-25.json';
 import fun1101 from '@/test/fixtures/placement/rex-fun-2026-11-01.json';
 import saga from '@/test/fixtures/placement/saga-titles.json';
+import seasonOvas from '@/test/fixtures/placement/season-ovas.json';
 import seasonSubtitles from '@/test/fixtures/placement/season-subtitles.json';
 import secondChanceTvdb from '@/test/fixtures/placement/second-chance-tvdb-name.json';
 import segmentLetters from '@/test/fixtures/placement/segment-letters.json';
@@ -2223,6 +2224,62 @@ describe('an OVA numbered and titled', () => {
 			[true, 592072, 'tt16606636'],
 			[false, 135531, 'tt2085795'],
 		]);
+	});
+});
+
+describe('an OVA named by its show and season alone', () => {
+	// zurg on fun (2026-11-10): fansub OVAs named by the season they follow and no title, beside that
+	// season's episodes or alone (see the fixtures README)
+	const placed = async (name: string) => {
+		const c = seasonOvas.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true, shows: true }],
+			Infinity,
+			{
+				...recordedSources(seasonOvas.answers),
+				anime: async () =>
+					buildAnimeIndex(
+						buildFranchiseIndex(seasonOvas.answers.anime.fribb as FribbAnimeEntry[]),
+						seasonOvas.answers.anime.titles
+					),
+			},
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return (part: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(part))!;
+			return [f.season, f.episode];
+		};
+	};
+
+	it("places it on the first special after the season's episodes the release holds", async () => {
+		// DanMachi III ended 2020-12-19; S0E4 (2021-04-28, 27 minutes) comes before S0E5 (2022-07-09)
+		const third = await placed(
+			'[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III'
+		);
+		expect(third('III - OVA v2')).toEqual([0, 4]);
+		// a creditless ending is no OVA
+		expect(third('III - OVA - NCED')).toEqual([null, null]);
+		// Durarara!!x2 Shou is TMDB's S2E1-12, Ten its S2E13-24: S0E3 follows the one, S0E4 the other
+		expect((await placed('[YURI] Durarara!!x2 Shou'))('Shou OVA')).toEqual([0, 3]);
+		expect((await placed('Durarara!!x2_Ten_'))('Ten - OVA')).toEqual([0, 4]);
+	});
+
+	it('places one of a release of OVAs by the season its name gives, as long as the file', async () => {
+		const oads = await placed('[Commie] Haikyuu!! OADs');
+		// S0E1 "Lev Appears!", not the four-minute picture dramas aired after season 1
+		expect(oads('Haikyuu!! - OAD')).toEqual([0, 1]);
+		expect(oads('Second Season - OAD')).toEqual([0, 2]);
+		// season 3 by TMDB's name for it
+		expect(oads('Shiratorizawa Academy - OAD')).toEqual([0, 3]);
+	});
+
+	it('places numbered ones in turn among the specials as long as them', async () => {
+		const ovas = await placed('[MTBB] Asobi Asobase OVAs');
+		// five-minute S0E1 and S0E2, the 13-minute S0E3
+		expect(ovas('OVA1')).toEqual([0, 1]);
+		expect(ovas('OVA2')).toEqual([0, 2]);
+		expect(ovas('OAD')).toEqual([0, 3]);
 	});
 });
 

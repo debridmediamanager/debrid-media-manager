@@ -77,7 +77,10 @@ export interface PlacementShow {
 	 */
 	episodes(
 		season: number
-	): Promise<{ episode: number; name: string; airDate: string | null; id?: number }[] | null>;
+	): Promise<
+		| { episode: number; name: string; airDate: string | null; id?: number; runtime?: number }[]
+		| null
+	>;
 	/** TMDB's episode for TVDB's season and episode, by the show's TVDB Order episode group. */
 	tvdbOrder?: (season: number, episode: number) => Promise<[number, number] | null>;
 	/** TMDB's episode for an English dub's season and episode, by the show's Dub Order group. */
@@ -1734,6 +1737,129 @@ export async function specialOf(
 		);
 	});
 	return segmented.length === 1 ? at(segmented[0]) : null;
+}
+
+// A season written after a show's name: `S2`, `Season 2`, `2nd Season`, `II`, `Second Season`.
+const ORDINALS = [
+	'first',
+	'second',
+	'third',
+	'fourth',
+	'fifth',
+	'sixth',
+	'seventh',
+	'eighth',
+	'ninth',
+	'tenth',
+];
+const ROMAN_SEASONS = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x'];
+// an OVA word and the number after it: `OVA`, `OAD`, `OVA1`, `OVA - 2`
+const OVA_WORD = /(?:^|[^a-z\d])(?:ova|oad)(?:[\s._-]*(\d{1,2}))?(?![a-z\d])/gi;
+
+/**
+ * A name's words without the season after them, and that season: `Mob Psycho 100 II` is 2; a
+ * release's OVA words left out (`[Commie] Haikyuu!! OADs`, `Durarara!!x2_Ten_(+OVA)`).
+ */
+function seasonOff(text: string): { key: string; season: number | null } {
+	const list = words(text).filter((word) => !/^(?:ova|oad)s?$/.test(word));
+	const named = [...namedSeasons(text)];
+	let season: number | null = named.length === 1 ? named[0] : null;
+	const last = list.at(-1) ?? '';
+	if (/^s\d{1,2}$/.test(last)) list.pop();
+	else if (list.length > 2 && list.at(-2) === 'season' && /^\d{1,2}$/.test(last)) list.splice(-2);
+	else if (last === 'season' && list.length > 2) {
+		const word = list.at(-2)!;
+		const ordinal = ORDINALS.indexOf(word);
+		if (ordinal >= 0) season = ordinal + 1;
+		if (ordinal >= 0 || /^\d{1,2}(?:st|nd|rd|th)$/.test(word)) list.splice(-2);
+	} else if (list.length > 1 && ROMAN_SEASONS.indexOf(last) > 0) {
+		season = ROMAN_SEASONS.indexOf(last) + 1;
+		list.pop();
+	}
+	return { key: list.join(''), season };
+}
+
+/**
+ * The special an OVA named only by its show and season is: the first TMDB lists after the last of
+ * that season's episodes the release holds and before the next season starts, as long as the file
+ * where its length is known, else the one special between them. [sam]'s `Dungeon ni Deai wo
+ * Motomeru no wa Machigatteiru Darou ka III - OVA` is DanMachi's S0E4 (2021-04-28), the first after
+ * S3's last episode (2020-12-19); `[YURI] Durarara!!x2 Shou OVA`, beside Shou's twelve episodes,
+ * S0E3 (2015-07-22) after S2E12, where Ten's S0E4 follows S2E24. Nothing but tags after the word:
+ * `II - OVA - NCED` is a creditless ending, `OVA - Water Slide` a title (`specialOf`).
+ */
+export async function seasonSpecialOf(
+	show: PlacementShow,
+	release: string,
+	file: { path: string; duration?: number },
+	held: Placement[]
+): Promise<Placement | null> {
+	if (!show.seasons.some((row) => row.season === 0) || SAMPLE.test(file.path)) return null;
+	const stem = (file.path.split('/').pop() ?? file.path)
+		.replace(EXTENSION, '')
+		.replace(ZURG_EXTRA, '')
+		.replace(LEADING_GROUPS, '')
+		.replace(BRACKETS, ' ');
+	const marks = [...stem.matchAll(OVA_WORD)];
+	if (marks.length !== 1) return null;
+	const end = marks[0].index! + marks[0][0].length;
+	const after = titleText(stem.slice(end))?.whole ?? '';
+	if (after && !/^v\d$/.test(after)) return null;
+	const number = marks[0][1] ? Number(marks[0][1]) : null;
+	const own = seasonOff(stem.slice(0, marks[0].index!));
+	const shows = [...show.names, parseName(release).title].map((name) => seasonOff(name).key);
+	// or the show and a season by TMDB's name: `Haikyuu!! Karasuno High School vs. Shiratorizawa
+	// Academy - OAD` is the third season's
+	const titledSeason = show.seasons.find(
+		(row) =>
+			row.season > 0 &&
+			row.name &&
+			shows.some((key) => key && own.key === key + words(row.name!).join(''))
+	)?.season;
+	if (!own.key || (!shows.includes(own.key) && !titledSeason)) return null;
+	const seasons = new Set(held.map((found) => found.season));
+	const regular = show.seasons.filter((row) => row.season > 0);
+	// a show of one season, or a release of its OVAs alone naming none: `[Commie] Haikyuu!! - OAD`
+	const season =
+		own.season ??
+		titledSeason ??
+		(seasons.size === 1 ? [...seasons][0] : null) ??
+		releaseSeason(release) ??
+		(regular.length === 1 || !seasons.size ? 1 : null);
+	if (!season) return null;
+	const listed = (await show.episodes(season)) ?? [];
+	const ofSeason = held.filter((found) => found.season === season);
+	const last = ofSeason.length
+		? Math.max(...ofSeason.map((found) => found.episodeEnd ?? found.episode))
+		: listed.at(-1)?.episode;
+	const ended = listed.find((row) => row.episode === last)?.airDate;
+	if (!ended) return null;
+	const next = show.seasons.find((row) => row.season === season + 1)?.airDate ?? null;
+	const between = ((await show.episodes(0)) ?? [])
+		.filter((row) => row.airDate && row.airDate > ended && (!next || row.airDate < next))
+		.sort((a, b) => a.airDate!.localeCompare(b.airDate!) || a.episode - b.episode);
+	const seconds = file.duration;
+	// as long as the file by TMDB's runtime: Haikyuu's four-minute picture dramas are no OAD
+	const fits = seconds
+		? between.filter(
+				(row) =>
+					row.runtime &&
+					Math.abs(row.runtime * 60 - seconds) <= Math.max(300, seconds / 4)
+			)
+		: between.length === 1 && !number
+			? between
+			: [];
+	// a numbered one is that one of them: Asobi Asobase's five-minute `OVA1` and `OVA2` are S0E1 and
+	// S0E2, its 13-minute `OAD` S0E3
+	const at = (number ?? 1) - 1;
+	const found = fits[at];
+	if (
+		!found ||
+		fits[at + 1]?.airDate === found.airDate ||
+		fits[at - 1]?.airDate === found.airDate
+	)
+		return null;
+	return { season: 0, episode: found.episode, episodeEnd: null, how: 'tmdb' };
 }
 
 /**

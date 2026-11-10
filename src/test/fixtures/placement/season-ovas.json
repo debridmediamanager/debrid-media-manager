@@ -1,0 +1,7160 @@
+{
+	"answers": {
+		"find": {
+			"tt4728568": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 62745,
+						"name": "Is It Wrong to Try to Pick Up Girls in a Dungeon?",
+						"first_air_date": "2015-04-04"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt1584000": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 42410,
+						"name": "Durarara!!",
+						"first_air_date": "2010-01-08"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt3398540": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 60863,
+						"name": "Haikyu!!",
+						"first_air_date": "2014-04-06"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt8515062": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 80539,
+						"name": "Asobi Asobase - workshop of fun -",
+						"first_air_date": "2018-07-08"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt6768600": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 70590,
+						"name": "Is It Wrong to Try to Pick Up Girls in a Dungeon? On the Side: Sword Oratoria",
+						"first_air_date": "2017-04-15"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt2703720": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 65676,
+						"name": "My Teen Romantic Comedy SNAFU",
+						"first_air_date": "2013-04-05"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt21621494": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 207784,
+						"name": "Delicious in Dungeon",
+						"first_air_date": "2024-01-04"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt32832441": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 250597,
+						"name": "Dungeon People",
+						"first_air_date": "2024-07-06"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"42410": {
+				"id": 42410,
+				"name": "Durarara!!",
+				"original_name": "デュラララ!!",
+				"first_air_date": "2010-01-08",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 9648,
+						"name": "Mystery"
+					},
+					{
+						"id": 80,
+						"name": "Crime"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 233,
+							"name": "japan"
+						},
+						{
+							"id": 542,
+							"name": "street gang"
+						},
+						{
+							"id": 6152,
+							"name": "supernatural"
+						},
+						{
+							"id": 9955,
+							"name": "urban legend"
+						},
+						{
+							"id": 12369,
+							"name": "tokyo, japan"
+						},
+						{
+							"id": 15011,
+							"name": "criminal underworld"
+						},
+						{
+							"id": 33910,
+							"name": "high school student"
+						},
+						{
+							"id": 163059,
+							"name": "youth culture"
+						},
+						{
+							"id": 206580,
+							"name": "chat room"
+						},
+						{
+							"id": 206671,
+							"name": "city life"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 235790,
+							"name": "japanese high school"
+						},
+						{
+							"id": 298549,
+							"name": "urban fantasy"
+						},
+						{
+							"id": 319900,
+							"name": "based on light novel"
+						},
+						{
+							"id": 334494,
+							"name": "online community"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt1584000",
+					"tvdb_id": 133341
+				},
+				"networks": [
+					{
+						"id": 94,
+						"name": "MBS"
+					},
+					{
+						"id": 343,
+						"name": "Gunma TV"
+					},
+					{
+						"id": 614,
+						"name": "TOKYO MX"
+					},
+					{
+						"id": 861,
+						"name": "BS11"
+					},
+					{
+						"id": 2478,
+						"name": "Tochigi TV"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "CN",
+							"title": "Durarara!!",
+							"type": "动画"
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "无头骑士异闻录×2 承",
+							"type": "Season 2 Part 1"
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "无头骑士异闻录×2 结",
+							"type": "Season 2 Part 3"
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "无头骑士异闻录×2 转",
+							"type": "Season 2 Part 2"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Durarara!!",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Durarara!!x2 Ketsu",
+							"type": "S2P3"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Durarara!!x2 Ten",
+							"type": "S2P2"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Durarara!!x2 Shou",
+							"type": "S2P1"
+						},
+						{
+							"iso_3166_1": "UA",
+							"title": "Брррум!!",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "UA",
+							"title": "Дррр!!",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Dullalala!!",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "DRRR!!",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Dyurarara!!",
+							"type": ""
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2010-08-25",
+						"episode_count": 5,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "2010-01-08",
+						"episode_count": 24,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "2015-01-10",
+						"episode_count": 36,
+						"name": "X2",
+						"season_number": 2
+					}
+				]
+			},
+			"60863": {
+				"id": 60863,
+				"name": "Haikyu!!",
+				"original_name": "ハイキュー!!",
+				"first_air_date": "2014-04-06",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 271,
+							"name": "competition"
+						},
+						{
+							"id": 4613,
+							"name": "training"
+						},
+						{
+							"id": 5605,
+							"name": "volleyball"
+						},
+						{
+							"id": 6075,
+							"name": "sports"
+						},
+						{
+							"id": 6270,
+							"name": "high school"
+						},
+						{
+							"id": 8635,
+							"name": "high school sports"
+						},
+						{
+							"id": 9823,
+							"name": "rivalry"
+						},
+						{
+							"id": 9914,
+							"name": "slice of life"
+						},
+						{
+							"id": 12380,
+							"name": "tournament"
+						},
+						{
+							"id": 12648,
+							"name": "bromance"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 33910,
+							"name": "high school student"
+						},
+						{
+							"id": 189964,
+							"name": "high school rivalry"
+						},
+						{
+							"id": 190116,
+							"name": "school life"
+						},
+						{
+							"id": 207826,
+							"name": "shounen"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 214532,
+							"name": "school club"
+						},
+						{
+							"id": 228041,
+							"name": "prodigy"
+						},
+						{
+							"id": 235790,
+							"name": "japanese high school"
+						},
+						{
+							"id": 285485,
+							"name": "teamwork"
+						},
+						{
+							"id": 300423,
+							"name": "team sports"
+						},
+						{
+							"id": 324018,
+							"name": "miyagi, japan"
+						},
+						{
+							"id": 344584,
+							"name": "bukatsu"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt3398540",
+					"tvdb_id": 278157
+				},
+				"networks": [
+					{
+						"id": 94,
+						"name": "MBS"
+					},
+					{
+						"id": 160,
+						"name": "TBS"
+					},
+					{
+						"id": 201,
+						"name": "CBC"
+					},
+					{
+						"id": 2460,
+						"name": "BSN"
+					},
+					{
+						"id": 2461,
+						"name": "tys"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "JP",
+							"title": "Haikyuu!!",
+							"type": "romaji"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "High Kyuu!!",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "ハイキュー!! セカンドシーズン",
+							"type": "season 2"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Haikyuu!! Karasuno Koukou VS Shiratorizawa Gakuen Koukou",
+							"type": "season 3 romaji"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "ハイキュー!! 烏野高校 VS 白鳥沢学園高校",
+							"type": "season 3"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "ハイキュー!! バケモノたちの行くところ",
+							"type": "special episode"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Haikyuu!! Riku vs. Kuu",
+							"type": "special episode"
+						},
+						{
+							"iso_3166_1": "KR",
+							"title": "하이큐!! 땅 VS 하늘",
+							"type": "special episode"
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "Волейбол!!",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Haikyuu!! II",
+							"type": "season 2"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Haikyuu!! TO THE TOP",
+							"type": "season 4"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "HAIKYU!! LAND VS. AIR",
+							"type": "special episode"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Haikyu!! Karasuno High School vs Shiratorizawa Academy",
+							"type": "season 3"
+						},
+						{
+							"iso_3166_1": "VN",
+							"title": "Vua Bóng Chuyền",
+							"type": ""
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2015-03-04",
+						"episode_count": 9,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "2014-04-06",
+						"episode_count": 25,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "2015-10-04",
+						"episode_count": 25,
+						"name": "Season 2",
+						"season_number": 2
+					},
+					{
+						"air_date": "2016-10-08",
+						"episode_count": 10,
+						"name": "Karasuno High School vs Shiratorizawa Academy",
+						"season_number": 3
+					},
+					{
+						"air_date": "2020-01-11",
+						"episode_count": 25,
+						"name": "TO THE TOP",
+						"season_number": 4
+					}
+				]
+			},
+			"62745": {
+				"id": 62745,
+				"name": "Is It Wrong to Try to Pick Up Girls in a Dungeon?",
+				"original_name": "ダンジョンに出会いを求めるのは間違っているだろうか",
+				"first_air_date": "2015-04-04",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 603,
+							"name": "elves"
+						},
+						{
+							"id": 1299,
+							"name": "monster"
+						},
+						{
+							"id": 2035,
+							"name": "mythology"
+						},
+						{
+							"id": 2343,
+							"name": "magic"
+						},
+						{
+							"id": 6054,
+							"name": "friendship"
+						},
+						{
+							"id": 9194,
+							"name": "harem"
+						},
+						{
+							"id": 9649,
+							"name": "god"
+						},
+						{
+							"id": 9840,
+							"name": "romance"
+						},
+						{
+							"id": 10777,
+							"name": "goddess"
+						},
+						{
+							"id": 34137,
+							"name": "dungeon"
+						},
+						{
+							"id": 170362,
+							"name": "fantasy world"
+						},
+						{
+							"id": 175428,
+							"name": "adventurer"
+						},
+						{
+							"id": 182250,
+							"name": "personal growth"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 293198,
+							"name": "fantasy"
+						},
+						{
+							"id": 319900,
+							"name": "based on light novel"
+						},
+						{
+							"id": 364081,
+							"name": "dungeon crawling"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt4728568",
+					"tvdb_id": 289882
+				},
+				"networks": [
+					{
+						"id": 173,
+						"name": "AT-X"
+					},
+					{
+						"id": 614,
+						"name": "TOKYO MX"
+					},
+					{
+						"id": 817,
+						"name": "Sun TV"
+					},
+					{
+						"id": 861,
+						"name": "BS11"
+					},
+					{
+						"id": 1137,
+						"name": "KBS Kyoto"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "BR",
+							"title": "DanMachi - É errado tentar pegar garotas numa masmorra?",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "BR",
+							"title": "É errado tentar pegar garotas numa masmorra?",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "在地下城寻求邂逅是否搞错了什么Ⅱ",
+							"type": "season 2"
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "期待在地下城邂逅有错吗 Ⅳ 新章 迷宫篇",
+							"type": "season 4 part 1"
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "期待在地下城邂逅有错吗Ⅲ",
+							"type": "season 3"
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "在地下城寻求邂逅是否搞错了什么Ⅳ 深章 灾厄篇",
+							"type": "season 4 part 2"
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "期待在地下城邂逅有错吗",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "在地下城寻求邂逅是否搞错了什么Ⅳ",
+							"type": "season 4"
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "在地下城寻求邂逅是否搞错了什么Ⅳ 新章 迷宫篇",
+							"type": "season 4 part 1"
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "期待在地下城邂逅有错吗Ⅱ",
+							"type": "season 2"
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "期待在地下城邂逅有错吗Ⅳ",
+							"type": "season 4"
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "在地下城寻求邂逅是否搞错了什么Ⅲ",
+							"type": "season 3"
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "期待在地下城邂逅有错吗 Ⅳ 深章 灾厄篇",
+							"type": "season 4 part 2"
+						},
+						{
+							"iso_3166_1": "ES",
+							"title": "DANMACHI ¿Qué tiene de Malo intentar Ligar en una Mazmorra?",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "FR",
+							"title": "DanMachi: Familia Myth",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "IL",
+							"title": "דאנמאצ'י",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "IT",
+							"title": "DanMachi",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "IT",
+							"title": "È sbagliato cercare di incontrare ragazze in un Dungeon?",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "IT",
+							"title": "È sbagliato cercare di incontrare ragazze in un Dungeon? II",
+							"type": "Stagione 2"
+						},
+						{
+							"iso_3166_1": "IT",
+							"title": "È sbagliato cercare di incontrare ragazze in un Dungeon? III",
+							"type": "Stagione 3"
+						},
+						{
+							"iso_3166_1": "IT",
+							"title": "È sbagliato cercare di incontrare ragazze in un Dungeon? IV",
+							"type": "Stagione 4"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "ダンジョンに出会いを求めるのは間違っているだろうかⅣ",
+							"type": "season 4"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka",
+							"type": "Romaji"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "ダンジョンに出会いを求めるのは間違っているだろうか Ⅳ 深章 厄灾篇",
+							"type": "season 4 part 2"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "ダンジョンに出会いを求めるのは間違っているだろうかⅣ 新章 迷宮篇",
+							"type": "season 4 part 1"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "ダンジョンに出会いを求めるのは間違っているだろうかⅡ",
+							"type": "season 2"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV: Shin Shou - Meikyuu-hen",
+							"type": "season 4 part 1 romaji"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka II",
+							"type": "season 2 romaji"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV: Fuka Shou - Yakusai-hen",
+							"type": "season 4 part 1 romaji"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III",
+							"type": "season 3 romaji"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV",
+							"type": "season 4 romaji"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "ダンジョンに出会いを求めるのは間違っているだろうかⅢ",
+							"type": "season 3"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Danmachi",
+							"type": "short title romaji"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "ダンジョンに出会いを求めるのは間違っているだろうか",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "ダンまちⅤ 豊穣の女神篇",
+							"type": "season 5"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "ダンまち",
+							"type": "short title"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "ダンジョンに出会いを求めるのは間違っているだろうかⅤ",
+							"type": "S5"
+						},
+						{
+							"iso_3166_1": "KR",
+							"title": "던전에서 만남을 추구하면 안 되는 걸까",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "KR",
+							"title": "던만추",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "MX",
+							"title": "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka",
+							"type": "Romanji"
+						},
+						{
+							"iso_3166_1": "PL",
+							"title": "Danmachi",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "Может, я встречу тебя в подземелье?",
+							"type": "Сезон 1"
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "Разве плохо искать себе пару в подземелье?",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "В подземелье я пойду, там красавицу найду!",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "Может, я встречу тебя в подземелье? II",
+							"type": "Сезон 2"
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "Может, я встречу тебя в подземелье? III",
+							"type": "Сезон 3"
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "Может, я встречу тебя в подземелье? IV",
+							"type": "Сезон 4"
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "Может, я встречу тебя в подземелье? V",
+							"type": "Сезон 5"
+						},
+						{
+							"iso_3166_1": "SA",
+							"title": "هل من الخطأ مُحاولة إثارة إعجاب فتاة في ديماس؟",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "TW",
+							"title": "在地下城尋求邂逅是否搞錯了什麼",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "TW",
+							"title": "DanMachi",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "TW",
+							"title": "在地下城尋求邂逅是否搞錯了什麼II",
+							"type": "season 2"
+						},
+						{
+							"iso_3166_1": "TW",
+							"title": "在地下城尋求邂逅是否搞錯了什麼III",
+							"type": "season 3"
+						},
+						{
+							"iso_3166_1": "TW",
+							"title": "在地下城尋求邂逅是否搞錯了什麼 IV 新章 迷宮篇",
+							"type": "season 4 part1"
+						},
+						{
+							"iso_3166_1": "TW",
+							"title": "在地下城尋求邂逅是否搞錯了什麼 IV 深章 厄災篇",
+							"type": "season4 part2"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Is It Wrong to Try to Pick Up Girls in a Dungeon? IV",
+							"type": "season 4"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Is It Wrong to Try to Pick Up Girls in a Dungeon? III",
+							"type": "season 3"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Is It Wrong to Try to Pick Up Girls in a Dungeon? II",
+							"type": "season 2"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Is It Wrong to Try to Pick Up Girls in a Dungeon? V",
+							"type": "season 5"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "DANMACHI",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Is It Wrong to Try to Pick Up Girls in a Dungeon",
+							"type": ""
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2016-12-07",
+						"episode_count": 5,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "2015-04-04",
+						"episode_count": 13,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "2019-07-13",
+						"episode_count": 12,
+						"name": "Season 2",
+						"season_number": 2
+					},
+					{
+						"air_date": "2020-10-03",
+						"episode_count": 12,
+						"name": "Season 3",
+						"season_number": 3
+					},
+					{
+						"air_date": "2022-07-23",
+						"episode_count": 22,
+						"name": "Season 4",
+						"season_number": 4
+					},
+					{
+						"air_date": "2024-10-05",
+						"episode_count": 15,
+						"name": "Season 5",
+						"season_number": 5
+					}
+				]
+			},
+			"65676": {
+				"id": 65676,
+				"name": "My Teen Romantic Comedy SNAFU",
+				"original_name": "やはり俺の青春ラブコメはまちがっている。",
+				"first_air_date": "2013-04-05",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 6054,
+							"name": "friendship"
+						},
+						{
+							"id": 6270,
+							"name": "high school"
+						},
+						{
+							"id": 9799,
+							"name": "romcom"
+						},
+						{
+							"id": 9840,
+							"name": "romance"
+						},
+						{
+							"id": 9914,
+							"name": "slice of life"
+						},
+						{
+							"id": 190116,
+							"name": "school life"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 235790,
+							"name": "japanese high school"
+						},
+						{
+							"id": 269719,
+							"name": "high school romance"
+						},
+						{
+							"id": 319900,
+							"name": "based on light novel"
+						},
+						{
+							"id": 324429,
+							"name": "romantic"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt2703720",
+					"tvdb_id": 267435
+				},
+				"networks": [
+					{
+						"id": 160,
+						"name": "TBS"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "CN",
+							"title": "我的青春恋爱物语果然有问题。",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "我的青春恋爱物语果然有问题。完",
+							"type": "第三季"
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "我的青春恋爱物语果然有问题。续",
+							"type": "第二季"
+						},
+						{
+							"iso_3166_1": "IL",
+							"title": "קומדיית המתבגרים הרומנטית שלי שגויה כפי שציפיתי",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Oregairu",
+							"type": "Romaji (Short)"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Yahari Ore no Seishun Love Come wa Machigatteiru.",
+							"type": "Romaji"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Hamachi",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Yahari Ore no Seishun Love Come wa Machigatteiru. Kan",
+							"type": "Romaji (Season 3)"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Yahari Ore no Seishun LoveCome wa Machigatte Iru.",
+							"type": "Romaji"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Oregairu Kan",
+							"type": "Romaji (Short) (Season 3)"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Yahari Ore no Seishun Love Come wa Machigatteiru. Zoku",
+							"type": "Romaji (Season 2)"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Oregairu 2",
+							"type": "Romaji (Short) (Season 2)"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Oregairu 3",
+							"type": "Romaji (Short) (Season 3)"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Oregairu Zoku",
+							"type": "Romaji (Short) (Season 2)"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "俺ガイル",
+							"type": "short"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "はまち",
+							"type": "short"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "やはり俺の青春ラブコメはまちがっている。続",
+							"type": "S2"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "やはり俺の青春ラブコメはまちがっている。完",
+							"type": "S3"
+						},
+						{
+							"iso_3166_1": "KR",
+							"title": "역시 내 청춘 러브 코메디는 잘못됐다",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "KR",
+							"title": "역내청",
+							"type": "short"
+						},
+						{
+							"iso_3166_1": "MX",
+							"title": "Mi comedia romántica juvenil está mal, como lo esperaba",
+							"type": "Literal"
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "Розовая пора моей школьной жизни сплошной обман",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "Как и ожидалось, моя школьная романтическая жизнь не удалась",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "TH",
+							"title": "กะแล้วชีวิตรักวัยรุ่นของผมมันต้องไม่สดใสเลยสักนิด",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "TW",
+							"title": "果然我的青春戀愛喜劇搞錯了。完",
+							"type": "S3"
+						},
+						{
+							"iso_3166_1": "TW",
+							"title": "果然我的青春戀愛喜劇搞錯了。續",
+							"type": "S2"
+						},
+						{
+							"iso_3166_1": "TW",
+							"title": "果然我的青春戀愛喜劇搞錯了。",
+							"type": "S1"
+						},
+						{
+							"iso_3166_1": "TW",
+							"title": "果然我的青春戀愛喜劇搞錯了",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "UA",
+							"title": "Моя романтична комедія не зовсім те, на що я очікував",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Youth Romantic Comedy Is Wrong as I Expected",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Teen RomCom SNAFU",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Teenage RomCom SNAFU",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Teen Romantic Comedy: SNAFU",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Teen Romantic Comedy: SNAFU Too!",
+							"type": "Season 2"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Teen Romantic Comedy SNAFU 3",
+							"type": "Season 3"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Teen Romantic Comedy SNAFU 2",
+							"type": "Season 2"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Teen Romantic Comedy: SNAFU Climax",
+							"type": "Season 3"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Teen Romantic Comedy: SNAFU 2",
+							"type": "Season 2"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Teenage RomCom SNAFU 2",
+							"type": "Season 2"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Teen RomCom SNAFU 2",
+							"type": "Season 2"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Teen Romantic Comedy: SNAFU 3",
+							"type": "Season 3"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Youth Romantic Comedy Is Wrong as I Expected 2",
+							"type": "Season 2"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Teenage RomCom SNAFU 3",
+							"type": "Season 3"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Youth Romantic Comedy Is Wrong as I Expected 3",
+							"type": "Season 3"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "My Teen RomCom SNAFU 3",
+							"type": "Season 3"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "SNAFU",
+							"type": "Short"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2013-09-19",
+						"episode_count": 3,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "2013-04-05",
+						"episode_count": 13,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "2015-04-03",
+						"episode_count": 13,
+						"name": "TOO!",
+						"season_number": 2
+					},
+					{
+						"air_date": "2020-07-10",
+						"episode_count": 12,
+						"name": "Climax!",
+						"season_number": 3
+					}
+				]
+			},
+			"70590": {
+				"id": 70590,
+				"name": "Is It Wrong to Try to Pick Up Girls in a Dungeon? On the Side: Sword Oratoria",
+				"original_name": "ソード・オラトリア ダンジョンに出会いを求めるのは間違っているだろうか外伝",
+				"first_air_date": "2017-04-15",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 2035,
+							"name": "mythology"
+						},
+						{
+							"id": 2343,
+							"name": "magic"
+						},
+						{
+							"id": 6054,
+							"name": "friendship"
+						},
+						{
+							"id": 15285,
+							"name": "spin off"
+						},
+						{
+							"id": 34137,
+							"name": "dungeon"
+						},
+						{
+							"id": 175428,
+							"name": "adventurer"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 319900,
+							"name": "based on light novel"
+						},
+						{
+							"id": 322942,
+							"name": "adventure"
+						},
+						{
+							"id": 364081,
+							"name": "dungeon crawling"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt6768600",
+					"tvdb_id": 321670
+				},
+				"networks": [
+					{
+						"id": 614,
+						"name": "TOKYO MX"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "CN",
+							"title": "期待在地下城邂逅有错吗 外传 剑姬神圣谭",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "ES",
+							"title": "Sword Oratoria",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "ES",
+							"title": "Danmachi: Sword Oratoria",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "FR",
+							"title": "Sword Oratoria: Dungeon ni deai o motomeru no wa machigatteiru no darô ka? Gaiden",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "FR",
+							"title": "DanMachi: Sword Oratoria",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "HU",
+							"title": "Is It Wrong to Try to Pick Up Girls in a Dungeon? On the Side: Sword Oratoria",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "IT",
+							"title": "È sbagliato cercare di incontrare ragazze in un dungeon? - Sword Oratoria",
+							"type": "Alt"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka Gaiden: Sword Oratoria",
+							"type": "romaji"
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "ダンジョンに出会いを求めるのは間違っているだろうか外伝 ソード・オラトリア",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "ソード・オラトリア",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "Может, я встречу тебя в подземелье? — Меч Оратории",
+							"type": "Сезон 1"
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "В подземелье я пойду, там красавицу найду: Меч Оратории",
+							"type": "Сезон 1"
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "Разве плохо искать себе пару в подземелье? — Меч Оратории",
+							"type": "Сезон 1"
+						},
+						{
+							"iso_3166_1": "TW",
+							"title": "在地下城尋求邂逅是否搞錯了什麼 外傳 劍姬神聖譚",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Sword Oratoria: Is It Wrong to Try to Pick Up Girls in a Dungeon? On the Side",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "DanMachi: Sword Oratoria",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "DanMachi Sword Oratoria",
+							"type": "Windows friendly naming"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2017-04-15",
+						"episode_count": 12,
+						"name": "Season 1",
+						"season_number": 1
+					}
+				]
+			},
+			"80539": {
+				"id": 80539,
+				"name": "Asobi Asobase - workshop of fun -",
+				"original_name": "あそびあそばせ",
+				"first_air_date": "2018-07-08",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 16,
+						"name": "Animation"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 3307,
+							"name": "surreal"
+						},
+						{
+							"id": 9253,
+							"name": "slapstick comedy"
+						},
+						{
+							"id": 10873,
+							"name": "school"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 170389,
+							"name": "junior high school"
+						},
+						{
+							"id": 190116,
+							"name": "school life"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 210710,
+							"name": "absurdist"
+						},
+						{
+							"id": 214532,
+							"name": "school club"
+						},
+						{
+							"id": 254641,
+							"name": "girls' school"
+						},
+						{
+							"id": 312313,
+							"name": "japanese junior high schooler"
+						},
+						{
+							"id": 326103,
+							"name": "playing"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt8515062",
+					"tvdb_id": 346798
+				},
+				"networks": [
+					{
+						"id": 173,
+						"name": "AT-X"
+					},
+					{
+						"id": 614,
+						"name": "TOKYO MX"
+					},
+					{
+						"id": 1137,
+						"name": "KBS Kyoto"
+					},
+					{
+						"id": 861,
+						"name": "BS11"
+					},
+					{
+						"id": 817,
+						"name": "Sun TV"
+					},
+					{
+						"id": 252,
+						"name": "TV Aichi"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "CN",
+							"title": "游戏3人娘",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "游戏三人娘",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "HK",
+							"title": "游戏三人娘",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Asobi Asobase",
+							"type": "Romaji"
+						},
+						{
+							"iso_3166_1": "KR",
+							"title": "아소비 아소바세",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "TH",
+							"title": "ชุมนุมคนละเรื่อง",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "TW",
+							"title": "遊戲三人娘",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Play and get Played On",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "To Play with Playing",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Play or be Played",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Why Don't We Play Together?",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Asobi Asobase: Workshop of Fun",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Play and Let Play",
+							"type": ""
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2018-11-28",
+						"episode_count": 3,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "2018-07-08",
+						"episode_count": 12,
+						"name": "Season 1",
+						"season_number": 1
+					}
+				]
+			},
+			"207784": {
+				"id": 207784,
+				"name": "Delicious in Dungeon",
+				"original_name": "ダンジョン飯",
+				"first_air_date": "2024-01-04",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 1299,
+							"name": "monster"
+						},
+						{
+							"id": 1918,
+							"name": "cooking"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 34137,
+							"name": "dungeon"
+						},
+						{
+							"id": 170362,
+							"name": "fantasy world"
+						},
+						{
+							"id": 195668,
+							"name": "seinen"
+						},
+						{
+							"id": 209125,
+							"name": "gourmet"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 211227,
+							"name": "high fantasy"
+						},
+						{
+							"id": 215720,
+							"name": "gastronomy"
+						},
+						{
+							"id": 229552,
+							"name": "cat girl"
+						},
+						{
+							"id": 278238,
+							"name": "dungeons and dragons"
+						},
+						{
+							"id": 320420,
+							"name": "hilarious"
+						},
+						{
+							"id": 321464,
+							"name": "intense"
+						},
+						{
+							"id": 322942,
+							"name": "adventure"
+						},
+						{
+							"id": 325765,
+							"name": "amused"
+						},
+						{
+							"id": 325784,
+							"name": "comforting"
+						},
+						{
+							"id": 325804,
+							"name": "earnest"
+						},
+						{
+							"id": 342557,
+							"name": "elf"
+						},
+						{
+							"id": 364081,
+							"name": "dungeon crawling"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt21621494",
+					"tvdb_id": 423257
+				},
+				"networks": [
+					{
+						"id": 173,
+						"name": "AT-X"
+					},
+					{
+						"id": 614,
+						"name": "TOKYO MX"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "CN",
+							"title": "迷宮飯",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "CN",
+							"title": "迷宫饭",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "FR",
+							"title": "Gloutons & Dragons",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Dungeon Meshi",
+							"type": "romaji"
+						},
+						{
+							"iso_3166_1": "MX",
+							"title": "Tragones y mazmorras",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "PL",
+							"title": "Dungeon Meshi - Lochy i smakołyki",
+							"type": "manga translation"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Dungeon Food",
+							"type": "literal translation"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Delicious in Dungeon",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "VN",
+							"title": "Mỹ vị hầm ngục",
+							"type": ""
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2024-01-04",
+						"episode_count": 24,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "2027-10-01",
+						"episode_count": 1,
+						"name": "Season 2",
+						"season_number": 2
+					}
+				]
+			},
+			"250597": {
+				"id": 250597,
+				"name": "Dungeon People",
+				"original_name": "ダンジョンの中のひと",
+				"first_air_date": "2024-07-06",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 2343,
+							"name": "magic"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 34137,
+							"name": "dungeon"
+						},
+						{
+							"id": 175428,
+							"name": "adventurer"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 316597,
+							"name": "administration"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt32832441",
+					"tvdb_id": 438420
+				},
+				"networks": [
+					{
+						"id": 94,
+						"name": "MBS"
+					},
+					{
+						"id": 160,
+						"name": "TBS"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "BR",
+							"title": "Dungeon no Naka no Hito",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "FR",
+							"title": "Au Cœur du Donjon",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Dungeon no Naka no Hito",
+							"type": ""
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2024-07-06",
+						"episode_count": 12,
+						"name": "Season 1",
+						"season_number": 1
+					}
+				]
+			}
+		},
+		"season": {
+			"62745/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Is It Wrong to Expect a Hot Spring in a Dungeon?",
+						"air_date": "2016-12-07",
+						"runtime": 24,
+						"id": 1256060
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Past & Future",
+						"air_date": "2019-07-06",
+						"runtime": 24,
+						"id": 1860334
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "Is It Wrong to Go Searching for Herbs on a Deserted Island?",
+						"air_date": "2020-01-29",
+						"runtime": 26,
+						"id": 2025338
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "Is It Wrong to Try to Find a Hot Spring in Orario? -Bath God Forever-",
+						"air_date": "2021-04-28",
+						"runtime": 27,
+						"id": 2813596
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "Play Back | Reminisce",
+						"air_date": "2022-07-09",
+						"runtime": 24,
+						"id": 3826698
+					}
+				]
+			},
+			"62745/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Bell Cranel | Adventurer",
+						"air_date": "2015-04-04",
+						"runtime": 23,
+						"id": 1065808
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Monsterphilia | Monster Festival",
+						"air_date": "2015-04-11",
+						"runtime": 23,
+						"id": 1065827
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Hestia Knife | The Blade of a God",
+						"air_date": "2015-04-18",
+						"runtime": 23,
+						"id": 1065828
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Supporter | The Weak",
+						"air_date": "2015-04-25",
+						"runtime": 23,
+						"id": 1065829
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Grimoire | Magic Book",
+						"air_date": "2015-05-02",
+						"runtime": 23,
+						"id": 1065830
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Liliruca Arde | Reason",
+						"air_date": "2015-05-09",
+						"runtime": 23,
+						"id": 1065831
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Aiz Wallenstein | Sword Princess",
+						"air_date": "2015-05-16",
+						"runtime": 23,
+						"id": 1065832
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Argonaut | Wanting to Be a Hero",
+						"air_date": "2015-05-23",
+						"runtime": 23,
+						"id": 1065874
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Welf Crozzo | Blacksmith",
+						"air_date": "2015-05-30",
+						"runtime": 23,
+						"id": 1073957
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Pass Parade | Procession of Monsters",
+						"air_date": "2015-06-06",
+						"runtime": 23,
+						"id": 1074254
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Under Resort | Labyrinth Utopia",
+						"air_date": "2015-06-13",
+						"runtime": 23,
+						"id": 1076483
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Show | Evil Intentions",
+						"air_date": "2015-06-20",
+						"runtime": 23,
+						"id": 1078075
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Familia Myth | The Story of a Familia",
+						"air_date": "2015-06-27",
+						"runtime": 23,
+						"id": 1078076
+					}
+				]
+			},
+			"62745/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Party | Banquet of the Gods",
+						"air_date": "2019-07-13",
+						"runtime": 23,
+						"id": 1821989
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Apollo | Sun God",
+						"air_date": "2019-07-20",
+						"runtime": 23,
+						"id": 1821990
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Conversion | Gathering",
+						"air_date": "2019-07-27",
+						"runtime": 23,
+						"id": 1821991
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "War Game | War Game",
+						"air_date": "2019-08-03",
+						"runtime": 23,
+						"id": 1821992
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Home | The Hearthfire Mansion",
+						"air_date": "2019-08-10",
+						"runtime": 23,
+						"id": 1821993
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Ishtar Familia | City of Lust",
+						"air_date": "2019-08-17",
+						"runtime": 23,
+						"id": 1821994
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Renard | Fox Person",
+						"air_date": "2019-08-24",
+						"runtime": 23,
+						"id": 1821995
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Ephemeral Dreams | Killing Stone",
+						"air_date": "2019-08-31",
+						"runtime": 23,
+						"id": 1821996
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Barbera | War Prostitutes",
+						"air_date": "2019-09-07",
+						"runtime": 23,
+						"id": 1821997
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "Argonaut | Longing to Be a Hero",
+						"air_date": "2019-09-14",
+						"runtime": 23,
+						"id": 1821998
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "Rakia | Army's Advance",
+						"air_date": "2019-09-21",
+						"runtime": 23,
+						"id": 1821999
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Song of Love | Goddess and Child",
+						"air_date": "2019-09-28",
+						"runtime": 23,
+						"id": 1845350
+					}
+				]
+			},
+			"62745/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "Wiene Dragon's Daughter",
+						"air_date": "2020-10-03",
+						"runtime": 23,
+						"id": 2025343
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "Monster | One Wing",
+						"air_date": "2020-10-10",
+						"runtime": 23,
+						"id": 2451630
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Xenos | Outliers",
+						"air_date": "2020-10-17",
+						"runtime": 23,
+						"id": 2458902
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "Aspiration | Distant Dream",
+						"air_date": "2020-10-24",
+						"runtime": 23,
+						"id": 2458903
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Ikelos Familia | King of Atrocity",
+						"air_date": "2020-10-31",
+						"runtime": 23,
+						"id": 2458904
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "Knossos | Man-Made Labyrinth",
+						"air_date": "2020-11-07",
+						"runtime": 23,
+						"id": 2458905
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "Dix Perdix | The Dreams of Beasts",
+						"air_date": "2020-11-14",
+						"runtime": 23,
+						"id": 2497325
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "Bell Cranel | The Fool",
+						"air_date": "2020-11-21",
+						"runtime": 23,
+						"id": 2506754
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "Stigma | Downfall",
+						"air_date": "2020-11-28",
+						"runtime": 23,
+						"id": 2519182
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "Invisible | Forced Breakthrough",
+						"air_date": "2020-12-05",
+						"runtime": 23,
+						"id": 2533506
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "Ultra Soul | Decisive Battle",
+						"air_date": "2020-12-12",
+						"runtime": 23,
+						"id": 2544881
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "Argonaut | Hero's Return",
+						"air_date": "2020-12-19",
+						"runtime": 23,
+						"id": 2553833
+					}
+				]
+			},
+			"62745/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 4,
+						"name": "Prelude | Night Before Departure",
+						"air_date": "2022-07-23",
+						"runtime": 23,
+						"id": 3293927
+					},
+					{
+						"episode_number": 2,
+						"season_number": 4,
+						"name": "The Great Falls | The Great Falls",
+						"air_date": "2022-07-30",
+						"runtime": 23,
+						"id": 3809526
+					},
+					{
+						"episode_number": 3,
+						"season_number": 4,
+						"name": "Parasite | Viscum Album",
+						"air_date": "2022-08-06",
+						"runtime": 23,
+						"id": 3809527
+					},
+					{
+						"episode_number": 4,
+						"season_number": 4,
+						"name": "Mermaid | The Girl of Water City",
+						"air_date": "2022-08-13",
+						"runtime": 23,
+						"id": 3846821
+					},
+					{
+						"episode_number": 5,
+						"season_number": 4,
+						"name": "Argo Vesta | Heroic Slash of Holy Flame",
+						"air_date": "2022-08-20",
+						"runtime": 23,
+						"id": 3848436
+					},
+					{
+						"episode_number": 6,
+						"season_number": 4,
+						"name": "Rabbit's Foot | Rabbit's Foot",
+						"air_date": "2022-08-27",
+						"runtime": 23,
+						"id": 3848437
+					},
+					{
+						"episode_number": 7,
+						"season_number": 4,
+						"name": "Cassandra Ilion | Dream Seer",
+						"air_date": "2022-09-03",
+						"runtime": 23,
+						"id": 3848438
+					},
+					{
+						"episode_number": 8,
+						"season_number": 4,
+						"name": "Mirabilis | Chaos",
+						"air_date": "2022-09-10",
+						"runtime": 23,
+						"id": 3848439
+					},
+					{
+						"episode_number": 9,
+						"season_number": 4,
+						"name": "Lambton | Ill Omen",
+						"air_date": "2022-09-17",
+						"runtime": 23,
+						"id": 3848440
+					},
+					{
+						"episode_number": 10,
+						"season_number": 4,
+						"name": "Juggernaut | The Destroyer",
+						"air_date": "2022-09-24",
+						"runtime": 23,
+						"id": 3848441
+					},
+					{
+						"episode_number": 11,
+						"season_number": 4,
+						"name": "Endless | Brutal",
+						"air_date": "2022-10-01",
+						"runtime": 23,
+						"id": 3848442
+					},
+					{
+						"episode_number": 12,
+						"season_number": 4,
+						"name": "Amphisbaena | A Song of Despair",
+						"air_date": "2023-01-07",
+						"runtime": 23,
+						"id": 3984597
+					},
+					{
+						"episode_number": 13,
+						"season_number": 4,
+						"name": "Morgue | Victim",
+						"air_date": "2023-01-14",
+						"runtime": 23,
+						"id": 4140770
+					},
+					{
+						"episode_number": 14,
+						"season_number": 4,
+						"name": "Daphne Lauros | Friend",
+						"air_date": "2023-01-21",
+						"runtime": 23,
+						"id": 4140771
+					},
+					{
+						"episode_number": 15,
+						"season_number": 4,
+						"name": "Ignis | Flame",
+						"air_date": "2023-01-28",
+						"runtime": 23,
+						"id": 4140772
+					},
+					{
+						"episode_number": 16,
+						"season_number": 4,
+						"name": "Welf Crozzo | Shikou",
+						"air_date": "2023-02-04",
+						"runtime": 23,
+						"id": 4140774
+					},
+					{
+						"episode_number": 17,
+						"season_number": 4,
+						"name": "White Palace | White Labyrinth",
+						"air_date": "2023-02-11",
+						"runtime": 23,
+						"id": 4140776
+					},
+					{
+						"episode_number": 18,
+						"season_number": 4,
+						"name": "Desperate | Dungeon Do-or-Die Time",
+						"air_date": "2023-02-18",
+						"runtime": 23,
+						"id": 4140777
+					},
+					{
+						"episode_number": 19,
+						"season_number": 4,
+						"name": "Colosseum | Combat Arena",
+						"air_date": "2023-02-25",
+						"runtime": 23,
+						"id": 4140778
+					},
+					{
+						"episode_number": 20,
+						"season_number": 4,
+						"name": "Astrea Familia | Heroic Death",
+						"air_date": "2023-03-04",
+						"runtime": 23,
+						"id": 4140955
+					},
+					{
+						"episode_number": 21,
+						"season_number": 4,
+						"name": "Daydream | A Sweet Lie",
+						"air_date": "2023-03-11",
+						"runtime": 23,
+						"id": 4141846
+					},
+					{
+						"episode_number": 22,
+						"season_number": 4,
+						"name": "Luvia | Starry Flower",
+						"air_date": "2023-03-18",
+						"runtime": 23,
+						"id": 4141847
+					}
+				]
+			},
+			"62745/5": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 5,
+						"name": "Syr",
+						"air_date": "2024-10-05",
+						"runtime": 23,
+						"id": 5524635
+					},
+					{
+						"episode_number": 2,
+						"season_number": 5,
+						"name": "(Master) Training",
+						"air_date": "2024-10-12",
+						"runtime": 23,
+						"id": 5644923
+					},
+					{
+						"episode_number": 3,
+						"season_number": 5,
+						"name": "(Odr) Partner",
+						"air_date": "2024-10-19",
+						"runtime": 23,
+						"id": 5644924
+					},
+					{
+						"episode_number": 4,
+						"season_number": 5,
+						"name": "(Seidr) God and Girl",
+						"air_date": "2024-10-26",
+						"runtime": 23,
+						"id": 5644925
+					},
+					{
+						"episode_number": 5,
+						"season_number": 5,
+						"name": "(Freya Familia) Invasion",
+						"air_date": "2024-11-02",
+						"runtime": 23,
+						"id": 5644926
+					},
+					{
+						"episode_number": 6,
+						"season_number": 5,
+						"name": "(Orario) Distorted City",
+						"air_date": "2024-11-09",
+						"runtime": 23,
+						"id": 5644927
+					},
+					{
+						"episode_number": 7,
+						"season_number": 5,
+						"name": "(Loneliness) Separated",
+						"air_date": "2024-11-16",
+						"runtime": 23,
+						"id": 5644928
+					},
+					{
+						"episode_number": 8,
+						"season_number": 5,
+						"name": "(Bell Cranel) Desires",
+						"air_date": "2024-11-23",
+						"runtime": 23,
+						"id": 5644929
+					},
+					{
+						"episode_number": 9,
+						"season_number": 5,
+						"name": "(Vesta) Altar of the Sacred Flame",
+						"air_date": "2024-12-07",
+						"runtime": 23,
+						"id": 5644930
+					},
+					{
+						"episode_number": 10,
+						"season_number": 5,
+						"name": "(War Game) The Great Faction Battle",
+						"air_date": "2024-12-14",
+						"runtime": 23,
+						"id": 5644931
+					},
+					{
+						"episode_number": 11,
+						"season_number": 5,
+						"name": "(Folkvangr) Hell",
+						"air_date": "2024-12-21",
+						"runtime": 23,
+						"id": 5644932
+					},
+					{
+						"episode_number": 12,
+						"season_number": 5,
+						"name": "(Astrea Record) Inheritance",
+						"air_date": "2025-02-14",
+						"runtime": 23,
+						"id": 5644933
+					},
+					{
+						"episode_number": 13,
+						"season_number": 5,
+						"name": "(Revenge) Counterattack",
+						"air_date": "2025-02-21",
+						"runtime": 23,
+						"id": 5913317
+					},
+					{
+						"episode_number": 14,
+						"season_number": 5,
+						"name": "(Einherjar) The Warriors of the Goddess",
+						"air_date": "2025-02-28",
+						"runtime": 23,
+						"id": 5913318
+					},
+					{
+						"episode_number": 15,
+						"season_number": 5,
+						"name": "(Syr) \"First Love\"",
+						"air_date": "2025-03-07",
+						"runtime": 23,
+						"id": 5913319
+					}
+				]
+			},
+			"42410/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Heaven's Vengeance",
+						"air_date": "2010-08-25",
+						"runtime": 24,
+						"id": 879917
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "World at Peace",
+						"air_date": "2011-02-23",
+						"runtime": 24,
+						"id": 879918
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "My Heart is Like a Hot Pot",
+						"air_date": "2015-07-22",
+						"runtime": 24,
+						"id": 1159223
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "Romanticist's Chaka-Poko",
+						"air_date": "2016-01-27",
+						"runtime": 24,
+						"id": 1163906
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "Dufufufu!!",
+						"air_date": "2016-05-21",
+						"runtime": 24,
+						"id": 1466370
+					}
+				]
+			},
+			"42410/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "A Picture Is Worth a Thousand Words",
+						"air_date": "2015-01-10",
+						"runtime": 24,
+						"id": 1029454
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Harmony Is the Greatest of Virtues",
+						"air_date": "2015-01-17",
+						"runtime": 24,
+						"id": 1037794
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Adding Insult to Injury",
+						"air_date": "2015-01-24",
+						"runtime": 24,
+						"id": 1038552
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "When in Rome, Do as the Romans Do",
+						"air_date": "2015-01-31",
+						"runtime": 24,
+						"id": 1056190
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "No One Knows What the Future Holds",
+						"air_date": "2015-02-07",
+						"runtime": 24,
+						"id": 1056191
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "A Crow in the Dark Night",
+						"air_date": "2015-02-14",
+						"runtime": 24,
+						"id": 1056192
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Moscow Does Not Believe in Tears",
+						"air_date": "2015-02-21",
+						"runtime": 24,
+						"id": 1056193
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "The Ladies' Man Has Neither Money nor Power",
+						"air_date": "2015-02-28",
+						"runtime": 24,
+						"id": 1056194
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "The Day Is Short, the Work Is Long",
+						"air_date": "2015-03-07",
+						"runtime": 24,
+						"id": 1056195
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "The Apple Doesn't Fall Far from the Tree",
+						"air_date": "2015-03-14",
+						"runtime": 24,
+						"id": 1056196
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "No Use Crying over Spilt Milk",
+						"air_date": "2015-03-21",
+						"runtime": 24,
+						"id": 1054906
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Adversity Makes a Man Wise",
+						"air_date": "2015-03-28",
+						"runtime": 24,
+						"id": 1054907
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "Love Thy Enemy",
+						"air_date": "2015-07-04",
+						"runtime": 24,
+						"id": 1158110
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "Life Is But a Dream",
+						"air_date": "2015-07-11",
+						"runtime": 24,
+						"id": 1158111
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "Marriages Are Made in Heaven",
+						"air_date": "2015-07-18",
+						"runtime": 24,
+						"id": 1158112
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "A Rumor Only Lasts Seventy-Five Days",
+						"air_date": "2015-07-25",
+						"runtime": 24,
+						"id": 1158113
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "Asleep or Awake",
+						"air_date": "2015-08-01",
+						"runtime": 24,
+						"id": 1158114
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "Roses Have Thorns",
+						"air_date": "2015-08-08",
+						"runtime": 24,
+						"id": 1158115
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "A Cat Has Nine Lives",
+						"air_date": "2015-08-15",
+						"runtime": 24,
+						"id": 1158116
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "A Mouth of Nectar, a Heart of Needles",
+						"air_date": "2015-08-22",
+						"runtime": 24,
+						"id": 1158117
+					},
+					{
+						"episode_number": 21,
+						"season_number": 2,
+						"name": "Eloquent and Competent",
+						"air_date": "2015-08-29",
+						"runtime": 24,
+						"id": 1158118
+					},
+					{
+						"episode_number": 22,
+						"season_number": 2,
+						"name": "Blessed Are the Foolish",
+						"air_date": "2015-09-12",
+						"runtime": 24,
+						"id": 1158119
+					},
+					{
+						"episode_number": 23,
+						"season_number": 2,
+						"name": "Birds of a Feather",
+						"air_date": "2015-09-19",
+						"runtime": 24,
+						"id": 1158120
+					},
+					{
+						"episode_number": 24,
+						"season_number": 2,
+						"name": "It Takes a Thief to Catch a Thief",
+						"air_date": "2015-09-26",
+						"runtime": 24,
+						"id": 1158121
+					},
+					{
+						"episode_number": 25,
+						"season_number": 2,
+						"name": "Even a Chance Acquaintance is Decreed by Destiny",
+						"air_date": "2016-01-09",
+						"runtime": 24,
+						"id": 1158122
+					},
+					{
+						"episode_number": 26,
+						"season_number": 2,
+						"name": "Bell the Cat",
+						"air_date": "2016-01-16",
+						"runtime": 24,
+						"id": 1158123
+					},
+					{
+						"episode_number": 27,
+						"season_number": 2,
+						"name": "All in the Same Boat",
+						"air_date": "2016-01-23",
+						"runtime": 24,
+						"id": 1158124
+					},
+					{
+						"episode_number": 28,
+						"season_number": 2,
+						"name": "Blood Is Thicker Than Water",
+						"air_date": "2016-01-30",
+						"runtime": 24,
+						"id": 1158125
+					},
+					{
+						"episode_number": 29,
+						"season_number": 2,
+						"name": "Lost in the Dark",
+						"air_date": "2016-02-06",
+						"runtime": 24,
+						"id": 1163909
+					},
+					{
+						"episode_number": 30,
+						"season_number": 2,
+						"name": "In For a Penny, In For a Pound",
+						"air_date": "2016-02-13",
+						"runtime": 24,
+						"id": 1163910
+					},
+					{
+						"episode_number": 31,
+						"season_number": 2,
+						"name": "No Love Lost",
+						"air_date": "2016-02-20",
+						"runtime": 24,
+						"id": 1163911
+					},
+					{
+						"episode_number": 32,
+						"season_number": 2,
+						"name": "A Tiger Dies and Leaves His Skin",
+						"air_date": "2016-02-27",
+						"runtime": 24,
+						"id": 1163912
+					},
+					{
+						"episode_number": 33,
+						"season_number": 2,
+						"name": "Walking On Thin Ice",
+						"air_date": "2016-03-05",
+						"runtime": 24,
+						"id": 1163913
+					},
+					{
+						"episode_number": 34,
+						"season_number": 2,
+						"name": "Telepathy",
+						"air_date": "2016-03-12",
+						"runtime": 24,
+						"id": 1163914
+					},
+					{
+						"episode_number": 35,
+						"season_number": 2,
+						"name": "Life Is an Unknown Course",
+						"air_date": "2016-03-19",
+						"runtime": 24,
+						"id": 1163915
+					},
+					{
+						"episode_number": 36,
+						"season_number": 2,
+						"name": "Those Who Meet Must Part",
+						"air_date": "2016-03-26",
+						"runtime": 24,
+						"id": 1163916
+					}
+				]
+			},
+			"60863/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Lev Appears!",
+						"air_date": "2015-03-04",
+						"runtime": 24,
+						"id": 1243691
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "VS Failing Marks",
+						"air_date": "2016-05-02",
+						"runtime": 24,
+						"id": 1243692
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "Special Feature! The Spring Tournament of Their Youth",
+						"air_date": "2017-08-04",
+						"runtime": 24,
+						"id": 1243694
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "Land vs. Air",
+						"air_date": "2020-01-22",
+						"runtime": 24,
+						"id": 2044695
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "The Path of the Ball",
+						"air_date": "2020-01-22",
+						"runtime": 24,
+						"id": 2045011
+					},
+					{
+						"episode_number": 6,
+						"season_number": 0,
+						"name": "Haikyu Quest Picture Drama - Episode 1: Before the Boss Battle",
+						"air_date": "2014-09-25",
+						"runtime": 4,
+						"id": 3231788
+					},
+					{
+						"episode_number": 7,
+						"season_number": 0,
+						"name": "Haikyu Quest Picture Drama - Episode 2: Half a World",
+						"air_date": "2014-09-25",
+						"runtime": 5,
+						"id": 3231789
+					},
+					{
+						"episode_number": 8,
+						"season_number": 0,
+						"name": "Haikyu Quest Picture Drama - Episode 3: Magic of Resurrection",
+						"air_date": "2014-09-25",
+						"runtime": 5,
+						"id": 3231790
+					},
+					{
+						"episode_number": 9,
+						"season_number": 0,
+						"name": "The Place Where Monsters Go",
+						"air_date": null,
+						"runtime": null,
+						"id": 6018215
+					}
+				]
+			},
+			"42410/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Exit 1, First Words",
+						"air_date": "2010-01-08",
+						"runtime": 24,
+						"id": 879919
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Highly Unpredictable",
+						"air_date": "2010-01-15",
+						"runtime": 24,
+						"id": 879934
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Rampant Evil",
+						"air_date": "2010-01-22",
+						"runtime": 24,
+						"id": 879935
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Utterly Alone",
+						"air_date": "2010-01-29",
+						"runtime": 24,
+						"id": 879936
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "False Advertising",
+						"air_date": "2010-02-05",
+						"runtime": 24,
+						"id": 879937
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Active Interest",
+						"air_date": "2010-02-12",
+						"runtime": 24,
+						"id": 879938
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Bad-ass Dude",
+						"air_date": "2010-02-19",
+						"runtime": 24,
+						"id": 879939
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Ephemeral Dream",
+						"air_date": "2010-02-26",
+						"runtime": 24,
+						"id": 879940
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Love and Cherish",
+						"air_date": "2010-03-05",
+						"runtime": 24,
+						"id": 879942
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Never Before Seen",
+						"air_date": "2010-03-12",
+						"runtime": 24,
+						"id": 879922
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Storm and Stress",
+						"air_date": "2010-03-19",
+						"runtime": 24,
+						"id": 879924
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Yin and Yang",
+						"air_date": "2010-03-26",
+						"runtime": 24,
+						"id": 879941
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Takes a Sudden Turn",
+						"air_date": "2010-04-09",
+						"runtime": 24,
+						"id": 879923
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Turmoil Reigns",
+						"air_date": "2010-04-16",
+						"runtime": 24,
+						"id": 879925
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Dumb Like a Fox",
+						"air_date": "2010-04-23",
+						"runtime": 24,
+						"id": 879926
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Mutual Love",
+						"air_date": "2010-04-30",
+						"runtime": 24,
+						"id": 879921
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "Everything Changes",
+						"air_date": "2010-05-07",
+						"runtime": 24,
+						"id": 879920
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Out of Your Control",
+						"air_date": "2010-05-14",
+						"runtime": 24,
+						"id": 879927
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Anarchy",
+						"air_date": "2010-05-21",
+						"runtime": 24,
+						"id": 879928
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "A New King Will Arise",
+						"air_date": "2010-05-28",
+						"runtime": 24,
+						"id": 879929
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Everything Covered in Fog",
+						"air_date": "2010-06-04",
+						"runtime": 24,
+						"id": 879930
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Declaration of Disbandment",
+						"air_date": "2010-06-11",
+						"runtime": 24,
+						"id": 879931
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Complicated and Confused",
+						"air_date": "2010-06-18",
+						"runtime": 24,
+						"id": 879932
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "Selfless Devotion",
+						"air_date": "2010-06-25",
+						"runtime": 24,
+						"id": 879933
+					}
+				]
+			},
+			"60863/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "The End & The Beginning",
+						"air_date": "2014-04-06",
+						"runtime": 24,
+						"id": 986240
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Karasuno High School Volleyball Club",
+						"air_date": "2014-04-13",
+						"runtime": 24,
+						"id": 986239
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "The Formidable Ally",
+						"air_date": "2014-04-20",
+						"runtime": 24,
+						"id": 986238
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "The View from the Summit",
+						"air_date": "2014-04-27",
+						"runtime": 24,
+						"id": 986237
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "A Coward's Anxiety",
+						"air_date": "2014-05-04",
+						"runtime": 24,
+						"id": 986236
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "An Interesting Team",
+						"air_date": "2014-05-11",
+						"runtime": 24,
+						"id": 986234
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Versus the Great King",
+						"air_date": "2014-05-18",
+						"runtime": 24,
+						"id": 986235
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "He Who is Called \"Ace\"",
+						"air_date": "2014-05-25",
+						"runtime": 24,
+						"id": 986233
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "A Toss to the Ace",
+						"air_date": "2014-06-01",
+						"runtime": 24,
+						"id": 986232
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Yearning",
+						"air_date": "2014-06-08",
+						"runtime": 24,
+						"id": 986230
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Decision",
+						"air_date": "2014-06-15",
+						"runtime": 24,
+						"id": 986229
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "The Neko-Karasu Reunion",
+						"air_date": "2014-06-22",
+						"runtime": 24,
+						"id": 986231
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Rival",
+						"air_date": "2014-06-29",
+						"runtime": 24,
+						"id": 986228
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Formidable Opponents",
+						"air_date": "2014-07-06",
+						"runtime": 24,
+						"id": 1003844
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Revival",
+						"air_date": "2014-07-13",
+						"runtime": 24,
+						"id": 1003845
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Winners and Losers",
+						"air_date": "2014-07-20",
+						"runtime": 24,
+						"id": 1003846
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "The Iron Wall",
+						"air_date": "2014-07-27",
+						"runtime": 24,
+						"id": 1003847
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Guarding Your Back",
+						"air_date": "2014-08-03",
+						"runtime": 24,
+						"id": 1003848
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Conductors",
+						"air_date": "2014-08-10",
+						"runtime": 24,
+						"id": 1003849
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Oikawa Toru Is Not a Genius",
+						"air_date": "2014-08-17",
+						"runtime": 24,
+						"id": 1010057
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Senpai's True Abilities",
+						"air_date": "2014-08-24",
+						"runtime": 24,
+						"id": 1010058
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Evolution",
+						"air_date": "2014-08-31",
+						"runtime": 24,
+						"id": 1010059
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "The Point that Changes the Momentum",
+						"air_date": "2014-09-07",
+						"runtime": 24,
+						"id": 1010060
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "Removing The Solitary King",
+						"air_date": "2014-09-14",
+						"runtime": 24,
+						"id": 1010061
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "The Third Day",
+						"air_date": "2014-09-21",
+						"runtime": 24,
+						"id": 1010062
+					}
+				]
+			},
+			"60863/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "Greetings",
+						"air_date": "2016-10-08",
+						"runtime": 24,
+						"id": 1229442
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "The Threat of the Left",
+						"air_date": "2016-10-15",
+						"runtime": 24,
+						"id": 1239750
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Guess-Monster",
+						"air_date": "2016-10-22",
+						"runtime": 24,
+						"id": 1239751
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "The Halo Around the Moon",
+						"air_date": "2016-10-29",
+						"runtime": 24,
+						"id": 1239752
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Individual vs. Numbers",
+						"air_date": "2016-11-05",
+						"runtime": 24,
+						"id": 1239753
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "The Chemical Change of Encounters",
+						"air_date": "2016-11-12",
+						"runtime": 24,
+						"id": 1239754
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "Obsession",
+						"air_date": "2016-11-19",
+						"runtime": 24,
+						"id": 1241129
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "An Annoying Guy",
+						"air_date": "2016-11-26",
+						"runtime": 24,
+						"id": 1243188
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "The Volleyball Idiots",
+						"air_date": "2016-12-03",
+						"runtime": 24,
+						"id": 1244935
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "The Battle of Concepts",
+						"air_date": "2016-12-10",
+						"runtime": 24,
+						"id": 1246565
+					}
+				]
+			},
+			"60863/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Let's Go To Tokyo!!",
+						"air_date": "2015-10-04",
+						"runtime": 24,
+						"id": 1113312
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Direct Sunlight",
+						"air_date": "2015-10-11",
+						"runtime": 24,
+						"id": 1116391
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Townsperson B",
+						"air_date": "2015-10-18",
+						"runtime": 24,
+						"id": 1130977
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Center Ace",
+						"air_date": "2015-10-25",
+						"runtime": 24,
+						"id": 1132263
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Greed",
+						"air_date": "2015-11-01",
+						"runtime": 24,
+						"id": 1133714
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Tempo",
+						"air_date": "2015-11-08",
+						"runtime": 24,
+						"id": 1135556
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Moonrise",
+						"air_date": "2015-11-15",
+						"runtime": 24,
+						"id": 1148629
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Illusionary Hero",
+						"air_date": "2015-11-22",
+						"runtime": 24,
+						"id": 1148630
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "VS \"Umbrella\"",
+						"air_date": "2015-11-29",
+						"runtime": 24,
+						"id": 1148631
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "Cogs",
+						"air_date": "2015-12-06",
+						"runtime": 24,
+						"id": 1148632
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "Above",
+						"air_date": "2015-12-13",
+						"runtime": 24,
+						"id": 1148633
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Let the Games Begin!",
+						"air_date": "2015-12-20",
+						"runtime": 24,
+						"id": 1148634
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "A Simple and Pure Strength",
+						"air_date": "2015-12-27",
+						"runtime": 24,
+						"id": 1150068
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "Still Growing",
+						"air_date": "2016-01-10",
+						"runtime": 24,
+						"id": 1156241
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "Place to Play",
+						"air_date": "2016-01-17",
+						"runtime": 24,
+						"id": 1160001
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "Next",
+						"air_date": "2016-01-24",
+						"runtime": 24,
+						"id": 1160002
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "The Battle Without Will Power",
+						"air_date": "2016-01-31",
+						"runtime": 24,
+						"id": 1160003
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "The Losers",
+						"air_date": "2016-02-07",
+						"runtime": 24,
+						"id": 1160932
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "The Iron Wall Can Be Rebuilt Again and Again",
+						"air_date": "2016-02-14",
+						"runtime": 24,
+						"id": 1160933
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "Wiping Out",
+						"air_date": "2016-02-21",
+						"runtime": 24,
+						"id": 1165695
+					},
+					{
+						"episode_number": 21,
+						"season_number": 2,
+						"name": "The Destroyer",
+						"air_date": "2016-02-28",
+						"runtime": 24,
+						"id": 1165696
+					},
+					{
+						"episode_number": 22,
+						"season_number": 2,
+						"name": "The Former Coward's Fight",
+						"air_date": "2016-03-06",
+						"runtime": 24,
+						"id": 1174078
+					},
+					{
+						"episode_number": 23,
+						"season_number": 2,
+						"name": "Team",
+						"air_date": "2016-03-13",
+						"runtime": 24,
+						"id": 1175462
+					},
+					{
+						"episode_number": 24,
+						"season_number": 2,
+						"name": "The Absolute Limit Switch",
+						"air_date": "2016-03-20",
+						"runtime": 24,
+						"id": 1178501
+					},
+					{
+						"episode_number": 25,
+						"season_number": 2,
+						"name": "Declaration of War",
+						"air_date": "2016-03-27",
+						"runtime": 24,
+						"id": 1178502
+					}
+				]
+			},
+			"70590/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "The Sword Princess and the Elf",
+						"air_date": "2017-04-15",
+						"runtime": 23,
+						"id": 1281914
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Fittings and Purchases",
+						"air_date": "2017-04-22",
+						"runtime": 23,
+						"id": 1306027
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Festivals and Courage",
+						"air_date": "2017-04-29",
+						"runtime": 23,
+						"id": 1309167
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "The Murder and the Jewel",
+						"air_date": "2017-05-06",
+						"runtime": 23,
+						"id": 1313252
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "The Red-head and the Lone Ruler",
+						"air_date": "2017-05-13",
+						"runtime": 23,
+						"id": 1316872
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Subjugation and Escape",
+						"air_date": "2017-05-20",
+						"runtime": 23,
+						"id": 1318737
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Requests and Divisions",
+						"air_date": "2017-05-27",
+						"runtime": 23,
+						"id": 1321086
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "The Corruption and The Maiden",
+						"air_date": "2017-06-03",
+						"runtime": 23,
+						"id": 1323642
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Training and Jealousy",
+						"air_date": "2017-06-10",
+						"runtime": 23,
+						"id": 1326516
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "The Boy and the Hero",
+						"air_date": "2017-06-17",
+						"runtime": 23,
+						"id": 1329516
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Adventure and the Unknown",
+						"air_date": "2017-06-24",
+						"runtime": 23,
+						"id": 1331282
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Kin of the Gods",
+						"air_date": "2017-07-01",
+						"runtime": 23,
+						"id": 1332939
+					}
+				]
+			},
+			"80539/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Little Brother",
+						"air_date": "2018-11-28",
+						"runtime": 5,
+						"id": 1630932
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Armstrong",
+						"air_date": "2018-12-21",
+						"runtime": 5,
+						"id": 1630933
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "Cosplay Contest / To the Future Me",
+						"air_date": "2018-12-26",
+						"runtime": 13,
+						"id": 1689084
+					}
+				]
+			},
+			"80539/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Equivalent Exchange / Cheap Thrills / Pleasure Seekers / The Kind Pervert",
+						"air_date": "2018-07-08",
+						"runtime": 23,
+						"id": 1514153
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Killing Time / Friendship Game / The Witch Trials / Non-title Match",
+						"air_date": "2018-07-15",
+						"runtime": 23,
+						"id": 1516903
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "A Battle That Must Be Won / Puppets / Betting My Life",
+						"air_date": "2018-07-22",
+						"runtime": 22,
+						"id": 1516904
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Lower Body Lasers / Pots and Kettles / Illegal Occupation / Butt Play",
+						"air_date": "2018-07-29",
+						"runtime": 23,
+						"id": 1516905
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Devilish Taste / Loaded Questions / Maeda's Curse / Sex Ed",
+						"air_date": "2018-08-05",
+						"runtime": 23,
+						"id": 1516906
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Asterisk / Studying for Exams / A New Look / Spirited Combat, Again",
+						"air_date": "2018-08-12",
+						"runtime": 23,
+						"id": 1516907
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Phantom Thieves: Pass Club / Woman of Terror / Weirdo Go / Boobie Tragedy",
+						"air_date": "2018-08-19",
+						"runtime": 23,
+						"id": 1516908
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Gotta \"Catch\" 'em All! / Divine Revelation / The Evil Sugoroku",
+						"air_date": "2018-08-26",
+						"runtime": 23,
+						"id": 1516909
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Troubles of a Fake Foreigner / A Dutchey Wife / Genetic Engineering",
+						"air_date": "2018-09-02",
+						"runtime": 23,
+						"id": 1516910
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Heart Go Boing Boing / Hanako's Trial of Shame / Secret of the Dong / Film Production",
+						"air_date": "2018-09-09",
+						"runtime": 23,
+						"id": 1516911
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Goodbye, Student Council President / Oka-ken Witch Project / Face of Mass Destruction",
+						"air_date": "2018-09-16",
+						"runtime": 23,
+						"id": 1516912
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Daniel / Bra Meeting / Fairy Tale Battle Royale / Paper Wars",
+						"air_date": "2018-09-23",
+						"runtime": 23,
+						"id": 1516913
+					}
+				]
+			},
+			"65676/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "There's No Choice but to Wish Them Happiness Right Here as They Arrive at Their Destiny",
+						"air_date": "2013-09-19",
+						"runtime": 24,
+						"id": 1234757
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Surely, Girls Are Made of Sugar and Spice, and Something Nice",
+						"air_date": "2016-10-27",
+						"runtime": 24,
+						"id": 1234758
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "So, Adolescence Never Ends, and My Youth Marches On",
+						"air_date": "2023-04-27",
+						"runtime": 24,
+						"id": 4158835
+					}
+				]
+			},
+			"65676/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Youth Romantic Comedy is Wrong, as I Expected",
+						"air_date": "2013-04-05",
+						"runtime": 24,
+						"id": 1168137
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "All People Surely Have Their Own Worries",
+						"air_date": "2013-04-12",
+						"runtime": 24,
+						"id": 1168138
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Sometimes the Gods of Rom-Coms Does Nice Things",
+						"air_date": "2013-04-19",
+						"runtime": 24,
+						"id": 1168139
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "In Other Words, He Doesn’t Have Many Friends",
+						"air_date": "2013-04-26",
+						"runtime": 24,
+						"id": 1168140
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Once Again, He Turns Back on the Path from Whence He Came",
+						"air_date": "2013-05-03",
+						"runtime": 24,
+						"id": 1168141
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "His Beginning With Her Finally Ends",
+						"air_date": "2013-05-10",
+						"runtime": 24,
+						"id": 1168142
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Anyway, Getting No Rest, Even Though it’s Summer Break, Just Isn’t Right",
+						"air_date": "2013-05-17",
+						"runtime": 24,
+						"id": 1168143
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "One Day, They Will Learn the Truth",
+						"air_date": "2013-05-24",
+						"runtime": 24,
+						"id": 1168144
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "For the Third Time, He Turns Back on the Path from Whence He Came",
+						"air_date": "2013-05-31",
+						"runtime": 24,
+						"id": 1168145
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "The Distance Between Them Remains Unchanged as the Festival is Becoming a Carnival",
+						"air_date": "2013-06-07",
+						"runtime": 24,
+						"id": 1168146
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "And So the Curtain on Each Stage Rises, and the Festival is Festivaling Its Very Best",
+						"air_date": "2013-06-14",
+						"runtime": 24,
+						"id": 1168147
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Thus, His and Her and Her Youth Continues to Be Wrong",
+						"air_date": "2013-06-21",
+						"runtime": 24,
+						"id": 1168148
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "And So, Their Festival Will Never End",
+						"air_date": "2013-06-28",
+						"runtime": 24,
+						"id": 1168149
+					}
+				]
+			},
+			"65676/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "No One Knows Why They Came to the Service Club",
+						"air_date": "2015-04-03",
+						"runtime": 24,
+						"id": 1168150
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "His and Her Confessions Reached No One",
+						"air_date": "2015-04-10",
+						"runtime": 24,
+						"id": 1168151
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Quietly, Yukinoshita Yukino Makes a Decision",
+						"air_date": "2015-04-17",
+						"runtime": 24,
+						"id": 1168152
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "And Yuigahama Yui Makes a Declaration",
+						"air_date": "2015-04-24",
+						"runtime": 24,
+						"id": 1168153
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "In That Room, There is No Longer the Scent of Tea",
+						"air_date": "2015-05-01",
+						"runtime": 24,
+						"id": 1168154
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Without Incident, the Congress Dances, But Does Not Progress",
+						"air_date": "2015-05-08",
+						"runtime": 24,
+						"id": 1168155
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Even So, That Room Continues to Play Out the Endless Days",
+						"air_date": "2015-05-15",
+						"runtime": 24,
+						"id": 1168156
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Even Still, Hachiman Hikigaya is…",
+						"air_date": "2015-05-22",
+						"runtime": 24,
+						"id": 1168157
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "And, Yukino Yukinoshita is…",
+						"air_date": "2015-05-29",
+						"runtime": 24,
+						"id": 1168158
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "The Thing That the Light in Each of Their Hands Illuminates",
+						"air_date": "2015-06-05",
+						"runtime": 24,
+						"id": 1168159
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "Hayato Hayama Always Lives Up to Expectations",
+						"air_date": "2015-06-12",
+						"runtime": 24,
+						"id": 1168160
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Still, The Thing He Desires Is Out of Reach, And He Continues to Mistake What’s Real",
+						"air_date": "2015-06-19",
+						"runtime": 24,
+						"id": 1168161
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "Spring Always Comes to Life Buried Underneath a Pile of Snow",
+						"air_date": "2015-06-26",
+						"runtime": 24,
+						"id": 1168162
+					}
+				]
+			},
+			"65676/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "In Due Time, the Seasons Change and the Snow Melts",
+						"air_date": "2020-07-10",
+						"runtime": 24,
+						"id": 1894527
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "That Key Was Never Handled Until Today",
+						"air_date": "2020-07-17",
+						"runtime": 24,
+						"id": 2199897
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Iroha Isshiki is the Strongest Junior, as Expected",
+						"air_date": "2020-07-24",
+						"runtime": 24,
+						"id": 2199898
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "By Chance, Yui Yuigahama Thinks of the Future",
+						"air_date": "2020-07-31",
+						"runtime": 24,
+						"id": 2199899
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Shizuka Hiratsuka Deeply Longs for the Days Past",
+						"air_date": "2020-08-07",
+						"runtime": 24,
+						"id": 2199900
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "Once again, Hachiman Hikigaya Makes a Speech",
+						"air_date": "2020-08-14",
+						"runtime": 24,
+						"id": 2199901
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "Until the End, Yui Yuigahama Will Continue Watching Over Them",
+						"air_date": "2020-08-21",
+						"runtime": 24,
+						"id": 2199902
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "Wishing That, at the Very Least, I Don't Make Any More Mistakes",
+						"air_date": "2020-08-28",
+						"runtime": 24,
+						"id": 2199903
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "A Whiff of That Fragrance Will Always Bring Memories of That Season",
+						"air_date": "2020-09-04",
+						"runtime": 24,
+						"id": 2199904
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "Gallantly, Shizuka Hiratsuka Moves Forward",
+						"air_date": "2020-09-11",
+						"runtime": 24,
+						"id": 2199905
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "Only a Heated Touch Truly Conveys the Sentiment",
+						"air_date": "2020-09-18",
+						"runtime": 24,
+						"id": 2199906
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "My Teen Romantic Comedy Is Wrong, As I Expected",
+						"air_date": "2020-09-25",
+						"runtime": 24,
+						"id": 2199907
+					}
+				]
+			},
+			"207784/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Episode 1: Hot Pot/Tart",
+						"air_date": "2024-01-04",
+						"runtime": 26,
+						"id": 3882309
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Episode 2: Roast Basilisk/Omelet/Kakiage",
+						"air_date": "2024-01-11",
+						"runtime": 26,
+						"id": 4789144
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Episode 3: Living Armor",
+						"air_date": "2024-01-18",
+						"runtime": 24,
+						"id": 4789145
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Episode 4: Stewed Cabbage/Orcs",
+						"air_date": "2024-01-25",
+						"runtime": 26,
+						"id": 4789146
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Episode 5: Snacks/Sorbet",
+						"air_date": "2024-02-01",
+						"runtime": 25,
+						"id": 4789147
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Episode 6: Court Cuisine/Boiled in Salt Water",
+						"air_date": "2024-02-08",
+						"runtime": 24,
+						"id": 4789148
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Episode 7: Kelpie/Porridge/Broiled with Sauce",
+						"air_date": "2024-02-15",
+						"runtime": 27,
+						"id": 4789149
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Episode 8: Raspberries/Grilled Meat",
+						"air_date": "2024-02-22",
+						"runtime": 24,
+						"id": 4789150
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Episode 9: Tentacles/Stew",
+						"air_date": "2024-02-29",
+						"runtime": 27,
+						"id": 4789151
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Episode 10: Giant Frogs/Aboveground",
+						"air_date": "2024-03-07",
+						"runtime": 25,
+						"id": 4789152
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Episode 11: Red Dragon I",
+						"air_date": "2024-03-14",
+						"runtime": 24,
+						"id": 4789153
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Episode 12: Red Dragon II",
+						"air_date": "2024-03-21",
+						"runtime": 24,
+						"id": 4789154
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Episode 13: Red Dragon III/Good Medicine",
+						"air_date": "2024-03-28",
+						"runtime": 24,
+						"id": 5024995
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Episode 14: Sea Serpent",
+						"air_date": "2024-04-04",
+						"runtime": 25,
+						"id": 5024996
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Episode 15: Dryad/Cockatrice",
+						"air_date": "2024-04-11",
+						"runtime": 26,
+						"id": 5024997
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Episode 16: Cleaners/Dried with Sweet Sake",
+						"air_date": "2024-04-18",
+						"runtime": 25,
+						"id": 5024998
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "Episode 17: Harpy/Chimera",
+						"air_date": "2024-04-25",
+						"runtime": 26,
+						"id": 5024999
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Episode 18: Shapeshifter",
+						"air_date": "2024-05-02",
+						"runtime": 24,
+						"id": 5025001
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Episode 19: Hag/Nightmare",
+						"air_date": "2024-05-09",
+						"runtime": 26,
+						"id": 5025002
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Episode 20: Ice Golem/Barometz",
+						"air_date": "2024-05-16",
+						"runtime": 25,
+						"id": 5025003
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Episode 21: Egg/The Golden Country",
+						"air_date": "2024-05-23",
+						"runtime": 27,
+						"id": 5025004
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Episode 22: Griffin/Familiars",
+						"air_date": "2024-05-30",
+						"runtime": 24,
+						"id": 5025005
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Episode 23: Griffin Soup/Dumplings -1-",
+						"air_date": "2024-06-06",
+						"runtime": 28,
+						"id": 5025007
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "Episode 24: Dumplings -2-/Bacon and Eggs",
+						"air_date": "2024-06-13",
+						"runtime": 25,
+						"id": 5025008
+					}
+				]
+			},
+			"207784/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Episode 1",
+						"air_date": "2027-10-01",
+						"runtime": null,
+						"id": 7464655
+					}
+				]
+			},
+			"250597/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "A Person in the Dungeon",
+						"air_date": "2024-07-06",
+						"runtime": 25,
+						"id": 5245373
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Starting Work on the Dungeon",
+						"air_date": "2024-07-13",
+						"runtime": 25,
+						"id": 5457107
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "The Ice Wolf's Fangs",
+						"air_date": "2024-07-20",
+						"runtime": 25,
+						"id": 5457108
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "The Thieves' Guild and the Dungeon",
+						"air_date": "2024-07-27",
+						"runtime": 25,
+						"id": 5457109
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Coworkers, Family",
+						"air_date": "2024-08-10",
+						"runtime": 25,
+						"id": 5457110
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Exploration and Cooking",
+						"air_date": "2024-08-17",
+						"runtime": 25,
+						"id": 5457111
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Monster Job Interview",
+						"air_date": "2024-08-24",
+						"runtime": 25,
+						"id": 5457112
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Remodeling and Employment",
+						"air_date": "2024-08-31",
+						"runtime": 25,
+						"id": 5457113
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "King and Dungeon Master",
+						"air_date": "2024-09-07",
+						"runtime": 25,
+						"id": 5457114
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "The Wind Slicer's Daughter",
+						"air_date": "2024-09-14",
+						"runtime": 25,
+						"id": 5457115
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Those Who Are Not Protected",
+						"air_date": "2024-09-21",
+						"runtime": 25,
+						"id": 5457116
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Dungeon People",
+						"air_date": "2024-09-28",
+						"runtime": 25,
+						"id": 5457117
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt4771630": "tt4728568",
+			"tt1584000": null,
+			"tt3398540": null,
+			"tt8515062": null
+		},
+		"seasonEpisodes": {},
+		"searchTv": {
+			"dungeon ni deai wo motomeru no wa machigatteiru darou ka iii": {
+				"results": [
+					{
+						"id": 70590,
+						"name": "Is It Wrong to Try to Pick Up Girls in a Dungeon? On the Side: Sword Oratoria",
+						"original_name": "ソード・オラトリア ダンジョンに出会いを求めるのは間違っているだろうか外伝",
+						"first_air_date": "2017-04-15"
+					},
+					{
+						"id": 62745,
+						"name": "Is It Wrong to Try to Pick Up Girls in a Dungeon?",
+						"original_name": "ダンジョンに出会いを求めるのは間違っているだろうか",
+						"first_air_date": "2015-04-04"
+					}
+				]
+			},
+			"is it wrong to try to pick up girls in a dungeon?": {
+				"results": [
+					{
+						"id": 62745,
+						"name": "Is It Wrong to Try to Pick Up Girls in a Dungeon?",
+						"original_name": "ダンジョンに出会いを求めるのは間違っているだろうか",
+						"first_air_date": "2015-04-04"
+					},
+					{
+						"id": 70590,
+						"name": "Is It Wrong to Try to Pick Up Girls in a Dungeon? On the Side: Sword Oratoria",
+						"original_name": "ソード・オラトリア ダンジョンに出会いを求めるのは間違っているだろうか外伝",
+						"first_air_date": "2017-04-15"
+					}
+				]
+			}
+		},
+		"identifier": {
+			"[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III v2 [BD 1080p FLAC]": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt4728568",
+						"score": 1.9377,
+						"title": "Is It Wrong to Try to Pick Up Girls in a Dungeon?",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt6768600",
+						"score": -1.6998,
+						"title": "DanMachi: Is It Wrong to Try to Pick Up Girls in a Dungeon? On the Side - Sword Oratoria",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt2703720",
+						"score": -3.5039,
+						"title": "My Teen Romantic Comedy SNAFU",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt21621494",
+						"score": -5.4734,
+						"title": "Delicious in Dungeon",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt32832441",
+						"score": -6.6611,
+						"title": "Dungeon People",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III v2",
+				"parsedYear": null,
+				"probability": 0.6137
+			},
+			"[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 01v2 [BD 1080p FLAC] [47408149]": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt4728568",
+						"score": 2.7685,
+						"title": "Is It Wrong to Try to Pick Up Girls in a Dungeon?",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt6768600",
+						"score": -1.7714,
+						"title": "DanMachi: Is It Wrong to Try to Pick Up Girls in a Dungeon? On the Side - Sword Oratoria",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt2703720",
+						"score": -4.26,
+						"title": "My Teen Romantic Comedy SNAFU",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt21621494",
+						"score": -5.7839,
+						"title": "Delicious in Dungeon",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt32832441",
+						"score": -7.0765,
+						"title": "Dungeon People",
+						"year": 2024
+					}
+				],
+				"parsedTitle": "Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III",
+				"parsedYear": null,
+				"probability": 0.6579
+			}
+		},
+		"anime": {
+			"fribb": [
+				{
+					"type": "TV",
+					"anidb_id": 6671,
+					"anilist_id": 6746,
+					"animecountdown_id": 36811,
+					"animenewsnetwork_id": 10947,
+					"anime-planet_id": "durarara",
+					"anisearch_id": 5473,
+					"imdb_id": ["tt1584000"],
+					"kitsu_id": 4696,
+					"livechart_id": 3256,
+					"mal_id": 6746,
+					"simkl_id": 36811,
+					"themoviedb_id": {
+						"tv": 42410
+					},
+					"tvdb_id": 133341,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 1
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 10145,
+					"anilist_id": 20464,
+					"animecountdown_id": 47270,
+					"animenewsnetwork_id": 15683,
+					"anime-planet_id": "haikyuu",
+					"anisearch_id": 9011,
+					"imdb_id": ["tt3398540"],
+					"kitsu_id": 8133,
+					"livechart_id": 251,
+					"mal_id": 20583,
+					"simkl_id": 47270,
+					"themoviedb_id": {
+						"tv": 60863
+					},
+					"tvdb_id": 278157,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 1
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 10523,
+					"anilist_id": 20652,
+					"animecountdown_id": 48798,
+					"animenewsnetwork_id": 16183,
+					"anime-planet_id": "durarara-x2",
+					"anisearch_id": 9542,
+					"imdb_id": ["tt1584000"],
+					"kitsu_id": 8314,
+					"livechart_id": 467,
+					"mal_id": 23199,
+					"simkl_id": 48798,
+					"themoviedb_id": {
+						"tv": 42410
+					},
+					"tvdb_id": 133341,
+					"season": {
+						"tvdb": 2,
+						"tmdb": 2
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 10866,
+					"anilist_id": 20879,
+					"animecountdown_id": 425202,
+					"animenewsnetwork_id": 16669,
+					"anime-planet_id": "durarara-x2-the-second-arc",
+					"anisearch_id": 10335,
+					"imdb_id": ["tt1584000"],
+					"kitsu_id": 9726,
+					"livechart_id": 1233,
+					"mal_id": 27831,
+					"simkl_id": 425202,
+					"themoviedb_id": {
+						"tv": 42410
+					},
+					"tvdb_id": 133341,
+					"season": {
+						"tvdb": 2,
+						"tmdb": 2
+					},
+					"episode_offset": {
+						"tvdb": 12,
+						"tmdb": 12
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 10867,
+					"anilist_id": 20880,
+					"animecountdown_id": 425204,
+					"animenewsnetwork_id": 16670,
+					"anime-planet_id": "durarara-x2-the-third-arc",
+					"anisearch_id": 10336,
+					"imdb_id": ["tt1584000"],
+					"kitsu_id": 9725,
+					"livechart_id": 1234,
+					"mal_id": 27833,
+					"simkl_id": 425204,
+					"themoviedb_id": {
+						"tv": 42410
+					},
+					"tvdb_id": 133341,
+					"season": {
+						"tvdb": 2,
+						"tmdb": 2
+					},
+					"episode_offset": {
+						"tvdb": 24,
+						"tmdb": 24
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 10894,
+					"anilist_id": 20920,
+					"animecountdown_id": 428658,
+					"animenewsnetwork_id": 16443,
+					"anime-planet_id": "is-it-wrong-to-try-to-pick-up-girls-in-a-dungeon",
+					"anisearch_id": 9940,
+					"imdb_id": ["tt4728568"],
+					"kitsu_id": 9962,
+					"livechart_id": 1274,
+					"mal_id": 28121,
+					"simkl_id": 428658,
+					"themoviedb_id": {
+						"tv": 62745
+					},
+					"tvdb_id": 289882,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 1
+					}
+				},
+				{
+					"type": "SPECIAL",
+					"anidb_id": 10954,
+					"animecountdown_id": 441824,
+					"imdb_id": ["tt3398540"],
+					"simkl_id": 441824,
+					"themoviedb_id": {
+						"tv": 60863
+					},
+					"tvdb_id": 278157,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 10981,
+					"anilist_id": 20992,
+					"animecountdown_id": 451670,
+					"animenewsnetwork_id": 16660,
+					"anime-planet_id": "haikyuu-second-season",
+					"anisearch_id": 10097,
+					"imdb_id": ["tt3398540"],
+					"kitsu_id": 10076,
+					"livechart_id": 1330,
+					"mal_id": 28891,
+					"simkl_id": 451670,
+					"themoviedb_id": {
+						"tv": 60863
+					},
+					"tvdb_id": 278157,
+					"season": {
+						"tvdb": 2,
+						"tmdb": 2
+					}
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 11941,
+					"anilist_id": 21660,
+					"animecountdown_id": 562260,
+					"animenewsnetwork_id": 19317,
+					"anime-planet_id": "is-it-wrong-to-try-to-pick-up-girls-in-a-dungeon-ova",
+					"anisearch_id": 11197,
+					"imdb_id": ["tt4728568"],
+					"kitsu_id": 11851,
+					"livechart_id": 2045,
+					"mal_id": 32801,
+					"simkl_id": 562260,
+					"themoviedb_id": {
+						"tv": 62745
+					},
+					"tvdb_id": 289882,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 11991,
+					"anilist_id": 21698,
+					"animecountdown_id": 568512,
+					"animenewsnetwork_id": 18459,
+					"anime-planet_id": "haikyuu-karasuno-high-school-vs-shiratorizawa-academy",
+					"anisearch_id": 11209,
+					"imdb_id": ["tt3398540"],
+					"kitsu_id": 11935,
+					"livechart_id": 2076,
+					"mal_id": 32935,
+					"simkl_id": 568512,
+					"themoviedb_id": {
+						"tv": 60863
+					},
+					"tvdb_id": 278157,
+					"season": {
+						"tvdb": 3,
+						"tmdb": 3
+					}
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 13332,
+					"anilist_id": 107351,
+					"animecountdown_id": 709301,
+					"animenewsnetwork_id": 26701,
+					"anime-planet_id": "haikyuu-tokushuu-harukou-volley-ni-kaketa-seishun",
+					"anisearch_id": 12676,
+					"imdb_id": ["tt3398540"],
+					"kitsu_id": 41556,
+					"livechart_id": 5601,
+					"mal_id": 35321,
+					"simkl_id": 709301,
+					"themoviedb_id": {
+						"tv": 60863
+					},
+					"tvdb_id": 278157,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 4,
+						"tmdb": 4
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 13750,
+					"anilist_id": 101001,
+					"animecountdown_id": 758949,
+					"animenewsnetwork_id": 20583,
+					"anime-planet_id": "asobi-asobase",
+					"anisearch_id": 13273,
+					"imdb_id": ["tt8515062"],
+					"kitsu_id": 41149,
+					"livechart_id": 3056,
+					"mal_id": 37171,
+					"simkl_id": 758949,
+					"themoviedb_id": {
+						"tv": 80539
+					},
+					"tvdb_id": 346798,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 1
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 13829,
+					"anilist_id": 101167,
+					"animecountdown_id": 767897,
+					"animenewsnetwork_id": 20673,
+					"anime-planet_id": "is-it-wrong-to-try-to-pick-up-girls-in-a-dungeon-ii",
+					"anisearch_id": 13352,
+					"imdb_id": ["tt4728568"],
+					"kitsu_id": 40599,
+					"livechart_id": 3107,
+					"mal_id": 37347,
+					"simkl_id": 767897,
+					"themoviedb_id": {
+						"tv": 62745
+					},
+					"tvdb_id": 289882,
+					"season": {
+						"tvdb": 2,
+						"tmdb": 2
+					}
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 14127,
+					"anilist_id": 104170,
+					"animecountdown_id": 838187,
+					"anime-planet_id": "asobi-asobase-ova",
+					"anisearch_id": 13671,
+					"imdb_id": ["tt8515062"],
+					"kitsu_id": 41877,
+					"livechart_id": 3329,
+					"mal_id": 37996,
+					"simkl_id": 838187,
+					"themoviedb_id": {
+						"tv": 80539
+					},
+					"tvdb_id": 346798,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 14552,
+					"anilist_id": 106625,
+					"animecountdown_id": 996629,
+					"animenewsnetwork_id": 22438,
+					"anime-planet_id": "haikyuu-to-the-top",
+					"anisearch_id": 14041,
+					"imdb_id": ["tt3398540"],
+					"kitsu_id": 42059,
+					"livechart_id": 8682,
+					"mal_id": 38883,
+					"simkl_id": 996629,
+					"themoviedb_id": {
+						"tv": 60863
+					},
+					"tvdb_id": 278157,
+					"season": {
+						"tvdb": 4,
+						"tmdb": 4
+					}
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 15045,
+					"anilist_id": 111790,
+					"animecountdown_id": 1151835,
+					"animenewsnetwork_id": 22972,
+					"anime-planet_id": "haikyuu-riku-vs-kuu",
+					"anisearch_id": 14682,
+					"imdb_id": ["tt3398540"],
+					"kitsu_id": 42502,
+					"livechart_id": 9564,
+					"mal_id": 40262,
+					"simkl_id": 1151835,
+					"themoviedb_id": {
+						"tv": 60863
+					},
+					"tvdb_id": 278157,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 7,
+						"tmdb": 7
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 15111,
+					"anilist_id": 112124,
+					"animecountdown_id": 1175973,
+					"animenewsnetwork_id": 22545,
+					"anime-planet_id": "is-it-wrong-to-try-to-pick-up-girls-in-a-dungeon-iii",
+					"anisearch_id": 14636,
+					"imdb_id": ["tt4728568"],
+					"kitsu_id": 42583,
+					"livechart_id": 9613,
+					"mal_id": 40454,
+					"simkl_id": 1175973,
+					"themoviedb_id": {
+						"tv": 62745
+					},
+					"tvdb_id": 289882,
+					"season": {
+						"tvdb": 3,
+						"tmdb": 3
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 15283,
+					"anilist_id": 113538,
+					"animecountdown_id": 1229235,
+					"animenewsnetwork_id": 23165,
+					"anime-planet_id": "haikyuu-to-the-top-part-ii",
+					"anisearch_id": 14832,
+					"imdb_id": ["tt3398540"],
+					"kitsu_id": 42938,
+					"livechart_id": 9693,
+					"mal_id": 40776,
+					"simkl_id": 1229235,
+					"themoviedb_id": {
+						"tv": 60863
+					},
+					"tvdb_id": 278157,
+					"season": {
+						"tvdb": 4,
+						"tmdb": 4
+					},
+					"episode_offset": {
+						"tvdb": 13,
+						"tmdb": 13
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 16032,
+					"anilist_id": 129196,
+					"animecountdown_id": 1536161,
+					"animenewsnetwork_id": 24004,
+					"anime-planet_id": "is-it-wrong-to-try-to-pick-up-girls-in-a-dungeon-iv",
+					"anisearch_id": 15932,
+					"imdb_id": ["tt4728568"],
+					"kitsu_id": 44031,
+					"livechart_id": 10382,
+					"mal_id": 47164,
+					"simkl_id": 1536161,
+					"themoviedb_id": {
+						"tv": 62745
+					},
+					"tvdb_id": 289882,
+					"season": {
+						"tvdb": 4,
+						"tmdb": 4
+					}
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 17570,
+					"anilist_id": 153658,
+					"animecountdown_id": 1973554,
+					"animenewsnetwork_id": 26218,
+					"anime-planet_id": "haikyuu-movie-5-the-dumpster-battle",
+					"anisearch_id": 17592,
+					"imdb_id": ["tt3398540"],
+					"kitsu_id": 46336,
+					"livechart_id": 11369,
+					"mal_id": 52742,
+					"simkl_id": 1973554,
+					"themoviedb_id": {
+						"tv": 60863
+					},
+					"tvdb_id": 278157,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 13,
+						"tmdb": 13
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 17652,
+					"anilist_id": 155211,
+					"animecountdown_id": 2002956,
+					"animenewsnetwork_id": 26400,
+					"anime-planet_id": "is-it-wrong-to-try-to-pick-up-girls-in-a-dungeon-iv-part-ii",
+					"anisearch_id": 17752,
+					"imdb_id": ["tt4728568"],
+					"kitsu_id": 46556,
+					"livechart_id": 11536,
+					"mal_id": 53111,
+					"simkl_id": 2002956,
+					"themoviedb_id": {
+						"tv": 62745
+					},
+					"tvdb_id": 289882,
+					"season": {
+						"tvdb": 4,
+						"tmdb": 4
+					},
+					"episode_offset": {
+						"tvdb": 11,
+						"tmdb": 11
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 18267,
+					"anilist_id": 170732,
+					"animecountdown_id": 2282064,
+					"animenewsnetwork_id": 30574,
+					"anime-planet_id": "is-it-wrong-to-try-to-pick-up-girls-in-a-dungeon-v",
+					"anisearch_id": 18838,
+					"imdb_id": ["tt4728568"],
+					"kitsu_id": 48216,
+					"livechart_id": 12398,
+					"mal_id": 57066,
+					"simkl_id": 2282064,
+					"themoviedb_id": {
+						"tv": 62745
+					},
+					"tvdb_id": 289882,
+					"season": {
+						"tvdb": 5,
+						"tmdb": 5
+					}
+				}
+			],
+			"titles": [
+				{
+					"anidbId": 6671,
+					"names": [
+						"Durarara!!",
+						"Durarara!!",
+						"デュラララ!!",
+						"Дюрарара!!",
+						"无头骑士异闻录 DuRaRaRa!!",
+						"無頭騎士異聞錄 DuRaRaRa!!",
+						"drrr",
+						"drrr1",
+						"Дурарара!!",
+						"Durarara",
+						"듀라라라!!",
+						"Dhurarara!!",
+						"Drrr!!",
+						"Dulalala!!",
+						"Dullalala",
+						"Dullalala!!",
+						"Dyurarara!!",
+						"无头骑士异闻录",
+						"無頭騎士異聞錄"
+					]
+				},
+				{
+					"anidbId": 10145,
+					"names": [
+						"Haikyuu!!",
+						"Haikyuu!!",
+						"هايكيوو",
+						"Haikyu!!",
+						"Haikyu!! Los Ases del Voley",
+						"Odbojka",
+						"ハイキュー!!",
+						"排球少年!!",
+						"Haikyuu1",
+						"Висока топка",
+						"Хайкю!!",
+						"Haikyuu",
+						"Волейбол!!"
+					]
+				},
+				{
+					"anidbId": 10523,
+					"names": [
+						"Durarara!!x2 Shou",
+						"Durarara!!x2 Shou",
+						"Durarara!! X2",
+						"デュラララ!!x2 承",
+						"无头骑士异闻录 DuRaRaRa!!×2 承",
+						"無頭騎士異聞錄 DuRaRaRa!!×2 承",
+						"drrr s2",
+						"Drrr!!x2",
+						"drrr2",
+						"Drrrx2",
+						"durarara 2",
+						"Durarara S2",
+						"Durarara2"
+					]
+				},
+				{
+					"anidbId": 10866,
+					"names": [
+						"Durarara!!x2 Ten",
+						"Durarara!!x2 Ten",
+						"Durarara!! X2: The Second Arc",
+						"デュラララ!!x2 転",
+						"無頭騎士異聞錄 DuRaRaRa!! 轉",
+						"无头骑士异闻录×2 转",
+						"drrr s3",
+						"Drrr!!x2 2",
+						"drrr3",
+						"Drrrx2 2",
+						"Durarara S3",
+						"Durarara3"
+					]
+				},
+				{
+					"anidbId": 10867,
+					"names": [
+						"Durarara!!x2 Ketsu",
+						"Durarara!!x2 Ketsu",
+						"Durarara!! X2: The Third Arc",
+						"デュラララ!!x2 結",
+						"無頭騎士異聞錄 DuRaRaRa!!×2 結",
+						"无头骑士异闻录×2 结",
+						"drrr s4",
+						"Drrr!!x2 3",
+						"drrr4",
+						"Drrrx2 3",
+						"Durarara S4",
+						"Durarara4"
+					]
+				},
+				{
+					"anidbId": 10894,
+					"names": [
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth",
+						"هل من الخطأ الإيقاع بفتياتٍ في ديماس؟",
+						"Danmachi: Is It Wrong to Try to Pick Up Girls in a Dungeon?",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon?",
+						"DanMachi: ¿Qué tiene de malo intentar ligar en una mazmorra?",
+						"DanMachi: ¿Está mal seducir chicas en un calabozo?",
+						"DanMachi : Familia Myth",
+						"?האם זה בסדר להתחיל עם בנות בצינוק",
+						"DanMachi: È sbagliato cercare di incontrare ragazze in un dungeon?",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH",
+						"던전에서 만남을 추구하면 안 되는 걸까",
+						"在地下城寻求邂逅是否搞错了什么",
+						"在地下城尋求邂逅是否搞錯了什麼",
+						"danmachi",
+						"Is het Verkeerd om Meisjes Op te Pikken in Een Dungeon?",
+						"В подземелье я пойду, там красавицу найду",
+						"มันผิดรึไงถ้าใจอยากจะพบรักในดันเจี้ยน",
+						"Невже шукати дівчину в підземеллі - неправильно?",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darouka: Familia Myth"
+					]
+				},
+				{
+					"anidbId": 10954,
+					"names": [
+						"Haikyuu!! (2014)",
+						"Haikyuu!! (2014)",
+						"Haikyu!! OADs",
+						"ハイキュー!! (2014)",
+						"Волейбол OVA-1",
+						"Haikyuu OVAs"
+					]
+				},
+				{
+					"anidbId": 10981,
+					"names": [
+						"Haikyuu!! Second Season",
+						"Haikyuu!! Second Season",
+						"Haikyu!! 2nd Season",
+						"Haikyu!! Los Ases del Vóley 2ª temporada",
+						"ハイキュー!! セカンドシーズン",
+						"Haikyuu!! II",
+						"排球少年 第二季",
+						"Haikyuu2",
+						"Haikyuu - Segunda Temporada",
+						"Волейбол!! [ТВ-2]"
+					]
+				},
+				{
+					"anidbId": 11941,
+					"names": [
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth - Dungeon ni Onsen o Motomeru no wa Machigatte Iru Darouka",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth - Dungeon ni Onsen o Motomeru no wa Machigatte Iru Darouka",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? Is It Wrong to Expect a Hot Spring in a Dungeon?",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH ダンジョンに温泉を求めるのは間違っているだろうか",
+						"在地下城尋求邂逅是否搞錯了什麼 (OVA)",
+						"danmachi ova",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? Is It Wrong to Try to Soak in a Hot Spring in a Dungeon?",
+						"던전에서 만남을 추구하면 안 되는 걸까? 던전에서 온천을 추구하면 안 되는 걸까",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darouka: Familia Myth - Dungeon ni Onsen o Motomeru no wa Machigatte Iru Darouka"
+					]
+				},
+				{
+					"anidbId": 11991,
+					"names": [
+						"Haikyuu!! Karasuno Koukou vs Shiratorizawa Gakuen Koukou",
+						"Haikyuu!! Karasuno Koukou vs Shiratorizawa Gakuen Koukou",
+						"Haikyu!! Karasuno vs. Shiratorizawa",
+						"Haikyu!! Karasuno High School vs Shiratorizawa Academy",
+						"Haikyu!! Los Ases del Vóley 3ª temporada",
+						"ハイキュー!! 烏野高校 VS 白鳥沢学園高校",
+						"Haikyuu - Terceira Temporada",
+						"排球少年!! 乌野高中 VS 白鸟泽学园高中",
+						"haikyuu3",
+						"Волейбол [ТВ-3]"
+					]
+				},
+				{
+					"anidbId": 13332,
+					"names": [
+						"Haikyuu!! Karasuno Koukou vs Shiratorizawa Gakuen Koukou: Tokushuu! Haru Kou Volley ni Kaketa Seishun",
+						"Haikyuu!! Karasuno Koukou vs Shiratorizawa Gakuen Koukou: Tokushuu! Haru Kou Volley ni Kaketa Seishun",
+						"Haikyu!! Karasuno vs. Shiratorizawa: Special Feature! The Spring Tournament of Their Youth",
+						"Haikyu!! Karasuno High School vs Shiratorizawa Academy: Special Feature! The Spring Tournament of Their Youth",
+						"ハイキュー!! 烏野高校 VS 白鳥沢学園高校 特集! 春高バレーに賭けた青春",
+						"排球少年 特集！赌在春高上的青春"
+					]
+				},
+				{
+					"anidbId": 13750,
+					"names": [
+						"Asobi Asobase",
+						"Asobi Asobase",
+						"Asobi Asobase: Workshop of Fun",
+						"あそびあそばせ",
+						"즐겁게 놀아보세",
+						"来玩游戏吧",
+						"遊戲 3 人娘",
+						"asoaso"
+					]
+				},
+				{
+					"anidbId": 13829,
+					"names": [
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth II",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth II",
+						"هل من الخطأ الإيقاع بفتياتٍ في ديماس؟ II",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? II",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH II",
+						"던전에서 만남을 추구하면 안 되는 걸까? 2",
+						"在地下城寻求邂逅是否搞错了什么Ⅱ",
+						"在地下城尋求邂逅是否搞錯了什麼 2",
+						"ダンまちII",
+						"DanMachi II",
+						"danmachi s2",
+						"danmachi2",
+						"던전에서 만남을 추구하면 안 되는 걸까? II",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darouka: Familia Myth II"
+					]
+				},
+				{
+					"anidbId": 14127,
+					"names": [
+						"Asobi Asobase: Cosplay Taikai / Otona no Watashi e",
+						"Asobi Asobase: Cosplay Taikai / Otona no Watashi e",
+						"あそびあそばせ コスプレ大会 / 大人の私へ",
+						"즐겁게 놀아보세: 코스프레 대회 / 어른인 나에게",
+						"asoaso ova",
+						"Asobi Asobase: Cosplay Convention / To My Future Self..."
+					]
+				},
+				{
+					"anidbId": 14552,
+					"names": [
+						"Haikyuu!! To the Top",
+						"Haikyuu!! To the Top",
+						"هايكيو!! إلى القمة",
+						"Haikyu!! To the Top",
+						"Haikyu!! Los Ases del Vóley 4ª temporada",
+						"ハイキュー!! TO THE TOP",
+						"Haikyuu - Quarta Temporada",
+						"排球少年 TO THE TOP",
+						"排球少年！！第四季",
+						"haikyuu4"
+					]
+				},
+				{
+					"anidbId": 15045,
+					"names": [
+						"Haikyuu!! (2019)",
+						"Haikyuu!! (2019)",
+						"Haikyu!! Land vs Air",
+						"ハイキュー!! (2019)",
+						"Haikyuu!! Riku vs Kuu"
+					]
+				},
+				{
+					"anidbId": 15111,
+					"names": [
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth III",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth III",
+						"هل من الخطأ الإيقاع بفتياتٍ في ديماس؟ III",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? III",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH III",
+						"在地下城寻求邂逅是否搞错了什么Ⅲ",
+						"在地下城尋求邂逅是否搞錯了什麼 第三季",
+						"DanMachi III",
+						"danmachi s3",
+						"danmachi3",
+						"Dungeon ni Deai o Motomeru no wa Machigatteiru Darou ka 3",
+						"Dungeon ni Deai o Motomeru no wa Machigatteiru Darou ka III",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darouka: Familia Myth III"
+					]
+				},
+				{
+					"anidbId": 15283,
+					"names": [
+						"Haikyuu!! To the Top (2020)",
+						"Haikyuu!! To the Top (2020)",
+						"هايكيو!! إلى القمة (2020)",
+						"Haikyu!! To the Top - Cour 2",
+						"Haikyu!! To the Top (2020)",
+						"Haikyu!! Los Ases del Vóley 4ª temporada Camino a la cima",
+						"ハイキュー!! TO THE TOP (2020)",
+						"排球少年 TO THE TOP 第二期",
+						"排球少年！！第四季 Part 2",
+						"Haikyu!! To the Top Part 2",
+						"Haikyuu!! To the Top 2",
+						"Haikyuu!!: To the Top 2nd Season",
+						"ハイキュー!! TO THE TOP 第2クール"
+					]
+				},
+				{
+					"anidbId": 16032,
+					"names": [
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth IV",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth IV",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? IV",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH IV",
+						"在地下城寻求邂逅是否搞错了什么 IV",
+						"在地下城尋求邂逅是否搞錯了什麼 4",
+						"DanMachi IV",
+						"danmachi s4",
+						"danmachi4",
+						"Dungeon ni Deai o Motomeru no wa Machigatteiru Darou ka 4",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka S4"
+					]
+				},
+				{
+					"anidbId": 17570,
+					"names": [
+						"Gekijouban Haikyuu!! Final",
+						"Gekijouban Haikyuu!! Final",
+						"劇場版ハイキュー!! FINAL",
+						"Haikyu!! Final"
+					]
+				},
+				{
+					"anidbId": 17652,
+					"names": [
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth IV (2023)",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth IV (2023)",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? IV (2023)",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH IV (2023)",
+						"期待在地下城邂逅有错吗 Ⅳ 深章 灾厄篇",
+						"danmachi s5",
+						"ダンまちIV 深章 厄災篇",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth IV Part 2"
+					]
+				},
+				{
+					"anidbId": 18267,
+					"names": [
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth V",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth V",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? V",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH V",
+						"ダンまちⅤ",
+						"DanMachi V",
+						"ダンジョンに出会いを求めるのは間違っているだろうかV 豊穣の女神篇",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka V: Houjou no Megami Hen"
+					]
+				},
+				{
+					"anidbId": 6671,
+					"names": [
+						"Durarara!!",
+						"DRRR!!",
+						"Dhurarara!!",
+						"Drrr!!",
+						"Dulalala!!",
+						"Dullalala",
+						"Dullalala!!",
+						"Durarara",
+						"Dyurarara!!",
+						"drrr",
+						"drrr1",
+						"Дурарара!!",
+						"Дюрарара!!",
+						"דורארארה!!",
+						"デュラララ!!",
+						"デュラララ！！",
+						"无头骑士异闻录",
+						"无头骑士异闻录 DuRaRaRa!!",
+						"無頭騎士異聞錄",
+						"無頭騎士異聞錄 DuRaRaRa!!",
+						"듀라라라!!"
+					]
+				},
+				{
+					"anidbId": 10145,
+					"names": [
+						"Haikyuu!!",
+						"HAIKYU!!",
+						"HAIKYÛ !!",
+						"HQ!!",
+						"Haikyu!!",
+						"Haikyu!! - L'asso del volley",
+						"Haikyu!! L'asso del volley",
+						"Haikyu!! Los Ases del Voley",
+						"Haikyu!! Los Ases del Vóley",
+						"Haikyu!! Los ases del vóley",
+						"Haikyu!! Los ases sel Vóley",
+						"Haikyu!! L’Asso del Volley",
+						"Haikyuu",
+						"Haikyuu1",
+						"Haikyū!!",
+						"High Kyuu!!",
+						"Odbojka",
+						"Висока топка",
+						"Волейбол!!",
+						"Хайкю!!",
+						"هايكيوو",
+						"ไฮคิว!! คู่ตบฟ้าประทาน",
+						"ハイキュー!!",
+						"ハイキュー！！",
+						"排球少年!!",
+						"排球少年！！"
+					]
+				},
+				{
+					"anidbId": 10523,
+					"names": [
+						"Durarara!!x2 Shou",
+						"DRRR!! 2 Shou",
+						"DRRR!! 2nd Season",
+						"Drrr!!x2",
+						"Drrr!!x2 Shou",
+						"Drrr!!×2 Shou",
+						"Drrrx2",
+						"Durarara S2",
+						"Durarara!! 2nd Season",
+						"Durarara!! Season 2",
+						"Durarara!! X2",
+						"Durarara!! x2",
+						"Durarara!! x2 Shou",
+						"Durarara!! x2 – The First Arc: Shou",
+						"Durarara!! ×2 (Arc 1)",
+						"Durarara!! ×2 The First Arc",
+						"Durarara!! ×2 – The First Arc: Shou",
+						"Durarara!!×2 Shou",
+						"Durarara!!×2 Shō",
+						"Durarara!!×2 Understanding",
+						"Durarara2",
+						"Durararax2 1st Arc",
+						"drrr s2",
+						"drrr2",
+						"durarara 2",
+						"דורארארה!!2x התפתחות",
+						"デュラララ!! 2",
+						"デュラララ!!x2",
+						"デュラララ!!x2 承",
+						"デュラララ!!×2 承",
+						"デュラララ!!×２ 承",
+						"デュラララ！！×2 承",
+						"无头骑士异闻录 DuRaRaRa!!×2 承",
+						"無頭騎士異聞錄 DuRaRaRa!!×2 承"
+					]
+				},
+				{
+					"anidbId": 10866,
+					"names": [
+						"Durarara!!x2 Ten",
+						"DRRR!! 2 Ten",
+						"Drrr!!x2 2",
+						"Drrr!!x2 Ten",
+						"Drrr!!×2 Ten",
+						"Drrrx2 2",
+						"Durarara S3",
+						"Durarara!! 3",
+						"Durarara!! X2 The Second Arc",
+						"Durarara!! X2: The Second Arc",
+						"Durarara!! x2 Ten",
+						"Durarara!! ×2 (Arc 2)",
+						"Durarara!! ×2 The Second Arc",
+						"Durarara!!×2 Motion",
+						"Durarara!!×2 Ten",
+						"Durarara3",
+						"drrr s3",
+						"drrr3",
+						"דורארארה!!2x תפנית",
+						"デュラララ!!x2 転",
+						"デュラララ!!×2 転",
+						"デュラララ!!×２ 転",
+						"デュラララ！！×2 転",
+						"无头骑士异闻录×2 转",
+						"無頭騎士異聞錄 DuRaRaRa!! 轉"
+					]
+				},
+				{
+					"anidbId": 10867,
+					"names": [
+						"Durarara!!x2 Ketsu",
+						"DRRR!! 2 Ketsu",
+						"Drrr!!x2 3",
+						"Drrr!!x2 Ketsu",
+						"Drrr!!×2 Ketsu",
+						"Drrrx2 3",
+						"Durarara S4",
+						"Durarara!! 4",
+						"Durarara!! X2 The Third Arc",
+						"Durarara!! X2: The Third Arc",
+						"Durarara!! x2 Ketsu",
+						"Durarara!! ×2 (Arc 3)",
+						"Durarara!! ×2 The Third Arc",
+						"Durarara!!×2 Conclusion",
+						"Durarara!!×2 Ketsu",
+						"Durarara4",
+						"drrr s4",
+						"drrr4",
+						"דורארארה!!2x סיום",
+						"デュラララ!!x2 結",
+						"デュラララ!!×2 結",
+						"デュラララ!!×２ 結",
+						"デュラララ！！×2 結",
+						"无头骑士异闻录×2 结",
+						"無頭騎士異聞錄 DuRaRaRa!!×2 結"
+					]
+				},
+				{
+					"anidbId": 10894,
+					"names": [
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka",
+						"?האם זה בסדר להתחיל עם בנות בצינוק",
+						"DANMACHI ¿Qué tiene de Malo intentar Ligar en una Mazmorra?",
+						"DanMachi",
+						"DanMachi - È sbagliato cercare di incontrare ragazze in un Dungeon?",
+						"DanMachi : Familia Myth",
+						"DanMachi: Familia Myth",
+						"DanMachi: Família Myth",
+						"DanMachi: Is It Wrong to Try to Pick Up Girls in a Dungeon?",
+						"DanMachi: ¿Está mal seducir chicas en un calabozo?",
+						"DanMachi: ¿Qué tiene de malo intentar ligar en una mazmorra?",
+						"DanMachi: È sbagliato cercare di incontrare ragazze in un dungeon?",
+						"DanMachi: È sbagliato cercare di incontrare ragazze in un dungeon? Familia Myth",
+						"DanMachi: É Errado Tentar Pegar Garotas numa Masmorra?",
+						"Danmachi",
+						"Danmachi: Is It Wrong to Try to Pick Up Girls in a Dungeon?",
+						"Danmachi: Is It Wrong to Try to Pick Up Girls in a Dungeon? Familia Myth",
+						"Danmachi: ¿Qué Tiene De Malo Intentar Ligar En Una Mazmorra?",
+						"Danmachi: ¿Qué Tiene de Malo Intentar Ligar en una Mazmorra?",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darou ka",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darou ka: Familia Myth",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darō ka",
+						"Dungeon ni Deai o Motomeru no wa Machigatteiru Darō ka",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darou ka",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darouka: Familia Myth",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru darou ka",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru darou ka: Familia Myth",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru no Darou ka",
+						"Est-ce un Tort de Chercher des Rencontres Romantiques dans un Donjon?",
+						"Familia Myth",
+						"Is It Wrong That I Want to Meet You in a Dungeon",
+						"Is It Wrong That I Want to Meet You in a Dungeon?",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon?",
+						"Is het Verkeerd om Meisjes Op te Pikken in Een Dungeon?",
+						"danmachi",
+						"¿Qué tiene de malo intentar ligar en una mazmorra?",
+						"È sbagliato cercare di incontrare ragazze in un dungeon? - Familia Myth",
+						"В подземелье я пойду",
+						"Может, я встречу тебя в подземелье?",
+						"Невже шукати дівчину в підземеллі - неправильно?",
+						"Разве плохо искать себе пару в подземелье?",
+						"там красавицу найду",
+						"فارسة أحلامي",
+						"هل من الخطأ الإيقاع بفتياتٍ في ديماس؟",
+						"มันผิดรึไงถ้าใจอยากจะพบรักในดันเจี้ยน",
+						"ダンまち",
+						"ダンジョンに出会いを求めるのは間違っているだろうか",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH",
+						"在地下城寻求邂逅是否搞错了什么",
+						"在地下城尋求邂逅是否搞錯了什麼",
+						"던전에서 만남을 추구하면 안 되는 걸까"
+					]
+				},
+				{
+					"anidbId": 10954,
+					"names": [
+						"Haikyuu!! (2014)",
+						"Haikyu!! OADs",
+						"Haikyu!!: Lev Appears!",
+						"Haikyuu OVAs",
+						"Haikyuu!! Lev Genzan!",
+						"Волейбол OVA-1",
+						"ハイキュー!!",
+						"ハイキュー!! (2014)"
+					]
+				},
+				{
+					"anidbId": 10981,
+					"names": [
+						"Haikyuu!! Second Season",
+						"HAIKYU!! 2nd Season",
+						"HQ!! 2",
+						"Haikyu!! - L'asso del volley S2",
+						"Haikyu!! 2",
+						"Haikyu!! 2da Temporada",
+						"Haikyu!! 2nd Season",
+						"Haikyu!! Los Ases del Vóley 2ª temporada",
+						"Haikyu!! Los Ases del Vóley Temporada 2",
+						"Haikyu!! L’Asso del Volley 2",
+						"Haikyu!! Saison 2",
+						"Haikyu!! Second Season",
+						"Haikyu!! Staffel 2",
+						"Haikyu!! Zweite Staffel",
+						"Haikyuu - Segunda Temporada",
+						"Haikyuu!! 2",
+						"Haikyuu!! 2nd Season",
+						"Haikyuu!! II",
+						"Haikyuu2",
+						"Haikyū!! Second Season",
+						"Волейбол!! [ТВ-2]",
+						"ไฮคิว!! คู่ตบฟ้าประทาน ภาค 2",
+						"ハイキュー!! 2",
+						"ハイキュー!! セカンドシーズン",
+						"ハイキュー！！ セカンドシーズン",
+						"排球少年 第二季"
+					]
+				},
+				{
+					"anidbId": 11941,
+					"names": [
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka OVA",
+						"DanMachi OVA",
+						"DanMachi: È sbagliato cercare di incontrare ragazze in un dungeon? È sbagliato cercare terme in un dungeon?",
+						"Danmachi OAV",
+						"Danmachi: Is It Wrong to Try to Pick Up Girls in a Dungeon? Familia Myth OVA",
+						"Danmachi: Is It Wrong to Try to Pick Up Girls in a Dungeon? Ist es falsch, im Dungeon in heißen Quellen zu baden?",
+						"Danmachi: ¿qué Tiene De Malo Intentar Buscar Unos Baños Termales En Una Mazmorra?",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth - Dungeon ni Onsen o Motomeru no wa Machigatte Iru Darouka",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darou ka: Familia Myth - Dungeon ni Onsen o Motomeru no wa Machigatte Iru darou ka",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darouka: Familia Myth OVA",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darō ka: Familia Myth - Dungeon ni Onsen o Motomeru no wa Machigatte Iru darō ka",
+						"Dungeon ni Deai o Motomeru no wa Machigatteiru Darō ka",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darou ka OVA",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darouka: Familia Myth - Dungeon ni Onsen o Motomeru no wa Machigatte Iru Darouka",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru darou ka: Familia Myth - Dungeon ni Onsen wo Motomeru no wa Machigatte Iru darou ka",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru darouka: Familia Myth OVA",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka: Dungeon ni Onsen wo Motomeru no wa Machigatteiru Darou ka",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru no Darou ka OVA",
+						"Dungeon ni Onsen o Motomeru no wa Machigatteiru Darō ka",
+						"Is It Wrong to Expect a Hot Spring in a Dungeon?",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon?",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? Familia Myth OVA",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? Is It Wrong to Expect a Hot Spring in a Dungeon?",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? Is It Wrong to Exprect a Hot Spring in a Dungeon?",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? Is It Wrong to Try to Soak in a Hot Spring in a Dungeon?",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? OVA",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon?: Is It Wrong to Expect a Hot Spring in a Dungeon?",
+						"Is it Wrong to Expect a Hot Spring in a Dungeon?",
+						"danmachi ova",
+						"¿Qué tiene de malo intentar buscar unos baños termales en una mazmorra?",
+						"È sbagliato cercare terme in un dungeon?",
+						"ダンまち OVA",
+						"ダンジョンに出会いを求めるのは間違っているだろうか",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH OVA",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH ダンジョンに温泉を求めるのは間違っているだろうか",
+						"ダンジョンに出会いを求めるのは間違っているだろうか OVA",
+						"ダンジョンに出会いを求めるのは間違っているだろうか OVA「ダンジョンに温泉を求めるのは 間違っているだろうか」",
+						"ダンジョンに出会いを求めるのは間違っているだろうか ダンジョンに温泉を求めるのは 間違っているだろうか",
+						"ダンジョンに温泉を求めるのは間違っているだろうか",
+						"在地下城寻求邂逅是否搞错了什么 第三季 OVA",
+						"在地下城尋求邂逅是否搞錯了什麼 (OVA)",
+						"在地下城尋求邂逅是否搞錯了什麼 第三季 OVA",
+						"던전에서 만남을 추구하면 안 되는 걸까? 던전에서 온천을 추구하면 안 되는 걸까"
+					]
+				},
+				{
+					"anidbId": 11991,
+					"names": [
+						"Haikyuu!! Karasuno Koukou vs. Shiratorizawa Gakuen Koukou",
+						"HAIKYU!! 3rd Season",
+						"HQ!! 3",
+						"Haikyu! L’asso del volley: Stagione 3",
+						"Haikyu!! 3",
+						"Haikyu!! 3ra Temporada",
+						"Haikyu!! 3rd Season",
+						"Haikyu!! Karasuno High School vs Shiratorizawa Academy",
+						"Haikyu!! Karasuno High vs Shiratorizawa Academy",
+						"Haikyu!! Karasuno Koukou vs Shiratorizawa Gakuen Koukou",
+						"Haikyu!! Karasuno vs. Shiratorizawa",
+						"Haikyu!! Los Ases del Vóley 3ª temporada",
+						"Haikyu!! Los Ases del Vóley Temporada 3",
+						"Haikyu!! Third Season",
+						"Haikyuu - Terceira Temporada",
+						"Haikyuu!! 3",
+						"Haikyuu!! Karasuno High School vs Shiratorizawa Academy",
+						"Haikyuu!! Karasuno High VS Shiratorizawa Academy",
+						"Haikyuu!! Karasuno Koukou vs Shiratorizawa Gakuen Koukou",
+						"Haikyuu!! Saison 3",
+						"Haikyuu!! Third Season",
+						"Haikyuu!!: Karasuno Koukou VS Shiratorizawa Gakuen Koukou",
+						"Haikyuu!!Staffel 3 Karasuno vs. Shiratorizawa",
+						"Haikyū!! Karasuno Kōkō vs Shiratorizawa Gakuen Kōkō",
+						"haikyuu3",
+						"Волейбол [ТВ-3]",
+						"ไฮคิว!! คู่ตบฟ้าประทาน ภาค 3",
+						"ハイキュー!! 3",
+						"ハイキュー!! 烏野高校 VS 白鳥沢学園高校",
+						"ハイキュー!! 烏野高校 ＶＳ 白鳥沢学園高校",
+						"ハイキュー！！ 烏野高校 VS 白鳥沢学園高校",
+						"排球少年!! 乌野高中 VS 白鸟泽学园高中"
+					]
+				},
+				{
+					"anidbId": 13332,
+					"names": [
+						"Haikyuu!! Tokushuu! Haru-kou Volley ni Kaketa Seishun",
+						"HAIKYU!! - Special Feature! The Spring Tournament of Their Youth",
+						"Haikyu!! Karasuno High School vs Shiratorizawa Academy: Special Feature! The Spring Tournament of Their Youth",
+						"Haikyu!! Karasuno vs. Shiratorizawa: Special Feature! The Spring Tournament of Their Youth",
+						"Haikyu!! La jeunesse se prépare pour le tournoi de printemps",
+						"Haikyu!! Season 3 OVA",
+						"Haikyu!! Sonderbeitrag: Die Jugend beim Frühlingsturnier",
+						"Haikyu!! Special Feature! The Spring Tournament of Their Youth",
+						"Haikyu!! Speciale! La Gioventù Messa in Gioco al Torneo Primaverile",
+						"Haikyu!! Tokushū! Haru-kō Volley ni Kaketa Seishun",
+						"Haikyu!! ¡Especial! Los jóvenes y el torneo de primavera",
+						"Haikyuu!! Karasuno Koukou vs Shiratorizawa Gakuen Koukou: Tokushuu! Haru Kou Volley ni Kaketa Seishun",
+						"Haikyuu!! OAD",
+						"Haikyuu!! OVA",
+						"Haikyuu!! Special Feature! The Spring Tournament of Their Youth",
+						"Haikyuu!! Tokushuu! Harukou Volley ni Kaketa Seishun",
+						"Haikyuu!!: Karasuno Koukou VS Shiratorizawa Gakuen",
+						"Haikyuu!!: Karasuno Koukou VS Shiratorizawa Gakuen Koukou OVA",
+						"Haikyuu!!: Tokushuu! Haru-kou Volley ni Kaketa Seishun",
+						"Haikyū!! Karasuno Kōkō vs Shiratorizawa Gakuen Kōkō: Tokushū! Haru Kō Volley ni Kaketa Seishun",
+						"ハイキュー!! 烏野高校 VS 白鳥沢学園高校 特集! 春高バレーに賭けた青春",
+						"ハイキュー!! 特集! 春高バレーに賭けた青春",
+						"ハイキュー!! 特集！春高バレーに賭けた青春",
+						"ハイキュー！！ 烏野高校 VS 白鳥沢学園高校 特集！ 春高バレーに賭けた青春",
+						"排球少年 特集！赌在春高上的青春"
+					]
+				},
+				{
+					"anidbId": 13750,
+					"names": [
+						"Asobi Asobase",
+						"Asobi Asobase - workshop of fun -",
+						"Asobi Asobase -workshop of fun-",
+						"Asobi Asobase: Workshop of Fun",
+						"Asobi Asobase: workshop of Fun",
+						"Play and Let Play",
+						"asoaso",
+						"Развлекательные развлечения",
+						"ชมรมสาวรักสนุก",
+						"あそびあそばせ",
+						"来玩游戏吧",
+						"游戏3人娘",
+						"遊戲 3 人娘",
+						"즐겁게 놀아보세"
+					]
+				},
+				{
+					"anidbId": 13829,
+					"names": [
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka II",
+						"DanMachi 2nd Season",
+						"DanMachi II",
+						"DanMachi: ¿Qué tiene de malo intentar ligar en una mazmorra? II",
+						"DanMachi: È sbagliato cercare di incontrare ragazze in un dungeon? Familia Myth II",
+						"Danmachi 2",
+						"Danmachi II",
+						"Danmachi Season 2",
+						"Danmachi: Family Myth II",
+						"Danmachi: Is It Wrong to Try to Pick Up Girls in a Dungeon? 2",
+						"Danmachi: Is It Wrong to Try to Pick Up Girls in a Dungeon? Familia Myth II",
+						"Danmachi: ¿Qué Tiene De Malo Intentar Ligar En Una Mazmorra? II",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth (2019)",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth II",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darou ka: Familia Myth II",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darō ka: Familia Myth II",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darou ka II: Familia Myth",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darouka: Familia Myth II",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru darou ka: Familia Myth II",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka 2",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru no Darou ka II",
+						"Is It Wrong That I Want to Meet You in a Dungeon 2nd Season",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? 2",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? II",
+						"danmachi s2",
+						"danmachi2",
+						"هل من الخطأ الإيقاع بفتياتٍ في ديماس؟ II",
+						"มันผิดรึไงถ้าใจอยากจะพบรักในดันเจี้ยน ภาค 2",
+						"ダンまちII",
+						"ダンまちⅡ",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH 2",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH II",
+						"ダンジョンに出会いを求めるのは間違っているだろうか II",
+						"ダンジョンに出会いを求めるのは間違っているだろうか II FAMILIA MYTH",
+						"ダンジョンに出会いを求めるのは間違っているだろうか2",
+						"ダンジョンに出会いを求めるのは間違っているだろうかII",
+						"ダンジョンに出会いを求めるのは間違っているだろうかⅡ",
+						"在地下城寻求邂逅是否搞错了什么Ⅱ",
+						"在地下城尋求邂逅是否搞錯了什麼 2",
+						"던전에서 만남을 추구하면 안 되는 걸까? 2",
+						"던전에서 만남을 추구하면 안 되는 걸까? II"
+					]
+				},
+				{
+					"anidbId": 14127,
+					"names": [
+						"Asobi Asobase: Cosplay Taikai/Otona no Watashi e",
+						"Asobi Asobase - workshop of fun - OVA",
+						"Asobi Asobase -workshop of fun- OVA",
+						"Asobi Asobase OVA",
+						"Asobi Asobase: Cosplay Contest/To the Future Me",
+						"Asobi Asobase: Cosplay Convention / To My Future Self...",
+						"Asobi Asobase: Cosplay Taikai / Otona no Watashi e",
+						"Play and Let Play (OVA)",
+						"asoaso ova",
+						"あそびあそばせ",
+						"あそびあそばせ (OAD)",
+						"あそびあそばせ OVA",
+						"あそびあそばせ コスプレ大会 / 大人の私へ",
+						"あそびあそばせ コスプレ大会 ／ 大人の私へ",
+						"즐겁게 놀아보세: 코스프레 대회 / 어른인 나에게"
+					]
+				},
+				{
+					"anidbId": 14552,
+					"names": [
+						"Haikyuu!! To the Top",
+						"HAIKYU!! TO THE TOP",
+						"Haikyu!! 4th Season",
+						"Haikyu!! L'asso del volley - To The Top",
+						"Haikyu!! Los Ases del Vóley 4ª temporada",
+						"Haikyu!! L’asso del volley: To the Top",
+						"Haikyu!! Season 4",
+						"Haikyu!! TO THE TOP",
+						"Haikyu!! To The Top",
+						"Haikyu!! To the Top",
+						"Haikyu!!: To The Top",
+						"Haikyuu - Quarta Temporada",
+						"Haikyuu 4",
+						"Haikyuu!! (2020)",
+						"Haikyuu!! (Shin Series)",
+						"Haikyuu!! 4th Season",
+						"Haikyuu!! Fourth Season",
+						"Haikyuu!! Season 4",
+						"Haikyuu!! TO THE TOP",
+						"Haikyuu!!: To the Top",
+						"Haikyū!! To the Top",
+						"haikyuu4",
+						"هايكيو!! إلى القمة",
+						"ไฮคิว!! คู่ตบฟ้าประทาน ภาค 4 Part 1",
+						"ハイキュー!!",
+						"ハイキュー!! (新シリーズ)",
+						"ハイキュー!! TO THE TOP",
+						"ハイキュー！！ To the Top",
+						"排球少年 TO THE TOP",
+						"排球少年!! 第四季",
+						"排球少年！！第四季"
+					]
+				},
+				{
+					"anidbId": 15045,
+					"names": [
+						"Haikyuu!! Riku vs. Kuu",
+						"Booru no \"Michi\"",
+						"HAIKYU!! LAND VS. AIR",
+						"Haikyu !! La terre vs le ciel / La trajectoire du Ballon",
+						"Haikyu! L’asso del volley: Terra vs cielo",
+						"Haikyu!! An Land vs. In der Luft / Der ”Weg” des Balls",
+						"Haikyu!! LAND VS. AIR",
+						"Haikyu!! Land vs Air",
+						"Haikyu!! Land vs. Air",
+						"Haikyu!! Los ases del vóley: Tierra contra aire",
+						"Haikyu!! Riku vs. Kū",
+						"Haikyu!! Season 4 OVA",
+						"Haikyu!! Terra VS Cielo",
+						"Haikyu!!: Riku vs Kuu",
+						"Haikyuu!! (2019)",
+						"Haikyuu!! Jump Festa 2020 Special",
+						"Haikyuu!! Land vs. Air & The \"Path\" of the Ball",
+						"Haikyuu!! OVA",
+						"Haikyuu!! Riku VS Kuu",
+						"Haikyuu!! Riku vs Kuu",
+						"Haikyuu!!: Ball no Michi",
+						"Haikyuu!!: Land vs Sky",
+						"Haikyuu!!: Riku vs Kuu",
+						"Haikyuu!!: The Volleyball Way",
+						"Haikyū!! Riku vs Kū",
+						"The \"Path\" of the Ball",
+						"ไฮคิว คู่ตบฟ้าประทาน Riku vs Kuu OVA",
+						"ハイキュー!!",
+						"ハイキュー!! (2019)",
+						"ハイキュー!! 陸 VS 空",
+						"ハイキュー!! 陸VS空",
+						"ハイキュー!!陸VS空",
+						"ハイキュー！！ 陸 VS 空",
+						"ボールの\"道\""
+					]
+				},
+				{
+					"anidbId": 15111,
+					"names": [
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III",
+						"DanMachi - É Errado Tentar Pegar Garotas numa Masmorra? 3",
+						"DanMachi 3rd Season",
+						"DanMachi III",
+						"DanMachi: ¿Qué tiene de malo intentar ligar en una mazmorra? III",
+						"DanMachi: È sbagliato cercare di incontrare ragazze in un dungeon? Familia Myth III",
+						"Danmachi 3",
+						"Danmachi III",
+						"Danmachi Is It Wrong to Try to Pick Up Girls in a Dungeon? III",
+						"Danmachi Season 3",
+						"Danmachi: Family Myth III",
+						"Danmachi: Is It Wrong to Try to Pick Up Girls in a Dungeon? Familia Myth III",
+						"Danmachi: Is It Wrong to Try to Pick Up Girls in a Dungeon? Season 3",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka III",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth III",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darou ka: Familia Myth III",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darō ka: Familia Myth III",
+						"Dungeon ni Deai o Motomeru no wa Machigatteiru Darou ka 3",
+						"Dungeon ni Deai o Motomeru no wa Machigatteiru Darou ka III",
+						"Dungeon ni Deai o Motomeru no wa Machigatteiru Darō ka III",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darou ka III: Familia Myth",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darouka 3",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darouka III",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darouka: Familia Myth III",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru darou ka: Familia Myth III",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru no Darou ka III",
+						"Is It Wrong That I Want to Meet You in a Dungeon 3rd Season",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? (Danmachi) III",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? 3",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? III",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? SAISON 3",
+						"danmachi s3",
+						"danmachi3",
+						"È sbagliato cercare di incontrare ragazze in un dungeon? - Familia Myth III",
+						"هل من الخطأ الإيقاع بفتياتٍ في ديماس؟ III",
+						"มันผิดรึไงถ้าใจอยากจะพบรักในดันเจี้ยน ภาค 3",
+						"ダンまちⅢ",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH III",
+						"ダンジョンに出会いを求めるのは間違っているだろうか III",
+						"ダンジョンに出会いを求めるのは間違っているだろうか III FAMILIA MYTH",
+						"ダンジョンに出会いを求めるのは間違っているだろうかIII",
+						"ダンジョンに出会いを求めるのは間違っているだろうかⅢ",
+						"在地下城寻求邂逅是否搞错了什么Ⅲ",
+						"在地下城尋求邂逅是否搞錯了什麼 第三季"
+					]
+				},
+				{
+					"anidbId": 15283,
+					"names": [
+						"Haikyuu!! To the Top Part 2",
+						"HAIKYU!! TO THE TOP Part 2",
+						"Haikyu!! 4th Season (Part 2)",
+						"Haikyu!! L'asso del volley - To The Top",
+						"Haikyu!! Los Ases del Vóley 4ª temporada Camino a la cima",
+						"Haikyu!! Los Ases del Vóley Temporada 4",
+						"Haikyu!! L’asso del volley: To the Top - Parte 2",
+						"Haikyu!! Saison 4 Cour 2",
+						"Haikyu!! Season 4 Part 2",
+						"Haikyu!! TO THE TOP 2nd-cour, Haikyu!! TO THE TOP Part 2",
+						"Haikyu!! TO THE TOP Cour 2",
+						"Haikyu!! To The Top",
+						"Haikyu!! To The Top 2",
+						"Haikyu!! To the Top",
+						"Haikyu!! To the Top (2020)",
+						"Haikyu!! To the Top (2da Parte)",
+						"Haikyu!! To the Top (Part 2)",
+						"Haikyu!! To the Top - Cour 2",
+						"Haikyu!! To the Top 2nd-cour",
+						"Haikyu!! To the Top Cour 2",
+						"Haikyu!! To the Top Part 2",
+						"Haikyu!! Vierte Staffel 4",
+						"Haikyuu!! TO THE TOP 2",
+						"Haikyuu!! To the Top (2020)",
+						"Haikyuu!! To the Top 2",
+						"Haikyuu!! To the Top 2nd Season",
+						"Haikyuu!! To the Top Part II",
+						"Haikyuu!! To the Top: Part II",
+						"Haikyuu!!: To the Top 2nd Season",
+						"Haikyuu!!: To the Top Part 2",
+						"Haikyū!! To the Top (2020)",
+						"هايكيو!! إلى القمة (2020)",
+						"ไฮคิว!! คู่ตบฟ้าประทาน ภาค 4 Part 2",
+						"ハイキュー TO THE TOP 第2クール",
+						"ハイキュー!! TO THE TOP",
+						"ハイキュー!! TO THE TOP (2020)",
+						"ハイキュー!! TO THE TOP (202X)",
+						"ハイキュー!! TO THE TOP 2",
+						"ハイキュー!! TO THE TOP 第2クール",
+						"ハイキュー！！ To The Top （2020）",
+						"排球少年 TO THE TOP 第二期",
+						"排球少年!! 第四季",
+						"排球少年！！第四季 Part 2"
+					]
+				},
+				{
+					"anidbId": 16032,
+					"names": [
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV: Shin Shou - Meikyuu-hen",
+						"DanMachi 4th Season",
+						"DanMachi : La Légende des Familias - Saison 4",
+						"DanMachi IV",
+						"DanMachi: ¿Qué tiene de malo intentar ligar en una mazmorra? IV",
+						"DanMachi: È sbagliato cercare di incontrare ragazze in un dungeon? Familia Myth IV",
+						"Danmachi IV",
+						"Danmachi: Is It Wrong to Try to Pick Up Girls in a Dungeon? Familia Myth IV",
+						"Danmachi: Is It Wrong to Try to Pick Up Girls in a Dungeon? IV",
+						"Danmachi: Is It Wrong to Try to Pick Up Girls in a Dungeon? Season 4",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth IV",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darou ka: Familia Myth IV",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darō ka: Familia Myth IV",
+						"Dungeon ni Deai o Motomeru no wa Machigatteiru Darou ka 4",
+						"Dungeon ni Deai o Motomeru no wa Machigatteiru Darō ka IV Shinshō Meikyū-hen",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darou ka IV: Familia Myth",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru darou ka: Familia Myth IV",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka 4th Season",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV: Shin Shou Meikyuu-hen",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka S4",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru no Darou ka IV: Shin Shou - Meikyuu-hen",
+						"Is It Wrong That I Want to Meet You in a Dungeon 4th Season",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? IV",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? IV New Chapter: The Labyrinth Arc",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? IV Part 1",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? Season 4",
+						"Liệu Có Sai Lầm Khi Tìm Kiếm Cuộc Gặp Gỡ Định Mệnh Trong Hầm Ngục? IV: Chương Mới Phần Mê Cung",
+						"danmachi s4",
+						"danmachi4",
+						"È sbagliato cercare di incontrare ragazze in un dungeon? - Familia Myth IV - Arco della calamità",
+						"มันผิดรึไงถ้าใจอยากจะพบรักในดันเจี้ยน ภาค 4",
+						"มันผิดรึไงถ้าใจอยากจะพบรักในดันเจี้ยน ภาคที่ 4",
+						"ダンまちⅣ",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH IV",
+						"ダンジョンに出会いを求めるのは間違っているだろうか IV",
+						"ダンジョンに出会いを求めるのは間違っているだろうか IV 新章 迷宮篇",
+						"ダンジョンに出会いを求めるのは間違っているだろうかⅣ",
+						"ダンジョンに出会いを求めるのは間違っているだろうかⅣ 新章 迷宮篇",
+						"在地下城寻求邂逅是否搞错了什么 IV",
+						"在地下城尋求邂逅是否搞錯了什麼 4"
+					]
+				},
+				{
+					"anidbId": 17570,
+					"names": [
+						"Haikyuu!! Movie: Gomisuteba no Kessen",
+						"Gekijouban Haikyuu!! Final",
+						"Gekijouban Haikyuu!! Gomi Suteba no Kessen",
+						"Gekijōban Haikyu!! Gomi Suteba no Kessen",
+						"Gekijōban Haikyū!! Gomi Suteba no Kessen",
+						"HAIKYU!! A Batalha na Lixeira",
+						"HAIKYU!! La Batalla del Basurero",
+						"HAIKYU!! La Guerre des Poubelles",
+						"HAIKYU!! The Dumpster Battle",
+						"Haikyu!! - Battaglia all'ultimo Rifiuto",
+						"Haikyu!! Das Play-off der Müllhalde",
+						"Haikyu!! Final",
+						"Haikyu!! Final Movie",
+						"Haikyu!! Gomi Suteba no Kessen",
+						"Haikyu!! La Batalla del Basurero",
+						"Haikyu!! La Guerre des Poubelles",
+						"Haikyu!! Movie: Decisive Battle at the Garbage Dump",
+						"Haikyu!! Movie: The Dumpster Battle",
+						"Haikyu!! The Dumpster Battle",
+						"Haikyu!! the Movie: Decisive Battle at the Garbage Dump",
+						"Haikyu!!: La batalla del basurero",
+						"Haikyuu!! Battle at the Garbage Dump",
+						"Haikyuu!! FINAL",
+						"Haikyuu!! FINAL Part 1",
+						"Haikyuu!! Final",
+						"Haikyuu!! Final - Part 1",
+						"Haikyuu!! Movie 5: Gomi Suteba no Kessen",
+						"Haikyuu!! Movie 5: The Dumpster Battle",
+						"Haikyuu!!: Gomi Suteba no Kessen",
+						"Haikyū!! : La Guerre des Poubelles",
+						"ハイキュー!! FINAL",
+						"ハイキュー!! FINAL 第1クール",
+						"ハイキュー!! ゴミ捨て場の決戦",
+						"ハイキュー!! 劇場版 ゴミ捨て場の決戦",
+						"劇場版ハイキュー!! FINAL",
+						"劇場版ハイキュー!! ゴミ捨て場の決戦",
+						"劇場版ハイキュー！！ ゴミ捨て場の決戦"
+					]
+				},
+				{
+					"anidbId": 17652,
+					"names": [
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV: Shin Shou - Yakusai-hen",
+						"DanMachi 4 Part 2",
+						"DanMachi 4th Season Part 2, Is It Wrong That I Want to Meet You in a Dungeon 4th Season Part 2",
+						"DanMachi : La Légende des Familias - Saison 4 (Partie 2)",
+						"DanMachi IV Part 2",
+						"DanMachi Season 4 Part 2",
+						"Danmachi IV Part 2",
+						"Danmachi IV: Parte 2 - Capitolo delle profondità: Arco delle calamità",
+						"Danmachi: Is It Wrong to Try to Pick Up Girls in a Dungeon? Familia Myth IV - Teil 2",
+						"Danmachi: Is It Wrong to Try to Pick Up Girls in a Dungeon? Familia Myth IV Part 2",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth IV (2023)",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth IV Part 2",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth Season 4 Part 2",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darou ka: Familia Myth IV Shinshou - Yakusai-hen",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darō ka: Familia Myth IV Shinshō - Yakusai-hen",
+						"Dungeon ni Deai o Motomeru no wa Machigatteiru Darō ka IV Shinshō Yakusai-hen",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darou ka IV: Familia Myth - Shinshou Yakusai-hen",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru darou ka: Familia Myth IV Shinshou - Yakusai-hen",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka 4th Season Part 2",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV: Fuka Shou Yakusai-hen",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka IV: Shin Shou Yakusai-hen",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru no Darou ka IV: Fuka Shou - Yakusai-hen",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? IV",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? IV (2023)",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? IV - Part 2",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? IV - Parte 2",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? IV Deep Chapter: The Disaster Arc",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? IV Late Arc: Disaster",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? IV Part 2",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? IV: Part II",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? Season 4 Part 2",
+						"danmachi s4p2",
+						"danmachi s5",
+						"มันผิดรึไงถ้าใจอยากจะพบรักในดันเจี้ยน ภาค 4 Part 2",
+						"มันผิดรึไงถ้าใจอยากจะพบรักในดันเจี้ยน ภาคที่ 4 บทชั้นลึก ภาคภัยพิบัติ",
+						"ダンまちIV 深章 厄災篇",
+						"ダンまちⅣ",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH IV",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH IV (2023)",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH IV 深章 厄災篇",
+						"ダンジョンに出会いを求めるのは間違っているだろうか IV 深章 厄災篇",
+						"ダンジョンに出会いを求めるのは間違っているだろうかⅣ 深章 厄災篇",
+						"ダンジョンに出会いを求めるのは間違っているだろうかⅣ深章 厄災篇",
+						"在地下城尋求邂逅是否搞錯了什麼 Ⅳ 深章 災厄篇",
+						"期待在地下城邂逅有错吗 Ⅳ 深章 灾厄篇"
+					]
+				},
+				{
+					"anidbId": 18267,
+					"names": [
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka V: Houjou no Megami-hen",
+						"DanMachi 5th Season",
+						"DanMachi : La Légende des Familias - Saison 5",
+						"DanMachi Season 5",
+						"DanMachi V",
+						"DanMachi5",
+						"DanMachi: ¿Qué tiene de malo intentar ligar en una mazmorra? V",
+						"DanMachi: È sbagliato cercare di incontrare ragazze in un dungeon? Familia Myth - Arco della dea della fertilità",
+						"Danmachi 5",
+						"Danmachi: Is It Wrong to Try to Pick Up Girls in a Dungeon? Familia Myth V: Goddess of the Harvest Arc",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka V: Houjou no Megami Hen",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth Season 5",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru Darouka: Familia Myth V",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darou ka: Familia Myth V - Houjou no Megami-hen",
+						"Dungeon ni Deai o Motomeru no wa Machigatte Iru darō ka: Familia Myth V - Hōjō no Megami-hen",
+						"Dungeon ni Deai o Motomeru no wa Machigatteiru Darou ka V: Houjou no Megami-hen",
+						"Dungeon ni Deai o Motomeru no wa Machigatteiru Darō ka V: Hōjō no Megami-hen",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru Darou ka V: Houjou no Megami-hen",
+						"Dungeon ni Deai wo Motomeru no wa Machigatte Iru darou ka: Familia Myth V - Houjou no Megami-hen",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka 5th Season",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka V",
+						"Dungeon ni Deai wo Motomeru no wa Machigatteiru no Darou ka V: Houjou no Megami-hen",
+						"Familia Myth V",
+						"Is It Wrong That I Want to Meet You in a Dungeon 5th Season",
+						"Is It Wrong To Try To Pick Up Girls in a Dungeon? V",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? 5th Season",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? Familia Myth V",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? Season 5",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? V",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? V: Goddess of Fertility Arc",
+						"Is It Wrong to Try to Pick Up Girls in a Dungeon? V: Goddess of the Harvest Arc",
+						"È sbagliato cercare di incontrare ragazze in un dungeon? - Familia Myth V: Arco della Dea della Fertilità",
+						"มันผิดรึไงถ้าใจอยากจะพบรักในดันเจี้ยน ภาคที่ 5",
+						"ダンまち5",
+						"ダンまちⅤ",
+						"ダンジョンに出会いを求めるのは間違っているだろうか FAMILIA MYTH V",
+						"ダンジョンに出会いを求めるのは間違っているだろうか V 豊穣の女神篇",
+						"ダンジョンに出会いを求めるのは間違っているだろうかV 豊穣の女神篇",
+						"ダンジョンに出会いを求めるのは間違っているだろうかⅤ",
+						"ダンジョンに出会いを求めるのは間違っているだろうかⅤ 豊穣の女神篇",
+						"在地下城寻求邂逅是否搞错了什么 第五季 丰饶女神篇",
+						"在地下城尋求邂逅是否搞錯了什麼 第五季"
+					]
+				}
+			]
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun (RD), 2026-11-10: the .zurgtorrent's name, hash, IMDb id and every video file with its folder and probed length, as zurg asks",
+			"request": {
+				"name": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III v2 [BD 1080p FLAC]",
+				"hash": "08926a02a9075a0ab01cd61d4bbd2fb0c41167a4",
+				"imdbId": "tt4771630",
+				"files": [
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 01v2 [BD 1080p FLAC] [47408149].mkv",
+						"folder": "",
+						"duration": 1419.919
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 02v2 [BD 1080p FLAC] [43CDBF15].mkv",
+						"folder": "",
+						"duration": 1419.961
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 03v2 [BD 1080p FLAC] [48B52525].mkv",
+						"folder": "",
+						"duration": 1420.002
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 04v2 [BD 1080p FLAC] [24DE7340].mkv",
+						"folder": "",
+						"duration": 1420.002
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 05v2 [BD 1080p FLAC] [15B2DA19].mkv",
+						"folder": "",
+						"duration": 1419.961
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 06v2 [BD 1080p FLAC] [41008C3E].mkv",
+						"folder": "",
+						"duration": 1419.961
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 07v2 [BD 1080p FLAC] [FEB84F59].mkv",
+						"folder": "",
+						"duration": 1420.044
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 08v2 [BD 1080p FLAC] [23BB75EF].mkv",
+						"folder": "",
+						"duration": 1420.044
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 09v2 [BD 1080p FLAC] [2E688288].mkv",
+						"folder": "",
+						"duration": 1420.002
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 10v2 [BD 1080p FLAC] [3490CE2E].mkv",
+						"folder": "",
+						"duration": 1419.961
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 11v2 [BD 1080p FLAC] [D0E91EF3].mkv",
+						"folder": "",
+						"duration": 1420.044
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 12v2 [BD 1080p FLAC] [0A9DD1E3].mkv",
+						"folder": "",
+						"duration": 1420.002
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - NCED v2 [BD 1080p FLAC] [26843919].mkv",
+						"folder": "Extras",
+						"duration": 90.09
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - NCOP v2 [BD 1080p FLAC] [1690ABAF].mkv",
+						"folder": "Extras",
+						"duration": 90.09
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - OVA - NCED v2 [BD 1080p FLAC] [FF35DB27].mkv",
+						"folder": "Extras",
+						"duration": 94.637
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - OVA v2 [BD 1080p FLAC] [0061755B].mkv",
+						"folder": "",
+						"duration": 1649.648
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt4728568",
+				"tmdbId": 62745,
+				"files": [
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 01v2 [BD 1080p FLAC] [47408149].mkv",
+						"season": 3,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 2025343
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 02v2 [BD 1080p FLAC] [43CDBF15].mkv",
+						"season": 3,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 2451630
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 03v2 [BD 1080p FLAC] [48B52525].mkv",
+						"season": 3,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 2458902
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 04v2 [BD 1080p FLAC] [24DE7340].mkv",
+						"season": 3,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 2458903
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 05v2 [BD 1080p FLAC] [15B2DA19].mkv",
+						"season": 3,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 2458904
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 06v2 [BD 1080p FLAC] [41008C3E].mkv",
+						"season": 3,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 2458905
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 07v2 [BD 1080p FLAC] [FEB84F59].mkv",
+						"season": 3,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 2497325
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 08v2 [BD 1080p FLAC] [23BB75EF].mkv",
+						"season": 3,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 2506754
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 09v2 [BD 1080p FLAC] [2E688288].mkv",
+						"season": 3,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 2519182
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 10v2 [BD 1080p FLAC] [3490CE2E].mkv",
+						"season": 3,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 2533506
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 11v2 [BD 1080p FLAC] [D0E91EF3].mkv",
+						"season": 3,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 2544881
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - 12v2 [BD 1080p FLAC] [0A9DD1E3].mkv",
+						"season": 3,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 2553833
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - NCED v2 [BD 1080p FLAC] [26843919].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - NCOP v2 [BD 1080p FLAC] [1690ABAF].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - OVA - NCED v2 [BD 1080p FLAC] [FF35DB27].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[sam] Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka III - OVA v2 [BD 1080p FLAC] [0061755B].mkv",
+						"season": 0,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2813596
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD), 2026-11-10: the .zurgtorrent's name, hash, IMDb id and every video file with its folder and probed length, as zurg asks",
+			"request": {
+				"name": "[YURI] Durarara!!x2 Shou (Dual Audio) [BD 1080p x264 10bit FLAC]",
+				"hash": "062416c60acb226775a5cfcac0513895d0c465ca",
+				"imdbId": "tt1584000",
+				"files": [
+					{
+						"path": "[YURI] Durarara!!x2 Shou (Creditless ED) [BD 1080p x264 10bit FLAC].mkv",
+						"folder": "NC",
+						"duration": 98.1
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou (Creditless OP) [BD 1080p x264 10bit FLAC].mkv",
+						"folder": "NC",
+						"duration": 97.097
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 01 [BD 1080p x264 10bit FLAC].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 02 [BD 1080p x264 10bit FLAC].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 03 [BD 1080p x264 10bit FLAC].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 04 [BD 1080p x264 10bit FLAC].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 05 [BD 1080p x264 10bit FLAC].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 06 [BD 1080p x264 10bit FLAC].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 07 [BD 1080p x264 10bit FLAC].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 08 [BD 1080p x264 10bit FLAC].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 09 [BD 1080p x264 10bit FLAC].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 10 [BD 1080p x264 10bit FLAC].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 11 [BD 1080p x264 10bit FLAC].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 12 [BD 1080p x264 10bit FLAC].mkv",
+						"folder": "",
+						"duration": 1434.1
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou OVA [BD 1080p x264 10bit FLAC].mkv",
+						"folder": "OVA",
+						"duration": 1435.855
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt1584000",
+				"tmdbId": 42410,
+				"files": [
+					{
+						"path": "[YURI] Durarara!!x2 Shou (Creditless ED) [BD 1080p x264 10bit FLAC].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou (Creditless OP) [BD 1080p x264 10bit FLAC].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 01 [BD 1080p x264 10bit FLAC].mkv",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1029454
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 02 [BD 1080p x264 10bit FLAC].mkv",
+						"season": 2,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1037794
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 03 [BD 1080p x264 10bit FLAC].mkv",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1038552
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 04 [BD 1080p x264 10bit FLAC].mkv",
+						"season": 2,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1056190
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 05 [BD 1080p x264 10bit FLAC].mkv",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1056191
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 06 [BD 1080p x264 10bit FLAC].mkv",
+						"season": 2,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1056192
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 07 [BD 1080p x264 10bit FLAC].mkv",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1056193
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 08 [BD 1080p x264 10bit FLAC].mkv",
+						"season": 2,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1056194
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 09 [BD 1080p x264 10bit FLAC].mkv",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1056195
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 10 [BD 1080p x264 10bit FLAC].mkv",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1056196
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 11 [BD 1080p x264 10bit FLAC].mkv",
+						"season": 2,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1054906
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou 12 [BD 1080p x264 10bit FLAC].mkv",
+						"season": 2,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1054907
+					},
+					{
+						"path": "[YURI] Durarara!!x2 Shou OVA [BD 1080p x264 10bit FLAC].mkv",
+						"season": 0,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1159223
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD), 2026-11-10: the .zurgtorrent's name, hash, IMDb id and every video file with its folder and probed length, as zurg asks",
+			"request": {
+				"name": "Durarara!!x2_Ten_(+OVA)_(BD_1080p_Hi10_FLACx2)_[Dual-Audio]_[Kametsu]",
+				"hash": "5088d03d0848eabc8f62cdef92c76ee51db6da45",
+				"imdbId": "tt1584000",
+				"files": [
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 01 (BD 1080p Hi10 FLACx2) [67F5AEF3].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 02 (BD 1080p Hi10 FLACx2) [1D930920].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 03 (BD 1080p Hi10 FLACx2) [65F769CC].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 04 (BD 1080p Hi10 FLACx2) [062327E7].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 05 (BD 1080p Hi10 FLACx2) [416FE92C].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 06 (BD 1080p Hi10 FLACx2) [0EB8D6AC].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 07 (BD 1080p Hi10 FLACx2) [BB086940].mkv",
+						"folder": "",
+						"duration": 1441.111
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 08 (BD 1080p Hi10 FLACx2) [03E369EE].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 09 (BD 1080p Hi10 FLACx2) [BB93D37C].mkv",
+						"folder": "",
+						"duration": 1441.111
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 10 (BD 1080p Hi10 FLACx2) [09219AAF].mkv",
+						"folder": "",
+						"duration": 1441.11
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 11 (BD 1080p Hi10 FLACx2) [9D46157E].mkv",
+						"folder": "",
+						"duration": 1441.111
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 12 (BD 1080p Hi10 FLACx2) [CFC30659].mkv",
+						"folder": "",
+						"duration": 1426.095
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - OVA (BD 1080p Hi10 FLACx2) [EDBA5ADA].mkv",
+						"folder": "",
+						"duration": 1439.65
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt1584000",
+				"tmdbId": 42410,
+				"files": [
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 01 (BD 1080p Hi10 FLACx2) [67F5AEF3].mkv",
+						"season": 2,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1158110
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 02 (BD 1080p Hi10 FLACx2) [1D930920].mkv",
+						"season": 2,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1158111
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 03 (BD 1080p Hi10 FLACx2) [65F769CC].mkv",
+						"season": 2,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1158112
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 04 (BD 1080p Hi10 FLACx2) [062327E7].mkv",
+						"season": 2,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1158113
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 05 (BD 1080p Hi10 FLACx2) [416FE92C].mkv",
+						"season": 2,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1158114
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 06 (BD 1080p Hi10 FLACx2) [0EB8D6AC].mkv",
+						"season": 2,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1158115
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 07 (BD 1080p Hi10 FLACx2) [BB086940].mkv",
+						"season": 2,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1158116
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 08 (BD 1080p Hi10 FLACx2) [03E369EE].mkv",
+						"season": 2,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1158117
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 09 (BD 1080p Hi10 FLACx2) [BB93D37C].mkv",
+						"season": 2,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1158118
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 10 (BD 1080p Hi10 FLACx2) [09219AAF].mkv",
+						"season": 2,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1158119
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 11 (BD 1080p Hi10 FLACx2) [9D46157E].mkv",
+						"season": 2,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1158120
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - 12 (BD 1080p Hi10 FLACx2) [CFC30659].mkv",
+						"season": 2,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1158121
+					},
+					{
+						"path": "[Kametsu] Durarara!!x2 Ten - OVA (BD 1080p Hi10 FLACx2) [EDBA5ADA].mkv",
+						"season": 0,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1163906
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD), 2026-11-10: the .zurgtorrent's name, hash, IMDb id and every video file with its folder and probed length, as zurg asks",
+			"request": {
+				"name": "[Commie] Haikyuu!! OADs",
+				"hash": "091f2dc766eb53a2c2011939dd7d666e23f8b603",
+				"imdbId": "tt3398540",
+				"files": [
+					{
+						"path": "[Commie] Haikyuu!! - OAD v2 [0A2CBD5C].mkv",
+						"folder": "",
+						"duration": 1456.455
+					},
+					{
+						"path": "[Commie] Haikyuu!! Karasuno High School vs. Shiratorizawa Academy - OAD v2 [FCEC5DA6].mkv",
+						"folder": "",
+						"duration": 1347.346
+					},
+					{
+						"path": "[Commie] Haikyuu!! Second Season - OAD v2 [EF1D18BD].mkv",
+						"folder": "",
+						"duration": 1310.017
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt3398540",
+				"tmdbId": 60863,
+				"files": [
+					{
+						"path": "[Commie] Haikyuu!! - OAD v2 [0A2CBD5C].mkv",
+						"season": 0,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1243691
+					},
+					{
+						"path": "[Commie] Haikyuu!! Karasuno High School vs. Shiratorizawa Academy - OAD v2 [FCEC5DA6].mkv",
+						"season": 0,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1243694
+					},
+					{
+						"path": "[Commie] Haikyuu!! Second Season - OAD v2 [EF1D18BD].mkv",
+						"season": 0,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1243692
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD), 2026-11-10: the .zurgtorrent's name, hash, IMDb id and every video file with its folder and probed length, as zurg asks",
+			"request": {
+				"name": "[MTBB] Asobi Asobase OVAs",
+				"hash": "0901af730b90e82aa76eda2fa6fb4f8d32638124",
+				"imdbId": "tt8515062",
+				"files": [
+					{
+						"path": "[MTBB] Asobi Asobase - OAD [FCCAFFC9].mkv",
+						"folder": "",
+						"duration": 801.941
+					},
+					{
+						"path": "[MTBB] Asobi Asobase - OVA1 [04501353].mkv",
+						"folder": "",
+						"duration": 307.987
+					},
+					{
+						"path": "[MTBB] Asobi Asobase - OVA2 [43F5C7B2].mkv",
+						"folder": "",
+						"duration": 326.159
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt8515062",
+				"tmdbId": 80539,
+				"files": [
+					{
+						"path": "[MTBB] Asobi Asobase - OAD [FCCAFFC9].mkv",
+						"season": 0,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1689084
+					},
+					{
+						"path": "[MTBB] Asobi Asobase - OVA1 [04501353].mkv",
+						"season": 0,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1630932
+					},
+					{
+						"path": "[MTBB] Asobi Asobase - OVA2 [43F5C7B2].mkv",
+						"season": 0,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1630933
+					}
+				]
+			}
+		}
+	]
+}

@@ -35,6 +35,7 @@ import {
 	numberedByTvdb,
 	parseName,
 	placeFile,
+	seasonSpecialOf,
 	specialOf,
 	spelledAlike,
 	stackedParts,
@@ -1643,7 +1644,16 @@ async function placeOnShow(
 	imdbId = hit ? (showImdb ?? imdbId) : (imdbId ?? showImdb);
 	const lists = new Map<
 		number,
-		Promise<{ episode: number; name: string; airDate: string | null; id?: number }[] | null>
+		Promise<
+			| {
+					episode: number;
+					name: string;
+					airDate: string | null;
+					id?: number;
+					runtime?: number;
+			  }[]
+			| null
+		>
 	>();
 	const episodes = (season: number) => {
 		if (!lists.has(season)) {
@@ -1658,6 +1668,9 @@ async function placeOnShow(
 									name: typeof row.name === 'string' ? row.name : '',
 									airDate: typeof row.air_date === 'string' ? row.air_date : null,
 									...(Number.isInteger(row.id) ? { id: row.id as number } : {}),
+									...(Number(row.runtime) > 0
+										? { runtime: row.runtime as number }
+										: {}),
 								}))
 								.sort((a, b) => a.episode - b.episode)
 						: null
@@ -1833,21 +1846,30 @@ async function placeFiles(
 			? found
 			: { ...between, episodeEnd: null, how: before.found.how };
 	});
+	// an OVA named by its show and season alone is the special after that season's episodes it holds
+	const held = kept.filter((found): found is Placement => Boolean(found && found.season > 0));
+	const specials = await Promise.all(
+		kept.map((found, at) =>
+			found || numbers[at]
+				? found
+				: seasonSpecialOf(placement, release.name, release.files[at], held)
+		)
+	);
 	// the one file of an episode beside a later part of it named so is its first: `Lost.S01E24`
 	// beside `Lost.S01E24.Part.2`
 	const parted = placement.parts
-		? kept.map((found) => {
+		? specials.map((found) => {
 				const same = (other: Placement | null) =>
 					other?.season === found?.season && other?.episode === found?.episode;
 				return found &&
 					!found.part &&
 					found.episodeEnd === null &&
-					kept.some((other) => same(other) && (other?.part ?? 0) > 1) &&
-					kept.filter((other) => same(other) && !other?.part).length === 1
+					specials.some((other) => same(other) && (other?.part ?? 0) > 1) &&
+					specials.filter((other) => same(other) && !other?.part).length === 1
 					? { ...found, part: 1 }
 					: found;
 			})
-		: kept;
+		: specials;
 	// every rule lands on an episode of TMDB's season lists, which carry its id; IMDb's list has none
 	const episodeId = async (found: Placement) =>
 		placement.tmdbId > 0
