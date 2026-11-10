@@ -10,6 +10,7 @@ describe('SiteLinks', () => {
 		const hrefs = [...nav.querySelectorAll('a')].map((a) => a.getAttribute('href'));
 		expect(hrefs).toEqual([
 			'https://zurg.debridmediamanager.com/',
+			'https://zurg.debridmediamanager.com/download.html',
 			'https://rex.debridmediamanager.com/',
 			'https://notes.debridmediamanager.com/',
 			'/choose-your-setup',
