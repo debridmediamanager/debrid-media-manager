@@ -475,4 +475,6 @@ function IndexPage() {
 	);
 }
 
-export default withAuth(IndexPage);
+// Nothing here reads the library, and the provider holds the whole cached library in
+// memory: a 20,000-row TorBox cache held 355 MB of heap on this page (2026-11-10).
+export default Object.assign(withAuth(IndexPage), { disableLibraryProvider: true });

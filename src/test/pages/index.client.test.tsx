@@ -134,6 +134,14 @@ vi.mock('react-hot-toast', () => ({
 
 import IndexPage from '@/pages/index';
 
+// The library provider holds the whole cached library in memory on every page it
+// wraps, and the home page never reads it: a 20,000-row TorBox cache held 355 MB of
+// heap here against 6 MB on /requests (2026-11-10), enough to run a reporter's tab
+// out of memory.
+it('runs without the library provider', () => {
+	expect((IndexPage as { disableLibraryProvider?: boolean }).disableLibraryProvider).toBe(true);
+});
+
 describe('IndexPage', () => {
 	beforeEach(() => {
 		currentUserMock.mockReset();
