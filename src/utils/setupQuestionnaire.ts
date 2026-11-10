@@ -361,7 +361,7 @@ function resolvePlayer({
 }
 
 const ANDROID_HOSTED_NZB =
-	'zurg Android has no TorBox hosted NZB backend; that route needs a normal host.';
+	'zurg+rex Android has no TorBox hosted NZB backend; that route needs a normal host.';
 
 /** zurg+rex Android runs zurg and the rex zurg feeds, never a mounted server, rex-stremio or another feed. */
 function runsOnAndroid(r: SourceRoute): boolean {
@@ -400,7 +400,7 @@ export function hostChoiceReason(
 		// zurg Android serves WebDAV and the Files picker, never a mount a server could scan.
 		const server =
 			answers.player === 'plex' ? 'Plex Media Server' : playerLabel(answers.player);
-		return `${server} needs a full server host; zurg Android cannot give a server on that device a library.`;
+		return `${server} needs a full server host; zurg+rex Android cannot give a server on that device a library.`;
 	}
 	if (rex && answers.sources.some((source) => source === 'url-addon' || source === 'http-local'))
 		return 'zurg+rex Android feeds rex from zurg only; Stremio URL addons and HTTP files need rex on a normal host.';
@@ -1302,7 +1302,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	if (player === 'webdav') {
 		result.alternatives.push({
 			title: 'For an SMB-only player',
-			detail: 'Use an existing SMB share, or zurg → filesystem mount → host SMB share → player. The host provides SMB; zurg itself does not. This bridge needs a normal host, not just the Android zurg app.',
+			detail: 'Use an existing SMB share, or zurg → filesystem mount → host SMB share → player. The host provides SMB; zurg itself does not. This bridge needs a normal host, not just the zurg+rex Android app.',
 			links: [ZURG],
 		});
 		const skipZurg = providerWebdav(selected);
@@ -1517,7 +1517,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		result.prerequisites.push(
 			androidRex
 				? 'zurg+rex Android needs sponsor access, a supported 64-bit device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. It has no TorBox hosted NZB (torbox_nzb) backend.'
-				: 'zurg Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and zurg Android has no TorBox hosted NZB (torbox_nzb) backend.'
+				: 'zurg+rex Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and zurg+rex Android has no TorBox hosted NZB (torbox_nzb) backend.'
 		);
 		const android = note('zurg/guides/android', 'zurg+rex Android guide');
 		// The app stands in for the desktop zurg and rex guides, so its own guide leads.

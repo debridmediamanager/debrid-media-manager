@@ -624,7 +624,7 @@ describe('choose your setup page', () => {
 		expectUnavailable(screen.getByRole('radio', { name: /Android \/ Google TV/ }));
 		expect(
 			screen.getByText(
-				'Unavailable: Plex Media Server needs a full server host; zurg Android cannot give a server on that device a library.'
+				'Unavailable: Plex Media Server needs a full server host; zurg+rex Android cannot give a server on that device a library.'
 			)
 		).toBeInTheDocument();
 	});
@@ -655,7 +655,7 @@ describe('choose your setup page', () => {
 	const ANDROID = /Android \/ Google TV/;
 
 	function expectAndroidDropped(
-		reason = 'zurg Android has no TorBox hosted NZB backend; that route needs a normal host.'
+		reason = 'zurg+rex Android has no TorBox hosted NZB backend; that route needs a normal host.'
 	) {
 		const group = screen.getByRole('radiogroup', {
 			name: 'Can a machine stay on while you watch?',
@@ -768,7 +768,7 @@ describe('choose your setup page', () => {
 		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
 
 		expectAndroidDropped(
-			'Plex Media Server needs a full server host; zurg Android cannot give a server on that device a library.'
+			'Plex Media Server needs a full server host; zurg+rex Android cannot give a server on that device a library.'
 		);
 	});
 

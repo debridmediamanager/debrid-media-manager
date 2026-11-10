@@ -507,7 +507,7 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
-	it('never offers Wanted or Seerr on Android without a source zurg Android can fetch with', () => {
+	it('never offers Wanted or Seerr on Android without a source zurg+rex Android can fetch with', () => {
 		expect(
 			breaking(
 				(answers, result) =>

@@ -1406,9 +1406,9 @@ describe('host messages name the server that needs the host', () => {
 		[{ player: 'plex', plexRoute: 'existing-server' }, 'Plex Media Server'],
 		[{ player: 'jellyfin' }, 'Jellyfin'],
 		[{ player: 'emby' }, 'Emby'],
-	] as const)('says zurg Android cannot give %o a library', (mode, name) => {
+	] as const)('says zurg+rex Android cannot give %o a library', (mode, name) => {
 		expect(hostChoiceReason({ ...mode, sources: [] }, 'android')).toBe(
-			`${name} needs a full server host; zurg Android cannot give a server on that device a library.`
+			`${name} needs a full server host; zurg+rex Android cannot give a server on that device a library.`
 		);
 	});
 
@@ -1436,7 +1436,7 @@ describe('host messages name the server that needs the host', () => {
 
 	it('gives the Android conflict the same reason', () => {
 		expect(recommendSetup(answers({ player: 'emby', host: 'android' })).conflicts).toContain(
-			'Emby needs a full server host; zurg Android cannot give a server on that device a library.'
+			'Emby needs a full server host; zurg+rex Android cannot give a server on that device a library.'
 		);
 	});
 
@@ -1802,7 +1802,7 @@ describe('Wanted and Seerr need a zurg that can run', () => {
 		{ sources: ['torbox-hosted'], host: 'android', preference: 'managed' },
 		{ player: 'kodi', sources: ['torbox-hosted'], host: 'android', needs: ['family'] },
 	] satisfies Partial<SetupAnswers>[])(
-		'offers no Wanted to zurg Android, which cannot fetch TorBox hosted NZBs (%o)',
+		'offers no Wanted to zurg+rex Android, which cannot fetch TorBox hosted NZBs (%o)',
 		(overrides) => {
 			const ids = offered(recommendSetup(answers(overrides)));
 
@@ -1811,7 +1811,7 @@ describe('Wanted and Seerr need a zurg that can run', () => {
 		}
 	);
 
-	it('suggests no Wanted route to zurg Android, which cannot fetch TorBox hosted NZBs', () => {
+	it('suggests no Wanted route to zurg+rex Android, which cannot fetch TorBox hosted NZBs', () => {
 		const result = recommendSetup(
 			answers({ sources: ['torbox-hosted'], host: 'android', preference: 'managed' })
 		);
@@ -2777,7 +2777,7 @@ describe('route copy stays on the player and source it is about', () => {
 		}
 	);
 
-	it('reminds zurg Android users that a NAS at home still needs a reachable connection', () => {
+	it('reminds zurg+rex Android users that a NAS at home still needs a reachable connection', () => {
 		expect(
 			recommendSetup(
 				answers({
@@ -3060,8 +3060,9 @@ describe('zurg+rex Android serves the Plex apps', () => {
 	});
 });
 
-describe('zurg Android has no TorBox hosted NZB backend', () => {
-	const reason = 'zurg Android has no TorBox hosted NZB backend; that route needs a normal host.';
+describe('zurg+rex Android has no TorBox hosted NZB backend', () => {
+	const reason =
+		'zurg+rex Android has no TorBox hosted NZB backend; that route needs a normal host.';
 
 	it('blocks Android when rex plays TorBox hosted NZBs through zurg', () => {
 		const input = answers({
@@ -3096,18 +3097,28 @@ describe('zurg Android has no TorBox hosted NZB backend', () => {
 	);
 
 	// TorBox hosted NZBs still play on that device through TorBox Cast or the Kodi addon.
-	it('says zurg Android lacks the torbox_nzb backend in the Android prerequisite', () => {
+	it('says zurg+rex Android lacks the torbox_nzb backend in the Android prerequisite', () => {
 		const result = recommendSetup(
 			answers({ player: 'kodi', sources: ['usenet'], host: 'android' })
 		);
 
 		expect(result.prerequisites).toContain(
-			'zurg Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and zurg Android has no TorBox hosted NZB (torbox_nzb) backend.'
+			'zurg+rex Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and zurg+rex Android has no TorBox hosted NZB (torbox_nzb) backend.'
 		);
 		expect(result.setupLinks).toContainEqual({
 			label: 'zurg+rex Android guide',
 			href: 'https://notes.debridmediamanager.com/zurg/guides/android/',
 		});
+	});
+
+	it('says the SMB bridge needs a normal host, not just the zurg+rex Android app', () => {
+		expect(
+			recommendSetup(
+				answers({ player: 'webdav', sources: ['offcloud'], host: 'android' })
+			).alternatives.find(({ title }) => title === 'For an SMB-only player')?.detail
+		).toBe(
+			'Use an existing SMB share, or zurg → filesystem mount → host SMB share → player. The host provides SMB; zurg itself does not. This bridge needs a normal host, not just the zurg+rex Android app.'
+		);
 	});
 });
 
