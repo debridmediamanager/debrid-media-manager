@@ -1843,7 +1843,7 @@ describe('Wanted and Seerr need a zurg that can run', () => {
 					({ id }) => id === 'zurg-nightly'
 				)?.detail
 			).toBe(
-				`Access the current zurg nightly builds, source code, Docker image and Android app (a Plex server on your phone) ${ending}`
+				`Access the current zurg nightly builds, source code and Docker image ${ending} The Android app (a Plex server on your phone) comes with it.`
 			);
 		}
 	);
@@ -3320,15 +3320,25 @@ describe('zurg+rex Android has no TorBox hosted NZB backend', () => {
 		);
 	});
 
-	it('says the SMB bridge needs a normal host, not just the zurg+rex Android app', () => {
-		expect(
-			recommendSetup(
-				answers({ player: 'webdav', sources: ['offcloud'], host: 'android' })
-			).alternatives.find(({ title }) => title === 'For an SMB-only player')?.detail
-		).toBe(
-			'Use an existing SMB share, or zurg → filesystem mount → host SMB share → player. The host provides SMB; zurg itself does not. This bridge needs a normal host, not just the zurg+rex Android app (a Plex server on your phone, not an SMB server).'
-		);
-	});
+	// On Android the prerequisite already calls the app a Plex server on your phone.
+	it.each([
+		['android', 'not just the zurg+rex Android app.'],
+		[
+			'none',
+			'not just the zurg+rex Android app (a Plex server on your phone, not an SMB server).',
+		],
+	] as const)(
+		'says the SMB bridge needs a normal host, not just the zurg+rex Android app (%s)',
+		(host, ending) => {
+			expect(
+				recommendSetup(
+					answers({ player: 'webdav', sources: ['offcloud'], host })
+				).alternatives.find(({ title }) => title === 'For an SMB-only player')?.detail
+			).toBe(
+				`Use an existing SMB share, or zurg → filesystem mount → host SMB share → player. The host provides SMB; zurg itself does not. This bridge needs a normal host, ${ending}`
+			);
+		}
+	);
 });
 
 describe('the zurg+rex Android guide leads wherever zurg runs on the device', () => {
