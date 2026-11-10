@@ -46,6 +46,7 @@ import fun1023 from '@/test/fixtures/placement/rex-fun-2026-10-23.json';
 import fun1024 from '@/test/fixtures/placement/rex-fun-2026-10-24.json';
 import fun1025 from '@/test/fixtures/placement/rex-fun-2026-10-25.json';
 import fun1101 from '@/test/fixtures/placement/rex-fun-2026-11-01.json';
+import runTogether from '@/test/fixtures/placement/run-together-segments.json';
 import saga from '@/test/fixtures/placement/saga-titles.json';
 import seasonOvas from '@/test/fixtures/placement/season-ovas.json';
 import seasonSubtitles from '@/test/fixtures/placement/season-subtitles.json';
@@ -2159,6 +2160,42 @@ describe("a segment title with an abbreviation's period", () => {
 		});
 		const f = releases[0].files.find((f) => f.path.includes('Harold vs. Patty + Rich Guy'))!;
 		expect([f.season, f.episode, f.episodeEnd]).toEqual([5, 23, 24]);
+	});
+});
+
+describe('segment titles run together with no mark between them', () => {
+	// zurg-usenet on fun (2026-11-10): the JHS SpongeBob packs write each half-hour's two titles as
+	// one (`Drive.HappyOld.Man.Patrick`), which TMDB lists as two episodes; read as one title they
+	// placed nothing, and the packs' files went by their numbers onto episodes they do not hold
+	const placed = async (name: string) => {
+		const c = runTogether.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true, shows: true }],
+			Infinity,
+			recordedSources(runTogether.answers),
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return (part: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(part))!;
+			return [f.season, f.episode, f.episodeEnd];
+		};
+	};
+
+	it('places the file on the run its titles divide into', async () => {
+		const eleven = await placed('Spongebob.Squarepants.S11');
+		// TMDB's S11E20 "Drive Happy" and S11E21 "Old Man Patrick"
+		expect(eleven('S11E11.Drive.HappyOld.Man.Patrick')).toEqual([11, 20, 21]);
+		// TMDB's S11E13 "Cuddle E. Hugs" and S11E17 "Pat the Horse" are no run: by its number on
+		// S11E5 "Feral Friends" before
+		expect(eleven('S11E09.Cuddle.E.HugsPat.the.Horse')).toEqual([null, null, null]);
+		const thirteen = await placed('Spongebob.Squarepants.S13');
+		// TMDB's S13E47 "Hot Crossed Nuts" and S13E48 "Sir Urchin and Snail Fail"
+		expect(thirteen('S13E17.Hot.Crossed.Nuts.Sir.Urchin.and.Snail.Fail')).toEqual([13, 47, 48]);
+		// three titles, TMDB's S13E34-E36; by its number on S13E12 "Plankton's Intern" before
+		expect(thirteen('S13E12.Welcome.to.Binary.Bottom')).toEqual([13, 34, 36]);
+		// on S13E10 "Squidward's Sick Daze" before
+		expect(thirteen('S13E10.Captain.Pipsqueak.Plane.to.Sea')).toEqual([13, 30, 31]);
 	});
 });
 

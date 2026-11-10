@@ -1463,6 +1463,39 @@ function titleRest(file: string, numbers: FileNumbers): string {
 const SEGMENTS = /\s+[-+]\s+|;|,\s|(?<!\b(?:vs|mrs?|ms|dr|no))\.\s|__|--/i;
 
 /**
+ * The titles of a file's segments run together with no mark between them, read as the one way
+ * they divide into titles each of one episode alone: the JHS SpongeBob packs'
+ * `S11E11.Drive.HappyOld.Man.Patrick` is "Drive Happy" and "Old Man Patrick", their
+ * `S13E17.Hot.Crossed.Nuts.Sir.Urchin.and.Snail.Fail` "Hot Crossed Nuts" and "Sir Urchin and
+ * Snail Fail". Null where they divide no way, or more than one.
+ */
+function glued(rest: string, candidates: { name: string }[]): string[] | null {
+	const list = titleText(rest.replace(/(\p{Ll})(\p{Lu})/gu, '$1 $2'))?.whole.split(' ') ?? [];
+	// every candidate's title as titled() compares it, to try only the runs of words that name one
+	const keys = new Set(
+		candidates.flatMap((item) => {
+			const name = words(item.name).join(' ');
+			return [name.replace(/ /g, ''), plain(name)];
+		})
+	);
+	const one = (part: string) =>
+		(keys.has(part.replace(/ /g, '')) || keys.has(plain(part))) &&
+		titled({ whole: part, first: part }, candidates, [0, 2]) !== null;
+	// the ways the words from each on divide, two at most: a second is as good as many
+	const ways: string[][][] = Array.from({ length: list.length + 1 }, () => []);
+	ways[list.length] = [[]];
+	for (let from = list.length - 1; from >= 0; from--) {
+		for (let to = from + 1; to <= list.length && ways[from].length < 2; to++) {
+			const part = list.slice(from, to).join(' ');
+			if (!ways[to].length || !one(part)) continue;
+			for (const after of ways[to].slice(0, 2 - ways[from].length))
+				ways[from].push([part, ...after]);
+		}
+	}
+	return ways[0].length === 1 && ways[0][0].length > 1 ? ways[0][0] : null;
+}
+
+/**
  * The run of TMDB episodes a file holds, where its title names the segments TMDB lists one by one:
  * Hey Arnold's `S01E14 - Tutoring Torvald + Gerald Comes Over` is TMDB's S1E26-E27 ("Arnold the
  * Tutor", "Gerald Comes Over"), Pinky and the Brain's `S2E5 E6 - Robin Brain, The Mummy` its
@@ -1477,14 +1510,18 @@ async function bySegments(
 ): Promise<[number, number, number] | null> {
 	// what a title says in parentheses is no segment of its own: `Идеально (англ. Perfect)`
 	const rest = titleRest(file, numbers).replace(/\([^()]*\)/g, ' ');
-	const whole = titleText(rest)?.whole;
+	let whole = titleText(rest)?.whole;
 	if (!whole) return null;
 	// the segments before the release's tags
-	const parts: string[] = [];
+	let parts: string[] = [];
 	for (const raw of rest.split(SEGMENTS)) {
 		if (parts.join(' ') === whole) break;
 		const part = titleText(raw)?.whole;
 		if (part) parts.push(part);
+	}
+	if (parts.length === 1) {
+		parts = glued(rest, candidates) ?? parts;
+		whole = parts.join(' ');
 	}
 	if (parts.length < 2 || parts.join(' ') !== whole) return null;
 	// a title TMDB gives one episode is that one's, commas and all: Johnny Bravo's "Welcome Back, Bravo"
