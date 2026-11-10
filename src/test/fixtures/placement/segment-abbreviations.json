@@ -5069,11 +5069,11 @@
 					},
 					{
 						"path": "[M-KV2501] Mickey Mouse Works 1x10 (10) Street Cleaner; Donald's Dinner Date; Brahms Lullabye; Hydro Squirter; Mickey's Piano Lesson [DVB].mkv",
-						"season": null,
-						"episode": null,
-						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": 9,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170828
 					},
 					{
 						"path": "[M-KV2501] Mickey Mouse Works 1x11 (11) Cages And Cannons; Mickey's Remedy; Wakeboarding; A Midsummer Night's Dream [VHSRip].mkv",
@@ -5085,11 +5085,11 @@
 					},
 					{
 						"path": "[M-KV2501] Mickey Mouse Works 1x12 (12) Bubble Gum; Mickey Tries To Cook; Donald And The Big Nut; Topsy Turvy Town [VHSRip].mkv",
-						"season": null,
-						"episode": null,
-						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"season": 2,
+						"episode": 14,
+						"episodeEnd": 17,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170829
 					},
 					{
 						"path": "[M-KV2501] Mickey Mouse Works 2x01 (14) Vending Machine; Donald's Grizzly Guest; Snowman; Mickey Foils The Phantom Blot [VHSRip].mkv",
@@ -5165,11 +5165,11 @@
 					},
 					{
 						"path": "[M-KV2501] Mickey Mouse Works 2x11 (24) Vending Machine; Mickey's Answering Service; Pluto's Magic Paws; Mickey's Big Break [DVB].mkv",
-						"season": null,
-						"episode": null,
-						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"season": 3,
+						"episode": 10,
+						"episodeEnd": 13,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170836
 					},
 					{
 						"path": "[M-KV2501] Mickey Mouse Works 2x12 (25) Bird Brained Donald; How To Be A Gentleman; Donald's Pool [DVB].mkv",

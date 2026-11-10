@@ -1506,7 +1506,8 @@ async function bySegments(
 	show: PlacementShow,
 	numbers: FileNumbers,
 	file: string,
-	candidates: { season: number; episode: number; name: string; airDate: string | null }[]
+	candidates: { season: number; episode: number; name: string; airDate: string | null }[],
+	least = 1
 ): Promise<[number, number, number] | null> {
 	// what a title says in parentheses is no segment of its own: `Идеально (англ. Perfect)`
 	const rest = titleRest(file, numbers).replace(/\([^()]*\)/g, ' ');
@@ -1535,7 +1536,7 @@ async function bySegments(
 		const found = titled({ whole: part, first: part }, candidates, [0, 2]);
 		return found ? [{ at, found }] : [];
 	});
-	if (!hits.length || new Set(hits.map((hit) => hit.found.season)).size > 1) return null;
+	if (hits.length < least || new Set(hits.map((hit) => hit.found.season)).size > 1) return null;
 	const { season } = hits[0].found;
 	const episodes = hits.map((hit) => hit.found.episode);
 	const lowest = Math.min(...episodes);
@@ -1638,6 +1639,13 @@ async function byName(
 	);
 	const anywhere = titled(title, others.flat());
 	if (anywhere) return [anywhere.season, anywhere.episode];
+	// or the run in another season, named by two of its segments at least: Mickey Mouse Works'
+	// `1x10 (10) Street Cleaner; Donald's Dinner Date; …` is TMDB's S2E5-E9, TMDB counting its first
+	// season to `1x08`
+	for (const list of others) {
+		const elsewhere = list.length && (await bySegments(show, numbers, file, list, 2));
+		if (elsewhere) return elsewhere;
+	}
 	// TMDB's title with the show's name before it: Ed, Edd n Eddy's `S00E05 - Big Picture Show` is
 	// "Ed, Edd n Eddy's Big Picture Show", ODDTAXI's `S00E14 [Picture Drama]` "Odd Taxi Picture Drama"
 	const shows = show.names.map((name) => words(name).join('')).filter((name) => name.length >= 3);

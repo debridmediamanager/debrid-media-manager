@@ -2152,6 +2152,28 @@ describe("a segment title with an abbreviation's period", () => {
 		]);
 	});
 
+	it('places a run of segments TMDB lists in another season', async () => {
+		// TMDB counts Mickey Mouse Works' first season to `1x08`; its S2E5-E9 are `1x10`'s segments
+		const mickey = await placed('[M-KV2501] Mickey Mouse Works');
+		expect(mickey('1x10 (10) Street Cleaner')).toEqual([2, 5, 9]);
+		expect(mickey('2x11 (24) Vending Machine')).toEqual([3, 10, 13]);
+		// "Hansel and Gretel" and "Mickey's Mechanical House" are each two of TMDB's season 2:
+		// one segment alone names no run elsewhere
+		expect(mickey('1x09 (09) Rock Climbing')).toEqual([null, null, null]);
+		// the JHS pack's `S11E01.Spot.ReturnsThe.Check-Up` is TMDB's S10E17-E18
+		const c = runTogether.cases.find((c) =>
+			c.request.name.startsWith('Spongebob.Squarepants.S11')
+		)!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true, shows: true }],
+			Infinity,
+			recordedSources(runTogether.answers),
+			async () => [null]
+		);
+		const spot = releases[0].files.find((f) => f.path.includes('S11E01.Spot.Returns'))!;
+		expect([spot.season, spot.episode, spot.episodeEnd]).toEqual([10, 17, 18]);
+	});
+
 	it('places a pack already in the corpus the same way', async () => {
 		const c = fun1024.cases.find((c) => c.request.name.startsWith('[TV] Hey Arnold!'))!;
 		const { releases } = await place([c.request as PlaceRequest], Infinity, {

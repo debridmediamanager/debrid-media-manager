@@ -13284,11 +13284,11 @@
 				"files": [
 					{
 						"path": "Spongebob.Squarepants.S11E01.Spot.ReturnsThe.Check-Up.1080p.JHS.WEB-DL.Multi.Audio.AAC.2.0.H264-Rv.mkv",
-						"season": null,
-						"episode": null,
-						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"season": 10,
+						"episode": 17,
+						"episodeEnd": 18,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1953586
 					},
 					{
 						"path": "Spongebob.Squarepants.S11E02.Cave.Dwelling.SpongeThe.Clam.Whisperer.1080p.JHS.WEB-DL.Multi.Audio.AAC.2.0.H264-Rv.mkv",
