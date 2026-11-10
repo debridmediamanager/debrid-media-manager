@@ -76,7 +76,7 @@ const postsId = (imdbId: string) => `imdb:${Number(imdbId.replace(/^tt/i, ''))}`
 /**
  * A sponsor's wanted list, for their zurg to fetch: `{"items": [{id, kind, title,
  * imdb, year?, tmdb?, tvdb?, titles?, released?, seasons?: [{season, episodes,
- * airing?, aired?}], upgrade?, posted?}]}`. Films zurg
+ * airing?, aired?, airedAt?}], upgrade?, posted?}]}`. Films zurg
  * already acknowledged are left out unless it wants a better release; shows stay,
  * so new episodes are fetched as they air. With `?bands=` a film is left out only once
  * every band holds a copy zurg wants no better than, and carries `bands` instead of

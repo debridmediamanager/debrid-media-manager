@@ -1,0 +1,1067 @@
+{
+	"_embedded": {
+		"seasons": [
+			{
+				"id": 312,
+				"url": "https://www.tvmaze.com/seasons/312/the-simpsons-season-1",
+				"number": 1,
+				"name": "",
+				"episodeOrder": 13,
+				"premiereDate": "1989-12-17",
+				"endDate": "1990-05-13",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60887.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60887.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/312" } }
+			},
+			{
+				"id": 313,
+				"url": "https://www.tvmaze.com/seasons/313/the-simpsons-season-2",
+				"number": 2,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "1990-10-11",
+				"endDate": "1991-07-11",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60888.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60888.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/313" } }
+			},
+			{
+				"id": 314,
+				"url": "https://www.tvmaze.com/seasons/314/the-simpsons-season-3",
+				"number": 3,
+				"name": "",
+				"episodeOrder": 24,
+				"premiereDate": "1991-09-19",
+				"endDate": "1992-08-27",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60889.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60889.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/314" } }
+			},
+			{
+				"id": 315,
+				"url": "https://www.tvmaze.com/seasons/315/the-simpsons-season-4",
+				"number": 4,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "1992-09-24",
+				"endDate": "1993-05-13",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60890.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60890.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/315" } }
+			},
+			{
+				"id": 316,
+				"url": "https://www.tvmaze.com/seasons/316/the-simpsons-season-5",
+				"number": 5,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "1993-09-30",
+				"endDate": "1994-05-19",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60891.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60891.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/316" } }
+			},
+			{
+				"id": 317,
+				"url": "https://www.tvmaze.com/seasons/317/the-simpsons-season-6",
+				"number": 6,
+				"name": "",
+				"episodeOrder": 25,
+				"premiereDate": "1994-09-04",
+				"endDate": "1995-05-21",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60892.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60892.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/317" } }
+			},
+			{
+				"id": 318,
+				"url": "https://www.tvmaze.com/seasons/318/the-simpsons-season-7",
+				"number": 7,
+				"name": "",
+				"episodeOrder": 25,
+				"premiereDate": "1995-09-17",
+				"endDate": "1996-05-19",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60893.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60893.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/318" } }
+			},
+			{
+				"id": 319,
+				"url": "https://www.tvmaze.com/seasons/319/the-simpsons-season-8",
+				"number": 8,
+				"name": "",
+				"episodeOrder": 25,
+				"premiereDate": "1996-10-27",
+				"endDate": "1997-05-18",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60894.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60894.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/319" } }
+			},
+			{
+				"id": 320,
+				"url": "https://www.tvmaze.com/seasons/320/the-simpsons-season-9",
+				"number": 9,
+				"name": "",
+				"episodeOrder": 25,
+				"premiereDate": "1997-09-21",
+				"endDate": "1998-05-17",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60895.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60895.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/320" } }
+			},
+			{
+				"id": 321,
+				"url": "https://www.tvmaze.com/seasons/321/the-simpsons-season-10",
+				"number": 10,
+				"name": "",
+				"episodeOrder": 23,
+				"premiereDate": "1998-08-23",
+				"endDate": "1999-05-16",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60896.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60896.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/321" } }
+			},
+			{
+				"id": 322,
+				"url": "https://www.tvmaze.com/seasons/322/the-simpsons-season-11",
+				"number": 11,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "1999-09-26",
+				"endDate": "2000-05-21",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60897.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60897.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/322" } }
+			},
+			{
+				"id": 323,
+				"url": "https://www.tvmaze.com/seasons/323/the-simpsons-season-12",
+				"number": 12,
+				"name": "",
+				"episodeOrder": 21,
+				"premiereDate": "2000-11-01",
+				"endDate": "2001-05-20",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60898.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60898.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/323" } }
+			},
+			{
+				"id": 324,
+				"url": "https://www.tvmaze.com/seasons/324/the-simpsons-season-13",
+				"number": 13,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2001-11-06",
+				"endDate": "2002-05-22",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60899.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60899.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/324" } }
+			},
+			{
+				"id": 325,
+				"url": "https://www.tvmaze.com/seasons/325/the-simpsons-season-14",
+				"number": 14,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2002-11-03",
+				"endDate": "2003-05-18",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60900.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60900.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/325" } }
+			},
+			{
+				"id": 326,
+				"url": "https://www.tvmaze.com/seasons/326/the-simpsons-season-15",
+				"number": 15,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2003-11-02",
+				"endDate": "2004-05-23",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60901.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60901.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/326" } }
+			},
+			{
+				"id": 327,
+				"url": "https://www.tvmaze.com/seasons/327/the-simpsons-season-16",
+				"number": 16,
+				"name": "",
+				"episodeOrder": 21,
+				"premiereDate": "2004-11-07",
+				"endDate": "2005-05-15",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60902.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60902.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/327" } }
+			},
+			{
+				"id": 328,
+				"url": "https://www.tvmaze.com/seasons/328/the-simpsons-season-17",
+				"number": 17,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2005-09-11",
+				"endDate": "2006-05-21",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60903.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60903.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/328" } }
+			},
+			{
+				"id": 329,
+				"url": "https://www.tvmaze.com/seasons/329/the-simpsons-season-18",
+				"number": 18,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2006-09-10",
+				"endDate": "2007-05-20",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60904.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60904.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/329" } }
+			},
+			{
+				"id": 330,
+				"url": "https://www.tvmaze.com/seasons/330/the-simpsons-season-19",
+				"number": 19,
+				"name": "",
+				"episodeOrder": 20,
+				"premiereDate": "2007-09-23",
+				"endDate": "2008-05-18",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60905.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60905.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/330" } }
+			},
+			{
+				"id": 331,
+				"url": "https://www.tvmaze.com/seasons/331/the-simpsons-season-20",
+				"number": 20,
+				"name": "",
+				"episodeOrder": 21,
+				"premiereDate": "2008-09-28",
+				"endDate": "2009-05-17",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60906.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60906.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/331" } }
+			},
+			{
+				"id": 332,
+				"url": "https://www.tvmaze.com/seasons/332/the-simpsons-season-21",
+				"number": 21,
+				"name": "",
+				"episodeOrder": 23,
+				"premiereDate": "2009-09-27",
+				"endDate": "2010-05-23",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/450/1126677.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/450/1126677.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/332" } }
+			},
+			{
+				"id": 333,
+				"url": "https://www.tvmaze.com/seasons/333/the-simpsons-season-22",
+				"number": 22,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2010-09-26",
+				"endDate": "2011-05-22",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/450/1126676.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/450/1126676.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/333" } }
+			},
+			{
+				"id": 334,
+				"url": "https://www.tvmaze.com/seasons/334/the-simpsons-season-23",
+				"number": 23,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2011-09-25",
+				"endDate": "2012-05-20",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/450/1126675.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/450/1126675.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/334" } }
+			},
+			{
+				"id": 335,
+				"url": "https://www.tvmaze.com/seasons/335/the-simpsons-season-24",
+				"number": 24,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2012-09-30",
+				"endDate": "2013-05-19",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/24/60910.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/24/60910.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/335" } }
+			},
+			{
+				"id": 336,
+				"url": "https://www.tvmaze.com/seasons/336/the-simpsons-season-25",
+				"number": 25,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2013-09-29",
+				"endDate": "2014-05-18",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/450/1126674.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/450/1126674.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/336" } }
+			},
+			{
+				"id": 337,
+				"url": "https://www.tvmaze.com/seasons/337/the-simpsons-season-26",
+				"number": 26,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2014-09-28",
+				"endDate": "2015-05-17",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/450/1126673.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/450/1126673.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/337" } }
+			},
+			{
+				"id": 6915,
+				"url": "https://www.tvmaze.com/seasons/6915/the-simpsons-season-27",
+				"number": 27,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2015-09-27",
+				"endDate": "2016-05-22",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/252/631680.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/252/631680.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/6915" } }
+			},
+			{
+				"id": 46785,
+				"url": "https://www.tvmaze.com/seasons/46785/the-simpsons-season-28",
+				"number": 28,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2016-09-25",
+				"endDate": "2017-05-21",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/252/631679.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/252/631679.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/46785" } }
+			},
+			{
+				"id": 56338,
+				"url": "https://www.tvmaze.com/seasons/56338/the-simpsons-season-29",
+				"number": 29,
+				"name": "",
+				"episodeOrder": 21,
+				"premiereDate": "2017-10-01",
+				"endDate": "2018-05-20",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/252/631678.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/252/631678.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/56338" } }
+			},
+			{
+				"id": 86292,
+				"url": "https://www.tvmaze.com/seasons/86292/the-simpsons-season-30",
+				"number": 30,
+				"name": "",
+				"episodeOrder": 23,
+				"premiereDate": "2018-09-30",
+				"endDate": "2019-05-12",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/252/631677.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/252/631677.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/86292" } }
+			},
+			{
+				"id": 93663,
+				"url": "https://www.tvmaze.com/seasons/93663/the-simpsons-season-31",
+				"number": 31,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2019-09-29",
+				"endDate": "2020-05-17",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/252/631676.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/252/631676.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/93663" } }
+			},
+			{
+				"id": 93664,
+				"url": "https://www.tvmaze.com/seasons/93664/the-simpsons-season-32",
+				"number": 32,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2020-09-27",
+				"endDate": "2021-05-23",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/373/933165.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/373/933165.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/93664" } }
+			},
+			{
+				"id": 124282,
+				"url": "https://www.tvmaze.com/seasons/124282/the-simpsons-season-33",
+				"number": 33,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2021-09-26",
+				"endDate": "2022-05-22",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/450/1126672.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/450/1126672.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/124282" } }
+			},
+			{
+				"id": 124283,
+				"url": "https://www.tvmaze.com/seasons/124283/the-simpsons-season-34",
+				"number": 34,
+				"name": "",
+				"episodeOrder": 22,
+				"premiereDate": "2022-09-25",
+				"endDate": "2023-05-21",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/482/1206203.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/482/1206203.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/124283" } }
+			},
+			{
+				"id": 148166,
+				"url": "https://www.tvmaze.com/seasons/148166/the-simpsons-season-35",
+				"number": 35,
+				"name": "",
+				"episodeOrder": 18,
+				"premiereDate": "2023-10-01",
+				"endDate": "2024-05-19",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": {
+					"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/552/1381540.jpg",
+					"original": "https://static.tvmaze.com/uploads/images/original_untouched/552/1381540.jpg"
+				},
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/148166" } }
+			},
+			{
+				"id": 148167,
+				"url": "https://www.tvmaze.com/seasons/148167/the-simpsons-season-36",
+				"number": 36,
+				"name": "",
+				"episodeOrder": 18,
+				"premiereDate": "2024-09-29",
+				"endDate": "2025-05-18",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/148167" } }
+			},
+			{
+				"id": 186546,
+				"url": "https://www.tvmaze.com/seasons/186546/the-simpsons-season-37",
+				"number": 37,
+				"name": "",
+				"episodeOrder": 15,
+				"premiereDate": "2025-09-28",
+				"endDate": "2026-02-15",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/186546" } }
+			},
+			{
+				"id": 201386,
+				"url": "https://www.tvmaze.com/seasons/201386/the-simpsons-season-38",
+				"number": 38,
+				"name": "",
+				"episodeOrder": null,
+				"premiereDate": "2026-09-27",
+				"endDate": "2026-12-06",
+				"network": {
+					"id": 4,
+					"name": "FOX",
+					"country": {
+						"name": "United States",
+						"code": "US",
+						"timezone": "America/New_York"
+					},
+					"officialSite": "https://www.fox.com/"
+				},
+				"webChannel": null,
+				"image": null,
+				"summary": null,
+				"_links": { "self": { "href": "https://api.tvmaze.com/seasons/201386" } }
+			}
+		],
+		"nextepisode": {
+			"id": 3792162,
+			"url": "https://www.tvmaze.com/episodes/3792162/the-simpsons-38x07-dream-scenari-moe",
+			"name": "Dream Scenari-Moe",
+			"season": 38,
+			"number": 7,
+			"type": "regular",
+			"airdate": "2026-11-15",
+			"airtime": "20:30",
+			"airstamp": "2026-11-16T01:30:00+00:00",
+			"runtime": 30,
+			"rating": { "average": null },
+			"image": null,
+			"summary": "<p>When Moe has trouble sleeping, he enrolls in a brand-new sleep study that gives him the greatest romantic comedy dreams of his life. But unbeknownst to him, his beautiful fantasy comes at a nightmarish price.</p>",
+			"_links": {
+				"self": { "href": "https://api.tvmaze.com/episodes/3792162" },
+				"show": { "href": "https://api.tvmaze.com/shows/83", "name": "The Simpsons" }
+			}
+		},
+		"previousepisode": {
+			"id": 3792161,
+			"url": "https://www.tvmaze.com/episodes/3792161/the-simpsons-38x06-the-kosmic-kruiser",
+			"name": "The Kosmic Kruiser",
+			"season": 38,
+			"number": 6,
+			"type": "regular",
+			"airdate": "2026-11-08",
+			"airtime": "20:30",
+			"airstamp": "2026-11-09T01:30:00+00:00",
+			"runtime": 30,
+			"rating": { "average": 7.3 },
+			"image": {
+				"medium": "https://static.tvmaze.com/uploads/images/medium_landscape/650/1626406.jpg",
+				"original": "https://static.tvmaze.com/uploads/images/original_untouched/650/1626406.jpg"
+			},
+			"summary": "<p>Bart and Lisa break into Krustyland's most notorious failed attraction, only to discover that it hasn't been completely abandoned.</p>",
+			"_links": {
+				"self": { "href": "https://api.tvmaze.com/episodes/3792161" },
+				"show": { "href": "https://api.tvmaze.com/shows/83", "name": "The Simpsons" }
+			}
+		}
+	},
+	"_links": {
+		"self": { "href": "https://api.tvmaze.com/shows/83" },
+		"previousepisode": {
+			"href": "https://api.tvmaze.com/episodes/3792161",
+			"name": "The Kosmic Kruiser"
+		},
+		"nextepisode": {
+			"href": "https://api.tvmaze.com/episodes/3792162",
+			"name": "Dream Scenari-Moe"
+		}
+	},
+	"averageRuntime": 30,
+	"dvdCountry": null,
+	"ended": null,
+	"externals": { "tvrage": 6190, "thetvdb": 71663, "imdb": "tt0096697" },
+	"genres": ["Comedy", "Family"],
+	"id": 83,
+	"image": {
+		"medium": "https://static.tvmaze.com/uploads/images/medium_portrait/637/1594614.jpg",
+		"original": "https://static.tvmaze.com/uploads/images/original_untouched/637/1594614.jpg"
+	},
+	"language": "English",
+	"name": "The Simpsons",
+	"network": {
+		"id": 4,
+		"name": "FOX",
+		"country": { "name": "United States", "code": "US", "timezone": "America/New_York" },
+		"officialSite": "https://www.fox.com/"
+	},
+	"officialSite": "http://www.fox.com/the-simpsons",
+	"premiered": "1989-12-17",
+	"rating": { "average": 8.1 },
+	"runtime": 30,
+	"schedule": { "time": "20:00", "days": ["Sunday"] },
+	"status": "Running",
+	"summary": "<p><b>The Simpsons</b> is the longest running scripted show in US television history. It captures the adventures of Homer, Marge, Maggie, Bart and Lisa who are living in a fictional town called Springfield.</p>",
+	"type": "Animation",
+	"updated": 1794250313,
+	"url": "https://www.tvmaze.com/shows/83/the-simpsons",
+	"webChannel": null,
+	"weight": 100
+}

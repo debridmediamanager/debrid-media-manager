@@ -6,7 +6,9 @@ import lesMiserables from '@/test/fixtures/metadata/tmdb-movie-82695-les-miserab
 import thirdRock from '@/test/fixtures/metadata/tmdb-tv-155-3rd-rock-from-the-sun.json';
 import dailyShow from '@/test/fixtures/metadata/tmdb-tv-2224-the-daily-show.json';
 import bakeOffAppended from '@/test/fixtures/metadata/tmdb-tv-34549-great-british-bake-off-appended.json';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import simpsons from '@/test/fixtures/metadata/tmdb-tv-456-the-simpsons.json';
+import simpsonsTvmaze from '@/test/fixtures/metadata/tvmaze-83-the-simpsons.json';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	airedSeasons,
 	filmTitles,
@@ -20,6 +22,7 @@ const cache = vi.hoisted(() => ({
 	searchTmdbByImdb: vi.fn(),
 	getTmdbTvInfo: vi.fn(),
 	getTmdbMovieInfo: vi.fn(),
+	getTvmazeShow: vi.fn(),
 }));
 vi.mock('@/services/metadataCache', () => ({ getMetadataCache: () => cache }));
 
@@ -124,6 +127,46 @@ describe('resolveWanted', () => {
 			title: '3rd Rock from the Sun',
 			imdb: 'tt0115082',
 		});
+	});
+});
+
+// zurg read `aired` as midnight UTC, a day early for a US evening episode: The
+// Simpsons' S38E06 aired on 2026-11-08 in New York and at 01:30 UTC the next day.
+describe('airedAt', () => {
+	const show = row({ imdbId: 'tt0096697', title: 'The Simpsons', seasons: [38] });
+	beforeEach(() => {
+		vi.useFakeTimers({ toFake: ['Date'], now: new Date('2026-11-10T12:00:00Z') });
+		cache.searchTmdbByImdb.mockResolvedValue({ tv_results: [{ id: simpsons.id }] });
+		cache.getTmdbTvInfo.mockResolvedValue(simpsons);
+		cache.getTvmazeShow.mockReset();
+	});
+	afterEach(() => vi.useRealTimers());
+
+	it("is when TVmaze says the show's newest episode aired", async () => {
+		cache.getTvmazeShow.mockResolvedValue(simpsonsTvmaze);
+		const [season] = (await resolveWanted(show)).seasons!;
+		expect(season).toMatchObject({ season: 38, aired: '2026-11-08' });
+		expect(season.airedAt).toBe('2026-11-09T01:30:00.000Z');
+		expect(cache.getTvmazeShow).toHaveBeenCalledWith('tt0096697');
+	});
+
+	it('is the start of the next UTC day when TVmaze does not know the episode', async () => {
+		cache.getTvmazeShow.mockResolvedValue(null);
+		const [season] = (await resolveWanted(show)).seasons!;
+		expect(season.airedAt).toBe('2026-11-09T00:00:00.000Z');
+	});
+
+	// zurg's fast searches end 48 h after an airing, so an old one needs no TVmaze call.
+	it('does not ask TVmaze about an episode aired weeks ago', async () => {
+		cache.searchTmdbByImdb.mockResolvedValue({ tv_results: [{ id: thirdRock.id }] });
+		cache.getTmdbTvInfo.mockResolvedValue(thirdRock);
+		const seasons = (await resolveWanted(row({ seasons: [5, 6] }))).seasons!;
+		expect(seasons[1]).toMatchObject({
+			aired: '2001-05-22',
+			airedAt: '2001-05-23T00:00:00.000Z',
+		});
+		expect(seasons[0]).not.toHaveProperty('airedAt');
+		expect(cache.getTvmazeShow).not.toHaveBeenCalled();
 	});
 });
 

@@ -360,7 +360,10 @@ acquisition reads it. Both calls share 30 a minute per sponsorship.
 numbers them; specials are never listed. An airing season grows as episodes air and
 carries `"airing": true` while TMDB lists episodes still to come. `aired` is the day
 the season's last listed episode aired, as `2006-01-02`, when it is the newest episode
-the show has aired: a fetcher can search for it often in the hours after.
+the show has aired: a fetcher can search for it often in the hours after. `airedAt`,
+beside it, is when that episode went out, as RFC 3339 in UTC (`2026-11-09T01:30:00.000Z`),
+from TVmaze; when TVmaze has no time for it, it is the start of the next day in UTC. A US
+evening episode airs early the next day in UTC, so `aired` read as midnight is a day early.
 `runtime` is a film's length in minutes, as TMDB has it, and absent when TMDB has none.
 `released` is the first day a film could be had at home, as `2006-01-02`: its earliest
 digital, physical or TV release in any country TMDB lists. It is never a cinema date,

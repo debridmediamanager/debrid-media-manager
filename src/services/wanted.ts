@@ -15,6 +15,12 @@ export interface WantedSeason {
 	 * hours after, when it is posted.
 	 */
 	aired?: string;
+	/**
+	 * Beside `aired`: when that episode went out, as RFC 3339 in UTC, from
+	 * TVmaze's airstamp, else the start of the next UTC day. A US evening
+	 * episode airs early the next day in UTC, which `aired` read as midnight misses.
+	 */
+	airedAt?: string;
 }
 
 /** A wanted title as `/api/sponsor/wanted` answers it. See docs/sponsor-api.md. */
@@ -109,6 +115,22 @@ export function airedSeasons(show: any, only: number[] | null): WantedSeason[] {
 	return out;
 }
 
+const DAY_MS = 24 * 60 * 60_000;
+/** zurg's fast searches end 48 h after an airing; past a week the day alone does. */
+const TVMAZE_AIRED_WITHIN_MS = 7 * DAY_MS;
+
+/**
+ * When the episode a show aired on `aired` went out: TVmaze's airstamp for that
+ * day's episode (its previous one, or its next while the cached show predates
+ * the airing), else the start of the next UTC day.
+ */
+function airedAt(aired: string, tvmaze: any): string {
+	const { previousepisode, nextepisode } = tvmaze?._embedded ?? {};
+	const episode = [previousepisode, nextepisode].find((e) => e?.airdate === aired);
+	const at = Date.parse(episode?.airstamp ?? '');
+	return new Date(Number.isFinite(at) ? at : Date.parse(aired) + DAY_MS).toISOString();
+}
+
 /** A TMDB date or timestamp as 2006-01-02, or undefined. */
 function day(value: unknown): string | undefined {
 	const d = typeof value === 'string' ? value.slice(0, 10) : '';
@@ -194,13 +216,22 @@ async function lookUp(row: WantedItemRow): Promise<{ resolved: WantedForZurg; se
 		return { resolved: { ...base, tmdb }, settled: false };
 	}
 	const tvdb = show?.external_ids?.tvdb_id;
+	const seasons = airedSeasons(show, row.seasons);
+	const newest = seasons.find((s) => s.aired);
+	if (newest?.aired) {
+		const recent = Date.now() - Date.parse(newest.aired) < TVMAZE_AIRED_WITHIN_MS;
+		newest.airedAt = airedAt(
+			newest.aired,
+			recent ? await cache.getTvmazeShow(row.imdbId) : null
+		);
+	}
 	return {
 		resolved: {
 			...base,
 			...year(show?.first_air_date ?? found.tv_results[0].first_air_date),
 			tmdb,
 			...(typeof tvdb === 'number' ? { tvdb } : {}),
-			seasons: airedSeasons(show, row.seasons),
+			seasons,
 		},
 		settled: true,
 	};

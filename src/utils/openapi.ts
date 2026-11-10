@@ -1068,6 +1068,10 @@ export const openApiDocument = {
 														},
 														airing: { type: 'boolean' },
 														aired: { type: 'string', format: 'date' },
+														airedAt: {
+															type: 'string',
+															format: 'date-time',
+														},
 													},
 												},
 											},
