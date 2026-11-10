@@ -135,6 +135,17 @@ function check(answers: SetupAnswers, result: SetupRecommendation) {
 	)
 		fail('zurg+rex Android has a conflict as if it could not run rex');
 
+	// The zurg+rex Android app stands in for desktop zurg, so its guide leads and zurg setup stays out.
+	const androidGuide = result.setupLinks.findIndex(
+		({ href }) => href === `${NOTES}zurg/guides/android/`
+	);
+	if (
+		answers.host === 'android' &&
+		(result.hostRequirement === 'zurg' || androidGuide >= 0) &&
+		(androidGuide !== 0 || result.setupLinks.some(({ href }) => href === `${NOTES}zurg/setup/`))
+	)
+		fail('zurg on Android does not lead with the zurg+rex Android guide alone');
+
 	const covered = result.sourceCoverage.map(({ source }) => source);
 	if (covered.length !== selected.length || selected.some((source) => !covered.includes(source)))
 		fail('source coverage is not one entry per selected source');

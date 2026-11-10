@@ -3155,6 +3155,30 @@ describe('zurg+rex Android has no TorBox hosted NZB backend', () => {
 	});
 });
 
+describe('the zurg+rex Android guide leads wherever zurg runs on the device', () => {
+	const android = {
+		label: 'zurg+rex Android guide',
+		href: 'https://notes.debridmediamanager.com/zurg/guides/android/',
+	};
+	const guide = {
+		label: 'Read the full setup guide',
+		href: 'https://notes.debridmediamanager.com/guides/choose-your-setup/',
+	};
+
+	it.each([
+		{ player: 'webdav', sources: ['offcloud', 'usenet'] },
+		{ player: 'kodi', sources: ['usenet'] },
+	] satisfies Partial<SetupAnswers>[])(
+		'lists the Android guide first, without the desktop zurg setup (%o)',
+		(overrides) => {
+			expect(recommendSetup(answers({ host: 'android', ...overrides })).setupLinks).toEqual([
+				android,
+				guide,
+			]);
+		}
+	);
+});
+
 describe('Cast names the account each source needs', () => {
 	it.each([
 		['real-debrid', 'A Real-Debrid account.'],
