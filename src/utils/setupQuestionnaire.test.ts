@@ -2998,6 +2998,28 @@ describe('zurg+rex Android serves the Plex apps', () => {
 		);
 	});
 
+	// The host decides the wording, even when no selected source runs zurg there.
+	it('gives Easynews alone the Android wording for local files and its rex feed', () => {
+		const result = onAndroid({
+			sources: ['easynews'],
+			preference: 'managed',
+			needs: ['mixed'],
+		});
+
+		expect(result.optionalNeeds).toContain(
+			'zurg+rex Android feeds rex from zurg only; local files need rex on a normal host, or a player on the device.'
+		);
+		expect(result.sourceCoverage[0].requirements).toEqual([
+			'Keep Easynews in a compatible player. For rex on Android there is no feed for it; a normal host can take a compatible URL addon or feed producer.',
+		]);
+	});
+
+	it('gives no source the Android wording for local files', () => {
+		expect(onAndroid({ sources: ['none'], needs: ['mixed'] }).optionalNeeds).toContain(
+			'zurg+rex Android feeds rex from zurg only; local files need rex on a normal host, or a player on the device.'
+		);
+	});
+
 	it('offers no Seerr, which needs a media server the device does not run', () => {
 		const result = onAndroid({ plexRoute: 'either', preference: 'managed' });
 

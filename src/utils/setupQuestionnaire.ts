@@ -1039,7 +1039,7 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 			'none',
 			[],
 			[
-				`Keep Easynews in a compatible player.${androidRunsRex(answers) ? ' For rex on Android there is no feed for it; a normal host can take a compatible URL addon or feed producer.' : rex ? ' For rex, a compatible URL addon or feed producer must supply streams and metadata.' : ''}`,
+				`Keep Easynews in a compatible player.${rex && answers.host === 'android' ? ' For rex on Android there is no feed for it; a normal host can take a compatible URL addon or feed producer.' : rex ? ' For rex, a compatible URL addon or feed producer must supply streams and metadata.' : ''}`,
 			],
 			[
 				DMM_CAST_LINKS.easynews,
@@ -1610,7 +1610,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		// Under a conflict the routes above are not a setup yet.
 		const cloud = `cloud titles come from ${result.conflicts.length ? 'the route you choose' : cloudRoutes > 1 ? 'the routes above' : cloudRoutes ? 'the route above' : 'the route you choose'}.`;
 		result.optionalNeeds.push(
-			androidRex
+			rex && answers.host === 'android'
 				? 'zurg+rex Android feeds rex from zurg only; local files need rex on a normal host, or a player on the device.'
 				: rex
 					? 'Local files join rex through an HTTP source and a feed producer; each source supplies its own metadata and reachable HTTP bytes.'
