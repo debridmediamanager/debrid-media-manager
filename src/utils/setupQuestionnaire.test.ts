@@ -3303,7 +3303,7 @@ describe('zurg+rex Android has no TorBox hosted NZB backend', () => {
 		);
 
 		expect(result.prerequisites).toContain(
-			'zurg+rex Android, your own Plex server on your phone or TV box, needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and zurg+rex Android has no TorBox hosted NZB (torbox_nzb) backend.'
+			'zurg+rex Android, your own Plex server on your phone or TV box, needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and the app has no TorBox hosted NZB (torbox_nzb) backend.'
 		);
 		expect(result.setupLinks).toContainEqual({
 			label: 'zurg+rex Android guide',

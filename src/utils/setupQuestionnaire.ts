@@ -1313,7 +1313,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	if (player === 'webdav') {
 		result.alternatives.push({
 			title: 'For an SMB-only player',
-			detail: `Use an existing SMB share, or zurg → filesystem mount → host SMB share → player. The host provides SMB; zurg itself does not. This bridge needs a normal host, not just the zurg+rex Android app (a Plex server on your phone, not an SMB server).`,
+			detail: 'Use an existing SMB share, or zurg → filesystem mount → host SMB share → player. The host provides SMB; zurg itself does not. This bridge needs a normal host, not just the zurg+rex Android app (a Plex server on your phone, not an SMB server).',
 			links: [ZURG],
 		});
 		const skipZurg = providerWebdav(selected);
@@ -1544,7 +1544,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		result.prerequisites.push(
 			androidRex
 				? `zurg+rex Android ${app} it runs zurg and rex on the device, so the Plex apps play from it. ${android64 ? 'Direct Usenet requires 64-bit Android, and the app' : 'It'} ${noHostedNzb}`
-				: `zurg+rex Android, your own Plex server on your phone or TV box, ${app} ${android64 ? 'direct Usenet requires 64-bit Android, and zurg+rex Android' : 'it'} ${noHostedNzb}`
+				: `zurg+rex Android, your own Plex server on your phone or TV box, ${app} ${android64 ? 'direct Usenet requires 64-bit Android, and the app' : 'it'} ${noHostedNzb}`
 		);
 		// Said once per result: the SMB alternative repeats it only when no prerequisite does.
 		const smb = result.alternatives.find(({ title }) => title === 'For an SMB-only player');
