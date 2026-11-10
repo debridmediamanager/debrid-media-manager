@@ -2932,9 +2932,29 @@ describe('zurg+rex Android serves the Plex apps', () => {
 				'zurg+rex Android needs sponsor access, a supported 64-bit device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. It has no TorBox hosted NZB (torbox_nzb) backend.'
 			);
 			expect(result.setupLinks).toContainEqual({
-				label: 'zurg Android guide',
+				label: 'zurg+rex Android guide',
 				href: 'https://notes.debridmediamanager.com/zurg/guides/android/',
 			});
+		}
+	);
+
+	it.each(['rex', 'either'] as const)(
+		'leads the setup links with the zurg+rex Android guide, without the desktop guides (%s)',
+		(plexRoute) => {
+			expect(onAndroid({ plexRoute }).setupLinks).toEqual([
+				{
+					label: 'zurg+rex Android guide',
+					href: 'https://notes.debridmediamanager.com/zurg/guides/android/',
+				},
+				{
+					label: 'rex compatibility and limits',
+					href: 'https://notes.debridmediamanager.com/rex/faq/',
+				},
+				{
+					label: 'Read the full setup guide',
+					href: 'https://notes.debridmediamanager.com/guides/choose-your-setup/',
+				},
+			]);
 		}
 	);
 
@@ -3054,12 +3074,17 @@ describe('zurg Android has no TorBox hosted NZB backend', () => {
 
 	// TorBox hosted NZBs still play on that device through TorBox Cast or the Kodi addon.
 	it('says zurg Android lacks the torbox_nzb backend in the Android prerequisite', () => {
-		expect(
-			recommendSetup(answers({ player: 'kodi', sources: ['usenet'], host: 'android' }))
-				.prerequisites
-		).toContain(
+		const result = recommendSetup(
+			answers({ player: 'kodi', sources: ['usenet'], host: 'android' })
+		);
+
+		expect(result.prerequisites).toContain(
 			'zurg Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and zurg Android has no TorBox hosted NZB (torbox_nzb) backend.'
 		);
+		expect(result.setupLinks).toContainEqual({
+			label: 'zurg+rex Android guide',
+			href: 'https://notes.debridmediamanager.com/zurg/guides/android/',
+		});
 	});
 });
 

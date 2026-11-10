@@ -1514,7 +1514,14 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				? 'zurg+rex Android needs sponsor access, a supported 64-bit device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. It has no TorBox hosted NZB (torbox_nzb) backend.'
 				: 'zurg Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and zurg Android has no TorBox hosted NZB (torbox_nzb) backend.'
 		);
-		links(note('zurg/guides/android', 'zurg Android guide'));
+		const android = note('zurg/guides/android', 'zurg+rex Android guide');
+		// The app stands in for the desktop zurg and rex guides, so its own guide leads.
+		if (androidRex)
+			result.setupLinks = [
+				android,
+				...result.setupLinks.filter((link) => link !== ZURG && link !== REX),
+			];
+		else links(android);
 	}
 	if (answers.needs.includes('remote')) {
 		const selfHosted =
