@@ -271,6 +271,7 @@ const OVA_NUMBER = /(?:^|[^a-z\d])(?:ova|oad|ona)[\s._-]*(?:ep[\s._-]*)?\d/i;
 const BRACKETS = /[[(][^\])]*[\])]/g;
 const SAMPLE = /(?:^|[\s._-])sample(?:[\s._-]|$)/i;
 const EXTENSION = /\.[a-z0-9]{2,4}$/i;
+const SPECIAL_ZERO = /(?:^|[^a-z0-9])s\d{1,2}[\s._-]*e0{1,3}(?![0-9])/i;
 const MEDIA_EXTENSION =
 	/\.(?:mkv|mp4|m4v|avi|mov|wmv|ts|m2ts|mts|mpg|mpeg|webm|flv|vob|iso|divx|ogm|3gp|rmvb|asf|srt|ass|ssa|sub|idx)$/i;
 const RESOLUTIONS = new Set([480, 576, 720, 1080, 2160]);
@@ -507,6 +508,9 @@ export function fileNumbers(
 		const part = partToken(unchecked);
 		return withSeason(part ? { ...scene, part } : scene);
 	}
+	// a season's episode 0 is a special `specialOf` places, and the tags after it number nothing:
+	// `Would.I.Lie.to.You.S15E00.At.Christmas.1080p.iP.WEB-DL.AAC2.0.H.264-NTb` is no S2E64
+	if (SPECIAL_ZERO.test(unchecked)) return null;
 	// Suits' `Extras/Season 03/Episode 16 Alternate Opening`
 	if (folder?.split('/').some((part) => EXTRAS_FOLDER.test(part.trim()))) return null;
 
@@ -1858,7 +1862,60 @@ export async function specialOf(
 					[false, true].some((tagged) => titledAs(row.name, tagged) === own)
 				)
 			: [];
-	if (named.length) return named.length === 1 ? at(named[0]) : null;
+	if (named.length === 1) return at(named[0]);
+	// several titled so: the one of the year the file names (`call.the.midwife.s11e00.christmas.special.
+	// 2022` is "Christmas Special 2022"), else the one aired after the season before the file's and by
+	// its own's end: Would I Lie to You's `S15E00.At.Christmas` is S0E12 "At Christmas 2021" of
+	// fourteen "At Christmas"
+	const year = token
+		? /(?:^|\D)((?:19|20)\d{2})(?!\d)/.exec(stem.slice(token.index + token[0].length))?.[1]
+		: undefined;
+	if (named.length && year) {
+		const dated = named.filter(
+			(row) => row.airDate?.startsWith(year) || row.name.includes(year)
+		);
+		return dated.length === 1 ? at(dated[0]) : null;
+	}
+	const season = Number(/(?:^|[^a-z0-9])s(\d{1,2})/i.exec(token?.[0] ?? '')?.[1]);
+	if (named.length && season > 0) {
+		const last = async (n: number) =>
+			((await show.episodes(n)) ?? [])
+				.flatMap((row) => (row.airDate ? [row.airDate] : []))
+				.sort()
+				.at(-1);
+		const [from, to] = await Promise.all([season > 1 ? last(season - 1) : '0', last(season)]);
+		const within =
+			from && to
+				? named.filter((row) => row.airDate && row.airDate > from && row.airDate <= to)
+				: [];
+		return within.length === 1 ? at(within[0]) : null;
+	}
+	if (named.length) return null;
+	// a season's episode 0 no special is titled as, but an episode TMDB lists in a season:
+	// `King.Of.The.Road.US.S01E00.Highway.To.Hell.10.Years.On.The.Road` is S1E1
+	if (own.length >= 6 && SPECIAL_ZERO.test(stem)) {
+		const lists = await Promise.all(
+			show.seasons
+				.filter((row) => row.season > 0)
+				.map(async (row) =>
+					((await show.episodes(row.season)) ?? []).map((item) => ({
+						...item,
+						season: row.season,
+					}))
+				)
+		);
+		const same = lists
+			.flat()
+			.filter((row) => [false, true].some((tagged) => titledAs(row.name, tagged) === own));
+		if (same.length === 1)
+			return {
+				season: same[0].season,
+				episode: same[0].episode,
+				episodeEnd: null,
+				how: 'tmdb',
+				titled: true,
+			};
+	}
 	// a special TMDB titles by its segments, the file by the same at its end: To Love-Ru Darkness'
 	// `OVA - 01 - Prologue - Pollen Plan - Body touch` is S0E7 "Prologue ~Commence Project~ / Pollen
 	// Plan ~Dangerous Sister Love~ / Body Touch? ~Nyanderful~"

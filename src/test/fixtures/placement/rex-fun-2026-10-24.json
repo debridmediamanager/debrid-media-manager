@@ -102379,11 +102379,11 @@
 					},
 					{
 						"path": "Beavis and Butt-head S01E0 Sign Here.mp4",
-						"season": null,
-						"episode": null,
+						"season": 2,
+						"episode": 23,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 4017229
 					},
 					{
 						"path": "Beavis and Butt-head S01E01 Door to Door.mp4",

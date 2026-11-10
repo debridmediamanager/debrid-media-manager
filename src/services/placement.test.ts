@@ -54,6 +54,7 @@ import runTogether from '@/test/fixtures/placement/run-together-segments.json';
 import saga from '@/test/fixtures/placement/saga-titles.json';
 import seasonOvas from '@/test/fixtures/placement/season-ovas.json';
 import seasonSubtitles from '@/test/fixtures/placement/season-subtitles.json';
+import seasonZeroSpecials from '@/test/fixtures/placement/season-zero-specials.json';
 import secondChanceTvdb from '@/test/fixtures/placement/second-chance-tvdb-name.json';
 import segmentAbbreviations from '@/test/fixtures/placement/segment-abbreviations.json';
 import segmentLetters from '@/test/fixtures/placement/segment-letters.json';
@@ -2882,6 +2883,30 @@ describe('a release sent with the IMDb id of an episode TMDB lists as a film', (
 			async () => [null]
 		);
 		expect(releases[0]).toMatchObject({ kind: 'movie', imdbId, tmdbId });
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe("a season's episode 0", () => {
+	// zurg on fun and DMM's PlacementMiss (2026-11-10): `S15E00` read the tags after it as S2E64
+	// (`H.264`), TMDB titles fourteen specials "At Christmas", Call the Midwife's names its year, and
+	// King of the Road's is S1E1 (see the fixtures README)
+	it.each([
+		['Would.I.Lie.to.You.S15E00', [0, 12]], // "At Christmas 2021", aired between series 14 and 15
+		['call.the.midwife.s11e00.christmas.special.2022', [0, 13]], // "Christmas Special 2022"
+		['King.Of.The.Road.US.S01E00', [1, 1]], // "Highway to Hell: 10 Years on the Road"
+	])('places %s', async (start, [season, episode]) => {
+		const c = seasonZeroSpecials.cases.find((c) =>
+			c.request.files.some((f) => f.path.startsWith(start))
+		)!;
+		const { releases } = await place(
+			[c.request as PlaceRequest],
+			Infinity,
+			recordedSources(seasonZeroSpecials.answers),
+			async () => [null]
+		);
+		const file = releases[0].files.find((f) => f.path.startsWith(start))!;
+		expect([file.season, file.episode]).toEqual([season, episode]);
 		expect(releases[0]).toEqual(c.expect);
 	});
 });

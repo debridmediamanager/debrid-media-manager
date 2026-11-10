@@ -1,0 +1,2019 @@
+{
+	"answers": {
+		"find": {
+			"tt1055238": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 4775,
+						"name": "Would I Lie to You?",
+						"first_air_date": "2007-06-16"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt1983079": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 39793,
+						"name": "Call the Midwife",
+						"first_air_date": "2012-01-15"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt5866252": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 66249,
+						"name": "King of the Road",
+						"first_air_date": "2016-04-28"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"4775": {
+				"id": 4775,
+				"name": "Would I Lie to You?",
+				"original_name": "Would I Lie to You?",
+				"first_air_date": "2007-06-16",
+				"original_language": "en",
+				"origin_country": ["GB"],
+				"genres": [
+					{
+						"id": 35,
+						"name": "Comedy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 2251,
+							"name": "lie"
+						},
+						{
+							"id": 4325,
+							"name": "game show"
+						},
+						{
+							"id": 4794,
+							"name": "bluff"
+						},
+						{
+							"id": 6256,
+							"name": "truth"
+						},
+						{
+							"id": 9758,
+							"name": "deception"
+						},
+						{
+							"id": 162612,
+							"name": "lie detection"
+						},
+						{
+							"id": 170682,
+							"name": "lying"
+						},
+						{
+							"id": 195207,
+							"name": "panel show"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt1055238",
+					"tvdb_id": 82548
+				},
+				"networks": [
+					{
+						"id": 4,
+						"name": "BBC One"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "GB",
+							"title": "WILTY",
+							"type": "Abbreviation"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2011-03-05",
+						"episode_count": 16,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "2007-06-16",
+						"episode_count": 6,
+						"name": "Series 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "2008-07-11",
+						"episode_count": 9,
+						"name": "Series 2",
+						"season_number": 2
+					},
+					{
+						"air_date": "2009-08-10",
+						"episode_count": 9,
+						"name": "Series 3",
+						"season_number": 3
+					},
+					{
+						"air_date": "2010-07-23",
+						"episode_count": 9,
+						"name": "Series 4",
+						"season_number": 4
+					},
+					{
+						"air_date": "2011-09-09",
+						"episode_count": 9,
+						"name": "Series 5",
+						"season_number": 5
+					},
+					{
+						"air_date": "2012-04-13",
+						"episode_count": 9,
+						"name": "Series 6",
+						"season_number": 6
+					},
+					{
+						"air_date": "2013-05-03",
+						"episode_count": 9,
+						"name": "Series 7",
+						"season_number": 7
+					},
+					{
+						"air_date": "2014-09-12",
+						"episode_count": 9,
+						"name": "Series 8",
+						"season_number": 8
+					},
+					{
+						"air_date": "2015-07-31",
+						"episode_count": 9,
+						"name": "Series 9",
+						"season_number": 9
+					},
+					{
+						"air_date": "2016-09-02",
+						"episode_count": 9,
+						"name": "Series 10",
+						"season_number": 10
+					},
+					{
+						"air_date": "2017-11-20",
+						"episode_count": 9,
+						"name": "Series 11",
+						"season_number": 11
+					},
+					{
+						"air_date": "2018-10-12",
+						"episode_count": 10,
+						"name": "Series 12",
+						"season_number": 12
+					},
+					{
+						"air_date": "2019-10-18",
+						"episode_count": 11,
+						"name": "Series 13",
+						"season_number": 13
+					},
+					{
+						"air_date": "2021-01-08",
+						"episode_count": 11,
+						"name": "Series 14",
+						"season_number": 14
+					},
+					{
+						"air_date": "2022-01-07",
+						"episode_count": 11,
+						"name": "Series 15",
+						"season_number": 15
+					},
+					{
+						"air_date": "2023-01-06",
+						"episode_count": 11,
+						"name": "Series 16",
+						"season_number": 16
+					},
+					{
+						"air_date": "2023-12-29",
+						"episode_count": 11,
+						"name": "Series 17",
+						"season_number": 17
+					},
+					{
+						"air_date": "2025-01-10",
+						"episode_count": 11,
+						"name": "Series 18",
+						"season_number": 18
+					},
+					{
+						"air_date": "2026-01-02",
+						"episode_count": 12,
+						"name": "Series 19",
+						"season_number": 19
+					}
+				],
+				"episode_run_time": [30]
+			},
+			"39793": {
+				"id": 39793,
+				"name": "Call the Midwife",
+				"original_name": "Call the Midwife",
+				"first_air_date": "2012-01-15",
+				"original_language": "en",
+				"origin_country": ["GB"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 212,
+							"name": "london, england"
+						},
+						{
+							"id": 428,
+							"name": "nurse"
+						},
+						{
+							"id": 745,
+							"name": "nun"
+						},
+						{
+							"id": 818,
+							"name": "based on novel or book"
+						},
+						{
+							"id": 6472,
+							"name": "midwife"
+						},
+						{
+							"id": 11612,
+							"name": "hospital"
+						},
+						{
+							"id": 13005,
+							"name": "doctor"
+						},
+						{
+							"id": 15060,
+							"name": "period drama"
+						},
+						{
+							"id": 15126,
+							"name": "historical"
+						},
+						{
+							"id": 164246,
+							"name": "nostalgic"
+						},
+						{
+							"id": 193787,
+							"name": "nursing"
+						},
+						{
+							"id": 194451,
+							"name": "social issues"
+						},
+						{
+							"id": 208611,
+							"name": "1950s"
+						},
+						{
+							"id": 208788,
+							"name": "medical drama"
+						},
+						{
+							"id": 210434,
+							"name": "thoughtful"
+						},
+						{
+							"id": 211740,
+							"name": "medical clinic"
+						},
+						{
+							"id": 215128,
+							"name": "maternity"
+						},
+						{
+							"id": 254167,
+							"name": "loving"
+						},
+						{
+							"id": 270343,
+							"name": "convent"
+						},
+						{
+							"id": 270813,
+							"name": "clinical"
+						},
+						{
+							"id": 278730,
+							"name": "bittersweet"
+						},
+						{
+							"id": 294348,
+							"name": "factual"
+						},
+						{
+							"id": 319319,
+							"name": "sentimental"
+						},
+						{
+							"id": 325784,
+							"name": "comforting"
+						},
+						{
+							"id": 325806,
+							"name": "empathetic"
+						},
+						{
+							"id": 325853,
+							"name": "sympathetic"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt1983079",
+					"tvdb_id": 255192
+				},
+				"networks": [
+					{
+						"id": 4,
+						"name": "BBC One"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "BE",
+							"title": "SOS sages-femmes",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "CA",
+							"title": "SOS Sages Femmes",
+							"type": "Québec title"
+						},
+						{
+							"iso_3166_1": "DE",
+							"title": "Call the Midwife Ruf des Lebens",
+							"type": "Alternativer Name"
+						},
+						{
+							"iso_3166_1": "DE",
+							"title": "Call the Midwife: Ruf des Lebens",
+							"type": "Alternative Schreibweise"
+						},
+						{
+							"iso_3166_1": "FR",
+							"title": "Call the Midwife : Les héroïnes de l'ombre",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "GR",
+							"title": "Επειγόντως τη μαμή",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "MX",
+							"title": "Llamen a la partera",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "MX",
+							"title": "Vida de parteras",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "Вызовите акушерку",
+							"type": ""
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2012-12-25",
+						"episode_count": 18,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "2012-01-15",
+						"episode_count": 6,
+						"name": "Series 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "2013-01-20",
+						"episode_count": 8,
+						"name": "Series 2",
+						"season_number": 2
+					},
+					{
+						"air_date": "2014-01-19",
+						"episode_count": 8,
+						"name": "Series 3",
+						"season_number": 3
+					},
+					{
+						"air_date": "2015-01-18",
+						"episode_count": 8,
+						"name": "Series 4",
+						"season_number": 4
+					},
+					{
+						"air_date": "2016-01-17",
+						"episode_count": 8,
+						"name": "Series 5",
+						"season_number": 5
+					},
+					{
+						"air_date": "2017-01-22",
+						"episode_count": 8,
+						"name": "Series 6",
+						"season_number": 6
+					},
+					{
+						"air_date": "2018-01-21",
+						"episode_count": 8,
+						"name": "Series 7",
+						"season_number": 7
+					},
+					{
+						"air_date": "2019-01-13",
+						"episode_count": 8,
+						"name": "Series 8",
+						"season_number": 8
+					},
+					{
+						"air_date": "2020-01-05",
+						"episode_count": 8,
+						"name": "Series 9",
+						"season_number": 9
+					},
+					{
+						"air_date": "2021-04-18",
+						"episode_count": 7,
+						"name": "Series 10",
+						"season_number": 10
+					},
+					{
+						"air_date": "2022-01-02",
+						"episode_count": 8,
+						"name": "Series 11",
+						"season_number": 11
+					},
+					{
+						"air_date": "2023-01-01",
+						"episode_count": 8,
+						"name": "Series 12",
+						"season_number": 12
+					},
+					{
+						"air_date": "2024-01-07",
+						"episode_count": 8,
+						"name": "Series 13",
+						"season_number": 13
+					},
+					{
+						"air_date": "2025-01-05",
+						"episode_count": 8,
+						"name": "Series 14",
+						"season_number": 14
+					},
+					{
+						"air_date": "2026-01-11",
+						"episode_count": 8,
+						"name": "Series 15",
+						"season_number": 15
+					}
+				],
+				"episode_run_time": [52]
+			},
+			"66249": {
+				"id": 66249,
+				"name": "King of the Road",
+				"original_name": "King of the Road",
+				"first_air_date": "2016-04-28",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 10764,
+						"name": "Reality"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 390,
+							"name": "skateboarding"
+						},
+						{
+							"id": 5452,
+							"name": "stunt"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt5866252",
+					"tvdb_id": 310319
+				},
+				"networks": [
+					{
+						"id": 1339,
+						"name": "Viceland"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "US",
+							"title": "K.O.T.R.",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "KOTR",
+							"type": "common abbreviation"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2003-02-16",
+						"episode_count": 11,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "2016-04-28",
+						"episode_count": 12,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "2017-06-08",
+						"episode_count": 11,
+						"name": "Season 2",
+						"season_number": 2
+					},
+					{
+						"air_date": "2018-07-10",
+						"episode_count": 11,
+						"name": "Season 3",
+						"season_number": 3
+					},
+					{
+						"air_date": "2011-01-08",
+						"episode_count": 12,
+						"name": "Season 2010",
+						"season_number": 2010
+					},
+					{
+						"air_date": "2013-01-29",
+						"episode_count": 17,
+						"name": "Season 2012",
+						"season_number": 2012
+					},
+					{
+						"air_date": "2014-01-06",
+						"episode_count": 16,
+						"name": "Season 2013",
+						"season_number": 2013
+					},
+					{
+						"air_date": "2016-05-03",
+						"episode_count": 11,
+						"name": "Season 2016",
+						"season_number": 2016
+					}
+				],
+				"episode_run_time": []
+			}
+		},
+		"season": {
+			"4775/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Comic Relief (2011)",
+						"air_date": "2011-03-05",
+						"runtime": 30,
+						"id": 2948403
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "At Christmas",
+						"air_date": "2013-12-23",
+						"runtime": 30,
+						"id": 343051
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "At Christmas",
+						"air_date": "2014-12-22",
+						"runtime": 30,
+						"id": 343052
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "At Christmas",
+						"air_date": "2015-12-24",
+						"runtime": 30,
+						"id": 343053
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "Children in Need (Series 10)",
+						"air_date": "2016-11-18",
+						"runtime": 30,
+						"id": 2948404
+					},
+					{
+						"episode_number": 6,
+						"season_number": 0,
+						"name": "At Christmas",
+						"air_date": "2016-12-19",
+						"runtime": 30,
+						"id": 343054
+					},
+					{
+						"episode_number": 7,
+						"season_number": 0,
+						"name": "At Christmas",
+						"air_date": "2017-12-18",
+						"runtime": 30,
+						"id": 1635205
+					},
+					{
+						"episode_number": 8,
+						"season_number": 0,
+						"name": "At Christmas",
+						"air_date": "2018-12-24",
+						"runtime": 30,
+						"id": 1635206
+					},
+					{
+						"episode_number": 9,
+						"season_number": 0,
+						"name": "At Christmas",
+						"air_date": "2019-12-26",
+						"runtime": 30,
+						"id": 2029478
+					},
+					{
+						"episode_number": 10,
+						"season_number": 0,
+						"name": "At Christmas 2020",
+						"air_date": "2020-12-24",
+						"runtime": 30,
+						"id": 2586403
+					},
+					{
+						"episode_number": 11,
+						"season_number": 0,
+						"name": "Mam, Would I Lie To You (Ant And Decs Saturday Night Takeaway)",
+						"air_date": "2021-03-14",
+						"runtime": 14,
+						"id": 5782417
+					},
+					{
+						"episode_number": 12,
+						"season_number": 0,
+						"name": "At Christmas 2021",
+						"air_date": "2021-12-20",
+						"runtime": 30,
+						"id": 3367311
+					},
+					{
+						"episode_number": 13,
+						"season_number": 0,
+						"name": "At Christmas 2022",
+						"air_date": "2022-12-30",
+						"runtime": 30,
+						"id": 4103023
+					},
+					{
+						"episode_number": 14,
+						"season_number": 0,
+						"name": "At Christmas 2023",
+						"air_date": "2023-12-22",
+						"runtime": 29,
+						"id": 4963587
+					},
+					{
+						"episode_number": 15,
+						"season_number": 0,
+						"name": "At Christmas 2024",
+						"air_date": "2024-12-23",
+						"runtime": 29,
+						"id": 5812027
+					},
+					{
+						"episode_number": 16,
+						"season_number": 0,
+						"name": "At Christmas 2025",
+						"air_date": "2025-12-26",
+						"runtime": 29,
+						"id": 6732563
+					}
+				]
+			},
+			"39793/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Christmas Special 2012",
+						"air_date": "2012-12-25",
+						"runtime": 80,
+						"id": 870017
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Christmas Special 2013",
+						"air_date": "2013-12-25",
+						"runtime": 43,
+						"id": 989770
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "Christmas Special 2014",
+						"air_date": "2014-12-25",
+						"runtime": 43,
+						"id": 989769
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "Christmas Special 2015",
+						"air_date": "2015-12-25",
+						"runtime": 44,
+						"id": 1147484
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "Christmas Special 2016",
+						"air_date": "2016-12-25",
+						"runtime": 43,
+						"id": 1248936
+					},
+					{
+						"episode_number": 6,
+						"season_number": 0,
+						"name": "The Casebook",
+						"air_date": "2017-01-15",
+						"runtime": 59,
+						"id": 1257599
+					},
+					{
+						"episode_number": 7,
+						"season_number": 0,
+						"name": "Christmas Special 2017",
+						"air_date": "2017-12-25",
+						"runtime": 41,
+						"id": 1409556
+					},
+					{
+						"episode_number": 8,
+						"season_number": 0,
+						"name": "Christmas Special 2018",
+						"air_date": "2018-12-25",
+						"runtime": 87,
+						"id": 1434714
+					},
+					{
+						"episode_number": 9,
+						"season_number": 0,
+						"name": "Christmas Special 2019",
+						"air_date": "2019-12-25",
+						"runtime": 78,
+						"id": 2027962
+					},
+					{
+						"episode_number": 10,
+						"season_number": 0,
+						"name": "Christmas Special 2020",
+						"air_date": "2020-12-25",
+						"runtime": 44,
+						"id": 2587567
+					},
+					{
+						"episode_number": 11,
+						"season_number": 0,
+						"name": "Special Delivery",
+						"air_date": "2021-05-30",
+						"runtime": 44,
+						"id": 2989521
+					},
+					{
+						"episode_number": 12,
+						"season_number": 0,
+						"name": "Christmas Special 2021",
+						"air_date": "2021-12-25",
+						"runtime": 44,
+						"id": 3112522
+					},
+					{
+						"episode_number": 13,
+						"season_number": 0,
+						"name": "Christmas Special 2022",
+						"air_date": "2022-12-25",
+						"runtime": 43,
+						"id": 4099429
+					},
+					{
+						"episode_number": 14,
+						"season_number": 0,
+						"name": "Christmas Special 2023",
+						"air_date": "2023-12-25",
+						"runtime": 44,
+						"id": 4979742
+					},
+					{
+						"episode_number": 15,
+						"season_number": 0,
+						"name": "Christmas Special 2024 (1)",
+						"air_date": "2024-12-25",
+						"runtime": 44,
+						"id": 5835884
+					},
+					{
+						"episode_number": 16,
+						"season_number": 0,
+						"name": "Christmas Special 2024 (2)",
+						"air_date": "2024-12-26",
+						"runtime": 44,
+						"id": 5835887
+					},
+					{
+						"episode_number": 17,
+						"season_number": 0,
+						"name": "Christmas Special 2025 (1)",
+						"air_date": "2025-12-25",
+						"runtime": 59,
+						"id": 6762379
+					},
+					{
+						"episode_number": 18,
+						"season_number": 0,
+						"name": "Christmas Special 2025 (2)",
+						"air_date": "2025-12-26",
+						"runtime": 59,
+						"id": 6762392
+					}
+				]
+			},
+			"66249/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "King of the Road 2003",
+						"air_date": "2003-02-16",
+						"runtime": 30,
+						"id": 5276298
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "King of the Road 2004",
+						"air_date": "2004-02-16",
+						"runtime": 58,
+						"id": 5276299
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "King of the Road 2005",
+						"air_date": "2005-02-19",
+						"runtime": 56,
+						"id": 5276300
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "King of the Road 2006",
+						"air_date": "2006-03-14",
+						"runtime": 48,
+						"id": 5276301
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "King of the Road 2007",
+						"air_date": "2007-07-25",
+						"runtime": 58,
+						"id": 5276302
+					},
+					{
+						"episode_number": 6,
+						"season_number": 0,
+						"name": "King of the Road 2010",
+						"air_date": "2010-03-15",
+						"runtime": 54,
+						"id": 5276303
+					},
+					{
+						"episode_number": 7,
+						"season_number": 0,
+						"name": "King of the Road 2011",
+						"air_date": "2011-03-15",
+						"runtime": 70,
+						"id": 5276305
+					},
+					{
+						"episode_number": 8,
+						"season_number": 0,
+						"name": "King of the Road China",
+						"air_date": "2012-03-09",
+						"runtime": 33,
+						"id": 5276306
+					},
+					{
+						"episode_number": 9,
+						"season_number": 0,
+						"name": "King of the Road 2012",
+						"air_date": "2012-03-10",
+						"runtime": 109,
+						"id": 5276307
+					},
+					{
+						"episode_number": 10,
+						"season_number": 0,
+						"name": "King of the Road 2013",
+						"air_date": "2013-03-16",
+						"runtime": 83,
+						"id": 5276308
+					},
+					{
+						"episode_number": 11,
+						"season_number": 0,
+						"name": "King of the Road 2014",
+						"air_date": "2014-08-26",
+						"runtime": 96,
+						"id": 5276309
+					}
+				]
+			},
+			"4775/14": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 14,
+						"name": "Les Dennis, Richard Osman, Alice Levine and Lou Sanders",
+						"air_date": "2021-01-08",
+						"runtime": 30,
+						"id": 2620761
+					},
+					{
+						"episode_number": 2,
+						"season_number": 14,
+						"name": "Stephen Hendry, Laura Whitmore, Chris McCausland and Maisie Adam",
+						"air_date": "2021-01-15",
+						"runtime": 30,
+						"id": 2620763
+					},
+					{
+						"episode_number": 3,
+						"season_number": 14,
+						"name": "Josh Widdicombe, Gemma Cairney, Raj Bisram and Sophie Hermann",
+						"air_date": "2021-01-22",
+						"runtime": 30,
+						"id": 2646503
+					},
+					{
+						"episode_number": 4,
+						"season_number": 14,
+						"name": "Bob Mortimer, Samantha Morton, Miles Jupp and Sarah Hadland",
+						"air_date": "2021-01-29",
+						"runtime": 30,
+						"id": 2646504
+					},
+					{
+						"episode_number": 5,
+						"season_number": 14,
+						"name": "Claudia Winkleman, Rev Kate Bottley, Sara Barron and Ed Gamble",
+						"air_date": "2021-02-01",
+						"runtime": 30,
+						"id": 2671357
+					},
+					{
+						"episode_number": 6,
+						"season_number": 14,
+						"name": "Sara Pascoe, Dan Walker, Nicola Coughlan and Mr Motivator",
+						"air_date": "2021-02-08",
+						"runtime": 30,
+						"id": 2685684
+					},
+					{
+						"episode_number": 7,
+						"season_number": 14,
+						"name": "Joel Dommett, Sindhu Vee, Alex Horne and AJ Odudu",
+						"air_date": "2021-02-15",
+						"runtime": 30,
+						"id": 2706475
+					},
+					{
+						"episode_number": 8,
+						"season_number": 14,
+						"name": "Maya Jama, Roisin Conaty, Roman Kemp and Dr Xand van Tulleken",
+						"air_date": "2021-02-22",
+						"runtime": 30,
+						"id": 2722918
+					},
+					{
+						"episode_number": 9,
+						"season_number": 14,
+						"name": "Johnny Vegas, Alex Jones, Martin Lewis and Anna Maxwell Martin",
+						"air_date": "2021-03-01",
+						"runtime": 30,
+						"id": 2737877
+					},
+					{
+						"episode_number": 10,
+						"season_number": 14,
+						"name": "The Unseen Bits (Series 14)",
+						"air_date": "2021-03-05",
+						"runtime": 30,
+						"id": 2758500
+					},
+					{
+						"episode_number": 11,
+						"season_number": 14,
+						"name": "The Best Bits (Series 14)",
+						"air_date": "2021-04-16",
+						"runtime": 30,
+						"id": 2803938
+					}
+				]
+			},
+			"4775/15": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 15,
+						"name": "John Cooper Clarke, Judi Love, Chris McCausland and Caroline Quentin",
+						"air_date": "2022-01-07",
+						"runtime": 30,
+						"id": 3384985
+					},
+					{
+						"episode_number": 2,
+						"season_number": 15,
+						"name": "Angellica Bell, Bob Mortimer, Suggs and Holly Willoughby",
+						"air_date": "2022-01-14",
+						"runtime": 30,
+						"id": 3396774
+					},
+					{
+						"episode_number": 3,
+						"season_number": 15,
+						"name": "Sophie Ellis-Bextor, Loyiso Gola, Jason Manford and Briony May Williams",
+						"air_date": "2022-01-21",
+						"runtime": 30,
+						"id": 3432804
+					},
+					{
+						"episode_number": 4,
+						"season_number": 15,
+						"name": "Gyles Brandreth, Yung Filly, Sarah Millican and Lou Sanders",
+						"air_date": "2022-01-28",
+						"runtime": 30,
+						"id": 3446442
+					},
+					{
+						"episode_number": 5,
+						"season_number": 15,
+						"name": "Pam Ayres, Sarah Kendall, Richard Osman and Kiell Smith-Bynoe",
+						"air_date": "2022-02-04",
+						"runtime": 30,
+						"id": 3458615
+					},
+					{
+						"episode_number": 6,
+						"season_number": 15,
+						"name": "Lady Leshurr, Philippa Perry, Alan Titchmarsh and Mike Wozniak",
+						"air_date": "2022-02-11",
+						"runtime": 30,
+						"id": 3470072
+					},
+					{
+						"episode_number": 7,
+						"season_number": 15,
+						"name": "Victoria Derbyshire, Rhod Gilbert, Rosie Jones and Jamali Maddix",
+						"air_date": "2022-02-18",
+						"runtime": 30,
+						"id": 3483275
+					},
+					{
+						"episode_number": 8,
+						"season_number": 15,
+						"name": "Raj Bisram, Deborah Frances-White, Stephen Mulhern and Jenny Ryan",
+						"air_date": "2022-02-25",
+						"runtime": 30,
+						"id": 3490331
+					},
+					{
+						"episode_number": 9,
+						"season_number": 15,
+						"name": "Jo Brand, Sam Quek, Bobby Seagull and Joe Thomas",
+						"air_date": "2022-03-04",
+						"runtime": 30,
+						"id": 3490332
+					},
+					{
+						"episode_number": 10,
+						"season_number": 15,
+						"name": "The Unseen Bits",
+						"air_date": "2022-04-01",
+						"runtime": 30,
+						"id": 3600222
+					},
+					{
+						"episode_number": 11,
+						"season_number": 15,
+						"name": "The Best Bits",
+						"air_date": "2022-06-03",
+						"runtime": null,
+						"id": 3735889
+					}
+				]
+			},
+			"66249/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Highway to Hell: 10 Years on the Road",
+						"air_date": "2016-04-28",
+						"runtime": 44,
+						"id": 5276137
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Let the Madness Begin",
+						"air_date": "2016-05-05",
+						"runtime": 44,
+						"id": 5276082
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Shirtless in Seattle",
+						"air_date": "2016-05-12",
+						"runtime": 44,
+						"id": 5276097
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Sabotage Is Part of the Game",
+						"air_date": "2016-05-19",
+						"runtime": 44,
+						"id": 5276103
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Possible Broken Cheekbone",
+						"air_date": "2016-05-26",
+						"runtime": 44,
+						"id": 5276110
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Midway Point",
+						"air_date": "2016-06-02",
+						"runtime": 44,
+						"id": 5276118
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "SF Legends",
+						"air_date": "2016-06-09",
+						"runtime": 44,
+						"id": 5276121
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "A Wobbly Beast",
+						"air_date": "2016-06-16",
+						"runtime": 44,
+						"id": 5276122
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Serious Rock Vibes",
+						"air_date": "2016-06-23",
+						"runtime": 44,
+						"id": 5276123
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Put On That Angry Face and Grind",
+						"air_date": "2016-06-30",
+						"runtime": 44,
+						"id": 5276124
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "End of the Line",
+						"air_date": "2016-07-07",
+						"runtime": 44,
+						"id": 5276126
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Grand Finale",
+						"air_date": "2016-07-14",
+						"runtime": 67,
+						"id": 5276127
+					}
+				]
+			},
+			"66249/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "The Quickest Piss in the West!",
+						"air_date": "2017-06-08",
+						"runtime": 44,
+						"id": 1325427
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Is This Safe?",
+						"air_date": "2017-06-15",
+						"runtime": 44,
+						"id": 1331091
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Handcuffed in Hell Paso",
+						"air_date": "2017-06-22",
+						"runtime": 44,
+						"id": 1331092
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "All In a Day's Twerk",
+						"air_date": "2017-06-29",
+						"runtime": 44,
+						"id": 1331695
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Feel the Splat Baby",
+						"air_date": "2017-07-06",
+						"runtime": 44,
+						"id": 1331696
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Why's America So Big?",
+						"air_date": "2017-07-13",
+						"runtime": 44,
+						"id": 1331697
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "The Return of the Butt Chug",
+						"air_date": "2017-07-20",
+						"runtime": 44,
+						"id": 1331701
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Handrails, Homies!",
+						"air_date": "2017-07-27",
+						"runtime": 44,
+						"id": 1331700
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Torture in Paradise",
+						"air_date": "2017-08-03",
+						"runtime": 44,
+						"id": 1331699
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "Hawaiian Psycho Jam",
+						"air_date": "2017-08-10",
+						"runtime": 44,
+						"id": 1331698
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "And the Winner Is...",
+						"air_date": "2017-08-17",
+						"runtime": 44,
+						"id": 1343244
+					}
+				]
+			},
+			"66249/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "Get the Goddamn Pig's Feet",
+						"air_date": "2018-07-10",
+						"runtime": 44,
+						"id": 1511224
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "Death by Pizza",
+						"air_date": "2018-07-17",
+						"runtime": 44,
+						"id": 1524997
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Chained Up And Tripped Out",
+						"air_date": "2018-07-24",
+						"runtime": 44,
+						"id": 1530141
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "Get Your War Face On",
+						"air_date": "2018-07-31",
+						"runtime": 44,
+						"id": 1534972
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Game Of Stoke",
+						"air_date": "2018-08-07",
+						"runtime": 44,
+						"id": 1542953
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "Hill Bomb in Diapers",
+						"air_date": "2018-08-14",
+						"runtime": 44,
+						"id": 1550418
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "Bruised Ribs & Broken Teeth",
+						"air_date": "2018-08-21",
+						"runtime": 44,
+						"id": 1554299
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "Dusted in the Desert",
+						"air_date": "2018-08-28",
+						"runtime": 44,
+						"id": 1554302
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "Phoenix Rising",
+						"air_date": "2018-09-04",
+						"runtime": 44,
+						"id": 1554301
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "The Finale",
+						"air_date": "2018-09-11",
+						"runtime": 44,
+						"id": 1554300
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "Team Watch Party",
+						"air_date": "2018-09-18",
+						"runtime": 44,
+						"id": 1569310
+					}
+				]
+			},
+			"66249/2010": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2010,
+						"name": "Episode 1",
+						"air_date": "2011-01-08",
+						"runtime": null,
+						"id": 1186787
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2010,
+						"name": "Episode 2",
+						"air_date": "2011-01-15",
+						"runtime": null,
+						"id": 1186788
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2010,
+						"name": "Episode 3",
+						"air_date": "2011-01-19",
+						"runtime": null,
+						"id": 1186789
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2010,
+						"name": "Episode 4",
+						"air_date": "2011-01-22",
+						"runtime": null,
+						"id": 1186790
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2010,
+						"name": "Episode 5",
+						"air_date": "2011-01-26",
+						"runtime": null,
+						"id": 1186791
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2010,
+						"name": "Episode 6",
+						"air_date": "2011-01-28",
+						"runtime": null,
+						"id": 1186792
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2010,
+						"name": "Episode 7",
+						"air_date": "2011-02-02",
+						"runtime": null,
+						"id": 1186793
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2010,
+						"name": "Episode 8",
+						"air_date": "2011-02-06",
+						"runtime": null,
+						"id": 1186794
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2010,
+						"name": "Episode 9",
+						"air_date": "2011-02-09",
+						"runtime": null,
+						"id": 1186795
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2010,
+						"name": "Episode 10",
+						"air_date": "2011-02-11",
+						"runtime": null,
+						"id": 1186796
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2010,
+						"name": "Episode 11",
+						"air_date": "2011-02-16",
+						"runtime": null,
+						"id": 1186797
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2010,
+						"name": "Episode 12",
+						"air_date": "2011-02-23",
+						"runtime": null,
+						"id": 1186798
+					}
+				]
+			},
+			"66249/2012": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2012,
+						"name": "Webisode 1",
+						"air_date": "2013-01-29",
+						"runtime": null,
+						"id": 1186806
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2012,
+						"name": "Webisode 2",
+						"air_date": "2013-01-31",
+						"runtime": null,
+						"id": 1186807
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2012,
+						"name": "Webisode 3",
+						"air_date": "2013-02-04",
+						"runtime": null,
+						"id": 1186808
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2012,
+						"name": "Webisode 4",
+						"air_date": "2013-02-06",
+						"runtime": null,
+						"id": 1186809
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2012,
+						"name": "Webisode 5",
+						"air_date": "2013-02-08",
+						"runtime": null,
+						"id": 1186810
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2012,
+						"name": "Webisode 6",
+						"air_date": "2013-02-12",
+						"runtime": null,
+						"id": 1186811
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2012,
+						"name": "Webisode 7",
+						"air_date": "2013-02-14",
+						"runtime": null,
+						"id": 1186812
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2012,
+						"name": "Webisode 8",
+						"air_date": "2013-02-18",
+						"runtime": null,
+						"id": 1186813
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2012,
+						"name": "Webisode 9",
+						"air_date": "2013-02-20",
+						"runtime": null,
+						"id": 1186814
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2012,
+						"name": "Webisode 10",
+						"air_date": "2013-02-22",
+						"runtime": null,
+						"id": 1186815
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2012,
+						"name": "Webisode 11",
+						"air_date": "2013-02-25",
+						"runtime": null,
+						"id": 1186816
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2012,
+						"name": "Webisode 12",
+						"air_date": "2013-02-27",
+						"runtime": null,
+						"id": 1186817
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2012,
+						"name": "Webisode 13",
+						"air_date": "2013-03-01",
+						"runtime": null,
+						"id": 1186818
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2012,
+						"name": "Webisode 14",
+						"air_date": "2013-03-05",
+						"runtime": null,
+						"id": 1186819
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2012,
+						"name": "Webisode 15",
+						"air_date": "2013-03-07",
+						"runtime": null,
+						"id": 1186820
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2012,
+						"name": "Webisode 16",
+						"air_date": "2013-03-12",
+						"runtime": null,
+						"id": 1186821
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2012,
+						"name": "Webisode 17",
+						"air_date": "2013-03-14",
+						"runtime": null,
+						"id": 1186822
+					}
+				]
+			},
+			"66249/2013": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2013,
+						"name": "Episode 1",
+						"air_date": "2014-01-06",
+						"runtime": 6,
+						"id": 1186766
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2013,
+						"name": "Episode 2",
+						"air_date": "2014-01-07",
+						"runtime": 5,
+						"id": 1186767
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2013,
+						"name": "Episode 3",
+						"air_date": "2014-01-08",
+						"runtime": 5,
+						"id": 1186768
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2013,
+						"name": "Episode 4",
+						"air_date": "2014-01-09",
+						"runtime": 11,
+						"id": 1186769
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2013,
+						"name": "Episode 5",
+						"air_date": "2014-01-10",
+						"runtime": 5,
+						"id": 1186770
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2013,
+						"name": "Episode 6",
+						"air_date": "2014-01-13",
+						"runtime": 3,
+						"id": 1186771
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2013,
+						"name": "Episode 7",
+						"air_date": "2014-01-14",
+						"runtime": 3,
+						"id": 1186772
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2013,
+						"name": "Episode 8",
+						"air_date": "2014-01-15",
+						"runtime": 8,
+						"id": 1186773
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2013,
+						"name": "Episode 9",
+						"air_date": "2014-01-16",
+						"runtime": 5,
+						"id": 1186774
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2013,
+						"name": "Episode 10",
+						"air_date": "2014-01-17",
+						"runtime": 8,
+						"id": 1186775
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2013,
+						"name": "Episode 11",
+						"air_date": "2014-01-20",
+						"runtime": 3,
+						"id": 1186776
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2013,
+						"name": "Episode 12",
+						"air_date": "2014-01-21",
+						"runtime": 4,
+						"id": 1186777
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2013,
+						"name": "Episode 13",
+						"air_date": "2014-01-22",
+						"runtime": 8,
+						"id": 1186778
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2013,
+						"name": "Episode 14",
+						"air_date": "2014-01-23",
+						"runtime": 4,
+						"id": 1186779
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2013,
+						"name": "Episode 15",
+						"air_date": "2014-01-24",
+						"runtime": 5,
+						"id": 1186780
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2013,
+						"name": "Episode 16",
+						"air_date": "2014-01-27",
+						"runtime": 11,
+						"id": 1186781
+					}
+				]
+			},
+			"66249/2016": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2016,
+						"name": "Let the Madness Begin",
+						"air_date": "2016-05-05",
+						"runtime": null,
+						"id": 1192466
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2016,
+						"name": "Shirtless In Seattle",
+						"air_date": "2016-05-12",
+						"runtime": null,
+						"id": 1192465
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2016,
+						"name": "Sabotage Is Part Of The Game",
+						"air_date": "2016-05-19",
+						"runtime": null,
+						"id": 1194724
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2016,
+						"name": "Possible Broken Cheekbone",
+						"air_date": "2016-05-26",
+						"runtime": null,
+						"id": 1196067
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2016,
+						"name": "Midway Point",
+						"air_date": "2016-06-02",
+						"runtime": null,
+						"id": 1197089
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2016,
+						"name": "SF Legends",
+						"air_date": "2016-06-09",
+						"runtime": null,
+						"id": 1198666
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2016,
+						"name": "A Wobbly Beast",
+						"air_date": "2016-06-16",
+						"runtime": null,
+						"id": 1199977
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2016,
+						"name": "Serious Rock Vibes",
+						"air_date": "2016-06-23",
+						"runtime": null,
+						"id": 1201182
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2016,
+						"name": "Put On That Angry Face and Grind",
+						"air_date": "2016-06-30",
+						"runtime": null,
+						"id": 1202749
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2016,
+						"name": "End Of The Line",
+						"air_date": "2016-07-07",
+						"runtime": null,
+						"id": 1204365
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2016,
+						"name": "Grand Finale",
+						"air_date": "2016-07-14",
+						"runtime": null,
+						"id": 1205916
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt1055238": null,
+			"tt1983079": null,
+			"tt5866252": null
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun (Usenet), 2026-11-10: the release's name, hash, the IMDb id zurg sent and its video, an archive member, with its folder and probed length, as zurg asks",
+			"request": {
+				"name": "Would.I.Lie.to.You.S15E00.At.Christmas.1080p.iP.WEB-DL.AAC2.0.H.264-NTb",
+				"hash": "77e5748cfb89bb7a086978464cd252cb6cb4ca89",
+				"imdbId": "tt1055238",
+				"files": [
+					{
+						"path": "Would.I.Lie.to.You.S15E00.At.Christmas.1080p.iP.WEB-DL.AAC2.0.H.264-NTb.mkv",
+						"folder": "s2crjgir9dafoietq",
+						"duration": 1736.84
+					}
+				],
+				"parts": true,
+				"shows": true
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt1055238",
+				"tmdbId": 4775,
+				"files": [
+					{
+						"path": "Would.I.Lie.to.You.S15E00.At.Christmas.1080p.iP.WEB-DL.AAC2.0.H.264-NTb.mkv",
+						"season": 0,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 3367311
+					}
+				]
+			}
+		},
+		{
+			"from": "DMM's PlacementMiss on 2026-11-10 (another sponsor's zurg), names only: the release's name, the IMDb id DMM answered and the missed video file",
+			"request": {
+				"name": "Call.The.Midwife.S11E08.1080p.WEB.H264-CBFM",
+				"files": [
+					{
+						"path": "call.the.midwife.s11e00.christmas.special.2022.1080p.web.h264-cbfm.mkv",
+						"folder": ""
+					}
+				],
+				"parts": true,
+				"shows": true,
+				"imdbId": "tt1983079"
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt1983079",
+				"tmdbId": 39793,
+				"files": [
+					{
+						"path": "call.the.midwife.s11e00.christmas.special.2022.1080p.web.h264-cbfm.mkv",
+						"season": 0,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4099429
+					}
+				]
+			}
+		},
+		{
+			"from": "DMM's PlacementMiss on 2026-11-10 (another sponsor's zurg), names only: the release's name, the IMDb id DMM answered and the missed video file",
+			"request": {
+				"name": "King.Of.The.Road.US.S01.COMPLETE.HDTV.x264-YesTV[TGx]",
+				"files": [
+					{
+						"path": "King.Of.The.Road.US.S01E00.Highway.To.Hell.10.Years.On.The.Road.HDTV.x264-YesTV.mkv",
+						"folder": ""
+					}
+				],
+				"parts": true,
+				"shows": true,
+				"imdbId": "tt5866252"
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt5866252",
+				"tmdbId": 66249,
+				"files": [
+					{
+						"path": "King.Of.The.Road.US.S01E00.Highway.To.Hell.10.Years.On.The.Road.HDTV.x264-YesTV.mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 5276137
+					}
+				]
+			}
+		}
+	]
+}
