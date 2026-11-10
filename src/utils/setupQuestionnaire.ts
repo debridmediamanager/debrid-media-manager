@@ -1514,18 +1514,21 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		result.conflicts.push(
 			`zurg needs a host that stays on while you watch. Choose a host${hostedNzb ? '' : ' or a supported Android device'}${noHostClause(player, selected, answers.player === 'unsure')}.`
 		);
-	if (answers.host === 'android' && (result.hostRequirement === 'zurg' || androidRex)) {
+	const androidZurg =
+		answers.host === 'android' && (result.hostRequirement === 'zurg' || androidRex);
+	if (androidZurg)
 		result.prerequisites.push(
 			androidRex
 				? 'zurg+rex Android needs sponsor access, a supported 64-bit device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. It has no TorBox hosted NZB (torbox_nzb) backend.'
 				: 'zurg+rex Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and zurg+rex Android has no TorBox hosted NZB (torbox_nzb) backend.'
 		);
-		// The app stands in for the desktop zurg and rex guides, so its own guide leads.
+	// The app stands in for the desktop zurg and rex guides, so its own guide leads; with no
+	// source chosen yet it is still where rex on Android starts.
+	if (androidZurg || (answers.host === 'android' && rex && !selected.length))
 		result.setupLinks = [
 			note('zurg/guides/android', 'zurg+rex Android guide'),
 			...result.setupLinks.filter((link) => link !== ZURG && link !== REX),
 		];
-	}
 	if (answers.needs.includes('remote')) {
 		const selfHosted =
 			'Self-hosted playback needs a securely reachable address; a LAN address works only at home.';

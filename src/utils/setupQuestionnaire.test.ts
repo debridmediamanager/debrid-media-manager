@@ -3065,6 +3065,26 @@ describe('zurg+rex Android serves the Plex apps', () => {
 		}
 	);
 
+	it.each(['rex', 'either'] as const)(
+		'leads with the zurg+rex Android guide when no source is chosen (%s)',
+		(plexRoute) => {
+			expect(onAndroid({ plexRoute, sources: ['none'] }).setupLinks).toEqual([
+				{
+					label: 'zurg+rex Android guide',
+					href: 'https://notes.debridmediamanager.com/zurg/guides/android/',
+				},
+				{
+					label: 'rex compatibility and limits',
+					href: 'https://notes.debridmediamanager.com/rex/faq/',
+				},
+				{
+					label: 'Read the full setup guide',
+					href: 'https://notes.debridmediamanager.com/guides/choose-your-setup/',
+				},
+			]);
+		}
+	);
+
 	it('says rex on Android has no feed for Easynews', () => {
 		expect(
 			onAndroid({ sources: ['real-debrid', 'easynews'] }).sourceCoverage.find(
