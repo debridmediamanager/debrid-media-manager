@@ -63,7 +63,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * releases they discarded). A caller that starts reading a field decides for itself whether to
  * ask again (zurg's placementReader). Deploys that place nothing differently keep it.
  */
-export const PLACEMENT_RULES = '2026-11-10.3';
+export const PLACEMENT_RULES = '2026-11-10.4';
 
 export interface PlaceRequest {
 	name: string;
