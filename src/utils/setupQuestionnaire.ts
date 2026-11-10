@@ -744,10 +744,11 @@ function sponsorshipFor(
 	return {
 		required: requiredBenefits,
 		optional: optionalBenefits,
+		// On Android rex comes inside the sponsor-only zurg+rex app, so nothing of rex is named free there.
 		freeFeatures: [
 			...(usesCast ? (['cast'] as const) : []),
-			...(usesRex ? (['rex'] as const) : []),
-			...(rexStremio ? (['rex-stremio'] as const) : []),
+			...(usesRex && answers.host !== 'android' ? (['rex'] as const) : []),
+			...(rexStremio && answers.host !== 'android' ? (['rex-stremio'] as const) : []),
 		],
 		routeAvailable,
 		usesDmmTools: routes.some(
@@ -1279,7 +1280,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	}
 	if (rex) {
 		result.limits.push(
-			`rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. ${rexStremio ? 'rex and rex-stremio do not' : 'rex does not'} require sponsorship.`
+			`rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. ${answers.host === 'android' ? 'On Android, rex comes inside the sponsor-only zurg+rex app.' : `${rexStremio ? 'rex and rex-stremio do not' : 'rex does not'} require sponsorship.`}`
 		);
 		links(note('rex/faq', 'rex compatibility and limits'));
 		if (rexWithoutZurg)

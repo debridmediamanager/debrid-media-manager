@@ -2976,6 +2976,30 @@ describe('zurg+rex Android serves the Plex apps', () => {
 		expect(result.alternatives.map(({ title }) => title)).toContain('DMM Wanted requests');
 	});
 
+	it.each(['rex', 'either'] as const)(
+		'says rex comes inside the sponsor-only app and names nothing of rex free (%s)',
+		(plexRoute) => {
+			const result = onAndroid({ plexRoute });
+
+			expect(result.limits).toContain(
+				'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. On Android, rex comes inside the sponsor-only zurg+rex app.'
+			);
+			expect(result.sponsorship.freeFeatures).toEqual([]);
+		}
+	);
+
+	it('offers the rex-stremio key only beside the rex-stremio alternative for a normal host', () => {
+		const ids = (result: ReturnType<typeof onAndroid>) =>
+			result.sponsorship.optional.map(({ id }) => id);
+		const withoutZurg = (result: ReturnType<typeof onAndroid>) =>
+			result.alternatives.some(({ title }) => title.startsWith('Without zurg'));
+
+		expect(withoutZurg(onAndroid())).toBe(true);
+		expect(ids(onAndroid())).toContain('rex-stremio-key');
+		expect(withoutZurg(onAndroid({ sources: ['usenet'] }))).toBe(false);
+		expect(ids(onAndroid({ sources: ['usenet'] }))).not.toContain('rex-stremio-key');
+	});
+
 	it('says rex on Android has no feed for Easynews', () => {
 		expect(
 			onAndroid({ sources: ['real-debrid', 'easynews'] }).sourceCoverage.find(

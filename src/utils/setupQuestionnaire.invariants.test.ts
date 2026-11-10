@@ -174,8 +174,11 @@ function check(answers: SetupAnswers, result: SetupRecommendation) {
 		({ id }) => id === 'rex-stremio-key'
 	);
 	const rexStremioFree = result.sponsorship.freeFeatures.includes('rex-stremio');
-	if (rexStremioKey !== rexStremioFree)
-		fail(`rex-stremio-key offered=${rexStremioKey} but rex-stremio free=${rexStremioFree}`);
+	// On Android rex comes inside the sponsor-only zurg+rex app, so nothing of rex is named free there.
+	if (rexStremioFree !== (rexStremioKey && answers.host !== 'android'))
+		fail(
+			`rex-stremio-key offered=${rexStremioKey} but rex-stremio free=${rexStremioFree} on host ${answers.host}`
+		);
 
 	if (selected.length === 1 && selected[0] === 'easynews') {
 		const offered = [...result.sponsorship.required, ...result.sponsorship.optional].map(
@@ -442,6 +445,21 @@ describe('setup copy and benefits for every combination of up to two sources', (
 					answers.host === 'android' &&
 					(offered(result).includes('seerr') ||
 						texts(result).some((text) => text.includes('dmm/seerr')))
+			)
+		).toEqual([]);
+	});
+
+	it('names nothing of rex free on Android, where rex comes inside the sponsor-only app', () => {
+		expect(
+			breaking(
+				(answers, result) =>
+					answers.host === 'android' &&
+					answers.player === 'plex' &&
+					(answers.plexRoute === 'rex' || answers.plexRoute === 'either') &&
+					(result.sponsorship.freeFeatures.some(
+						(feature) => feature === 'rex' || feature === 'rex-stremio'
+					) ||
+						texts(result).some((text) => /not require sponsorship/.test(text)))
 			)
 		).toEqual([]);
 	});
