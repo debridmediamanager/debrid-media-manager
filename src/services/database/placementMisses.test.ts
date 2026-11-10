@@ -45,10 +45,10 @@ describe('placementMisses', () => {
 			placed: [expect.any(String)],
 		});
 		const { missed } = placementMisses(pace, answered);
-		expect(missed.find((row) => row.name.includes('Reverse Mountain'))?.files).toEqual([
-			'[One Pace][101-103] Reverse Mountain 01 [1080p][CE01A533].mkv',
+		expect(missed.find((row) => row.name.includes('Baratie 03'))?.files).toEqual([
+			'[One Pace][47-49] Baratie 03 [1080p][0EB7F7E9].mkv',
 		]);
-		expect(missed.reduce((n, row) => n + row.files.length, 0)).toBe(464 - 409);
+		expect(missed.reduce((n, row) => n + row.files.length, 0)).toBe(464 - 430);
 	});
 
 	it('leaves a skipped release alone: zurg asks again', () => {

@@ -117,14 +117,13 @@ describe("fun's One Pace releases", () => {
 	it('place each file whose chapters, arc and number name one of its episodes', () => {
 		const placed = all();
 		expect(Object.keys(placed)).toHaveLength(464);
-		expect(Object.values(placed).filter(Boolean)).toHaveLength(409);
+		expect(Object.values(placed).filter(Boolean)).toHaveLength(430);
 		expect(placed).toMatchObject({
 			'[One Pace][340-342] Water Seven 08 [1080p][6E2DB1B9].mkv': 'S16E08',
 			'[One Pace][1] Romance Dawn 01 [1080p][FB72C13F].mkv': 'S01E01',
 			'[One Pace][69-71] Arlong Park 01 [480p][D8004901].mkv': 'S06E01',
 			// One Pace spelled Alabasta `Arabasta` in its older names
 			'[One Pace][179-182] Arabasta 10 [1080p][4B8CC4E7].mkv': 'S12E10',
-			'[One Pace][153-155, 142] Drum Island 08 [1080p][9794072D].mkv': null,
 			'[One Pace][159, 161-162] Arabasta 03 [1080p][73003149].mkv': 'S12E03',
 			// its chapters in either order, with or without its number
 			'[One Pace][22,42] Gaimon 01 [1080p][9AA8B637].mkv': 'S04E01',
@@ -143,12 +142,31 @@ describe("fun's One Pace releases", () => {
 		});
 	});
 
+	it('place a file of an older cut on the episode it became', () => {
+		expect(all()).toMatchObject({
+			// the same chapters under another number: One Pace made one of Baratie's old 03 and 04
+			'[One Pace][53-55] Baratie 05 [1080p][6858E16A].mkv': 'S05E04',
+			'[One Pace][67-68] Baratie 09 [1080p][D8C1FD62].mkv': 'S05E08',
+			'[One Pace][436-437] Post-Enies Lobby 03 [720p][2C843A0F].mkv': 'S18E04',
+			'[One Pace][40-41] Syrup Village 06 [480p][D1742A98].mkv': 'S03E07',
+			// its number, a chapter more or less: Drum Island 04 is 139-141 now, Wano 24 944-945
+			'[One Pace][139-140] Drum Island 04 [1080p][902076E8].mkv': 'S11E04',
+			'[One Pace][153-155, 142] Drum Island 08 [1080p][9794072D].mkv': 'S11E08',
+			'[One Pace][189-192] Arabasta 13 [1080p][58649840].mkv': 'S12E13',
+			'[One Pace][945] Wano 24 [1080p][6173BCE1].mkv': 'S32E24',
+			'[One Pace][101-103] Reverse Mountain 01 [1080p][CE01A533].mkv': 'S08E01',
+		});
+	});
+
 	it('leave a file of an older cut, or none of the list, unplaced', () => {
 		expect(all()).toMatchObject({
-			// re-edited onto other chapters: One Pace's Baratie 03 is 48-52 now
+			// re-edited onto other chapters: One Pace's Baratie 03 is 48-52 now, the old 04 a part of it
 			'[One Pace][47-49] Baratie 03 [1080p][0EB7F7E9].mkv': null,
-			// the same chapters under another number: Post-Enies Lobby 04 is 436-437 now
-			'[One Pace][436-437] Post-Enies Lobby 03 [720p][2C843A0F].mkv': null,
+			'[One Pace][50-52] Baratie 04 [1080p][15D77CB3].mkv': null,
+			// two of today's episodes: Loguetown 02 is 98-99 and 03 100, Post-Enies Lobby 03 435
+			'[One Pace][98-100] Loguetown 03 [480p][23E3E489].mkv': null,
+			'[One Pace][433-435] Post-Enies Lobby 02 [720p][344EA844].mkv': null,
+			'[One Pace][35-39] Syrup Village 05 [480p][5498C538].mkv': null,
 			// no chapters in the name
 			'[One Pace] Paced One Piece - Thriller Bark Episode 01 [720p][30D0916C].mkv': null,
 			'[One Pace][Romance Dawn v2] Romance Dawn v2 [1080p][5E77445F].mkv': null,
@@ -156,8 +174,6 @@ describe("fun's One Pace releases", () => {
 			'[One Pace][0] Strong World [480p][76B2C869].mkv': null,
 			"[One Pace][236-262 Covers] Wapol's Omnivorous Hurrah [720p][05BE81E6].mkv": null,
 			'[One Pace] Tournament of Power.mp4': null,
-			// a part One Pace has pulled to redo: Wano 24 is 944-945 now
-			'[One Pace][945] Wano 24 [1080p][6173BCE1].mkv': null,
 		});
 	});
 

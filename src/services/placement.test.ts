@@ -1558,11 +1558,11 @@ describe('One Pace', () => {
 		expect(reverse.series!.seasons.map((s) => [s.season, s.title])).toEqual([
 			[8, 'Reverse Mountain'],
 		]);
-		// its 01 covers 101-103, a cut One Pace has since redone as 101-102: that file stays unplaced
+		// its 01 covers 101-103, a cut One Pace has since redone as 101-102: still its 01
 		expect(
 			reverse.files.map((f) => [f.season, f.episode, f.series?.season, f.series?.episode])
 		).toEqual([
-			[null, null, undefined, undefined],
+			[null, null, 8, 1],
 			[null, null, 8, 2],
 		]);
 		expect(releases.every((r) => r.kind === null && r.tmdbId === null)).toBe(true);

@@ -304,8 +304,10 @@ files are on, an arc of One Pace's. Each main arc is a season in One Pace's orde
 in the list's order (The Adventures of Buggy's Crew is S00E01). A file's `series` is its episode,
 with One Pace's title, summary and still; a file without one is unplaced. A file is matched by
 the manga chapters its name covers (`[340-342]`, `Chapter 700-701` in a release named for its
-arc), which are unique to an episode, and its arc and number must agree: a file of a cut One
-Pace has since re-edited onto other chapters or numbers matches nothing. A release none of whose
+arc), which are unique to an episode, in its arc. A file of an older cut is the episode it
+became: the one now on its chapters under another number, else the one under its number whose
+chapters hold its own or are held by them, unless the file holds another episode whole; a cut on
+other chapters under another number matches nothing. A release none of whose
 files is matched answers without `series` and `anime`. Artwork is onepace.net's own. DMM reads
 One Pace's list off onepace.net once a day, keeping the list it has when the page cannot be
 read, so a new episode is placed within a day of One Pace publishing it.

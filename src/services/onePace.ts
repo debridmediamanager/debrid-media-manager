@@ -5,8 +5,8 @@
  * (Romance Dawn 1 ... Egghead 33, as One Pace numbers its subtitle folders); its cover-story
  * arcs and specials are season 0, numbered in the list's order (One Pace's `00 Cover Stories
  * and Specials`). A file is matched by the manga chapters its name says it covers, which are
- * unique to an episode, and its arc and number must agree: a file of an older cut, which One
- * Pace has since re-edited onto other chapters or numbers, matches nothing and stays unplaced.
+ * unique to an episode, in its arc; a file of an older cut, which One Pace has since re-edited
+ * onto a chapter more or less or renumbered, is the episode it became (see `episodeOf`).
  */
 import snapshot from '@/services/onePaceCatalogue.json';
 import type { PlacedFile, PlacedRelease, PlaceRequest } from '@/services/placement';
@@ -239,7 +239,26 @@ function chapterIndex(catalogue: OnePaceCatalogue): Map<string, Hit[]> {
 	return index;
 }
 
-/** The episode a file is: its chapters name it, and its arc and number (where it gives one) agree. */
+/** Every chapter a list of ranges covers. */
+const chapterSet = (ranges: [number, number][]) =>
+	new Set(
+		ranges.flatMap(([from, to]) => Array.from({ length: to - from + 1 }, (_, n) => from + n))
+	);
+
+/** One set holds every member of the other. */
+const nests = (a: Set<number>, b: Set<number>) => {
+	const [small, large] = a.size <= b.size ? [a, b] : [b, a];
+	return [...small].every((chapter) => large.has(chapter));
+};
+
+/**
+ * The episode a file is: its chapters name it in its arc, under its number where it gives one.
+ * A file of an older cut is the episode now on its chapters under another number (One Pace's
+ * Baratie 05 [53-55] is its Baratie 04 now, since it made one of the old 03 and 04), else the one
+ * under its own number whose chapters hold its own or are held by them (Drum Island 04 [139-140]
+ * is 139-141 now), unless it holds another of today's episodes whole; a cut on other chapters
+ * under another number (the old Baratie 04 [50-52], a part of today's 03) is none.
+ */
 function episodeOf(catalogue: OnePaceCatalogue, path: string, releaseArc?: string): Hit | null {
 	const name = basename(path);
 	const named = NAMED.exec(name);
@@ -247,14 +266,25 @@ function episodeOf(catalogue: OnePaceCatalogue, path: string, releaseArc?: strin
 	const arc = named ? named[2].trim() : releaseArc;
 	if (!(named || chapters) || !arc) return null;
 	const number = named?.[3] ? Number(named[3]) : null;
-	const hits = (
-		chapterIndex(catalogue).get(chapterKey(parseRanges((named ?? chapters)![1]))) ?? []
-	).filter(
-		(hit) =>
-			arcName(hit.arc.title) === arcName(arc) &&
-			(number === null || number === hit.episode.number)
+	const ranges = parseRanges((named ?? chapters)![1]);
+	const inArc = (hit: Hit) => arcName(hit.arc.title) === arcName(arc);
+	const exact = (chapterIndex(catalogue).get(chapterKey(ranges)) ?? []).filter(inArc);
+	const hits = exact.filter((hit) => number === null || number === hit.episode.number);
+	if (hits.length === 1) return hits[0];
+	if (exact.length === 1) return exact[0];
+	if (number === null || exact.length) return null;
+	const own = chapterSet(ranges);
+	const arcHits = catalogue.arcs
+		.flatMap((at) => at.episodes.map((episode) => ({ arc: at, episode })))
+		.filter((hit) => inArc(hit) && hit.episode.chapters.length > 0);
+	const nested = arcHits.filter(
+		(hit) => hit.episode.number === number && nests(own, chapterSet(hit.episode.chapters))
 	);
-	return hits.length === 1 ? hits[0] : null;
+	// a cut holding a whole other episode of today's is two of them: Loguetown 03 [98-100] is 02 and 03
+	const holds = (hit: Hit) => [...chapterSet(hit.episode.chapters)].every((c) => own.has(c));
+	return nested.length === 1 && arcHits.filter(holds).every((hit) => hit === nested[0])
+		? nested[0]
+		: null;
 }
 
 /**
