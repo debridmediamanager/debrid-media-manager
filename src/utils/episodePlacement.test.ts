@@ -61,8 +61,6 @@ describe('fileNumbers', () => {
 			unread: [
 				// a release of one file named by its hash: zurg sends that release alone
 				'/0816e0b1bd854e41b9aaa223db7a413b.mkv: null for 4,21',
-				// a director's cut, which TMDB lists as no episode of its own
-				"/[Sephirotic] Evangelion - 22' [MULTI][BD 1080p 8bits 5.1 AAC][82842B04].mkv: null for 1,22",
 			],
 		});
 	});

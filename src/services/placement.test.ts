@@ -17,6 +17,7 @@ import pastCour from '@/test/fixtures/placement/anime-past-cour.json';
 import answers from '@/test/fixtures/placement/answers.json';
 import betweenTitled from '@/test/fixtures/placement/between-titled-files.json';
 import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
+import directorsCuts from '@/test/fixtures/placement/directors-cut-primes.json';
 import betweenPairs from '@/test/fixtures/placement/episodes-between-aligned-pairs.json';
 import filmsBeforeShows from '@/test/fixtures/placement/films-before-shows.json';
 import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
@@ -2126,5 +2127,33 @@ describe("a film titled as the show and the file's own words", () => {
 				'S00E04 - My Hero Academia The Movie The Two Heroes'
 			)
 		).toEqual(['movie', 505262]);
+	});
+});
+
+describe("a director's cut's prime after a fansub's number", () => {
+	// zurg on fun (2026-11-09): `[Sephirotic] Evangelion - 21' [MULTI]…`, the pack's only copies of
+	// episodes 21-24 (see the fixtures README)
+	it('places the file on the episode it numbers', async () => {
+		const [c] = directorsCuts.cases;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			{
+				...recordedSources(directorsCuts.answers),
+				anime: async () =>
+					buildAnimeIndex(
+						buildFranchiseIndex(directorsCuts.answers.anime.fribb as FribbAnimeEntry[]),
+						directorsCuts.answers.anime.titles
+					),
+			},
+			async () => [null]
+		);
+		const at = (name: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(name))!;
+			return [f.season, f.episode];
+		};
+		expect(at("Evangelion - 21' [MULTI]")).toEqual([1, 21]);
+		expect(at("Evangelion - 24' [MULTI]")).toEqual([1, 24]);
+		expect(releases[0]).toEqual(c.expect);
 	});
 });

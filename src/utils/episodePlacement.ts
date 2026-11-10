@@ -317,6 +317,9 @@ function sceneNumbers(name: string): FileNumbers | null {
 
 /** Fansub and loose numbering: `Oshi no Ko S2 - 05`, `Kingdom 4th Season - 21`, `- 05`, `[05]`, `10of13`. */
 function looseNumbers(stem: string): FileNumbers | null {
+	// a director's cut's prime after a fansub's number, right after its title: `[Sephirotic]
+	// Evangelion - 21' [MULTI]…`, not `Evangelion - The End of Evangelion - 25'`, the film's chapter
+	stem = stem.replace(/^((?:\[[^\]]*\][\s._-]*)*(?:(?!\s-\s).)+\s-\s\d{1,4})'(?=[\s[(]|$)/, '$1');
 	if (fansubShaped(stem) && !/\s/.test(stem.replace(LEADING_GROUPS, ''))) {
 		stem = stem.replace(DOTTED_EPISODE, ' - $1 ');
 	}
