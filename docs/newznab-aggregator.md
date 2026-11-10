@@ -197,6 +197,12 @@ is more than an hour late, keeps its ordinary TTL, and a post dated up to two ho
 an answer still counts as newer than it. Shows are not kept this way: some upstreams name
 no TheTVDB id on their TV posts, so a new episode there would go unseen.
 
+The same watch cuts a film's tier short: an answer still inside its TTL is not served
+once a post naming the film is newer than it (with the same two hours of slack) and newer
+than every result it holds. The search goes upstream instead. A tier holds an answer about
+an old film for weeks, and that post is the one a fetcher searching for the film waits for.
+While the watch is more than an hour late, answers keep to their tiers.
+
 ### Sets missing an upstream
 
 A fan-out leaves an upstream out when it is over its pacing budget, and tolerates one

@@ -1,9 +1,14 @@
 import handler from '@/pages/api/newznab/api';
-import type { CachedUsenetResult } from '@/services/database/newznabApiCache';
+import {
+	type CachedUsenetResult,
+	isFresh,
+	ttlForResults,
+} from '@/services/database/newznabApiCache';
 import { _resetUpstreamIndexersForTest } from '@/services/newznab/indexers';
 import { _resetTokenSecretForTest, encryptReleaseId } from '@/services/newznab/opaqueId';
 import {
 	_resetUpstreamLimiterForTest,
+	postsById,
 	REFILL_AFTER_MS,
 	RSS_TTL_MS,
 	sweepFreshPosts,
@@ -14,6 +19,7 @@ import { parseNewznabResponse } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, RedisRateLimiter } from '@/services/rateLimit/middlewareRateLimiter';
 import { repository } from '@/services/repository';
 import { setBlocklistForTests } from '@/services/takedown/blocklist';
+import cocaineBear from '@/test/fixtures/easynews/nzb2rd-search-cocaine-bear-2023-2026-11-08.json';
 import althubMovie from '@/test/fixtures/newznab-fresh/althub-movie-2026-10-31.json';
 import drunkenslugMovie from '@/test/fixtures/newznab-fresh/drunkenslug-movie-2026-10-31.json';
 import nzbgeekMovie from '@/test/fixtures/newznab/nzbgeek-movie-2026-11-01.json';
@@ -275,6 +281,8 @@ beforeEach(() => {
 	mockRepo.setCachedNewznabApiSearch = vi.fn(async (key: string, results) => {
 		cacheStore.set(key, results as CachedUsenetResult[]);
 	});
+	// No post has named any film since its answer was cached.
+	mockRepo.newznabFreshPosts = vi.fn().mockResolvedValue(new Map());
 
 	mockGetStored.mockResolvedValue(null);
 	mockPutStored.mockResolvedValue(true);
@@ -1492,6 +1500,82 @@ describe('GET /api/newznab/api film searches kept until a new post', () => {
 			Date
 		>;
 		expect([...recorded.keys()]).toEqual(['imdb:29544868']);
+	});
+});
+
+// A tier holds an answer about an old film for weeks, and 14 wanted films had a
+// post on 2026-11-10 that their tier-fresh answer hid. Cocaine Bear's real
+// posts: the answer is its 2023 ones, as when they were all there was; the new
+// post is its 2026-10-30 remux.
+describe('GET /api/newznab/api film answers a new post outdates', () => {
+	const MIN = 60 * 1000;
+	const DAY = 24 * 60 * MIN;
+	const posts = cocaineBear.results as CachedUsenetResult[];
+	const old = posts.filter((r) => Date.parse(r.pubDate!) < Date.parse('2024-01-01'));
+	const film = { t: 'movie', imdbid: 'tt14209916', apikey: SPONSOR_KEY };
+	const cached = (results: CachedUsenetResult[], updatedAt: Date) => {
+		mockRepo.getCachedNewznabApiSearch = vi.fn(async () => ({
+			results,
+			updatedAt,
+			isFresh: isFresh(updatedAt, ttlForResults(results)),
+		}));
+	};
+	const swept = (agoMs: number) => {
+		mockRepo.newznabSweptAt = vi
+			.fn()
+			.mockResolvedValue({ at: new Date(Date.now() - agoMs), since: new Date(0) });
+	};
+
+	beforeEach(() => {
+		vi.useFakeTimers({ toFake: ['Date'], now: new Date('2026-11-08T12:00:00Z') });
+		cached(old, new Date('2026-10-01T00:00:00Z'));
+		swept(5 * MIN);
+		mockRepo.newznabFreshPosts = vi.fn().mockResolvedValue(postsById(posts));
+	});
+	afterEach(() => vi.useRealTimers());
+
+	it('asks upstream though the tier would hold the answer for weeks', async () => {
+		expect(ttlForResults(old)).toBe(45 * DAY);
+
+		await run(film);
+
+		expect(fetchMock).toHaveBeenCalled();
+		expect(mockRepo.newznabFreshPosts).toHaveBeenCalledWith(['imdb:14209916']);
+	});
+
+	it('serves the answer while no post is newer than it', async () => {
+		mockRepo.newznabFreshPosts = vi.fn().mockResolvedValue(postsById(old));
+		await run(film);
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	// Else every search in the two hours of slack after the post would go upstream.
+	it('serves an answer that already holds the post', async () => {
+		vi.setSystemTime(new Date('2026-10-30T16:00:00Z'));
+		swept(5 * MIN);
+		cached(posts, new Date('2026-10-30T15:00:00Z'));
+		await run(film);
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	it('serves the answer as before when the sweep has stopped', async () => {
+		swept(2 * 60 * MIN);
+		await run(film);
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	it('reads nothing more for show, title and RSS searches', async () => {
+		cached(old, new Date());
+		const queries: Record<string, string>[] = [
+			{ t: 'tvsearch', tvdbid: '81189' },
+			{ t: 'search', q: 'cocaine bear' },
+			{ t: 'movie' },
+		];
+		for (const query of queries) {
+			await run({ ...query, apikey: SPONSOR_KEY });
+		}
+		expect(mockRepo.newznabFreshPosts).not.toHaveBeenCalled();
+		expect(fetchMock).not.toHaveBeenCalled();
 	});
 });
 

@@ -17,9 +17,10 @@
 //     `Request limit reached`, and Sonarr turns a refusal into a 24h backoff —
 //     so an indexer over budget is skipped for this query rather than asked.
 
-import type {
-	CachedNewznabApiSearch,
-	CachedUsenetResult,
+import {
+	type CachedNewznabApiSearch,
+	type CachedUsenetResult,
+	newestPubDate,
 } from '@/services/database/newznabApiCache';
 import { fanOut, Indexer, nativeReleaseId, type UsenetResult } from '@/services/nzb2rd';
 import { repository as db } from '@/services/repository';
@@ -345,6 +346,7 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	const targeted =
 		params.q !== undefined || params.imdbid !== undefined || params.tvdbid !== undefined;
 	const cached = await db.getCachedNewznabApiSearch(key, targeted ? undefined : RSS_TTL_MS);
+	if (cached?.isFresh && (await outdatedByPost(key, cached))) cached.isFresh = false;
 	// A set that still stands is first completed with the upstreams it lacks.
 	if (cached?.isFresh) cached.results = await completed(t, params, key, cached);
 	// Filtered on the way out rather than before caching, so an approval or a
@@ -453,6 +455,26 @@ export async function noNewPostSince(
 		const at = posts.get(id);
 		return !at || at.getTime() < cachedAt.getTime() - FRESH_POST_SLACK_MS;
 	});
+}
+
+/**
+ * Whether a post naming the film a search names by IMDb id appeared since its
+ * answer was cached, and is not in it. A tier holds an answer about an old film
+ * for weeks, and such a post is what a zurg searching for the film waits for.
+ * One read, and a second only when there is such a post; with the sweep late,
+ * answers keep to their tiers as before.
+ */
+async function outdatedByPost(key: string, cached: CachedNewznabApiSearch): Promise<boolean> {
+	const ids = idsOfSearch(key);
+	if (ids.length === 0) return false;
+	const since = cached.updatedAt.getTime() - FRESH_POST_SLACK_MS;
+	const held = newestPubDate(cached.results)?.getTime() ?? -Infinity;
+	const posts = await db.newznabFreshPosts(ids);
+	if (![...posts.values()].some((at) => at.getTime() >= since && at.getTime() > held)) {
+		return false;
+	}
+	const watch = await db.newznabSweptAt();
+	return !!watch && Date.now() - watch.at.getTime() <= FRESH_WATCH_STALE_MS;
 }
 
 function oldestPost(results: UsenetResult[]): number {
