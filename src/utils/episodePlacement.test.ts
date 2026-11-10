@@ -65,6 +65,23 @@ describe('fileNumbers', () => {
 		});
 	});
 
+	it('reads a bracketed episode number before a title with a special word in it', () => {
+		// zurg on fun (2026-11-10), `My Hero Academia`'s `Season 3`: TMDB's S3E20 "Special Episode:
+		// Save the World with Love!", the 58th, was left unnumbered as a special
+		expect(
+			fileNumbers(
+				'My Hero Academia',
+				'Season 3',
+				'[Episode 58] Special Episode：Save the World with Love!.mkv',
+				false
+			)
+		).toMatchObject({ season: 3, episode: 58 });
+		// a special named before the number stays unnumbered
+		expect(
+			fileNumbers('My Hero Academia', 'Season 3', 'Special [Episode 58].mkv', false)
+		).toBeNull();
+	});
+
 	it('takes a lone file its release numbers', () => {
 		expect(
 			fileNumbers(

@@ -353,9 +353,10 @@ function looseNumbers(stem: string): FileNumbers | null {
 	}
 	// the words before the number only: after it is the episode's own title, `One Piece - 0700 -
 	// The Ultimate Power! The Secret of the Op-Op Fruit!`, `- 0918 - … The Special Operation …`,
-	// `One.Piece.EP1154.The.Truth.Behind.the.Secret.Plan`
+	// `One.Piece.EP1154.The.Truth.Behind.the.Secret.Plan`, `[Episode 58] Special Episode：Save the
+	// World with Love!`
 	const head = stem.split(
-		/\s-\s\d{2,4}(?:v\d)?\s-\s|(?:^|[\s._-])(?:ep?|episode[\s._]?)\d{1,4}(?:v\d)?(?=[\s._-]|$)/i
+		/\s-\s\d{2,4}(?:v\d)?\s-\s|(?:^|[\s._\-[(])(?:ep?|episode[\s._]?)\d{1,4}(?:v\d)?(?=[\s._\-\])]|$)/i
 	)[0];
 	if (NOT_EPISODE.test(head.replace(BRACKETS, ' ').replace(/_/g, ' '))) return null;
 	const fansub = FANSUB_SEASON.exec(stem);
