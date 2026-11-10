@@ -4,6 +4,7 @@ import {
 	NEED_OPTIONS,
 	PLAYER_OPTIONS,
 	PREFERENCE_OPTIONS,
+	SETUP_GUIDE_URL,
 	SOURCE_OPTIONS,
 	hostChoiceReason,
 	recommendSetup,
@@ -111,6 +112,22 @@ describe('recommendSetup', () => {
 				},
 			])
 		);
+	});
+
+	it('keeps the full setup guide link last when the local-files route lists it first', () => {
+		const result = recommendSetup(
+			answers({
+				sources: ['real-debrid', 'http-local'],
+				host: 'existing',
+				preference: 'arr',
+			})
+		);
+
+		expect(result.setupLinks.length).toBeGreaterThan(1);
+		expect(result.setupLinks.at(-1)).toEqual({
+			label: 'Read the full setup guide',
+			href: SETUP_GUIDE_URL,
+		});
 	});
 
 	it('does not treat Android as a rex host', () => {

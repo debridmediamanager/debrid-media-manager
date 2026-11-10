@@ -1651,10 +1651,14 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 							: `Local files stay in your player; ${cloud}`
 		);
 	}
-	links(GUIDE);
-	result.setupLinks = result.setupLinks.filter(
-		(l, i, all) => all.findIndex((x) => x.href === l.href) === i
-	);
+	// The guide goes last even when a route (local files) already listed it among its own links.
+	result.setupLinks = [
+		...result.setupLinks.filter(
+			(l, i, all) =>
+				l.href !== SETUP_GUIDE_URL && all.findIndex((x) => x.href === l.href) === i
+		),
+		GUIDE,
+	];
 	for (const key of [
 		'components',
 		'prerequisites',
