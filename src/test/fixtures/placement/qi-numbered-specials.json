@@ -1,0 +1,7427 @@
+{
+	"answers": {
+		"find": {
+			"tt0380136": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 1554,
+						"name": "QI",
+						"first_air_date": "2003-09-11"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"1554": {
+				"id": 1554,
+				"name": "QI",
+				"original_name": "QI",
+				"first_air_date": "2003-09-11",
+				"original_language": "en",
+				"origin_country": ["GB"],
+				"genres": [
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 10767,
+						"name": "Talk"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 4325,
+							"name": "game show"
+						},
+						{
+							"id": 6784,
+							"name": "quiz"
+						},
+						{
+							"id": 160311,
+							"name": "trivia"
+						},
+						{
+							"id": 195207,
+							"name": "panel show"
+						},
+						{
+							"id": 211986,
+							"name": "knowledge"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0380136",
+					"tvdb_id": 72716
+				},
+				"networks": [
+					{
+						"id": 4,
+						"name": "BBC One"
+					},
+					{
+						"id": 100,
+						"name": "BBC Four"
+					},
+					{
+						"id": 332,
+						"name": "BBC Two"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "GB",
+							"title": "QI XL",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "UA",
+							"title": "Доволі цікаво",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Quite Interesting",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "QI X",
+							"type": ""
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2006-12-06",
+						"episode_count": 62,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "2003-09-11",
+						"episode_count": 12,
+						"name": "Series A",
+						"season_number": 1
+					},
+					{
+						"air_date": "2004-10-08",
+						"episode_count": 12,
+						"name": "Series B",
+						"season_number": 2
+					},
+					{
+						"air_date": "2005-09-30",
+						"episode_count": 12,
+						"name": "Series C",
+						"season_number": 3
+					},
+					{
+						"air_date": "2006-09-29",
+						"episode_count": 13,
+						"name": "Series D",
+						"season_number": 4
+					},
+					{
+						"air_date": "2007-09-21",
+						"episode_count": 13,
+						"name": "Series E",
+						"season_number": 5
+					},
+					{
+						"air_date": "2008-11-14",
+						"episode_count": 12,
+						"name": "Series F",
+						"season_number": 6
+					},
+					{
+						"air_date": "2009-11-26",
+						"episode_count": 18,
+						"name": "Series G",
+						"season_number": 7
+					},
+					{
+						"air_date": "2010-09-17",
+						"episode_count": 18,
+						"name": "Series H",
+						"season_number": 8
+					},
+					{
+						"air_date": "2011-09-09",
+						"episode_count": 18,
+						"name": "Series I",
+						"season_number": 9
+					},
+					{
+						"air_date": "2012-09-14",
+						"episode_count": 18,
+						"name": "Series J",
+						"season_number": 10
+					},
+					{
+						"air_date": "2013-09-06",
+						"episode_count": 18,
+						"name": "Series K",
+						"season_number": 11
+					},
+					{
+						"air_date": "2014-10-03",
+						"episode_count": 18,
+						"name": "Series L",
+						"season_number": 12
+					},
+					{
+						"air_date": "2015-10-16",
+						"episode_count": 18,
+						"name": "Series M",
+						"season_number": 13
+					},
+					{
+						"air_date": "2016-10-21",
+						"episode_count": 18,
+						"name": "Series N",
+						"season_number": 14
+					},
+					{
+						"air_date": "2017-10-20",
+						"episode_count": 18,
+						"name": "Series O",
+						"season_number": 15
+					},
+					{
+						"air_date": "2018-09-10",
+						"episode_count": 18,
+						"name": "Series P",
+						"season_number": 16
+					},
+					{
+						"air_date": "2019-09-06",
+						"episode_count": 18,
+						"name": "Series Q",
+						"season_number": 17
+					},
+					{
+						"air_date": "2020-05-27",
+						"episode_count": 16,
+						"name": "Series R",
+						"season_number": 18
+					},
+					{
+						"air_date": "2021-09-09",
+						"episode_count": 16,
+						"name": "Series S",
+						"season_number": 19
+					},
+					{
+						"air_date": "2022-11-11",
+						"episode_count": 16,
+						"name": "Series T",
+						"season_number": 20
+					},
+					{
+						"air_date": "2023-12-18",
+						"episode_count": 17,
+						"name": "Series U",
+						"season_number": 21
+					},
+					{
+						"air_date": "2024-10-22",
+						"episode_count": 16,
+						"name": "Series V",
+						"season_number": 22
+					},
+					{
+						"air_date": "2025-10-21",
+						"episode_count": 16,
+						"name": "Series W",
+						"season_number": 23
+					},
+					{
+						"air_date": "2026-11-03",
+						"episode_count": 3,
+						"name": "Series X",
+						"season_number": 24
+					}
+				],
+				"episode_run_time": []
+			}
+		},
+		"season": {
+			"1554/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Pilot",
+						"air_date": "2006-12-06",
+						"runtime": null,
+						"id": 79873
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Comic Relief 24 Hour Panel People Special",
+						"air_date": "2011-03-06",
+						"runtime": null,
+						"id": 79868
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "The Making of QI Documentary",
+						"air_date": "2011-09-10",
+						"runtime": null,
+						"id": 79870
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "Sport Relief Special 2012",
+						"air_date": "2012-03-23",
+						"runtime": null,
+						"id": 1378721
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "VG: Part 1",
+						"air_date": "2020-08-13",
+						"runtime": null,
+						"id": 2803023
+					},
+					{
+						"episode_number": 6,
+						"season_number": 0,
+						"name": "VG: Part 2",
+						"air_date": "2021-02-04",
+						"runtime": null,
+						"id": 2803024
+					},
+					{
+						"episode_number": 7,
+						"season_number": 0,
+						"name": "Bonus Bits & Bloopers - Series 1",
+						"air_date": "2006-12-06",
+						"runtime": null,
+						"id": 79864
+					},
+					{
+						"episode_number": 8,
+						"season_number": 0,
+						"name": "Bonus Bits & Bloopers - Series 2",
+						"air_date": "2008-03-17",
+						"runtime": null,
+						"id": 79866
+					},
+					{
+						"episode_number": 9,
+						"season_number": 0,
+						"name": "Bonus Bits & Bloopers - Series 3",
+						"air_date": "2008-03-19",
+						"runtime": null,
+						"id": 3382183
+					},
+					{
+						"episode_number": 10,
+						"season_number": 0,
+						"name": "Peter Cushing Lives in Whitstable",
+						"air_date": "2008-03-20",
+						"runtime": null,
+						"id": 3382190
+					},
+					{
+						"episode_number": 11,
+						"season_number": 0,
+						"name": "Comic Relief 2022 Special",
+						"air_date": "2022-03-18",
+						"runtime": 4,
+						"id": 3984628
+					},
+					{
+						"episode_number": 12,
+						"season_number": 0,
+						"name": "Series 2 Banter Part 1",
+						"air_date": null,
+						"runtime": 75,
+						"id": 5997847
+					},
+					{
+						"episode_number": 13,
+						"season_number": 0,
+						"name": "Series 2 Banter Part 2",
+						"air_date": null,
+						"runtime": 75,
+						"id": 5997848
+					},
+					{
+						"episode_number": 14,
+						"season_number": 0,
+						"name": "Series 1 Bonus Bits & Bloopers",
+						"air_date": "2022-03-19",
+						"runtime": null,
+						"id": 4155151
+					},
+					{
+						"episode_number": 15,
+						"season_number": 0,
+						"name": "Series 2 Bonus Bits & Bloopers",
+						"air_date": "2022-03-20",
+						"runtime": null,
+						"id": 4155154
+					},
+					{
+						"episode_number": 16,
+						"season_number": 0,
+						"name": "Series 3 Bonus Bits & Bloopers",
+						"air_date": "2022-03-21",
+						"runtime": null,
+						"id": 4155156
+					},
+					{
+						"episode_number": 17,
+						"season_number": 0,
+						"name": "Deleted Bits (Volume 1)",
+						"air_date": "2022-03-23",
+						"runtime": null,
+						"id": 4155158
+					},
+					{
+						"episode_number": 18,
+						"season_number": 0,
+						"name": "Deleted Bits (Volume 2)",
+						"air_date": "2022-03-24",
+						"runtime": null,
+						"id": 4155159
+					},
+					{
+						"episode_number": 19,
+						"season_number": 0,
+						"name": "Deleted Bits (Volume 3)",
+						"air_date": "2022-03-25",
+						"runtime": null,
+						"id": 4155160
+					},
+					{
+						"episode_number": 20,
+						"season_number": 0,
+						"name": "Deleted Bits (Volume 4)",
+						"air_date": "2022-03-26",
+						"runtime": null,
+						"id": 4155161
+					},
+					{
+						"episode_number": 21,
+						"season_number": 0,
+						"name": "Fry Says Hi",
+						"air_date": "2022-03-27",
+						"runtime": null,
+						"id": 4155162
+					},
+					{
+						"episode_number": 22,
+						"season_number": 0,
+						"name": "A QI Christmas Cracker (Christmas Compilation)",
+						"air_date": "2022-03-28",
+						"runtime": null,
+						"id": 4155163
+					},
+					{
+						"episode_number": 23,
+						"season_number": 0,
+						"name": "QI Live in Kent",
+						"air_date": "2022-03-30",
+						"runtime": null,
+						"id": 4155165
+					},
+					{
+						"episode_number": 24,
+						"season_number": 0,
+						"name": "Fourteen Quite Interesting Years",
+						"air_date": "2022-03-31",
+						"runtime": null,
+						"id": 4155166
+					},
+					{
+						"episode_number": 25,
+						"season_number": 0,
+						"name": "Sandi's First Day",
+						"air_date": "2022-04-01",
+						"runtime": null,
+						"id": 4155167
+					},
+					{
+						"episode_number": 26,
+						"season_number": 0,
+						"name": "All the QI Buzzers (A to M)",
+						"air_date": "2022-04-02",
+						"runtime": null,
+						"id": 4155168
+					},
+					{
+						"episode_number": 27,
+						"season_number": 0,
+						"name": "A QI Director's Guide to Research",
+						"air_date": "2022-04-03",
+						"runtime": null,
+						"id": 4155169
+					},
+					{
+						"episode_number": 28,
+						"season_number": 0,
+						"name": "Jolly Japes with the QI Elves",
+						"air_date": "2022-04-04",
+						"runtime": null,
+						"id": 4155170
+					},
+					{
+						"episode_number": 29,
+						"season_number": 0,
+						"name": "A Peek Behind the Scenes",
+						"air_date": "2022-04-06",
+						"runtime": null,
+						"id": 4155171
+					},
+					{
+						"episode_number": 30,
+						"season_number": 0,
+						"name": "Stephen's Spare Sounds",
+						"air_date": "2022-04-07",
+						"runtime": null,
+						"id": 4155173
+					},
+					{
+						"episode_number": 31,
+						"season_number": 0,
+						"name": "A Quite Interesting Marriage Proposal",
+						"air_date": "2022-04-08",
+						"runtime": null,
+						"id": 4155175
+					},
+					{
+						"episode_number": 32,
+						"season_number": 0,
+						"name": "The QI Philosophy",
+						"air_date": "2022-04-09",
+						"runtime": null,
+						"id": 4155176
+					},
+					{
+						"episode_number": 33,
+						"season_number": 0,
+						"name": "QI Quibble Awards",
+						"air_date": "2022-04-10",
+						"runtime": null,
+						"id": 4155178
+					},
+					{
+						"episode_number": 34,
+						"season_number": 0,
+						"name": "No Such Thing as the News Chats QI",
+						"air_date": "2022-04-11",
+						"runtime": null,
+						"id": 4155179
+					},
+					{
+						"episode_number": 35,
+						"season_number": 0,
+						"name": "QI XS S01E01 Quite Internal",
+						"air_date": "2022-04-13",
+						"runtime": null,
+						"id": 4155181
+					},
+					{
+						"episode_number": 36,
+						"season_number": 0,
+						"name": "QI XS S01E02 Quite International",
+						"air_date": "2022-04-14",
+						"runtime": null,
+						"id": 4155182
+					},
+					{
+						"episode_number": 37,
+						"season_number": 0,
+						"name": "QI XS S01E03 Quite Insubordinate",
+						"air_date": "2022-04-15",
+						"runtime": null,
+						"id": 4155184
+					},
+					{
+						"episode_number": 38,
+						"season_number": 0,
+						"name": "QI XS S01E04 Quite Into the Wild",
+						"air_date": "2022-04-16",
+						"runtime": null,
+						"id": 4155185
+					},
+					{
+						"episode_number": 39,
+						"season_number": 0,
+						"name": "QI XS S01E05 Quite Inappropriate",
+						"air_date": "2022-04-17",
+						"runtime": null,
+						"id": 4155186
+					},
+					{
+						"episode_number": 40,
+						"season_number": 0,
+						"name": "QI XS S01E06 Silent Quite",
+						"air_date": "2022-04-18",
+						"runtime": null,
+						"id": 4155188
+					},
+					{
+						"episode_number": 41,
+						"season_number": 0,
+						"name": "QI XS S02E01 Quite Irregular",
+						"air_date": "2023-03-07",
+						"runtime": null,
+						"id": 4500875
+					},
+					{
+						"episode_number": 42,
+						"season_number": 0,
+						"name": "QI XS S02E02 Quite Inept",
+						"air_date": "2023-03-14",
+						"runtime": null,
+						"id": 4500877
+					},
+					{
+						"episode_number": 43,
+						"season_number": 0,
+						"name": "QI XS S02E03 Quite Ignorant",
+						"air_date": "2023-03-21",
+						"runtime": null,
+						"id": 4500878
+					},
+					{
+						"episode_number": 44,
+						"season_number": 0,
+						"name": "QI XS S02E04 Quite Intrepid",
+						"air_date": "2023-05-22",
+						"runtime": null,
+						"id": 4500880
+					},
+					{
+						"episode_number": 45,
+						"season_number": 0,
+						"name": "QI Series T: New Guest Initiations",
+						"air_date": "2022-12-23",
+						"runtime": null,
+						"id": 4500884
+					},
+					{
+						"episode_number": 46,
+						"season_number": 0,
+						"name": "QI Series T Pre-Show Banter",
+						"air_date": "2022-12-02",
+						"runtime": null,
+						"id": 4500886
+					},
+					{
+						"episode_number": 47,
+						"season_number": 0,
+						"name": "QI Quickies - E01 Engineering",
+						"air_date": "2007-09-21",
+						"runtime": null,
+						"id": 4500904
+					},
+					{
+						"episode_number": 48,
+						"season_number": 0,
+						"name": "QI Quickies - E02 Electricity",
+						"air_date": "2007-09-21",
+						"runtime": null,
+						"id": 4500909
+					},
+					{
+						"episode_number": 49,
+						"season_number": 0,
+						"name": "QI Quickies - E03 Eating",
+						"air_date": "2007-09-28",
+						"runtime": null,
+						"id": 4500912
+					},
+					{
+						"episode_number": 50,
+						"season_number": 0,
+						"name": "QI Quickies - E04 Exploration",
+						"air_date": "2007-10-06",
+						"runtime": null,
+						"id": 4500914
+					},
+					{
+						"episode_number": 51,
+						"season_number": 0,
+						"name": "QI Quickies - E05 Europe",
+						"air_date": "2007-10-12",
+						"runtime": null,
+						"id": 4500920
+					},
+					{
+						"episode_number": 52,
+						"season_number": 0,
+						"name": "QI Quickies - E06 Everything Etc",
+						"air_date": "2007-10-19",
+						"runtime": null,
+						"id": 4500926
+					},
+					{
+						"episode_number": 53,
+						"season_number": 0,
+						"name": "QI Quickies - E07 Espionage",
+						"air_date": "2007-10-26",
+						"runtime": null,
+						"id": 4500932
+					},
+					{
+						"episode_number": 54,
+						"season_number": 0,
+						"name": "QI Quickies - E08 Eyes and Ears",
+						"air_date": "2007-11-02",
+						"runtime": null,
+						"id": 4500936
+					},
+					{
+						"episode_number": 55,
+						"season_number": 0,
+						"name": "QI Quickies - E09 Entertainment",
+						"air_date": "2007-11-09",
+						"runtime": null,
+						"id": 4500937
+					},
+					{
+						"episode_number": 56,
+						"season_number": 0,
+						"name": "QI Quickies - E10 England",
+						"air_date": "2007-11-16",
+						"runtime": null,
+						"id": 4500938
+					},
+					{
+						"episode_number": 57,
+						"season_number": 0,
+						"name": "QI Quickies - E11 Endings",
+						"air_date": "2007-11-23",
+						"runtime": null,
+						"id": 4500939
+					},
+					{
+						"episode_number": 58,
+						"season_number": 0,
+						"name": "QI Quickies - E12 Empire",
+						"air_date": "2007-12-07",
+						"runtime": null,
+						"id": 4500941
+					},
+					{
+						"episode_number": 59,
+						"season_number": 0,
+						"name": "QI Quickies - E13 Elephants",
+						"air_date": "2007-12-14",
+						"runtime": null,
+						"id": 4500943
+					},
+					{
+						"episode_number": 60,
+						"season_number": 0,
+						"name": "QI Series U: New Guest Initiations",
+						"air_date": null,
+						"runtime": 5,
+						"id": 5997864
+					},
+					{
+						"episode_number": 61,
+						"season_number": 0,
+						"name": "QI Series U: Behind The Scenes Unbroadcastable Banter",
+						"air_date": null,
+						"runtime": 7,
+						"id": 5997865
+					},
+					{
+						"episode_number": 62,
+						"season_number": 0,
+						"name": "QI's 300th Episode Celebration",
+						"air_date": null,
+						"runtime": 3,
+						"id": 5997866
+					}
+				]
+			},
+			"1554/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Adam",
+						"air_date": "2003-09-11",
+						"runtime": 29,
+						"id": 79612
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Astronomy",
+						"air_date": "2003-09-18",
+						"runtime": 30,
+						"id": 79620
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Aquatic Animals",
+						"air_date": "2003-09-25",
+						"runtime": 30,
+						"id": 79613
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Atoms",
+						"air_date": "2003-10-02",
+						"runtime": 29,
+						"id": 79617
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Advertising",
+						"air_date": "2003-10-09",
+						"runtime": 29,
+						"id": 79616
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Antidotes",
+						"air_date": "2003-10-16",
+						"runtime": 29,
+						"id": 79614
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Arthropods",
+						"air_date": "2003-10-23",
+						"runtime": 29,
+						"id": 79619
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Albania",
+						"air_date": "2003-10-30",
+						"runtime": 29,
+						"id": 79615
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Antelopes",
+						"air_date": "2003-11-06",
+						"runtime": 29,
+						"id": 79618
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Aviation",
+						"air_date": "2003-11-13",
+						"runtime": 29,
+						"id": 79621
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Arts",
+						"air_date": "2003-11-20",
+						"runtime": 29,
+						"id": 79622
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Advent",
+						"air_date": "2003-12-25",
+						"runtime": 29,
+						"id": 79623
+					}
+				]
+			},
+			"1554/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Blue",
+						"air_date": "2004-10-08",
+						"runtime": 29,
+						"id": 79627
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Birds",
+						"air_date": "2004-10-08",
+						"runtime": 29,
+						"id": 79630
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Bombs",
+						"air_date": "2004-10-15",
+						"runtime": 29,
+						"id": 79632
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Bible",
+						"air_date": "2004-10-22",
+						"runtime": 29,
+						"id": 79624
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Bears",
+						"air_date": "2004-10-29",
+						"runtime": 29,
+						"id": 79625
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Beavers",
+						"air_date": "2004-11-05",
+						"runtime": 29,
+						"id": 79629
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Biscuits",
+						"air_date": "2004-11-12",
+						"runtime": 29,
+						"id": 79631
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Bees",
+						"air_date": "2004-11-19",
+						"runtime": 29,
+						"id": 79628
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Bats",
+						"air_date": "2004-11-26",
+						"runtime": 29,
+						"id": 79633
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "Bills",
+						"air_date": "2004-12-03",
+						"runtime": 29,
+						"id": 79626
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "Beats",
+						"air_date": "2004-12-10",
+						"runtime": 29,
+						"id": 79636
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Birth (Christmas special)",
+						"air_date": "2004-12-17",
+						"runtime": 30,
+						"id": 79634
+					}
+				]
+			},
+			"1554/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "Campanology",
+						"air_date": "2005-09-30",
+						"runtime": 29,
+						"id": 79649
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "Cummingtonite",
+						"air_date": "2005-09-30",
+						"runtime": 29,
+						"id": 79640
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Common Knowledge",
+						"air_date": "2005-10-07",
+						"runtime": 29,
+						"id": 79652
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "Cheating",
+						"air_date": "2005-10-14",
+						"runtime": 29,
+						"id": 79644
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Cat's Eyes",
+						"air_date": "2005-10-21",
+						"runtime": 29,
+						"id": 79683
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "Cockneys",
+						"air_date": "2005-10-28",
+						"runtime": 29,
+						"id": 79654
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "Constellations",
+						"air_date": "2005-11-04",
+						"runtime": 29,
+						"id": 79681
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "Corby",
+						"air_date": "2005-11-11",
+						"runtime": 29,
+						"id": 79643
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "Creatures",
+						"air_date": "2005-11-18",
+						"runtime": 29,
+						"id": 79656
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "Cleve Crudgington",
+						"air_date": "2005-11-25",
+						"runtime": 29,
+						"id": 79685
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "Carnival",
+						"air_date": "2005-12-02",
+						"runtime": 29,
+						"id": 79645
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "Combustion",
+						"air_date": "2005-12-09",
+						"runtime": 29,
+						"id": 79639
+					}
+				]
+			},
+			"1554/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 4,
+						"name": "Danger",
+						"air_date": "2006-09-29",
+						"runtime": 29,
+						"id": 79688
+					},
+					{
+						"episode_number": 2,
+						"season_number": 4,
+						"name": "Discoveries",
+						"air_date": "2006-10-06",
+						"runtime": 29,
+						"id": 79696
+					},
+					{
+						"episode_number": 3,
+						"season_number": 4,
+						"name": "Dogs",
+						"air_date": "2006-10-13",
+						"runtime": 29,
+						"id": 79691
+					},
+					{
+						"episode_number": 4,
+						"season_number": 4,
+						"name": "Dictionaries",
+						"air_date": "2006-10-20",
+						"runtime": 29,
+						"id": 79702
+					},
+					{
+						"episode_number": 5,
+						"season_number": 4,
+						"name": "Death (Halloween Special)",
+						"air_date": "2006-10-27",
+						"runtime": 29,
+						"id": 79713
+					},
+					{
+						"episode_number": 6,
+						"season_number": 4,
+						"name": "Drinks",
+						"air_date": "2006-11-03",
+						"runtime": 29,
+						"id": 79701
+					},
+					{
+						"episode_number": 7,
+						"season_number": 4,
+						"name": "Differences",
+						"air_date": "2006-11-10",
+						"runtime": 29,
+						"id": 79707
+					},
+					{
+						"episode_number": 8,
+						"season_number": 4,
+						"name": "Descendants (Children in Need Special)",
+						"air_date": "2006-11-17",
+						"runtime": 29,
+						"id": 79705
+					},
+					{
+						"episode_number": 9,
+						"season_number": 4,
+						"name": "Doves",
+						"air_date": "2006-11-24",
+						"runtime": 29,
+						"id": 79699
+					},
+					{
+						"episode_number": 10,
+						"season_number": 4,
+						"name": "Divination",
+						"air_date": "2006-12-01",
+						"runtime": 29,
+						"id": 79718
+					},
+					{
+						"episode_number": 11,
+						"season_number": 4,
+						"name": "Deprivation",
+						"air_date": "2006-12-08",
+						"runtime": 29,
+						"id": 79714
+					},
+					{
+						"episode_number": 12,
+						"season_number": 4,
+						"name": "Domesticity",
+						"air_date": "2006-12-15",
+						"runtime": 29,
+						"id": 79710
+					},
+					{
+						"episode_number": 13,
+						"season_number": 4,
+						"name": "December (Christmas Special)",
+						"air_date": "2006-12-22",
+						"runtime": 29,
+						"id": 79719
+					}
+				]
+			},
+			"1554/5": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 5,
+						"name": "Engineering",
+						"air_date": "2007-09-21",
+						"runtime": 29,
+						"id": 79724
+					},
+					{
+						"episode_number": 2,
+						"season_number": 5,
+						"name": "Electricity",
+						"air_date": "2007-09-21",
+						"runtime": 29,
+						"id": 79720
+					},
+					{
+						"episode_number": 3,
+						"season_number": 5,
+						"name": "Eating",
+						"air_date": "2007-09-28",
+						"runtime": 29,
+						"id": 79721
+					},
+					{
+						"episode_number": 4,
+						"season_number": 5,
+						"name": "Exploration",
+						"air_date": "2007-10-06",
+						"runtime": 29,
+						"id": 79726
+					},
+					{
+						"episode_number": 5,
+						"season_number": 5,
+						"name": "Europe",
+						"air_date": "2007-10-12",
+						"runtime": 29,
+						"id": 79727
+					},
+					{
+						"episode_number": 6,
+						"season_number": 5,
+						"name": "Everything Etc",
+						"air_date": "2007-10-19",
+						"runtime": 29,
+						"id": 79722
+					},
+					{
+						"episode_number": 7,
+						"season_number": 5,
+						"name": "Espionage",
+						"air_date": "2007-10-26",
+						"runtime": 29,
+						"id": 79737
+					},
+					{
+						"episode_number": 8,
+						"season_number": 5,
+						"name": "Eyes and Ears",
+						"air_date": "2007-11-02",
+						"runtime": 29,
+						"id": 79734
+					},
+					{
+						"episode_number": 9,
+						"season_number": 5,
+						"name": "Entertainment",
+						"air_date": "2007-11-09",
+						"runtime": 29,
+						"id": 79728
+					},
+					{
+						"episode_number": 10,
+						"season_number": 5,
+						"name": "England",
+						"air_date": "2007-11-16",
+						"runtime": 29,
+						"id": 79730
+					},
+					{
+						"episode_number": 11,
+						"season_number": 5,
+						"name": "Endings",
+						"air_date": "2007-11-23",
+						"runtime": 29,
+						"id": 79739
+					},
+					{
+						"episode_number": 12,
+						"season_number": 5,
+						"name": "Empire",
+						"air_date": "2007-12-07",
+						"runtime": 29,
+						"id": 79742
+					},
+					{
+						"episode_number": 13,
+						"season_number": 5,
+						"name": "Elephants",
+						"air_date": "2007-12-14",
+						"runtime": 29,
+						"id": 79741
+					}
+				]
+			},
+			"1554/6": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 6,
+						"name": "Families (Children in Need Special)",
+						"air_date": "2008-11-14",
+						"runtime": 29,
+						"id": 79744
+					},
+					{
+						"episode_number": 2,
+						"season_number": 6,
+						"name": "Fire and Freezing (Christmas Special)",
+						"air_date": "2008-12-22",
+						"runtime": 28,
+						"id": 79747
+					},
+					{
+						"episode_number": 3,
+						"season_number": 6,
+						"name": "Flotsam and Jetsam",
+						"air_date": "2009-01-09",
+						"runtime": 29,
+						"id": 79749
+					},
+					{
+						"episode_number": 4,
+						"season_number": 6,
+						"name": "Fight or Flight",
+						"air_date": "2009-01-16",
+						"runtime": 29,
+						"id": 79766
+					},
+					{
+						"episode_number": 5,
+						"season_number": 6,
+						"name": "France",
+						"air_date": "2009-01-23",
+						"runtime": 29,
+						"id": 79758
+					},
+					{
+						"episode_number": 6,
+						"season_number": 6,
+						"name": "Fakes and Frauds",
+						"air_date": "2009-01-30",
+						"runtime": 29,
+						"id": 79760
+					},
+					{
+						"episode_number": 7,
+						"season_number": 6,
+						"name": "Fingers and Fumbs",
+						"air_date": "2009-02-06",
+						"runtime": 26,
+						"id": 79769
+					},
+					{
+						"episode_number": 8,
+						"season_number": 6,
+						"name": "Fashion",
+						"air_date": "2009-02-13",
+						"runtime": 28,
+						"id": 79764
+					},
+					{
+						"episode_number": 9,
+						"season_number": 6,
+						"name": "The Future",
+						"air_date": "2009-02-20",
+						"runtime": 28,
+						"id": 79761
+					},
+					{
+						"episode_number": 10,
+						"season_number": 6,
+						"name": "Flora and Fauna",
+						"air_date": "2009-02-27",
+						"runtime": 27,
+						"id": 79756
+					},
+					{
+						"episode_number": 11,
+						"season_number": 6,
+						"name": "Film",
+						"air_date": "2009-03-06",
+						"runtime": 28,
+						"id": 79751
+					},
+					{
+						"episode_number": 12,
+						"season_number": 6,
+						"name": "Food",
+						"air_date": "2009-03-20",
+						"runtime": 27,
+						"id": 79759
+					}
+				]
+			},
+			"1554/7": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 7,
+						"name": "Gardens",
+						"air_date": "2009-11-26",
+						"runtime": 29,
+						"id": 79774
+					},
+					{
+						"episode_number": 2,
+						"season_number": 7,
+						"name": "G-animals",
+						"air_date": "2009-12-03",
+						"runtime": 29,
+						"id": 79776
+					},
+					{
+						"episode_number": 3,
+						"season_number": 7,
+						"name": "Games",
+						"air_date": "2009-12-10",
+						"runtime": 29,
+						"id": 79779
+					},
+					{
+						"episode_number": 4,
+						"season_number": 7,
+						"name": "Geography",
+						"air_date": "2009-12-17",
+						"runtime": 29,
+						"id": 79781
+					},
+					{
+						"episode_number": 5,
+						"season_number": 7,
+						"name": "Groovy (Christmas Special)",
+						"air_date": "2009-12-24",
+						"runtime": 29,
+						"id": 79783
+					},
+					{
+						"episode_number": 6,
+						"season_number": 7,
+						"name": "Genius",
+						"air_date": "2010-01-01",
+						"runtime": 29,
+						"id": 79785
+					},
+					{
+						"episode_number": 7,
+						"season_number": 7,
+						"name": "Girls and Boys",
+						"air_date": "2010-01-08",
+						"runtime": 29,
+						"id": 79787
+					},
+					{
+						"episode_number": 8,
+						"season_number": 7,
+						"name": "Germany",
+						"air_date": "2010-01-15",
+						"runtime": 29,
+						"id": 79788
+					},
+					{
+						"episode_number": 9,
+						"season_number": 7,
+						"name": "Gallimaufrey",
+						"air_date": "2010-01-22",
+						"runtime": 29,
+						"id": 79789
+					},
+					{
+						"episode_number": 10,
+						"season_number": 7,
+						"name": "Greats",
+						"air_date": "2010-01-29",
+						"runtime": 29,
+						"id": 79792
+					},
+					{
+						"episode_number": 11,
+						"season_number": 7,
+						"name": "Gifts",
+						"air_date": "2010-02-05",
+						"runtime": 29,
+						"id": 79794
+					},
+					{
+						"episode_number": 12,
+						"season_number": 7,
+						"name": "Gravity",
+						"air_date": "2010-02-12",
+						"runtime": 29,
+						"id": 79797
+					},
+					{
+						"episode_number": 13,
+						"season_number": 7,
+						"name": "Gothic",
+						"air_date": "2010-02-19",
+						"runtime": 29,
+						"id": 79798
+					},
+					{
+						"episode_number": 14,
+						"season_number": 7,
+						"name": "Greeks",
+						"air_date": "2010-03-05",
+						"runtime": 29,
+						"id": 79799
+					},
+					{
+						"episode_number": 15,
+						"season_number": 7,
+						"name": "Green",
+						"air_date": "2010-03-26",
+						"runtime": 29,
+						"id": 79800
+					},
+					{
+						"episode_number": 16,
+						"season_number": 7,
+						"name": "Geometry",
+						"air_date": "2010-04-02",
+						"runtime": 29,
+						"id": 79803
+					},
+					{
+						"episode_number": 17,
+						"season_number": 7,
+						"name": "VG Part One",
+						"air_date": "2010-04-05",
+						"runtime": 29,
+						"id": 79805
+					},
+					{
+						"episode_number": 18,
+						"season_number": 7,
+						"name": "VG Part Two",
+						"air_date": "2010-04-16",
+						"runtime": 29,
+						"id": 79806
+					}
+				]
+			},
+			"1554/8": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 8,
+						"name": "Hodge Podge",
+						"air_date": "2010-09-17",
+						"runtime": 28,
+						"id": 79808
+					},
+					{
+						"episode_number": 2,
+						"season_number": 8,
+						"name": "H Anatomy",
+						"air_date": "2010-09-24",
+						"runtime": 29,
+						"id": 79812
+					},
+					{
+						"episode_number": 3,
+						"season_number": 8,
+						"name": "Hoaxes",
+						"air_date": "2010-10-01",
+						"runtime": 29,
+						"id": 79813
+					},
+					{
+						"episode_number": 4,
+						"season_number": 8,
+						"name": "Humans",
+						"air_date": "2010-10-08",
+						"runtime": 29,
+						"id": 79815
+					},
+					{
+						"episode_number": 5,
+						"season_number": 8,
+						"name": "H-animals",
+						"air_date": "2010-10-15",
+						"runtime": 29,
+						"id": 79818
+					},
+					{
+						"episode_number": 6,
+						"season_number": 8,
+						"name": "Happiness",
+						"air_date": "2010-10-22",
+						"runtime": 29,
+						"id": 79816
+					},
+					{
+						"episode_number": 7,
+						"season_number": 8,
+						"name": "Horrible (Halloween Special)",
+						"air_date": "2010-10-29",
+						"runtime": 29,
+						"id": 79819
+					},
+					{
+						"episode_number": 8,
+						"season_number": 8,
+						"name": "Hypothetical",
+						"air_date": "2010-11-05",
+						"runtime": 29,
+						"id": 79821
+					},
+					{
+						"episode_number": 9,
+						"season_number": 8,
+						"name": "House and Home",
+						"air_date": "2010-11-12",
+						"runtime": 29,
+						"id": 79822
+					},
+					{
+						"episode_number": 10,
+						"season_number": 8,
+						"name": "Health and Safety",
+						"air_date": "2010-11-26",
+						"runtime": 29,
+						"id": 79825
+					},
+					{
+						"episode_number": 11,
+						"season_number": 8,
+						"name": "Highs and Lows",
+						"air_date": "2010-12-03",
+						"runtime": 29,
+						"id": 79826
+					},
+					{
+						"episode_number": 12,
+						"season_number": 8,
+						"name": "Horses and Hunting",
+						"air_date": "2010-12-10",
+						"runtime": 29,
+						"id": 79830
+					},
+					{
+						"episode_number": 13,
+						"season_number": 8,
+						"name": "Holidays",
+						"air_date": "2010-12-17",
+						"runtime": 26,
+						"id": 79829
+					},
+					{
+						"episode_number": 14,
+						"season_number": 8,
+						"name": "Hocus-Pocus (Christmas Special)",
+						"air_date": "2010-12-24",
+						"runtime": 29,
+						"id": 79828
+					},
+					{
+						"episode_number": 15,
+						"season_number": 8,
+						"name": "Hypnosis, Hallucinations & Hysteria",
+						"air_date": "2011-01-07",
+						"runtime": 29,
+						"id": 79832
+					},
+					{
+						"episode_number": 16,
+						"season_number": 8,
+						"name": "History",
+						"air_date": "2011-01-14",
+						"runtime": 29,
+						"id": 79835
+					},
+					{
+						"episode_number": 17,
+						"season_number": 8,
+						"name": "VG Part One",
+						"air_date": "2011-04-25",
+						"runtime": 29,
+						"id": 79834
+					},
+					{
+						"episode_number": 18,
+						"season_number": 8,
+						"name": "VG Part Two",
+						"air_date": "2011-05-02",
+						"runtime": 29,
+						"id": 79837
+					}
+				]
+			},
+			"1554/9": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 9,
+						"name": "I-Spy",
+						"air_date": "2011-09-09",
+						"runtime": 29,
+						"id": 79838
+					},
+					{
+						"episode_number": 2,
+						"season_number": 9,
+						"name": "International",
+						"air_date": "2011-09-16",
+						"runtime": 29,
+						"id": 79840
+					},
+					{
+						"episode_number": 3,
+						"season_number": 9,
+						"name": "Imbroglio",
+						"air_date": "2011-09-23",
+						"runtime": 29,
+						"id": 79843
+					},
+					{
+						"episode_number": 4,
+						"season_number": 9,
+						"name": "Indecision",
+						"air_date": "2011-09-30",
+						"runtime": 29,
+						"id": 79845
+					},
+					{
+						"episode_number": 5,
+						"season_number": 9,
+						"name": "Invertebrates",
+						"air_date": "2011-10-07",
+						"runtime": 29,
+						"id": 79846
+					},
+					{
+						"episode_number": 6,
+						"season_number": 9,
+						"name": "Inventive",
+						"air_date": "2011-10-14",
+						"runtime": 29,
+						"id": 79848
+					},
+					{
+						"episode_number": 7,
+						"season_number": 9,
+						"name": "Incomprehensible",
+						"air_date": "2011-10-21",
+						"runtime": 29,
+						"id": 79850
+					},
+					{
+						"episode_number": 8,
+						"season_number": 9,
+						"name": "Inequality",
+						"air_date": "2011-10-28",
+						"runtime": 29,
+						"id": 79851
+					},
+					{
+						"episode_number": 9,
+						"season_number": 9,
+						"name": "Illness",
+						"air_date": "2011-11-04",
+						"runtime": 29,
+						"id": 79852
+					},
+					{
+						"episode_number": 10,
+						"season_number": 9,
+						"name": "Inland Revenue",
+						"air_date": "2011-11-11",
+						"runtime": 29,
+						"id": 79853
+					},
+					{
+						"episode_number": 11,
+						"season_number": 9,
+						"name": "Infantile",
+						"air_date": "2011-11-18",
+						"runtime": 29,
+						"id": 79854
+					},
+					{
+						"episode_number": 12,
+						"season_number": 9,
+						"name": "Illumination",
+						"air_date": "2011-11-25",
+						"runtime": 29,
+						"id": 79855
+					},
+					{
+						"episode_number": 13,
+						"season_number": 9,
+						"name": "Intelligence",
+						"air_date": "2011-12-02",
+						"runtime": 29,
+						"id": 79856
+					},
+					{
+						"episode_number": 14,
+						"season_number": 9,
+						"name": "VG Part 1",
+						"air_date": "2011-12-16",
+						"runtime": 29,
+						"id": 79859
+					},
+					{
+						"episode_number": 15,
+						"season_number": 9,
+						"name": "VG Part 2",
+						"air_date": "2011-12-23",
+						"runtime": 29,
+						"id": 79862
+					},
+					{
+						"episode_number": 16,
+						"season_number": 9,
+						"name": "Ice",
+						"air_date": "2011-12-29",
+						"runtime": 29,
+						"id": 954245
+					},
+					{
+						"episode_number": 17,
+						"season_number": 9,
+						"name": "Immortal Bard",
+						"air_date": "2012-04-27",
+						"runtime": 29,
+						"id": 79861
+					},
+					{
+						"episode_number": 18,
+						"season_number": 9,
+						"name": "Idleness",
+						"air_date": "2012-05-04",
+						"runtime": 29,
+						"id": 79857
+					}
+				]
+			},
+			"1554/10": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 10,
+						"name": "Jargon",
+						"air_date": "2012-09-14",
+						"runtime": 29,
+						"id": 79874
+					},
+					{
+						"episode_number": 2,
+						"season_number": 10,
+						"name": "Jam, Jelly and Juice",
+						"air_date": "2012-09-21",
+						"runtime": 29,
+						"id": 79891
+					},
+					{
+						"episode_number": 3,
+						"season_number": 10,
+						"name": "Journeys",
+						"air_date": "2012-09-28",
+						"runtime": 29,
+						"id": 79895
+					},
+					{
+						"episode_number": 4,
+						"season_number": 10,
+						"name": "Jack and Jill",
+						"air_date": "2012-10-05",
+						"runtime": 29,
+						"id": 79876
+					},
+					{
+						"episode_number": 5,
+						"season_number": 10,
+						"name": "J-Places",
+						"air_date": "2012-10-12",
+						"runtime": 29,
+						"id": 79887
+					},
+					{
+						"episode_number": 6,
+						"season_number": 10,
+						"name": "Joints",
+						"air_date": "2012-10-19",
+						"runtime": 29,
+						"id": 79878
+					},
+					{
+						"episode_number": 7,
+						"season_number": 10,
+						"name": "Journalism",
+						"air_date": "2012-10-26",
+						"runtime": 29,
+						"id": 79879
+					},
+					{
+						"episode_number": 8,
+						"season_number": 10,
+						"name": "Jumble",
+						"air_date": "2012-11-02",
+						"runtime": 29,
+						"id": 79889
+					},
+					{
+						"episode_number": 9,
+						"season_number": 10,
+						"name": "Jeopardy",
+						"air_date": "2012-11-09",
+						"runtime": 29,
+						"id": 79883
+					},
+					{
+						"episode_number": 10,
+						"season_number": 10,
+						"name": "Jungles",
+						"air_date": "2012-11-23",
+						"runtime": 29,
+						"id": 79884
+					},
+					{
+						"episode_number": 11,
+						"season_number": 10,
+						"name": "Jumpers",
+						"air_date": "2012-11-30",
+						"runtime": 29,
+						"id": 79886
+					},
+					{
+						"episode_number": 12,
+						"season_number": 10,
+						"name": "Justice",
+						"air_date": "2012-12-07",
+						"runtime": 29,
+						"id": 79880
+					},
+					{
+						"episode_number": 13,
+						"season_number": 10,
+						"name": "Jobs",
+						"air_date": "2012-12-14",
+						"runtime": 29,
+						"id": 79888
+					},
+					{
+						"episode_number": 14,
+						"season_number": 10,
+						"name": "Jingle Bells",
+						"air_date": "2012-12-21",
+						"runtime": 29,
+						"id": 79890
+					},
+					{
+						"episode_number": 15,
+						"season_number": 10,
+						"name": "VG Part One",
+						"air_date": "2012-12-28",
+						"runtime": 29,
+						"id": 79896
+					},
+					{
+						"episode_number": 16,
+						"season_number": 10,
+						"name": "VG Part Two",
+						"air_date": "2013-01-04",
+						"runtime": 29,
+						"id": 79893
+					},
+					{
+						"episode_number": 17,
+						"season_number": 10,
+						"name": "Jolly",
+						"air_date": "2013-01-11",
+						"runtime": 29,
+						"id": 79881
+					},
+					{
+						"episode_number": 18,
+						"season_number": 10,
+						"name": "Just the Job",
+						"air_date": "2013-08-25",
+						"runtime": 29,
+						"id": 79894
+					}
+				]
+			},
+			"1554/11": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 11,
+						"name": "Knees & Knockers",
+						"air_date": "2013-09-06",
+						"runtime": 29,
+						"id": 79914
+					},
+					{
+						"episode_number": 2,
+						"season_number": 11,
+						"name": "Kit and Kaboodle",
+						"air_date": "2013-09-13",
+						"runtime": 29,
+						"id": 79915
+					},
+					{
+						"episode_number": 3,
+						"season_number": 11,
+						"name": "K-Folk",
+						"air_date": "2013-09-20",
+						"runtime": 29,
+						"id": 79912
+					},
+					{
+						"episode_number": 4,
+						"season_number": 11,
+						"name": "Knits & Knots",
+						"air_date": "2013-09-27",
+						"runtime": 29,
+						"id": 79905
+					},
+					{
+						"episode_number": 5,
+						"season_number": 11,
+						"name": "Kings",
+						"air_date": "2013-10-04",
+						"runtime": 29,
+						"id": 79903
+					},
+					{
+						"episode_number": 6,
+						"season_number": 11,
+						"name": "Killers",
+						"air_date": "2013-10-11",
+						"runtime": 29,
+						"id": 79902
+					},
+					{
+						"episode_number": 7,
+						"season_number": 11,
+						"name": "Knowledge",
+						"air_date": "2013-10-18",
+						"runtime": 29,
+						"id": 79901
+					},
+					{
+						"episode_number": 8,
+						"season_number": 11,
+						"name": "Keys",
+						"air_date": "2013-10-25",
+						"runtime": 29,
+						"id": 79910
+					},
+					{
+						"episode_number": 9,
+						"season_number": 11,
+						"name": "Kinetic",
+						"air_date": "2013-11-01",
+						"runtime": 29,
+						"id": 79909
+					},
+					{
+						"episode_number": 10,
+						"season_number": 11,
+						"name": "Keeps",
+						"air_date": "2013-11-08",
+						"runtime": 29,
+						"id": 79908
+					},
+					{
+						"episode_number": 11,
+						"season_number": 11,
+						"name": "Kinky",
+						"air_date": "2013-11-29",
+						"runtime": 29,
+						"id": 79906
+					},
+					{
+						"episode_number": 12,
+						"season_number": 11,
+						"name": "Knights and Knaves",
+						"air_date": "2013-12-06",
+						"runtime": 29,
+						"id": 79911
+					},
+					{
+						"episode_number": 13,
+						"season_number": 11,
+						"name": "Kitchen Sink",
+						"air_date": "2013-12-13",
+						"runtime": 29,
+						"id": 79917
+					},
+					{
+						"episode_number": 14,
+						"season_number": 11,
+						"name": "Kris Kringle",
+						"air_date": "2013-12-24",
+						"runtime": 29,
+						"id": 79898
+					},
+					{
+						"episode_number": 15,
+						"season_number": 11,
+						"name": "Kitsch",
+						"air_date": "2014-01-10",
+						"runtime": 29,
+						"id": 79899
+					},
+					{
+						"episode_number": 16,
+						"season_number": 11,
+						"name": "Kaleidoscope",
+						"air_date": "2014-01-17",
+						"runtime": 29,
+						"id": 966340
+					},
+					{
+						"episode_number": 17,
+						"season_number": 11,
+						"name": "VG Part One",
+						"air_date": "2014-01-24",
+						"runtime": 29,
+						"id": 970816
+					},
+					{
+						"episode_number": 18,
+						"season_number": 11,
+						"name": "VG Part Two",
+						"air_date": "2014-01-31",
+						"runtime": 29,
+						"id": 970817
+					}
+				]
+			},
+			"1554/12": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 12,
+						"name": "L-animals",
+						"air_date": "2014-10-03",
+						"runtime": 29,
+						"id": 1029411
+					},
+					{
+						"episode_number": 2,
+						"season_number": 12,
+						"name": "Location, Location, Location",
+						"air_date": "2014-10-10",
+						"runtime": 29,
+						"id": 1029414
+					},
+					{
+						"episode_number": 3,
+						"season_number": 12,
+						"name": "Literature",
+						"air_date": "2014-10-17",
+						"runtime": 29,
+						"id": 1029415
+					},
+					{
+						"episode_number": 4,
+						"season_number": 12,
+						"name": "Levity",
+						"air_date": "2014-10-24",
+						"runtime": 29,
+						"id": 1029416
+					},
+					{
+						"episode_number": 5,
+						"season_number": 12,
+						"name": "Lenses",
+						"air_date": "2014-10-31",
+						"runtime": 29,
+						"id": 1029417
+					},
+					{
+						"episode_number": 6,
+						"season_number": 12,
+						"name": "Liblabble",
+						"air_date": "2014-11-07",
+						"runtime": 29,
+						"id": 1029418
+					},
+					{
+						"episode_number": 7,
+						"season_number": 12,
+						"name": "Lethal",
+						"air_date": "2014-11-21",
+						"runtime": 29,
+						"id": 1029419
+					},
+					{
+						"episode_number": 8,
+						"season_number": 12,
+						"name": "Lovely",
+						"air_date": "2014-11-28",
+						"runtime": 29,
+						"id": 1029420
+					},
+					{
+						"episode_number": 9,
+						"season_number": 12,
+						"name": "Ladies and Gents",
+						"air_date": "2014-12-05",
+						"runtime": 29,
+						"id": 1029421
+					},
+					{
+						"episode_number": 10,
+						"season_number": 12,
+						"name": "Lying",
+						"air_date": "2014-12-12",
+						"runtime": 29,
+						"id": 1029422
+					},
+					{
+						"episode_number": 11,
+						"season_number": 12,
+						"name": "Lumped Together",
+						"air_date": "2014-12-19",
+						"runtime": 29,
+						"id": 1029423
+					},
+					{
+						"episode_number": 12,
+						"season_number": 12,
+						"name": "No L",
+						"air_date": "2014-12-25",
+						"runtime": 29,
+						"id": 1029424
+					},
+					{
+						"episode_number": 13,
+						"season_number": 12,
+						"name": "Lucky Losers",
+						"air_date": "2015-01-02",
+						"runtime": 29,
+						"id": 1029425
+					},
+					{
+						"episode_number": 14,
+						"season_number": 12,
+						"name": "Little and Large",
+						"air_date": "2015-01-09",
+						"runtime": 29,
+						"id": 1029701
+					},
+					{
+						"episode_number": 15,
+						"season_number": 12,
+						"name": "Long Lost",
+						"air_date": "2015-01-16",
+						"runtime": 29,
+						"id": 1029702
+					},
+					{
+						"episode_number": 16,
+						"season_number": 12,
+						"name": "Landmarks",
+						"air_date": "2015-01-23",
+						"runtime": 29,
+						"id": 1029703
+					},
+					{
+						"episode_number": 17,
+						"season_number": 12,
+						"name": "VG: Part One",
+						"air_date": "2015-01-30",
+						"runtime": 29,
+						"id": 1029704
+					},
+					{
+						"episode_number": 18,
+						"season_number": 12,
+						"name": "VG: Part Two",
+						"air_date": "2015-01-31",
+						"runtime": 29,
+						"id": 1029705
+					}
+				]
+			},
+			"1554/13": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 13,
+						"name": "A Medley of Maladies",
+						"air_date": "2015-10-16",
+						"runtime": 29,
+						"id": 1130061
+					},
+					{
+						"episode_number": 2,
+						"season_number": 13,
+						"name": "Military Matters",
+						"air_date": "2015-10-23",
+						"runtime": 29,
+						"id": 1147616
+					},
+					{
+						"episode_number": 3,
+						"season_number": 13,
+						"name": "M-Places",
+						"air_date": "2015-10-30",
+						"runtime": 29,
+						"id": 1147617
+					},
+					{
+						"episode_number": 4,
+						"season_number": 13,
+						"name": "Miscellany",
+						"air_date": "2015-11-06",
+						"runtime": 29,
+						"id": 1147618
+					},
+					{
+						"episode_number": 5,
+						"season_number": 13,
+						"name": "Maths",
+						"air_date": "2015-11-20",
+						"runtime": 29,
+						"id": 1147619
+					},
+					{
+						"episode_number": 6,
+						"season_number": 13,
+						"name": "Marriage and Mating",
+						"air_date": "2015-11-27",
+						"runtime": 29,
+						"id": 1147620
+					},
+					{
+						"episode_number": 7,
+						"season_number": 13,
+						"name": "Middle Muddle",
+						"air_date": "2015-12-11",
+						"runtime": 29,
+						"id": 1147621
+					},
+					{
+						"episode_number": 8,
+						"season_number": 13,
+						"name": "Merriment",
+						"air_date": "2015-12-25",
+						"runtime": 29,
+						"id": 1147622
+					},
+					{
+						"episode_number": 9,
+						"season_number": 13,
+						"name": "Messing with Your Mind",
+						"air_date": "2015-12-29",
+						"runtime": 29,
+						"id": 1147623
+					},
+					{
+						"episode_number": 10,
+						"season_number": 13,
+						"name": "Making a Meal of It",
+						"air_date": "2016-01-08",
+						"runtime": 29,
+						"id": 1147624
+					},
+					{
+						"episode_number": 11,
+						"season_number": 13,
+						"name": "Menagerie",
+						"air_date": "2016-01-15",
+						"runtime": 29,
+						"id": 1147625
+					},
+					{
+						"episode_number": 12,
+						"season_number": 13,
+						"name": "Medieval and Macabre",
+						"air_date": "2016-01-22",
+						"runtime": 29,
+						"id": 1147626
+					},
+					{
+						"episode_number": 13,
+						"season_number": 13,
+						"name": "Monster Mash",
+						"air_date": "2016-01-29",
+						"runtime": 29,
+						"id": 1147628
+					},
+					{
+						"episode_number": 14,
+						"season_number": 13,
+						"name": "Messy",
+						"air_date": "2016-02-05",
+						"runtime": 29,
+						"id": 1147627
+					},
+					{
+						"episode_number": 15,
+						"season_number": 13,
+						"name": "Mix and Match",
+						"air_date": "2016-02-12",
+						"runtime": 29,
+						"id": 1165612
+					},
+					{
+						"episode_number": 16,
+						"season_number": 13,
+						"name": "Misconceptions",
+						"air_date": "2016-02-19",
+						"runtime": 29,
+						"id": 1224564
+					},
+					{
+						"episode_number": 17,
+						"season_number": 13,
+						"name": "VG: Part One",
+						"air_date": "2016-03-04",
+						"runtime": 29,
+						"id": 1224565
+					},
+					{
+						"episode_number": 18,
+						"season_number": 13,
+						"name": "VG: Part Two",
+						"air_date": "2016-03-25",
+						"runtime": 29,
+						"id": 1224566
+					}
+				]
+			},
+			"1554/14": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 14,
+						"name": "Naming Names",
+						"air_date": "2016-10-21",
+						"runtime": 29,
+						"id": 1231469
+					},
+					{
+						"episode_number": 2,
+						"season_number": 14,
+						"name": "North Norse",
+						"air_date": "2016-10-28",
+						"runtime": 29,
+						"id": 1232889
+					},
+					{
+						"episode_number": 3,
+						"season_number": 14,
+						"name": "Nosey Noisy",
+						"air_date": "2016-11-04",
+						"runtime": 29,
+						"id": 1236890
+					},
+					{
+						"episode_number": 4,
+						"season_number": 14,
+						"name": "Noble Rot",
+						"air_date": "2016-11-11",
+						"runtime": 29,
+						"id": 1239037
+					},
+					{
+						"episode_number": 5,
+						"season_number": 14,
+						"name": "Not Nearly",
+						"air_date": "2016-11-25",
+						"runtime": 29,
+						"id": 1245981
+					},
+					{
+						"episode_number": 6,
+						"season_number": 14,
+						"name": "Night",
+						"air_date": "2016-12-02",
+						"runtime": 29,
+						"id": 1245982
+					},
+					{
+						"episode_number": 7,
+						"season_number": 14,
+						"name": "Naked Truth",
+						"air_date": "2016-12-09",
+						"runtime": 29,
+						"id": 1248308
+					},
+					{
+						"episode_number": 8,
+						"season_number": 14,
+						"name": "Non Sequiturs",
+						"air_date": "2016-12-16",
+						"runtime": 29,
+						"id": 1248309
+					},
+					{
+						"episode_number": 9,
+						"season_number": 14,
+						"name": "Noel",
+						"air_date": "2016-12-22",
+						"runtime": 29,
+						"id": 1248310
+					},
+					{
+						"episode_number": 10,
+						"season_number": 14,
+						"name": "Nature/Nurture",
+						"air_date": "2016-12-30",
+						"runtime": 29,
+						"id": 1248311
+					},
+					{
+						"episode_number": 11,
+						"season_number": 14,
+						"name": "Nonsense",
+						"air_date": "2017-01-06",
+						"runtime": 29,
+						"id": 1248312
+					},
+					{
+						"episode_number": 12,
+						"season_number": 14,
+						"name": "Noodles",
+						"air_date": "2017-01-13",
+						"runtime": 29,
+						"id": 1248313
+					},
+					{
+						"episode_number": 13,
+						"season_number": 14,
+						"name": "Naval Navigation",
+						"air_date": "2017-01-20",
+						"runtime": 29,
+						"id": 1248314
+					},
+					{
+						"episode_number": 14,
+						"season_number": 14,
+						"name": "Numbers",
+						"air_date": "2017-01-27",
+						"runtime": 29,
+						"id": 1248315
+					},
+					{
+						"episode_number": 15,
+						"season_number": 14,
+						"name": "Next",
+						"air_date": "2017-02-03",
+						"runtime": 29,
+						"id": 1248316
+					},
+					{
+						"episode_number": 16,
+						"season_number": 14,
+						"name": "New",
+						"air_date": "2017-02-10",
+						"runtime": 29,
+						"id": 1248317
+					},
+					{
+						"episode_number": 17,
+						"season_number": 14,
+						"name": "VG: Part One",
+						"air_date": "2017-02-17",
+						"runtime": 29,
+						"id": 1303285
+					},
+					{
+						"episode_number": 18,
+						"season_number": 14,
+						"name": "VG: Part Two",
+						"air_date": "2017-02-24",
+						"runtime": 29,
+						"id": 1303286
+					}
+				]
+			},
+			"1554/15": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 15,
+						"name": "Ologies",
+						"air_date": "2017-10-20",
+						"runtime": 29,
+						"id": 1388568
+					},
+					{
+						"episode_number": 2,
+						"season_number": 15,
+						"name": "Organisms",
+						"air_date": "2017-10-27",
+						"runtime": 29,
+						"id": 1388569
+					},
+					{
+						"episode_number": 3,
+						"season_number": 15,
+						"name": "Oceans",
+						"air_date": "2017-11-03",
+						"runtime": 29,
+						"id": 1388570
+					},
+					{
+						"episode_number": 4,
+						"season_number": 15,
+						"name": "Over and Ova",
+						"air_date": "2017-11-10",
+						"runtime": 29,
+						"id": 1388571
+					},
+					{
+						"episode_number": 5,
+						"season_number": 15,
+						"name": "Odorous and Odious",
+						"air_date": "2017-11-24",
+						"runtime": 29,
+						"id": 1391533
+					},
+					{
+						"episode_number": 6,
+						"season_number": 15,
+						"name": "Odds and Ends",
+						"air_date": "2017-12-01",
+						"runtime": 29,
+						"id": 1391532
+					},
+					{
+						"episode_number": 7,
+						"season_number": 15,
+						"name": "Opposites",
+						"air_date": "2017-12-08",
+						"runtime": 29,
+						"id": 1391534
+					},
+					{
+						"episode_number": 8,
+						"season_number": 15,
+						"name": "Operations",
+						"air_date": "2017-12-15",
+						"runtime": 29,
+						"id": 1407376
+					},
+					{
+						"episode_number": 9,
+						"season_number": 15,
+						"name": "O Christmas",
+						"air_date": "2017-12-26",
+						"runtime": 29,
+						"id": 1412009
+					},
+					{
+						"episode_number": 10,
+						"season_number": 15,
+						"name": "Origins and Openings",
+						"air_date": "2018-01-05",
+						"runtime": 29,
+						"id": 1412011
+					},
+					{
+						"episode_number": 11,
+						"season_number": 15,
+						"name": "Objects and Ornaments",
+						"air_date": "2018-01-12",
+						"runtime": 29,
+						"id": 1412013
+					},
+					{
+						"episode_number": 12,
+						"season_number": 15,
+						"name": "The Occult",
+						"air_date": "2018-01-19",
+						"runtime": 29,
+						"id": 1412014
+					},
+					{
+						"episode_number": 13,
+						"season_number": 15,
+						"name": "Omnishambles",
+						"air_date": "2018-01-26",
+						"runtime": 29,
+						"id": 1412015
+					},
+					{
+						"episode_number": 14,
+						"season_number": 15,
+						"name": "Oddballs",
+						"air_date": "2018-02-02",
+						"runtime": 29,
+						"id": 1412017
+					},
+					{
+						"episode_number": 15,
+						"season_number": 15,
+						"name": "Occupations and Offices",
+						"air_date": "2018-02-09",
+						"runtime": 29,
+						"id": 1412018
+					},
+					{
+						"episode_number": 16,
+						"season_number": 15,
+						"name": "Overseas",
+						"air_date": "2018-02-16",
+						"runtime": 29,
+						"id": 1412019
+					},
+					{
+						"episode_number": 17,
+						"season_number": 15,
+						"name": "VG Part One",
+						"air_date": "2018-02-23",
+						"runtime": 29,
+						"id": 1412020
+					},
+					{
+						"episode_number": 18,
+						"season_number": 15,
+						"name": "VG Part Two",
+						"air_date": "2018-03-02",
+						"runtime": 29,
+						"id": 1412022
+					}
+				]
+			},
+			"1554/16": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 16,
+						"name": "P-animals",
+						"air_date": "2018-09-10",
+						"runtime": null,
+						"id": 1591396
+					},
+					{
+						"episode_number": 2,
+						"season_number": 16,
+						"name": "Peril",
+						"air_date": "2018-09-17",
+						"runtime": null,
+						"id": 1591397
+					},
+					{
+						"episode_number": 3,
+						"season_number": 16,
+						"name": "Piecemeal",
+						"air_date": "2018-09-24",
+						"runtime": null,
+						"id": 1591398
+					},
+					{
+						"episode_number": 4,
+						"season_number": 16,
+						"name": "Parts",
+						"air_date": "2018-10-01",
+						"runtime": null,
+						"id": 1591399
+					},
+					{
+						"episode_number": 5,
+						"season_number": 16,
+						"name": "Public & Private",
+						"air_date": "2018-10-08",
+						"runtime": null,
+						"id": 1591400
+					},
+					{
+						"episode_number": 6,
+						"season_number": 16,
+						"name": "Pictures",
+						"air_date": "2018-10-15",
+						"runtime": null,
+						"id": 1591401
+					},
+					{
+						"episode_number": 7,
+						"season_number": 16,
+						"name": "Picnics",
+						"air_date": "2018-10-22",
+						"runtime": null,
+						"id": 1607124
+					},
+					{
+						"episode_number": 8,
+						"season_number": 16,
+						"name": "Plants",
+						"air_date": "2018-10-29",
+						"runtime": null,
+						"id": 1607125
+					},
+					{
+						"episode_number": 9,
+						"season_number": 16,
+						"name": "Pubs",
+						"air_date": "2018-12-18",
+						"runtime": null,
+						"id": 1635941
+					},
+					{
+						"episode_number": 10,
+						"season_number": 16,
+						"name": "Pain & Punishment",
+						"air_date": "2019-01-11",
+						"runtime": null,
+						"id": 1666836
+					},
+					{
+						"episode_number": 11,
+						"season_number": 16,
+						"name": "Potpourri",
+						"air_date": "2019-01-18",
+						"runtime": null,
+						"id": 1700829
+					},
+					{
+						"episode_number": 12,
+						"season_number": 16,
+						"name": "Procrastination",
+						"air_date": "2019-01-25",
+						"runtime": null,
+						"id": 1700830
+					},
+					{
+						"episode_number": 13,
+						"season_number": 16,
+						"name": "Phenomena",
+						"air_date": "2019-02-01",
+						"runtime": null,
+						"id": 1700831
+					},
+					{
+						"episode_number": 14,
+						"season_number": 16,
+						"name": "Pathological",
+						"air_date": "2019-02-08",
+						"runtime": null,
+						"id": 1700832
+					},
+					{
+						"episode_number": 15,
+						"season_number": 16,
+						"name": "Past Times",
+						"air_date": "2019-02-15",
+						"runtime": null,
+						"id": 1708629
+					},
+					{
+						"episode_number": 16,
+						"season_number": 16,
+						"name": "Post",
+						"air_date": "2019-02-22",
+						"runtime": null,
+						"id": 1717541
+					},
+					{
+						"episode_number": 17,
+						"season_number": 16,
+						"name": "VG Part One",
+						"air_date": "2019-03-01",
+						"runtime": null,
+						"id": 1749823
+					},
+					{
+						"episode_number": 18,
+						"season_number": 16,
+						"name": "VG Part Two",
+						"air_date": "2019-03-08",
+						"runtime": null,
+						"id": 1749824
+					}
+				]
+			},
+			"1554/17": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 17,
+						"name": "Quirky",
+						"air_date": "2019-09-06",
+						"runtime": null,
+						"id": 1904944
+					},
+					{
+						"episode_number": 2,
+						"season_number": 17,
+						"name": "Quintessential",
+						"air_date": "2019-09-13",
+						"runtime": null,
+						"id": 1920530
+					},
+					{
+						"episode_number": 3,
+						"season_number": 17,
+						"name": "Quarrels",
+						"air_date": "2019-09-20",
+						"runtime": null,
+						"id": 1920531
+					},
+					{
+						"episode_number": 4,
+						"season_number": 17,
+						"name": "Queasy Quacks",
+						"air_date": "2019-09-27",
+						"runtime": null,
+						"id": 1941415
+					},
+					{
+						"episode_number": 5,
+						"season_number": 17,
+						"name": "Questions and Qualifications",
+						"air_date": "2019-10-04",
+						"runtime": null,
+						"id": 1941416
+					},
+					{
+						"episode_number": 6,
+						"season_number": 17,
+						"name": "Quests (1)",
+						"air_date": "2019-10-11",
+						"runtime": null,
+						"id": 1941417
+					},
+					{
+						"episode_number": 7,
+						"season_number": 17,
+						"name": "Quests (2)",
+						"air_date": "2019-10-18",
+						"runtime": null,
+						"id": 1958073
+					},
+					{
+						"episode_number": 8,
+						"season_number": 17,
+						"name": "Qanimals",
+						"air_date": "2019-10-25",
+						"runtime": null,
+						"id": 1958074
+					},
+					{
+						"episode_number": 9,
+						"season_number": 17,
+						"name": "Quizmas",
+						"air_date": "2019-12-24",
+						"runtime": null,
+						"id": 2026036
+					},
+					{
+						"episode_number": 10,
+						"season_number": 17,
+						"name": "Quiet",
+						"air_date": "2020-01-03",
+						"runtime": null,
+						"id": 2026126
+					},
+					{
+						"episode_number": 11,
+						"season_number": 17,
+						"name": "Quaffing",
+						"air_date": "2020-01-10",
+						"runtime": null,
+						"id": 2026129
+					},
+					{
+						"episode_number": 12,
+						"season_number": 17,
+						"name": "Quagmire",
+						"air_date": "2020-01-17",
+						"runtime": null,
+						"id": 2026130
+					},
+					{
+						"episode_number": 13,
+						"season_number": 17,
+						"name": "Quills",
+						"air_date": "2020-01-24",
+						"runtime": null,
+						"id": 2061638
+					},
+					{
+						"episode_number": 14,
+						"season_number": 17,
+						"name": "Queens",
+						"air_date": "2020-01-31",
+						"runtime": null,
+						"id": 2061639
+					},
+					{
+						"episode_number": 15,
+						"season_number": 17,
+						"name": "Quantity and Quality",
+						"air_date": "2020-02-07",
+						"runtime": null,
+						"id": 2061641
+					},
+					{
+						"episode_number": 16,
+						"season_number": 17,
+						"name": "Quads and Quins",
+						"air_date": "2020-02-14",
+						"runtime": null,
+						"id": 2160370
+					},
+					{
+						"episode_number": 17,
+						"season_number": 17,
+						"name": "VG: Part I",
+						"air_date": "2020-02-21",
+						"runtime": null,
+						"id": 2160371
+					},
+					{
+						"episode_number": 18,
+						"season_number": 17,
+						"name": "VG: Part II",
+						"air_date": "2020-02-28",
+						"runtime": null,
+						"id": 2177137
+					}
+				]
+			},
+			"1554/18": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 18,
+						"name": "Rude",
+						"air_date": "2020-05-28",
+						"runtime": null,
+						"id": 2287051
+					},
+					{
+						"episode_number": 2,
+						"season_number": 18,
+						"name": "Ruff and Ready",
+						"air_date": "2020-06-04",
+						"runtime": null,
+						"id": 2287052
+					},
+					{
+						"episode_number": 3,
+						"season_number": 18,
+						"name": "Road and Rail",
+						"air_date": "2020-06-11",
+						"runtime": null,
+						"id": 2287053
+					},
+					{
+						"episode_number": 4,
+						"season_number": 18,
+						"name": "Restaurants",
+						"air_date": "2020-06-18",
+						"runtime": null,
+						"id": 2311289
+					},
+					{
+						"episode_number": 5,
+						"season_number": 18,
+						"name": "Rubbish",
+						"air_date": "2020-06-25",
+						"runtime": null,
+						"id": 2311294
+					},
+					{
+						"episode_number": 6,
+						"season_number": 18,
+						"name": "Ridiculous",
+						"air_date": "2020-07-02",
+						"runtime": null,
+						"id": 2311295
+					},
+					{
+						"episode_number": 7,
+						"season_number": 18,
+						"name": "Revolutions",
+						"air_date": "2020-07-09",
+						"runtime": null,
+						"id": 2311296
+					},
+					{
+						"episode_number": 8,
+						"season_number": 18,
+						"name": "Reflections",
+						"air_date": "2020-07-16",
+						"runtime": null,
+						"id": 2311297
+					},
+					{
+						"episode_number": 9,
+						"season_number": 18,
+						"name": "Radioactive",
+						"air_date": "2020-07-23",
+						"runtime": null,
+						"id": 2311298
+					},
+					{
+						"episode_number": 10,
+						"season_number": 18,
+						"name": "Rest & Recreation",
+						"air_date": "2020-07-30",
+						"runtime": null,
+						"id": 2311299
+					},
+					{
+						"episode_number": 11,
+						"season_number": 18,
+						"name": "Roaming",
+						"air_date": "2020-08-06",
+						"runtime": null,
+						"id": 2311300
+					},
+					{
+						"episode_number": 12,
+						"season_number": 18,
+						"name": "Rejoice! A Christmas Special",
+						"air_date": "2020-12-23",
+						"runtime": null,
+						"id": 2583864
+					},
+					{
+						"episode_number": 13,
+						"season_number": 18,
+						"name": "Rogue",
+						"air_date": "2021-01-14",
+						"runtime": null,
+						"id": 2623081
+					},
+					{
+						"episode_number": 14,
+						"season_number": 18,
+						"name": "Random",
+						"air_date": "2021-01-21",
+						"runtime": null,
+						"id": 2623082
+					},
+					{
+						"episode_number": 15,
+						"season_number": 18,
+						"name": "Rock 'n' Roll",
+						"air_date": "2021-01-28",
+						"runtime": null,
+						"id": 2624118
+					},
+					{
+						"episode_number": 16,
+						"season_number": 18,
+						"name": "R Animals",
+						"air_date": "2021-03-27",
+						"runtime": null,
+						"id": 2687077
+					}
+				]
+			},
+			"1554/19": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 19,
+						"name": "Sick",
+						"air_date": "2021-09-09",
+						"runtime": null,
+						"id": 3174994
+					},
+					{
+						"episode_number": 2,
+						"season_number": 19,
+						"name": "Secrets, Spies & Sleuths",
+						"air_date": "2021-09-16",
+						"runtime": null,
+						"id": 3181300
+					},
+					{
+						"episode_number": 3,
+						"season_number": 19,
+						"name": "Shady & Shaky",
+						"air_date": "2021-09-23",
+						"runtime": null,
+						"id": 3203301
+					},
+					{
+						"episode_number": 4,
+						"season_number": 19,
+						"name": "Sideshows, Stunts & Scavenger Hunts",
+						"air_date": "2021-09-30",
+						"runtime": null,
+						"id": 3221138
+					},
+					{
+						"episode_number": 5,
+						"season_number": 19,
+						"name": "Sugar & Spice",
+						"air_date": "2021-10-07",
+						"runtime": null,
+						"id": 3237535
+					},
+					{
+						"episode_number": 6,
+						"season_number": 19,
+						"name": "Sensational",
+						"air_date": "2021-10-14",
+						"runtime": null,
+						"id": 3251072
+					},
+					{
+						"episode_number": 7,
+						"season_number": 19,
+						"name": "Spooky",
+						"air_date": "2021-10-21",
+						"runtime": null,
+						"id": 3274348
+					},
+					{
+						"episode_number": 8,
+						"season_number": 19,
+						"name": "Seasons Greetings",
+						"air_date": "2021-12-20",
+						"runtime": null,
+						"id": 3375506
+					},
+					{
+						"episode_number": 9,
+						"season_number": 19,
+						"name": "S Animals",
+						"air_date": "2022-01-07",
+						"runtime": null,
+						"id": 3435882
+					},
+					{
+						"episode_number": 10,
+						"season_number": 19,
+						"name": "Smörgåsbord",
+						"air_date": "2022-01-14",
+						"runtime": null,
+						"id": 3435883
+					},
+					{
+						"episode_number": 11,
+						"season_number": 19,
+						"name": "Saints & Sinners",
+						"air_date": "2022-01-21",
+						"runtime": null,
+						"id": 3435884
+					},
+					{
+						"episode_number": 12,
+						"season_number": 19,
+						"name": "Silly Season",
+						"air_date": "2022-01-28",
+						"runtime": null,
+						"id": 3446443
+					},
+					{
+						"episode_number": 13,
+						"season_number": 19,
+						"name": "Sun, Sea & Sandi",
+						"air_date": "2022-02-04",
+						"runtime": null,
+						"id": 3458616
+					},
+					{
+						"episode_number": 14,
+						"season_number": 19,
+						"name": "Sexed-Up",
+						"air_date": "2022-02-11",
+						"runtime": null,
+						"id": 3470540
+					},
+					{
+						"episode_number": 15,
+						"season_number": 19,
+						"name": "VG: Part I",
+						"air_date": "2022-02-15",
+						"runtime": null,
+						"id": 3483276
+					},
+					{
+						"episode_number": 16,
+						"season_number": 19,
+						"name": "VG: Part II",
+						"air_date": "2022-02-22",
+						"runtime": null,
+						"id": 3496884
+					}
+				]
+			},
+			"1554/20": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 20,
+						"name": "Tips and Tools",
+						"air_date": "2022-11-11",
+						"runtime": 29,
+						"id": 4041887
+					},
+					{
+						"episode_number": 2,
+						"season_number": 20,
+						"name": "'T' Animals",
+						"air_date": "2022-11-18",
+						"runtime": 29,
+						"id": 4041888
+					},
+					{
+						"episode_number": 3,
+						"season_number": 20,
+						"name": "Television",
+						"air_date": "2022-11-25",
+						"runtime": 29,
+						"id": 4053932
+					},
+					{
+						"episode_number": 4,
+						"season_number": 20,
+						"name": "Thrills & Spills",
+						"air_date": "2022-12-02",
+						"runtime": 29,
+						"id": 4053933
+					},
+					{
+						"episode_number": 5,
+						"season_number": 20,
+						"name": "Testing",
+						"air_date": "2022-12-09",
+						"runtime": 29,
+						"id": 4067802
+					},
+					{
+						"episode_number": 6,
+						"season_number": 20,
+						"name": "Tricks & Treats",
+						"air_date": "2022-12-16",
+						"runtime": 29,
+						"id": 4083777
+					},
+					{
+						"episode_number": 7,
+						"season_number": 20,
+						"name": "Toys, Tinsel, and Turkeys",
+						"air_date": "2022-12-19",
+						"runtime": 44,
+						"id": 4083778
+					},
+					{
+						"episode_number": 8,
+						"season_number": 20,
+						"name": "Ticks Tax Toes",
+						"air_date": "2023-01-09",
+						"runtime": 29,
+						"id": 4093266
+					},
+					{
+						"episode_number": 9,
+						"season_number": 20,
+						"name": "Theatrical!",
+						"air_date": "2023-01-16",
+						"runtime": 29,
+						"id": 4106622
+					},
+					{
+						"episode_number": 10,
+						"season_number": 20,
+						"name": "Telling Tails",
+						"air_date": "2023-01-23",
+						"runtime": 29,
+						"id": 4140296
+					},
+					{
+						"episode_number": 11,
+						"season_number": 20,
+						"name": "Trundling",
+						"air_date": "2023-01-30",
+						"runtime": 29,
+						"id": 4155676
+					},
+					{
+						"episode_number": 12,
+						"season_number": 20,
+						"name": "This, That and the Other",
+						"air_date": "2023-02-06",
+						"runtime": 29,
+						"id": 4171846
+					},
+					{
+						"episode_number": 13,
+						"season_number": 20,
+						"name": "Tubular",
+						"air_date": "2023-02-13",
+						"runtime": 29,
+						"id": 4192125
+					},
+					{
+						"episode_number": 14,
+						"season_number": 20,
+						"name": "Tea Time",
+						"air_date": "2023-02-21",
+						"runtime": 29,
+						"id": 4206890
+					},
+					{
+						"episode_number": 15,
+						"season_number": 20,
+						"name": "VG: Part 1",
+						"air_date": "2023-02-24",
+						"runtime": 29,
+						"id": 4222503
+					},
+					{
+						"episode_number": 16,
+						"season_number": 20,
+						"name": "VG: Part 2",
+						"air_date": "2023-03-03",
+						"runtime": 29,
+						"id": 4237416
+					}
+				]
+			},
+			"1554/21": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 21,
+						"name": "All I Want For Christmas Is U",
+						"air_date": "2023-12-18",
+						"runtime": 45,
+						"id": 4968259
+					},
+					{
+						"episode_number": 2,
+						"season_number": 21,
+						"name": "Upside-Down",
+						"air_date": "2024-01-05",
+						"runtime": 44,
+						"id": 4980734
+					},
+					{
+						"episode_number": 3,
+						"season_number": 21,
+						"name": "United",
+						"air_date": "2024-01-12",
+						"runtime": 29,
+						"id": 5001087
+					},
+					{
+						"episode_number": 4,
+						"season_number": 21,
+						"name": "Unsavoury",
+						"air_date": "2024-01-19",
+						"runtime": 44,
+						"id": 5047784
+					},
+					{
+						"episode_number": 5,
+						"season_number": 21,
+						"name": "Uncle Sam",
+						"air_date": "2024-01-26",
+						"runtime": 44,
+						"id": 5068886
+					},
+					{
+						"episode_number": 6,
+						"season_number": 21,
+						"name": "Ultras",
+						"air_date": "2024-02-06",
+						"runtime": 44,
+						"id": 5101048
+					},
+					{
+						"episode_number": 7,
+						"season_number": 21,
+						"name": "Ufology",
+						"air_date": "2024-02-13",
+						"runtime": 43,
+						"id": 5113611
+					},
+					{
+						"episode_number": 8,
+						"season_number": 21,
+						"name": "'U' Animals",
+						"air_date": "2024-02-20",
+						"runtime": 44,
+						"id": 5133000
+					},
+					{
+						"episode_number": 9,
+						"season_number": 21,
+						"name": "Unrelated",
+						"air_date": "2024-02-27",
+						"runtime": 44,
+						"id": 5147467
+					},
+					{
+						"episode_number": 10,
+						"season_number": 21,
+						"name": "Upsadaisy",
+						"air_date": "2024-03-26",
+						"runtime": 44,
+						"id": 5214111
+					},
+					{
+						"episode_number": 11,
+						"season_number": 21,
+						"name": "Underthings",
+						"air_date": "2024-04-02",
+						"runtime": 44,
+						"id": 5224446
+					},
+					{
+						"episode_number": 12,
+						"season_number": 21,
+						"name": "University",
+						"air_date": "2024-04-09",
+						"runtime": 44,
+						"id": 5237351
+					},
+					{
+						"episode_number": 13,
+						"season_number": 21,
+						"name": "Upbringing",
+						"air_date": "2024-04-16",
+						"runtime": 44,
+						"id": 5258761
+					},
+					{
+						"episode_number": 14,
+						"season_number": 21,
+						"name": "Underground and Underwater",
+						"air_date": "2024-04-23",
+						"runtime": 29,
+						"id": 5272115
+					},
+					{
+						"episode_number": 15,
+						"season_number": 21,
+						"name": "Ulex",
+						"air_date": "2024-04-30",
+						"runtime": 44,
+						"id": 5288954
+					},
+					{
+						"episode_number": 16,
+						"season_number": 21,
+						"name": "VG: Part 1",
+						"air_date": "2024-05-10",
+						"runtime": 28,
+						"id": 5310171
+					},
+					{
+						"episode_number": 17,
+						"season_number": 21,
+						"name": "VG: Part 2",
+						"air_date": "2024-05-17",
+						"runtime": 29,
+						"id": 5317964
+					}
+				]
+			},
+			"1554/22": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 22,
+						"name": "Voyaging",
+						"air_date": "2024-10-22",
+						"runtime": 44,
+						"id": 5662836
+					},
+					{
+						"episode_number": 2,
+						"season_number": 22,
+						"name": "Vocal",
+						"air_date": "2024-10-29",
+						"runtime": 44,
+						"id": 5682764
+					},
+					{
+						"episode_number": 3,
+						"season_number": 22,
+						"name": "Very Varied",
+						"air_date": "2024-11-05",
+						"runtime": 44,
+						"id": 5696651
+					},
+					{
+						"episode_number": 4,
+						"season_number": 22,
+						"name": "Vets",
+						"air_date": "2024-11-12",
+						"runtime": 44,
+						"id": 5715432
+					},
+					{
+						"episode_number": 5,
+						"season_number": 22,
+						"name": "Visual",
+						"air_date": "2024-11-19",
+						"runtime": 44,
+						"id": 5728492
+					},
+					{
+						"episode_number": 6,
+						"season_number": 22,
+						"name": "Volatile",
+						"air_date": "2024-11-26",
+						"runtime": 44,
+						"id": 5744410
+					},
+					{
+						"episode_number": 7,
+						"season_number": 22,
+						"name": "Visionaries",
+						"air_date": "2024-12-03",
+						"runtime": 44,
+						"id": 5759653
+					},
+					{
+						"episode_number": 8,
+						"season_number": 22,
+						"name": "Viral",
+						"air_date": "2024-12-10",
+						"runtime": 44,
+						"id": 5773465
+					},
+					{
+						"episode_number": 9,
+						"season_number": 22,
+						"name": "Variety",
+						"air_date": "2024-12-17",
+						"runtime": 44,
+						"id": 5792777
+					},
+					{
+						"episode_number": 10,
+						"season_number": 22,
+						"name": "Vulgar",
+						"air_date": "2024-12-31",
+						"runtime": 44,
+						"id": 5812765
+					},
+					{
+						"episode_number": 11,
+						"season_number": 22,
+						"name": "Vintage",
+						"air_date": "2025-01-07",
+						"runtime": 44,
+						"id": 5834897
+					},
+					{
+						"episode_number": 12,
+						"season_number": 22,
+						"name": "Vices and Virtues",
+						"air_date": "2025-01-14",
+						"runtime": 44,
+						"id": 5852522
+					},
+					{
+						"episode_number": 13,
+						"season_number": 22,
+						"name": "Veggies",
+						"air_date": "2025-01-21",
+						"runtime": 44,
+						"id": 5887737
+					},
+					{
+						"episode_number": 14,
+						"season_number": 22,
+						"name": "Victory",
+						"air_date": "2025-02-25",
+						"runtime": 44,
+						"id": 5908765
+					},
+					{
+						"episode_number": 15,
+						"season_number": 22,
+						"name": "VG: Part 1",
+						"air_date": "2025-02-10",
+						"runtime": 29,
+						"id": 5950520
+					},
+					{
+						"episode_number": 16,
+						"season_number": 22,
+						"name": "VG: Part 2",
+						"air_date": "2025-02-17",
+						"runtime": 29,
+						"id": 5965722
+					}
+				]
+			},
+			"1554/23": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 23,
+						"name": "Wales, Whales and Wails",
+						"air_date": "2025-10-21",
+						"runtime": 45,
+						"id": 6601135
+					},
+					{
+						"episode_number": 2,
+						"season_number": 23,
+						"name": "Wings and Wheels",
+						"air_date": "2025-10-28",
+						"runtime": 45,
+						"id": 6607700
+					},
+					{
+						"episode_number": 3,
+						"season_number": 23,
+						"name": "Weaponry",
+						"air_date": "2025-11-04",
+						"runtime": 44,
+						"id": 6622719
+					},
+					{
+						"episode_number": 4,
+						"season_number": 23,
+						"name": "Wavey",
+						"air_date": "2025-11-11",
+						"runtime": 45,
+						"id": 6656812
+					},
+					{
+						"episode_number": 5,
+						"season_number": 23,
+						"name": "Wild West",
+						"air_date": "2025-11-25",
+						"runtime": 45,
+						"id": 6674719
+					},
+					{
+						"episode_number": 6,
+						"season_number": 23,
+						"name": "Wooing",
+						"air_date": "2025-12-02",
+						"runtime": 45,
+						"id": 6687078
+					},
+					{
+						"episode_number": 7,
+						"season_number": 23,
+						"name": "Who What Why?",
+						"air_date": "2025-12-09",
+						"runtime": 44,
+						"id": 6700574
+					},
+					{
+						"episode_number": 8,
+						"season_number": 23,
+						"name": "Weird and Wonderful",
+						"air_date": "2025-12-16",
+						"runtime": 45,
+						"id": 6715229
+					},
+					{
+						"episode_number": 9,
+						"season_number": 23,
+						"name": "Winter Wonderland",
+						"air_date": "2025-12-23",
+						"runtime": 45,
+						"id": 6738079
+					},
+					{
+						"episode_number": 10,
+						"season_number": 23,
+						"name": "‘W’ Animals",
+						"air_date": "2026-01-06",
+						"runtime": 45,
+						"id": 6767039
+					},
+					{
+						"episode_number": 11,
+						"season_number": 23,
+						"name": "Wet and Windy",
+						"air_date": "2026-01-13",
+						"runtime": 44,
+						"id": 6770943
+					},
+					{
+						"episode_number": 12,
+						"season_number": 23,
+						"name": "Willy Nilly",
+						"air_date": "2026-01-20",
+						"runtime": 45,
+						"id": 6823823
+					},
+					{
+						"episode_number": 13,
+						"season_number": 23,
+						"name": "Wordmongery",
+						"air_date": "2026-01-27",
+						"runtime": 44,
+						"id": 6849074
+					},
+					{
+						"episode_number": 14,
+						"season_number": 23,
+						"name": "Whatnots",
+						"air_date": "2026-02-03",
+						"runtime": 45,
+						"id": 6873312
+					},
+					{
+						"episode_number": 15,
+						"season_number": 23,
+						"name": "VG: Part 1",
+						"air_date": "2026-02-10",
+						"runtime": 29,
+						"id": 6894599
+					},
+					{
+						"episode_number": 16,
+						"season_number": 23,
+						"name": "VG: Part 2",
+						"air_date": "2026-02-17",
+						"runtime": 30,
+						"id": 6915296
+					}
+				]
+			},
+			"1554/24": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 24,
+						"name": "XL XS XL",
+						"air_date": "2026-11-03",
+						"runtime": 45,
+						"id": 8016945
+					},
+					{
+						"episode_number": 2,
+						"season_number": 24,
+						"name": "'X' Materials",
+						"air_date": "2026-11-10",
+						"runtime": 44,
+						"id": 8026458
+					},
+					{
+						"episode_number": 3,
+						"season_number": 24,
+						"name": "X-Rated",
+						"air_date": "2026-11-24",
+						"runtime": 44,
+						"id": 8096967
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt0380136": null
+		},
+		"tvdbEpisodes": {
+			"72716": {
+				"data": {
+					"episodes": [
+						{
+							"id": 337284,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "Pilot",
+							"aired": "2006-12-06",
+							"runtime": 30
+						},
+						{
+							"id": 3847811,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": "Comic Relief 24 Hour Panel People Special",
+							"aired": "2011-03-06",
+							"runtime": 30
+						},
+						{
+							"id": 4167141,
+							"seasonNumber": 0,
+							"number": 3,
+							"name": "The Making of QI",
+							"aired": "2011-09-10",
+							"runtime": 30
+						},
+						{
+							"id": 4295800,
+							"seasonNumber": 0,
+							"number": 4,
+							"name": "Sport Relief Special 2012",
+							"aired": "2012-03-23",
+							"runtime": 7
+						},
+						{
+							"id": 7761646,
+							"seasonNumber": 0,
+							"number": 5,
+							"name": "VG: Part 1 (Series R)",
+							"aired": "2020-08-13",
+							"runtime": 29
+						},
+						{
+							"id": 8165330,
+							"seasonNumber": 0,
+							"number": 6,
+							"name": "VG: Part 2 (Series R)",
+							"aired": "2021-02-04",
+							"runtime": 29
+						},
+						{
+							"id": 8983166,
+							"seasonNumber": 0,
+							"number": 7,
+							"name": "VG: Part I (Series S)",
+							"aired": "2022-02-15",
+							"runtime": 29
+						},
+						{
+							"id": 8997094,
+							"seasonNumber": 0,
+							"number": 8,
+							"name": "VG: Part II (Series S)",
+							"aired": "2022-02-22",
+							"runtime": 29
+						},
+						{
+							"id": 9092156,
+							"seasonNumber": 0,
+							"number": 9,
+							"name": "Comic Relief 2022 Special",
+							"aired": "2022-03-18",
+							"runtime": 4
+						},
+						{
+							"id": 9610768,
+							"seasonNumber": 0,
+							"number": 10,
+							"name": "VG: Part I (Series T)",
+							"aired": "2023-02-24",
+							"runtime": 29
+						},
+						{
+							"id": 9624678,
+							"seasonNumber": 0,
+							"number": 11,
+							"name": "VG: Part 2 (Series T)",
+							"aired": "2023-03-03",
+							"runtime": 29
+						},
+						{
+							"id": 10477685,
+							"seasonNumber": 0,
+							"number": 12,
+							"name": "VG: Part 1 (Series U)",
+							"aired": "2024-05-10",
+							"runtime": 28
+						},
+						{
+							"id": 10479833,
+							"seasonNumber": 0,
+							"number": 13,
+							"name": "VG: Part 2 (Series U)",
+							"aired": "2024-05-17",
+							"runtime": 29
+						},
+						{
+							"id": 10501566,
+							"seasonNumber": 0,
+							"number": 14,
+							"name": "Series U New Guest Initiation",
+							"aired": null,
+							"runtime": 4
+						},
+						{
+							"id": 94494,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "Adam",
+							"aired": "2003-09-11",
+							"runtime": 30
+						},
+						{
+							"id": 94495,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "Astronomy",
+							"aired": "2003-09-18",
+							"runtime": 30
+						},
+						{
+							"id": 94496,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "Aquatic Animals",
+							"aired": "2003-09-25",
+							"runtime": 30
+						},
+						{
+							"id": 94497,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "Atoms",
+							"aired": "2003-10-02",
+							"runtime": 30
+						},
+						{
+							"id": 94498,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "Advertising",
+							"aired": "2003-10-09",
+							"runtime": 30
+						},
+						{
+							"id": 94499,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "Antidotes",
+							"aired": "2003-10-16",
+							"runtime": 30
+						},
+						{
+							"id": 94500,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "Arthropods",
+							"aired": "2003-10-23",
+							"runtime": 30
+						},
+						{
+							"id": 94501,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "Albania",
+							"aired": "2003-10-30",
+							"runtime": 30
+						},
+						{
+							"id": 94502,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "Antelopes",
+							"aired": "2003-11-06",
+							"runtime": 30
+						},
+						{
+							"id": 94503,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "Aviation",
+							"aired": "2003-11-13",
+							"runtime": 30
+						},
+						{
+							"id": 94504,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "Arts",
+							"aired": "2003-11-20",
+							"runtime": 30
+						},
+						{
+							"id": 94505,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "Advent (Christmas Special)",
+							"aired": "2003-12-25",
+							"runtime": 30
+						},
+						{
+							"id": 94506,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "Blue",
+							"aired": "2004-10-08",
+							"runtime": 30
+						},
+						{
+							"id": 94507,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "Birds",
+							"aired": "2004-10-08",
+							"runtime": 30
+						},
+						{
+							"id": 94508,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "Bombs",
+							"aired": "2004-10-15",
+							"runtime": 30
+						},
+						{
+							"id": 94509,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "Bible",
+							"aired": "2004-10-22",
+							"runtime": 30
+						},
+						{
+							"id": 94510,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "Bears",
+							"aired": "2004-10-29",
+							"runtime": 30
+						},
+						{
+							"id": 94511,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "Beavers",
+							"aired": "2004-11-05",
+							"runtime": 30
+						},
+						{
+							"id": 332114,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "Biscuits",
+							"aired": "2004-11-12",
+							"runtime": 30
+						},
+						{
+							"id": 332115,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "Bees",
+							"aired": "2004-11-19",
+							"runtime": 30
+						},
+						{
+							"id": 332116,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "Bats",
+							"aired": "2004-11-26",
+							"runtime": 30
+						},
+						{
+							"id": 332117,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "Bills",
+							"aired": "2004-12-03",
+							"runtime": 30
+						},
+						{
+							"id": 332118,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "Beats",
+							"aired": "2004-12-10",
+							"runtime": 30
+						},
+						{
+							"id": 332119,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "Birth (Christmas Special)",
+							"aired": "2004-12-17",
+							"runtime": 30
+						},
+						{
+							"id": 332190,
+							"seasonNumber": 3,
+							"number": 1,
+							"name": "Campanology",
+							"aired": "2005-09-30",
+							"runtime": 30
+						},
+						{
+							"id": 332191,
+							"seasonNumber": 3,
+							"number": 2,
+							"name": "Cummingtonite",
+							"aired": "2005-09-30",
+							"runtime": 30
+						},
+						{
+							"id": 332192,
+							"seasonNumber": 3,
+							"number": 3,
+							"name": "Common Knowledge",
+							"aired": "2005-10-07",
+							"runtime": 30
+						},
+						{
+							"id": 332193,
+							"seasonNumber": 3,
+							"number": 4,
+							"name": "Cheating",
+							"aired": "2005-10-14",
+							"runtime": 30
+						},
+						{
+							"id": 332194,
+							"seasonNumber": 3,
+							"number": 5,
+							"name": "Cat's Eyes",
+							"aired": "2005-10-21",
+							"runtime": 30
+						},
+						{
+							"id": 332195,
+							"seasonNumber": 3,
+							"number": 6,
+							"name": "Cockneys",
+							"aired": "2005-10-28",
+							"runtime": 30
+						},
+						{
+							"id": 332196,
+							"seasonNumber": 3,
+							"number": 7,
+							"name": "Constellations",
+							"aired": "2005-11-04",
+							"runtime": 30
+						},
+						{
+							"id": 332197,
+							"seasonNumber": 3,
+							"number": 8,
+							"name": "Corby",
+							"aired": "2005-11-11",
+							"runtime": 30
+						},
+						{
+							"id": 332198,
+							"seasonNumber": 3,
+							"number": 9,
+							"name": "Creatures",
+							"aired": "2005-11-18",
+							"runtime": 30
+						},
+						{
+							"id": 332199,
+							"seasonNumber": 3,
+							"number": 10,
+							"name": "Cleve Crudgington",
+							"aired": "2005-11-25",
+							"runtime": 30
+						},
+						{
+							"id": 332200,
+							"seasonNumber": 3,
+							"number": 11,
+							"name": "Carnival",
+							"aired": "2005-12-02",
+							"runtime": 30
+						},
+						{
+							"id": 332201,
+							"seasonNumber": 3,
+							"number": 12,
+							"name": "Combustion",
+							"aired": "2005-12-09",
+							"runtime": 30
+						},
+						{
+							"id": 312489,
+							"seasonNumber": 4,
+							"number": 1,
+							"name": "Danger",
+							"aired": "2006-09-29",
+							"runtime": 30
+						},
+						{
+							"id": 312490,
+							"seasonNumber": 4,
+							"number": 2,
+							"name": "Discoveries",
+							"aired": "2006-10-06",
+							"runtime": 30
+						},
+						{
+							"id": 312491,
+							"seasonNumber": 4,
+							"number": 3,
+							"name": "Dogs",
+							"aired": "2006-10-13",
+							"runtime": 30
+						},
+						{
+							"id": 312492,
+							"seasonNumber": 4,
+							"number": 4,
+							"name": "Dictionaries",
+							"aired": "2006-10-20",
+							"runtime": 30
+						},
+						{
+							"id": 312493,
+							"seasonNumber": 4,
+							"number": 5,
+							"name": "Death (Halloween Special)",
+							"aired": "2006-10-27",
+							"runtime": 30
+						},
+						{
+							"id": 312494,
+							"seasonNumber": 4,
+							"number": 6,
+							"name": "Drinks",
+							"aired": "2006-11-03",
+							"runtime": 30
+						},
+						{
+							"id": 312495,
+							"seasonNumber": 4,
+							"number": 7,
+							"name": "Differences",
+							"aired": "2006-11-10",
+							"runtime": 30
+						},
+						{
+							"id": 312496,
+							"seasonNumber": 4,
+							"number": 8,
+							"name": "Descendants (Children in Need Special)",
+							"aired": "2006-11-17",
+							"runtime": 30
+						},
+						{
+							"id": 312497,
+							"seasonNumber": 4,
+							"number": 9,
+							"name": "Doves",
+							"aired": "2006-11-24",
+							"runtime": 30
+						},
+						{
+							"id": 312498,
+							"seasonNumber": 4,
+							"number": 10,
+							"name": "Divination",
+							"aired": "2006-12-01",
+							"runtime": 30
+						},
+						{
+							"id": 312499,
+							"seasonNumber": 4,
+							"number": 11,
+							"name": "Denial & Deprivation",
+							"aired": "2006-12-08",
+							"runtime": 30
+						},
+						{
+							"id": 312500,
+							"seasonNumber": 4,
+							"number": 12,
+							"name": "Domesticity",
+							"aired": "2006-12-15",
+							"runtime": 30
+						},
+						{
+							"id": 312501,
+							"seasonNumber": 4,
+							"number": 13,
+							"name": "December (Christmas Special)",
+							"aired": "2006-12-22",
+							"runtime": 30
+						},
+						{
+							"id": 336189,
+							"seasonNumber": 5,
+							"number": 1,
+							"name": "Engineering",
+							"aired": "2007-09-21",
+							"runtime": 30
+						},
+						{
+							"id": 336190,
+							"seasonNumber": 5,
+							"number": 2,
+							"name": "Electricity",
+							"aired": "2007-09-21",
+							"runtime": 30
+						},
+						{
+							"id": 337285,
+							"seasonNumber": 5,
+							"number": 3,
+							"name": "Eating",
+							"aired": "2007-09-28",
+							"runtime": 30
+						},
+						{
+							"id": 337435,
+							"seasonNumber": 5,
+							"number": 4,
+							"name": "Exploration",
+							"aired": "2007-10-06",
+							"runtime": 30
+						},
+						{
+							"id": 338077,
+							"seasonNumber": 5,
+							"number": 5,
+							"name": "Europe",
+							"aired": "2007-10-12",
+							"runtime": 30
+						},
+						{
+							"id": 338956,
+							"seasonNumber": 5,
+							"number": 6,
+							"name": "Everything, etc.",
+							"aired": "2007-10-19",
+							"runtime": 30
+						},
+						{
+							"id": 339505,
+							"seasonNumber": 5,
+							"number": 7,
+							"name": "Espionage",
+							"aired": "2007-10-26",
+							"runtime": 30
+						},
+						{
+							"id": 340465,
+							"seasonNumber": 5,
+							"number": 8,
+							"name": "Eyes & Ears",
+							"aired": "2007-11-02",
+							"runtime": 30
+						},
+						{
+							"id": 341621,
+							"seasonNumber": 5,
+							"number": 9,
+							"name": "Entertainment",
+							"aired": "2007-11-09",
+							"runtime": 30
+						},
+						{
+							"id": 342643,
+							"seasonNumber": 5,
+							"number": 10,
+							"name": "England",
+							"aired": "2007-11-16",
+							"runtime": 30
+						},
+						{
+							"id": 343319,
+							"seasonNumber": 5,
+							"number": 11,
+							"name": "Endings",
+							"aired": "2007-11-23",
+							"runtime": 30
+						},
+						{
+							"id": 344741,
+							"seasonNumber": 5,
+							"number": 12,
+							"name": "Empire",
+							"aired": "2007-12-07",
+							"runtime": 30
+						},
+						{
+							"id": 345249,
+							"seasonNumber": 5,
+							"number": 13,
+							"name": "Elephants",
+							"aired": "2007-12-14",
+							"runtime": 30
+						},
+						{
+							"id": 404877,
+							"seasonNumber": 6,
+							"number": 1,
+							"name": "Families (Children in Need Special)",
+							"aired": "2008-11-14",
+							"runtime": 30
+						},
+						{
+							"id": 404878,
+							"seasonNumber": 6,
+							"number": 2,
+							"name": "Fire and Freezing (Christmas Special)",
+							"aired": "2008-12-22",
+							"runtime": 30
+						},
+						{
+							"id": 404889,
+							"seasonNumber": 6,
+							"number": 3,
+							"name": "Flotsam and Jetsam",
+							"aired": "2009-01-09",
+							"runtime": 30
+						},
+						{
+							"id": 404884,
+							"seasonNumber": 6,
+							"number": 4,
+							"name": "Fight or Flight",
+							"aired": "2009-01-16",
+							"runtime": 30
+						},
+						{
+							"id": 404883,
+							"seasonNumber": 6,
+							"number": 5,
+							"name": "France",
+							"aired": "2009-01-23",
+							"runtime": 30
+						},
+						{
+							"id": 404882,
+							"seasonNumber": 6,
+							"number": 6,
+							"name": "Fakes and Frauds",
+							"aired": "2009-01-30",
+							"runtime": 30
+						},
+						{
+							"id": 404879,
+							"seasonNumber": 6,
+							"number": 7,
+							"name": "Fingers and Fumbs",
+							"aired": "2009-02-06",
+							"runtime": 30
+						},
+						{
+							"id": 404887,
+							"seasonNumber": 6,
+							"number": 8,
+							"name": "Fashion",
+							"aired": "2009-02-13",
+							"runtime": 30
+						},
+						{
+							"id": 404881,
+							"seasonNumber": 6,
+							"number": 9,
+							"name": "The Future",
+							"aired": "2009-02-20",
+							"runtime": 30
+						},
+						{
+							"id": 404885,
+							"seasonNumber": 6,
+							"number": 10,
+							"name": "Flora and Fauna",
+							"aired": "2009-02-27",
+							"runtime": 30
+						},
+						{
+							"id": 404888,
+							"seasonNumber": 6,
+							"number": 11,
+							"name": "Film",
+							"aired": "2009-03-06",
+							"runtime": 30
+						},
+						{
+							"id": 404886,
+							"seasonNumber": 6,
+							"number": 12,
+							"name": "Food",
+							"aired": "2009-03-20",
+							"runtime": 30
+						},
+						{
+							"id": 1326071,
+							"seasonNumber": 7,
+							"number": 1,
+							"name": "Gardens",
+							"aired": "2009-11-26",
+							"runtime": 30
+						},
+						{
+							"id": 1326081,
+							"seasonNumber": 7,
+							"number": 2,
+							"name": "G Animals",
+							"aired": "2009-12-03",
+							"runtime": 30
+						},
+						{
+							"id": 1326091,
+							"seasonNumber": 7,
+							"number": 3,
+							"name": "Games",
+							"aired": "2009-12-10",
+							"runtime": 30
+						},
+						{
+							"id": 1326101,
+							"seasonNumber": 7,
+							"number": 4,
+							"name": "Geography",
+							"aired": "2009-12-17",
+							"runtime": 30
+						},
+						{
+							"id": 1326111,
+							"seasonNumber": 7,
+							"number": 5,
+							"name": "Groovy (Christmas Special)",
+							"aired": "2009-12-24",
+							"runtime": 30
+						},
+						{
+							"id": 1326121,
+							"seasonNumber": 7,
+							"number": 6,
+							"name": "Genius",
+							"aired": "2010-01-01",
+							"runtime": 30
+						},
+						{
+							"id": 1393571,
+							"seasonNumber": 7,
+							"number": 7,
+							"name": "Girls and Boys",
+							"aired": "2010-01-08",
+							"runtime": 30
+						},
+						{
+							"id": 1393661,
+							"seasonNumber": 7,
+							"number": 8,
+							"name": "Germany",
+							"aired": "2010-01-15",
+							"runtime": 30
+						},
+						{
+							"id": 1393641,
+							"seasonNumber": 7,
+							"number": 9,
+							"name": "Gallimaufrey",
+							"aired": "2010-01-22",
+							"runtime": 30
+						},
+						{
+							"id": 1393701,
+							"seasonNumber": 7,
+							"number": 10,
+							"name": "Greats",
+							"aired": "2010-01-29",
+							"runtime": 30
+						},
+						{
+							"id": 1393561,
+							"seasonNumber": 7,
+							"number": 11,
+							"name": "Gifts",
+							"aired": "2010-02-05",
+							"runtime": 30
+						},
+						{
+							"id": 1393681,
+							"seasonNumber": 7,
+							"number": 12,
+							"name": "Gravity",
+							"aired": "2010-02-12",
+							"runtime": 30
+						},
+						{
+							"id": 1393671,
+							"seasonNumber": 7,
+							"number": 13,
+							"name": "Gothic",
+							"aired": "2010-02-19",
+							"runtime": 30
+						},
+						{
+							"id": 1393551,
+							"seasonNumber": 7,
+							"number": 14,
+							"name": "Greeks",
+							"aired": "2010-03-05",
+							"runtime": 30
+						},
+						{
+							"id": 1393541,
+							"seasonNumber": 7,
+							"number": 15,
+							"name": "Green",
+							"aired": "2010-03-26",
+							"runtime": 30
+						},
+						{
+							"id": 1393581,
+							"seasonNumber": 7,
+							"number": 16,
+							"name": "Geometry",
+							"aired": "2010-04-02",
+							"runtime": 30
+						},
+						{
+							"id": 2019451,
+							"seasonNumber": 7,
+							"number": 17,
+							"name": "VG Part One",
+							"aired": "2010-04-05",
+							"runtime": 30
+						},
+						{
+							"id": 2075361,
+							"seasonNumber": 7,
+							"number": 18,
+							"name": "VG Part Two",
+							"aired": "2010-04-16",
+							"runtime": 30
+						},
+						{
+							"id": 2729321,
+							"seasonNumber": 8,
+							"number": 1,
+							"name": "Hodge Podge",
+							"aired": "2010-09-17",
+							"runtime": 30
+						},
+						{
+							"id": 2729271,
+							"seasonNumber": 8,
+							"number": 2,
+							"name": "Hanatomy",
+							"aired": "2010-09-24",
+							"runtime": 30
+						},
+						{
+							"id": 2729371,
+							"seasonNumber": 8,
+							"number": 3,
+							"name": "Hoaxes",
+							"aired": "2010-10-01",
+							"runtime": 30
+						},
+						{
+							"id": 2729261,
+							"seasonNumber": 8,
+							"number": 4,
+							"name": "Humans",
+							"aired": "2010-10-08",
+							"runtime": 30
+						},
+						{
+							"id": 2729281,
+							"seasonNumber": 8,
+							"number": 5,
+							"name": "H Animals",
+							"aired": "2010-10-15",
+							"runtime": 30
+						},
+						{
+							"id": 2729291,
+							"seasonNumber": 8,
+							"number": 6,
+							"name": "Happiness",
+							"aired": "2010-10-22",
+							"runtime": 30
+						},
+						{
+							"id": 2729361,
+							"seasonNumber": 8,
+							"number": 7,
+							"name": "Horrible (Halloween Special)",
+							"aired": "2010-10-29",
+							"runtime": 30
+						},
+						{
+							"id": 2729391,
+							"seasonNumber": 8,
+							"number": 8,
+							"name": "Hypothetical",
+							"aired": "2010-11-05",
+							"runtime": 30
+						},
+						{
+							"id": 2729301,
+							"seasonNumber": 8,
+							"number": 9,
+							"name": "House and Home",
+							"aired": "2010-11-12",
+							"runtime": 30
+						},
+						{
+							"id": 2729401,
+							"seasonNumber": 8,
+							"number": 10,
+							"name": "Health and Safety",
+							"aired": "2010-11-26",
+							"runtime": 30
+						},
+						{
+							"id": 2729341,
+							"seasonNumber": 8,
+							"number": 11,
+							"name": "Highs and Lows",
+							"aired": "2010-12-03",
+							"runtime": 30
+						},
+						{
+							"id": 2729411,
+							"seasonNumber": 8,
+							"number": 12,
+							"name": "Horses and Hunting",
+							"aired": "2010-12-10",
+							"runtime": 30
+						},
+						{
+							"id": 2729311,
+							"seasonNumber": 8,
+							"number": 13,
+							"name": "Holidays",
+							"aired": "2010-12-17",
+							"runtime": 30
+						},
+						{
+							"id": 2729421,
+							"seasonNumber": 8,
+							"number": 14,
+							"name": "Hocus Pocus (Christmas Special)",
+							"aired": "2010-12-24",
+							"runtime": 30
+						},
+						{
+							"id": 2729331,
+							"seasonNumber": 8,
+							"number": 15,
+							"name": "Hypnosis, Hallucinations and Hysteria",
+							"aired": "2011-01-07",
+							"runtime": 30
+						},
+						{
+							"id": 2729351,
+							"seasonNumber": 8,
+							"number": 16,
+							"name": "History",
+							"aired": "2011-01-14",
+							"runtime": 30
+						},
+						{
+							"id": 4085653,
+							"seasonNumber": 8,
+							"number": 17,
+							"name": "VG Part One",
+							"aired": "2011-04-25",
+							"runtime": 30
+						},
+						{
+							"id": 4086945,
+							"seasonNumber": 8,
+							"number": 18,
+							"name": "VG Part Two",
+							"aired": "2011-05-02",
+							"runtime": 30
+						},
+						{
+							"id": 4160185,
+							"seasonNumber": 9,
+							"number": 1,
+							"name": "I-Spy",
+							"aired": "2011-09-09",
+							"runtime": 30
+						},
+						{
+							"id": 4166498,
+							"seasonNumber": 9,
+							"number": 2,
+							"name": "International",
+							"aired": "2011-09-16",
+							"runtime": 30
+						},
+						{
+							"id": 4166642,
+							"seasonNumber": 9,
+							"number": 3,
+							"name": "Imbroglio",
+							"aired": "2011-09-23",
+							"runtime": 30
+						},
+						{
+							"id": 4175249,
+							"seasonNumber": 9,
+							"number": 4,
+							"name": "Indecision",
+							"aired": "2011-09-30",
+							"runtime": 30
+						},
+						{
+							"id": 4181225,
+							"seasonNumber": 9,
+							"number": 5,
+							"name": "Invertebrates",
+							"aired": "2011-10-07",
+							"runtime": 30
+						},
+						{
+							"id": 4184629,
+							"seasonNumber": 9,
+							"number": 6,
+							"name": "Inventive",
+							"aired": "2011-10-14",
+							"runtime": 30
+						},
+						{
+							"id": 4185101,
+							"seasonNumber": 9,
+							"number": 7,
+							"name": "Incomprehensible",
+							"aired": "2011-10-21",
+							"runtime": 30
+						},
+						{
+							"id": 4185102,
+							"seasonNumber": 9,
+							"number": 8,
+							"name": "Inequality",
+							"aired": "2011-10-28",
+							"runtime": 30
+						},
+						{
+							"id": 4191669,
+							"seasonNumber": 9,
+							"number": 9,
+							"name": "Illness",
+							"aired": "2011-11-04",
+							"runtime": 30
+						},
+						{
+							"id": 4191670,
+							"seasonNumber": 9,
+							"number": 10,
+							"name": "Inland Revenue",
+							"aired": "2011-11-11",
+							"runtime": 30
+						},
+						{
+							"id": 4207717,
+							"seasonNumber": 9,
+							"number": 11,
+							"name": "Infantile",
+							"aired": "2011-11-18",
+							"runtime": 30
+						},
+						{
+							"id": 4191672,
+							"seasonNumber": 9,
+							"number": 12,
+							"name": "Illumination",
+							"aired": "2011-11-25",
+							"runtime": 30
+						},
+						{
+							"id": 4191673,
+							"seasonNumber": 9,
+							"number": 13,
+							"name": "Intelligence",
+							"aired": "2011-12-02",
+							"runtime": 30
+						},
+						{
+							"id": 4219803,
+							"seasonNumber": 9,
+							"number": 14,
+							"name": "VG Part 1",
+							"aired": "2011-12-16",
+							"runtime": 30
+						},
+						{
+							"id": 4219804,
+							"seasonNumber": 9,
+							"number": 15,
+							"name": "VG Part 2",
+							"aired": "2011-12-23",
+							"runtime": 30
+						},
+						{
+							"id": 4199532,
+							"seasonNumber": 9,
+							"number": 16,
+							"name": "Ice",
+							"aired": "2011-12-29",
+							"runtime": 30
+						},
+						{
+							"id": 4191692,
+							"seasonNumber": 9,
+							"number": 17,
+							"name": "Immortal Bard",
+							"aired": "2012-04-27",
+							"runtime": 30
+						},
+						{
+							"id": 4191691,
+							"seasonNumber": 9,
+							"number": 18,
+							"name": "Idleness",
+							"aired": "2012-05-04",
+							"runtime": 30
+						},
+						{
+							"id": 4332064,
+							"seasonNumber": 10,
+							"number": 1,
+							"name": "Jargon",
+							"aired": "2012-09-14",
+							"runtime": 30
+						},
+						{
+							"id": 4358251,
+							"seasonNumber": 10,
+							"number": 2,
+							"name": "Jam, Jelly and Juice",
+							"aired": "2012-09-21",
+							"runtime": 30
+						},
+						{
+							"id": 4398156,
+							"seasonNumber": 10,
+							"number": 3,
+							"name": "Journeys",
+							"aired": "2012-09-28",
+							"runtime": 30
+						},
+						{
+							"id": 4332065,
+							"seasonNumber": 10,
+							"number": 4,
+							"name": "Jack and Jill",
+							"aired": "2012-10-05",
+							"runtime": 30
+						},
+						{
+							"id": 4358242,
+							"seasonNumber": 10,
+							"number": 5,
+							"name": "J-Places",
+							"aired": "2012-10-12",
+							"runtime": 30
+						},
+						{
+							"id": 4332066,
+							"seasonNumber": 10,
+							"number": 6,
+							"name": "Joints",
+							"aired": "2012-10-19",
+							"runtime": 30
+						},
+						{
+							"id": 4358230,
+							"seasonNumber": 10,
+							"number": 7,
+							"name": "Journalism",
+							"aired": "2012-10-26",
+							"runtime": 30
+						},
+						{
+							"id": 4358246,
+							"seasonNumber": 10,
+							"number": 8,
+							"name": "Jumble",
+							"aired": "2012-11-02",
+							"runtime": 30
+						},
+						{
+							"id": 4358235,
+							"seasonNumber": 10,
+							"number": 9,
+							"name": "Jeopardy",
+							"aired": "2012-11-09",
+							"runtime": 30
+						},
+						{
+							"id": 4358237,
+							"seasonNumber": 10,
+							"number": 10,
+							"name": "Jungles",
+							"aired": "2012-11-23",
+							"runtime": 30
+						},
+						{
+							"id": 4358239,
+							"seasonNumber": 10,
+							"number": 11,
+							"name": "Jumpers",
+							"aired": "2012-11-30",
+							"runtime": 30
+						},
+						{
+							"id": 4358231,
+							"seasonNumber": 10,
+							"number": 12,
+							"name": "Justice",
+							"aired": "2012-12-07",
+							"runtime": 30
+						},
+						{
+							"id": 4358244,
+							"seasonNumber": 10,
+							"number": 13,
+							"name": "Jobs",
+							"aired": "2012-12-14",
+							"runtime": 30
+						},
+						{
+							"id": 4358248,
+							"seasonNumber": 10,
+							"number": 14,
+							"name": "Jingle Bells",
+							"aired": "2012-12-21",
+							"runtime": 30
+						},
+						{
+							"id": 4459923,
+							"seasonNumber": 10,
+							"number": 15,
+							"name": "VG Part One",
+							"aired": "2012-12-28",
+							"runtime": 30
+						},
+						{
+							"id": 4459921,
+							"seasonNumber": 10,
+							"number": 16,
+							"name": "VG Part Two",
+							"aired": "2013-01-04",
+							"runtime": 30
+						},
+						{
+							"id": 4358232,
+							"seasonNumber": 10,
+							"number": 17,
+							"name": "Jolly",
+							"aired": "2013-01-11",
+							"runtime": 30
+						},
+						{
+							"id": 4452277,
+							"seasonNumber": 10,
+							"number": 18,
+							"name": "Just the Job",
+							"aired": "2013-08-25",
+							"runtime": 30
+						},
+						{
+							"id": 4641467,
+							"seasonNumber": 11,
+							"number": 1,
+							"name": "Knees & Knockers",
+							"aired": "2013-09-06",
+							"runtime": 30
+						},
+						{
+							"id": 4641482,
+							"seasonNumber": 11,
+							"number": 2,
+							"name": "Kit and Kaboodle",
+							"aired": "2013-09-13",
+							"runtime": 30
+						},
+						{
+							"id": 4641473,
+							"seasonNumber": 11,
+							"number": 3,
+							"name": "K-Folk",
+							"aired": "2013-09-20",
+							"runtime": 30
+						},
+						{
+							"id": 4641470,
+							"seasonNumber": 11,
+							"number": 4,
+							"name": "Knits & Knots",
+							"aired": "2013-09-27",
+							"runtime": 30
+						},
+						{
+							"id": 4641471,
+							"seasonNumber": 11,
+							"number": 5,
+							"name": "Kings",
+							"aired": "2013-10-04",
+							"runtime": 30
+						},
+						{
+							"id": 4641478,
+							"seasonNumber": 11,
+							"number": 6,
+							"name": "Killers",
+							"aired": "2013-10-11",
+							"runtime": 30
+						},
+						{
+							"id": 4641469,
+							"seasonNumber": 11,
+							"number": 7,
+							"name": "Knowledge",
+							"aired": "2013-10-18",
+							"runtime": 30
+						},
+						{
+							"id": 4641474,
+							"seasonNumber": 11,
+							"number": 8,
+							"name": "Keys",
+							"aired": "2013-10-25",
+							"runtime": 30
+						},
+						{
+							"id": 4641475,
+							"seasonNumber": 11,
+							"number": 9,
+							"name": "Kinetic",
+							"aired": "2013-11-01",
+							"runtime": 30
+						},
+						{
+							"id": 4641472,
+							"seasonNumber": 11,
+							"number": 10,
+							"name": "Keeps",
+							"aired": "2013-11-08",
+							"runtime": 30
+						},
+						{
+							"id": 4641479,
+							"seasonNumber": 11,
+							"number": 11,
+							"name": "Kinky",
+							"aired": "2013-11-29",
+							"runtime": 30
+						},
+						{
+							"id": 4641477,
+							"seasonNumber": 11,
+							"number": 12,
+							"name": "Knights and Knaves",
+							"aired": "2013-12-06",
+							"runtime": 30
+						},
+						{
+							"id": 4641468,
+							"seasonNumber": 11,
+							"number": 13,
+							"name": "Kitchen Sink",
+							"aired": "2013-12-13",
+							"runtime": 30
+						},
+						{
+							"id": 4641476,
+							"seasonNumber": 11,
+							"number": 14,
+							"name": "Kris Kringle",
+							"aired": "2013-12-24",
+							"runtime": 30
+						},
+						{
+							"id": 4641480,
+							"seasonNumber": 11,
+							"number": 15,
+							"name": "Kitsch",
+							"aired": "2014-01-10",
+							"runtime": 30
+						},
+						{
+							"id": 4641481,
+							"seasonNumber": 11,
+							"number": 16,
+							"name": "Kaleidoscope",
+							"aired": "2014-01-17",
+							"runtime": 30
+						},
+						{
+							"id": 4713361,
+							"seasonNumber": 11,
+							"number": 17,
+							"name": "VG Part One",
+							"aired": "2014-01-24",
+							"runtime": 30
+						},
+						{
+							"id": 4697541,
+							"seasonNumber": 11,
+							"number": 18,
+							"name": "VG Part Two",
+							"aired": "2014-01-31",
+							"runtime": 30
+						},
+						{
+							"id": 4895479,
+							"seasonNumber": 12,
+							"number": 1,
+							"name": "L-Animals",
+							"aired": "2014-10-03",
+							"runtime": 30
+						},
+						{
+							"id": 4895480,
+							"seasonNumber": 12,
+							"number": 2,
+							"name": "Location, Location, Location",
+							"aired": "2014-10-10",
+							"runtime": 30
+						},
+						{
+							"id": 4895481,
+							"seasonNumber": 12,
+							"number": 3,
+							"name": "Literature",
+							"aired": "2014-10-17",
+							"runtime": 30
+						},
+						{
+							"id": 4895482,
+							"seasonNumber": 12,
+							"number": 4,
+							"name": "Levity",
+							"aired": "2014-10-24",
+							"runtime": 30
+						},
+						{
+							"id": 4895483,
+							"seasonNumber": 12,
+							"number": 5,
+							"name": "Lenses",
+							"aired": "2014-10-31",
+							"runtime": 30
+						},
+						{
+							"id": 4895484,
+							"seasonNumber": 12,
+							"number": 6,
+							"name": "Liblabble",
+							"aired": "2014-11-07",
+							"runtime": 30
+						},
+						{
+							"id": 4895485,
+							"seasonNumber": 12,
+							"number": 7,
+							"name": "Lethal",
+							"aired": "2014-11-21",
+							"runtime": 30
+						},
+						{
+							"id": 5011682,
+							"seasonNumber": 12,
+							"number": 8,
+							"name": "Lovely",
+							"aired": "2014-11-28",
+							"runtime": 30
+						},
+						{
+							"id": 5011683,
+							"seasonNumber": 12,
+							"number": 9,
+							"name": "Ladies and Gents",
+							"aired": "2014-12-05",
+							"runtime": 30
+						},
+						{
+							"id": 5011684,
+							"seasonNumber": 12,
+							"number": 10,
+							"name": "Lying",
+							"aired": "2014-12-12",
+							"runtime": 30
+						},
+						{
+							"id": 5011685,
+							"seasonNumber": 12,
+							"number": 11,
+							"name": "Lumped Together",
+							"aired": "2014-12-19",
+							"runtime": 30
+						},
+						{
+							"id": 5011686,
+							"seasonNumber": 12,
+							"number": 12,
+							"name": "No-L",
+							"aired": "2014-12-25",
+							"runtime": 30
+						},
+						{
+							"id": 5011689,
+							"seasonNumber": 12,
+							"number": 13,
+							"name": "Lucky Losers",
+							"aired": "2015-01-02",
+							"runtime": 30
+						},
+						{
+							"id": 5011691,
+							"seasonNumber": 12,
+							"number": 14,
+							"name": "Little and Large",
+							"aired": "2015-01-09",
+							"runtime": 30
+						},
+						{
+							"id": 5011693,
+							"seasonNumber": 12,
+							"number": 15,
+							"name": "Long Lost",
+							"aired": "2015-01-16",
+							"runtime": 30
+						},
+						{
+							"id": 5011694,
+							"seasonNumber": 12,
+							"number": 16,
+							"name": "Landmarks",
+							"aired": "2015-01-23",
+							"runtime": 30
+						},
+						{
+							"id": 5011695,
+							"seasonNumber": 12,
+							"number": 17,
+							"name": "VG: Part One",
+							"aired": "2015-01-30",
+							"runtime": 30
+						},
+						{
+							"id": 5011696,
+							"seasonNumber": 12,
+							"number": 18,
+							"name": "VG: Part Two",
+							"aired": "2015-01-31",
+							"runtime": 30
+						},
+						{
+							"id": 5320480,
+							"seasonNumber": 13,
+							"number": 1,
+							"name": "A Medley of Maladies",
+							"aired": "2015-10-16",
+							"runtime": 30
+						},
+						{
+							"id": 5321862,
+							"seasonNumber": 13,
+							"number": 2,
+							"name": "Military Matters",
+							"aired": "2015-10-23",
+							"runtime": 30
+						},
+						{
+							"id": 5321863,
+							"seasonNumber": 13,
+							"number": 3,
+							"name": "M-Places",
+							"aired": "2015-10-30",
+							"runtime": 30
+						},
+						{
+							"id": 5321864,
+							"seasonNumber": 13,
+							"number": 4,
+							"name": "Miscellany",
+							"aired": "2015-11-06",
+							"runtime": 30
+						},
+						{
+							"id": 5321866,
+							"seasonNumber": 13,
+							"number": 5,
+							"name": "Maths",
+							"aired": "2015-11-20",
+							"runtime": 30
+						},
+						{
+							"id": 5321867,
+							"seasonNumber": 13,
+							"number": 6,
+							"name": "Marriage and Mating",
+							"aired": "2015-11-27",
+							"runtime": 30
+						},
+						{
+							"id": 5321869,
+							"seasonNumber": 13,
+							"number": 7,
+							"name": "Middle Muddle",
+							"aired": "2015-12-11",
+							"runtime": 30
+						},
+						{
+							"id": 5321870,
+							"seasonNumber": 13,
+							"number": 8,
+							"name": "Merriment",
+							"aired": "2015-12-25",
+							"runtime": 30
+						},
+						{
+							"id": 5321871,
+							"seasonNumber": 13,
+							"number": 9,
+							"name": "Messing With Your Mind",
+							"aired": "2015-12-29",
+							"runtime": 30
+						},
+						{
+							"id": 5321865,
+							"seasonNumber": 13,
+							"number": 10,
+							"name": "Making a Meal of It",
+							"aired": "2016-01-08",
+							"runtime": 30
+						},
+						{
+							"id": 5321868,
+							"seasonNumber": 13,
+							"number": 11,
+							"name": "Menagerie",
+							"aired": "2016-01-15",
+							"runtime": 30
+						},
+						{
+							"id": 5321875,
+							"seasonNumber": 13,
+							"number": 12,
+							"name": "Medieval and Macabre",
+							"aired": "2016-01-22",
+							"runtime": 30
+						},
+						{
+							"id": 5321874,
+							"seasonNumber": 13,
+							"number": 13,
+							"name": "Monster Mash",
+							"aired": "2016-01-29",
+							"runtime": 30
+						},
+						{
+							"id": 5321876,
+							"seasonNumber": 13,
+							"number": 14,
+							"name": "Messy",
+							"aired": "2016-02-05",
+							"runtime": 30
+						},
+						{
+							"id": 5321877,
+							"seasonNumber": 13,
+							"number": 15,
+							"name": "Mix and Match",
+							"aired": "2016-02-12",
+							"runtime": 30
+						},
+						{
+							"id": 5321878,
+							"seasonNumber": 13,
+							"number": 16,
+							"name": "Misconceptions",
+							"aired": "2016-02-19",
+							"runtime": 30
+						},
+						{
+							"id": 5543991,
+							"seasonNumber": 13,
+							"number": 17,
+							"name": "VG: Part One",
+							"aired": "2016-03-04",
+							"runtime": 30
+						},
+						{
+							"id": 5543992,
+							"seasonNumber": 13,
+							"number": 18,
+							"name": "VG: Part Two",
+							"aired": "2016-03-25",
+							"runtime": 30
+						},
+						{
+							"id": 5690198,
+							"seasonNumber": 14,
+							"number": 1,
+							"name": "Naming Names",
+							"aired": "2016-10-21",
+							"runtime": 30
+						},
+						{
+							"id": 5690199,
+							"seasonNumber": 14,
+							"number": 2,
+							"name": "North Norse",
+							"aired": "2016-10-28",
+							"runtime": 30
+						},
+						{
+							"id": 5690203,
+							"seasonNumber": 14,
+							"number": 3,
+							"name": "Nosey Noisy",
+							"aired": "2016-11-04",
+							"runtime": 30
+						},
+						{
+							"id": 5690200,
+							"seasonNumber": 14,
+							"number": 4,
+							"name": "Noble Rot",
+							"aired": "2016-11-11",
+							"runtime": 30
+						},
+						{
+							"id": 5690204,
+							"seasonNumber": 14,
+							"number": 5,
+							"name": "Not Nearly",
+							"aired": "2016-11-25",
+							"runtime": 30
+						},
+						{
+							"id": 5690205,
+							"seasonNumber": 14,
+							"number": 6,
+							"name": "Night",
+							"aired": "2016-12-02",
+							"runtime": 30
+						},
+						{
+							"id": 5690213,
+							"seasonNumber": 14,
+							"number": 7,
+							"name": "Naked Truth",
+							"aired": "2016-12-09",
+							"runtime": 30
+						},
+						{
+							"id": 5690207,
+							"seasonNumber": 14,
+							"number": 8,
+							"name": "Non Sequiturs",
+							"aired": "2016-12-16",
+							"runtime": 30
+						},
+						{
+							"id": 5690209,
+							"seasonNumber": 14,
+							"number": 9,
+							"name": "Noel",
+							"aired": "2016-12-22",
+							"runtime": 30
+						},
+						{
+							"id": 5690208,
+							"seasonNumber": 14,
+							"number": 10,
+							"name": "Nature/Nurture",
+							"aired": "2016-12-30",
+							"runtime": 30
+						},
+						{
+							"id": 5690210,
+							"seasonNumber": 14,
+							"number": 11,
+							"name": "Nonsense",
+							"aired": "2017-01-06",
+							"runtime": 30
+						},
+						{
+							"id": 5690211,
+							"seasonNumber": 14,
+							"number": 12,
+							"name": "Noodles",
+							"aired": "2017-01-13",
+							"runtime": 30
+						},
+						{
+							"id": 5690212,
+							"seasonNumber": 14,
+							"number": 13,
+							"name": "Naval Navigation",
+							"aired": "2017-01-20",
+							"runtime": 30
+						},
+						{
+							"id": 5690214,
+							"seasonNumber": 14,
+							"number": 14,
+							"name": "Numbers",
+							"aired": "2017-01-27",
+							"runtime": 30
+						},
+						{
+							"id": 5690215,
+							"seasonNumber": 14,
+							"number": 15,
+							"name": "Next",
+							"aired": "2017-02-03",
+							"runtime": 30
+						},
+						{
+							"id": 5690206,
+							"seasonNumber": 14,
+							"number": 16,
+							"name": "New",
+							"aired": "2017-02-10",
+							"runtime": 30
+						},
+						{
+							"id": 5690216,
+							"seasonNumber": 14,
+							"number": 17,
+							"name": "VG: Part One",
+							"aired": "2017-02-17",
+							"runtime": 30
+						},
+						{
+							"id": 5690217,
+							"seasonNumber": 14,
+							"number": 18,
+							"name": "VG: Part Two",
+							"aired": "2017-02-24",
+							"runtime": 30
+						},
+						{
+							"id": 6240575,
+							"seasonNumber": 15,
+							"number": 1,
+							"name": "Ologies",
+							"aired": "2017-10-20",
+							"runtime": 30
+						},
+						{
+							"id": 6240576,
+							"seasonNumber": 15,
+							"number": 2,
+							"name": "Organisms",
+							"aired": "2017-10-27",
+							"runtime": 30
+						},
+						{
+							"id": 6240577,
+							"seasonNumber": 15,
+							"number": 3,
+							"name": "Oceans",
+							"aired": "2017-11-03",
+							"runtime": 30
+						},
+						{
+							"id": 6240578,
+							"seasonNumber": 15,
+							"number": 4,
+							"name": "Over and Ova",
+							"aired": "2017-11-10",
+							"runtime": 30
+						},
+						{
+							"id": 6240579,
+							"seasonNumber": 15,
+							"number": 5,
+							"name": "Odorous and Odious",
+							"aired": "2017-11-24",
+							"runtime": 30
+						},
+						{
+							"id": 6240580,
+							"seasonNumber": 15,
+							"number": 6,
+							"name": "Odds and Ends",
+							"aired": "2017-12-01",
+							"runtime": 30
+						},
+						{
+							"id": 6240582,
+							"seasonNumber": 15,
+							"number": 7,
+							"name": "Opposites",
+							"aired": "2017-12-08",
+							"runtime": 30
+						},
+						{
+							"id": 6240587,
+							"seasonNumber": 15,
+							"number": 8,
+							"name": "Operations",
+							"aired": "2017-12-15",
+							"runtime": 30
+						},
+						{
+							"id": 6240585,
+							"seasonNumber": 15,
+							"number": 9,
+							"name": "O Christmas",
+							"aired": "2017-12-26",
+							"runtime": 30
+						},
+						{
+							"id": 6240584,
+							"seasonNumber": 15,
+							"number": 10,
+							"name": "Origins and Openings",
+							"aired": "2018-01-05",
+							"runtime": 30
+						},
+						{
+							"id": 6240581,
+							"seasonNumber": 15,
+							"number": 11,
+							"name": "Objects and Ornaments",
+							"aired": "2018-01-12",
+							"runtime": 30
+						},
+						{
+							"id": 6240589,
+							"seasonNumber": 15,
+							"number": 12,
+							"name": "The Occult",
+							"aired": "2018-01-19",
+							"runtime": 30
+						},
+						{
+							"id": 6240590,
+							"seasonNumber": 15,
+							"number": 13,
+							"name": "Omnishambles",
+							"aired": "2018-01-26",
+							"runtime": 30
+						},
+						{
+							"id": 6240588,
+							"seasonNumber": 15,
+							"number": 14,
+							"name": "Oddballs",
+							"aired": "2018-02-02",
+							"runtime": 30
+						},
+						{
+							"id": 6240586,
+							"seasonNumber": 15,
+							"number": 15,
+							"name": "Occupations and Offices",
+							"aired": "2018-02-09",
+							"runtime": 30
+						},
+						{
+							"id": 6240583,
+							"seasonNumber": 15,
+							"number": 16,
+							"name": "Overseas",
+							"aired": "2018-02-16",
+							"runtime": 30
+						},
+						{
+							"id": 6240592,
+							"seasonNumber": 15,
+							"number": 17,
+							"name": "VG Part One",
+							"aired": "2018-02-23",
+							"runtime": 30
+						},
+						{
+							"id": 6276061,
+							"seasonNumber": 15,
+							"number": 18,
+							"name": "VG Part Two",
+							"aired": "2018-03-02",
+							"runtime": 30
+						},
+						{
+							"id": 6811024,
+							"seasonNumber": 16,
+							"number": 1,
+							"name": "Panimals",
+							"aired": "2018-09-10",
+							"runtime": 30
+						},
+						{
+							"id": 6813079,
+							"seasonNumber": 16,
+							"number": 2,
+							"name": "Peril",
+							"aired": "2018-09-17",
+							"runtime": 30
+						},
+						{
+							"id": 6813080,
+							"seasonNumber": 16,
+							"number": 3,
+							"name": "Piecemeal",
+							"aired": "2018-09-24",
+							"runtime": 30
+						},
+						{
+							"id": 6813081,
+							"seasonNumber": 16,
+							"number": 4,
+							"name": "Parts",
+							"aired": "2018-10-01",
+							"runtime": 30
+						},
+						{
+							"id": 6813082,
+							"seasonNumber": 16,
+							"number": 5,
+							"name": "Public & Private",
+							"aired": "2018-10-08",
+							"runtime": 30
+						},
+						{
+							"id": 6813084,
+							"seasonNumber": 16,
+							"number": 6,
+							"name": "Pictures",
+							"aired": "2018-10-15",
+							"runtime": 30
+						},
+						{
+							"id": 6813083,
+							"seasonNumber": 16,
+							"number": 7,
+							"name": "Picnics",
+							"aired": "2018-10-22",
+							"runtime": 30
+						},
+						{
+							"id": 6813085,
+							"seasonNumber": 16,
+							"number": 8,
+							"name": "Plants",
+							"aired": "2018-10-29",
+							"runtime": 30
+						},
+						{
+							"id": 6813086,
+							"seasonNumber": 16,
+							"number": 9,
+							"name": "Pubs - A Christmas Special",
+							"aired": "2018-12-18",
+							"runtime": 30
+						},
+						{
+							"id": 6813087,
+							"seasonNumber": 16,
+							"number": 10,
+							"name": "Pain & Punishment",
+							"aired": "2019-01-11",
+							"runtime": 30
+						},
+						{
+							"id": 6813088,
+							"seasonNumber": 16,
+							"number": 11,
+							"name": "Potpourri",
+							"aired": "2019-01-18",
+							"runtime": 30
+						},
+						{
+							"id": 6813089,
+							"seasonNumber": 16,
+							"number": 12,
+							"name": "Procrastination",
+							"aired": "2019-01-25",
+							"runtime": 30
+						},
+						{
+							"id": 6813091,
+							"seasonNumber": 16,
+							"number": 13,
+							"name": "Phenomenal",
+							"aired": "2019-02-01",
+							"runtime": 30
+						},
+						{
+							"id": 6813092,
+							"seasonNumber": 16,
+							"number": 14,
+							"name": "Pathology",
+							"aired": "2019-02-08",
+							"runtime": 30
+						},
+						{
+							"id": 6813093,
+							"seasonNumber": 16,
+							"number": 15,
+							"name": "Past Times",
+							"aired": "2019-02-15",
+							"runtime": 30
+						},
+						{
+							"id": 6813094,
+							"seasonNumber": 16,
+							"number": 16,
+							"name": "Post",
+							"aired": "2019-02-22",
+							"runtime": 30
+						},
+						{
+							"id": 6813095,
+							"seasonNumber": 16,
+							"number": 17,
+							"name": "VG Part One",
+							"aired": "2019-03-01",
+							"runtime": 30
+						},
+						{
+							"id": 6813096,
+							"seasonNumber": 16,
+							"number": 18,
+							"name": "VG Part Two",
+							"aired": "2019-03-08",
+							"runtime": 30
+						},
+						{
+							"id": 7052227,
+							"seasonNumber": 17,
+							"number": 1,
+							"name": "Quirky",
+							"aired": "2019-09-06",
+							"runtime": 30
+						},
+						{
+							"id": 7341455,
+							"seasonNumber": 17,
+							"number": 2,
+							"name": "Quintessential",
+							"aired": "2019-09-13",
+							"runtime": 30
+						},
+						{
+							"id": 7348010,
+							"seasonNumber": 17,
+							"number": 3,
+							"name": "Quarrels",
+							"aired": "2019-09-20",
+							"runtime": 30
+						},
+						{
+							"id": 7348011,
+							"seasonNumber": 17,
+							"number": 4,
+							"name": "Queasy Quacks",
+							"aired": "2019-09-27",
+							"runtime": 30
+						},
+						{
+							"id": 7348014,
+							"seasonNumber": 17,
+							"number": 5,
+							"name": "Questions and Qualifications",
+							"aired": "2019-10-04",
+							"runtime": 30
+						},
+						{
+							"id": 7353912,
+							"seasonNumber": 17,
+							"number": 6,
+							"name": "Quests: Part I",
+							"aired": "2019-10-11",
+							"runtime": 30
+						},
+						{
+							"id": 7362549,
+							"seasonNumber": 17,
+							"number": 7,
+							"name": "Quests: Part II",
+							"aired": "2019-10-18",
+							"runtime": 30
+						},
+						{
+							"id": 7362578,
+							"seasonNumber": 17,
+							"number": 8,
+							"name": "Q Animals",
+							"aired": "2019-10-25",
+							"runtime": 30
+						},
+						{
+							"id": 7454498,
+							"seasonNumber": 17,
+							"number": 9,
+							"name": "Quizmas",
+							"aired": "2019-12-24",
+							"runtime": 30
+						},
+						{
+							"id": 7479840,
+							"seasonNumber": 17,
+							"number": 10,
+							"name": "Quiet",
+							"aired": "2020-01-03",
+							"runtime": 30
+						},
+						{
+							"id": 7493011,
+							"seasonNumber": 17,
+							"number": 11,
+							"name": "Quaffing",
+							"aired": "2020-01-10",
+							"runtime": 30
+						},
+						{
+							"id": 7509969,
+							"seasonNumber": 17,
+							"number": 12,
+							"name": "Quagmire",
+							"aired": "2020-01-17",
+							"runtime": 30
+						},
+						{
+							"id": 7509971,
+							"seasonNumber": 17,
+							"number": 13,
+							"name": "Quills",
+							"aired": "2020-01-24",
+							"runtime": 30
+						},
+						{
+							"id": 7509973,
+							"seasonNumber": 17,
+							"number": 14,
+							"name": "Queens",
+							"aired": "2020-01-31",
+							"runtime": 30
+						},
+						{
+							"id": 7572283,
+							"seasonNumber": 17,
+							"number": 15,
+							"name": "Quantity and Quality",
+							"aired": "2020-02-07",
+							"runtime": 30
+						},
+						{
+							"id": 7572284,
+							"seasonNumber": 17,
+							"number": 16,
+							"name": "Quads and Quins",
+							"aired": "2020-02-14",
+							"runtime": 30
+						},
+						{
+							"id": 7595011,
+							"seasonNumber": 17,
+							"number": 17,
+							"name": "VG: Part I",
+							"aired": "2020-02-21",
+							"runtime": 30
+						},
+						{
+							"id": 7595012,
+							"seasonNumber": 17,
+							"number": 18,
+							"name": "VG: Part II",
+							"aired": "2020-02-28",
+							"runtime": 30
+						},
+						{
+							"id": 7751374,
+							"seasonNumber": 18,
+							"number": 1,
+							"name": "Rude",
+							"aired": "2020-05-28",
+							"runtime": 30
+						},
+						{
+							"id": 7761621,
+							"seasonNumber": 18,
+							"number": 2,
+							"name": "Ruff and Ready",
+							"aired": "2020-06-04",
+							"runtime": 30
+						},
+						{
+							"id": 7761627,
+							"seasonNumber": 18,
+							"number": 3,
+							"name": "Road and Rail",
+							"aired": "2020-06-11",
+							"runtime": 30
+						},
+						{
+							"id": 7761634,
+							"seasonNumber": 18,
+							"number": 4,
+							"name": "Restaurants",
+							"aired": "2020-06-18",
+							"runtime": 30
+						},
+						{
+							"id": 7761648,
+							"seasonNumber": 18,
+							"number": 5,
+							"name": "Rubbish",
+							"aired": "2020-06-25",
+							"runtime": 30
+						},
+						{
+							"id": 7761642,
+							"seasonNumber": 18,
+							"number": 6,
+							"name": "Ridiculous",
+							"aired": "2020-07-02",
+							"runtime": 30
+						},
+						{
+							"id": 7761639,
+							"seasonNumber": 18,
+							"number": 7,
+							"name": "Revolutions",
+							"aired": "2020-07-09",
+							"runtime": 30
+						},
+						{
+							"id": 7761637,
+							"seasonNumber": 18,
+							"number": 8,
+							"name": "Reflections",
+							"aired": "2020-07-16",
+							"runtime": 30
+						},
+						{
+							"id": 7824294,
+							"seasonNumber": 18,
+							"number": 9,
+							"name": "Radioactive",
+							"aired": "2020-07-23",
+							"runtime": 30
+						},
+						{
+							"id": 7761644,
+							"seasonNumber": 18,
+							"number": 10,
+							"name": "Rest & Recreation",
+							"aired": "2020-07-30",
+							"runtime": 30
+						},
+						{
+							"id": 7778648,
+							"seasonNumber": 18,
+							"number": 11,
+							"name": "Roaming",
+							"aired": "2020-08-06",
+							"runtime": 30
+						},
+						{
+							"id": 8073999,
+							"seasonNumber": 18,
+							"number": 12,
+							"name": "Rejoice! A Christmas Special",
+							"aired": "2020-12-23",
+							"runtime": 30
+						},
+						{
+							"id": 8167019,
+							"seasonNumber": 18,
+							"number": 13,
+							"name": "R Animals",
+							"aired": "2021-01-07",
+							"runtime": 45
+						},
+						{
+							"id": 8098793,
+							"seasonNumber": 18,
+							"number": 14,
+							"name": "Rogue",
+							"aired": "2021-01-14",
+							"runtime": 30
+						},
+						{
+							"id": 8124967,
+							"seasonNumber": 18,
+							"number": 15,
+							"name": "Random",
+							"aired": "2021-01-21",
+							"runtime": 30
+						},
+						{
+							"id": 8139718,
+							"seasonNumber": 18,
+							"number": 16,
+							"name": "Rock 'n' Roll",
+							"aired": "2021-01-28",
+							"runtime": 30
+						},
+						{
+							"id": 8632896,
+							"seasonNumber": 19,
+							"number": 1,
+							"name": "Sick",
+							"aired": "2021-09-09",
+							"runtime": 29
+						},
+						{
+							"id": 8645298,
+							"seasonNumber": 19,
+							"number": 2,
+							"name": "Secrets, Spies & Sleuths",
+							"aired": "2021-09-16",
+							"runtime": 29
+						},
+						{
+							"id": 8645299,
+							"seasonNumber": 19,
+							"number": 3,
+							"name": "Shady & Shaky",
+							"aired": "2021-09-23",
+							"runtime": 29
+						},
+						{
+							"id": 8645300,
+							"seasonNumber": 19,
+							"number": 4,
+							"name": "Sideshows, Stunts & Scavenger Hunts",
+							"aired": "2021-09-30",
+							"runtime": 29
+						},
+						{
+							"id": 8645301,
+							"seasonNumber": 19,
+							"number": 5,
+							"name": "Sugar and Spice",
+							"aired": "2021-10-07",
+							"runtime": 29
+						},
+						{
+							"id": 8645302,
+							"seasonNumber": 19,
+							"number": 6,
+							"name": "Sensational",
+							"aired": "2021-10-14",
+							"runtime": 29
+						},
+						{
+							"id": 8645303,
+							"seasonNumber": 19,
+							"number": 7,
+							"name": "Spooky",
+							"aired": "2021-10-21",
+							"runtime": 29
+						},
+						{
+							"id": 8645304,
+							"seasonNumber": 19,
+							"number": 8,
+							"name": "Seasons Greetings",
+							"aired": "2021-12-20",
+							"runtime": 29
+						},
+						{
+							"id": 8645305,
+							"seasonNumber": 19,
+							"number": 9,
+							"name": "'S' Animals",
+							"aired": "2022-01-07",
+							"runtime": 44
+						},
+						{
+							"id": 8645306,
+							"seasonNumber": 19,
+							"number": 10,
+							"name": "Smörgåsbord",
+							"aired": "2022-01-14",
+							"runtime": 44
+						},
+						{
+							"id": 8645307,
+							"seasonNumber": 19,
+							"number": 11,
+							"name": "Saints & Sinners",
+							"aired": "2022-01-21",
+							"runtime": 44
+						},
+						{
+							"id": 8645308,
+							"seasonNumber": 19,
+							"number": 12,
+							"name": "Silly Season",
+							"aired": "2022-01-28",
+							"runtime": 43
+						},
+						{
+							"id": 8645309,
+							"seasonNumber": 19,
+							"number": 13,
+							"name": "Sun, Sea & Sandi",
+							"aired": "2022-02-04",
+							"runtime": 44
+						},
+						{
+							"id": 8645310,
+							"seasonNumber": 19,
+							"number": 14,
+							"name": "Sexed-Up",
+							"aired": "2022-02-11",
+							"runtime": 44
+						},
+						{
+							"id": 9422919,
+							"seasonNumber": 20,
+							"number": 1,
+							"name": "Tips and Tools",
+							"aired": "2022-11-11",
+							"runtime": 29
+						},
+						{
+							"id": 9436659,
+							"seasonNumber": 20,
+							"number": 2,
+							"name": "'T' Animals",
+							"aired": "2022-11-18",
+							"runtime": 29
+						},
+						{
+							"id": 9445631,
+							"seasonNumber": 20,
+							"number": 3,
+							"name": "Television",
+							"aired": "2022-11-25",
+							"runtime": 29
+						},
+						{
+							"id": 9455915,
+							"seasonNumber": 20,
+							"number": 4,
+							"name": "Thrills & Spills",
+							"aired": "2022-12-02",
+							"runtime": 29
+						},
+						{
+							"id": 9469356,
+							"seasonNumber": 20,
+							"number": 5,
+							"name": "Testing",
+							"aired": "2022-12-09",
+							"runtime": 29
+						},
+						{
+							"id": 9469357,
+							"seasonNumber": 20,
+							"number": 6,
+							"name": "Tricks & Treats",
+							"aired": "2022-12-16",
+							"runtime": 29
+						},
+						{
+							"id": 9491280,
+							"seasonNumber": 20,
+							"number": 7,
+							"name": "Toys, Tinsel, and Turkeys",
+							"aired": "2023-12-15",
+							"runtime": 29
+						},
+						{
+							"id": 9492841,
+							"seasonNumber": 20,
+							"number": 8,
+							"name": "Ticks Tax Toes",
+							"aired": "2023-01-06",
+							"runtime": 29
+						},
+						{
+							"id": 9517330,
+							"seasonNumber": 20,
+							"number": 9,
+							"name": "Theatrical!",
+							"aired": "2023-01-13",
+							"runtime": 29
+						},
+						{
+							"id": 9541277,
+							"seasonNumber": 20,
+							"number": 10,
+							"name": "Telling Tails",
+							"aired": "2023-01-20",
+							"runtime": 29
+						},
+						{
+							"id": 9569511,
+							"seasonNumber": 20,
+							"number": 11,
+							"name": "Trundling",
+							"aired": "2023-01-27",
+							"runtime": 29
+						},
+						{
+							"id": 9569512,
+							"seasonNumber": 20,
+							"number": 12,
+							"name": "This, That, and the Other",
+							"aired": "2023-02-03",
+							"runtime": 29
+						},
+						{
+							"id": 9593817,
+							"seasonNumber": 20,
+							"number": 13,
+							"name": "Tubular",
+							"aired": "2023-02-10",
+							"runtime": 29
+						},
+						{
+							"id": 9594630,
+							"seasonNumber": 20,
+							"number": 14,
+							"name": "Tea Time",
+							"aired": "2023-02-17",
+							"runtime": 29
+						},
+						{
+							"id": 10172399,
+							"seasonNumber": 21,
+							"number": 1,
+							"name": "All I Want for Christmas Is U",
+							"aired": "2023-12-18",
+							"runtime": 29
+						},
+						{
+							"id": 10184293,
+							"seasonNumber": 21,
+							"number": 2,
+							"name": "Upside-Down",
+							"aired": "2024-01-08",
+							"runtime": 29
+						},
+						{
+							"id": 10199536,
+							"seasonNumber": 21,
+							"number": 3,
+							"name": "United",
+							"aired": "2024-01-15",
+							"runtime": 29
+						},
+						{
+							"id": 10237333,
+							"seasonNumber": 21,
+							"number": 4,
+							"name": "Unsavoury",
+							"aired": "2024-01-22",
+							"runtime": 29
+						},
+						{
+							"id": 10246069,
+							"seasonNumber": 21,
+							"number": 5,
+							"name": "Uncle Sam",
+							"aired": "2024-01-29",
+							"runtime": 29
+						},
+						{
+							"id": 10271108,
+							"seasonNumber": 21,
+							"number": 6,
+							"name": "Ultras",
+							"aired": "2024-02-09",
+							"runtime": 29
+						},
+						{
+							"id": 10286838,
+							"seasonNumber": 21,
+							"number": 7,
+							"name": "Ufology",
+							"aired": "2024-02-18",
+							"runtime": 29
+						},
+						{
+							"id": 10305874,
+							"seasonNumber": 21,
+							"number": 8,
+							"name": "‘U’ Animals",
+							"aired": "2024-02-23",
+							"runtime": 29
+						},
+						{
+							"id": 10321897,
+							"seasonNumber": 21,
+							"number": 9,
+							"name": "Unrelated",
+							"aired": "2024-03-03",
+							"runtime": 29
+						},
+						{
+							"id": 10386596,
+							"seasonNumber": 21,
+							"number": 10,
+							"name": "Upsadaisy",
+							"aired": "2024-03-29",
+							"runtime": 28
+						},
+						{
+							"id": 10396114,
+							"seasonNumber": 21,
+							"number": 11,
+							"name": "Underthings",
+							"aired": "2024-04-05",
+							"runtime": 29
+						},
+						{
+							"id": 10407606,
+							"seasonNumber": 21,
+							"number": 12,
+							"name": "University",
+							"aired": "2024-04-12",
+							"runtime": 29
+						},
+						{
+							"id": 10423585,
+							"seasonNumber": 21,
+							"number": 13,
+							"name": "Upbringing",
+							"aired": "2024-04-19",
+							"runtime": 29
+						},
+						{
+							"id": 10443264,
+							"seasonNumber": 21,
+							"number": 14,
+							"name": "Underground and Underwater",
+							"aired": "2024-04-26",
+							"runtime": 29
+						},
+						{
+							"id": 10450998,
+							"seasonNumber": 21,
+							"number": 15,
+							"name": "Ulex",
+							"aired": "2024-05-03",
+							"runtime": 29
+						},
+						{
+							"id": 10737234,
+							"seasonNumber": 22,
+							"number": 1,
+							"name": "Voyaging",
+							"aired": "2024-10-27",
+							"runtime": 29
+						},
+						{
+							"id": 10738211,
+							"seasonNumber": 22,
+							"number": 2,
+							"name": "Vocal",
+							"aired": "2024-11-03",
+							"runtime": 29
+						},
+						{
+							"id": 10738212,
+							"seasonNumber": 22,
+							"number": 3,
+							"name": "Very Varied",
+							"aired": "2024-11-10",
+							"runtime": 29
+						},
+						{
+							"id": 10738213,
+							"seasonNumber": 22,
+							"number": 4,
+							"name": "Vets",
+							"aired": "2024-11-18",
+							"runtime": 29
+						},
+						{
+							"id": 10738214,
+							"seasonNumber": 22,
+							"number": 5,
+							"name": "Visual",
+							"aired": "2024-11-25",
+							"runtime": 29
+						},
+						{
+							"id": 10738215,
+							"seasonNumber": 22,
+							"number": 6,
+							"name": "Volatile",
+							"aired": "2024-12-02",
+							"runtime": 29
+						},
+						{
+							"id": 10738216,
+							"seasonNumber": 22,
+							"number": 7,
+							"name": "Visionaries",
+							"aired": "2024-12-09",
+							"runtime": 29
+						},
+						{
+							"id": 10738217,
+							"seasonNumber": 22,
+							"number": 8,
+							"name": "Viral",
+							"aired": "2024-12-16",
+							"runtime": 29
+						},
+						{
+							"id": 10738218,
+							"seasonNumber": 22,
+							"number": 9,
+							"name": "Christmas Special",
+							"aired": "2024-12-17",
+							"runtime": 29
+						},
+						{
+							"id": 10738219,
+							"seasonNumber": 22,
+							"number": 10,
+							"name": "Vulgar",
+							"aired": "2025-01-06",
+							"runtime": 29
+						},
+						{
+							"id": 10738220,
+							"seasonNumber": 22,
+							"number": 11,
+							"name": "Vintage",
+							"aired": "2025-01-13",
+							"runtime": 29
+						},
+						{
+							"id": 10738221,
+							"seasonNumber": 22,
+							"number": 12,
+							"name": "Vices and Virtues",
+							"aired": "2025-01-20",
+							"runtime": 29
+						},
+						{
+							"id": 10738222,
+							"seasonNumber": 22,
+							"number": 13,
+							"name": "Veggies",
+							"aired": "2025-01-26",
+							"runtime": 29
+						},
+						{
+							"id": 10738223,
+							"seasonNumber": 22,
+							"number": 14,
+							"name": "Victory",
+							"aired": "2025-03-03",
+							"runtime": 29
+						},
+						{
+							"id": 10895757,
+							"seasonNumber": 22,
+							"number": 15,
+							"name": "VG: Part 1",
+							"aired": "2025-02-10",
+							"runtime": 29
+						},
+						{
+							"id": 10895758,
+							"seasonNumber": 22,
+							"number": 16,
+							"name": "VG: Part 2",
+							"aired": "2025-02-17",
+							"runtime": 29
+						},
+						{
+							"id": 11386272,
+							"seasonNumber": 23,
+							"number": 1,
+							"name": "Wales, Whales and Wails",
+							"aired": "2025-10-21",
+							"runtime": 29
+						},
+						{
+							"id": 11395395,
+							"seasonNumber": 23,
+							"number": 2,
+							"name": "Wings and Wheels",
+							"aired": "2025-10-28",
+							"runtime": 29
+						},
+						{
+							"id": 11395396,
+							"seasonNumber": 23,
+							"number": 3,
+							"name": "Weaponry",
+							"aired": "2025-11-04",
+							"runtime": 29
+						},
+						{
+							"id": 11395397,
+							"seasonNumber": 23,
+							"number": 4,
+							"name": "Wavey",
+							"aired": "2025-11-11",
+							"runtime": 29
+						},
+						{
+							"id": 11395398,
+							"seasonNumber": 23,
+							"number": 5,
+							"name": "Wild West",
+							"aired": "2025-11-25",
+							"runtime": 29
+						},
+						{
+							"id": 11395399,
+							"seasonNumber": 23,
+							"number": 6,
+							"name": "Wooing",
+							"aired": "2025-12-02",
+							"runtime": 29
+						},
+						{
+							"id": 11395400,
+							"seasonNumber": 23,
+							"number": 7,
+							"name": "Who What Why?",
+							"aired": "2025-12-09",
+							"runtime": 29
+						},
+						{
+							"id": 11395401,
+							"seasonNumber": 23,
+							"number": 8,
+							"name": "Weird and Wonderful",
+							"aired": "2025-12-16",
+							"runtime": 29
+						},
+						{
+							"id": 11395402,
+							"seasonNumber": 23,
+							"number": 9,
+							"name": "Christmas Special: Winter Wonderland",
+							"aired": "2025-12-23",
+							"runtime": 29
+						},
+						{
+							"id": 11395403,
+							"seasonNumber": 23,
+							"number": 10,
+							"name": "'W' Animals",
+							"aired": "2026-01-06",
+							"runtime": 29
+						},
+						{
+							"id": 11395404,
+							"seasonNumber": 23,
+							"number": 11,
+							"name": "Wet and Windy",
+							"aired": "2026-01-13",
+							"runtime": 29
+						},
+						{
+							"id": 11395405,
+							"seasonNumber": 23,
+							"number": 12,
+							"name": "Willy Nilly",
+							"aired": "2026-01-20",
+							"runtime": 29
+						},
+						{
+							"id": 11395406,
+							"seasonNumber": 23,
+							"number": 13,
+							"name": "Wordmongery",
+							"aired": "2026-01-27",
+							"runtime": 29
+						},
+						{
+							"id": 11395407,
+							"seasonNumber": 23,
+							"number": 14,
+							"name": "Whatnots",
+							"aired": "2026-02-03",
+							"runtime": 29
+						},
+						{
+							"id": 11595717,
+							"seasonNumber": 23,
+							"number": 15,
+							"name": "VG: Part 1",
+							"aired": "2026-02-10",
+							"runtime": 28
+						},
+						{
+							"id": 11595718,
+							"seasonNumber": 23,
+							"number": 16,
+							"name": "VG: Part 2",
+							"aired": "2026-02-17",
+							"runtime": 29
+						},
+						{
+							"id": 12048685,
+							"seasonNumber": 24,
+							"number": 1,
+							"name": "XL XS",
+							"aired": "2026-11-03",
+							"runtime": 29
+						},
+						{
+							"id": 12062003,
+							"seasonNumber": 24,
+							"number": 2,
+							"name": "'X' Materials",
+							"aired": "2026-11-10",
+							"runtime": 29
+						},
+						{
+							"id": 12071114,
+							"seasonNumber": 24,
+							"number": 3,
+							"name": "X-Rated",
+							"aired": "2026-11-24",
+							"runtime": 29
+						},
+						{
+							"id": 12071115,
+							"seasonNumber": 24,
+							"number": 4,
+							"name": "Episode 4",
+							"aired": null,
+							"runtime": 29
+						},
+						{
+							"id": 12071116,
+							"seasonNumber": 24,
+							"number": 5,
+							"name": "Episode 5",
+							"aired": null,
+							"runtime": 29
+						},
+						{
+							"id": 12071117,
+							"seasonNumber": 24,
+							"number": 6,
+							"name": "Episode 6",
+							"aired": null,
+							"runtime": 29
+						},
+						{
+							"id": 12071118,
+							"seasonNumber": 24,
+							"number": 7,
+							"name": "Episode 7",
+							"aired": null,
+							"runtime": 29
+						},
+						{
+							"id": 12071119,
+							"seasonNumber": 24,
+							"number": 8,
+							"name": "Episode 8",
+							"aired": null,
+							"runtime": 29
+						},
+						{
+							"id": 12071120,
+							"seasonNumber": 24,
+							"number": 9,
+							"name": "Episode 9",
+							"aired": null,
+							"runtime": 29
+						},
+						{
+							"id": 12071121,
+							"seasonNumber": 24,
+							"number": 10,
+							"name": "Episode 10",
+							"aired": null,
+							"runtime": 29
+						},
+						{
+							"id": 12071122,
+							"seasonNumber": 24,
+							"number": 11,
+							"name": "Episode 11",
+							"aired": null,
+							"runtime": 29
+						},
+						{
+							"id": 12071123,
+							"seasonNumber": 24,
+							"number": 12,
+							"name": "Episode 12",
+							"aired": null,
+							"runtime": 29
+						},
+						{
+							"id": 12071124,
+							"seasonNumber": 24,
+							"number": 13,
+							"name": "Episode 13",
+							"aired": null,
+							"runtime": 29
+						},
+						{
+							"id": 12071125,
+							"seasonNumber": 24,
+							"number": 14,
+							"name": "Episode 14",
+							"aired": null,
+							"runtime": 29
+						},
+						{
+							"id": 12071126,
+							"seasonNumber": 24,
+							"number": 15,
+							"name": "Episode 15",
+							"aired": null,
+							"runtime": 29
+						}
+					]
+				}
+			}
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun (RD), 2026-11-10: the .zurgtorrent's name, hash, IMDb id and the 33 video files of its Specials folder (of 374) with their folders and probed lengths, as zurg asks",
+			"request": {
+				"name": "QI",
+				"hash": "133c4c7363cd9315ce4122504a64f76e52616265",
+				"imdbId": "tt0380136",
+				"files": [
+					{
+						"path": "QI - s00e01 - Pilot.mkv",
+						"folder": "Specials",
+						"duration": 2144.361
+					},
+					{
+						"path": "QI - s00e02 - Comic Relief 24 Hour Panel People Special.avi",
+						"folder": "Specials",
+						"duration": 4254.28
+					},
+					{
+						"path": "QI - s00e03 - The Making of QI Documentary.mkv",
+						"folder": "Specials",
+						"duration": 3553.557
+					},
+					{
+						"path": "QI - s00e04 - BBC Sport Relief Night 2012.mkv",
+						"folder": "Specials",
+						"duration": 414.52
+					},
+					{
+						"path": "QI - s00e07 - QI Comic Relief 2022 Special.mkv",
+						"folder": "Specials",
+						"duration": 246.101
+					},
+					{
+						"path": "QI - s00e10 - Series 01 - Bonus Bits & Bloopers.mp4",
+						"folder": "Specials",
+						"duration": 1655.086667
+					},
+					{
+						"path": "QI - s00e11 - Series 02 - Bonus Bits & Bloopers.mkv",
+						"folder": "Specials",
+						"duration": 1729.041
+					},
+					{
+						"path": "QI - s00e12 - Series 03 - Bonus Bits & Bloopers.mkv",
+						"folder": "Specials",
+						"duration": 1596.041
+					},
+					{
+						"path": "QI - s00e13 - Series 02 - Banter (Part 1).mp4",
+						"folder": "Specials",
+						"duration": 4462.463333
+					},
+					{
+						"path": "QI - s00e14 - Series 02 - Banter (Part 2).mp4",
+						"folder": "Specials",
+						"duration": 4437.023333
+					},
+					{
+						"path": "QI - s00e15 - Peter Cushing Lives in Whitstable (QI Version).mkv",
+						"folder": "Specials",
+						"duration": 105.685
+					},
+					{
+						"path": "QI - s00e16 - Peter Cushing Lives in Whitstable (Original 1987 Version).mkv",
+						"folder": "Specials",
+						"duration": 151.801
+					},
+					{
+						"path": "QI - s00e17 - Peter Cushing Lives in Whitstable (2008 Remix).mkv",
+						"folder": "Specials",
+						"duration": 202.041
+					},
+					{
+						"path": "QI - s00e18 - The Short History of the Cushing Song.mkv",
+						"folder": "Specials",
+						"duration": 162.154
+					},
+					{
+						"path": "QI - s00e19 - Deleted Bits (Volume 1).mkv",
+						"folder": "Specials",
+						"duration": 2449.834
+					},
+					{
+						"path": "QI - s00e20 - Deleted Bits (Volume 2).mkv",
+						"folder": "Specials",
+						"duration": 2370.005
+					},
+					{
+						"path": "QI - s00e21 - Deleted Bits (Volume 3).mkv",
+						"folder": "Specials",
+						"duration": 2291.821
+					},
+					{
+						"path": "QI - s00e22 - Deleted Bits (Volume 4).mkv",
+						"folder": "Specials",
+						"duration": 2289.341
+					},
+					{
+						"path": "QI - s00e23 - Fry Says Hi (Outtakes).mkv",
+						"folder": "Specials",
+						"duration": 1005.501
+					},
+					{
+						"path": "QI - s00e24 - A QI Christmas Cracker (Christmas Compilation).mkv",
+						"folder": "Specials",
+						"duration": 2308.437
+					},
+					{
+						"path": "QI - s00e25 - QI Live in Kent.mkv",
+						"folder": "Specials",
+						"duration": 2837.901
+					},
+					{
+						"path": "QI - s00e26 - Fourteen Quite Interesting Years (An Interview with Stephen Fry).mkv",
+						"folder": "Specials",
+						"duration": 1811.413
+					},
+					{
+						"path": "QI - s00e27 - Sandi's First Day.mkv",
+						"folder": "Specials",
+						"duration": 1119.381
+					},
+					{
+						"path": "QI - s00e28 - All the QI Buzzers (A to M).mkv",
+						"folder": "Specials",
+						"duration": 2070.314
+					},
+					{
+						"path": "QI - s00e29 - A QI Director's Guide to Research.mkv",
+						"folder": "Specials",
+						"duration": 1241.365
+					},
+					{
+						"path": "QI - s00e30 - Jolly Japes with the QI Elves.mkv",
+						"folder": "Specials",
+						"duration": 247.701
+					},
+					{
+						"path": "QI - s00e31 - A Peek Behind the Scenes.mkv",
+						"folder": "Specials",
+						"duration": 149.301
+					},
+					{
+						"path": "QI - s00e32 - Stephen's Spare Sounds.mkv",
+						"folder": "Specials",
+						"duration": 41.429
+					},
+					{
+						"path": "QI - s00e33 - A Quite Interesting Marriage Proposal.mkv",
+						"folder": "Specials",
+						"duration": 119.061
+					},
+					{
+						"path": "QI - s00e34 - The QI Philosophy.mkv",
+						"folder": "Specials",
+						"duration": 209.021
+					},
+					{
+						"path": "QI - s00e35 - QI Quibble Awards.mkv",
+						"folder": "Specials",
+						"duration": 602.261
+					},
+					{
+						"path": "QI - s00e36 - No Such Thing as the News Chats QI.mkv",
+						"folder": "Specials",
+						"duration": 959.741
+					},
+					{
+						"path": "QI Series T - Pre-Show Banter.mkv",
+						"folder": "Specials",
+						"duration": 327.842
+					}
+				],
+				"parts": true,
+				"shows": true
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0380136",
+				"tmdbId": 1554,
+				"files": [
+					{
+						"path": "QI - s00e01 - Pilot.mkv",
+						"season": 0,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 79873
+					},
+					{
+						"path": "QI - s00e02 - Comic Relief 24 Hour Panel People Special.avi",
+						"season": 0,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 79868
+					},
+					{
+						"path": "QI - s00e03 - The Making of QI Documentary.mkv",
+						"season": 0,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 79870
+					},
+					{
+						"path": "QI - s00e04 - BBC Sport Relief Night 2012.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "QI - s00e07 - QI Comic Relief 2022 Special.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "QI - s00e10 - Series 01 - Bonus Bits & Bloopers.mp4",
+						"season": 0,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155151
+					},
+					{
+						"path": "QI - s00e11 - Series 02 - Bonus Bits & Bloopers.mkv",
+						"season": 0,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155154
+					},
+					{
+						"path": "QI - s00e12 - Series 03 - Bonus Bits & Bloopers.mkv",
+						"season": 0,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 5997847
+					},
+					{
+						"path": "QI - s00e13 - Series 02 - Banter (Part 1).mp4",
+						"season": 0,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 5997847
+					},
+					{
+						"path": "QI - s00e14 - Series 02 - Banter (Part 2).mp4",
+						"season": 0,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155151
+					},
+					{
+						"path": "QI - s00e15 - Peter Cushing Lives in Whitstable (QI Version).mkv",
+						"season": 0,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 3382190
+					},
+					{
+						"path": "QI - s00e16 - Peter Cushing Lives in Whitstable (Original 1987 Version).mkv",
+						"season": 0,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 3382190
+					},
+					{
+						"path": "QI - s00e17 - Peter Cushing Lives in Whitstable (2008 Remix).mkv",
+						"season": 0,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 3382190
+					},
+					{
+						"path": "QI - s00e18 - The Short History of the Cushing Song.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "QI - s00e19 - Deleted Bits (Volume 1).mkv",
+						"season": 0,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155158
+					},
+					{
+						"path": "QI - s00e20 - Deleted Bits (Volume 2).mkv",
+						"season": 0,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155159
+					},
+					{
+						"path": "QI - s00e21 - Deleted Bits (Volume 3).mkv",
+						"season": 0,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155160
+					},
+					{
+						"path": "QI - s00e22 - Deleted Bits (Volume 4).mkv",
+						"season": 0,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155161
+					},
+					{
+						"path": "QI - s00e23 - Fry Says Hi (Outtakes).mkv",
+						"season": 0,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155162
+					},
+					{
+						"path": "QI - s00e24 - A QI Christmas Cracker (Christmas Compilation).mkv",
+						"season": 0,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155163
+					},
+					{
+						"path": "QI - s00e25 - QI Live in Kent.mkv",
+						"season": 0,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155165
+					},
+					{
+						"path": "QI - s00e26 - Fourteen Quite Interesting Years (An Interview with Stephen Fry).mkv",
+						"season": 0,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155166
+					},
+					{
+						"path": "QI - s00e27 - Sandi's First Day.mkv",
+						"season": 0,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155167
+					},
+					{
+						"path": "QI - s00e28 - All the QI Buzzers (A to M).mkv",
+						"season": 0,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155168
+					},
+					{
+						"path": "QI - s00e29 - A QI Director's Guide to Research.mkv",
+						"season": 0,
+						"episode": 27,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155169
+					},
+					{
+						"path": "QI - s00e30 - Jolly Japes with the QI Elves.mkv",
+						"season": 0,
+						"episode": 28,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155170
+					},
+					{
+						"path": "QI - s00e31 - A Peek Behind the Scenes.mkv",
+						"season": 0,
+						"episode": 29,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155171
+					},
+					{
+						"path": "QI - s00e32 - Stephen's Spare Sounds.mkv",
+						"season": 0,
+						"episode": 30,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155173
+					},
+					{
+						"path": "QI - s00e33 - A Quite Interesting Marriage Proposal.mkv",
+						"season": 0,
+						"episode": 31,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155175
+					},
+					{
+						"path": "QI - s00e34 - The QI Philosophy.mkv",
+						"season": 0,
+						"episode": 32,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155176
+					},
+					{
+						"path": "QI - s00e35 - QI Quibble Awards.mkv",
+						"season": 0,
+						"episode": 33,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155178
+					},
+					{
+						"path": "QI - s00e36 - No Such Thing as the News Chats QI.mkv",
+						"season": 0,
+						"episode": 34,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4155179
+					},
+					{
+						"path": "QI Series T - Pre-Show Banter.mkv",
+						"season": 0,
+						"episode": 46,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 4500886
+					}
+				]
+			}
+		}
+	]
+}

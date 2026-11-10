@@ -1436,6 +1436,9 @@ const plain = (text: string) =>
 		// "The Crab and the Urchin"), and the years TMDB adds after a title ("Hitler's Germany: The
 		// People's Community (1933–1939)")
 		.replace(/(?:^|(?<= ))(?:the|a|an) /g, '')
+		// a number's leading zeros (QI's `Series 01 - Bonus Bits & Bloopers` is "Series 1 Bonus Bits &
+		// Bloopers")
+		.replace(/(?:^|(?<= ))0+(?=\d)/g, '')
 		.replace(/(?: (?:19|20)\d{2}){1,2}$/, '')
 		.replace(
 			/ (?:part |pt )?(one|two|three|four|five|\d{1,2})(?: of \d{1,2})?$/,

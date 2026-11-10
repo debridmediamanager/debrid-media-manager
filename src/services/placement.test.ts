@@ -42,6 +42,7 @@ import mythbusters from '@/test/fixtures/placement/mythbusters-year-titles.json'
 import office from '@/test/fixtures/placement/office-tvdb-order.json';
 import otherShows from '@/test/fixtures/placement/other-show-files.json';
 import partTitlesSpoken from '@/test/fixtures/placement/part-titles-spoken.json';
+import qiNumberedSpecials from '@/test/fixtures/placement/qi-numbered-specials.json';
 import releaseTags from '@/test/fixtures/placement/release-tags.json';
 import cases from '@/test/fixtures/placement/releases.json';
 import revival from '@/test/fixtures/placement/revival-seasons.json';
@@ -2908,6 +2909,27 @@ describe("a season's episode 0", () => {
 		const file = releases[0].files.find((f) => f.path.startsWith(start))!;
 		expect([file.season, file.episode]).toEqual([season, episode]);
 		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe("QI's numbered specials", () => {
+	// zurg on fun (2026-11-10): QI's Specials folder titles its specials by series (see the fixtures README)
+	const placedAt = async (start: string) => {
+		const [c] = qiNumberedSpecials.cases;
+		const { releases } = await place(
+			[c.request as PlaceRequest],
+			Infinity,
+			recordedSources(qiNumberedSpecials.answers),
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		const file = releases[0].files.find((f) => f.path.startsWith(start))!;
+		return [file.season, file.episode];
+	};
+
+	it("reads a number's leading zeros as none", async () => {
+		// "Series 1 Bonus Bits & Bloopers"
+		expect(await placedAt('QI - s00e10 - Series 01')).toEqual([0, 14]);
 	});
 });
 
