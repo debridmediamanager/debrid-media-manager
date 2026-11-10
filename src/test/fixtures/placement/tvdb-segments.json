@@ -4961,43 +4961,43 @@
 					},
 					{
 						"path": "Freakazoid! - Special 1 - Freakazoid The Original Freak.mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 1,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1028527
 					},
 					{
 						"path": "Freakazoid! - Special 2 - Freakazoid-less Freakazoid Promos.mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 2,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1028528
 					},
 					{
 						"path": "Freakazoid! - Special 3 - Liebeslied für Normadeus.mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 3,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1028529
 					},
 					{
 						"path": "Freakazoid! - Special 4 - A Full Season's Worth of Commentaries (in Five Minutes or Less).mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 4,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1028530
 					},
 					{
 						"path": "Freakazoid! - Special 5 - Alternate Episode꞉ The Cloud∕Candle Jack .mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 5,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 4329392
 					}
 				]
 			}

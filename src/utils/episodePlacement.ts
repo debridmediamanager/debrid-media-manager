@@ -1589,11 +1589,24 @@ async function byName(
 
 // What names a special as one beside its title: `- OVA - Water Slide`, `DC Comics Special II`.
 const SPECIAL_WORDS = /^(?:ova|oad|ona|special|specials|sp|movie|film|the|a|an|episode|part)$/;
+const NUMBERED_SPECIAL = /^(?:ova|oad|ona|special|sp)$/;
 
-/** A special's title as letters, the release's tags, the show's name and the special words left out. */
+/**
+ * A special's title as letters, the release's tags, the show's name, the special words and the
+ * number after one left out.
+ */
 function specialKey(text: string, shows: string[]): string {
 	const key = words(text.replace(LEADING_GROUPS, '').replace(BRACKETS, ' '))
-		.filter((word) => !TAGS.test(word) && !SPECIAL_WORDS.test(word))
+		// the number after a special word (Fairy Tail's `OVA 1 - Welcome To Fairy Hills!!` is S0E1
+		// "Welcome to Fairy Hills!!"), and "and" as either language says it (`Yankee-Kun To
+		// Yankee-Chan` is "Yankee-kun and Yankee-chan", Japanese と)
+		.filter(
+			(word, at, list) =>
+				!TAGS.test(word) &&
+				!SPECIAL_WORDS.test(word) &&
+				!/^(?:and|to)$/.test(word) &&
+				!(/^\d{1,3}$/.test(word) && at > 0 && NUMBERED_SPECIAL.test(list[at - 1]))
+		)
 		.join('');
 	const show = shows.find((name) => name && key.length > name.length && key.startsWith(name));
 	return show ? key.slice(show.length) : key;
@@ -1621,7 +1634,13 @@ export async function specialOf(
 	const specials = ((await show.episodes(0)) ?? []).filter(
 		(row) => !GENERIC.test(words(row.name).join(' '))
 	);
-	const found = specials.filter((row) => specialKey(row.name, shows) === key);
+	// TMDB's title with the show's name in it, the file's after the show's name: Fairy Tail's `OVA 6
+	// - Fairy Tail x Rave` is S0E6 "Fairy Tail x Rave"; never the show's name alone
+	const found = specials.filter(
+		(row) =>
+			specialKey(row.name, shows) === key ||
+			(!shows.includes(key) && specialKey(row.name, []) === key)
+	);
 	const at = (row: { episode: number }): Placement => ({
 		season: 0,
 		episode: row.episode,

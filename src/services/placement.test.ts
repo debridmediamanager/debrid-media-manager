@@ -20,6 +20,7 @@ import betweenTitled from '@/test/fixtures/placement/between-titled-files.json';
 import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
 import directorsCuts from '@/test/fixtures/placement/directors-cut-primes.json';
 import betweenPairs from '@/test/fixtures/placement/episodes-between-aligned-pairs.json';
+import fairyTail from '@/test/fixtures/placement/fairy-tail-ovas.json';
 import filmsBeforeShows from '@/test/fixtures/placement/films-before-shows.json';
 import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
 import filmsInShows from '@/test/fixtures/placement/films-in-show-releases.json';
@@ -1880,6 +1881,14 @@ describe("TVDB's segments of one TMDB episode", () => {
 		// its first segment cut before the part it names is not TMDB's "The Chip: Part 1"
 		expect(at(release, '1x20 - The Chip (2)')).toEqual([1, 7, null, 1]);
 		expect(at(release, '1x34 - The Wrath of Guitierrez')).toEqual([1, 13, null, null]);
+		// a special by its title after `Special N`, the show's name in both: S0E1 "Freakazoid: The
+		// Original Freak"
+		expect(at(release, 'Special 1 - Freakazoid The Original Freak')).toEqual([
+			0,
+			1,
+			null,
+			null,
+		]);
 		expect(release).toEqual(expected);
 	});
 
@@ -2007,6 +2016,59 @@ describe('a special named by its title', () => {
 		expect(darkness('OVA - 01 - Prologue - Pollen Plan - Body touch')).toEqual([0, 7]);
 		expect(darkness('OVA - 02 - Nostalgia - The Changing Heart - Flower')).toEqual([0, 8]);
 		expect(darkness('OVA - 03 - Exchange - It feels')).toEqual([0, 9]);
+	});
+});
+
+describe('an OVA numbered and titled', () => {
+	// zurg on fun (2026-11-10): Anime Time's Fairy Tail pack titles its OVAs after their numbers,
+	// `Fairy Tail - OVA 1 - Welcome To Fairy Hills!!` (see the fixtures README)
+	const placed = async (name: string) => {
+		const c = fairyTail.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true, shows: true }],
+			Infinity,
+			{
+				...recordedSources(fairyTail.answers),
+				anime: async () =>
+					buildAnimeIndex(
+						buildFranchiseIndex(fairyTail.answers.anime.fribb as FribbAnimeEntry[]),
+						fairyTail.answers.anime.titles
+					),
+			},
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return (part: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(part))!;
+			return [f.season, f.episode];
+		};
+	};
+
+	it("places each on TMDB's special of that title", async () => {
+		const pack = await placed('[Anime Time] Fairy Tail Complete Series');
+		// TMDB's S0E1-E9, "Welcome to Fairy Hills!!" to "Fairies' Christmas"
+		expect(pack('OVA 1 - Welcome To Fairy Hills!!')).toEqual([0, 1]);
+		expect(pack('OVA 3 - Memory Days')).toEqual([0, 3]);
+		expect(pack('OVA 8 - Natsu vs. Mavis')).toEqual([0, 8]);
+		expect(pack("OVA 9 - Fairies' Christmas")).toEqual([0, 9]);
+	});
+
+	it("places one titled with the show's name", async () => {
+		// TMDB's S0E6 "Fairy Tail x Rave"
+		const pack = await placed('[Anime Time] Fairy Tail Complete Series');
+		expect(pack('OVA 6 - Fairy Tail x Rave')).toEqual([0, 6]);
+	});
+
+	it('places one whose title says "and" in Japanese', async () => {
+		// TMDB's S0E2 "Fairy Academy: Yankee-kun and Yankee-chan"
+		const pack = await placed('[Anime Time] Fairy Tail Complete Series');
+		expect(pack('OVA 2 - Fairy Academy Yankee-Kun To Yankee-Chan')).toEqual([0, 2]);
+	});
+
+	it('places no OVA by its number alone, nor a prologue TMDB lists no special for', async () => {
+		const ova = await placed('[Tsuki-Hatsuyuki-Kaitou]_Fairy_Tail_OVA-Movie');
+		expect(ova('OVA_-_01_')).toEqual([null, null]);
+		expect(ova('Phoenix_Priestess_(Prologue)')).toEqual([null, null]);
 	});
 });
 
