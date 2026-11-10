@@ -253,13 +253,15 @@ export async function syncWantedList(row: WantedListRow): Promise<ListSyncResult
 	}
 	const seen = new Set(row.seen);
 	const fresh = read.titles.filter((t) => !seen.has(t.imdbId));
-	const result = await db.wantMany(
+	const { dropped, ...result } = await db.wantMany(
 		row.shortId,
 		fresh.map((t) => ({ ...t, seasons: null }))
 	);
+	// A title that did not fit stays unseen, so a later read adds it once there is room.
+	const left = new Set(dropped);
 	await db.recordWantedListRead(row.id, {
 		name: read.name,
-		seen: read.titles.map((t) => t.imdbId),
+		seen: read.titles.map((t) => t.imdbId).filter((id) => !left.has(id)),
 		added: row.added + result.added,
 	});
 	return { name: read.name, count: read.titles.length, noImdbId: read.noImdbId, ...result };

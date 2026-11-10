@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import { MAX_WANTED_ITEMS, WantedItemsService } from './wantedItems';
+import { MAX_WANTED_ITEMS, MAX_WANTED_ROWS, WantedItemsService } from './wantedItems';
 
 const prismaMock = vi.hoisted(() => ({
 	wantedItem: {
@@ -12,7 +12,9 @@ const prismaMock = vi.hoisted(() => ({
 		upsert: vi.fn(),
 		deleteMany: vi.fn(),
 		updateMany: vi.fn(),
+		aggregate: vi.fn(),
 	},
+	cache: { findUnique: vi.fn(), upsert: vi.fn() },
 }));
 
 vi.mock('./client', () => ({
@@ -38,16 +40,74 @@ describe('WantedItemsService', () => {
 	let service: WantedItemsService;
 	beforeEach(() => {
 		service = new WantedItemsService();
-		for (const fn of Object.values(prismaMock.wantedItem)) (fn as Mock).mockReset();
+		for (const fn of [
+			...Object.values(prismaMock.wantedItem),
+			...Object.values(prismaMock.cache),
+		])
+			(fn as Mock).mockReset();
 	});
+
+	/** `n` listed rows as the cap check reads them; open films unless `over` says otherwise. */
+	const listed = (n: number, over: Record<string, unknown> = {}, from = 9000000) =>
+		Array.from({ length: n }, (_, i) => ({
+			imdbId: `tt${from + i}`,
+			kind: 'movie',
+			fulfilledAt: null,
+			fulfilled: null,
+			...over,
+		}));
+	const DONE = {
+		fulfilledAt: new Date('2026-11-01'),
+		fulfilled: { release: 'x', grab: 'g', torrent: false, resolution: '2160p' },
+	};
+	const film = { imdbId: 'tt0133093', kind: 'movie' as const, title: 'x', seasons: null };
 
 	it('refuses a new title once the list is full', async () => {
 		prismaMock.wantedItem.findUnique.mockResolvedValue(null);
-		prismaMock.wantedItem.count.mockResolvedValue(MAX_WANTED_ITEMS);
-		await expect(
-			service.want('ZP1M', { imdbId: 'tt0133093', kind: 'movie', title: 'x', seasons: null })
-		).resolves.toBeNull();
+		prismaMock.wantedItem.findMany.mockResolvedValue(listed(MAX_WANTED_ITEMS));
+		await expect(service.want('ZP1M', film)).resolves.toBeNull();
 		expect(prismaMock.wantedItem.upsert).not.toHaveBeenCalled();
+	});
+
+	// kittystabz in #sponsors, 2026-11-09: a full list had to be emptied of fetched films
+	// by hand. Five sponsors sat at 5,000 on 2026-11-10, JLK9 with 3,369 films done.
+	it('does not count films zurg is done with toward the cap', async () => {
+		prismaMock.wantedItem.findUnique.mockResolvedValue(null);
+		prismaMock.wantedItem.findMany.mockResolvedValue([
+			...listed(3369, DONE),
+			...listed(MAX_WANTED_ITEMS - 3369, {}, 8000000),
+		]);
+		// The table holds 5,000 rows for this sponsor, whatever reads it.
+		prismaMock.wantedItem.count.mockResolvedValue(MAX_WANTED_ITEMS);
+		prismaMock.wantedItem.upsert.mockResolvedValue(ROW);
+		await expect(service.want('ZP1M', film)).resolves.not.toBeNull();
+	});
+
+	it('counts every show and each film waiting for a better copy', async () => {
+		prismaMock.wantedItem.findUnique.mockResolvedValue(null);
+		const upgrading = {
+			...DONE,
+			fulfilled: { ...DONE.fulfilled, resolution: '1080p', upgradeTo: '2160p' },
+		};
+		const band = {
+			...DONE,
+			fulfilled: {
+				...DONE.fulfilled,
+				bands: { '2160p': { ...DONE.fulfilled, resolution: '1080p', upgradeTo: '2160p' } },
+			},
+		};
+		prismaMock.wantedItem.findMany.mockResolvedValue([
+			...listed(2000, { ...DONE, kind: 'show' }),
+			...listed(2000, upgrading, 7000000),
+			...listed(MAX_WANTED_ITEMS - 4000, band, 6000000),
+		]);
+		await expect(service.want('ZP1M', film)).resolves.toBeNull();
+	});
+
+	it('still caps the rows in all', async () => {
+		prismaMock.wantedItem.findUnique.mockResolvedValue(null);
+		prismaMock.wantedItem.findMany.mockResolvedValue(listed(MAX_WANTED_ROWS, DONE));
+		await expect(service.want('ZP1M', film)).resolves.toBeNull();
 	});
 
 	// Wanting a film again after zurg fetched it means fetch it again.
@@ -60,7 +120,7 @@ describe('WantedItemsService', () => {
 			title: 'x',
 			seasons: null,
 		});
-		expect(prismaMock.wantedItem.count).not.toHaveBeenCalled();
+		expect(prismaMock.wantedItem.findMany).not.toHaveBeenCalled();
 		expect(prismaMock.wantedItem.upsert.mock.calls[0][0].update.fulfilledAt).toBeNull();
 		expect(prismaMock.wantedItem.upsert.mock.calls[0][0].update.fulfilled).toBe(Prisma.DbNull);
 	});
@@ -113,7 +173,7 @@ describe('WantedItemsService', () => {
 
 		it('adds a show not wanted yet following no season, and respects the cap', async () => {
 			prismaMock.wantedItem.findUnique.mockResolvedValue(null);
-			prismaMock.wantedItem.count.mockResolvedValue(0);
+			prismaMock.wantedItem.findMany.mockResolvedValue([]);
 			prismaMock.wantedItem.upsert.mockResolvedValue(ROW);
 			await service.pinWanted(
 				'ZP1M',
@@ -127,7 +187,7 @@ describe('WantedItemsService', () => {
 			});
 
 			prismaMock.wantedItem.upsert.mockClear();
-			prismaMock.wantedItem.count.mockResolvedValue(MAX_WANTED_ITEMS);
+			prismaMock.wantedItem.findMany.mockResolvedValue(listed(MAX_WANTED_ITEMS));
 			await expect(
 				service.pinWanted('ZP1M', { imdbId: 'tt0133093', kind: 'show', title: 'x' }, pin())
 			).resolves.toBeNull();
@@ -138,10 +198,8 @@ describe('WantedItemsService', () => {
 	// An import from Radarr or Sonarr leaves titles already wanted as they are.
 	it('imports only titles not wanted yet, until the list is full', async () => {
 		prismaMock.wantedItem.findMany.mockResolvedValue([
-			...Array.from({ length: MAX_WANTED_ITEMS - 2 }, (_, i) => ({
-				imdbId: `tt${9000000 + i}`,
-			})),
-			{ imdbId: 'tt0133093' },
+			...listed(MAX_WANTED_ITEMS - 2),
+			...listed(1, {}, 133093).map((r) => ({ ...r, imdbId: 'tt0133093' })),
 		]);
 		const film = (imdbId: string) => ({
 			imdbId,
@@ -151,7 +209,7 @@ describe('WantedItemsService', () => {
 		});
 		await expect(
 			service.wantMany('ZP1M', [film('tt0133093'), film('tt0234215'), film('tt0242653')])
-		).resolves.toEqual({ added: 1, alreadyWanted: 1, overCap: 1 });
+		).resolves.toEqual({ added: 1, alreadyWanted: 1, overCap: 1, dropped: ['tt0242653'] });
 		expect(prismaMock.wantedItem.createMany.mock.calls[0][0].data).toEqual([
 			{
 				shortId: 'ZP1M',
@@ -248,6 +306,31 @@ describe('WantedItemsService', () => {
 		expect(prismaMock.wantedItem.updateMany).toHaveBeenCalledWith({
 			where: { shortId: 'ZP1M', id: ROW.id },
 			data: { fulfilled: { ...later, bands }, fulfilledAt: expect.any(Date) },
+		});
+	});
+
+	// A sponsor who set zurg up before wanting anything was told no zurg read the list
+	// (live, 2026-11-10): the read was recorded only on rows, and there were none.
+	it('records a read of an empty list', async () => {
+		await service.touchPolled('ZP1M');
+		const value = prismaMock.cache.upsert.mock.calls[0][0].create;
+		expect(value.key).toBe('wanted:polled:v1:ZP1M');
+		prismaMock.cache.findUnique.mockResolvedValue({ value: value.value });
+		await expect(service.polledAt('ZP1M')).resolves.toEqual(new Date(value.value.at));
+	});
+
+	it('answers the later of the row and list reads in the summary', async () => {
+		prismaMock.wantedItem.aggregate.mockResolvedValue({
+			_count: { _all: 0 },
+			_min: { createdAt: null },
+			_max: { lastPolledAt: null },
+		});
+		prismaMock.cache.findUnique.mockResolvedValue({
+			value: { at: '2026-11-10T15:00:00.000Z' },
+		});
+		await expect(service.summary('ZP1M')).resolves.toMatchObject({
+			count: 0,
+			lastPolledAt: new Date('2026-11-10T15:00:00.000Z'),
 		});
 	});
 

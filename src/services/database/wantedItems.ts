@@ -56,8 +56,32 @@ export interface WantedItemRow {
 	pins?: WantedPin[];
 }
 
-/** At most this many titles a sponsor's zurg is asked to keep fetching. */
+/**
+ * At most this many titles a sponsor's zurg is asked to keep fetching: every show and
+ * each film still open (see `isOpen`). A film zurg is done with costs no poll, so it
+ * does not count.
+ */
 export const MAX_WANTED_ITEMS = 5000;
+/** Every row on the list, finished films included, so it cannot grow without end. */
+export const MAX_WANTED_ROWS = 20000;
+
+/** Polled-at for a sponsor, kept beside the rows so an empty list still records it. */
+const polledKey = (shortId: string) => `wanted:polled:v1:${shortId}`;
+
+/**
+ * A title zurg still works on: every show (followed for new episodes), and a film it
+ * has not fetched yet or holds a copy of it wants bettered.
+ */
+export function isOpen(row: {
+	kind: string;
+	fulfilledAt: Date | null;
+	fulfilled: unknown;
+}): boolean {
+	if (row.kind === 'show' || !row.fulfilledAt) return true;
+	const took = row.fulfilled as WantedFulfilled | null;
+	// ponytail: a band zurg asks for but never fetched is not stored, so such a film counts as done; only the cap is looser for it
+	return !!took?.upgradeTo || Object.values(took?.bands ?? {}).some((b) => !!b.upgradeTo);
+}
 
 function toRow(row: any): WantedItemRow {
 	return {
@@ -82,13 +106,27 @@ function toRow(row: any): WantedItemRow {
  * list it is.
  */
 export class WantedItemsService extends DatabaseClient {
-	public async list(shortId: string): Promise<WantedItemRow[]> {
+	/** The whole list, or with `imdbId` just that title's row (none or one). */
+	public async list(shortId: string, imdbId?: string): Promise<WantedItemRow[]> {
 		if (!shortId) return [];
 		const rows = await this.prisma.wantedItem.findMany({
-			where: { shortId },
+			where: { shortId, ...(imdbId && { imdbId }) },
 			orderBy: { createdAt: 'desc' },
 		});
 		return rows.map(toRow);
+	}
+
+	/** The titles listed now, and how many more fit under both caps. */
+	private async room(shortId: string): Promise<{ listed: Set<string>; room: number }> {
+		const rows = await this.prisma.wantedItem.findMany({
+			where: { shortId },
+			select: { imdbId: true, kind: true, fulfilledAt: true, fulfilled: true },
+		});
+		const open = rows.filter(isOpen).length;
+		return {
+			listed: new Set(rows.map((row) => row.imdbId)),
+			room: Math.max(0, Math.min(MAX_WANTED_ITEMS - open, MAX_WANTED_ROWS - rows.length)),
+		};
 	}
 
 	/**
@@ -104,12 +142,7 @@ export class WantedItemsService extends DatabaseClient {
 			where: { shortId_imdbId: { shortId, imdbId: item.imdbId } },
 			select: { id: true },
 		});
-		if (
-			!existing &&
-			(await this.prisma.wantedItem.count({ where: { shortId } })) >= MAX_WANTED_ITEMS
-		) {
-			return null;
-		}
+		if (!existing && (await this.room(shortId)).room < 1) return null;
 		const seasons = item.seasons ?? Prisma.DbNull;
 		const row = await this.prisma.wantedItem.upsert({
 			where: { shortId_imdbId: { shortId, imdbId: item.imdbId } },
@@ -142,12 +175,7 @@ export class WantedItemsService extends DatabaseClient {
 			where,
 			select: { id: true, pins: true },
 		});
-		if (
-			!existing &&
-			(await this.prisma.wantedItem.count({ where: { shortId } })) >= MAX_WANTED_ITEMS
-		) {
-			return null;
-		}
+		if (!existing && (await this.room(shortId)).room < 1) return null;
 		// ponytail: read-then-write, so two episodes pinned in the same instant can lose one; a transaction if that is ever seen
 		const before = Array.isArray(existing?.pins)
 			? (existing.pins as unknown as WantedPin[])
@@ -183,17 +211,10 @@ export class WantedItemsService extends DatabaseClient {
 	public async wantMany(
 		shortId: string,
 		items: { imdbId: string; kind: WantedKind; title: string; seasons: number[] | null }[]
-	): Promise<{ added: number; alreadyWanted: number; overCap: number }> {
-		const existing = new Set(
-			(
-				await this.prisma.wantedItem.findMany({
-					where: { shortId },
-					select: { imdbId: true },
-				})
-			).map((row) => row.imdbId)
-		);
-		const fresh = items.filter((item) => !existing.has(item.imdbId));
-		const taken = fresh.slice(0, Math.max(0, MAX_WANTED_ITEMS - existing.size));
+	): Promise<{ added: number; alreadyWanted: number; overCap: number; dropped: string[] }> {
+		const { listed, room } = await this.room(shortId);
+		const fresh = items.filter((item) => !listed.has(item.imdbId));
+		const taken = fresh.slice(0, room);
 		if (taken.length) {
 			await this.prisma.wantedItem.createMany({
 				data: taken.map((item) => ({
@@ -206,14 +227,15 @@ export class WantedItemsService extends DatabaseClient {
 				skipDuplicates: true,
 			});
 		}
+		const dropped = fresh.slice(taken.length).map((item) => item.imdbId);
 		return {
 			added: taken.length,
 			alreadyWanted: items.length - fresh.length,
-			overCap: fresh.length - taken.length,
+			overCap: dropped.length,
+			dropped,
 		};
 	}
 
-	/** False when the title was not on the list, which is not an error. */
 	/** How many of the titles were on the list. */
 	public async remove(shortId: string, imdbIds: string[]): Promise<number> {
 		const result = await this.prisma.wantedItem.deleteMany({
@@ -263,18 +285,33 @@ export class WantedItemsService extends DatabaseClient {
 			_min: { createdAt: true },
 			_max: { lastPolledAt: true },
 		});
+		const polled = await this.polledAt(shortId);
+		const rowsPolled = r._max.lastPolledAt ?? null;
 		return {
 			count: r._count._all,
 			since: r._min.createdAt ?? null,
-			lastPolledAt: r._max.lastPolledAt ?? null,
+			lastPolledAt: polled && (!rowsPolled || polled > rowsPolled) ? polled : rowsPolled,
 		};
+	}
+
+	/** When the sponsor's zurg last read the list, empty or not; null before the first read was recorded. */
+	public async polledAt(shortId: string): Promise<Date | null> {
+		const row = await this.prisma.cache.findUnique({ where: { key: polledKey(shortId) } });
+		const at = (row?.value as { at?: string } | null)?.at;
+		return at ? new Date(at) : null;
 	}
 
 	/** Records that the sponsor's zurg read the list, for the page's "last checked". */
 	public async touchPolled(shortId: string): Promise<void> {
-		await this.prisma.wantedItem.updateMany({
-			where: { shortId },
-			data: { lastPolledAt: new Date() },
-		});
+		const now = new Date();
+		const value = { at: now.toISOString() };
+		await Promise.all([
+			this.prisma.wantedItem.updateMany({ where: { shortId }, data: { lastPolledAt: now } }),
+			this.prisma.cache.upsert({
+				where: { key: polledKey(shortId) },
+				update: { value },
+				create: { key: polledKey(shortId), value },
+			}),
+		]);
 	}
 }

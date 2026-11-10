@@ -83,7 +83,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		if (!found) {
 			return res.status(400).json({ error: 'That is not a Radarr or Sonarr backup' });
 		}
-		const result = await db.wantMany(payload.shortId, found.wanted);
+		const { dropped: _, ...result } = await db.wantMany(payload.shortId, found.wanted);
 		const body: WantedImportResponse = {
 			app: found.app,
 			found: found.wanted.length,

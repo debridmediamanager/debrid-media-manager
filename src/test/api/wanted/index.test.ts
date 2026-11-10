@@ -41,6 +41,7 @@ describe('/api/wanted', () => {
 
 	it("lists the sponsor's titles with dates as ISO strings", async () => {
 		mockRepository.listWanted = vi.fn().mockResolvedValue([stored]);
+		mockRepository.wantedPolledAt = vi.fn().mockResolvedValue(null);
 		const res = createMockResponse();
 		await handler(call('GET'), res);
 		expect(res.status).toHaveBeenCalledWith(200);
@@ -50,6 +51,30 @@ describe('/api/wanted', () => {
 			lastPolledAt: '2026-10-24T10:01:00.000Z',
 			fulfilledAt: null,
 		});
+	});
+
+	it('says when zurg last read the list, empty or not', async () => {
+		mockRepository.listWanted = vi.fn().mockResolvedValue([]);
+		mockRepository.wantedPolledAt = vi.fn().mockResolvedValue(new Date('2026-11-10T15:00:00Z'));
+		const res = createMockResponse();
+		await handler(call('GET'), res);
+		expect(vi.mocked(res.json).mock.calls[0][0]).toEqual({
+			items: [],
+			lastPolledAt: '2026-11-10T15:00:00.000Z',
+		});
+	});
+
+	// A title page's button asks about its title, not the whole list.
+	it('lists one title for ?imdbId=, and refuses one that is not an IMDb id', async () => {
+		mockRepository.listWanted = vi.fn().mockResolvedValue([stored]);
+		const res = createMockResponse();
+		await handler(call('GET', { query: { imdbId: 'tt0115082' } }), res);
+		expect(mockRepository.listWanted).toHaveBeenCalledWith(expect.any(String), 'tt0115082');
+		expect(vi.mocked(res.json).mock.calls[0][0].items).toHaveLength(1);
+
+		const bad = createMockResponse();
+		await handler(call('GET', { query: { imdbId: 'nope' } }), bad);
+		expect(bad.status).toHaveBeenCalledWith(400);
 	});
 
 	it('adds a show with its seasons, sorted and deduplicated', async () => {

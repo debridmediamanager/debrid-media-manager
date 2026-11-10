@@ -14,7 +14,10 @@ export function followSummary(r: FollowListResponse): string {
 		`Following ${r.name} (${r.count.toLocaleString()} title${r.count === 1 ? '' : 's'}): ${r.added.toLocaleString()} added`,
 	];
 	if (r.alreadyWanted) parts.push(`${r.alreadyWanted.toLocaleString()} already wanted`);
-	if (r.overCap) parts.push(`${r.overCap.toLocaleString()} did not fit, the list is full`);
+	if (r.overCap)
+		parts.push(
+			`${r.overCap.toLocaleString()} did not fit, the list is full; they are added once there is room`
+		);
 	let text = parts.join(', ') + '.';
 	if (r.noImdbId) text += ` ${r.noImdbId.toLocaleString()} left out for having no IMDb id.`;
 	return text;

@@ -1907,8 +1907,8 @@ export class Repository {
 	}
 
 	// Wanted list: titles a sponsor's zurg fetches
-	public listWanted(shortId: string) {
-		return this.wantedItemsService.list(shortId);
+	public listWanted(shortId: string, imdbId?: string) {
+		return this.wantedItemsService.list(shortId, imdbId);
 	}
 
 	public want(shortId: string, item: Parameters<WantedItemsService['want']>[1]) {
@@ -1938,6 +1938,10 @@ export class Repository {
 
 	public wantedSummary(shortId: string) {
 		return this.wantedItemsService.summary(shortId);
+	}
+
+	public wantedPolledAt(shortId: string) {
+		return this.wantedItemsService.polledAt(shortId);
 	}
 
 	public touchWantedPolled(shortId: string) {

@@ -1,5 +1,6 @@
 import {
 	MAX_WANTED_ITEMS,
+	MAX_WANTED_ROWS,
 	type WantedFulfilled,
 	type WantedItemRow,
 	type WantedPin,
@@ -10,6 +11,8 @@ import { requireSponsor } from '@/utils/requireSponsor';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const IMDB_ID = /^tt\d{7,}$/;
+
+export const WANTED_FULL = `Your wanted list is full: ${MAX_WANTED_ITEMS.toLocaleString('en-US')} titles still to fetch, or ${MAX_WANTED_ROWS.toLocaleString('en-US')} in all. Films zurg has fetched do not count toward the first.`;
 
 export interface WantedItemResponse {
 	id: string;
@@ -42,7 +45,8 @@ function parseSeasons(raw: unknown): number[] | null | undefined {
 
 /**
  * The signed-in sponsor's wanted list, which their zurg reads from
- * `/api/sponsor/wanted`: GET lists it, POST `{imdbId, kind, title, seasons?}`
+ * `/api/sponsor/wanted`: GET lists it with when zurg last read it (`?imdbId=` lists
+ * just that title, for a title page's button), POST `{imdbId, kind, title, seasons?}`
  * adds a title or replaces its seasons, DELETE `?imdbId=` removes one and
  * DELETE `{imdbIds: [...]}` several at once.
  */
@@ -55,8 +59,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	try {
 		if (req.method === 'GET') {
-			const items = await db.listWanted(payload.shortId);
-			return res.status(200).json({ items: items.map(toResponse) });
+			const one = typeof req.query.imdbId === 'string' ? req.query.imdbId : undefined;
+			if (one !== undefined && !IMDB_ID.test(one)) {
+				return res.status(400).json({ error: 'Expected ?imdbId=tt…' });
+			}
+			const items = (await db.listWanted(payload.shortId, one)).map(toResponse);
+			if (one) return res.status(200).json({ items });
+			// Read beside the rows, so a list zurg reads while it is empty says so too.
+			const polled = await db.wantedPolledAt(payload.shortId);
+			return res.status(200).json({ items, lastPolledAt: polled?.toISOString() ?? null });
 		}
 
 		if (req.method === 'POST') {
@@ -88,9 +99,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				seasons,
 			});
 			if (!row) {
-				return res
-					.status(409)
-					.json({ error: `Your wanted list is full (${MAX_WANTED_ITEMS} titles)` });
+				return res.status(409).json({ error: WANTED_FULL });
 			}
 			return res.status(200).json({ item: toResponse(row) });
 		}

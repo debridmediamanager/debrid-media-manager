@@ -247,6 +247,33 @@ describe('syncWantedList', () => {
 		);
 	});
 
+	// YGYE's 6,823-film Trakt list read 0 added on 2026-11-10: it was followed while the
+	// wanted list was full, every title was marked seen, and none came in after room opened.
+	it('leaves titles that did not fit unseen, so a later read adds them', async () => {
+		const ids = fixture('mdblist-items-14.json').movies.map((m: any) => m.imdb_id);
+		const dropped = ids.slice(30);
+		vi.mocked(db).wantMany = vi
+			.fn()
+			.mockResolvedValue({ added: 30, alreadyWanted: 0, overCap: dropped.length, dropped });
+		const result = await syncWantedList(row());
+		expect(result).toMatchObject({ added: 30, overCap: dropped.length });
+		expect(result).not.toHaveProperty('dropped');
+		const seen = vi.mocked(db.recordWantedListRead).mock.calls[0][1].seen;
+		expect(seen).toEqual(ids.slice(0, 30));
+
+		// Room opened: the next read offers exactly the ones left out.
+		vi.mocked(db).wantMany = vi.fn().mockResolvedValue({
+			added: dropped.length,
+			alreadyWanted: 0,
+			overCap: 0,
+			dropped: [],
+		});
+		await syncWantedList(row({ seen, added: 30 }));
+		expect(
+			vi.mocked(db.wantMany).mock.calls[0][1].map((t: { imdbId: string }) => t.imdbId)
+		).toEqual(dropped);
+	});
+
 	it('records why a read failed and leaves the wanted list alone', async () => {
 		mdblist.getListByPath.mockResolvedValue([]);
 		await expect(syncWantedList(row())).rejects.toThrow(ListUnreadable);
