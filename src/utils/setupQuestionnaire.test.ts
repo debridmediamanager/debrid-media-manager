@@ -3075,6 +3075,17 @@ describe('zurg+rex Android serves the Plex apps', () => {
 		]);
 	});
 
+	// An Easynews release sent to zurg is an NZB, which zurg's own Usenet account fetches.
+	it('says Easynews releases sent to zurg reach rex on Android beside own Usenet', () => {
+		expect(
+			onAndroid({ sources: ['easynews', 'usenet'] }).sourceCoverage.find(
+				({ source }) => source === 'easynews'
+			)?.requirements
+		).toEqual([
+			'Keep Easynews in a compatible player. For rex on Android, only releases you send to zurg reach it; a normal host can take a compatible URL addon or feed producer.',
+		]);
+	});
+
 	it('keeps the arr conflict, which zurg+rex Android cannot run', () => {
 		expect(onAndroid({ preference: 'arr' }).conflicts).toEqual([
 			'The arr workflow needs an existing or willing full host for Sonarr/Radarr and zurg. Android and no host cannot run this workflow.',

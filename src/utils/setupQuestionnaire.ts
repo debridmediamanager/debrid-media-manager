@@ -1039,7 +1039,8 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 			'none',
 			[],
 			[
-				`Keep Easynews in a compatible player.${rex && answers.host === 'android' ? ' For rex on Android there is no feed for it; a normal host can take a compatible URL addon or feed producer.' : rex ? ' For rex, a compatible URL addon or feed producer must supply streams and metadata.' : ''}`,
+				// A release sent to zurg is an NZB, so only zurg's own Usenet account fetches it for rex.
+				`Keep Easynews in a compatible player.${rex && answers.host === 'android' ? ` For rex on Android${answers.sources.includes('usenet') ? ', only releases you send to zurg reach it' : ' there is no feed for it'}; a normal host can take a compatible URL addon or feed producer.` : rex ? ' For rex, a compatible URL addon or feed producer must supply streams and metadata.' : ''}`,
 			],
 			[
 				DMM_CAST_LINKS.easynews,
