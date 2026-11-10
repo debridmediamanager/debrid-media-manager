@@ -597,7 +597,7 @@ describe('setup copy and benefits for every combination of up to two sources', (
 					text.includes('Plex server on your phone')
 				).length;
 				return (
-					(body.some((text) => /zurg\+rex (Android|app)/.test(text)) && mentions === 0) ||
+					(body.some((text) => /zurg\+rex|zurg Android/.test(text)) && mentions === 0) ||
 					mentions > 1
 				);
 			})
