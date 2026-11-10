@@ -1,0 +1,3623 @@
+{
+	"answers": {
+		"identify": {
+			"[ANi].入間同學入魔了！第四季.-.20.[1080P][Baha][WEB-DL][AAC.AVC][CHT]": null,
+			"[ANi].入間同學入魔了！第四季.-.23.[1080P][Baha][WEB-DL][AAC.AVC][CHT]": null
+		},
+		"identifier": {
+			"[ANi].入間同學入魔了！第四季.-.20.[1080P][Baha][WEB-DL][AAC.AVC][CHT]": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt11034066",
+						"score": 0.5786,
+						"title": "Welcome to Demon-School, Iruma-kun",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt0124932",
+						"score": -2.029,
+						"title": "20/20",
+						"year": 1978
+					},
+					{
+						"imdbId": "tt21308746",
+						"score": -3.7571,
+						"title": "Ru",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt8860450",
+						"score": -3.9277,
+						"title": "What/If",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt10168312",
+						"score": -4.1541,
+						"title": "What If...?",
+						"year": 2021
+					}
+				],
+				"parsedTitle": "20",
+				"parsedYear": null,
+				"probability": 0.144
+			},
+			"[ANi] 入間同學入魔了！第四季 - 20 [1080P][Baha][WEB-DL][AAC AVC][CHT]": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt11034066",
+						"score": 0.5786,
+						"title": "Welcome to Demon-School, Iruma-kun",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt0124932",
+						"score": -2.029,
+						"title": "20/20",
+						"year": 1978
+					},
+					{
+						"imdbId": "tt21308746",
+						"score": -3.7571,
+						"title": "Ru",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt8860450",
+						"score": -3.9277,
+						"title": "What/If",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt10168312",
+						"score": -4.1541,
+						"title": "What If...?",
+						"year": 2021
+					}
+				],
+				"parsedTitle": "20",
+				"parsedYear": null,
+				"probability": 0.144
+			},
+			"[ANi].入間同學入魔了！第四季.-.23.[1080P][Baha][WEB-DL][AAC.AVC][CHT]": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0126765",
+						"score": 1.5998,
+						"title": "23",
+						"year": 1998
+					},
+					{
+						"imdbId": "tt1774264",
+						"score": 0.005,
+						"title": "23",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt35851471",
+						"score": -0.9393,
+						"title": "23",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt0481369",
+						"score": -1.7227,
+						"title": "The Number 23",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt14570440",
+						"score": -3.0294,
+						"title": "Radical",
+						"year": 2023
+					}
+				],
+				"parsedTitle": "23",
+				"parsedYear": null,
+				"probability": 0.193
+			},
+			"[ANi] 入間同學入魔了！第四季 - 23 [1080P][Baha][WEB-DL][AAC AVC][CHT]": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0126765",
+						"score": 1.5998,
+						"title": "23",
+						"year": 1998
+					},
+					{
+						"imdbId": "tt1774264",
+						"score": 0.005,
+						"title": "23",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt35851471",
+						"score": -0.9393,
+						"title": "23",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt0481369",
+						"score": -1.7227,
+						"title": "The Number 23",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt14570440",
+						"score": -3.0294,
+						"title": "Radical",
+						"year": 2023
+					}
+				],
+				"parsedTitle": "23",
+				"parsedYear": null,
+				"probability": 0.193
+			}
+		},
+		"find": {
+			"tt11034066": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 91801,
+						"name": "Welcome to Demon School! Iruma-kun",
+						"first_air_date": "2019-10-05",
+						"original_language": "ja",
+						"media_type": "tv"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0124932": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 2035,
+						"name": "20/20",
+						"first_air_date": "1978-06-06",
+						"original_language": "en",
+						"media_type": "tv"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt21308746": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 253645,
+						"name": "RU",
+						"first_air_date": "2024-05-24",
+						"original_language": "tr",
+						"media_type": "tv"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt8860450": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 81940,
+						"name": "WHAT / IF",
+						"first_air_date": "2019-05-24",
+						"original_language": "en",
+						"media_type": "tv"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt10168312": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 91363,
+						"name": "What If...?",
+						"first_air_date": "2021-08-11",
+						"original_language": "en",
+						"media_type": "tv"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"2035": {
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "トゥエンティ・トゥエンティ",
+							"iso_3166_1": "JP"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0124932",
+					"tvdb_id": 72289
+				},
+				"first_air_date": "1978-06-06",
+				"genres": [
+					{
+						"id": 10763,
+						"name": "News"
+					},
+					{
+						"id": 99,
+						"name": "Documentary"
+					}
+				],
+				"id": 2035,
+				"keywords": {
+					"results": [
+						{
+							"id": 233624,
+							"name": "news magazine"
+						},
+						{
+							"id": 307587,
+							"name": "crime documentary"
+						},
+						{
+							"id": 323114,
+							"name": "crime"
+						}
+					]
+				},
+				"name": "20/20",
+				"networks": [
+					{
+						"id": 2,
+						"name": "ABC"
+					}
+				],
+				"origin_country": ["US"],
+				"original_language": "en",
+				"original_name": "20/20",
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 38,
+						"air_date": null,
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 13,
+						"air_date": "1978-06-06",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 20,
+						"air_date": "1979-05-03",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 1,
+						"air_date": "1985-11-07",
+						"name": "Season 8"
+					},
+					{
+						"season_number": 22,
+						"episode_count": 13,
+						"air_date": "2000-09-01",
+						"name": "Season 22"
+					},
+					{
+						"season_number": 25,
+						"episode_count": 3,
+						"air_date": "2003-05-30",
+						"name": "Season 25"
+					},
+					{
+						"season_number": 26,
+						"episode_count": 5,
+						"air_date": "2003-11-28",
+						"name": "Season 26"
+					},
+					{
+						"season_number": 28,
+						"episode_count": 1,
+						"air_date": null,
+						"name": "Season 28"
+					},
+					{
+						"season_number": 29,
+						"episode_count": 56,
+						"air_date": "2006-09-08",
+						"name": "Season 29"
+					},
+					{
+						"season_number": 30,
+						"episode_count": 59,
+						"air_date": "2007-09-14",
+						"name": "Season 30"
+					},
+					{
+						"season_number": 31,
+						"episode_count": 55,
+						"air_date": "2008-09-17",
+						"name": "Season 31"
+					},
+					{
+						"season_number": 32,
+						"episode_count": 31,
+						"air_date": "2009-09-11",
+						"name": "Season 32"
+					},
+					{
+						"season_number": 33,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 33"
+					},
+					{
+						"season_number": 34,
+						"episode_count": 62,
+						"air_date": "2010-09-17",
+						"name": "Season 34"
+					},
+					{
+						"season_number": 35,
+						"episode_count": 40,
+						"air_date": "2012-03-17",
+						"name": "Season 35"
+					},
+					{
+						"season_number": 36,
+						"episode_count": 58,
+						"air_date": "2013-01-04",
+						"name": "Season 36"
+					},
+					{
+						"season_number": 37,
+						"episode_count": 1,
+						"air_date": null,
+						"name": "Season 37"
+					},
+					{
+						"season_number": 38,
+						"episode_count": 3,
+						"air_date": null,
+						"name": "Season 38"
+					},
+					{
+						"season_number": 39,
+						"episode_count": 3,
+						"air_date": null,
+						"name": "Season 39"
+					},
+					{
+						"season_number": 40,
+						"episode_count": 13,
+						"air_date": null,
+						"name": "Season 40"
+					},
+					{
+						"season_number": 41,
+						"episode_count": 49,
+						"air_date": "2017-09-15",
+						"name": "Season 41"
+					},
+					{
+						"season_number": 42,
+						"episode_count": 44,
+						"air_date": "2018-09-07",
+						"name": "Season 42"
+					},
+					{
+						"season_number": 43,
+						"episode_count": 36,
+						"air_date": "2019-09-27",
+						"name": "Season 43"
+					},
+					{
+						"season_number": 44,
+						"episode_count": 35,
+						"air_date": "2020-10-16",
+						"name": "Season 44"
+					},
+					{
+						"season_number": 45,
+						"episode_count": 26,
+						"air_date": "2021-10-08",
+						"name": "Season 45"
+					},
+					{
+						"season_number": 46,
+						"episode_count": 33,
+						"air_date": "2022-09-23",
+						"name": "Season 46"
+					},
+					{
+						"season_number": 47,
+						"episode_count": 33,
+						"air_date": "2023-09-29",
+						"name": "Season 47"
+					},
+					{
+						"season_number": 48,
+						"episode_count": 35,
+						"air_date": "2024-09-20",
+						"name": "Season 48"
+					},
+					{
+						"season_number": 49,
+						"episode_count": 33,
+						"air_date": "2025-09-26",
+						"name": "Season 49"
+					},
+					{
+						"season_number": 50,
+						"episode_count": 7,
+						"air_date": "2026-09-25",
+						"name": "Season 50"
+					}
+				],
+				"translations": {
+					"translations": [
+						{
+							"iso_3166_1": "US",
+							"iso_639_1": "en",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "KR",
+							"iso_639_1": "ko",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "PT",
+							"iso_639_1": "pt",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "ES",
+							"iso_639_1": "es",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "DE",
+							"iso_639_1": "de",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "JP",
+							"iso_639_1": "ja",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "SA",
+							"iso_639_1": "ar",
+							"data": {
+								"name": ""
+							}
+						}
+					]
+				},
+				"episode_run_time": [40, 80, 81]
+			},
+			"81940": {
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "假如",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "如／果",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "What/If",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Δίλημμα με τη Ρενέ Ζελβέγκερ",
+							"iso_3166_1": "GR"
+						},
+						{
+							"title": "What if (2019)",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt8860450",
+					"tvdb_id": 473812
+				},
+				"first_air_date": "2019-05-24",
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"id": 81940,
+				"keywords": {
+					"results": [
+						{
+							"id": 582,
+							"name": "san francisco, california"
+						},
+						{
+							"id": 2110,
+							"name": "capitalist"
+						},
+						{
+							"id": 6038,
+							"name": "marriage"
+						},
+						{
+							"id": 9706,
+							"name": "anthology"
+						},
+						{
+							"id": 10594,
+							"name": "money"
+						},
+						{
+							"id": 11162,
+							"name": "miniseries"
+						},
+						{
+							"id": 207268,
+							"name": "neo-noir"
+						},
+						{
+							"id": 257783,
+							"name": "2010s"
+						},
+						{
+							"id": 267122,
+							"name": "sex"
+						},
+						{
+							"id": 288793,
+							"name": "power"
+						}
+					]
+				},
+				"name": "WHAT / IF",
+				"networks": [
+					{
+						"id": 213,
+						"name": "Netflix"
+					}
+				],
+				"origin_country": ["US"],
+				"original_language": "en",
+				"original_name": "WHAT / IF",
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 10,
+						"air_date": "2019-05-24",
+						"name": "Part I"
+					}
+				],
+				"translations": {
+					"translations": [
+						{
+							"iso_3166_1": "US",
+							"iso_639_1": "en",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "ES",
+							"iso_639_1": "es",
+							"data": {
+								"name": "Dilema"
+							}
+						},
+						{
+							"iso_3166_1": "FR",
+							"iso_639_1": "fr",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "BR",
+							"iso_639_1": "pt",
+							"data": {
+								"name": "Dilema"
+							}
+						},
+						{
+							"iso_3166_1": "KR",
+							"iso_639_1": "ko",
+							"data": {
+								"name": "왓 / 이프"
+							}
+						},
+						{
+							"iso_3166_1": "RU",
+							"iso_639_1": "ru",
+							"data": {
+								"name": "Что/если"
+							}
+						},
+						{
+							"iso_3166_1": "GR",
+							"iso_639_1": "el",
+							"data": {
+								"name": "Δίλημμα"
+							}
+						},
+						{
+							"iso_3166_1": "PL",
+							"iso_639_1": "pl",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "CA",
+							"iso_639_1": "fr",
+							"data": {
+								"name": "Dilemme"
+							}
+						},
+						{
+							"iso_3166_1": "SE",
+							"iso_639_1": "sv",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "FI",
+							"iso_639_1": "fi",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "DK",
+							"iso_639_1": "da",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "NL",
+							"iso_639_1": "nl",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "DE",
+							"iso_639_1": "de",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "JP",
+							"iso_639_1": "ja",
+							"data": {
+								"name": "WHAT / IF 選択の連鎖"
+							}
+						},
+						{
+							"iso_3166_1": "IT",
+							"iso_639_1": "it",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "CN",
+							"iso_639_1": "zh",
+							"data": {
+								"name": "如／果"
+							}
+						},
+						{
+							"iso_3166_1": "TR",
+							"iso_639_1": "tr",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "TH",
+							"iso_639_1": "th",
+							"data": {
+								"name": "เส้นทางร้าย"
+							}
+						},
+						{
+							"iso_3166_1": "RO",
+							"iso_639_1": "ro",
+							"data": {
+								"name": "Repercusiuni"
+							}
+						},
+						{
+							"iso_3166_1": "IL",
+							"iso_639_1": "he",
+							"data": {
+								"name": "השלכות"
+							}
+						},
+						{
+							"iso_3166_1": "BG",
+							"iso_639_1": "bg",
+							"data": {
+								"name": "Ами ако"
+							}
+						},
+						{
+							"iso_3166_1": "UA",
+							"iso_639_1": "uk",
+							"data": {
+								"name": "ЩО / ЯКЩО"
+							}
+						},
+						{
+							"iso_3166_1": "MX",
+							"iso_639_1": "es",
+							"data": {
+								"name": "Dilema"
+							}
+						},
+						{
+							"iso_3166_1": "HU",
+							"iso_639_1": "hu",
+							"data": {
+								"name": "Mi lenne/ha"
+							}
+						},
+						{
+							"iso_3166_1": "TW",
+							"iso_639_1": "zh",
+							"data": {
+								"name": "如／果"
+							}
+						},
+						{
+							"iso_3166_1": "PT",
+							"iso_639_1": "pt",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "CZ",
+							"iso_639_1": "cs",
+							"data": {
+								"name": "CO / KDYBY"
+							}
+						},
+						{
+							"iso_3166_1": "HK",
+							"iso_639_1": "zh",
+							"data": {
+								"name": "如／果"
+							}
+						},
+						{
+							"iso_3166_1": "IN",
+							"iso_639_1": "hi",
+							"data": {
+								"name": ""
+							}
+						}
+					]
+				},
+				"episode_run_time": [60]
+			},
+			"91363": {
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "O Que Aconteceria Se...?",
+							"iso_3166_1": "BR"
+						},
+						{
+							"title": "What If... ? de Marvel Animation",
+							"iso_3166_1": "CA"
+						},
+						{
+							"title": "假如…？",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "¿Qué pasaría si...? de Marvel Studios",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Et qu'est-ce qui se passerait si...?",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Τι θα γινόταν αν...;",
+							"iso_3166_1": "GR"
+						},
+						{
+							"title": "מה אם?",
+							"iso_3166_1": "IL"
+						},
+						{
+							"title": "چه میشه اگر...؟",
+							"iso_3166_1": "IR"
+						},
+						{
+							"title": "ホワット・イフ...?",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "ホワット・イフ...",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "マーベルアニメ ホワット・イフ...？",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "마블 왓 이프 What if...?",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "왓 이프...?",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "왓 이프",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Marvel Studios E se...?",
+							"iso_3166_1": "PT"
+						},
+						{
+							"title": "Farzedelim...?",
+							"iso_3166_1": "TR"
+						},
+						{
+							"title": "А що як...?",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "Marvel Studios' What If...?",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "What If...",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "What If",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Marvel Animation's What If...?",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "What If …?: Nếu Như …?",
+							"iso_3166_1": "VN"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt10168312",
+					"tvdb_id": 367147
+				},
+				"first_air_date": "2021-08-11",
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"id": 91363,
+				"keywords": {
+					"results": [
+						{
+							"id": 9706,
+							"name": "anthology"
+						},
+						{
+							"id": 9715,
+							"name": "superhero"
+						},
+						{
+							"id": 180547,
+							"name": "marvel cinematic universe (mcu)"
+						},
+						{
+							"id": 186760,
+							"name": "alternate timeline"
+						},
+						{
+							"id": 336874,
+							"name": "multiverse"
+						}
+					]
+				},
+				"name": "What If...?",
+				"networks": [
+					{
+						"id": 2739,
+						"name": "Disney+"
+					}
+				],
+				"origin_country": ["US"],
+				"original_language": "en",
+				"original_name": "What If...?",
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 9,
+						"air_date": "2021-08-11",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 9,
+						"air_date": "2023-12-22",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 8,
+						"air_date": "2024-12-22",
+						"name": "Season 3"
+					}
+				],
+				"translations": {
+					"translations": [
+						{
+							"iso_3166_1": "US",
+							"iso_639_1": "en",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "KR",
+							"iso_639_1": "ko",
+							"data": {
+								"name": "왓 이프...?"
+							}
+						},
+						{
+							"iso_3166_1": "FR",
+							"iso_639_1": "fr",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "RU",
+							"iso_639_1": "ru",
+							"data": {
+								"name": "Что, Если...?"
+							}
+						},
+						{
+							"iso_3166_1": "BR",
+							"iso_639_1": "pt",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "IL",
+							"iso_639_1": "he",
+							"data": {
+								"name": "מה אם...?"
+							}
+						},
+						{
+							"iso_3166_1": "SK",
+							"iso_639_1": "sk",
+							"data": {
+								"name": "Čo keby...?"
+							}
+						},
+						{
+							"iso_3166_1": "ES",
+							"iso_639_1": "es",
+							"data": {
+								"name": "¿Qué pasaría si...?"
+							}
+						},
+						{
+							"iso_3166_1": "CZ",
+							"iso_639_1": "cs",
+							"data": {
+								"name": "Co kdyby...?"
+							}
+						},
+						{
+							"iso_3166_1": "TH",
+							"iso_639_1": "th",
+							"data": {
+								"name": "สมมุติว่า...?"
+							}
+						},
+						{
+							"iso_3166_1": "IT",
+							"iso_639_1": "it",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "NL",
+							"iso_639_1": "nl",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "MX",
+							"iso_639_1": "es",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "PT",
+							"iso_639_1": "pt",
+							"data": {
+								"name": "E Se...?"
+							}
+						},
+						{
+							"iso_3166_1": "UA",
+							"iso_639_1": "uk",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "CN",
+							"iso_639_1": "zh",
+							"data": {
+								"name": "假如…？"
+							}
+						},
+						{
+							"iso_3166_1": "DE",
+							"iso_639_1": "de",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "PL",
+							"iso_639_1": "pl",
+							"data": {
+								"name": "A gdyby…?"
+							}
+						},
+						{
+							"iso_3166_1": "HR",
+							"iso_639_1": "hr",
+							"data": {
+								"name": "Što ako...?"
+							}
+						},
+						{
+							"iso_3166_1": "JP",
+							"iso_639_1": "ja",
+							"data": {
+								"name": "ホワット・イフ…？"
+							}
+						},
+						{
+							"iso_3166_1": "VN",
+							"iso_639_1": "vi",
+							"data": {
+								"name": "Nếu Như…?"
+							}
+						},
+						{
+							"iso_3166_1": "FI",
+							"iso_639_1": "fi",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "HK",
+							"iso_639_1": "zh",
+							"data": {
+								"name": "無限可能: 假如...?"
+							}
+						},
+						{
+							"iso_3166_1": "TW",
+							"iso_639_1": "zh",
+							"data": {
+								"name": "無限可能：假如…？"
+							}
+						},
+						{
+							"iso_3166_1": "RO",
+							"iso_639_1": "ro",
+							"data": {
+								"name": "Și dacă...?"
+							}
+						},
+						{
+							"iso_3166_1": "GR",
+							"iso_639_1": "el",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "TR",
+							"iso_639_1": "tr",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "RS",
+							"iso_639_1": "sr",
+							"data": {
+								"name": "Шта ако...?"
+							}
+						},
+						{
+							"iso_3166_1": "HU",
+							"iso_639_1": "hu",
+							"data": {
+								"name": "Mi lenne, ha…?"
+							}
+						},
+						{
+							"iso_3166_1": "DK",
+							"iso_639_1": "da",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "SD",
+							"iso_639_1": "sd",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "LT",
+							"iso_639_1": "lt",
+							"data": {
+								"name": "O kas, jeigu...?"
+							}
+						},
+						{
+							"iso_3166_1": "SA",
+							"iso_639_1": "ar",
+							"data": {
+								"name": "ماذا لو...؟"
+							}
+						},
+						{
+							"iso_3166_1": "CA",
+							"iso_639_1": "fr",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "AV",
+							"iso_639_1": "av",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "AE",
+							"iso_639_1": "ar",
+							"data": {
+								"name": "ماذا لو...؟"
+							}
+						},
+						{
+							"iso_3166_1": "GE",
+							"iso_639_1": "ka",
+							"data": {
+								"name": "რა იქნებოდა თუ...?"
+							}
+						},
+						{
+							"iso_3166_1": "IR",
+							"iso_639_1": "fa",
+							"data": {
+								"name": "چه می‌شود اگر...؟"
+							}
+						},
+						{
+							"iso_3166_1": "BG",
+							"iso_639_1": "bg",
+							"data": {
+								"name": "Ами ако...?"
+							}
+						},
+						{
+							"iso_3166_1": "NO",
+							"iso_639_1": "no",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "SE",
+							"iso_639_1": "sv",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "SG",
+							"iso_639_1": "zh",
+							"data": {
+								"name": "假如…？"
+							}
+						}
+					]
+				},
+				"episode_run_time": []
+			},
+			"91801": {
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Iruma à l’école des démons",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "डेमन स्कूल में आपका स्वागत है! इरुमा-कुन",
+							"iso_3166_1": "IN"
+						},
+						{
+							"title": "Mairimashita! Iruma-kun",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Mairimashita! Iruma-kun 2",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Mairimashita, Iruma-kun 2",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Mairimashita, Iruma-kun",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Mairimashita! Iruma-kun 3",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "魔入りました！入間くん４",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "魔入りました！入間くん",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "魔入りました!入間くん4",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "마계학교 이루마군",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "악마에 입문했습니다! 이루마 군",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "마계학교! 이루마군",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Iruma w szkole demonów",
+							"iso_3166_1": "PL"
+						},
+						{
+							"title": "อิรุมะคุงกับโรงเรียนปิศาจ",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "Welcome to Demon-School, Iruma-kun",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "The Demon, Iruma-kun, Came and Enrolled!",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Welcome to Demon School, Iruma-kun",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Enrolled Demon Iruma!",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Welcome to Demon School! Iruma-kun 2",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Here Comes the Demon! Iruma-Kun",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Welcome to Demon-School! Iruma-kun 3",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Vào Ma Giới Rồi Đấy",
+							"iso_3166_1": "VN"
+						},
+						{
+							"title": "Vào Ma Giới Rồi Đấy! Iruma-kun",
+							"iso_3166_1": "VN"
+						},
+						{
+							"title": "Vào Ma Giới Rồi Đấy Iruma-kun",
+							"iso_3166_1": "VN"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt11034066",
+					"tvdb_id": 369144
+				},
+				"first_air_date": "2019-10-05",
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"id": 91801,
+				"keywords": {
+					"results": [
+						{
+							"id": 2343,
+							"name": "magic"
+						},
+						{
+							"id": 2393,
+							"name": "adoption"
+						},
+						{
+							"id": 3734,
+							"name": "ambition"
+						},
+						{
+							"id": 6152,
+							"name": "supernatural"
+						},
+						{
+							"id": 6154,
+							"name": "hell"
+						},
+						{
+							"id": 6270,
+							"name": "high school"
+						},
+						{
+							"id": 9717,
+							"name": "based on comic"
+						},
+						{
+							"id": 12090,
+							"name": "cross dressing"
+						},
+						{
+							"id": 15001,
+							"name": "demon"
+						},
+						{
+							"id": 190116,
+							"name": "school life"
+						},
+						{
+							"id": 207826,
+							"name": "shounen"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 210295,
+							"name": "classmates"
+						},
+						{
+							"id": 237451,
+							"name": "isekai"
+						},
+						{
+							"id": 248927,
+							"name": "found family"
+						},
+						{
+							"id": 340775,
+							"name": "rank"
+						}
+					]
+				},
+				"name": "Welcome to Demon School! Iruma-kun",
+				"networks": [
+					{
+						"id": 622,
+						"name": "NHK Educational TV"
+					}
+				],
+				"origin_country": ["JP"],
+				"original_language": "ja",
+				"original_name": "魔入りました！入間くん",
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 23,
+						"air_date": "2019-10-05",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 21,
+						"air_date": "2021-04-17",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 21,
+						"air_date": "2022-10-08",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 24,
+						"air_date": "2026-04-04",
+						"name": "Season 4"
+					}
+				],
+				"translations": {
+					"translations": [
+						{
+							"iso_3166_1": "MX",
+							"iso_639_1": "es",
+							"data": {
+								"name": "Welcome to Demon School! Iruma-kun"
+							}
+						},
+						{
+							"iso_3166_1": "BR",
+							"iso_639_1": "pt",
+							"data": {
+								"name": "Welcome to Demon School! Iruma-kun"
+							}
+						},
+						{
+							"iso_3166_1": "US",
+							"iso_639_1": "en",
+							"data": {
+								"name": "Welcome to Demon School! Iruma-kun"
+							}
+						},
+						{
+							"iso_3166_1": "FR",
+							"iso_639_1": "fr",
+							"data": {
+								"name": "Welcome to Demon School! Iruma-kun"
+							}
+						},
+						{
+							"iso_3166_1": "KR",
+							"iso_639_1": "ko",
+							"data": {
+								"name": "마계학교! 이루마군"
+							}
+						},
+						{
+							"iso_3166_1": "ES",
+							"iso_639_1": "es",
+							"data": {
+								"name": "Mairimashita! Iruma-kun"
+							}
+						},
+						{
+							"iso_3166_1": "CN",
+							"iso_639_1": "zh",
+							"data": {
+								"name": "入间同学入魔了！"
+							}
+						},
+						{
+							"iso_3166_1": "PL",
+							"iso_639_1": "pl",
+							"data": {
+								"name": "Welcome to Demon School! Iruma-kun"
+							}
+						},
+						{
+							"iso_3166_1": "DE",
+							"iso_639_1": "de",
+							"data": {
+								"name": "Welcome to Demon School! Iruma-kun"
+							}
+						},
+						{
+							"iso_3166_1": "SA",
+							"iso_639_1": "ar",
+							"data": {
+								"name": "مرحبًا بك في مدرسة الشياطين! إيروما-كن"
+							}
+						},
+						{
+							"iso_3166_1": "RU",
+							"iso_639_1": "ru",
+							"data": {
+								"name": "Добро пожаловать в ад, Ирума!"
+							}
+						},
+						{
+							"iso_3166_1": "TW",
+							"iso_639_1": "zh",
+							"data": {
+								"name": "入間同學入魔了"
+							}
+						},
+						{
+							"iso_3166_1": "TH",
+							"iso_639_1": "th",
+							"data": {
+								"name": "อิรุมะคุง ผจญในแดนปีศาจ!"
+							}
+						},
+						{
+							"iso_3166_1": "UA",
+							"iso_639_1": "uk",
+							"data": {
+								"name": "Вітаємо в пеклі, Ірумо"
+							}
+						},
+						{
+							"iso_3166_1": "JP",
+							"iso_639_1": "ja",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "CZ",
+							"iso_639_1": "cs",
+							"data": {
+								"name": "Welcome to Demon School! Iruma-kun"
+							}
+						},
+						{
+							"iso_3166_1": "SK",
+							"iso_639_1": "sk",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "IT",
+							"iso_639_1": "it",
+							"data": {
+								"name": "Welcome to Demon School! Iruma-kun"
+							}
+						},
+						{
+							"iso_3166_1": "VN",
+							"iso_639_1": "vi",
+							"data": {
+								"name": "Vào Ma Giới Rồi Đấy! Iruma-kun"
+							}
+						},
+						{
+							"iso_3166_1": "IR",
+							"iso_639_1": "fa",
+							"data": {
+								"name": "به مدرسه‌ی شیطانی خوش اومدی! محترم ایروما‌"
+							}
+						},
+						{
+							"iso_3166_1": "HK",
+							"iso_639_1": "zh",
+							"data": {
+								"name": "入間同學入魔了"
+							}
+						},
+						{
+							"iso_3166_1": "NL",
+							"iso_639_1": "nl",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "SG",
+							"iso_639_1": "zh",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "PT",
+							"iso_639_1": "pt",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "JV",
+							"iso_639_1": "jv",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "LA",
+							"iso_639_1": "la",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "MY",
+							"iso_639_1": "ms",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "SG",
+							"iso_639_1": "ms",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "ID",
+							"iso_639_1": "id",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "PK",
+							"iso_639_1": "ur",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "PH",
+							"iso_639_1": "tl",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "IL",
+							"iso_639_1": "he",
+							"data": {
+								"name": "ברוך הבא לתיכון השדים, אירומה-קון!"
+							}
+						},
+						{
+							"iso_3166_1": "IN",
+							"iso_639_1": "hi",
+							"data": {
+								"name": "डेमन स्कूल में आपका स्वागत है! इरुमा-कुन"
+							}
+						},
+						{
+							"iso_3166_1": "TR",
+							"iso_639_1": "tr",
+							"data": {
+								"name": ""
+							}
+						}
+					]
+				},
+				"episode_run_time": [25]
+			},
+			"253645": {
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "حكاية روح",
+							"iso_3166_1": "AE"
+						},
+						{
+							"title": "حكاية روح",
+							"iso_3166_1": "EG"
+						},
+						{
+							"title": "Hekayat Rouh",
+							"iso_3166_1": "EG"
+						},
+						{
+							"title": "حكاية روح",
+							"iso_3166_1": "LB"
+						},
+						{
+							"title": "Ru",
+							"iso_3166_1": "MX"
+						},
+						{
+							"title": "حكاية روح",
+							"iso_3166_1": "SA"
+						},
+						{
+							"title": "رو",
+							"iso_3166_1": "SA"
+						},
+						{
+							"title": "Ru",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt21308746",
+					"tvdb_id": 449752
+				},
+				"first_air_date": "2024-05-24",
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"id": 253645,
+				"keywords": {
+					"results": []
+				},
+				"name": "RU",
+				"networks": [
+					{
+						"id": 3626,
+						"name": "MBC Shahid"
+					},
+					{
+						"id": 4409,
+						"name": "GAİN"
+					}
+				],
+				"origin_country": ["TR"],
+				"original_language": "tr",
+				"original_name": "RU",
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 8,
+						"air_date": "2024-05-24",
+						"name": "Season 1"
+					}
+				],
+				"translations": {
+					"translations": [
+						{
+							"iso_3166_1": "RU",
+							"iso_639_1": "ru",
+							"data": {
+								"name": "Ру"
+							}
+						},
+						{
+							"iso_3166_1": "TR",
+							"iso_639_1": "tr",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "SA",
+							"iso_639_1": "ar",
+							"data": {
+								"name": "حكاية روح"
+							}
+						},
+						{
+							"iso_3166_1": "MX",
+							"iso_639_1": "es",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "US",
+							"iso_639_1": "en",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "BE",
+							"iso_639_1": "nl",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "NL",
+							"iso_639_1": "nl",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "RO",
+							"iso_639_1": "ro",
+							"data": {
+								"name": "Reyan și Uzer"
+							}
+						},
+						{
+							"iso_3166_1": "IT",
+							"iso_639_1": "it",
+							"data": {
+								"name": ""
+							}
+						},
+						{
+							"iso_3166_1": "ES",
+							"iso_639_1": "es",
+							"data": {
+								"name": ""
+							}
+						}
+					]
+				},
+				"episode_run_time": [45]
+			}
+		},
+		"season": {
+			"91801/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 4,
+						"name": "The Other Demon in the Misfit Class",
+						"air_date": "2026-04-04",
+						"runtime": 25,
+						"id": 6943906
+					},
+					{
+						"episode_number": 2,
+						"season_number": 4,
+						"name": "A Challenge to the Thirteen",
+						"air_date": "2026-04-11",
+						"runtime": 25,
+						"id": 7110255
+					},
+					{
+						"episode_number": 3,
+						"season_number": 4,
+						"name": "The Essence of a Dem-dol",
+						"air_date": "2026-04-18",
+						"runtime": 25,
+						"id": 7123723
+					},
+					{
+						"episode_number": 4,
+						"season_number": 4,
+						"name": "We Can't See Him, But...",
+						"air_date": "2026-04-25",
+						"runtime": 25,
+						"id": 7139757
+					},
+					{
+						"episode_number": 5,
+						"season_number": 4,
+						"name": "Let's Have a Chat",
+						"air_date": "2026-05-02",
+						"runtime": 25,
+						"id": 7139758
+					},
+					{
+						"episode_number": 6,
+						"season_number": 4,
+						"name": "The Music Festival: Showtime!!",
+						"air_date": "2026-05-09",
+						"runtime": 25,
+						"id": 7139759
+					},
+					{
+						"episode_number": 7,
+						"season_number": 4,
+						"name": "Lilith's Carpet",
+						"air_date": "2026-05-16",
+						"runtime": 25,
+						"id": 7139760
+					},
+					{
+						"episode_number": 8,
+						"season_number": 4,
+						"name": "Victory Salute",
+						"air_date": "2026-05-23",
+						"runtime": 25,
+						"id": 7139761
+					},
+					{
+						"episode_number": 9,
+						"season_number": 4,
+						"name": "Behind Those Eyes",
+						"air_date": "2026-05-30",
+						"runtime": 25,
+						"id": 7139763
+					},
+					{
+						"episode_number": 10,
+						"season_number": 4,
+						"name": "Triple Love Squad",
+						"air_date": "2026-06-06",
+						"runtime": 25,
+						"id": 7139764
+					},
+					{
+						"episode_number": 11,
+						"season_number": 4,
+						"name": "Best Friend Meeting / Lead's Flirting Meeting",
+						"air_date": "2026-06-13",
+						"runtime": 25,
+						"id": 7139765
+					},
+					{
+						"episode_number": 12,
+						"season_number": 4,
+						"name": "One-Year Distance and One-Centimeter Distance",
+						"air_date": "2026-06-20",
+						"runtime": 25,
+						"id": 7139766
+					},
+					{
+						"episode_number": 13,
+						"season_number": 4,
+						"name": "Suzuki Iruma's Exorcibration",
+						"air_date": "2026-06-27",
+						"runtime": 25,
+						"id": 7384399
+					},
+					{
+						"episode_number": 14,
+						"season_number": 4,
+						"name": "Infiltrate the Teacher Dorms! / A New Member Joins the Girls?!",
+						"air_date": "2026-07-04",
+						"runtime": 25,
+						"id": 7384402
+					},
+					{
+						"episode_number": 15,
+						"season_number": 4,
+						"name": "The Laws of the Netherworld Dictate That One Takes After Their Master / Even Among Those Who Are Close...",
+						"air_date": "2026-07-11",
+						"runtime": 25,
+						"id": 7384404
+					},
+					{
+						"episode_number": 16,
+						"season_number": 4,
+						"name": "A Misfit Casual Gathering / Netherworld Devotee",
+						"air_date": "2026-07-18",
+						"runtime": null,
+						"id": 7384406
+					},
+					{
+						"episode_number": 17,
+						"season_number": 4,
+						"name": "The Great Heroes Gather",
+						"air_date": "2026-07-25",
+						"runtime": 25,
+						"id": 7384409
+					},
+					{
+						"episode_number": 18,
+						"season_number": 4,
+						"name": "Give the Youth All the Nutrients They Need / Crossing the Sunbeams Shining Through the Trees",
+						"air_date": "2026-08-01",
+						"runtime": 25,
+						"id": 7384412
+					},
+					{
+						"episode_number": 19,
+						"season_number": 4,
+						"name": "The Dem-dol Games",
+						"air_date": "2026-08-22",
+						"runtime": 25,
+						"id": 7384413
+					},
+					{
+						"episode_number": 20,
+						"season_number": 4,
+						"name": "Team Devimuse",
+						"air_date": "2026-08-29",
+						"runtime": 25,
+						"id": 7384414
+					},
+					{
+						"episode_number": 21,
+						"season_number": 4,
+						"name": "The Tycoon and the Jewel",
+						"air_date": "2026-09-05",
+						"runtime": 25,
+						"id": 7384415
+					},
+					{
+						"episode_number": 22,
+						"season_number": 4,
+						"name": "The Proud Songstress",
+						"air_date": "2026-09-12",
+						"runtime": 25,
+						"id": 7384416
+					},
+					{
+						"episode_number": 23,
+						"season_number": 4,
+						"name": "The Road to the Demon King",
+						"air_date": "2026-09-19",
+						"runtime": 25,
+						"id": 7384417
+					},
+					{
+						"episode_number": 24,
+						"season_number": 4,
+						"name": "The Most Extravagant Farewell Party",
+						"air_date": "2026-09-26",
+						"runtime": 25,
+						"id": 7384418
+					}
+				]
+			},
+			"91801/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Iruma-kun from Demon School",
+						"air_date": "2019-10-05",
+						"runtime": 25,
+						"id": 1870606
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Familiars Summoned!",
+						"air_date": "2019-10-12",
+						"runtime": 25,
+						"id": 1947203
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Iruma and Clara / Demon Friends",
+						"air_date": "2019-10-19",
+						"runtime": 25,
+						"id": 1947204
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "The Misfit Class",
+						"air_date": "2019-10-26",
+						"runtime": 25,
+						"id": 1947205
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "The One Who Wants to Be Demon King",
+						"air_date": "2019-11-02",
+						"runtime": 25,
+						"id": 1947206
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Ameri's Theory",
+						"air_date": "2019-11-09",
+						"runtime": 25,
+						"id": 1947207
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "First Love Memories",
+						"air_date": "2019-11-16",
+						"runtime": 25,
+						"id": 1947208
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Head Over Heels for Clara",
+						"air_date": "2019-11-23",
+						"runtime": 25,
+						"id": 1947209
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Iruma's Decision and Hard Work",
+						"air_date": "2019-11-30",
+						"runtime": 25,
+						"id": 1947210
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Fierce Battle, Execution Cannonball!!",
+						"air_date": "2019-12-07",
+						"runtime": 25,
+						"id": 1947211
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Together with Familiars!",
+						"air_date": "2019-12-14",
+						"runtime": 25,
+						"id": 1947212
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "The Rookie Hunt!!",
+						"air_date": "2019-12-21",
+						"runtime": 25,
+						"id": 1947213
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "The Magical Apparatus Battler",
+						"air_date": "2019-12-28",
+						"runtime": 25,
+						"id": 1947214
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "The Battlers' Presentation",
+						"air_date": "2020-01-04",
+						"runtime": 25,
+						"id": 1947215
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Kiriwo's Secret Room",
+						"air_date": "2020-01-11",
+						"runtime": 25,
+						"id": 1947216
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Party Eve",
+						"air_date": "2020-01-18",
+						"runtime": 25,
+						"id": 1947217
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "Run, Iruma, to Kiriwo!",
+						"air_date": "2020-01-25",
+						"runtime": 25,
+						"id": 1947218
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "What I Want More Than Anything",
+						"air_date": "2020-02-01",
+						"runtime": 25,
+						"id": 1947219
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "I Want to Pick Everything Up",
+						"air_date": "2020-02-08",
+						"runtime": 25,
+						"id": 1947220
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Glorious Award / Treatment of Humans",
+						"air_date": "2020-02-15",
+						"runtime": 25,
+						"id": 1947221
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Dem-dol Kuromu-chan!",
+						"air_date": "2020-02-22",
+						"runtime": 25,
+						"id": 1947222
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Sparkling Shock",
+						"air_date": "2020-02-29",
+						"runtime": 25,
+						"id": 1947223
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "You Fit Right In Now, Iruma-kun",
+						"air_date": "2020-03-07",
+						"runtime": 25,
+						"id": 1947224
+					}
+				]
+			},
+			"91801/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "The Secret Behind the Ring",
+						"air_date": "2021-04-17",
+						"runtime": 25,
+						"id": 2727839
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Ameri's Decision",
+						"air_date": "2021-04-24",
+						"runtime": 25,
+						"id": 2817830
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "A Lovely Demoness",
+						"air_date": "2021-05-01",
+						"runtime": 25,
+						"id": 2817831
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "The Student Council President's Gaze",
+						"air_date": "2021-05-08",
+						"runtime": 25,
+						"id": 2817832
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Invite Your Friends!",
+						"air_date": "2021-05-15",
+						"runtime": 25,
+						"id": 2817833
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Royal One",
+						"air_date": "2021-05-22",
+						"runtime": 25,
+						"id": 2817834
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "The Teachers at Babyls",
+						"air_date": "2021-05-29",
+						"runtime": 25,
+						"id": 2817835
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "The Miracle of Some Fools",
+						"air_date": "2021-06-05",
+						"runtime": 25,
+						"id": 2817836
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Studying in the Netherworld",
+						"air_date": "2021-06-12",
+						"runtime": 25,
+						"id": 2817837
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "Balam's Lesson",
+						"air_date": "2021-06-19",
+						"runtime": 25,
+						"id": 2817838
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "End-of-Terminus Exams / Girls' Talk",
+						"air_date": "2021-06-26",
+						"runtime": 25,
+						"id": 2817839
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Kalego-sensei's Home Visit",
+						"air_date": "2021-07-03",
+						"runtime": 25,
+						"id": 2817840
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "Walter Park",
+						"air_date": "2021-07-10",
+						"runtime": 25,
+						"id": 3018517
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "Everyone's Playmates",
+						"air_date": "2021-07-17",
+						"runtime": 25,
+						"id": 3018518
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "Magical Beasts Attack",
+						"air_date": "2021-07-24",
+						"runtime": 25,
+						"id": 3018519
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "The Name of This Feeling",
+						"air_date": "2021-07-31",
+						"runtime": 25,
+						"id": 3018520
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "The Ultimate Halberd",
+						"air_date": "2021-08-07",
+						"runtime": 25,
+						"id": 3018521
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "My Desire",
+						"air_date": "2021-08-14",
+						"runtime": 25,
+						"id": 3018522
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "Clara's House",
+						"air_date": "2021-08-21",
+						"runtime": 25,
+						"id": 3018523
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "Dream Date",
+						"air_date": "2021-09-04",
+						"runtime": 25,
+						"id": 3018524
+					},
+					{
+						"episode_number": 21,
+						"season_number": 2,
+						"name": "The One Who Rules Over the Netherworld",
+						"air_date": "2021-09-11",
+						"runtime": 25,
+						"id": 3018525
+					}
+				]
+			},
+			"91801/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "The Misfit Class's New Term",
+						"air_date": "2022-10-08",
+						"runtime": 25,
+						"id": 3920700
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "Master Bachiko",
+						"air_date": "2022-10-15",
+						"runtime": 25,
+						"id": 3994018
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Iruma's True Feelings",
+						"air_date": "2022-10-22",
+						"runtime": 25,
+						"id": 3994019
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "The Signal That the Harvest Festival Has Begun",
+						"air_date": "2022-10-29",
+						"runtime": 25,
+						"id": 3994020
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Cunning Demons",
+						"air_date": "2022-11-05",
+						"runtime": 25,
+						"id": 3994021
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "Devilishly Pure",
+						"air_date": "2022-11-12",
+						"runtime": 25,
+						"id": 3994022
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "Clara's Toy Box / A Night Filled With Screams",
+						"air_date": "2022-11-19",
+						"runtime": 25,
+						"id": 3994023
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "Can We Make 100 Friends? / The Students I'm Proud Of",
+						"air_date": "2022-11-26",
+						"runtime": 25,
+						"id": 3995575
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "The Dorodoro Brothers' Provocation",
+						"air_date": "2022-12-03",
+						"runtime": 25,
+						"id": 3995577
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "The Iruma I Know",
+						"air_date": "2022-12-10",
+						"runtime": 25,
+						"id": 3995578
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "Toto the Genie",
+						"air_date": "2022-12-17",
+						"runtime": 25,
+						"id": 3995579
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "Wish Upon Your Bow",
+						"air_date": "2022-12-24",
+						"runtime": 25,
+						"id": 3995581
+					},
+					{
+						"episode_number": 13,
+						"season_number": 3,
+						"name": "My Very Own Magic",
+						"air_date": "2023-01-07",
+						"runtime": 25,
+						"id": 3995583
+					},
+					{
+						"episode_number": 14,
+						"season_number": 3,
+						"name": "Lead's Distress",
+						"air_date": "2023-01-14",
+						"runtime": 25,
+						"id": 3995584
+					},
+					{
+						"episode_number": 15,
+						"season_number": 3,
+						"name": "The True Worth of the Archer",
+						"air_date": "2023-01-21",
+						"runtime": 25,
+						"id": 3995585
+					},
+					{
+						"episode_number": 16,
+						"season_number": 3,
+						"name": "The End of the Harvest Festival",
+						"air_date": "2023-01-28",
+						"runtime": 25,
+						"id": 3995586
+					},
+					{
+						"episode_number": 17,
+						"season_number": 3,
+						"name": "Legend Leaf",
+						"air_date": "2023-02-04",
+						"runtime": 25,
+						"id": 3995587
+					},
+					{
+						"episode_number": 18,
+						"season_number": 3,
+						"name": "Welcome Back",
+						"air_date": "2023-02-11",
+						"runtime": 25,
+						"id": 3995588
+					},
+					{
+						"episode_number": 19,
+						"season_number": 3,
+						"name": "The Instructors' Banquet",
+						"air_date": "2023-02-18",
+						"runtime": 25,
+						"id": 3995589
+					},
+					{
+						"episode_number": 20,
+						"season_number": 3,
+						"name": "Bad Company / Heartfelt Cooking Class",
+						"air_date": "2023-02-25",
+						"runtime": 25,
+						"id": 3995591
+					},
+					{
+						"episode_number": 21,
+						"season_number": 3,
+						"name": "Words for My Friends",
+						"air_date": "2023-03-04",
+						"runtime": 25,
+						"id": 3995592
+					}
+				]
+			}
+		},
+		"searchTv": {
+			"入間同學入魔了！第四季": {
+				"page": 1,
+				"results": [],
+				"total_pages": 1,
+				"total_results": 0
+			}
+		},
+		"tvdbEpisodes": {
+			"369144": {
+				"data": {
+					"episodes": [
+						{
+							"id": 7345602,
+							"seasonNumber": 1,
+							"number": 1,
+							"aired": "2019-10-05",
+							"name": "悪魔学校の入間くん"
+						},
+						{
+							"id": 7378651,
+							"seasonNumber": 1,
+							"number": 2,
+							"aired": "2019-10-12",
+							"name": "使い魔、召喚！"
+						},
+						{
+							"id": 7390224,
+							"seasonNumber": 1,
+							"number": 3,
+							"aired": "2019-10-19",
+							"name": "入間とクララ／悪魔のお友達"
+						},
+						{
+							"id": 7390226,
+							"seasonNumber": 1,
+							"number": 4,
+							"aired": "2019-10-26",
+							"name": "問題児(アブノーマル)クラス"
+						},
+						{
+							"id": 7420504,
+							"seasonNumber": 1,
+							"number": 5,
+							"aired": "2019-11-02",
+							"name": "魔王を目指す者"
+						},
+						{
+							"id": 7423460,
+							"seasonNumber": 1,
+							"number": 6,
+							"aired": "2019-11-09",
+							"name": "アメリの仮説"
+						},
+						{
+							"id": 7423462,
+							"seasonNumber": 1,
+							"number": 7,
+							"aired": "2019-11-16",
+							"name": "初恋メモリー"
+						},
+						{
+							"id": 7423464,
+							"seasonNumber": 1,
+							"number": 8,
+							"aired": "2019-11-23",
+							"name": "クララにメロメロ"
+						},
+						{
+							"id": 7469264,
+							"seasonNumber": 1,
+							"number": 9,
+							"aired": "2019-11-30",
+							"name": "入間の決意、高鳴る努力"
+						},
+						{
+							"id": 7470676,
+							"seasonNumber": 1,
+							"number": 10,
+							"aired": "2019-12-07",
+							"name": "激闘、処刑玉砲!!"
+						},
+						{
+							"id": 7483915,
+							"seasonNumber": 1,
+							"number": 11,
+							"aired": "2019-12-14",
+							"name": "使い魔といっしょ！／師団(バトラ)の挑戦"
+						},
+						{
+							"id": 7490620,
+							"seasonNumber": 1,
+							"number": 12,
+							"aired": "2019-12-21",
+							"name": "1年生争奪戦(ルーキーハント)!!"
+						},
+						{
+							"id": 7490625,
+							"seasonNumber": 1,
+							"number": 13,
+							"aired": "2019-12-28",
+							"name": "魔具研究師団(バトラ)／13冠の集い"
+						},
+						{
+							"id": 7490627,
+							"seasonNumber": 1,
+							"number": 14,
+							"aired": "2020-01-04",
+							"name": "師団(バトラ)のお披露目"
+						},
+						{
+							"id": 7513198,
+							"seasonNumber": 1,
+							"number": 15,
+							"aired": "2020-01-11",
+							"name": "キリヲの隠し部屋"
+						},
+						{
+							"id": 7513199,
+							"seasonNumber": 1,
+							"number": 16,
+							"aired": "2020-01-18",
+							"name": "前夜祭"
+						},
+						{
+							"id": 7513200,
+							"seasonNumber": 1,
+							"number": 17,
+							"aired": "2020-01-25",
+							"name": "走れ入間、キリヲのもとへ！"
+						},
+						{
+							"id": 7543718,
+							"seasonNumber": 1,
+							"number": 18,
+							"aired": "2020-02-01",
+							"name": "心から望むもの"
+						},
+						{
+							"id": 7460869,
+							"seasonNumber": 1,
+							"number": 19,
+							"aired": "2020-02-08",
+							"name": "全部拾いたい／家族との時間"
+						},
+						{
+							"id": 7543719,
+							"seasonNumber": 1,
+							"number": 20,
+							"aired": "2020-02-15",
+							"name": "栄えある表彰／人間の処遇"
+						},
+						{
+							"id": 7543720,
+							"seasonNumber": 1,
+							"number": 21,
+							"aired": "2020-02-22",
+							"name": "アクドルくろむちゃん！"
+						},
+						{
+							"id": 7543721,
+							"seasonNumber": 1,
+							"number": 22,
+							"aired": "2020-02-29",
+							"name": "キラキラの衝撃"
+						},
+						{
+							"id": 7543722,
+							"seasonNumber": 1,
+							"number": 23,
+							"aired": "2020-03-07",
+							"name": "馴染みました！入間くん"
+						},
+						{
+							"id": 8108377,
+							"seasonNumber": 2,
+							"number": 1,
+							"aired": "2021-04-17",
+							"name": "指輪の秘密"
+						},
+						{
+							"id": 8327746,
+							"seasonNumber": 2,
+							"number": 2,
+							"aired": "2021-04-24",
+							"name": "アメリの決断"
+						},
+						{
+							"id": 8327766,
+							"seasonNumber": 2,
+							"number": 3,
+							"aired": "2021-05-01",
+							"name": "乙女な悪魔"
+						},
+						{
+							"id": 8327748,
+							"seasonNumber": 2,
+							"number": 4,
+							"aired": "2021-05-08",
+							"name": "生徒会長の眺め"
+						},
+						{
+							"id": 8327749,
+							"seasonNumber": 2,
+							"number": 5,
+							"aired": "2021-05-15",
+							"name": "オトモダチご招待!"
+						},
+						{
+							"id": 8327750,
+							"seasonNumber": 2,
+							"number": 6,
+							"aired": "2021-05-22",
+							"name": "王の教室(ロイヤル・ワン)"
+						},
+						{
+							"id": 8327751,
+							"seasonNumber": 2,
+							"number": 7,
+							"aired": "2021-05-29",
+							"name": "悪魔学校(バビルス)の教師たち"
+						},
+						{
+							"id": 8327771,
+							"seasonNumber": 2,
+							"number": 8,
+							"aired": "2021-06-05",
+							"name": "道化師の奇跡"
+						},
+						{
+							"id": 8327772,
+							"seasonNumber": 2,
+							"number": 9,
+							"aired": "2021-06-12",
+							"name": "魔界のお勉強"
+						},
+						{
+							"id": 8327754,
+							"seasonNumber": 2,
+							"number": 10,
+							"aired": "2021-06-19",
+							"name": "バラムの授業"
+						},
+						{
+							"id": 8327755,
+							"seasonNumber": 2,
+							"number": 11,
+							"aired": "2021-06-26",
+							"name": "終末テスト/ガールズトーク"
+						},
+						{
+							"id": 8327756,
+							"seasonNumber": 2,
+							"number": 12,
+							"aired": "2021-07-03",
+							"name": "カルエゴ先生の家庭訪問"
+						},
+						{
+							"id": 8327757,
+							"seasonNumber": 2,
+							"number": 13,
+							"aired": "2021-07-10",
+							"name": "ウォルターパーク"
+						},
+						{
+							"id": 8327777,
+							"seasonNumber": 2,
+							"number": 14,
+							"aired": "2021-07-17",
+							"name": "みんなの遊び相手"
+						},
+						{
+							"id": 8327778,
+							"seasonNumber": 2,
+							"number": 15,
+							"aired": "2021-07-24",
+							"name": "魔獣襲撃"
+						},
+						{
+							"id": 8327760,
+							"seasonNumber": 2,
+							"number": 16,
+							"aired": "2021-07-31",
+							"name": "この感情の名前は"
+						},
+						{
+							"id": 8327780,
+							"seasonNumber": 2,
+							"number": 17,
+							"aired": "2021-08-07",
+							"name": "最強の矛"
+						},
+						{
+							"id": 8327762,
+							"seasonNumber": 2,
+							"number": 18,
+							"aired": "2021-08-14",
+							"name": "僕の欲"
+						},
+						{
+							"id": 8327763,
+							"seasonNumber": 2,
+							"number": 19,
+							"aired": "2021-08-21",
+							"name": "クララのお家"
+						},
+						{
+							"id": 8327764,
+							"seasonNumber": 2,
+							"number": 20,
+							"aired": "2021-09-04",
+							"name": "夢見るデート"
+						},
+						{
+							"id": 8327795,
+							"seasonNumber": 2,
+							"number": 21,
+							"aired": "2021-09-11",
+							"name": "魔界を統べる者"
+						},
+						{
+							"id": 8668776,
+							"seasonNumber": 3,
+							"number": 1,
+							"aired": "2022-10-08",
+							"name": "問題児クラスの新学期"
+						},
+						{
+							"id": 9378862,
+							"seasonNumber": 3,
+							"number": 2,
+							"aired": "2022-10-15",
+							"name": "師匠バチコ"
+						},
+						{
+							"id": 9378863,
+							"seasonNumber": 3,
+							"number": 3,
+							"aired": "2022-10-22",
+							"name": "入間の本音"
+						},
+						{
+							"id": 9378864,
+							"seasonNumber": 3,
+							"number": 4,
+							"aired": "2022-10-29",
+							"name": "収穫祭の狼煙(のろし)"
+						},
+						{
+							"id": 9378865,
+							"seasonNumber": 3,
+							"number": 5,
+							"aired": "2022-11-05",
+							"name": "狡猾(こうかつ)な悪魔"
+						},
+						{
+							"id": 9378866,
+							"seasonNumber": 3,
+							"number": 6,
+							"aired": "2022-11-12",
+							"name": "魔性のピュア"
+						},
+						{
+							"id": 9378867,
+							"seasonNumber": 3,
+							"number": 7,
+							"aired": "2022-11-19",
+							"name": "クララのおもちゃ箱/叫び声の響く夜"
+						},
+						{
+							"id": 9378868,
+							"seasonNumber": 3,
+							"number": 8,
+							"aired": "2022-11-26",
+							"name": "お仲間100人できるかな / 自慢の弟子たち"
+						},
+						{
+							"id": 9378869,
+							"seasonNumber": 3,
+							"number": 9,
+							"aired": "2022-12-03",
+							"name": "ドロドロ兄弟の挑発"
+						},
+						{
+							"id": 9378870,
+							"seasonNumber": 3,
+							"number": 10,
+							"aired": "2022-12-10",
+							"name": "私の知るイルマは"
+						},
+						{
+							"id": 9378871,
+							"seasonNumber": 3,
+							"number": 11,
+							"aired": "2022-12-17",
+							"name": "魔神トートー"
+						},
+						{
+							"id": 9378872,
+							"seasonNumber": 3,
+							"number": 12,
+							"aired": "2022-12-24",
+							"name": "願いを弓に"
+						},
+						{
+							"id": 9378873,
+							"seasonNumber": 3,
+							"number": 13,
+							"aired": "2023-01-07",
+							"name": "僕だけの魔術"
+						},
+						{
+							"id": 9378874,
+							"seasonNumber": 3,
+							"number": 14,
+							"aired": "2023-01-14",
+							"name": "リードの苦悩"
+						},
+						{
+							"id": 9378875,
+							"seasonNumber": 3,
+							"number": 15,
+							"aired": "2023-01-21",
+							"name": "弓使いの真価"
+						},
+						{
+							"id": 9379708,
+							"seasonNumber": 3,
+							"number": 16,
+							"aired": "2023-01-28",
+							"name": "収穫祭の終わり"
+						},
+						{
+							"id": 9379709,
+							"seasonNumber": 3,
+							"number": 17,
+							"aired": "2023-02-04",
+							"name": "伝説の(レジェンド)リーフ"
+						},
+						{
+							"id": 9379710,
+							"seasonNumber": 3,
+							"number": 18,
+							"aired": "2023-02-11",
+							"name": "おかえり"
+						},
+						{
+							"id": 9379711,
+							"seasonNumber": 3,
+							"number": 19,
+							"aired": "2023-02-18",
+							"name": "教師陣の宴"
+						},
+						{
+							"id": 9379712,
+							"seasonNumber": 3,
+							"number": 20,
+							"aired": "2023-02-25",
+							"name": "悪友/真心クッキング"
+						},
+						{
+							"id": 9379713,
+							"seasonNumber": 3,
+							"number": 21,
+							"aired": "2023-03-04",
+							"name": "トモダチへの言葉"
+						},
+						{
+							"id": 11569767,
+							"seasonNumber": 4,
+							"number": 1,
+							"aired": "2026-04-04",
+							"name": "問題児(アブノーマル)クラス、もう一人の悪魔"
+						},
+						{
+							"id": 11655491,
+							"seasonNumber": 4,
+							"number": 2,
+							"aired": "2026-04-11",
+							"name": "13人の挑戦"
+						},
+						{
+							"id": 11655492,
+							"seasonNumber": 4,
+							"number": 3,
+							"aired": "2026-04-18",
+							"name": "アクドルの神髄"
+						},
+						{
+							"id": 11655494,
+							"seasonNumber": 4,
+							"number": 4,
+							"aired": "2026-04-25",
+							"name": "見えないけど"
+						},
+						{
+							"id": 11655496,
+							"seasonNumber": 4,
+							"number": 5,
+							"aired": "2026-05-02",
+							"name": "おしゃべり"
+						},
+						{
+							"id": 11655498,
+							"seasonNumber": 4,
+							"number": 6,
+							"aired": "2026-05-09",
+							"name": "音楽祭、本番！"
+						},
+						{
+							"id": 11655500,
+							"seasonNumber": 4,
+							"number": 7,
+							"aired": "2026-05-16",
+							"name": "リリス・カーペット"
+						},
+						{
+							"id": 11655502,
+							"seasonNumber": 4,
+							"number": 8,
+							"aired": "2026-05-23",
+							"name": "勝利の祝砲"
+						},
+						{
+							"id": 11655504,
+							"seasonNumber": 4,
+							"number": 9,
+							"aired": "2026-05-30",
+							"name": "瞳の奥"
+						},
+						{
+							"id": 11655506,
+							"seasonNumber": 4,
+							"number": 10,
+							"aired": "2026-06-06",
+							"name": "大好き軍団(トリオ)"
+						},
+						{
+							"id": 11655508,
+							"seasonNumber": 4,
+							"number": 11,
+							"aired": "2026-06-13",
+							"name": "シンユー会議／リードのイチャコラ会議"
+						},
+						{
+							"id": 11655511,
+							"seasonNumber": 4,
+							"number": 12,
+							"aired": "2026-06-20",
+							"name": "１年間と１センチの距離"
+						},
+						{
+							"id": 11655513,
+							"seasonNumber": 4,
+							"number": 13,
+							"aired": "2026-06-27",
+							"name": "鈴木入間“降魔の儀”"
+						},
+						{
+							"id": 11655515,
+							"seasonNumber": 4,
+							"number": 14,
+							"aired": "2026-07-04",
+							"name": "教師寮へ潜入せよ！ / 女子会に新メンバー!?"
+						},
+						{
+							"id": 11655516,
+							"seasonNumber": 4,
+							"number": 15,
+							"aired": "2026-07-11",
+							"name": "主（あるじ）に似るは魔界の摂理 / 親しき仲にも"
+						},
+						{
+							"id": 11655517,
+							"seasonNumber": 4,
+							"number": 16,
+							"aired": "2026-07-18",
+							"name": "問題児（アブノーマル）な無礼講 / 魔界の献身者"
+						},
+						{
+							"id": 11655518,
+							"seasonNumber": 4,
+							"number": 17,
+							"aired": "2026-07-25",
+							"name": "集いし英傑"
+						},
+						{
+							"id": 11655519,
+							"seasonNumber": 4,
+							"number": 18,
+							"aired": "2026-08-01",
+							"name": "若葉には大いなる糧を／こもれびまたいで"
+						},
+						{
+							"id": 11655520,
+							"seasonNumber": 4,
+							"number": 19,
+							"aired": "2026-08-22",
+							"name": "アクドル大武闘会（だいうんどうかい）"
+						},
+						{
+							"id": 11655521,
+							"seasonNumber": 4,
+							"number": 20,
+							"aired": "2026-08-29",
+							"name": "チームデビムス"
+						},
+						{
+							"id": 11655522,
+							"seasonNumber": 4,
+							"number": 21,
+							"aired": "2026-09-05",
+							"name": "富豪と宝石"
+						},
+						{
+							"id": 11655523,
+							"seasonNumber": 4,
+							"number": 22,
+							"aired": "2026-09-12",
+							"name": "傲慢の歌姫"
+						},
+						{
+							"id": 11655524,
+							"seasonNumber": 4,
+							"number": 23,
+							"aired": "2026-09-19",
+							"name": "魔王への道"
+						},
+						{
+							"id": 11655525,
+							"seasonNumber": 4,
+							"number": 24,
+							"aired": "2026-09-26",
+							"name": "一番豪華な餞（はなむけ）を"
+						}
+					]
+				}
+			}
+		},
+		"anime": {
+			"fribb": [
+				{
+					"type": "TV",
+					"anidb_id": 14660,
+					"anilist_id": 107693,
+					"animecountdown_id": 1034469,
+					"animenewsnetwork_id": 21927,
+					"anime-planet_id": "welcome-to-demon-school-iruma-kun",
+					"anisearch_id": 14154,
+					"imdb_id": ["tt11034066"],
+					"kitsu_id": 42310,
+					"livechart_id": 9215,
+					"mal_id": 39196,
+					"simkl_id": 1034469,
+					"themoviedb_id": {
+						"tv": 91801
+					},
+					"tvdb_id": 369144,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 1
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 15428,
+					"anilist_id": 116338,
+					"animecountdown_id": 1294833,
+					"animenewsnetwork_id": 24018,
+					"anime-planet_id": "welcome-to-demon-school-iruma-kun-2",
+					"anisearch_id": 15059,
+					"imdb_id": ["tt11034066"],
+					"kitsu_id": 43047,
+					"livechart_id": 9820,
+					"mal_id": 41402,
+					"simkl_id": 1294833,
+					"themoviedb_id": {
+						"tv": 91801
+					},
+					"tvdb_id": 369144,
+					"season": {
+						"tvdb": 2,
+						"tmdb": 2
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 16627,
+					"anilist_id": 139092,
+					"animecountdown_id": 1728821,
+					"animenewsnetwork_id": 24714,
+					"anime-planet_id": "welcome-to-demon-school-iruma-kun-3",
+					"anisearch_id": 16582,
+					"imdb_id": ["tt11034066"],
+					"kitsu_id": 45154,
+					"livechart_id": 10780,
+					"mal_id": 49784,
+					"simkl_id": 1728821,
+					"themoviedb_id": {
+						"tv": 91801
+					},
+					"tvdb_id": 369144,
+					"season": {
+						"tvdb": 3,
+						"tmdb": 3
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 18995,
+					"anilist_id": 184492,
+					"animecountdown_id": 2638832,
+					"animenewsnetwork_id": 34035,
+					"anime-planet_id": "welcome-to-demon-school-iruma-kun-4",
+					"anisearch_id": 19776,
+					"imdb_id": ["tt11034066"],
+					"kitsu_id": 49361,
+					"livechart_id": 12927,
+					"mal_id": 60310,
+					"simkl_id": 2638832,
+					"themoviedb_id": {
+						"tv": 91801
+					},
+					"tvdb_id": 369144,
+					"season": {
+						"tvdb": 4,
+						"tmdb": 4
+					}
+				}
+			],
+			"titles": [
+				{
+					"anidbId": 14660,
+					"names": [
+						"Mairimashita! Iruma-kun",
+						"Mairimashita! Iruma-kun",
+						"مرحبًا بك في مدرسة الشياطين! إيروما-كن",
+						"Welcome to Demon School! Iruma-kun",
+						"魔入りました! 入間くん",
+						"Добро пожаловать в ад, Ирума",
+						"入间同学入魔了",
+						"入間同學入魔了！",
+						"Iruma-kun",
+						"iruma"
+					]
+				},
+				{
+					"anidbId": 15428,
+					"names": [
+						"Mairimashita! Iruma-kun (2021)",
+						"Mairimashita! Iruma-kun (2021)",
+						"Welcome to Demon School! Iruma-kun (2021)",
+						"魔入りました! 入間くん (2021)",
+						"Добро пожаловать в ад, Ирума. 2 сезон",
+						"入间同学入魔了 第二季",
+						"iruma s2",
+						"Iruma-kun s2",
+						"Welcome to Demon School! Iruma-kun: Season 2"
+					]
+				},
+				{
+					"anidbId": 16627,
+					"names": [
+						"Mairimashita! Iruma-kun (2022)",
+						"Mairimashita! Iruma-kun (2022)",
+						"Welcome to Demon School! Iruma-kun (2022)",
+						"魔入りました! 入間くん (2022)",
+						"入间同学入魔了 第三季",
+						"iruma s3",
+						"Iruma-kun s3"
+					]
+				},
+				{
+					"anidbId": 18995,
+					"names": [
+						"Mairimashita! Iruma-kun (2026)",
+						"Mairimashita! Iruma-kun (2026)",
+						"Welcome to Demon School! Iruma-kun (2026)",
+						"魔入りました! 入間くん (2026)",
+						"Welcome to Demon School! Iruma-kun Staffel 4",
+						"Mairimashita! Iruma-kun S4",
+						"Welcome to Demon School! Iruma-kun Season 4"
+					]
+				},
+				{
+					"anidbId": 14660,
+					"names": [
+						"Mairimashita! Iruma-kun",
+						"Iruma-kun",
+						"Welcome to Demon School",
+						"Welcome to Demon School! Iruma-kun",
+						"Welcome to Demon School, Iruma-kun",
+						"Welcome to Demon School, Iruma-kun!",
+						"Welcome to Demon-School! Iruma-kun",
+						"iruma",
+						"Добро пожаловать в ад, Ирума",
+						"مرحبًا بك في مدرسة الشياطين! إيروما-كن",
+						"อิรุมะคุง พจญในแดนปีศาจ!",
+						"入間同學入魔了！",
+						"入间同学入魔了",
+						"入间同学入魔了！",
+						"魔入りました! 入間くん",
+						"魔入りました！ 入間くん",
+						"魔入りました！入間くん"
+					]
+				},
+				{
+					"anidbId": 15428,
+					"names": [
+						"Mairimashita! Iruma-kun 2nd Season",
+						"Iruma-kun s2",
+						"Mairimashita! Iruma-kun",
+						"Mairimashita! Iruma-kun (2021)",
+						"Mairimashita! Iruma-kun 2",
+						"Mairimashita! Iruma-kun: Dai 2 Series",
+						"Welcome to Demon School! Iruma-kun",
+						"Welcome to Demon School! Iruma-kun (2021)",
+						"Welcome to Demon School! Iruma-kun 2nd Season",
+						"Welcome to Demon School! Iruma-kun Saison 2",
+						"Welcome to Demon School! Iruma-kun Season 2",
+						"Welcome to Demon School! Iruma-kun Staffel 2",
+						"Welcome to Demon School! Iruma-kun Temporada 2",
+						"Welcome to Demon School! Iruma-kun: Season 2",
+						"Welcome to Demon School, Iruma-kun",
+						"Welcome to Demon School, Iruma-kun 2",
+						"Welcome to Demon School, Iruma-kun! Season 2",
+						"Welcome to Demon-School ! Iruma-kun Saison 2",
+						"Welcome to Demon-School! Iruma-kun 2nd Season",
+						"Welcome to Demon-School! Iruma-kun Season 2",
+						"Welcome to Demon-School! Iruma-kun: Season 2",
+						"Welcome to Demon-School! Iruma-kun: Staffel 2",
+						"iruma s2",
+						"Добро пожаловать в ад, Ирума. 2 сезон",
+						"อิรุมะคุง พจญในแดนปีศาจ! ภาค 2",
+						"入间同学入魔了 第二季",
+						"入间同学入魔了！2",
+						"魔入りました! 入間くん",
+						"魔入りました! 入間くん (2021)",
+						"魔入りました！ 入間くん 第２シリーズ",
+						"魔入りました！入間くん",
+						"魔入りました！入間くん 2",
+						"魔入りました！入間くん 第2シリーズ"
+					]
+				},
+				{
+					"anidbId": 16627,
+					"names": [
+						"Mairimashita! Iruma-kun 3rd Season",
+						"Iruma-kun s3",
+						"Mairimashita! Iruma-kun (2022)",
+						"Mairimashita! Iruma-kun 3",
+						"Mairimashita! Iruma-kun: Dai 3 Series",
+						"Welcome to Demon School! Iruma-kun",
+						"Welcome to Demon School! Iruma-kun (2022)",
+						"Welcome to Demon School! Iruma-kun 3",
+						"Welcome to Demon School! Iruma-kun 3rd Season",
+						"Welcome to Demon School! Iruma-kun : Saison 3",
+						"Welcome to Demon School! Iruma-kun Season 3",
+						"Welcome to Demon School! Iruma-kun: Season 3",
+						"Welcome to Demon School! Iruma-kun: Staffel 3",
+						"Welcome to Demon School, Iruma-kun 3",
+						"iruma s3",
+						"อิรุมะคุง พจญในแดนปีศาจ! ภาค 3",
+						"入间同学入魔了 第三季",
+						"魔入りました! 入間くん",
+						"魔入りました! 入間くん (2022)",
+						"魔入りました! 入間くん 3",
+						"魔入りました！ 入間くん 第3シリーズ",
+						"魔入りました！入間くん",
+						"魔入りました！入間くん 第3シリーズ"
+					]
+				},
+				{
+					"anidbId": 18995,
+					"names": [
+						"Mairimashita! Iruma-kun 4th Season",
+						"Mairimashita! Iruma-kun (2026)",
+						"Mairimashita! Iruma-kun 4",
+						"Mairimashita! Iruma-kun S4",
+						"Mairimashita! Iruma-kun: Dai 4 Series",
+						"Welcome to Demon School ! Iruma-kun : Saison 4",
+						"Welcome to Demon School! Iruma-kun",
+						"Welcome to Demon School! Iruma-kun (2026)",
+						"Welcome to Demon School! Iruma-kun 4th Season",
+						"Welcome to Demon School! Iruma-kun Season 4",
+						"Welcome to Demon School! Iruma-kun Staffel 4",
+						"Welcome to Demon School! Iruma-kun: Season 4",
+						"Welcome to Demon School! Iruma-kun: Staffel 4",
+						"Welcome to Demon School! Iruma-kun: Stagione 4",
+						"Welcome to Demon School! Iruma-kun: Temporada 4",
+						"Welcome to Demon School, Iruma-kun 4",
+						"อิรุมะคุง ผจญในแดนปีศาจ ซีซั่น 4",
+						"魔入りました! 入間くん",
+						"魔入りました! 入間くん (2026)",
+						"魔入りました! 入間くん (第4シリーズ)",
+						"魔入りました! 入間くん 4",
+						"魔入りました！ 入間くん 第4シリーズ",
+						"魔入りました！入間くん 第4シリーズ",
+						"魔入りました！入間くん 第４シリーズ"
+					]
+				}
+			]
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg-usenet on fun, 2026-11-10 (the .zurgtorrent's name, no IMDb id, and its one video file with its stored probe's length as zurg asks; no hash, a Usenet copy)",
+			"request": {
+				"name": "[ANi].入間同學入魔了！第四季.-.20.[1080P][Baha][WEB-DL][AAC.AVC][CHT]",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "[ANi] 入間同學入魔了！第四季 - 20 [1080P][Baha][WEB-DL][AAC AVC][CHT].mp4",
+						"folder": "",
+						"duration": 1500.074667
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt11034066",
+				"tmdbId": 91801,
+				"files": [
+					{
+						"path": "[ANi] 入間同學入魔了！第四季 - 20 [1080P][Baha][WEB-DL][AAC AVC][CHT].mp4",
+						"season": 4,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 7384414
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-10 (the .zurgtorrent's name, no IMDb id, and its one video file with its stored probe's length as zurg asks; no hash, a Usenet copy)",
+			"request": {
+				"name": "[ANi].入間同學入魔了！第四季.-.23.[1080P][Baha][WEB-DL][AAC.AVC][CHT]",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "[ANi] 入間同學入魔了！第四季 - 23 [1080P][Baha][WEB-DL][AAC AVC][CHT].mp4",
+						"folder": "",
+						"duration": 1500.074667
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt11034066",
+				"tmdbId": 91801,
+				"files": [
+					{
+						"path": "[ANi] 入間同學入魔了！第四季 - 23 [1080P][Baha][WEB-DL][AAC AVC][CHT].mp4",
+						"season": 4,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 7384417
+					}
+				]
+			}
+		}
+	]
+}

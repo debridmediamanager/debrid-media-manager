@@ -177,6 +177,21 @@ describe('parseName', () => {
 			expect(parseName(request.name).title).toBe('Samurai Champloo');
 		}
 	});
+
+	it.each([
+		// zurg-usenet on fun and DMM's PlacementMiss, 2026-11-10
+		[
+			'[ANi].入間同學入魔了！第四季.-.20.[1080P][Baha][WEB-DL][AAC.AVC][CHT]',
+			'入間同學入魔了！',
+			4,
+		],
+		['黑袍纠察队 第一季', '黑袍纠察队', 1],
+		// numerals past nine, which no recorded name has yet
+		['[ANi] 某劇 第十二季 - 01 [1080P]', '某劇', 12],
+		['[ANi] 某劇 第20季 - 01 [1080P]', '某劇', 20],
+	])('reads a Chinese season out of the title: %s', (name, title, season) => {
+		expect(parseName(name)).toMatchObject({ title, season });
+	});
 });
 
 describe('normalizeTitle', () => {

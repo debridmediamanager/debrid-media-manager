@@ -18,6 +18,7 @@ import pastCour from '@/test/fixtures/placement/anime-past-cour.json';
 import answers from '@/test/fixtures/placement/answers.json';
 import betweenTitled from '@/test/fixtures/placement/between-titled-files.json';
 import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
+import cjkSeasons from '@/test/fixtures/placement/cjk-season-titles.json';
 import directorsCuts from '@/test/fixtures/placement/directors-cut-primes.json';
 import betweenPairs from '@/test/fixtures/placement/episodes-between-aligned-pairs.json';
 import fairyTail from '@/test/fixtures/placement/fairy-tail-ovas.json';
@@ -1720,6 +1721,40 @@ describe('a fansub episode titled the show and then one of its seasons', () => {
 				releases[0].files[0].season,
 				releases[0].files[0].episode,
 			]).toEqual([91768, 2, episode]);
+		}
+	);
+});
+
+describe('a Chinese title naming its season', () => {
+	// zurg-usenet on fun (2026-11-10): [ANi]'s `入間同學入魔了！第四季 - 20` and `- 23`, Welcome to Demon
+	// School! Iruma-kun (91801) as Taiwan names it, then 第四季, "fourth season", which the name
+	// parser left in the title, so the anime index never found the show (see the fixtures README)
+	const from: PlacementSources = {
+		...recordedSources(cjkSeasons.answers),
+		anime: async () =>
+			buildAnimeIndex(
+				buildFranchiseIndex(cjkSeasons.answers.anime.fribb as FribbAnimeEntry[]),
+				cjkSeasons.answers.anime.titles
+			),
+	};
+
+	it.each(cjkSeasons.cases.map((c) => [c.request.name, c] as const))(
+		'places %s in season 4',
+		async (_, c) => {
+			const { releases } = await place(
+				[{ ...(c.request as PlaceRequest), parts: true }],
+				Infinity,
+				from,
+				async (list) =>
+					list.map(({ name }) => (cjkSeasons.answers.identify as any)[name] ?? null)
+			);
+			expect(releases[0]).toEqual(c.expect);
+			const episode = Number(/ - (\d+) \[/.exec(c.request.files[0].path)![1]);
+			expect([
+				releases[0].tmdbId,
+				releases[0].files[0].season,
+				releases[0].files[0].episode,
+			]).toEqual([91801, 4, episode]);
 		}
 	);
 });

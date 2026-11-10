@@ -126,6 +126,21 @@ const CRC32 = /[[(][0-9A-F]{8}[\])]/gi;
 export const fansubShaped = (name: string) => SHAPED.test(name);
 const LEADING_GROUPS = /^\s*(?:\[[^\]]*\][\s._-]*)+/;
 const FIRST_GROUP = /^\s*\[[^\]]*\][\s._-]*/;
+// `[ANi] 入間同學入魔了！第四季 - 20`, `犯罪心理 [第15季]`: a Chinese season, which ptt leaves in the title.
+// ponytail: `第N期` is left out, a Chinese variety show's twelfth episode is its `第12期`
+const CJK_SEASON = /第\s*(\d{1,2}|[一二三四五六七八九]?十?[一二三四五六七八九]?)\s*季/;
+const CJK_DIGITS = '一二三四五六七八九';
+function cjkSeason(text: string): number | null {
+	const number = CJK_SEASON.exec(text)?.[1];
+	if (!number) return null;
+	if (/^\d+$/.test(number)) return Number(number) || null;
+	const digit = (char = '') => CJK_DIGITS.indexOf(char) + 1;
+	const [tens, ones] = number.split('十');
+	return (
+		(number.includes('十') ? (tens ? digit(tens) : 1) * 10 + digit(ones) : digit(number)) ||
+		null
+	);
+}
 
 /** A name's title, year and single season, the release group left off. */
 export function parseName(name: string): {
@@ -168,10 +183,12 @@ export function parseName(name: string): {
 		title && spaced.startsWith(title)
 			? /^-\p{L}{1,3}(?![\p{L}\p{N}])/u.exec(spaced.slice(title.length))
 			: null;
+	const whole = glued ? title + glued[0] : title;
+	const cjk = cjkSeason(whole);
 	return {
-		title: glued ? title + glued[0] : title,
+		title: cjk === null ? whole : whole.replace(CJK_SEASON, '').trim() || whole,
 		year: typeof parsed.year === 'number' ? parsed.year : null,
-		season: seasons.length === 1 ? seasons[0] : null,
+		season: seasons.length === 1 ? seasons[0] : seasons.length ? null : cjk,
 	};
 }
 
@@ -431,7 +448,7 @@ function releaseSeason(release: string): number | null {
 	const fansub = FANSUB_SEASON.exec(release);
 	if (fansub) return Number(fansub[1] ?? fansub[2]);
 	const seasons = namedSeasons(release.replace(DASHED_NUMBER, ' '));
-	return seasons.size === 1 ? [...seasons][0] : null;
+	return seasons.size === 1 ? [...seasons][0] : seasons.size ? null : cjkSeason(release);
 }
 
 /**
