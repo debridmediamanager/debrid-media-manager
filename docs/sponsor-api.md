@@ -104,7 +104,8 @@ curl -X POST https://debridmediamanager.com/api/sponsor/place \
 Each release is `{name, hash?, imdbId?, files: [{path, folder}]}`: `path` is the file's
 name and `folder` the folder the provider lists it in inside the release (`""` at the
 top). Send `"parts": true` beside `releases` when your tool reads each file's `part` (below);
-without it no file is placed as a part of an episode. Send `imdbId` when you already know the title; an episode's id is read as its show,
+without it no file is placed as a part of an episode. Send `"shows": true` when it reads a file's
+own show (below); without it a file of another show than its release's is left unplaced. Send `imdbId` when you already know the title; an episode's id is read as its show,
 and one TMDB cannot use (one it knows nothing by, one whose show it has deleted, or a film's,
 for a release whose files name seasons) is set aside for the name. Without one, DMM
 identifies the release by its name as `/api/sponsor/identify` does. An anime release (a
@@ -193,7 +194,7 @@ S4E13 `part` 2, with the same `tmdbEpisodeId`. A file is also a part where its t
 after its episode (`Lost.S01E24.Part.2`, `- pt2`, `cd2`, `disc2`) and another file of the release
 is of the same episode, which is then its part 1; `Twin.Peaks.S03E05.Part.5` alone is that
 episode's title. Without `"parts": true` a later part is left unplaced, as before, since a tool
-that does not read `part` would file it as another copy of the episode. `tmdbEpisodeId` is TMDB's own id for that episode (from TMDB's season list, whichever rule placed the file), which Plex's episode rows carry as `tmdb://<id>`: Plex numbers many shows otherwise than TMDB (Re:ZERO's TMDB S1E84 is Plex's S4E18), so match by it rather than by the numbers. It is `null` where the file is unplaced or placed on IMDb's numbering. A film inside a show's release (`[Movie 02] Heroes Rising` in a My Hero Academia pack, a `Movies` folder, a name with a year in brackets, or a release's one file, `[RaptoR] Jujutsu Kaisen 0 (2021)` sent with the show's id), named by the identifier or as TMDB's one film titled as the show and the file's own words (`[SubsPlease] Kaijuu 8-gou - Mission Recon` is Kaiju No. 8: Mission Recon), left unplaced as an episode, is named on its own where DMM can: such a file also carries `kind` `"movie"`, `imdbId` and `tmdbId`, the film's (TMDB's movie id), and no other file carries them. Movies and files
+that does not read `part` would file it as another copy of the episode. `tmdbEpisodeId` is TMDB's own id for that episode (from TMDB's season list, whichever rule placed the file), which Plex's episode rows carry as `tmdb://<id>`: Plex numbers many shows otherwise than TMDB (Re:ZERO's TMDB S1E84 is Plex's S4E18), so match by it rather than by the numbers. It is `null` where the file is unplaced or placed on IMDb's numbering. A film inside a show's release (`[Movie 02] Heroes Rising` in a My Hero Academia pack, a `Movies` folder, a name with a year in brackets, or a release's one file, `[RaptoR] Jujutsu Kaisen 0 (2021)` sent with the show's id), named by the identifier or as TMDB's one film titled as the show and the file's own words (`[SubsPlease] Kaijuu 8-gou - Mission Recon` is Kaiju No. 8: Mission Recon), left unplaced as an episode, is named on its own where DMM can: such a file also carries `kind` `"movie"`, `imdbId` and `tmdbId`, the film's (TMDB's movie id), and no other file carries them but one of another show (below). Movies and files
 DMM cannot place have `season` and `episode` `null`. A file naming the show's running
 number beside its season and episode (`Détective Conan S11E01 - 286`) is placed only where
 TMDB's count of the show's episodes reaches that number. `how` says which rule placed a file:
@@ -210,6 +211,44 @@ TMDB's count of the show's episodes reaches that number. `how` says which rule p
 | `group`      | A pack numbered in one of the show's TMDB episode groups rather than as TMDB aired it: the group whose seasons hold exactly as many episodes as the pack's, in more seasons than TMDB's own list, used for the seasons TMDB's list does not match. `Futurama HD PL` numbers seasons 7-10 by 13 as TMDB's "Digital Order" does, so its `s07e01` is TMDB's S6E1.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `absolute`   | A number with no season (`One Piece - 1100`), counted through TMDB's seasons; never for a fansub title the anime lists do not know, of a show they map season by season (`Pocket Monsters - Aim to be a Pokémon Master 10` is no tenth episode of Pokémon). A fansub number of a later cour the anime lists know is counted only where it runs past every episode of that cour's season: `[DB]Gintama (2017)_-_317_` is TMDB's S8E1.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `airdate`    | A daily show's file named by the day it aired and no episode (`WWE.RAW.2026.10.05`, `WWE Monday Night RAW 2026 10 12`, or the day and month before the year), as the one episode TMDB lists as aired that day: Raw's S34E40. A name with an episode as well is placed by its numbers.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+
+A pack can hold another show's episodes beside its own: a Batman: The Animated Series pack holds
+`The New Batman Adventures - S01 E01 - Holiday Knights`, and `Whose Line Is It Anyway (US) S1-10`
+the 2013 revival as seasons 9 and 10, which TVDB numbers on as the 1998 series and TMDB keeps as a
+show of its own (64978). For a request that sent `"shows": true`, such a file, where no rule placed
+it on the release's show, carries `kind` `"tv"`, that show's `imdbId` (where TMDB records one),
+`tmdbId`, `title`, `year`, `tvdbId` and `anime`, and its `season`, `episode`, `how` and
+`tmdbEpisodeId` on that show; the release's `kind` and ids stay its own show's:
+
+```json
+{
+	"anime": false,
+	"episode": 1,
+	"episodeEnd": null,
+	"how": "tmdb",
+	"imdbId": "tt0118266",
+	"kind": "tv",
+	"part": null,
+	"path": "The New Batman Adventures - S01 E01 - Holiday Knights (1080p - BluRay).mp4",
+	"season": 1,
+	"title": "The New Batman Adventures",
+	"tmdbEpisodeId": 335594,
+	"tmdbId": 4625,
+	"tvdbId": 77084,
+	"year": 1997
+}
+```
+
+DMM names one so only where the file's name names that show before its numbers (`The New Batman
+Adventures`, or `Batman` for Batman: The Animated Series), on one other show alone, which is:
+one TMDB titles as the file's name, where the release's show's name does not hold it, that the
+file's own title places it on; the show the `imdbId` sent names, where the file's title places it
+and DMM placed the release elsewhere (`Batman - 066 - Sideshow` in a pack of Batman TAS seasons 2-3,
+most of which is The New Batman Adventures, is Batman: The Animated Series' S2E7); or, for a season
+the release's show lacks, the show TMDB's find gives TVDB's episode of the release's series on,
+answered as `how` `tvdbSeries` with TVDB's numbers and that series' `tvdbId` (`Whose Line Is It
+Anyway - S09E01 - Lauren Cohan`). Without `"shows": true` the file is unplaced, as before: a tool
+that does not read a file's own show would file it as an episode of the release's.
 
 One Pace (onepace.net), the fan re-edit of One Piece, is a show no TMDB, IMDb or Plex record
 numbers, so DMM numbers it by One Pace's own list. A release whose name, or every file's name,

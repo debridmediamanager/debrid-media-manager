@@ -6,6 +6,7 @@ import onePaceList from '@/services/onePaceCatalogue.json';
 import {
 	cachedSources,
 	placeReleases,
+	titled,
 	type Identify,
 	type PlacedRelease,
 	type PlacementSources,
@@ -33,6 +34,7 @@ import lost from '@/test/fixtures/placement/lost-tvdb-order.json';
 import namesakes from '@/test/fixtures/placement/miniseries-namesake-films.json';
 import mythbusters from '@/test/fixtures/placement/mythbusters-year-titles.json';
 import office from '@/test/fixtures/placement/office-tvdb-order.json';
+import otherShows from '@/test/fixtures/placement/other-show-files.json';
 import releaseTags from '@/test/fixtures/placement/release-tags.json';
 import cases from '@/test/fixtures/placement/releases.json';
 import revival from '@/test/fixtures/placement/revival-seasons.json';
@@ -2204,5 +2206,65 @@ describe('a title TMDB spells otherwise', () => {
 				list('Genie Meanie Minie Moe', 'Genie Meanie Minie Mob')
 			)
 		).toBeNull();
+	});
+});
+
+describe("a file of another show in a show's release", () => {
+	// zurg on fun (2026-11-10): packs placed whole on one show, holding files of another, which DMM
+	// left unplaced (see the fixtures README)
+	const placed = async (name: string, shows = true) => {
+		const c = otherShows.cases.find((c) => c.request.name.startsWith(name))!;
+		const from = recordedSources(otherShows.answers);
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true, ...(shows ? { shows: true } : {}) }],
+			Infinity,
+			from,
+			async (list) =>
+				list.map(({ name }) => (otherShows.answers as any).identify?.[name] ?? null)
+		);
+		if (shows) expect(releases[0]).toEqual(c.expect);
+		const answer = await titled(releases[0], from);
+		return (part: string) => {
+			const f = answer.files.find((f) => f.path.includes(part))!;
+			return [
+				f.kind ?? null,
+				f.tmdbId ?? answer.tmdbId,
+				f.season,
+				f.episode,
+				f.title ?? null,
+			];
+		};
+	};
+
+	it('answers a file named as another show as its episode', async () => {
+		// a Batman: The Animated Series (2098) pack; "Holiday Knights" is The New Batman Adventures' S1E1
+		const pack = await placed('BATMAN The Animated Series (1992-1999)');
+		expect(pack('Holiday Knights')).toEqual(['tv', 4625, 1, 1, 'The New Batman Adventures']);
+		expect(pack('Heart of Ice')).toEqual([null, 2098, 1, 3, null]);
+	});
+
+	it('answers a file of the show the id sent named, which most of the pack is not', async () => {
+		// the pack is placed on The New Batman Adventures; "Sideshow" is Batman: The Animated Series' S2E7
+		const pack = await placed('Batman TAS Seasons 2-3');
+		expect(pack('066 - Sideshow')).toEqual(['tv', 2098, 2, 7, 'Batman: The Animated Series']);
+		expect(pack('086 - Holiday Knights')).toEqual([null, 4625, 1, 1, null]);
+	});
+
+	it("answers a season TVDB numbers on and TMDB keeps as a revival as the revival's", async () => {
+		// TMDB's 2013 Whose Line Is It Anyway? (64978), numbered as TVDB's series 76808 numbers it
+		const pack = await placed('Whose Line Is It Anyway (US)');
+		expect(pack('S09E01 - Lauren Cohan')).toEqual([
+			'tv',
+			64978,
+			9,
+			1,
+			'Whose Line Is It Anyway?',
+		]);
+		expect(pack('S08E01')).toEqual([null, 61018, 8, 1, null]);
+	});
+
+	it('leaves such a file unplaced for a caller that does not read it', async () => {
+		const pack = await placed('BATMAN The Animated Series (1992-1999)', false);
+		expect(pack('Holiday Knights')).toEqual([null, 2098, null, null, null]);
 	});
 });
