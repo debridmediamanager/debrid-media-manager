@@ -55,6 +55,7 @@ import secondChanceTvdb from '@/test/fixtures/placement/second-chance-tvdb-name.
 import segmentAbbreviations from '@/test/fixtures/placement/segment-abbreviations.json';
 import segmentLetters from '@/test/fixtures/placement/segment-letters.json';
 import segmentTitles from '@/test/fixtures/placement/segment-titles.json';
+import serialPack from '@/test/fixtures/placement/serial-in-show-pack.json';
 import showNamedTitles from '@/test/fixtures/placement/show-named-titles.json';
 import showsByTitle from '@/test/fixtures/placement/shows-named-by-title.json';
 import byRuntime from '@/test/fixtures/placement/shows-told-apart-by-runtime.json';
@@ -2226,6 +2227,31 @@ describe("a special numbered as a season's film", () => {
 		// TMDB's S0E4 "Town Without Pity", a TV film after season 8
 		expect(murder('S08M01 Town Without Pity')).toEqual([0, 4, null]);
 		expect(murder('S00M01 Diagnosis of Murder')).toEqual([0, 1, null]);
+	});
+});
+
+describe('a file its name dates before the show began', () => {
+	// zurg on fun (2026-11-10): a pack of 1979's Buck Rogers in the 25th Century carries the 1939
+	// serial's chapters (`Buck Rogers 1939 E02 Tragedy on Saturn`), twice; by their numbers E02 and
+	// E04 landed on the 1979 show's S1E2 and S1E4, which other files' titles left free
+	const placed = async (name: string) => {
+		const c = serialPack.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true, shows: true }],
+			Infinity,
+			recordedSources(serialPack.answers),
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return (part: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(part))!;
+			return [f.season, f.episode, f.episodeEnd];
+		};
+	};
+	it("places it on none of the show's episodes", async () => {
+		const buck = await placed('Buck Rogers in the 25th Century');
+		expect(buck(' Buck Rogers 1939 E02 Tragedy on Saturn')).toEqual([null, null, null]);
+		expect(buck(' Buck Rogers 1939 E04 The Sky Patrol')).toEqual([null, null, null]);
 	});
 });
 

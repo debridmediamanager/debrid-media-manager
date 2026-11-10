@@ -1804,8 +1804,28 @@ async function placeFiles(
 	// scene notation is the list's own numbering; a count or a folder's season is not
 	const counted = (at: number) =>
 		numbers[at]!.season === null || Boolean(numbers[at]!.coded || numbers[at]!.borrowed);
+	// a file its name dates, before its number, to years before the show began is another show's: the
+	// 1939 serial's `Buck Rogers 1939 E02 Tragedy on Saturn`, in a pack of 1979's Buck Rogers in the
+	// 25th Century, is no S1E2 of it
+	const began = Math.min(
+		...placement.seasons.flatMap((row) =>
+			row.season > 0 && row.airDate ? [Number(row.airDate.slice(0, 4))] : []
+		)
+	);
+	const earlier = (at: number) => {
+		const stem = release.files[at].path.split('/').pop() ?? '';
+		const year =
+			/(?:^|[\s._([-])((?:19|20)\d{2})[\s._)\]-]+(?:s\d{1,2}[\s._-]*)?e\d{1,3}(?!\d)/i.exec(
+				stem
+			)?.[1];
+		return year !== undefined && Number(year) < began - 1;
+	};
 	const dropped = yielded.map((found, at) =>
-		found && !found.titled && titles[at] && (moved || (byTitle && counted(at))) ? null : found
+		found &&
+		!found.titled &&
+		((titles[at] && (moved || (byTitle && counted(at)))) || earlier(at))
+			? null
+			: found
 	);
 	// a file its title and numbers placed nowhere, between the nearest files numbered before and after
 	// it that their titles placed as many episodes apart as their numbers are: Hell's Paradise's
@@ -1829,7 +1849,7 @@ async function placeFiles(
 	};
 	const kept = dropped.map((found, at) => {
 		const own = numbers[at];
-		if (found || !own || own.end !== null) return found;
+		if (found || !own || own.end !== null || earlier(at)) return found;
 		const [before, after] = [
 			nearest(own.season, own.episode, -1),
 			nearest(own.season, own.episode, 1),

@@ -1,0 +1,2155 @@
+{
+	"answers": {
+		"episodeShow": {
+			"tt0078579": null
+		},
+		"find": {
+			"tt0078579": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 2443,
+						"name": "Buck Rogers in the 25th Century",
+						"first_air_date": "1979-09-20"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"2443": {
+				"id": 2443,
+				"name": "Buck Rogers in the 25th Century",
+				"original_name": "Buck Rogers in the 25th Century",
+				"first_air_date": "1979-09-20",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 310,
+							"name": "artificial intelligence (a.i.)"
+						},
+						{
+							"id": 2902,
+							"name": "space battle"
+						},
+						{
+							"id": 2964,
+							"name": "future"
+						},
+						{
+							"id": 4379,
+							"name": "time travel"
+						},
+						{
+							"id": 9739,
+							"name": "extraterrestrial"
+						},
+						{
+							"id": 14544,
+							"name": "robot"
+						},
+						{
+							"id": 14909,
+							"name": "alien invasion"
+						},
+						{
+							"id": 161176,
+							"name": "space opera"
+						},
+						{
+							"id": 234345,
+							"name": "starfighter"
+						},
+						{
+							"id": 298554,
+							"name": "planetary romance"
+						},
+						{
+							"id": 328279,
+							"name": "nuclear war aftermath"
+						},
+						{
+							"id": 350775,
+							"name": "25th century"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0078579",
+					"tvdb_id": 74523
+				},
+				"networks": [
+					{
+						"id": 6,
+						"name": "NBC"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "AT",
+							"title": "Buck Rogers",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "CH",
+							"title": "Buck Rogers",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "DE",
+							"title": "Buck Rogers",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "FR",
+							"title": "Buck Rogers Au 25ème Siècle",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "25世紀の宇宙戦士キャプテン・ロジャース",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "KR",
+							"title": "25세기의 버크 로저스",
+							"type": ""
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "1979-09-20",
+						"episode_count": 3,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "1979-09-20",
+						"episode_count": 24,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "1981-01-15",
+						"episode_count": 13,
+						"name": "Season 2",
+						"season_number": 2
+					}
+				]
+			}
+		},
+		"tvdbEpisodes": {
+			"74523": {
+				"data": {
+					"episodes": [
+						{
+							"id": 1162331,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "Buck Rogers in the 25th Century (Theatrical Film Release)",
+							"aired": "1979-03-30",
+							"runtime": 89
+						},
+						{
+							"id": 8215047,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": "Star Gaze: Interview With Erin Gray",
+							"aired": "2020-11-24",
+							"runtime": 18
+						},
+						{
+							"id": 8215065,
+							"seasonNumber": 0,
+							"number": 3,
+							"name": "Flight of the Birdman: Interview with Thom Christopher",
+							"aired": "2020-11-24",
+							"runtime": 9
+						},
+						{
+							"id": 147881,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "Awakening",
+							"aired": "1979-09-20",
+							"runtime": 45
+						},
+						{
+							"id": 147882,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "Awakening (2)",
+							"aired": "1979-09-20",
+							"runtime": 45
+						},
+						{
+							"id": 147883,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "Planet of the Slave Girls",
+							"aired": "1979-09-27",
+							"runtime": 45
+						},
+						{
+							"id": 147884,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "Planet of the Slave Girls (2)",
+							"aired": "1979-09-27",
+							"runtime": 45
+						},
+						{
+							"id": 147885,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "Vegas in Space",
+							"aired": "1979-10-04",
+							"runtime": 45
+						},
+						{
+							"id": 147886,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "The Plot to Kill a City (1)",
+							"aired": "1979-10-11",
+							"runtime": 45
+						},
+						{
+							"id": 147887,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "The Plot to Kill a City (2)",
+							"aired": "1979-10-18",
+							"runtime": 45
+						},
+						{
+							"id": 147888,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "Return of the Fighting 69th",
+							"aired": "1979-10-25",
+							"runtime": 45
+						},
+						{
+							"id": 147889,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "Unchained Woman",
+							"aired": "1979-11-01",
+							"runtime": 45
+						},
+						{
+							"id": 147890,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "Planet of the Amazon Women",
+							"aired": "1979-11-08",
+							"runtime": 45
+						},
+						{
+							"id": 147891,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "Cosmic Whiz Kid",
+							"aired": "1979-11-15",
+							"runtime": 45
+						},
+						{
+							"id": 147892,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "Escape from Wedded Bliss",
+							"aired": "1979-11-29",
+							"runtime": 45
+						},
+						{
+							"id": 147893,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "Cruise Ship to the Stars",
+							"aired": "1979-12-27",
+							"runtime": 45
+						},
+						{
+							"id": 147894,
+							"seasonNumber": 1,
+							"number": 14,
+							"name": "Space Vampire",
+							"aired": "1980-01-03",
+							"runtime": 45
+						},
+						{
+							"id": 147895,
+							"seasonNumber": 1,
+							"number": 15,
+							"name": "Happy Birthday, Buck",
+							"aired": "1980-01-10",
+							"runtime": 45
+						},
+						{
+							"id": 147896,
+							"seasonNumber": 1,
+							"number": 16,
+							"name": "A Blast for Buck",
+							"aired": "1980-01-17",
+							"runtime": 45
+						},
+						{
+							"id": 147897,
+							"seasonNumber": 1,
+							"number": 17,
+							"name": "Ardala Returns",
+							"aired": "1980-01-24",
+							"runtime": 45
+						},
+						{
+							"id": 147898,
+							"seasonNumber": 1,
+							"number": 18,
+							"name": "Twiki is Missing",
+							"aired": "1980-01-31",
+							"runtime": 45
+						},
+						{
+							"id": 147899,
+							"seasonNumber": 1,
+							"number": 19,
+							"name": "Olympiad",
+							"aired": "1980-02-07",
+							"runtime": 45
+						},
+						{
+							"id": 147900,
+							"seasonNumber": 1,
+							"number": 20,
+							"name": "A Dream of Jennifer",
+							"aired": "1980-02-14",
+							"runtime": 45
+						},
+						{
+							"id": 147901,
+							"seasonNumber": 1,
+							"number": 21,
+							"name": "Space Rockers",
+							"aired": "1980-02-21",
+							"runtime": 45
+						},
+						{
+							"id": 147902,
+							"seasonNumber": 1,
+							"number": 22,
+							"name": "Buck's Duel to the Death",
+							"aired": "1980-03-20",
+							"runtime": 45
+						},
+						{
+							"id": 147903,
+							"seasonNumber": 1,
+							"number": 23,
+							"name": "Flight of the War Witch (1)",
+							"aired": "1980-03-27",
+							"runtime": 45
+						},
+						{
+							"id": 147904,
+							"seasonNumber": 1,
+							"number": 24,
+							"name": "Flight of the War Witch (2)",
+							"aired": "1980-03-27",
+							"runtime": 45
+						},
+						{
+							"id": 147905,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "Time of the Hawk",
+							"aired": "1981-01-15",
+							"runtime": 45
+						},
+						{
+							"id": 147906,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "Time of the Hawk (2)",
+							"aired": "1981-01-15",
+							"runtime": 45
+						},
+						{
+							"id": 147907,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "Journey to Oasis",
+							"aired": "1981-01-22",
+							"runtime": 45
+						},
+						{
+							"id": 147908,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "Journey to Oasis (2)",
+							"aired": "1981-01-22",
+							"runtime": 45
+						},
+						{
+							"id": 147909,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "The Guardians",
+							"aired": "1981-01-29",
+							"runtime": 45
+						},
+						{
+							"id": 147910,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "Mark of the Saurian",
+							"aired": "1981-02-05",
+							"runtime": 45
+						},
+						{
+							"id": 147911,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "The Golden Man",
+							"aired": "1981-02-19",
+							"runtime": 45
+						},
+						{
+							"id": 147912,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "The Crystals",
+							"aired": "1981-03-05",
+							"runtime": 45
+						},
+						{
+							"id": 147913,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "The Satyr",
+							"aired": "1981-03-12",
+							"runtime": 45
+						},
+						{
+							"id": 147914,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "Shgoratchx!",
+							"aired": "1981-03-19",
+							"runtime": 45
+						},
+						{
+							"id": 147915,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "The Hand of the Goral",
+							"aired": "1981-03-26",
+							"runtime": 45
+						},
+						{
+							"id": 147916,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "Testimony of a Traitor",
+							"aired": "1981-04-09",
+							"runtime": 45
+						},
+						{
+							"id": 147917,
+							"seasonNumber": 2,
+							"number": 13,
+							"name": "The Dorian Secret",
+							"aired": "1981-04-16",
+							"runtime": 45
+						}
+					]
+				}
+			}
+		},
+		"season": {
+			"2443/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Bonus Episode: Awakening Original TV Pilot",
+						"air_date": "1979-09-20",
+						"runtime": 60,
+						"id": 3477608
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Star Gaze: Interview With Erin Gray",
+						"air_date": "2020-11-24",
+						"runtime": null,
+						"id": 2997014
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "Flight Of The Birdman: Interview With Thom Christopher",
+						"air_date": "2020-11-24",
+						"runtime": null,
+						"id": 2997015
+					}
+				]
+			},
+			"2443/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Awakening (1)",
+						"air_date": "1979-09-20",
+						"runtime": 60,
+						"id": 183960
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Awakening (2)",
+						"air_date": "1979-09-20",
+						"runtime": 60,
+						"id": 183963
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Planet of the Slave Girls (1)",
+						"air_date": "1979-09-27",
+						"runtime": 60,
+						"id": 183966
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Planet of the Slave Girls (2)",
+						"air_date": "1979-09-27",
+						"runtime": 60,
+						"id": 183964
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Vegas in Space",
+						"air_date": "1979-10-04",
+						"runtime": 60,
+						"id": 183965
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "The Plot to Kill a City (1)",
+						"air_date": "1979-10-11",
+						"runtime": 60,
+						"id": 183962
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "The Plot to Kill a City (2)",
+						"air_date": "1979-10-18",
+						"runtime": 60,
+						"id": 183967
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Return of the Fighting 69th",
+						"air_date": "1979-10-25",
+						"runtime": 60,
+						"id": 183961
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Unchained Woman",
+						"air_date": "1979-11-01",
+						"runtime": 60,
+						"id": 183968
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Planet of the Amazon Women",
+						"air_date": "1979-11-08",
+						"runtime": 60,
+						"id": 183972
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Cosmic Whiz Kid",
+						"air_date": "1979-11-15",
+						"runtime": 46,
+						"id": 183970
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Escape From Wedded Bliss",
+						"air_date": "1979-11-29",
+						"runtime": 46,
+						"id": 183971
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Cruise Ship to the Stars",
+						"air_date": "1979-12-27",
+						"runtime": 60,
+						"id": 183969
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Space Vampire",
+						"air_date": "1980-01-03",
+						"runtime": 60,
+						"id": 183975
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Happy Birthday, Buck",
+						"air_date": "1980-01-10",
+						"runtime": 60,
+						"id": 183974
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "A Blast for Buck",
+						"air_date": "1980-01-17",
+						"runtime": 60,
+						"id": 183976
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "Ardala Returns",
+						"air_date": "1980-01-24",
+						"runtime": 60,
+						"id": 183978
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Twiki is Missing",
+						"air_date": "1980-01-31",
+						"runtime": 60,
+						"id": 183973
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Olympiad",
+						"air_date": "1980-02-07",
+						"runtime": 60,
+						"id": 183979
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "A Dream of Jennifer",
+						"air_date": "1980-02-14",
+						"runtime": 60,
+						"id": 183977
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Space Rockers",
+						"air_date": "1980-02-21",
+						"runtime": 60,
+						"id": 183980
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Buck's Duel to the Death",
+						"air_date": "1980-03-20",
+						"runtime": 60,
+						"id": 183981
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Flight of the War Witch (1)",
+						"air_date": "1980-03-27",
+						"runtime": 60,
+						"id": 183983
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "Flight of the War Witch (2)",
+						"air_date": "1980-03-27",
+						"runtime": 60,
+						"id": 183982
+					}
+				]
+			},
+			"2443/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Time of the Hawk (1)",
+						"air_date": "1981-01-15",
+						"runtime": 60,
+						"id": 183986
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Time of the Hawk (2)",
+						"air_date": "1981-01-15",
+						"runtime": 60,
+						"id": 183988
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Journey to Oasis (1)",
+						"air_date": "1981-01-22",
+						"runtime": 60,
+						"id": 183984
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Journey to Oasis (2)",
+						"air_date": "1981-01-22",
+						"runtime": 60,
+						"id": 183987
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "The Guardians",
+						"air_date": "1981-01-29",
+						"runtime": 60,
+						"id": 183989
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Mark of the Saurian",
+						"air_date": "1981-02-05",
+						"runtime": 60,
+						"id": 183985
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "The Golden Man",
+						"air_date": "1981-02-19",
+						"runtime": 60,
+						"id": 183993
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "The Crystals",
+						"air_date": "1981-03-05",
+						"runtime": 60,
+						"id": 183990
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "The Satyr",
+						"air_date": "1981-03-12",
+						"runtime": 60,
+						"id": 183992
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "Shgoratchx!",
+						"air_date": "1981-03-19",
+						"runtime": 60,
+						"id": 183991
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "The Hand of the Goral",
+						"air_date": "1981-03-26",
+						"runtime": 60,
+						"id": 183995
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Testimony of a Traitor",
+						"air_date": "1981-04-09",
+						"runtime": 60,
+						"id": 183994
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "The Dorian Secret",
+						"air_date": "1981-04-16",
+						"runtime": 60,
+						"id": 183996
+					}
+				]
+			}
+		},
+		"seasonTranslations": {
+			"2443/1": {
+				"translations": [
+					{
+						"data": {
+							"name": "Season 1"
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					}
+				]
+			},
+			"2443/2": {
+				"translations": [
+					{
+						"data": {
+							"name": "Season 2"
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					},
+					{
+						"data": {
+							"name": ""
+						}
+					}
+				]
+			}
+		},
+		"searchTv": {
+			"Buck Rogers in the 25th Century": {
+				"results": [
+					{
+						"id": 2443,
+						"name": "Buck Rogers in the 25th Century",
+						"original_name": "Buck Rogers in the 25th Century",
+						"first_air_date": "1979-09-20"
+					}
+				]
+			}
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun (RD), 2026-11-10: the .zurgtorrent's name, hash, IMDb id and every video file with its folder, as zurg asks",
+			"request": {
+				"name": "Buck Rogers in the 25th Century",
+				"hash": "867e45b0dd9da3958bf9c933ffa56fa0aea23b05",
+				"files": [
+					{
+						"path": " Buck Rogers 1939 E01 Tomorrow's World.mp4",
+						"folder": "Buck Rogers 1939 S01 (352p)"
+					},
+					{
+						"path": " Buck Rogers 1939 E02 Tragedy on Saturn.mp4",
+						"folder": "Buck Rogers 1939 S01 (352p)"
+					},
+					{
+						"path": " Buck Rogers 1939 E03 The Enemy's Stronghold.mp4",
+						"folder": "Buck Rogers 1939 S01 (352p)"
+					},
+					{
+						"path": " Buck Rogers 1939 E04 The Sky Patrol.mp4",
+						"folder": "Buck Rogers 1939 S01 (352p)"
+					},
+					{
+						"path": " Buck Rogers 1939 E05 The Phantom Plane.mp4",
+						"folder": "Buck Rogers 1939 S01 (352p)"
+					},
+					{
+						"path": " Buck Rogers 1939 E06 The Unknown Command.mp4",
+						"folder": "Buck Rogers 1939 S01 (352p)"
+					},
+					{
+						"path": " Buck Rogers 1939 E07 Primative Urge.mp4",
+						"folder": "Buck Rogers 1939 S01 (352p)"
+					},
+					{
+						"path": " Buck Rogers 1939 E08 Revolt of the Zuggs.mp4",
+						"folder": "Buck Rogers 1939 S01 (352p)"
+					},
+					{
+						"path": " Buck Rogers 1939 E09 Bodies Without Minds.mp4",
+						"folder": "Buck Rogers 1939 S01 (352p)"
+					},
+					{
+						"path": " Buck Rogers 1939 E10 Broken Barriers.mp4",
+						"folder": "Buck Rogers 1939 S01 (352p)"
+					},
+					{
+						"path": " Buck Rogers 1939 E11 Prince in Bondage.mp4",
+						"folder": "Buck Rogers 1939 S01 (352p)"
+					},
+					{
+						"path": " Buck Rogers 1939 E12 War of the Planets.mp4",
+						"folder": "Buck Rogers 1939 S01 (352p)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E01+E02 Awakening.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E03+E04 Planet of the Slave Girls.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E05 Vegas in Space.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E06 The Plot to Kill a City Pt 1.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E07 The Plot to Kill a City Pt 2.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E08 Return of the Fighting 69th.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E09 Unchained Woman.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E10 Planet of the Amazon Women.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E11 Cosmic Whiz Kid.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E12 Escape from Wedded Bliss.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E13 Cruise Ship to the Stars.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E14 Space Vampire.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E15 Happy Birthday, Buck.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E16 A Blast for Buck.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E17 Ardala Returns.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E18 Twiki is Missing.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E19 Olympiad.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E20 A Dream of Jennifer.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E21 Space Rockers.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E22 Buck's Duel to the Death.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S01E23+24 Flight of the War Witch.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S01 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S02E01+E02 Time of the Hawk.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S02 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S02E03+E04 Journey to Oasis.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S02 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S02E05 The Guardians.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S02 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S02E06 Mark of the Saurian.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S02 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S02E07 The Golden Man.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S02 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S02E08 The Crystals.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S02 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S02E09 The Satyr.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S02 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S02E10 Shgoratchx!.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S02 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S02E11 The Hand of the Goral.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S02 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S02E12 Testimony of a Traitor.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S02 (360p re-dvdrip)"
+					},
+					{
+						"path": " Buck Rogers 1979 S02E13 The Dorian Secret.mp4",
+						"folder": "Buck Rogers 1979 S01-S02 (1979-)/Buck Rogers 1979 S02 (360p re-dvdrip)"
+					},
+					{
+						"path": "Buck Rogers 1939 E01 Tomorrow's World.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1939 E02 Tragedy on Saturn.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1939 E03 The Enemy's Stronghold.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1939 E04 The Sky Patrol.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1939 E05 The Phantom Plane.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1939 E06 The Unknown Command.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1939 E07 Primative Urge.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1939 E08 Revolt of the Zuggs.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1939 E09 Bodies Without Minds.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1939 E10 Broken Barriers.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1939 E11 Prince in Bondage.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1939 E12 War of the Planets.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E01+E02 Awakening.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E03+E04 Planet of the Slave Girls.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E05 Vegas in Space.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E06 The Plot to Kill a City Pt 1.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E07 The Plot to Kill a City Pt 2.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E08 Return of the Fighting 69th.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E09 Unchained Woman.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E10 Planet of the Amazon Women.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E11 Cosmic Whiz Kid.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E12 Escape from Wedded Bliss.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E13 Cruise Ship to the Stars.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E14 Space Vampire.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E15 Happy Birthday, Buck.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E16 A Blast for Buck.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E17 Ardala Returns.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E18 Twiki is Missing.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E19 Olympiad.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E20 A Dream of Jennifer.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E21 Space Rockers.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E22 Buck's Duel to the Death.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S01E23+24 Flight of the War Witch.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S02E01+E02 Time of the Hawk.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S02E03+E04 Journey to Oasis.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S02E05 The Guardians.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S02E06 Mark of the Saurian.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S02E07 The Golden Man.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S02E08 The Crystals.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S02E09 The Satyr.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S02E10 Shgoratchx!.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S02E11 The Hand of the Goral.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S02E12 Testimony of a Traitor.mp4",
+						"folder": ""
+					},
+					{
+						"path": "Buck Rogers 1979 S02E13 The Dorian Secret.mp4",
+						"folder": ""
+					}
+				],
+				"imdbId": "tt0078579"
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0078579",
+				"tmdbId": 2443,
+				"files": [
+					{
+						"path": " Buck Rogers 1939 E01 Tomorrow's World.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": " Buck Rogers 1939 E02 Tragedy on Saturn.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": " Buck Rogers 1939 E03 The Enemy's Stronghold.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": " Buck Rogers 1939 E04 The Sky Patrol.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": " Buck Rogers 1939 E05 The Phantom Plane.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": " Buck Rogers 1939 E06 The Unknown Command.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": " Buck Rogers 1939 E07 Primative Urge.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": " Buck Rogers 1939 E08 Revolt of the Zuggs.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": " Buck Rogers 1939 E09 Bodies Without Minds.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": " Buck Rogers 1939 E10 Broken Barriers.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": " Buck Rogers 1939 E11 Prince in Bondage.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": " Buck Rogers 1939 E12 War of the Planets.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": " Buck Rogers 1979 S01E01+E02 Awakening.mp4",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183960
+					},
+					{
+						"path": " Buck Rogers 1979 S01E03+E04 Planet of the Slave Girls.mp4",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183966
+					},
+					{
+						"path": " Buck Rogers 1979 S01E05 Vegas in Space.mp4",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183965
+					},
+					{
+						"path": " Buck Rogers 1979 S01E06 The Plot to Kill a City Pt 1.mp4",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183962
+					},
+					{
+						"path": " Buck Rogers 1979 S01E07 The Plot to Kill a City Pt 2.mp4",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183967
+					},
+					{
+						"path": " Buck Rogers 1979 S01E08 Return of the Fighting 69th.mp4",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183961
+					},
+					{
+						"path": " Buck Rogers 1979 S01E09 Unchained Woman.mp4",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183968
+					},
+					{
+						"path": " Buck Rogers 1979 S01E10 Planet of the Amazon Women.mp4",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183972
+					},
+					{
+						"path": " Buck Rogers 1979 S01E11 Cosmic Whiz Kid.mp4",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183970
+					},
+					{
+						"path": " Buck Rogers 1979 S01E12 Escape from Wedded Bliss.mp4",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183971
+					},
+					{
+						"path": " Buck Rogers 1979 S01E13 Cruise Ship to the Stars.mp4",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183969
+					},
+					{
+						"path": " Buck Rogers 1979 S01E14 Space Vampire.mp4",
+						"season": 1,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183975
+					},
+					{
+						"path": " Buck Rogers 1979 S01E15 Happy Birthday, Buck.mp4",
+						"season": 1,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183974
+					},
+					{
+						"path": " Buck Rogers 1979 S01E16 A Blast for Buck.mp4",
+						"season": 1,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183976
+					},
+					{
+						"path": " Buck Rogers 1979 S01E17 Ardala Returns.mp4",
+						"season": 1,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183978
+					},
+					{
+						"path": " Buck Rogers 1979 S01E18 Twiki is Missing.mp4",
+						"season": 1,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183973
+					},
+					{
+						"path": " Buck Rogers 1979 S01E19 Olympiad.mp4",
+						"season": 1,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183979
+					},
+					{
+						"path": " Buck Rogers 1979 S01E20 A Dream of Jennifer.mp4",
+						"season": 1,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183977
+					},
+					{
+						"path": " Buck Rogers 1979 S01E21 Space Rockers.mp4",
+						"season": 1,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183980
+					},
+					{
+						"path": " Buck Rogers 1979 S01E22 Buck's Duel to the Death.mp4",
+						"season": 1,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183981
+					},
+					{
+						"path": " Buck Rogers 1979 S01E23+24 Flight of the War Witch.mp4",
+						"season": 1,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183983
+					},
+					{
+						"path": " Buck Rogers 1979 S02E01+E02 Time of the Hawk.mp4",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183986
+					},
+					{
+						"path": " Buck Rogers 1979 S02E03+E04 Journey to Oasis.mp4",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183984
+					},
+					{
+						"path": " Buck Rogers 1979 S02E05 The Guardians.mp4",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183989
+					},
+					{
+						"path": " Buck Rogers 1979 S02E06 Mark of the Saurian.mp4",
+						"season": 2,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183985
+					},
+					{
+						"path": " Buck Rogers 1979 S02E07 The Golden Man.mp4",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183993
+					},
+					{
+						"path": " Buck Rogers 1979 S02E08 The Crystals.mp4",
+						"season": 2,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183990
+					},
+					{
+						"path": " Buck Rogers 1979 S02E09 The Satyr.mp4",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183992
+					},
+					{
+						"path": " Buck Rogers 1979 S02E10 Shgoratchx!.mp4",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183991
+					},
+					{
+						"path": " Buck Rogers 1979 S02E11 The Hand of the Goral.mp4",
+						"season": 2,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183995
+					},
+					{
+						"path": " Buck Rogers 1979 S02E12 Testimony of a Traitor.mp4",
+						"season": 2,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183994
+					},
+					{
+						"path": " Buck Rogers 1979 S02E13 The Dorian Secret.mp4",
+						"season": 2,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183996
+					},
+					{
+						"path": "Buck Rogers 1939 E01 Tomorrow's World.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Buck Rogers 1939 E02 Tragedy on Saturn.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Buck Rogers 1939 E03 The Enemy's Stronghold.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Buck Rogers 1939 E04 The Sky Patrol.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Buck Rogers 1939 E05 The Phantom Plane.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Buck Rogers 1939 E06 The Unknown Command.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Buck Rogers 1939 E07 Primative Urge.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Buck Rogers 1939 E08 Revolt of the Zuggs.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Buck Rogers 1939 E09 Bodies Without Minds.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Buck Rogers 1939 E10 Broken Barriers.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Buck Rogers 1939 E11 Prince in Bondage.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Buck Rogers 1939 E12 War of the Planets.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Buck Rogers 1979 S01E01+E02 Awakening.mp4",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183960
+					},
+					{
+						"path": "Buck Rogers 1979 S01E03+E04 Planet of the Slave Girls.mp4",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183966
+					},
+					{
+						"path": "Buck Rogers 1979 S01E05 Vegas in Space.mp4",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183965
+					},
+					{
+						"path": "Buck Rogers 1979 S01E06 The Plot to Kill a City Pt 1.mp4",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183962
+					},
+					{
+						"path": "Buck Rogers 1979 S01E07 The Plot to Kill a City Pt 2.mp4",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183967
+					},
+					{
+						"path": "Buck Rogers 1979 S01E08 Return of the Fighting 69th.mp4",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183961
+					},
+					{
+						"path": "Buck Rogers 1979 S01E09 Unchained Woman.mp4",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183968
+					},
+					{
+						"path": "Buck Rogers 1979 S01E10 Planet of the Amazon Women.mp4",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183972
+					},
+					{
+						"path": "Buck Rogers 1979 S01E11 Cosmic Whiz Kid.mp4",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183970
+					},
+					{
+						"path": "Buck Rogers 1979 S01E12 Escape from Wedded Bliss.mp4",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183971
+					},
+					{
+						"path": "Buck Rogers 1979 S01E13 Cruise Ship to the Stars.mp4",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183969
+					},
+					{
+						"path": "Buck Rogers 1979 S01E14 Space Vampire.mp4",
+						"season": 1,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183975
+					},
+					{
+						"path": "Buck Rogers 1979 S01E15 Happy Birthday, Buck.mp4",
+						"season": 1,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183974
+					},
+					{
+						"path": "Buck Rogers 1979 S01E16 A Blast for Buck.mp4",
+						"season": 1,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183976
+					},
+					{
+						"path": "Buck Rogers 1979 S01E17 Ardala Returns.mp4",
+						"season": 1,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183978
+					},
+					{
+						"path": "Buck Rogers 1979 S01E18 Twiki is Missing.mp4",
+						"season": 1,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183973
+					},
+					{
+						"path": "Buck Rogers 1979 S01E19 Olympiad.mp4",
+						"season": 1,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183979
+					},
+					{
+						"path": "Buck Rogers 1979 S01E20 A Dream of Jennifer.mp4",
+						"season": 1,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183977
+					},
+					{
+						"path": "Buck Rogers 1979 S01E21 Space Rockers.mp4",
+						"season": 1,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183980
+					},
+					{
+						"path": "Buck Rogers 1979 S01E22 Buck's Duel to the Death.mp4",
+						"season": 1,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183981
+					},
+					{
+						"path": "Buck Rogers 1979 S01E23+24 Flight of the War Witch.mp4",
+						"season": 1,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183983
+					},
+					{
+						"path": "Buck Rogers 1979 S02E01+E02 Time of the Hawk.mp4",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183986
+					},
+					{
+						"path": "Buck Rogers 1979 S02E03+E04 Journey to Oasis.mp4",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183984
+					},
+					{
+						"path": "Buck Rogers 1979 S02E05 The Guardians.mp4",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183989
+					},
+					{
+						"path": "Buck Rogers 1979 S02E06 Mark of the Saurian.mp4",
+						"season": 2,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183985
+					},
+					{
+						"path": "Buck Rogers 1979 S02E07 The Golden Man.mp4",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183993
+					},
+					{
+						"path": "Buck Rogers 1979 S02E08 The Crystals.mp4",
+						"season": 2,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183990
+					},
+					{
+						"path": "Buck Rogers 1979 S02E09 The Satyr.mp4",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183992
+					},
+					{
+						"path": "Buck Rogers 1979 S02E10 Shgoratchx!.mp4",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183991
+					},
+					{
+						"path": "Buck Rogers 1979 S02E11 The Hand of the Goral.mp4",
+						"season": 2,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183995
+					},
+					{
+						"path": "Buck Rogers 1979 S02E12 Testimony of a Traitor.mp4",
+						"season": 2,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183994
+					},
+					{
+						"path": "Buck Rogers 1979 S02E13 The Dorian Secret.mp4",
+						"season": 2,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 183996
+					}
+				]
+			}
+		}
+	]
+}
