@@ -64,6 +64,21 @@ describe('MetadataCacheService fetchWithCache', () => {
 		expect(cacheFactory.current.set).not.toHaveBeenCalled();
 	});
 
+	// A line per hit was ~95% of dmm_web's log on 2026-11-10 (5 GB that day), and
+	// each console.log is a blocking write to the container's stdout pipe.
+	it('logs nothing on a cache hit', async () => {
+		cacheFactory.current!.getWithMetadata.mockResolvedValue({
+			data: { cached: true },
+			updatedAt: new Date(),
+		});
+		const log = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+		await new MetadataCacheService().fetchWithCache('url', 'key', 'type', undefined, 3600000);
+
+		expect(log).not.toHaveBeenCalled();
+		log.mockRestore();
+	});
+
 	it('fetches and caches data when entry is missing or expired', async () => {
 		const expired = { data: { cached: false }, updatedAt: new Date(Date.now() - 10000) };
 		cacheFactory.current = buildCache();

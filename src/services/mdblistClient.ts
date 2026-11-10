@@ -150,7 +150,6 @@ export class MDBListClient {
 			const cacheAge = Date.now() - cached.updatedAt.getTime();
 
 			if (this.isFresh(cached.updatedAt, maxAge)) {
-				console.log(`[MDBList] Using cached data for IMDB ID: ${imdbId}`);
 				return cached.data;
 			}
 
@@ -215,7 +214,6 @@ export class MDBListClient {
 				? CACHE_TTL.ERROR
 				: metadataMaxAge(mdblistReleaseSignals(cached.data), CACHE_TTL.SHOW);
 			if (this.isFresh(cached.updatedAt, maxAge)) {
-				console.log(`[MDBList] Using cached data for TVDB ID: ${tvdbId}`);
 				return cached.data;
 			}
 		}
@@ -277,7 +275,6 @@ export class MDBListClient {
 		const row = await this.cache.getWithMetadata(cacheKey);
 		const cached = row && Array.isArray(row.data) ? row : null;
 		if (cached && this.isFresh(cached.updatedAt, ttl)) {
-			console.log(`[MDBList] Using cached ${label}`);
 			return cached.data;
 		}
 

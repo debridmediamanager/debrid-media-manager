@@ -202,7 +202,7 @@ export class MetadataCacheService {
 		// Check cache first
 		const cached = await this.cache.getWithMetadata(cacheKey);
 		if (cached && !this.isCacheExpired(cached.updatedAt, resolveMaxAge(maxAge, cached.data))) {
-			console.log(`[MetadataCache] Using cached ${cacheType} data for: ${cacheKey}`);
+			// No log on a hit: hits ran to millions of lines a day, ~95% of dmm_web's log.
 			return cached.data as T;
 		}
 
