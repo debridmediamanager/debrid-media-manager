@@ -35,6 +35,7 @@ import {
 	parseName,
 	placeFile,
 	specialOf,
+	spelledAlike,
 	stackedParts,
 	TITLE_EPISODE,
 	titleOf,
@@ -304,6 +305,7 @@ export async function placeReleases(
 			if (!waits) out[at] = await filmLook(release, out[at], sources);
 			if (!waits) out[at] = await tvdbLook(out[at], sources);
 			if (!waits) out[at] = await revivalLook(release, out[at], sources);
+			if (!waits) out[at] = await spellingLook(release, out[at], sources);
 		}
 	};
 	await Promise.all(Array.from({ length: CONCURRENCY }, worker));
@@ -534,6 +536,91 @@ async function revivalLook(
 		tvdbId,
 		files,
 	};
+}
+
+/**
+ * A file its release's show left unplaced whose title is TMDB's but for its spelling
+ * (`spelledAlike`), in its own season or the one before or after: The Backyardigans' `S04E04
+ * Attack of the 50 Foot Worman` is S4E12 "Attack of the Fifty-Foot Worman", The Crocodile Hunter's
+ * `s03e02 - Journey to the Red Centre` S4E4 "Journey to the Red Center". Asked last, of the files
+ * every other rule left unplaced, so it moves no file and decides no show; an episode another
+ * file holds is not given twice.
+ */
+async function spellingLook(
+	release: PlaceRequest,
+	placed: PlacedRelease,
+	sources: PlacementSources
+): Promise<PlacedRelease> {
+	const { tmdbId } = placed;
+	if (placed.skipped || placed.kind !== 'tv' || tmdbId === null) return placed;
+	// numbered as TVDB or IMDb do, not on TMDB's lists
+	if (placed.files.some((file) => file.how === 'tvdbSeries' || file.how === 'imdb'))
+		return placed;
+	const single = release.files.length === 1;
+	const asked = release.files.flatMap((file, at) => {
+		const numbers =
+			placed.files[at].season === null && !placed.files[at].kind
+				? fileNumbers(release.name, file.folder, file.path, single)
+				: null;
+		const title =
+			numbers?.season != null && numbers.end === null
+				? titleOf(file.path.split('/').pop() ?? file.path, numbers)
+				: null;
+		return title ? [{ at, season: numbers!.season!, title: title.whole }] : [];
+	});
+	if (!asked.length) return placed;
+	const listed = new Set(
+		(((await sources.show(tmdbId))?.seasons as any[]) ?? []).map((row) => row?.season_number)
+	);
+	const lists = new Map<
+		number,
+		Promise<{ season: number; episode: number; name: string; id: unknown }[]>
+	>();
+	const episodes = (season: number) => {
+		if (!lists.has(season))
+			lists.set(
+				season,
+				sources.season(tmdbId, season).then((list) =>
+					((list?.episodes as any[]) ?? []).flatMap((row) =>
+						Number.isInteger(row?.episode_number) && typeof row.name === 'string'
+							? [
+									{
+										season,
+										episode: row.episode_number as number,
+										name: row.name as string,
+										id: row.id,
+									},
+								]
+							: []
+					)
+				)
+			);
+		return lists.get(season)!;
+	};
+	const taken = new Set(
+		placed.files.flatMap((file) =>
+			file.season === null ? [] : [`${file.season}|${file.episode}`]
+		)
+	);
+	const files = [...placed.files];
+	for (const { at, season, title } of asked) {
+		// specials only for a special
+		const near = [season - 1, season, season + 1].filter(
+			(n) => listed.has(n) && (n > 0 || season === 0)
+		);
+		const found = spelledAlike(title, (await Promise.all(near.map(episodes))).flat());
+		const key = found && `${found.season}|${found.episode}`;
+		if (!found || taken.has(key!)) continue;
+		taken.add(key!);
+		files[at] = {
+			...files[at],
+			season: found.season,
+			episode: found.episode,
+			how: 'tmdb',
+			tmdbEpisodeId: Number.isInteger(found.id) ? (found.id as number) : null,
+		};
+	}
+	return { ...placed, files };
 }
 
 /**

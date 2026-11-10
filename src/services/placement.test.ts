@@ -48,13 +48,14 @@ import showNamedTitles from '@/test/fixtures/placement/show-named-titles.json';
 import showsByTitle from '@/test/fixtures/placement/shows-named-by-title.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import specialsByTitle from '@/test/fixtures/placement/specials-by-title.json';
+import spellingVariants from '@/test/fixtures/placement/spelling-variants.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import titleEpisodes from '@/test/fixtures/placement/title-episode-numbers.json';
 import titleParts from '@/test/fixtures/placement/title-parts.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
 import tvdbSegments from '@/test/fixtures/placement/tvdb-segments.json';
 import wwe from '@/test/fixtures/placement/wwe-air-dates.json';
-import { buildAnimeIndex } from '@/utils/episodePlacement';
+import { buildAnimeIndex, spelledAlike } from '@/utils/episodePlacement';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
@@ -2155,5 +2156,53 @@ describe("a director's cut's prime after a fansub's number", () => {
 		expect(at("Evangelion - 21' [MULTI]")).toEqual([1, 21]);
 		expect(at("Evangelion - 24' [MULTI]")).toEqual([1, 24]);
 		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a title TMDB spells otherwise', () => {
+	// zurg on fun (2026-11-10): files placement left unplaced, their numbers being no TMDB
+	// episode's, titled as one of their season's or the next but for a spelling (see the fixtures README)
+	const spelled = async (name: string, file: string) => {
+		const c = spellingVariants.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(spellingVariants.answers),
+			async (list) =>
+				list.map(({ name }) => (spellingVariants.answers.identify as any)?.[name] ?? null)
+		);
+		expect(releases[0]).toEqual(c.expect);
+		const f = releases[0].files.find((f) => f.path.includes(file))!;
+		return [f.season, f.episode];
+	};
+
+	it('places a file by a title spelled with figures or British spelling', async () => {
+		// "Attack of the Fifty-Foot Worman"
+		expect(await spelled('The Backyardigans', 'Attack of the 50 Foot Worman')).toEqual([4, 12]);
+		// "Journey to the Red Center", the season after the file's
+		expect(await spelled('The Crocodile Hunter', 'Journey to the Red Centre')).toEqual([4, 4]);
+		// "What Does Blue Wanna Do On a Rainy Day?"
+		expect(await spelled("Blue's Clues", 'Want to Do on a Rainy Day')).toEqual([2, 12]);
+	});
+
+	it('places a file by a title one word of which is mistyped', async () => {
+		// "The Unbelievable Wrongness of Talking"
+		expect(await spelled('Becker (1998)', 'Unbearable Wrongness of Talking')).toEqual([6, 6]);
+		// "Genie Meanie Minie Moe"
+		expect(await spelled('The Fairly OddParents', 'Genie Meanie Minie Mo')).toEqual([4, 20]);
+	});
+
+	it('takes no number for a slip, no short title, and no title two episodes are alike', () => {
+		const list = (...names: string[]) => names.map((name) => ({ name }));
+		expect(spelledAlike('Treehouse of Horror V', list('Treehouse of Horror VI'))).toBeNull();
+		expect(spelledAlike('Showdown Part 2', list('Showdown Part 1'))).toBeNull();
+		expect(spelledAlike('Mo', list('Moe'))).toBeNull();
+		expect(spelledAlike('Bart the Genius', list('Bart the General'))).toBeNull();
+		expect(
+			spelledAlike(
+				'Genie Meanie Minie Mo',
+				list('Genie Meanie Minie Moe', 'Genie Meanie Minie Mob')
+			)
+		).toBeNull();
 	});
 });

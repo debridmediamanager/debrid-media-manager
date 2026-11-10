@@ -5617,27 +5617,27 @@
 					},
 					{
 						"path": "604 - The Tale of the Vitrual Pets.avi",
-						"season": null,
-						"episode": null,
+						"season": 6,
+						"episode": 3,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 223019
 					},
 					{
 						"path": "605 - The Tale of the Misfourtune Cookie.avi",
-						"season": null,
-						"episode": null,
+						"season": 6,
+						"episode": 2,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 223022
 					},
 					{
 						"path": "606 - The Tale of the Grusome Gourmets.avi",
-						"season": null,
-						"episode": null,
+						"season": 6,
+						"episode": 5,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 223029
 					},
 					{
 						"path": "607 - The Tale of the Hunted.avi",

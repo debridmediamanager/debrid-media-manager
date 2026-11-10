@@ -12399,11 +12399,11 @@
 					},
 					{
 						"path": "SpongeBob SquarePants S01E11B Squidward, the Unfreindly Ghost.mkv",
-						"season": null,
-						"episode": null,
+						"season": 1,
+						"episode": 23,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1001282
 					},
 					{
 						"path": "SpongeBob SquarePants S01E12A The Chaperone.mkv",

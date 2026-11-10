@@ -91080,11 +91080,11 @@
 					},
 					{
 						"path": "s03e02 - Journey to the Red Centre.mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 4,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 120258
 					},
 					{
 						"path": "s04e02 - Sidewinders of Arizona.mkv",

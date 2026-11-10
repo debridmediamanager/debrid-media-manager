@@ -1228,6 +1228,104 @@ function titled<T extends { name: string }>(
 	return null;
 }
 
+const NUMBER_WORDS: Record<string, string> = Object.fromEntries([
+	...[
+		'zero',
+		'one',
+		'two',
+		'three',
+		'four',
+		'five',
+		'six',
+		'seven',
+		'eight',
+		'nine',
+		'ten',
+		'eleven',
+		'twelve',
+		'thirteen',
+		'fourteen',
+		'fifteen',
+		'sixteen',
+		'seventeen',
+		'eighteen',
+		'nineteen',
+		'twenty',
+	].map((word, n) => [word, String(n)]),
+	...['thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'].map((word, n) => [
+		word,
+		String(30 + 10 * n),
+	]),
+]);
+// what a title says as it is spoken: `Girls Just Wanna Have Fun` is "Girls Just Want to Have Fun"
+const SPOKEN: Record<string, string[]> = {
+	wanna: ['want', 'to'],
+	gonna: ['going', 'to'],
+	gotta: ['got', 'to'],
+};
+const ROMAN = /^(?:i{1,3}|iv|vi{0,3}|ix|xi{0,3})$/;
+
+/**
+ * A title's words, its spelling aside: no article, figures for number words (`50 Foot` is
+ * "Fifty-Foot"), spoken forms written out, and American spellings (`Centre` is "Center", `Colour`
+ * "Color").
+ */
+const spelling = (text: string) =>
+	words(text)
+		.flatMap((word) => SPOKEN[word] ?? [word])
+		.filter((word) => !/^(?:the|a|an)$/.test(word))
+		.map(
+			(word) =>
+				NUMBER_WORDS[word] ??
+				word
+					.replace(/(?<=..[^aeiou\d])re(?=s?$)/, 'er')
+					.replace(/(?<=\D{3})our(?=$|s$|ed$|ing$|ite$|ites$)/, 'or')
+		);
+
+/** Letters inserted, dropped, changed or swapped with the next to make one word the other. */
+function slips(a: string, b: string): number {
+	const d = Array.from({ length: a.length + 1 }, (_, i) =>
+		Array.from({ length: b.length + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0))
+	);
+	for (let i = 1; i <= a.length; i++)
+		for (let j = 1; j <= b.length; j++) {
+			d[i][j] = Math.min(
+				d[i - 1][j] + 1,
+				d[i][j - 1] + 1,
+				d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+			);
+			if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1])
+				d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+		}
+	return d[a.length][b.length];
+}
+
+/**
+ * The one candidate titled as a file is but for its spelling: the same words once spelled alike
+ * (`spelling`), else the same words but one, of three words or more, that a slip of at most a
+ * third of its letters makes the other and that is no number (Becker's `Unbearable Wrongness of
+ * Talking` is "The Unbelievable Wrongness of Talking", The Fairly OddParents' `Genie Meanie Minie
+ * Mo` "Genie Meanie Minie Moe"). Null where none is, or where two are alike.
+ */
+export function spelledAlike<T extends { name: string }>(title: string, candidates: T[]): T | null {
+	const own = spelling(title);
+	if (own.join('').length < 6) return null;
+	const near = candidates.flatMap((item) => {
+		const other = spelling(item.name);
+		if (other.length !== own.length) return [];
+		const differ = own.flatMap((word, n) => (word === other[n] ? [] : [n]));
+		if (!differ.length) return [{ item, slips: 0 }];
+		if (differ.length > 1 || own.length < 3) return [];
+		const [a, b] = [own[differ[0]], other[differ[0]]];
+		if (/\d/.test(a + b) || ROMAN.test(a) || ROMAN.test(b)) return [];
+		const count = slips(a, b);
+		return count * 3 <= Math.max(a.length, b.length) ? [{ item, slips: count }] : [];
+	});
+	const least = Math.min(...near.map((row) => row.slips));
+	const found = near.filter((row) => row.slips === least);
+	return found.length === 1 ? found[0].item : null;
+}
+
 const PART = / (?:part |pt )?\d{1,2}$/;
 const SPELLED: Record<string, string> = { one: '1', two: '2', three: '3', four: '4', five: '5' };
 /**
