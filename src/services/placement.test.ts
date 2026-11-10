@@ -26,6 +26,7 @@ import filmsBeforeShows from '@/test/fixtures/placement/films-before-shows.json'
 import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
 import filmsInShows from '@/test/fixtures/placement/films-in-show-releases.json';
 import filmsOfEpisodes from '@/test/fixtures/placement/films-of-imdb-episodes.json';
+import filmsTitledApart from '@/test/fixtures/placement/films-titled-apart.json';
 import filmsBeforeColons from '@/test/fixtures/placement/films-titled-before-a-colon.json';
 import filmsTitledByShow from '@/test/fixtures/placement/films-titled-by-show.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
@@ -1661,6 +1662,27 @@ describe('a film named by its title before a colon', () => {
 			'movie',
 			imdbId,
 			tmdbId,
+		]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a film named by one of the titles its name gives apart', () => {
+	// zurg-usenet on fun (2026-11-10): `High Voltage - Vergebung ist keine Option aka Asian Cops`,
+	// its German and English titles beside the original (see the fixtures README)
+	it('names it by the one TMDB titles so in that year', async () => {
+		const c = filmsTitledApart.cases[0];
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(filmsTitledApart.answers),
+			async (list) =>
+				list.map(({ name }) => (filmsTitledApart.answers.identify as any)[name] ?? null)
+		);
+		expect([releases[0].kind, releases[0].imdbId, releases[0].tmdbId]).toEqual([
+			'movie',
+			'tt0113144',
+			99582,
 		]);
 		expect(releases[0]).toEqual(c.expect);
 	});

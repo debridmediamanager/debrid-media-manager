@@ -1,0 +1,117 @@
+{
+	"answers": {
+		"find": {
+			"tt0113144": {
+				"movie_results": [
+					{
+						"id": 99582,
+						"title": "High Voltage",
+						"original_title": "亞洲警察之高壓線",
+						"release_date": "1995-01-14"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			}
+		},
+		"show": {},
+		"season": {},
+		"seasonEpisodes": {},
+		"episodeShow": {
+			"tt0113144": null
+		},
+		"identifier": {
+			"High Voltage - Vergebung ist keine Option aka Asian Cops 1995 DVDRip Uncut German0251 yEnc": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0129992",
+						"score": 0.0769,
+						"title": "High Voltage",
+						"year": 1997
+					},
+					{
+						"imdbId": "tt0113144",
+						"score": -0.107,
+						"title": "Asian Cop: High Voltage",
+						"year": 1994
+					},
+					{
+						"imdbId": "tt6905442",
+						"score": -1.3582,
+						"title": "High Voltage",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt0019983",
+						"score": -1.8563,
+						"title": "High Voltage",
+						"year": 1929
+					},
+					{
+						"imdbId": "tt1121931",
+						"score": -1.9024,
+						"title": "Crank: High Voltage",
+						"year": 2009
+					}
+				],
+				"parsedTitle": "High Voltage",
+				"parsedYear": 1995,
+				"probability": 0.4698
+			}
+		},
+		"identify": {
+			"High Voltage - Vergebung ist keine Option aka Asian Cops 1995 DVDRip Uncut German0251 yEnc": null
+		},
+		"searchMovie": {
+			"High Voltage - Vergebung ist keine Option aka Asian Cops|1995": {
+				"results": [
+					{
+						"id": 99582,
+						"title": "High Voltage",
+						"original_title": "亞洲警察之高壓線",
+						"release_date": "1995-01-14"
+					}
+				]
+			}
+		},
+		"movieIds": {
+			"99582": {
+				"id": 99582,
+				"imdb_id": "tt0113144"
+			}
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg-usenet on fun, 2026-11-10: the .zurgtorrent's name, hash and the RAR member it lists (its base name, the member's folder) as zurg asks",
+			"request": {
+				"name": "High Voltage - Vergebung ist keine Option aka Asian Cops 1995 DVDRip Uncut German0251 yEnc",
+				"hash": "f4e44594402197ef22047e2b9c3776fdde30b05e",
+				"imdbId": null,
+				"files": [
+					{
+						"path": "High Voltage - Vergebung ist keine Option aka Asian Cops (1995 DVDRip Uncut German).avi",
+						"folder": "passwort-poster-sind-d�del"
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt0113144",
+				"tmdbId": 99582,
+				"files": [
+					{
+						"path": "High Voltage - Vergebung ist keine Option aka Asian Cops (1995 DVDRip Uncut German).avi",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		}
+	]
+}

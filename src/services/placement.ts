@@ -1321,7 +1321,8 @@ async function secondLook(
  * the 1915 and 1917 shorts. Only for a release DMM knows nothing of, with no numbered file, and
  * only where one film of that year (a year either way, where none is of it) is titled as the name
  * by letters, under its title or else its original title (`Macbeth.2010` is the English TV film,
- * not the Polish `Makbet` TMDB also titles Macbeth), and TMDB knows its IMDb id. A release placed
+ * not the Polish `Makbet` TMDB also titles Macbeth), or as one of the titles the name gives apart,
+ * and TMDB knows its IMDb id. A release placed
  * on a show that first aired after that year is no episode of it either (`laterShow`).
  */
 async function filmByTitle(
@@ -1344,10 +1345,24 @@ async function filmByTitle(
 	// a leading article only where nothing is titled as the name: `Burlesque.on.Carmen.1915` is A
 	// Burlesque on Carmen; the title before its colon only where neither is: `Berlin.1927` is Berlin:
 	// Symphony of a Great City, `Puffs.2018` Puffs: Filmed Live Off Broadway
+	// one of the titles a name gives after ` - ` or ` aka ` only where none of these is:
+	// `High Voltage - Vergebung ist keine Option aka Asian Cops 1995` is High Voltage
+	const aliases = title
+		.split(/\s+-\s+|\s+aka\s+/i)
+		.map((alias) => letters(alias))
+		.filter((alias) => alias.length >= 3);
+	const aliased = () =>
+		aliases.length > 1
+			? near.filter((row) =>
+					[row?.title, row?.original_title].some((text) =>
+						aliases.includes(letters(text))
+					)
+				)
+			: [];
 	const titled =
 		[letters, unarticled, (text = '') => letters(text.split(':')[0])]
 			.map(titledAs)
-			.find((rows) => rows.length) ?? [];
+			.find((rows) => rows.length) ?? aliased();
 	const exact = titled.filter((row: any) => yearOf(row) === year);
 	let found = exact.length ? exact : titled;
 	if (found.length > 1)
