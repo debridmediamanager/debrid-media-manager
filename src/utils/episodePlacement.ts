@@ -1627,11 +1627,17 @@ async function byName(
 	// a special by the title before its subtitle too, within the specials alone
 	const inSeason = listed && titled(title, listed, season === 0 ? [0, 1, 2, 3] : undefined);
 	if (inSeason) return [season!, inSeason.episode];
+	// a year-numbered file's title among the episodes TMDB aired that year: MythBusters' `S2007E18
+	// Myth Evolution` (TVDB's "Myth Evolution!" of 2007) is not TMDB's S7E18 "Myth Evolution" of
+	// 2009, TVDB's "Myth Evolution 2", nor `S2008E20 Viewer Special Threequel` its S0E17, the 2010
+	// Buster's Cut of S0E11
+	const aired = (item: { airDate: string | null }) =>
+		season === null || season < 1900 || Boolean(item.airDate?.startsWith(String(season)));
 	const others = await Promise.all(
 		show.seasons
 			.filter((row) => row.season !== season)
 			.map(async (row) =>
-				((await show.episodes(row.season)) ?? []).map((item) => ({
+				((await show.episodes(row.season)) ?? []).filter(aired).map((item) => ({
 					...item,
 					season: row.season,
 				}))

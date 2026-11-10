@@ -17532,11 +17532,11 @@
 					},
 					{
 						"path": "Smyth S2007E18 Myth Evolution.mp4",
-						"season": 7,
+						"season": 5,
 						"episode": 18,
 						"episodeEnd": null,
 						"how": "tmdb",
-						"tmdbEpisodeId": 65362
+						"tmdbEpisodeId": 65326
 					},
 					{
 						"path": "Smyth S2007E19 Trail Blazers.mp4",
@@ -17748,11 +17748,11 @@
 					},
 					{
 						"path": "Smyth S2008E20 Viewer Special Threequel.mp4",
-						"season": 0,
-						"episode": 17,
+						"season": null,
+						"episode": null,
 						"episodeEnd": null,
-						"how": "tmdb",
-						"tmdbEpisodeId": 1001618
+						"how": null,
+						"tmdbEpisodeId": null
 					},
 					{
 						"path": "Smyth S2009E01 Demolition Derby Special.mp4",
@@ -17892,11 +17892,11 @@
 					},
 					{
 						"path": "Smyth S2009E18 Myth Evolution 2.mp4",
-						"season": null,
-						"episode": null,
+						"season": 7,
+						"episode": 18,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 65362
 					},
 					{
 						"path": "Smyth S2009E19 Dumpster Diving.mp4",

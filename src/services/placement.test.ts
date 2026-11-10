@@ -1868,6 +1868,28 @@ describe('a year-numbered episode titled otherwise than TMDB titles it', () => {
 	});
 });
 
+describe('a year-numbered episode titled as TMDB titles one of another year', () => {
+	// zurg on fun (2026-11-10): `Streamlined Mythbusters Complete` numbers TVDB's years, whose
+	// `S2007E18 Myth Evolution` (TVDB's "Myth Evolution!", aired 2007-09-05) took TMDB's S7E18 "Myth
+	// Evolution" of 2009 from `S2009E18 Myth Evolution 2`, and `S2008E20 Viewer Special Threequel`
+	// (aired 2008-11-19) TMDB's S0E17, the 2010 Buster's Cut (see the fixtures README)
+	it.each([
+		['Smyth S2007E18 Myth Evolution.mp4', [5, 18]],
+		['Smyth S2009E18 Myth Evolution 2.mp4', [7, 18]],
+		['Smyth S2008E20 Viewer Special Threequel.mp4', [null, null]],
+	])('places %s on an episode of its year', async (path, [season, episode]) => {
+		const c = mythbusters.cases.find((c) => c.request.files.some((f) => f.path === path))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(mythbusters.answers),
+			async () => [null]
+		);
+		const file = releases[0].files.find((f) => f.path === path)!;
+		expect([file.season, file.episode]).toEqual([season, episode]);
+	});
+});
+
 describe('a title TMDB writes with an accent', () => {
 	// zurg on fun (2026-11-09): `Pokemon Ultimate Journeys S25 1080p`'s last file, numbered E53 and
 	// titled as TMDB's S25E57 "The Rainbow and the Pokémon Master!" (see the fixtures README)
