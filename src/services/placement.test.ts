@@ -902,17 +902,30 @@ describe("a series TMDB cannot use, numbered on IMDb's own list (zurg on fun, 20
 		expect(releases[0]).toEqual(c.expect);
 	});
 
-	it("places a pack's files by their titles on IMDb's seasons, never by TFS's running count", async () => {
+	it("places a pack's files by their titles on IMDb's seasons, and by TFS's count through its parts", async () => {
 		const pack = await placedHere('[iKaos] TFS Dragon Ball Z Abridged Collection');
 		expect(pack).toMatchObject({ kind: 'tv', imdbId: 'tt10710138', tmdbId: null });
 		expect(at(pack, '025 - Nail Is Piccolo')).toEqual([2, 15, 'imdb']);
 		expect(at(pack, '055 - It')).toEqual([3, 25, 'imdb']);
+		// IMDb spells its S2E1 `Loolike the Z-Warriors…`: TFS's count, which the titles agree with
+		expect(at(pack, '011 - Looks Like The Z-Fighters')).toEqual([2, 1, 'imdb']);
 		// a side series' number and a deleted scene's are no episodes of the show
 		expect(at(pack, 'DragonShortZ - 001')).toEqual([null, null, null]);
 		expect(at(pack, '001 - Deleted Scene Episode 3')).toEqual([null, null, null]);
 		const series = await placedHere('TFS Dragon Ball Z Abridged - Complete');
-		// TFS's `Episode 11` is IMDb's S2E1, so no `Episode N` is placed by its number
-		expect(series.files.every((f) => f.season === null)).toBe(true);
+		// TFS's `Episode 11` is IMDb's S2E1: IMDb lists its 10, 30 and 60 as Parts 1-3 each
+		expect(at(series, 'Episode 9 -')).toEqual([1, 9, 'imdb']);
+		expect(at(series, 'Episode 10 Part 3')).toEqual([1, 12, 'imdb']);
+		expect(at(series, 'Episode 11 -')).toEqual([2, 1, 'imdb']);
+		expect(at(series, 'Episode 30 Part 2')).toEqual([2, 21, 'imdb']);
+		expect(at(series, 'Episode 31 -')).toEqual([3, 1, 'imdb']);
+		expect(at(series, 'Episode 60 - Part 3')).toEqual([3, 32, 'imdb']);
+		// beside its parts no part of it (IMDb's S3E33 "Die, Robot" by a title it does not carry),
+		// nor a count of another series' (`Dragon Ball Top 24 Villains Part 1`), nor a film
+		expect(at(series, 'Episode 60 - Epilogue')).toEqual([null, null, null]);
+		expect(at(series, 'Top 24 Villains Part 1')).toEqual([null, null, null]);
+		expect(at(series, 'Top 24 Movies and Specials 04-01')).toEqual([null, null, null]);
+		expect(at(series, 'MOVIE Lord Slug')).toEqual([null, null, null]);
 	});
 
 	it("takes a file's name when the id sent is another show's episode", async () => {
@@ -955,7 +968,7 @@ describe("a placed file's TMDB episode id", () => {
 			c.request.name.startsWith('[iKaos] TFS Dragon Ball Z Abridged')
 		)!;
 		const { releases } = await place([abridged.request as PlaceRequest]);
-		expect(releases[0].files.find((f) => f.episode !== null)).toMatchObject({
+		expect(releases[0].files.find((f) => f.path.includes('025 - Nail'))).toMatchObject({
 			season: 2,
 			episode: 15,
 			how: 'imdb',

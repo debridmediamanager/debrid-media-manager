@@ -1873,9 +1873,9 @@ async function placeFiles(
  * TMDB's (a file's own title first) and all answered `imdb`: the show's ids are IMDb's alone, and
  * Plex's agent knows the show by them with IMDb's seasons. A number counted through the seasons is
  * taken only for a series of one season, and a file numbered by a count or its folder, with a
- * title, only by its title: TFS numbers Dragon Ball Z Abridged on through its seasons and splits
- * episodes in parts (`DBZ Abridged - 025 - Nail Is Piccolo, And So Can You!` is IMDb's S2E15,
- * `DragonBall Z Abridged Episode 11` its S2E1), which no count reaches.
+ * title, only by its title: TFS numbers Dragon Ball Z Abridged on through its seasons and IMDb
+ * splits episodes in parts (`DBZ Abridged - 025 - Nail Is Piccolo, And So Can You!` is IMDb's
+ * S2E15, `DragonBall Z Abridged Episode 11` its S2E1), which only `countedThroughParts` counts.
  */
 async function placeOnImdb(
 	release: PlaceRequest,
@@ -1900,7 +1900,7 @@ async function placeOnImdb(
 			.map(([season, list]) => ({ season, episodes: list.length, airDate: null }))
 			.sort((a, b) => a.season - b.season),
 	};
-	return placeFiles(
+	const placed = await placeFiles(
 		release,
 		placement,
 		anime,
@@ -1914,6 +1914,131 @@ async function placeOnImdb(
 		// a file with a title only by it: TFS's `Episode 11 - TeamFourStar (TFS)` is IMDb's S2E1
 		true
 	);
+	return placement.seasons.filter((row) => row.season > 0).length > 1
+		? countedThroughParts(release, title.listed, placed)
+		: placed;
+}
+
+// `DragonBall Z Abridged Episode 10 Part 2 - TeamFourStar (TFS)`, `DBZ Abridged - 011 - Looks Like…`:
+// what leads the number, and a part right after it
+const LEADING_NUMBER = (episode: number) =>
+	new RegExp(String.raw`^(.*?)(?:^|[\s._-])0*${episode}(?=$|[\s._-])(.*)$`);
+const PART_AFTER = /^[\s._-]*(?:-[\s._-]*)?part[\s._-]*(\d{1,2})(?=$|[\s._-])/i;
+const EPISODE_WORD = /(?:^|[\s._-])(?:episode|ep)[\s._-]*$/i;
+// IMDb's `The Punchline Part 1`-`3`: one episode of the series' own count, in parts
+const PART_TITLE = /^(.*?)[\s:,-]*\bpart\s*(\d{1,2})$/i;
+
+/**
+ * A multi-season series IMDb lists, numbered by a count through its seasons where IMDb splits an
+ * episode in parts: TFS numbers Dragon Ball Z Abridged 1-60 and IMDb lists its 10, 30 and 60 as
+ * `Part 1`-`3` each (`The Punchline`, `Freeza: The Final Cut`, `Cell-Out`), so TFS's `Episode 11`
+ * is IMDb's S2E1, `Episode 30 Part 2` its S2E21; [iKaos]' pack counts so too (its `025 - Nail Is
+ * Piccolo` is S2E15 by its title). Only a file the placement left unplaced, numbered with no season,
+ * led by the series' title (`Episode` aside) or by the words leading the files its titles placed
+ * (`DBZ Abridged - `), never a side series' (`DBZ Abridged Movie - 005`, `DragonShortz Episode 1`);
+ * and only where every file its title placed lies where the count puts it, and some does or the
+ * parts the files name are IMDb's. A file of an episode in parts names its part.
+ */
+function countedThroughParts(
+	release: PlaceRequest,
+	listed: ImdbSeries,
+	placed: PlacedRelease
+): PlacedRelease {
+	const slots: { season: number; episode: number; base: string; part: number }[][] = [];
+	const rows = listed.episodes
+		.filter(
+			(row) =>
+				row.season !== null && row.season > 0 && row.episode !== null && row.episode > 0
+		)
+		.sort((a, b) => a.season! - b.season! || a.episode! - b.episode!);
+	for (const row of rows) {
+		const parted = PART_TITLE.exec(row.name ?? '');
+		const at = {
+			season: row.season!,
+			episode: row.episode!,
+			base: parted ? letters(parted[1]) : '',
+			part: parted ? Number(parted[2]) : 0,
+		};
+		const last = slots[slots.length - 1]?.at(-1);
+		if (
+			last &&
+			at.part > 1 &&
+			last.season === at.season &&
+			last.base === at.base &&
+			last.part === at.part - 1
+		)
+			slots[slots.length - 1].push(at);
+		else slots.push([at]);
+	}
+	// nothing in parts: the count is the one placeFiles refused
+	if (slots.length === rows.length) return placed;
+	const titled = titledEach.get(placed) ?? [];
+	const read = release.files.map((file, at) => {
+		const own = fileNumbers(release.name, file.folder, file.path, release.files.length === 1);
+		// a season its folder gives must be the count's: [iKaos]' `2 - Season 2/DBZ Abridged - 011 - …`
+		if (!own || (own.season !== null && !own.borrowed) || own.end !== null) return null;
+		const stem = (file.path.split('/').pop() ?? file.path).replace(/\.[a-z0-9]{2,4}$/i, '');
+		const found = LEADING_NUMBER(own.episode).exec(stem);
+		if (!found) return null;
+		const lead = letters(found[1].replace(EPISODE_WORD, ''));
+		const part = PART_AFTER.exec(found[2]);
+		return {
+			at,
+			number: own.episode,
+			season: own.season,
+			lead,
+			part: part ? Number(part[1]) : null,
+		};
+	});
+	// the count is the release's where its titled files lie on it, or where every part it names
+	// right after a number is one of IMDb's runs: TFS's `Episode 10 Part 1`-`3`, `30`, `60`. Yu-Gi-Oh!'s
+	// `059 - The ESP Duelist (Part 2)` numbers each part on its own
+	const parted = read.flatMap((n) => (n?.part ? [n] : []));
+	const partsAreRuns =
+		parted.length > 0 &&
+		parted.every((n) => (slots[n.number - 1]?.length ?? 0) >= Math.max(n.part!, 2));
+	const counted = (n: { number: number; season: number | null; part: number | null }) => {
+		const slot = slots[n.number - 1];
+		if (!slot || (n.season !== null && slot[0].season !== n.season)) return null;
+		// a file naming no part of an episode in parts is none of them: `Episode 60 - Epilogue`
+		if (n.part === null) return slot.length === 1 ? slot[0] : null;
+		return slot.length > 1 ? (slot[n.part - 1] ?? null) : null;
+	};
+	const leads = new Set<string>();
+	for (const n of read) {
+		if (!n || !titled[n.at]) continue;
+		const file = placed.files[n.at];
+		const there = counted(n);
+		// a titled file holding a whole run (`010 - The Punchline`) says nothing of the count
+		if (!there) continue;
+		if (there.season !== file.season || there.episode !== file.episode) return placed;
+		leads.add(n.lead);
+	}
+	if (!leads.size && !partsAreRuns) return placed;
+	const own = letters(listed.title ?? '');
+	let changed = false;
+	const files = placed.files.map((file, at) => {
+		const n = read[at];
+		if (file.season !== null || !n || !n.lead || !(n.lead === own || leads.has(n.lead)))
+			return file;
+		const there = counted(n);
+		if (!there) return file;
+		changed = true;
+		return {
+			...file,
+			season: there.season,
+			episode: there.episode,
+			episodeEnd: null,
+			how: 'imdb' as const,
+		};
+	});
+	if (!changed) return placed;
+	// what the titles placed is the same answer's: placeRelease weighs it against the anime index's
+	const counts = { ...placed, files };
+	titledFiles.set(counts, titledFiles.get(placed) ?? 0);
+	titledEach.set(counts, titled);
+	agreedFiles.set(counts, agreedFiles.get(placed) ?? 0);
+	return counts;
 }
 
 /** How many of an answer's files placeOnShow placed by their own titles. */

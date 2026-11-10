@@ -47,7 +47,7 @@
 	{
 		"from": "rex-fun library, 2026-10-16",
 		"request": {
-			"name": "[HorribleSubs] One Piece (01-700) [1080p] (Batch) [HorribleSubs] One Piece - 06 [1080p].mkv 👤 7 💾 570.49 MB ⚙️ NyaaSi",
+			"name": "[HorribleSubs] One Piece (01-700) [1080p] (Batch) [HorribleSubs] One Piece - 06 [1080p].mkv \ud83d\udc64 7 \ud83d\udcbe 570.49 MB \u2699\ufe0f NyaaSi",
 			"hash": null,
 			"imdbId": "tt0388629",
 			"files": [
@@ -1257,10 +1257,10 @@
 			"files": [
 				{
 					"path": "DBZ Abridged - 013 - Dr. Briefs Made This. In A Cave. WITHABOXOFSCRAPS! [phantop].mkv",
-					"season": null,
-					"episode": null,
+					"season": 2,
+					"episode": 3,
 					"episodeEnd": null,
-					"how": null,
+					"how": "imdb",
 					"tmdbEpisodeId": null
 				},
 				{
