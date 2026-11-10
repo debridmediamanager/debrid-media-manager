@@ -29,6 +29,7 @@ import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
 import filmsInShows from '@/test/fixtures/placement/films-in-show-releases.json';
 import filmsOfEpisodes from '@/test/fixtures/placement/films-of-imdb-episodes.json';
 import filmsTitledApart from '@/test/fixtures/placement/films-titled-apart.json';
+import filmsOfSentEpisodeIds from '@/test/fixtures/placement/films-of-sent-episode-ids.json';
 import filmsBeforeColons from '@/test/fixtures/placement/films-titled-before-a-colon.json';
 import filmsTitledByShow from '@/test/fixtures/placement/films-titled-by-show.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
@@ -2856,6 +2857,25 @@ describe("a part titled as its other part's number", () => {
 		);
 		const file = releases[0].files.find((f) => f.path.includes(part))!;
 		expect([file.season, file.episode]).toEqual([season, episode]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a release sent with the IMDb id of an episode TMDB lists as a film', () => {
+	// zurg on fun (2026-11-10): stage recordings IMDb lists as episodes of anthology series, sent with
+	// that id, which DMM resolved to the series and placed no file of (see the fixtures README)
+	it.each([
+		['Company (Raul Esparza).avi', 'tt1160997', 31020], // Company: A Musical Comedy (2008)
+		['into-the-woods-1991', 'tt0099851', 23378], // Into the Woods (1991)
+	])('places %s as the film', async (name, imdbId, tmdbId) => {
+		const c = filmsOfSentEpisodeIds.cases.find((c) => c.request.name === name)!;
+		const { releases } = await place(
+			[c.request as PlaceRequest],
+			Infinity,
+			recordedSources(filmsOfSentEpisodeIds.answers),
+			async () => [null]
+		);
+		expect(releases[0]).toMatchObject({ kind: 'movie', imdbId, tmdbId });
 		expect(releases[0]).toEqual(c.expect);
 	});
 });

@@ -1,0 +1,734 @@
+{
+	"answers": {
+		"find": {
+			"tt0159876": {
+				"movie_results": [
+					{
+						"id": 1424864,
+						"title": "Patsy Cline: Walkin' After Midnight",
+						"release_date": ""
+					}
+				],
+				"tv_results": [
+					{
+						"id": 10029,
+						"name": "Great Performances",
+						"first_air_date": "1971-01-28"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0176357": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 10282,
+						"name": "American Playhouse",
+						"first_air_date": "1982-01-12"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0099851": {
+				"movie_results": [
+					{
+						"id": 23378,
+						"title": "Into the Woods",
+						"release_date": "1991-03-15"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt1160997": {
+				"movie_results": [
+					{
+						"id": 31020,
+						"title": "Company: A Musical Comedy",
+						"release_date": "2008-02-20"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"10029": {
+				"id": 10029,
+				"name": "Great Performances",
+				"original_name": "Great Performances",
+				"first_air_date": "1971-01-28",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 99,
+						"name": "Documentary"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 818,
+							"name": "based on novel or book"
+						},
+						{
+							"id": 9706,
+							"name": "anthology"
+						},
+						{
+							"id": 10181,
+							"name": "based on play or musical"
+						},
+						{
+							"id": 186849,
+							"name": "literary adaptation"
+						},
+						{
+							"id": 246884,
+							"name": "filmed theater"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0159876",
+					"tvdb_id": 76548
+				},
+				"networks": [
+					{
+						"id": 14,
+						"name": "PBS"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "US",
+							"title": "GREAT PERFORMANCES | PBS",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Playhouse New York",
+							"type": ""
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2017-01-20",
+						"episode_count": 1,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "1971-01-28",
+						"episode_count": 5,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "1972-11-04",
+						"episode_count": 3,
+						"name": "Season 2",
+						"season_number": 2
+					},
+					{
+						"air_date": "1974-01-23",
+						"episode_count": 10,
+						"name": "Season 3",
+						"season_number": 3
+					},
+					{
+						"air_date": "1975-01-05",
+						"episode_count": 7,
+						"name": "Season 4",
+						"season_number": 4
+					},
+					{
+						"air_date": "1976-01-01",
+						"episode_count": 9,
+						"name": "Season 5",
+						"season_number": 5
+					},
+					{
+						"air_date": "1977-01-12",
+						"episode_count": 4,
+						"name": "Season 6",
+						"season_number": 6
+					},
+					{
+						"air_date": "1978-01-25",
+						"episode_count": 4,
+						"name": "Season 7",
+						"season_number": 7
+					},
+					{
+						"air_date": "1979-06-20",
+						"episode_count": 1,
+						"name": "Season 8",
+						"season_number": 8
+					},
+					{
+						"air_date": "1980-01-01",
+						"episode_count": 3,
+						"name": "Season 9",
+						"season_number": 9
+					},
+					{
+						"air_date": "1981-01-05",
+						"episode_count": 6,
+						"name": "Season 10",
+						"season_number": 10
+					},
+					{
+						"air_date": "1982-12-06",
+						"episode_count": 2,
+						"name": "Season 11",
+						"season_number": 11
+					},
+					{
+						"air_date": "1983-03-07",
+						"episode_count": 9,
+						"name": "Season 12",
+						"season_number": 12
+					},
+					{
+						"air_date": "1985-10-11",
+						"episode_count": 7,
+						"name": "Season 13",
+						"season_number": 13
+					},
+					{
+						"air_date": "1985-03-22",
+						"episode_count": 7,
+						"name": "Season 14",
+						"season_number": 14
+					},
+					{
+						"air_date": "1986-02-07",
+						"episode_count": 6,
+						"name": "Season 15",
+						"season_number": 15
+					},
+					{
+						"air_date": "1987-01-01",
+						"episode_count": 11,
+						"name": "Season 16",
+						"season_number": 16
+					},
+					{
+						"air_date": "1988-01-01",
+						"episode_count": 6,
+						"name": "Season 17",
+						"season_number": 17
+					},
+					{
+						"air_date": "1989-01-01",
+						"episode_count": 9,
+						"name": "Season 18",
+						"season_number": 18
+					},
+					{
+						"air_date": "1990-01-01",
+						"episode_count": 6,
+						"name": "Season 19",
+						"season_number": 19
+					},
+					{
+						"air_date": "1991-01-25",
+						"episode_count": 7,
+						"name": "Season 20",
+						"season_number": 20
+					},
+					{
+						"air_date": "1992-01-01",
+						"episode_count": 9,
+						"name": "Season 21",
+						"season_number": 21
+					},
+					{
+						"air_date": "1993-09-08",
+						"episode_count": 18,
+						"name": "Season 22",
+						"season_number": 22
+					},
+					{
+						"air_date": "1993-01-06",
+						"episode_count": 15,
+						"name": "Season 23",
+						"season_number": 23
+					},
+					{
+						"air_date": "1994-01-01",
+						"episode_count": 9,
+						"name": "Season 25",
+						"season_number": 25
+					},
+					{
+						"air_date": "1995-01-01",
+						"episode_count": 11,
+						"name": "Season 26",
+						"season_number": 26
+					},
+					{
+						"air_date": "1996-01-01",
+						"episode_count": 5,
+						"name": "Season 27",
+						"season_number": 27
+					},
+					{
+						"air_date": "1997-01-01",
+						"episode_count": 10,
+						"name": "Season 28",
+						"season_number": 28
+					},
+					{
+						"air_date": "1998-01-01",
+						"episode_count": 13,
+						"name": "Season 29",
+						"season_number": 29
+					},
+					{
+						"air_date": "1999-01-01",
+						"episode_count": 12,
+						"name": "Season 30",
+						"season_number": 30
+					},
+					{
+						"air_date": "2000-01-01",
+						"episode_count": 7,
+						"name": "Season 31",
+						"season_number": 31
+					},
+					{
+						"air_date": "2001-01-01",
+						"episode_count": 14,
+						"name": "Season 32",
+						"season_number": 32
+					},
+					{
+						"air_date": "2002-01-01",
+						"episode_count": 9,
+						"name": "Season 33",
+						"season_number": 33
+					},
+					{
+						"air_date": "2005-10-05",
+						"episode_count": 12,
+						"name": "Season 34",
+						"season_number": 34
+					},
+					{
+						"air_date": "2004-01-01",
+						"episode_count": 15,
+						"name": "Season 35",
+						"season_number": 35
+					},
+					{
+						"air_date": "2008-09-10",
+						"episode_count": 12,
+						"name": "Season 36",
+						"season_number": 36
+					},
+					{
+						"air_date": "2009-10-21",
+						"episode_count": 14,
+						"name": "Season 37",
+						"season_number": 37
+					},
+					{
+						"air_date": "2010-10-27",
+						"episode_count": 22,
+						"name": "Season 38",
+						"season_number": 38
+					},
+					{
+						"air_date": "2011-09-30",
+						"episode_count": 24,
+						"name": "Season 39",
+						"season_number": 39
+					},
+					{
+						"air_date": "2012-09-07",
+						"episode_count": 18,
+						"name": "Season 40",
+						"season_number": 40
+					},
+					{
+						"air_date": "2013-09-20",
+						"episode_count": 32,
+						"name": "Season 41",
+						"season_number": 41
+					},
+					{
+						"air_date": "2014-09-13",
+						"episode_count": 23,
+						"name": "Season 42",
+						"season_number": 42
+					},
+					{
+						"air_date": "2015-10-23",
+						"episode_count": 16,
+						"name": "Season 43",
+						"season_number": 43
+					},
+					{
+						"air_date": "2016-10-14",
+						"episode_count": 27,
+						"name": "Season 44",
+						"season_number": 44
+					},
+					{
+						"air_date": "2017-10-06",
+						"episode_count": 28,
+						"name": "Season 45",
+						"season_number": 45
+					},
+					{
+						"air_date": "2018-10-05",
+						"episode_count": 29,
+						"name": "Season 46",
+						"season_number": 46
+					},
+					{
+						"air_date": "2019-09-20",
+						"episode_count": 30,
+						"name": "Season 47",
+						"season_number": 47
+					},
+					{
+						"air_date": "2020-09-11",
+						"episode_count": 31,
+						"name": "Season 48",
+						"season_number": 48
+					},
+					{
+						"air_date": "2021-09-03",
+						"episode_count": 33,
+						"name": "Season 49",
+						"season_number": 49
+					},
+					{
+						"air_date": "2022-09-16",
+						"episode_count": 24,
+						"name": "Season 50",
+						"season_number": 50
+					},
+					{
+						"air_date": "2023-09-10",
+						"episode_count": 22,
+						"name": "Season 51",
+						"season_number": 51
+					},
+					{
+						"air_date": "2024-10-25",
+						"episode_count": 24,
+						"name": "Season 52",
+						"season_number": 52
+					},
+					{
+						"air_date": "2025-10-03",
+						"episode_count": 24,
+						"name": "Season 53",
+						"season_number": 53
+					},
+					{
+						"air_date": "2026-09-13",
+						"episode_count": 6,
+						"name": "Season 54",
+						"season_number": 54
+					},
+					{
+						"air_date": "2026-09-13",
+						"episode_count": 6,
+						"name": "Season 55",
+						"season_number": 55
+					}
+				],
+				"episode_run_time": []
+			},
+			"10282": {
+				"id": 10282,
+				"name": "American Playhouse",
+				"original_name": "American Playhouse",
+				"first_air_date": "1982-01-12",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 818,
+							"name": "based on novel or book"
+						},
+						{
+							"id": 9672,
+							"name": "based on true story"
+						},
+						{
+							"id": 9706,
+							"name": "anthology"
+						},
+						{
+							"id": 9914,
+							"name": "slice of life"
+						},
+						{
+							"id": 10181,
+							"name": "based on play or musical"
+						},
+						{
+							"id": 156866,
+							"name": "based on short story"
+						},
+						{
+							"id": 165317,
+							"name": "based on movie"
+						},
+						{
+							"id": 185343,
+							"name": "based on myths, legends or folklore"
+						},
+						{
+							"id": 186849,
+							"name": "literary adaptation"
+						},
+						{
+							"id": 189140,
+							"name": "based on opera"
+						},
+						{
+							"id": 194008,
+							"name": "edited from tv series"
+						},
+						{
+							"id": 263521,
+							"name": "based on radio drama"
+						},
+						{
+							"id": 269769,
+							"name": "based on tv series"
+						},
+						{
+							"id": 342872,
+							"name": "edited from film"
+						},
+						{
+							"id": 374743,
+							"name": "ensemble cast"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0176357",
+					"tvdb_id": 146861
+				},
+				"networks": [
+					{
+						"id": 14,
+						"name": "PBS"
+					}
+				],
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"air_date": "1982-01-12",
+						"episode_count": 25,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "1983-01-18",
+						"episode_count": 12,
+						"name": "Season 2",
+						"season_number": 2
+					},
+					{
+						"air_date": "1984-01-17",
+						"episode_count": 17,
+						"name": "Season 3",
+						"season_number": 3
+					},
+					{
+						"air_date": "1984-11-26",
+						"episode_count": 22,
+						"name": "Season 4",
+						"season_number": 4
+					},
+					{
+						"air_date": "1986-01-20",
+						"episode_count": 19,
+						"name": "Season 5",
+						"season_number": 5
+					},
+					{
+						"air_date": "1987-01-19",
+						"episode_count": 17,
+						"name": "Season 6",
+						"season_number": 6
+					},
+					{
+						"air_date": "1988-01-13",
+						"episode_count": 16,
+						"name": "Season 7",
+						"season_number": 7
+					},
+					{
+						"air_date": "1989-02-01",
+						"episode_count": 20,
+						"name": "Season 8",
+						"season_number": 8
+					},
+					{
+						"air_date": "1990-01-24",
+						"episode_count": 18,
+						"name": "Season 9",
+						"season_number": 9
+					},
+					{
+						"air_date": "1991-03-15",
+						"episode_count": 16,
+						"name": "Season 10",
+						"season_number": 10
+					},
+					{
+						"air_date": "1992-01-22",
+						"episode_count": 17,
+						"name": "Season 11",
+						"season_number": 11
+					},
+					{
+						"air_date": "1994-01-10",
+						"episode_count": 6,
+						"name": "Season 12",
+						"season_number": 12
+					},
+					{
+						"air_date": "1995-01-02",
+						"episode_count": 6,
+						"name": "Season 13",
+						"season_number": 13
+					}
+				],
+				"episode_run_time": [60]
+			}
+		},
+		"season": {
+			"10029/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Alicia Keys - Landmarks Live in Concert: A Great Performances Special",
+						"air_date": "2017-01-20",
+						"runtime": null,
+						"id": 1258875
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt1160997": "tt0159876",
+			"tt0099851": "tt0176357"
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun (RD), 2026-11-10: the .zurgtorrent's name, hash, the IMDb id zurg sent and its video files with their folders and probed lengths, as zurg asks",
+			"request": {
+				"name": "Company (Raul Esparza).avi",
+				"hash": "425d39edad3d289031b35ffc5d154cae93e93ec8",
+				"imdbId": "tt1160997",
+				"files": [
+					{
+						"path": "Company (Raul Esparza).avi",
+						"folder": "",
+						"duration": 7899.04
+					}
+				],
+				"parts": true,
+				"shows": true
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt1160997",
+				"tmdbId": 31020,
+				"files": [
+					{
+						"path": "Company (Raul Esparza).avi",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD), 2026-11-10: the .zurgtorrent's name, hash, the IMDb id zurg sent and its video files with their folders and probed lengths, as zurg asks",
+			"request": {
+				"name": "into-the-woods-1991",
+				"hash": "d7cea71f9ee5f77e9817e90aa8703565ae2bc635",
+				"imdbId": "tt0099851",
+				"files": [
+					{
+						"path": "Into The Woods 1991.ia.mp4",
+						"folder": "",
+						"duration": 9128.874
+					},
+					{
+						"path": "Into The Woods 1991.mp4",
+						"folder": "",
+						"duration": 9128.874
+					}
+				],
+				"parts": true,
+				"shows": true
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt0099851",
+				"tmdbId": 23378,
+				"files": [
+					{
+						"path": "Into The Woods 1991.ia.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Into The Woods 1991.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		}
+	]
+}

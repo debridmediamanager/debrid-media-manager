@@ -320,6 +320,7 @@ export async function placeReleases(
 			if (!waits) out[at] = await seriesLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await secondLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await filmByTitle(release, out[at], sources);
+			if (!waits) out[at] = await filmOfEpisodeId(release, out[at], sources);
 			if (!waits) out[at] = await siblingLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await namesakeLook(release, out[at], sources, anime);
 			if (!waits) out[at] = await tvdbNameLook(release, out[at], sources, anime);
@@ -1380,6 +1381,32 @@ async function filmByTitle(
 		(row: any) => row?.id === found[0].id
 	);
 	return own ? { kind: 'movie', imdbId, tmdbId: found[0].id, files } : placed;
+}
+
+/**
+ * TMDB's film of the IMDb id a release was sent with, where IMDb lists that id as an episode, so
+ * `resolve` named its series, and the release numbers no episode and placed none of it: zurg sent
+ * tt1160997, IMDb's Great Performances episode, with `Company (Raul Esparza).avi`, TMDB's film
+ * Company: A Musical Comedy (2008), and tt0099851, American Playhouse's, with `into-the-woods-1991`,
+ * TMDB's Into the Woods (1991).
+ */
+async function filmOfEpisodeId(
+	release: PlaceRequest,
+	placed: PlacedRelease,
+	sources: PlacementSources
+): Promise<PlacedRelease> {
+	const id = release.imdbId;
+	if (placed.skipped || placed.kind !== 'tv' || placesFiles(placed) || !id) return placed;
+	if (releaseNumbers(release).some(Boolean) || !(await sources.episodeShow(id))) return placed;
+	const film = (await sources.find(id))?.movie_results?.[0]?.id;
+	return typeof film === 'number'
+		? {
+				kind: 'movie',
+				imdbId: id,
+				tmdbId: film,
+				files: release.files.map((f) => unplaced(f.path)),
+			}
+		: placed;
 }
 
 /**
