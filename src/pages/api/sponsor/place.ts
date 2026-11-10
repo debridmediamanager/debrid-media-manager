@@ -20,11 +20,16 @@ const IMDB_ID = /^tt\d{7,}$/;
 const misses = new PlacementMissService();
 
 function parseReleases(body: unknown): PlaceRequest[] | null {
-	const { releases, parts } = (body ?? {}) as { releases?: unknown; parts?: unknown };
+	const { releases, parts, shows } = (body ?? {}) as {
+		releases?: unknown;
+		parts?: unknown;
+		shows?: unknown;
+	};
 	if (!Array.isArray(releases) || releases.length === 0 || releases.length > MAX_RELEASES) {
 		return null;
 	}
 	if (parts != null && typeof parts !== 'boolean') return null;
+	if (shows != null && typeof shows !== 'boolean') return null;
 	let files = 0;
 	const out: PlaceRequest[] = [];
 	for (const raw of releases) {
@@ -53,6 +58,8 @@ function parseReleases(body: unknown): PlaceRequest[] | null {
 			files: parsed,
 			// a caller that reads `part`: an older one files a second part as a copy of the episode
 			...(parts ? { parts: true as const } : {}),
+			// a caller that reads a file's own show: an older one files it as an episode of the release's
+			...(shows ? { shows: true as const } : {}),
 		});
 	}
 	return out;
@@ -60,10 +67,11 @@ function parseReleases(body: unknown): PlaceRequest[] | null {
 
 /**
  * What each release of a sponsor's library is, and its files' TMDB season and episode:
- * `{"releases": [{name, hash?, imdbId?, files: [{path, folder}]}], "parts"?: true}` answers
+ * `{"releases": [{name, hash?, imdbId?, files: [{path, folder}]}], "parts"?: true, "shows"?: true}` answers
  * `{"releases": [{kind, imdbId, tmdbId, series?, files: [{path, season, episode, episodeEnd, how, part?, series?}]}],
- * "complete", "rules"}` in request order; every file carries `part` when `parts` was sent, and a
- * One Pace release `series` (a show DMM numbers itself). See docs/sponsor-api.md.
+ * "complete", "rules"}` in request order; every file carries `part` when `parts` was sent, a file of
+ * another show its own `kind` `tv` and ids when `shows` was, and a One Pace release `series` (a show
+ * DMM numbers itself). See docs/sponsor-api.md.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
@@ -84,7 +92,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const releases = parseReleases(req.body);
 	if (!releases) {
 		return res.status(400).json({
-			error: `Expected {"releases": [{"name": string, "hash"?: string, "imdbId"?: string, "files": [{"path": string, "folder"?: string}]}], "parts"?: boolean} with 1-${MAX_RELEASES} releases and at most ${MAX_FILES} files`,
+			error: `Expected {"releases": [{"name": string, "hash"?: string, "imdbId"?: string, "files": [{"path": string, "folder"?: string}]}], "parts"?: boolean, "shows"?: boolean} with 1-${MAX_RELEASES} releases and at most ${MAX_FILES} files`,
 		});
 	}
 

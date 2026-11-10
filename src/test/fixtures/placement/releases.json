@@ -47,7 +47,7 @@
 	{
 		"from": "rex-fun library, 2026-10-16",
 		"request": {
-			"name": "[HorribleSubs] One Piece (01-700) [1080p] (Batch) [HorribleSubs] One Piece - 06 [1080p].mkv \ud83d\udc64 7 \ud83d\udcbe 570.49 MB \u2699\ufe0f NyaaSi",
+			"name": "[HorribleSubs] One Piece (01-700) [1080p] (Batch) [HorribleSubs] One Piece - 06 [1080p].mkv 👤 7 💾 570.49 MB ⚙️ NyaaSi",
 			"hash": null,
 			"imdbId": "tt0388629",
 			"files": [
@@ -247,7 +247,7 @@
 					"path": "103a-b - The Magnificent Few; S'Winter.mkv",
 					"season": 1,
 					"episode": 10,
-					"episodeEnd": null,
+					"episodeEnd": 11,
 					"how": "tmdb",
 					"tmdbEpisodeId": 114712
 				}
@@ -284,7 +284,7 @@
 					"path": "02. Pup Pup Boogie + Pups in a Fog.HD.rus.eng.mkv",
 					"season": 1,
 					"episode": 3,
-					"episodeEnd": null,
+					"episodeEnd": 4,
 					"how": "tmdb",
 					"tmdbEpisodeId": 943006
 				},
@@ -292,7 +292,7 @@
 					"path": "03. Pups Save the Sea Turtles + Pup and the Very Big Baby.HD.rus.eng.mkv",
 					"season": 1,
 					"episode": 5,
-					"episodeEnd": null,
+					"episodeEnd": 6,
 					"how": "tmdb",
 					"tmdbEpisodeId": 943005
 				}

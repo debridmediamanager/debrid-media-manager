@@ -638,7 +638,87 @@
 			"file": "aaf-wilty.304.avi",
 			"season": 3,
 			"episode": 4
+		},
+		{
+			"shape": "scene-shorthand",
+			"release": "Season #23",
+			"folder": "",
+			"file": "2301 - Mexican Joker.mkv",
+			"season": 23,
+			"episode": 1
+		},
+		{
+			"shape": "scene-shorthand",
+			"release": "Season #23",
+			"folder": "",
+			"file": "2302 - Band in China.mkv",
+			"season": 23,
+			"episode": 2
+		},
+		{
+			"shape": "scene-shorthand",
+			"release": "Season #23",
+			"folder": "",
+			"file": "2303 - Shots!!!.mkv",
+			"season": 23,
+			"episode": 3
+		},
+		{
+			"shape": "scene-shorthand",
+			"release": "Season #23",
+			"folder": "",
+			"file": "2304 - Let Them Eat Goo.mkv",
+			"season": 23,
+			"episode": 4
+		},
+		{
+			"shape": "scene-shorthand",
+			"release": "Season #23",
+			"folder": "",
+			"file": "2305 - Tegridy Farms Halloween Special.mkv",
+			"season": 23,
+			"episode": 5
+		},
+		{
+			"shape": "scene-shorthand",
+			"release": "Season #23",
+			"folder": "",
+			"file": "2306 - Season Finale.mkv",
+			"season": 23,
+			"episode": 6
+		},
+		{
+			"shape": "scene-shorthand",
+			"release": "Season #23",
+			"folder": "",
+			"file": "2307 - Board Girls.mkv",
+			"season": 23,
+			"episode": 7
+		},
+		{
+			"shape": "scene-shorthand",
+			"release": "Season #23",
+			"folder": "",
+			"file": "2308 - Turd Burglars.mkv",
+			"season": 23,
+			"episode": 8
+		},
+		{
+			"shape": "scene-shorthand",
+			"release": "Season #23",
+			"folder": "",
+			"file": "2309 - Basic Cable.mkv",
+			"season": 23,
+			"episode": 9
+		},
+		{
+			"shape": "scene-shorthand",
+			"release": "Season #23",
+			"folder": "",
+			"file": "2310 - Christmas Snow.mkv",
+			"season": 23,
+			"episode": 10
 		}
 	],
-	"source": "files the production rex's feed left unplaced as \"no episode number\" on 2026-10-13, and two it placed on the wrong episode; season and episode read by hand from each name; and anime seasons written as `4th Season`, `Season 3` or `[07]` (2026-10-13 afternoon); and names that carry their number only beside their release -- a leading number, the show's name then a number, `10of13`, `2014e06` -- with the shapes deliberately left unread (2026-10-15); and the shapes fun's Plex still held that rex did not (2026-10-15 afternoon): top-level files of a one-folder release, dotted, four-digit, S6EP01, Season.3-09, ep27#, two-episode files on their first episode, a director's cut, a Japanese season numeral, and what stays out; and scene files in an archive that number season and episode as one (`aaf-wilty.302` inside `Would.I.Lie.To.You.S03E01.PROPER`, which holds two episodes), from the production server's Usenet feed (2026-10-16)"
+	"source": "files the production rex's feed left unplaced as \"no episode number\" on 2026-10-13, and two it placed on the wrong episode; season and episode read by hand from each name; and anime seasons written as `4th Season`, `Season 3` or `[07]` (2026-10-13 afternoon); and names that carry their number only beside their release -- a leading number, the show's name then a number, `10of13`, `2014e06` -- with the shapes deliberately left unread (2026-10-15); and the shapes fun's Plex still held that rex did not (2026-10-15 afternoon): top-level files of a one-folder release, dotted, four-digit, S6EP01, Season.3-09, ep27#, two-episode files on their first episode, a director's cut, a Japanese season numeral, and what stays out; and scene files in an archive that number season and episode as one (`aaf-wilty.302` inside `Would.I.Lie.To.You.S03E01.PROPER`, which holds two episodes), from the production server's Usenet feed (2026-10-16); and a South Park pack named `Season #23` whose files number a two-digit season and episode as one (`2301 - Mexican Joker.mkv`), from production's placement misses for a Discord user's zurg (2026-11-09)"
 }

@@ -6,22 +6,36 @@ import onePaceList from '@/services/onePaceCatalogue.json';
 import {
 	cachedSources,
 	placeReleases,
+	titled,
 	type Identify,
 	type PlacedRelease,
 	type PlacementSources,
 	type PlaceRequest,
 } from '@/services/placement';
 import onePaceFun from '@/test/fixtures/onepace/fun-releases-2026-11-09.json';
+import accented from '@/test/fixtures/placement/accented-titles.json';
 import pastCour from '@/test/fixtures/placement/anime-past-cour.json';
 import answers from '@/test/fixtures/placement/answers.json';
+import betweenTitled from '@/test/fixtures/placement/between-titled-files.json';
 import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
+import directorsCuts from '@/test/fixtures/placement/directors-cut-primes.json';
+import betweenPairs from '@/test/fixtures/placement/episodes-between-aligned-pairs.json';
+import filmsBeforeShows from '@/test/fixtures/placement/films-before-shows.json';
 import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
+import filmsInShows from '@/test/fixtures/placement/films-in-show-releases.json';
+import filmsOfEpisodes from '@/test/fixtures/placement/films-of-imdb-episodes.json';
+import filmsBeforeColons from '@/test/fixtures/placement/films-titled-before-a-colon.json';
+import filmsTitledByShow from '@/test/fixtures/placement/films-titled-by-show.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
 import spelled from '@/test/fixtures/placement/identifier-titles-spelled.json';
 import imdbSeries from '@/test/fixtures/placement/imdb-series.json';
 import kitchenNightmares from '@/test/fixtures/placement/kitchen-nightmares-tvdb.json';
 import lost from '@/test/fixtures/placement/lost-tvdb-order.json';
 import namesakes from '@/test/fixtures/placement/miniseries-namesake-films.json';
+import mythbusters from '@/test/fixtures/placement/mythbusters-year-titles.json';
+import office from '@/test/fixtures/placement/office-tvdb-order.json';
+import otherShows from '@/test/fixtures/placement/other-show-files.json';
+import releaseTags from '@/test/fixtures/placement/release-tags.json';
 import cases from '@/test/fixtures/placement/releases.json';
 import revival from '@/test/fixtures/placement/revival-seasons.json';
 import fun1022 from '@/test/fixtures/placement/rex-fun-2026-10-22.json';
@@ -30,11 +44,20 @@ import fun1024 from '@/test/fixtures/placement/rex-fun-2026-10-24.json';
 import fun1025 from '@/test/fixtures/placement/rex-fun-2026-10-25.json';
 import fun1101 from '@/test/fixtures/placement/rex-fun-2026-11-01.json';
 import saga from '@/test/fixtures/placement/saga-titles.json';
+import segmentLetters from '@/test/fixtures/placement/segment-letters.json';
+import segmentTitles from '@/test/fixtures/placement/segment-titles.json';
+import showNamedTitles from '@/test/fixtures/placement/show-named-titles.json';
+import showsByTitle from '@/test/fixtures/placement/shows-named-by-title.json';
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
+import specialsByTitle from '@/test/fixtures/placement/specials-by-title.json';
+import spellingVariants from '@/test/fixtures/placement/spelling-variants.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
+import titleEpisodes from '@/test/fixtures/placement/title-episode-numbers.json';
+import titleParts from '@/test/fixtures/placement/title-parts.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
+import tvdbSegments from '@/test/fixtures/placement/tvdb-segments.json';
 import wwe from '@/test/fixtures/placement/wwe-air-dates.json';
-import { buildAnimeIndex } from '@/utils/episodePlacement';
+import { buildAnimeIndex, spelledAlike } from '@/utils/episodePlacement';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
@@ -260,6 +283,34 @@ describe('a season TVDB lists otherwise than TMDB (Lost, 2026-11-01)', () => {
 			const before = await placed(lost.requests[season], false, withoutTvdb);
 			expect(await placed(lost.requests[season], true)).toEqual(before);
 			expect(await placed(lost.requests[season], false)).toEqual(before);
+		}
+	);
+});
+
+describe('a multi-episode file in a season TVDB lists otherwise than TMDB (The Office, 2026-11-09)', () => {
+	// TMDB's S4E14 "Goodbye Toby" and S7E11 "Classy Christmas" are one episode each; TVDB, and
+	// HiQVE's BluRay, number their halves S04E18E19 and S07E11E12. S04E18E19 came back unplaced
+	// and S07E11E12 landed on TMDB's S7E11-E12, taking "Ultimatum" with it
+	const recorded = recordedSources(office.answers);
+	const placed = async (parts: boolean) =>
+		(
+			await place(
+				[{ ...(office.requests.hiqve as PlaceRequest), ...(parts ? { parts: true } : {}) }],
+				Infinity,
+				recorded
+			)
+		).releases[0].files.map((f) => [f.season, f.episode, f.episodeEnd, f.tmdbEpisodeId, f.how]);
+
+	it.each([true, false])(
+		"places both halves on TMDB's one episode (parts: %s)",
+		async (parts) => {
+			expect(await placed(parts)).toEqual([
+				[4, 13, null, 170236, 'aligned'],
+				[4, 14, null, 170233, 'aligned'],
+				[7, 10, null, 170274, 'tmdb'],
+				[7, 11, null, 170285, 'aligned'],
+				[7, 12, null, 170277, 'aligned'],
+			]);
 		}
 	);
 });
@@ -1279,9 +1330,6 @@ describe('a film neither the id sent nor the identifier names', () => {
 	it.each([
 		// TMDB lists two films of 1922 titled Pay Day
 		'Pay.Day.1922.1080p.HMAX.WEB-DL.DD2.0.H.264-alfaHD',
-		// TMDB's film names an IMDb episode of Live from Lincoln Center and Great Performances
-		'Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ',
-		'Macbeth.2010.1080p.AMZN.WEB-DL.DD.2.0.H.264-monkee',
 	])('leaves %s unnamed where TMDB names no one film of it', async (name) => {
 		const [placed, expected] = await ask(name);
 		expect([placed.kind, placed.imdbId, placed.tmdbId]).toEqual([null, null, null]);
@@ -1496,5 +1544,727 @@ describe('One Pace', () => {
 				.flatMap((r) => r.files)
 				.every((f) => f.season === null && f.tmdbEpisodeId === null)
 		).toBe(true);
+	});
+});
+
+describe('a film named by a show that first aired later', () => {
+	// zurg-usenet on fun (2026-11-09): the ids zurg sent with three silent films name shows of the
+	// same title from decades later, which hold none of them (see the fixtures README)
+	it.each([
+		['[1+9] - Wings.1927.1080p.BluRay.REMUX.AVC.DTS.HD.MA.5.1.PTer.par2', 'tt0018578', 28966],
+		['The.Great.Train.Robbery.1903.1080p.BluRay-LAMA', 'tt0000439', 5698],
+		['Behind.The.Screen.1916.1080p.Bluray.REMUX.AVC.LPCM.2.0-Atomic', 'tt0006414', 53419],
+	])('names %s by TMDB title and year', async (name, imdbId, tmdbId) => {
+		const c = filmsBeforeShows.cases.find((c) => c.request.name === name)!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(filmsBeforeShows.answers),
+			async () => [null]
+		);
+		expect([releases[0].kind, releases[0].imdbId, releases[0].tmdbId]).toEqual([
+			'movie',
+			imdbId,
+			tmdbId,
+		]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a film TMDB lists under an id IMDb lists as an episode', () => {
+	// zurg-usenet on fun (2026-11-09): stage recordings TMDB keeps as films and IMDb as episodes of
+	// Live from Lincoln Center and Great Performances (see the fixtures README)
+	it.each([
+		['Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ', 'tt7140738', 609261],
+		// a file named by a hash, as the release; the Polish Makbet of 2010 aside
+		['Macbeth.2010.1080p.AMZN.WEB-DL.DD.2.0.H.264-monkee', 'tt1570337', 133448],
+		[
+			'Rodgers.and.Hammersteins.Carousel.Live.From.Lincoln.Center.2013.1080p.WEBRip.x264-NGP',
+			'tt2845166',
+			408974,
+		],
+	])("names %s as TMDB's film", async (name, imdbId, tmdbId) => {
+		const c = filmsOfEpisodes.cases.find((c) => c.request.name === name)!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(filmsOfEpisodes.answers),
+			async (list) =>
+				list.map(({ name }) => (filmsOfEpisodes.answers.identify as any)[name] ?? null)
+		);
+		expect([releases[0].kind, releases[0].imdbId, releases[0].tmdbId]).toEqual([
+			'movie',
+			imdbId,
+			tmdbId,
+		]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a film named by its title before a colon', () => {
+	// zurg-usenet on fun (2026-11-09): names that leave out the subtitle TMDB titles the film with
+	// (see the fixtures README)
+	it.each([
+		['Berlin.1927.1080p.Bluray.Remux.AVC.PCM2.0', 'tt0017668', 222],
+		// a file named by a hash, as the release
+		['Puffs.2018.1080p.AMZN.WEBRip.DDP5.1.x264-QOQ', 'tt9856680', 523427],
+	])('names %s by TMDB title and year', async (name, imdbId, tmdbId) => {
+		const c = filmsBeforeColons.cases.find((c) => c.request.name === name)!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(filmsBeforeColons.answers),
+			async (list) =>
+				list.map(({ name }) => (filmsBeforeColons.answers.identify as any)[name] ?? null)
+		);
+		expect([releases[0].kind, releases[0].imdbId, releases[0].tmdbId]).toEqual([
+			'movie',
+			imdbId,
+			tmdbId,
+		]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a release DMM names nothing, on the show TMDB titles as it', () => {
+	// zurg-usenet on fun (2026-11-09): numbered episodes the identifier reads as a film or is unsure
+	// of, of shows TMDB lists several of under the name (see the fixtures README)
+	const ask = async (name: string) => {
+		const c = showsByTitle.cases.find((c) => c.request.name === name)!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(showsByTitle.answers),
+			async (list) =>
+				list.map(({ name }) => (showsByTitle.answers.identify as any)[name] ?? null)
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return releases[0];
+	};
+
+	it('places an episode only one of them has', async () => {
+		// the 2012 series, not the 13-episode OVA of 1993
+		const placed = await ask('JoJos.Bizarre.Adventure.E25.MULTi.1080p.WEB.x264-AMB3R');
+		expect([placed.tmdbId, placed.files[0].season, placed.files[0].episode]).toEqual([
+			45790, 1, 25,
+		]);
+	});
+
+	it('places one several have on the one made for the service the name says', async () => {
+		// Netflix's Korean Kingdom, beside three other Kingdoms with an S02E02
+		const placed = await ask('Kingdom.S02E02.1080p.NF.WEB-DL.Atmos.DDP5.1.x264-ExREN');
+		expect([placed.tmdbId, placed.files[0].season, placed.files[0].episode]).toEqual([
+			70593, 2, 2,
+		]);
+	});
+
+	it.each([
+		'JoJos.Bizarre.Adventure.E01.MULTi.1080p.WEB.x264-AMB3R',
+		'Kingdom.S02E10.1280x720.Hi10p.AAC-Obfuscated',
+		// a site's scene of 21 March 2025, not episode 25 of the 2026 series Freeze
+		'Freeze.25.03.21.J.Pop.Fanatic.1080p',
+	])('leaves %s unnamed where nothing tells the shows apart', async (name) => {
+		expect((await ask(name)).kind).toBe(null);
+	});
+});
+
+describe('a year-numbered episode titled otherwise than TMDB titles it', () => {
+	// zurg on fun (2026-11-09): two MythBusters packs numbered in TVDB's years, whose titles are
+	// TMDB's with more words, the show's name, or the episode's myths (see the fixtures README)
+	it.each([
+		['MythBusters.2004e17.Viewers choice - Christmas Special [Special].mkv', [2, 17]],
+		// "End" is a release word where it opens a title
+		['MythBusters.2008e19.End with a bang.mkv', [6, 19]],
+		['MythBusters.2016e11.MythBusters - The Reunion.mkv', [14, 11]],
+		["Smyth S2004E02 Explosive Decompression, Frog Giggin', Rear Axle.mp4", [2, 1]],
+		['Smyth S2010E06 No Pain No Gain, Propane Tank Rocket.mp4', [8, 6]],
+		['Smyth S2008E08 Shark Week 2008.mp4', [6, 8]],
+	])('places %s', async (path, [season, episode]) => {
+		const c = mythbusters.cases.find((c) => c.request.files.some((f) => f.path === path))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(mythbusters.answers),
+			async () => [null]
+		);
+		const file = releases[0].files.find((f) => f.path === path)!;
+		expect([file.season, file.episode]).toEqual([season, episode]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a title TMDB writes with an accent', () => {
+	// zurg on fun (2026-11-09): `Pokemon Ultimate Journeys S25 1080p`'s last file, numbered E53 and
+	// titled as TMDB's S25E57 "The Rainbow and the Pokémon Master!" (see the fixtures README)
+	it('places the file by its title', async () => {
+		const [c] = accented.cases;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(accented.answers),
+			async () => [null]
+		);
+		const file = releases[0].files.find((f) => f.path.startsWith('S25E53'))!;
+		expect([file.season, file.episode, file.how]).toEqual([25, 57, 'tmdb']);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('files between two files their titles placed', () => {
+	// zurg on fun (2026-11-09): [bonkai77]'s Bleach pack numbers on through the show under `(Season 2)`,
+	// and six files' titles are not TMDB's (see the fixtures README)
+	it('places them between the episodes those titles name', async () => {
+		const [c] = betweenTitled.cases;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			{
+				...recordedSources(betweenTitled.answers),
+				anime: async () =>
+					buildAnimeIndex(
+						buildFranchiseIndex(betweenTitled.answers.anime.fribb as FribbAnimeEntry[]),
+						betweenTitled.answers.anime.titles
+					),
+			},
+			async () => [null]
+		);
+		// `Episode.21` to `Episode.41`: TMDB's S1E21 to S1E41, `32`, `33` and `35`-`38` among them
+		expect(releases[0].files.map((f) => [f.season, f.episode])).toEqual(
+			Array.from({ length: 21 }, (_, n) => [1, n + 21])
+		);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('an episode TVDB and TMDB date apart, between two they pair', () => {
+	// zurg on fun (2026-11-09): TVDB dates Bleach's S2E13 two days before TMDB's S1E33, so the
+	// alignment of the two lists paired neither (see the fixtures README)
+	const ask = async (name: string) => {
+		const c = betweenPairs.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			{
+				...recordedSources(betweenPairs.answers),
+				anime: async () =>
+					buildAnimeIndex(
+						buildFranchiseIndex(betweenPairs.answers.anime.fribb as FribbAnimeEntry[]),
+						betweenPairs.answers.anime.titles
+					),
+			},
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return releases[0];
+	};
+
+	it('places it between them', async () => {
+		const placed = await ask('Bleach.2004.S02E13');
+		expect([placed.files[0].season, placed.files[0].episode, placed.files[0].how]).toEqual([
+			1,
+			33,
+			'aligned',
+		]);
+	});
+
+	it('leaves one aired two weeks off the episode between them where it is', async () => {
+		// TVDB's S11E1 "From Pork to Tofu" is not TMDB's S11E1 "Pub Grub and More"
+		const placed = await ask('Diners Drive-Ins and Dives Collection');
+		const file = placed.files.find((f) => f.path.includes('From Pork to Tofu'))!;
+		expect(file.season).toBe(null);
+	});
+});
+
+describe('an episode number left at the end of a title', () => {
+	// zurg-usenet on fun (2026-11-09): `Dragonball.Z.061.1080p.BluRay…`, its one file named by a hash;
+	// the name parser reads the title as Dragonball Z 061 (see the fixtures README)
+	it("places the file on the show the identifier offers, by the title's number", async () => {
+		const [c] = titleEpisodes.cases;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(titleEpisodes.answers),
+			async (list) =>
+				list.map(({ name }) => (titleEpisodes.answers.identify as any)[name] ?? null)
+		);
+		// Dragon Ball Z's 61st episode: TMDB's S2E22, its season 1 holding 39
+		expect([
+			releases[0].tmdbId,
+			releases[0].files[0].season,
+			releases[0].files[0].episode,
+		]).toEqual([12971, 2, 22]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a segment letter joined to the episode number', () => {
+	// zurg on fun (2026-11-09): `SpongeBob SquarePants S01E01B Reef Blower`, a pack numbering the
+	// half-hours and lettering their segments, which TMDB lists one by one (see the fixtures README)
+	it("places each segment on the TMDB episode its title names, never on the half-hour's number", async () => {
+		const [c] = segmentLetters.cases;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(segmentLetters.answers)
+		);
+		const at = (name: string) => {
+			const file = releases[0].files.find((f) => f.path.includes(name))!;
+			return [file.season, file.episode];
+		};
+		expect(at('S01E01B Reef Blower')).toEqual([1, 2]);
+		expect(at('S01E01C Tea at the Treedome')).toEqual([1, 3]);
+		// read as `B Plankton!`, it went to the half-hour's number, TMDB's S1E2 "Reef Blower"
+		expect(at('S01E02B Plankton!')).toEqual([1, 7]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe("TVDB's segments of one TMDB episode", () => {
+	// zurg on fun (2026-11-09): Freakazoid, which TVDB lists by segment (34 in season 1) and TMDB by
+	// half-hour, titling each by its segments (S1E1 "Five Day Forecast / Dance of Doom / Hand Man")
+	const placed = async (name: string, parts = true) => {
+		const c = tvdbSegments.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), ...(parts ? { parts: true as const } : {}) }],
+			Infinity,
+			recordedSources(tvdbSegments.answers),
+			async () => [null]
+		);
+		return { release: releases[0], expect: c.expect };
+	};
+	const at = (release: PlacedRelease, name: string) => {
+		const f = release.files.find((f) => f.path.includes(name))!;
+		return [f.season, f.episode, f.episodeEnd, f.part ?? null];
+	};
+
+	it('places each segment as its part of the half-hour', async () => {
+		const { release, expect: expected } = await placed('Freakazoid! (1995)');
+		expect(at(release, '1x01 - Five Day Forecast')).toEqual([1, 1, null, 1]);
+		expect(at(release, '1x02 - Dance of Doom')).toEqual([1, 1, null, 2]);
+		// a title TMDB spells otherwise ("Freak's French Lesson") by TVDB's number alone
+		expect(at(release, '1x13 - Frenching with Freakazoid')).toEqual([1, 4, null, 3]);
+		// its first segment cut before the part it names is not TMDB's "The Chip: Part 1"
+		expect(at(release, '1x20 - The Chip (2)')).toEqual([1, 7, null, 1]);
+		expect(at(release, '1x34 - The Wrath of Guitierrez')).toEqual([1, 13, null, null]);
+		expect(release).toEqual(expected);
+	});
+
+	it('places a file of every segment of a half-hour as that episode', async () => {
+		const five = await placed('Freakazoid.S01E14-E15-E16-E17-E18');
+		expect(at(five.release, 'S01E14')).toEqual([1, 5, null, null]);
+		const two = await placed('Freakazoid.S01E30-E31');
+		expect(at(two.release, 'S01E30')).toEqual([1, 11, null, null]);
+		expect(two.release).toEqual(two.expect);
+	});
+
+	it('leaves a later segment unplaced for a caller that does not read parts', async () => {
+		const { release } = await placed('Freakazoid! (1995)', false);
+		expect(at(release, '1x01 - Five Day Forecast')).toEqual([1, 1, null, null]);
+		expect(at(release, '1x02 - Dance of Doom')).toEqual([null, null, null, null]);
+	});
+});
+
+describe("a release's SD tag after a title", () => {
+	// zurg on fun (2026-11-09): Animaniacs' `5x13 - Punchline - The Chicken or the Egg - SD DVD`, a
+	// pack numbered otherwise than TMDB, whose titles name its episodes (see the fixtures README)
+	it('places each file on the episode its title names, the tag left out of the title', async () => {
+		const [c] = releaseTags.cases;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(releaseTags.answers)
+		);
+		const at = (name: string) => {
+			const file = releases[0].files.find((f) => f.path.includes(name))!;
+			return [file.season, file.episode];
+		};
+		expect(at('5x13 - Punchline - The Chicken or the Egg')).toEqual([5, 18]);
+		expect(at('5x15 - Hooray for North Hollywood (1)')).toEqual([5, 11]);
+		// read with `sd` as their titles' last word, these went by their numbers
+		expect(at('5x12 - Punchline - Why did the Chicken Cross the Road')).toEqual([5, 16]);
+		expect(at('5x16 - Hooray for North Hollywood (2)')).toEqual([5, 12]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a file holding segments TMDB lists one by one', () => {
+	// zurg on fun (2026-11-09): half-hours of two segments, titled by both (`Tutoring Torvald +
+	// Gerald Comes Over`, `Robin Brain, The Mummy`), of shows TMDB lists by segment
+	const placed = async (name: string) => {
+		const c = segmentTitles.cases.find((c) => c.request.name === name)!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(segmentTitles.answers),
+			async () => [null]
+		);
+		return { release: releases[0], expect: c.expect };
+	};
+	const at = (release: PlacedRelease, name: string) => {
+		const f = release.files.find((f) => f.path.includes(name))!;
+		return [f.season, f.episode, f.episodeEnd];
+	};
+
+	it('places the file on the run of episodes its segments name', async () => {
+		const arnold = await placed('Hey Arnold! Season 1 1080p');
+		// "6th Grade Girls" is titled otherwise; "The Baseball" is TMDB's S1E10, aired the same day
+		expect(at(arnold.release, 'S01E05 - Sixth Grade Girls - The Baseball')).toEqual([1, 9, 10]);
+		expect(arnold.release).toEqual(arnold.expect);
+		const brain = await placed('Pinky and the Brain Complete collection');
+		// TMDB's S2E10 "The Mummy" and S2E11 "Robin Brain"
+		expect(at(brain.release, 'S2E5 E6 - Robin Brain, The Mummy')).toEqual([2, 10, 11]);
+		// placed by its numbers on S2E10-E11 before, which its titles are not
+		expect(at(brain.release, 'A Little Off the Top, Megalomaniacs Anonymous')).toEqual([
+			2, 8, 9,
+		]);
+		expect(brain.release).toEqual(brain.expect);
+		const jimmy = await placed('The Adventures of Jimmy Neutron - Boy Genius');
+		expect(at(jimmy.release, 'S01E11 - Saftey First; Crime Sheen Investigation')).toEqual([
+			1, 20, 21,
+		]);
+		// "Journey to the Center of Carl" is S1E22, "Professor Calamitous, I Presume" S1E27: no run
+		expect(at(jimmy.release, 'S01E12 - Professor Calamitous')).toEqual([null, null, null]);
+		expect(jimmy.release).toEqual(jimmy.expect);
+	});
+
+	it('reads no segment out of a title in parentheses', async () => {
+		// `Блуи S3E01 - Идеально (англ. Perfect)`: the English title is no second segment
+		const bluey = await placed('Bluey season 3');
+		expect(at(bluey.release, 'S3E01 - Идеально')).toEqual([3, 1, null]);
+		expect(bluey.release).toEqual(bluey.expect);
+	});
+});
+
+describe('a special named by its title', () => {
+	// zurg on fun and DMM's PlacementMiss (2026-11-09): specials numbered as a season's E00, named
+	// after a season alone, or titled by the segments TMDB titles them by (see the fixtures README)
+	const placed = async (name: string) => {
+		const c = specialsByTitle.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(specialsByTitle.answers),
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return (part: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(part))!;
+			return [f.season, f.episode];
+		};
+	};
+
+	it("places a season's E00 by the title after it", async () => {
+		const archer = await placed('Archer.2009.S01-S14');
+		// TMDB's S0E3-E5 "Heart of Archness (1)"-"(3)"
+		expect(archer('S03E00.Heart.of.Archness,Pt.1')).toEqual([0, 3]);
+		expect(archer('S03E00.Heart.of.Archness,Pt.3')).toEqual([0, 5]);
+		const who = await placed('Doctor.Who.2023.S02E00.Joy.to.the.World');
+		expect(who('S02E00')).toEqual([0, 5]);
+	});
+
+	it('places a special named after a season alone by the title after it', async () => {
+		const wilty = await placed('Would I Lie to You');
+		// TMDB's S0E5 "Children in Need (Series 10)"
+		expect(wilty('S10 - Children in Need Special')).toEqual([0, 5]);
+	});
+
+	it('places a special titled by its segments', async () => {
+		const darkness = await placed('[KH] To Love-Ru Darkness');
+		expect(darkness('OVA - 01 - Prologue - Pollen Plan - Body touch')).toEqual([0, 7]);
+		expect(darkness('OVA - 02 - Nostalgia - The Changing Heart - Flower')).toEqual([0, 8]);
+		expect(darkness('OVA - 03 - Exchange - It feels')).toEqual([0, 9]);
+	});
+});
+
+describe("TMDB's title with the show's name before it", () => {
+	// zurg on fun (2026-11-09): files titled without the show's name TMDB titles them with, or with
+	// the show's name TMDB titles them without (see the fixtures README)
+	const placed = async (name: string) => {
+		const c = showNamedTitles.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(showNamedTitles.answers),
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return (part: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(part))!;
+			return [f.season, f.episode];
+		};
+	};
+
+	it('places a file on the episode titled as it with the show named first', async () => {
+		// TMDB's S0E13 "Ed, Edd n Eddy's Big Picture Show"
+		expect(
+			(await placed('Ed, Edd n Eddy (1999) Season 6'))('S00E05 - Big Picture Show')
+		).toEqual([0, 13]);
+		// TMDB's S0E1 "Odd Taxi Picture Drama", the title in brackets after the number
+		expect((await placed('[Anime Time] Odd Taxi'))('S00E14 [Picture Drama]')).toEqual([0, 1]);
+	});
+
+	it("places a file titled with the show's name on the episode titled without it", async () => {
+		const dark = await placed('Are You Afraid Of The Dark Complete Series');
+		// TMDB's S1E1 "The Tale of the Phantom Cab"
+		expect(dark('-01 Are You Afraid of the Dark - The Tale of the Phantom Cab')).toEqual([
+			1, 1,
+		]);
+		expect(dark('-13 Are You Afraid of the Dark - The Tale of the Pinball Wizard')).toEqual([
+			1, 13,
+		]);
+	});
+});
+
+describe('a part of the episode its title names', () => {
+	// zurg on fun (2026-11-09): two Star Wars Rebels season 2 packs, each with `The.Siege.of.Lothal`
+	// in two files (`Part1`, `Part2`), TMDB's one 44-minute special S0E6 (see the fixtures README)
+	const placed = async (name: string, parts: boolean) => {
+		const c = titleParts.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), ...(parts ? { parts: true as const } : {}) }],
+			Infinity,
+			recordedSources(titleParts.answers),
+			async () => [null]
+		);
+		if (parts) expect(releases[0]).toEqual(c.expect);
+		return (name: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(name))!;
+			return [f.season, f.episode, f.part ?? null];
+		};
+	};
+
+	it("places each file as its part of TMDB's episode", async () => {
+		const nogrp = await placed('Star.Wars.Rebels.S02.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP', true);
+		expect(nogrp('S02E01.The.Siege.of.Lothal.Part1')).toEqual([0, 6, 1]);
+		expect(nogrp('S02E02.The.Siege.of.Lothal.Part2')).toEqual([0, 6, 2]);
+		const privatehd = await placed('Star.Wars.Rebels.S02.1080p.BluRay.REMUX.AVC.DD.5.1', true);
+		expect(privatehd('S02E01.The.Siege.of.Lothal.Part2')).toEqual([0, 6, 2]);
+	});
+
+	it('leaves a later part unplaced for a caller that does not read parts', async () => {
+		const nogrp = await placed(
+			'Star.Wars.Rebels.S02.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP',
+			false
+		);
+		expect(nogrp('S02E01.The.Siege.of.Lothal.Part1')).toEqual([0, 6, null]);
+		expect(nogrp('S02E02.The.Siege.of.Lothal.Part2')).toEqual([null, null, null]);
+	});
+});
+
+describe("a film in a show's release, by the identifier's answer", () => {
+	// zurg on fun and DMM's PlacementMiss (2026-11-09): films in releases placed on a show, whose
+	// titles differ from the show's by a number, an article or the film's number in the series
+	const films = async (name: string) => {
+		const c = filmsInShows.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(filmsInShows.answers),
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return releases[0].files.flatMap((f) => (f.kind ? [[f.imdbId, f.tmdbId]] : []));
+	};
+
+	it('names a film titled as the show and a number', async () => {
+		// JUJUTSU KAISEN 0 (2021), the release's one file, sent with the show's id
+		expect(await films('[RaptoR] Jujutsu Kaisen 0 (2021)')).toEqual([['tt14331144', 810693]]);
+	});
+
+	it('names a film whose title has an article or a number the name leaves out', async () => {
+		// "Ranma ½: The Movie, Big Trouble in Nekonron, China", "Ranma ½: The Movie 2, Nihao My Concubine"
+		expect(await films('[Exiled-Destiny]_Ranma')).toEqual([
+			['tt0101583', 37024],
+			['tt0104604', 37021],
+		]);
+	});
+
+	it("names a release's one file the identifier is sure is a film", async () => {
+		expect(await films('Deadpool')).toEqual([['tt6263850', 533535]]);
+	});
+});
+
+describe("a film titled as the show and the file's own words", () => {
+	// zurg on fun (2026-11-09): films in releases placed on a show, no identifier answer naming them,
+	// which TMDB titles as the show and the words the file names beyond it (see the fixtures README)
+	const film = async (name: string, part?: string) => {
+		const c = filmsTitledByShow.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			{
+				...recordedSources(filmsTitledByShow.answers),
+				anime: async () =>
+					buildAnimeIndex(
+						buildFranchiseIndex(
+							filmsTitledByShow.answers.anime.fribb as FribbAnimeEntry[]
+						),
+						filmsTitledByShow.answers.anime.titles
+					),
+			},
+			async (list) =>
+				list.map(({ name }) => (filmsTitledByShow.answers.identify as any)?.[name] ?? null)
+		);
+		expect(releases[0]).toEqual(c.expect);
+		const f = releases[0].files.find((f) => !part || f.path.includes(part))!;
+		return [f.kind ?? null, f.tmdbId ?? null];
+	};
+
+	it("names a fansub's film by the words after its title", async () => {
+		// "Kaiju No. 8: Mission Recon" (2025), the release sent with the show's id
+		expect(await film('[SubsPlease] Kaijuu 8-gou - Mission Recon')).toEqual(['movie', 1326106]);
+		// "Non Non Biyori Vacation" (2018)
+		expect(await film('[Erai-raws] Non Non Biyori - Vacation - Movie')).toEqual([
+			'movie',
+			494471,
+		]);
+		// "Fate/kaleid liner Prisma☆Illya: Prisma☆Phantasm" (2019)
+		expect(await film('[Arid] Fate kaleid liner')).toEqual(['movie', 658436]);
+	});
+
+	it("names a pack's film numbered as a special by the words after the show's", async () => {
+		// "My Hero Academia: Two Heroes" (2018), not TMDB's S0E4 "All Might: Rising"
+		expect(
+			await film(
+				'[Tenrai-Sensei] My Hero Academia',
+				'S00E04 - My Hero Academia The Movie The Two Heroes'
+			)
+		).toEqual(['movie', 505262]);
+	});
+});
+
+describe("a director's cut's prime after a fansub's number", () => {
+	// zurg on fun (2026-11-09): `[Sephirotic] Evangelion - 21' [MULTI]…`, the pack's only copies of
+	// episodes 21-24 (see the fixtures README)
+	it('places the file on the episode it numbers', async () => {
+		const [c] = directorsCuts.cases;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			{
+				...recordedSources(directorsCuts.answers),
+				anime: async () =>
+					buildAnimeIndex(
+						buildFranchiseIndex(directorsCuts.answers.anime.fribb as FribbAnimeEntry[]),
+						directorsCuts.answers.anime.titles
+					),
+			},
+			async () => [null]
+		);
+		const at = (name: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(name))!;
+			return [f.season, f.episode];
+		};
+		expect(at("Evangelion - 21' [MULTI]")).toEqual([1, 21]);
+		expect(at("Evangelion - 24' [MULTI]")).toEqual([1, 24]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe('a title TMDB spells otherwise', () => {
+	// zurg on fun (2026-11-10): files placement left unplaced, their numbers being no TMDB
+	// episode's, titled as one of their season's or the next but for a spelling (see the fixtures README)
+	const spelled = async (name: string, file: string) => {
+		const c = spellingVariants.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(spellingVariants.answers),
+			async (list) =>
+				list.map(({ name }) => (spellingVariants.answers.identify as any)?.[name] ?? null)
+		);
+		expect(releases[0]).toEqual(c.expect);
+		const f = releases[0].files.find((f) => f.path.includes(file))!;
+		return [f.season, f.episode];
+	};
+
+	it('places a file by a title spelled with figures or British spelling', async () => {
+		// "Attack of the Fifty-Foot Worman"
+		expect(await spelled('The Backyardigans', 'Attack of the 50 Foot Worman')).toEqual([4, 12]);
+		// "Journey to the Red Center", the season after the file's
+		expect(await spelled('The Crocodile Hunter', 'Journey to the Red Centre')).toEqual([4, 4]);
+		// "What Does Blue Wanna Do On a Rainy Day?"
+		expect(await spelled("Blue's Clues", 'Want to Do on a Rainy Day')).toEqual([2, 12]);
+	});
+
+	it('places a file by a title one word of which is mistyped', async () => {
+		// "The Unbelievable Wrongness of Talking"
+		expect(await spelled('Becker (1998)', 'Unbearable Wrongness of Talking')).toEqual([6, 6]);
+		// "Genie Meanie Minie Moe"
+		expect(await spelled('The Fairly OddParents', 'Genie Meanie Minie Mo')).toEqual([4, 20]);
+	});
+
+	it('takes no number for a slip, no short title, and no title two episodes are alike', () => {
+		const list = (...names: string[]) => names.map((name) => ({ name }));
+		expect(spelledAlike('Treehouse of Horror V', list('Treehouse of Horror VI'))).toBeNull();
+		expect(spelledAlike('Showdown Part 2', list('Showdown Part 1'))).toBeNull();
+		expect(spelledAlike('Mo', list('Moe'))).toBeNull();
+		expect(spelledAlike('Bart the Genius', list('Bart the General'))).toBeNull();
+		expect(
+			spelledAlike(
+				'Genie Meanie Minie Mo',
+				list('Genie Meanie Minie Moe', 'Genie Meanie Minie Mob')
+			)
+		).toBeNull();
+	});
+});
+
+describe("a file of another show in a show's release", () => {
+	// zurg on fun (2026-11-10): packs placed whole on one show, holding files of another, which DMM
+	// left unplaced (see the fixtures README)
+	const placed = async (name: string, shows = true) => {
+		const c = otherShows.cases.find((c) => c.request.name.startsWith(name))!;
+		const from = recordedSources(otherShows.answers);
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true, ...(shows ? { shows: true } : {}) }],
+			Infinity,
+			from,
+			async (list) =>
+				list.map(({ name }) => (otherShows.answers as any).identify?.[name] ?? null)
+		);
+		if (shows) expect(releases[0]).toEqual(c.expect);
+		const answer = await titled(releases[0], from);
+		return (part: string) => {
+			const f = answer.files.find((f) => f.path.includes(part))!;
+			return [
+				f.kind ?? null,
+				f.tmdbId ?? answer.tmdbId,
+				f.season,
+				f.episode,
+				f.title ?? null,
+			];
+		};
+	};
+
+	it('answers a file named as another show as its episode', async () => {
+		// a Batman: The Animated Series (2098) pack; "Holiday Knights" is The New Batman Adventures' S1E1
+		const pack = await placed('BATMAN The Animated Series (1992-1999)');
+		expect(pack('Holiday Knights')).toEqual(['tv', 4625, 1, 1, 'The New Batman Adventures']);
+		expect(pack('Heart of Ice')).toEqual([null, 2098, 1, 3, null]);
+	});
+
+	it('answers a file of the show the id sent named, which most of the pack is not', async () => {
+		// the pack is placed on The New Batman Adventures; "Sideshow" is Batman: The Animated Series' S2E7
+		const pack = await placed('Batman TAS Seasons 2-3');
+		expect(pack('066 - Sideshow')).toEqual(['tv', 2098, 2, 7, 'Batman: The Animated Series']);
+		expect(pack('086 - Holiday Knights')).toEqual([null, 4625, 1, 1, null]);
+	});
+
+	it("answers a season TVDB numbers on and TMDB keeps as a revival as the revival's", async () => {
+		// TMDB's 2013 Whose Line Is It Anyway? (64978), numbered as TVDB's series 76808 numbers it
+		const pack = await placed('Whose Line Is It Anyway (US)');
+		expect(pack('S09E01 - Lauren Cohan')).toEqual([
+			'tv',
+			64978,
+			9,
+			1,
+			'Whose Line Is It Anyway?',
+		]);
+		expect(pack('S08E01')).toEqual([null, 61018, 8, 1, null]);
+	});
+
+	it('leaves such a file unplaced for a caller that does not read it', async () => {
+		const pack = await placed('BATMAN The Animated Series (1992-1999)', false);
+		expect(pack('Holiday Knights')).toEqual([null, 2098, null, null, null]);
 	});
 });

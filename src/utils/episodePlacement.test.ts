@@ -61,8 +61,6 @@ describe('fileNumbers', () => {
 			unread: [
 				// a release of one file named by its hash: zurg sends that release alone
 				'/0816e0b1bd854e41b9aaa223db7a413b.mkv: null for 4,21',
-				// a director's cut, which TMDB lists as no episode of its own
-				"/[Sephirotic] Evangelion - 22' [MULTI][BD 1080p 8bits 5.1 AAC][82842B04].mkv: null for 1,22",
 			],
 		});
 	});
@@ -153,6 +151,8 @@ describe("fileNumbers on files fun's zurg held unplaced on 2026-11-09", () => {
 		(_, c) => {
 			const got = fileNumbers(c.release, c.folder, c.file, Boolean((c as any).single));
 			expect(got && [got.season, got.episode]).toEqual([c.season, c.episode]);
+			// a file of several episodes, its last
+			if ('end' in c) expect(got?.end).toBe(c.end);
 		}
 	);
 });
@@ -208,8 +208,8 @@ describe('titleText', () => {
 		expect(titleText(' Letâ\u0080\u0099s Go Home.mkv')?.whole).toBe('lets go home');
 		expect(titleText(' LetÃ¢Â\u0080Â\u0099s Go Home')?.whole).toBe('lets go home');
 		expect(titleText(' You Look Wellâ\u0080¦.mkv')?.whole).toBe('you look well');
-		// Latin-1 that is no UTF-8 stays as it is
-		expect(titleText(' Pokémon Fan Club.mkv')?.whole).toBe('pokémon fan club');
+		// Latin-1 that is no UTF-8 stays as it is, its accent aside
+		expect(titleText(' Pokémon Fan Club.mkv')?.whole).toBe('pokemon fan club');
 	});
 });
 

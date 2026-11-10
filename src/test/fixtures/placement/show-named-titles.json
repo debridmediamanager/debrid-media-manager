@@ -1,0 +1,6372 @@
+{
+	"answers": {
+		"find": {
+			"tt0103352": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 2913,
+						"name": "Are You Afraid of the Dark?",
+						"first_air_date": "1992-08-15"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0184111": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 606,
+						"name": "Ed, Edd n Eddy",
+						"first_air_date": "1999-01-04"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt14134550": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 116727,
+						"name": "ODDTAXI",
+						"first_air_date": "2021-04-06"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt26761232": {
+				"movie_results": [],
+				"tv_results": [],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"606": {
+				"id": 606,
+				"name": "Ed, Edd n Eddy",
+				"original_name": "Ed, Edd n Eddy",
+				"first_air_date": "1999-01-04",
+				"original_language": "en",
+				"origin_country": ["CA", "US"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 10762,
+						"name": "Kids"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 3307,
+							"name": "surreal"
+						},
+						{
+							"id": 6054,
+							"name": "friendship"
+						},
+						{
+							"id": 157955,
+							"name": "childhood"
+						},
+						{
+							"id": 210710,
+							"name": "absurdist"
+						},
+						{
+							"id": 221189,
+							"name": "suburban"
+						},
+						{
+							"id": 264326,
+							"name": "mischief"
+						},
+						{
+							"id": 325832,
+							"name": "joyful"
+						},
+						{
+							"id": 356086,
+							"name": "scams"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0184111",
+					"tvdb_id": 77466
+				},
+				"networks": [
+					{
+						"id": 56,
+						"name": "Cartoon Network"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Du, Dudu e Edu",
+							"iso_3166_1": "BR"
+						},
+						{
+							"title": "Ed, Edd und Eddy",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Ed, Edd og Eddy",
+							"iso_3166_1": "DK"
+						},
+						{
+							"title": "Ed, Edd ja Eddy",
+							"iso_3166_1": "EE"
+						},
+						{
+							"title": "Ed, Edd y Eddy",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Ed, Edd et Eddy",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Εντ, Ενττ και Εντι",
+							"iso_3166_1": "GR"
+						},
+						{
+							"title": "Ed, Edd i Eddy",
+							"iso_3166_1": "HR"
+						},
+						{
+							"title": "Ed, Edd és Eddy",
+							"iso_3166_1": "HU"
+						},
+						{
+							"title": "אד אד ואדי",
+							"iso_3166_1": "IL"
+						},
+						{
+							"title": "Ed, Edd + Eddy",
+							"iso_3166_1": "IT"
+						},
+						{
+							"title": "エド エッド エディ",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "에드라는 이름의 세 친구",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Ed, Edd ir Eddy",
+							"iso_3166_1": "LT"
+						},
+						{
+							"title": "Eds, Edis un Edijs",
+							"iso_3166_1": "LV"
+						},
+						{
+							"title": "Ed, Edd y Eddy",
+							"iso_3166_1": "MX"
+						},
+						{
+							"title": "Ed, Edd en Eddy",
+							"iso_3166_1": "NL"
+						},
+						{
+							"title": "Ed, Edd og Eddy",
+							"iso_3166_1": "NO"
+						},
+						{
+							"title": "Ed, Edd i Eddy",
+							"iso_3166_1": "PL"
+						},
+						{
+							"title": "Ed, Edd și Eddy",
+							"iso_3166_1": "RO"
+						},
+						{
+							"title": "Ed, Ed i Edi",
+							"iso_3166_1": "RS"
+						},
+						{
+							"title": "Эд, Эдд и Эдди",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "إد، إدد وادي",
+							"iso_3166_1": "SA"
+						},
+						{
+							"title": "Ed, Edd och Eddy",
+							"iso_3166_1": "SE"
+						},
+						{
+							"title": "เอ็ด เอ็ดด กับ เอ็ดดี้",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "Ed, Edd ve Eddy",
+							"iso_3166_1": "TR"
+						},
+						{
+							"title": "Ед, Едд та Едді",
+							"iso_3166_1": "UA"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 13,
+						"air_date": "2002-07-05",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 26,
+						"air_date": "1999-01-04",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 26,
+						"air_date": "1999-11-26",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 25,
+						"air_date": "2001-04-06",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 25,
+						"air_date": "2002-09-27",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 22,
+						"air_date": "2005-11-04",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 2,
+						"air_date": "2008-06-29",
+						"name": "Season 6"
+					}
+				]
+			},
+			"2913": {
+				"id": 2913,
+				"name": "Are You Afraid of the Dark?",
+				"original_name": "Are You Afraid of the Dark?",
+				"first_air_date": "1992-08-15",
+				"original_language": "en",
+				"origin_country": ["CA", "US"],
+				"genres": [
+					{
+						"id": 9648,
+						"name": "Mystery"
+					},
+					{
+						"id": 10762,
+						"name": "Kids"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 3335,
+							"name": "halloween"
+						},
+						{
+							"id": 9706,
+							"name": "anthology"
+						},
+						{
+							"id": 9853,
+							"name": "paranormal"
+						},
+						{
+							"id": 9887,
+							"name": "surrealism"
+						},
+						{
+							"id": 11627,
+							"name": "paranormal phenomena"
+						},
+						{
+							"id": 47020,
+							"name": "storytelling"
+						},
+						{
+							"id": 169886,
+							"name": "campfire story"
+						},
+						{
+							"id": 251513,
+							"name": "supernatural power"
+						},
+						{
+							"id": 269233,
+							"name": "good versus evil"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0103352",
+					"tvdb_id": 77960
+				},
+				"networks": [
+					{
+						"id": 13,
+						"name": "Nickelodeon"
+					},
+					{
+						"id": 46,
+						"name": "YTV"
+					},
+					{
+						"id": 197,
+						"name": "Family Channel"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "A Turma do Terror",
+							"iso_3166_1": "BR"
+						},
+						{
+							"title": "你害怕黑暗吗？",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "¿Le Tienes Miedo a la Oscuridad?",
+							"iso_3166_1": "CO"
+						},
+						{
+							"title": "¿Le temes a la oscuridad?",
+							"iso_3166_1": "MX"
+						},
+						{
+							"title": "Quem tem Medo do Escuro?",
+							"iso_3166_1": "PT"
+						},
+						{
+							"title": "膽小勿視",
+							"iso_3166_1": "TW"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 13,
+						"air_date": "1992-08-15",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 13,
+						"air_date": "1993-06-19",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 13,
+						"air_date": "1994-01-08",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 13,
+						"air_date": "1994-10-01",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 13,
+						"air_date": "1995-10-07",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 13,
+						"air_date": "1999-02-06",
+						"name": "Season 6"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 13,
+						"air_date": "2000-04-02",
+						"name": "Season 7"
+					}
+				]
+			},
+			"93693": {
+				"id": 93693,
+				"name": "Are You Afraid of the Dark?",
+				"original_name": "Are You Afraid of the Dark?",
+				"first_air_date": "2019-10-11",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 9648,
+						"name": "Mystery"
+					},
+					{
+						"id": 10751,
+						"name": "Family"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 3335,
+							"name": "halloween"
+						},
+						{
+							"id": 9706,
+							"name": "anthology"
+						},
+						{
+							"id": 250593,
+							"name": "horror anthology"
+						},
+						{
+							"id": 315058,
+							"name": "horror"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt10473306",
+					"tvdb_id": 368145
+				},
+				"networks": [
+					{
+						"id": 13,
+						"name": "Nickelodeon"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "你害怕黑暗吗？",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "מי מפחד מהחושך",
+							"iso_3166_1": "IL"
+						},
+						{
+							"title": "膽小勿視",
+							"iso_3166_1": "TW"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 3,
+						"air_date": "2019-10-11",
+						"name": "Carnival of Doom"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 6,
+						"air_date": "2021-02-12",
+						"name": "Curse of the Shadows"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 4,
+						"air_date": "2022-07-30",
+						"name": "Ghost Island"
+					}
+				]
+			},
+			"116727": {
+				"id": 116727,
+				"name": "ODDTAXI",
+				"original_name": "オッドタクシー",
+				"first_air_date": "2021-04-06",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 9648,
+						"name": "Mystery"
+					},
+					{
+						"id": 80,
+						"name": "Crime"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 444,
+							"name": "taxi"
+						},
+						{
+							"id": 1749,
+							"name": "taxi driver"
+						},
+						{
+							"id": 10941,
+							"name": "disappearance"
+						},
+						{
+							"id": 11477,
+							"name": "anthropomorphism"
+						},
+						{
+							"id": 190102,
+							"name": "mysterious girl"
+						},
+						{
+							"id": 209525,
+							"name": "mysterious past"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 228281,
+							"name": "dark mysteries"
+						},
+						{
+							"id": 250416,
+							"name": "incidents"
+						},
+						{
+							"id": 269710,
+							"name": "anthropomorphic animal"
+						},
+						{
+							"id": 272789,
+							"name": "mysteries"
+						},
+						{
+							"id": 281776,
+							"name": "mysterious disappearance"
+						},
+						{
+							"id": 288394,
+							"name": "suspense"
+						},
+						{
+							"id": 338226,
+							"name": "anthropomorphic"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt14134550",
+					"tvdb_id": 397208
+				},
+				"networks": [
+					{
+						"id": 98,
+						"name": "TV Tokyo"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "奇巧出租车",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "奇巧计程车",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "オッドタクシー",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "オッドタクシー：2021",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "ODDTAXI",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "오드 택시",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "ODD Taxi",
+							"iso_3166_1": "MX"
+						},
+						{
+							"title": "Необычное такси",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "Случайное такси",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "อ็อด แท็กซี่",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "Odd Taxi",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 1,
+						"air_date": "2022-03-30",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 13,
+						"air_date": "2021-04-06",
+						"name": "Season 1"
+					}
+				]
+			}
+		},
+		"season": {
+			"2913/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "The Tale of the Phantom Cab",
+						"air_date": "1992-08-15",
+						"id": 222603
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "The Tale of Laughing in the Dark",
+						"air_date": "1992-08-22",
+						"id": 222516
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "The Tale of the Lonely Ghost",
+						"air_date": "1992-08-29",
+						"id": 1057765
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "The Tale of the Twisted Claw",
+						"air_date": "1992-09-12",
+						"id": 222557
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "The Tale of the Hungry Hounds",
+						"air_date": "1992-09-19",
+						"id": 222558
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "The Tale of the Super Specs",
+						"air_date": "1992-09-26",
+						"id": 222559
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "The Tale of the Captured Souls",
+						"air_date": "1992-10-03",
+						"id": 222560
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "The Tale of the Nightly Neighbors",
+						"air_date": "1992-10-10",
+						"id": 222585
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "The Tale of the Sorcerer's Apprentice",
+						"air_date": "1992-10-17",
+						"id": 222589
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "The Tale of Jake and the Leprechaun",
+						"air_date": "1992-10-24",
+						"id": 222592
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "The Tale of the Dark Music",
+						"air_date": "1992-10-31",
+						"id": 222593
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "The Tale of the Prom Queen",
+						"air_date": "1992-11-07",
+						"id": 222594
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "The Tale of the Pinball Wizard",
+						"air_date": "1992-11-14",
+						"id": 222595
+					}
+				]
+			},
+			"2913/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "The Tale of the Final Wish",
+						"air_date": "1993-06-19",
+						"id": 222604
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "The Tale of the Midnight Madness",
+						"air_date": "1993-06-26",
+						"id": 222649
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "The Tale of Locker 22",
+						"air_date": "1993-07-03",
+						"id": 222605
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "The Tale of the Thirteenth Floor",
+						"air_date": "1993-07-10",
+						"id": 222647
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "The Tale of the Dream Machine",
+						"air_date": "1993-07-17",
+						"id": 222618
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "The Tale of the Dark Dragon",
+						"air_date": "1993-07-24",
+						"id": 222619
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "The Tale of the Whispering Walls",
+						"air_date": "1993-07-31",
+						"id": 222622
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "The Tale of the Frozen Ghost",
+						"air_date": "1993-08-14",
+						"id": 222625
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "The Tale of the Full Moon",
+						"air_date": "1993-08-21",
+						"id": 222632
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "The Tale of the Shiny Red Bicycle",
+						"air_date": "1993-08-28",
+						"id": 222633
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "The Tale of the Magician's Assistant",
+						"air_date": "1993-09-11",
+						"id": 222634
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "The Tale of the Hatching",
+						"air_date": "1993-09-25",
+						"id": 222635
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "The Tale of Old Man Corcoran",
+						"air_date": "1993-10-02",
+						"id": 222643
+					}
+				]
+			},
+			"2913/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "The Tale of the Midnight Ride",
+						"air_date": "1994-01-08",
+						"id": 962466
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "The Tale of Apartment 214",
+						"air_date": "1994-01-15",
+						"id": 962467
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "The Tale of Watcher's Woods",
+						"air_date": "1994-01-22",
+						"id": 962431
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "The Tale of the Phone Police",
+						"air_date": "1994-01-29",
+						"id": 962432
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "The Tale of the Dollmaker",
+						"air_date": "1994-02-05",
+						"id": 962433
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "The Tale of the Bookish Babysitter",
+						"air_date": "1994-02-12",
+						"id": 962458
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "The Tale of the Carved Stone",
+						"air_date": "1994-02-26",
+						"id": 962434
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "The Tale of the Guardian's Curse",
+						"air_date": "1994-03-05",
+						"id": 962435
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "The Tale of the Curious Camera",
+						"air_date": "1994-03-19",
+						"id": 962436
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "The Tale of the Dream Girl",
+						"air_date": "1994-03-26",
+						"id": 962437
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "The Tale of the Quicksilver",
+						"air_date": "1994-04-02",
+						"id": 962438
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "The Tale of the Crimson Clown",
+						"air_date": "1994-04-09",
+						"id": 962439
+					},
+					{
+						"episode_number": 13,
+						"season_number": 3,
+						"name": "The Tale of the Dangerous Soup",
+						"air_date": "1994-04-16",
+						"id": 962440
+					}
+				]
+			},
+			"2913/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 4,
+						"name": "The Tale of the Renegade Virus",
+						"air_date": "1994-10-01",
+						"id": 222658
+					},
+					{
+						"episode_number": 2,
+						"season_number": 4,
+						"name": "The Tale of the Long Ago Locket",
+						"air_date": "1994-10-08",
+						"id": 222661
+					},
+					{
+						"episode_number": 3,
+						"season_number": 4,
+						"name": "The Tale of the Water Demons",
+						"air_date": "1994-10-15",
+						"id": 222668
+					},
+					{
+						"episode_number": 4,
+						"season_number": 4,
+						"name": "The Tale of Cutter's Treasure (1)",
+						"air_date": "1994-10-29",
+						"id": 222670
+					},
+					{
+						"episode_number": 5,
+						"season_number": 4,
+						"name": "The Tale of Cutter's Treasure (2)",
+						"air_date": "1994-10-29",
+						"id": 222681
+					},
+					{
+						"episode_number": 6,
+						"season_number": 4,
+						"name": "The Tale of the Quiet Librarian",
+						"air_date": "1994-11-05",
+						"id": 222686
+					},
+					{
+						"episode_number": 7,
+						"season_number": 4,
+						"name": "The Tale of the Silent Servant",
+						"air_date": "1994-11-12",
+						"id": 222691
+					},
+					{
+						"episode_number": 8,
+						"season_number": 4,
+						"name": "The Tale of the Room for Rent",
+						"air_date": "1994-11-19",
+						"id": 222731
+					},
+					{
+						"episode_number": 9,
+						"season_number": 4,
+						"name": "The Tale of the Ghastly Grinner",
+						"air_date": "1994-12-03",
+						"id": 222737
+					},
+					{
+						"episode_number": 10,
+						"season_number": 4,
+						"name": "The Tale of the Fire Ghost",
+						"air_date": "1994-12-10",
+						"id": 222741
+					},
+					{
+						"episode_number": 11,
+						"season_number": 4,
+						"name": "The Tale of the Closet Keepers",
+						"air_date": "1995-01-07",
+						"id": 222743
+					},
+					{
+						"episode_number": 12,
+						"season_number": 4,
+						"name": "The Tale of the Unfinished Painting",
+						"air_date": "1995-01-14",
+						"id": 222746
+					},
+					{
+						"episode_number": 13,
+						"season_number": 4,
+						"name": "The Tale of Train Magic",
+						"air_date": "1995-01-21",
+						"id": 222757
+					}
+				]
+			},
+			"2913/5": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 5,
+						"name": "The Tale of the Dead Man's Float",
+						"air_date": "1995-10-07",
+						"id": 222768
+					},
+					{
+						"episode_number": 2,
+						"season_number": 5,
+						"name": "The Tale of the Jagged Sign",
+						"air_date": "1995-10-21",
+						"id": 222782
+					},
+					{
+						"episode_number": 3,
+						"season_number": 5,
+						"name": "The Tale of Station 109.1",
+						"air_date": "1995-11-04",
+						"id": 222796
+					},
+					{
+						"episode_number": 4,
+						"season_number": 5,
+						"name": "The Tale of the Mystical Mirror",
+						"air_date": "1995-11-11",
+						"id": 222802
+					},
+					{
+						"episode_number": 5,
+						"season_number": 5,
+						"name": "The Tale of Prisoners Past",
+						"air_date": "1995-12-02",
+						"id": 222811
+					},
+					{
+						"episode_number": 6,
+						"season_number": 5,
+						"name": "The Tale of C7",
+						"air_date": "1995-12-09",
+						"id": 222821
+					},
+					{
+						"episode_number": 7,
+						"season_number": 5,
+						"name": "The Tale of Badge",
+						"air_date": "1995-12-23",
+						"id": 222828
+					},
+					{
+						"episode_number": 8,
+						"season_number": 5,
+						"name": "The Tale of the Manaha",
+						"air_date": "1995-12-30",
+						"id": 1173553
+					},
+					{
+						"episode_number": 9,
+						"season_number": 5,
+						"name": "The Tale of the Unexpected Visitor",
+						"air_date": "1996-01-06",
+						"id": 1173558
+					},
+					{
+						"episode_number": 10,
+						"season_number": 5,
+						"name": "The Tale of the Chameleons",
+						"air_date": "1996-01-13",
+						"id": 222880
+					},
+					{
+						"episode_number": 11,
+						"season_number": 5,
+						"name": "The Tale of the Vacant Lot",
+						"air_date": "1996-01-20",
+						"id": 222929
+					},
+					{
+						"episode_number": 12,
+						"season_number": 5,
+						"name": "The Tale of a Door Unlocked",
+						"air_date": "1996-01-27",
+						"id": 222944
+					},
+					{
+						"episode_number": 13,
+						"season_number": 5,
+						"name": "The Tale of the Night Shift",
+						"air_date": "1996-02-03",
+						"id": 222959
+					}
+				]
+			},
+			"2913/6": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 6,
+						"name": "The Tale of the Forever Game",
+						"air_date": "1999-02-06",
+						"id": 222960
+					},
+					{
+						"episode_number": 2,
+						"season_number": 6,
+						"name": "The Tale of the Misfortune Cookie",
+						"air_date": "1999-02-13",
+						"id": 223022
+					},
+					{
+						"episode_number": 3,
+						"season_number": 6,
+						"name": "The Tale of the Virtual Pets",
+						"air_date": "1999-02-20",
+						"id": 223019
+					},
+					{
+						"episode_number": 4,
+						"season_number": 6,
+						"name": "The Tale of the Zombie Dice",
+						"air_date": "1999-02-27",
+						"id": 1173547
+					},
+					{
+						"episode_number": 5,
+						"season_number": 6,
+						"name": "The Tale of the Gruesome Gourmets",
+						"air_date": "1999-03-13",
+						"id": 223029
+					},
+					{
+						"episode_number": 6,
+						"season_number": 6,
+						"name": "The Tale of Jake the Snake",
+						"air_date": "1999-03-20",
+						"id": 1173548
+					},
+					{
+						"episode_number": 7,
+						"season_number": 6,
+						"name": "The Tale of the Hunted",
+						"air_date": "1999-03-27",
+						"id": 223035
+					},
+					{
+						"episode_number": 8,
+						"season_number": 6,
+						"name": "The Tale of the Wisdom Glass",
+						"air_date": "1999-04-03",
+						"id": 223070
+					},
+					{
+						"episode_number": 9,
+						"season_number": 6,
+						"name": "The Tale of the Walking Shadow",
+						"air_date": "1999-04-10",
+						"id": 223073
+					},
+					{
+						"episode_number": 10,
+						"season_number": 6,
+						"name": "The Tale of Oblivion",
+						"air_date": "1999-04-17",
+						"id": 223083
+					},
+					{
+						"episode_number": 11,
+						"season_number": 6,
+						"name": "The Tale of Vampire Town",
+						"air_date": "1999-04-24",
+						"id": 223049
+					},
+					{
+						"episode_number": 12,
+						"season_number": 6,
+						"name": "The Tale of the Secret Admirer",
+						"air_date": "1999-05-08",
+						"id": 223084
+					},
+					{
+						"episode_number": 13,
+						"season_number": 6,
+						"name": "The Tale of Bigfoot Ridge",
+						"air_date": "1999-05-15",
+						"id": 223134
+					}
+				]
+			},
+			"2913/7": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 7,
+						"name": "The Tale of the Silver Sight (1)",
+						"air_date": "2000-04-02",
+						"id": 223142
+					},
+					{
+						"episode_number": 2,
+						"season_number": 7,
+						"name": "The Tale of the Silver Sight (2)",
+						"air_date": "2000-04-02",
+						"id": 223199
+					},
+					{
+						"episode_number": 3,
+						"season_number": 7,
+						"name": "The Tale of the Silver Sight (3)",
+						"air_date": "2000-04-02",
+						"id": 1173545
+					},
+					{
+						"episode_number": 4,
+						"season_number": 7,
+						"name": "The Tale of the Lunar Locusts",
+						"air_date": "2000-04-09",
+						"id": 223208
+					},
+					{
+						"episode_number": 5,
+						"season_number": 7,
+						"name": "The Tale of the Stone Maiden",
+						"air_date": "2000-04-16",
+						"id": 1173546
+					},
+					{
+						"episode_number": 6,
+						"season_number": 7,
+						"name": "The Tale of Highway 13",
+						"air_date": "2000-04-23",
+						"id": 223226
+					},
+					{
+						"episode_number": 7,
+						"season_number": 7,
+						"name": "The Tale of the Reanimator",
+						"air_date": "2000-04-30",
+						"id": 223229
+					},
+					{
+						"episode_number": 8,
+						"season_number": 7,
+						"name": "The Tale of the Time Trap",
+						"air_date": "2000-05-07",
+						"id": 223277
+					},
+					{
+						"episode_number": 9,
+						"season_number": 7,
+						"name": "The Tale of the Photo Finish",
+						"air_date": "2000-05-14",
+						"id": 223285
+					},
+					{
+						"episode_number": 10,
+						"season_number": 7,
+						"name": "The Tale of the Last Dance",
+						"air_date": "2000-05-21",
+						"id": 1173544
+					},
+					{
+						"episode_number": 11,
+						"season_number": 7,
+						"name": "The Tale of the Laser Maze",
+						"air_date": "2000-05-28",
+						"id": 223293
+					},
+					{
+						"episode_number": 12,
+						"season_number": 7,
+						"name": "The Tale of the Many Faces",
+						"air_date": "2000-06-04",
+						"id": 223294
+					},
+					{
+						"episode_number": 13,
+						"season_number": 7,
+						"name": "The Tale of the Night Nurse",
+						"air_date": "2000-06-11",
+						"id": 1206371
+					}
+				]
+			},
+			"606/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "My Best Friend Plank",
+						"air_date": "2002-07-05",
+						"id": 34561
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Ed, Edd n Eddy's Jingle Jingle Jangle",
+						"air_date": "2004-12-03",
+						"id": 34571
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "Ed, Edd n Eddy's Hanky Panky Hullabaloo",
+						"air_date": "2005-02-11",
+						"id": 34570
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "Ed, Edd n Eddy's Boo Haw Haw",
+						"air_date": "2005-10-28",
+						"id": 34562
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "The Incredible Shrinking Day",
+						"air_date": "2006-07-02",
+						"id": 1936126
+					},
+					{
+						"episode_number": 6,
+						"season_number": 0,
+						"name": "The Eds are Coming",
+						"air_date": "2007-05-11",
+						"id": 3616619
+					},
+					{
+						"episode_number": 7,
+						"season_number": 0,
+						"name": "Ed, Edd n' Eddy - How To Draw Ed",
+						"air_date": "2022-10-18",
+						"id": 34569
+					},
+					{
+						"episode_number": 8,
+						"season_number": 0,
+						"name": "Ed, Edd n' Eddy - How to Draw Eddy",
+						"air_date": "2022-10-18",
+						"id": 34564
+					},
+					{
+						"episode_number": 9,
+						"season_number": 0,
+						"name": "Ed, Edd n' Eddy - How to Make an Ed Edd n Eddy Cartoon",
+						"air_date": "2022-10-18",
+						"id": 34567
+					},
+					{
+						"episode_number": 10,
+						"season_number": 0,
+						"name": "Ed, Edd n' Eddy - Interview with the creator",
+						"air_date": "2022-10-18",
+						"id": 34568
+					},
+					{
+						"episode_number": 11,
+						"season_number": 0,
+						"name": "Ed, Edd n' Eddy - Music video I'm not coming in Anymore",
+						"air_date": "2022-10-18",
+						"id": 34566
+					},
+					{
+						"episode_number": 12,
+						"season_number": 0,
+						"name": "Ed, Edd n' Eddy - Behind the Eds with shows creator",
+						"air_date": "2022-10-18",
+						"id": 34565
+					},
+					{
+						"episode_number": 13,
+						"season_number": 0,
+						"name": "Ed, Edd n Eddy's Big Picture Show",
+						"air_date": "2009-11-09",
+						"id": 6039225
+					}
+				]
+			},
+			"606/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "The Ed-Touchables",
+						"air_date": "1999-01-04",
+						"id": 34431
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Nagged to Ed",
+						"air_date": "1999-01-04",
+						"id": 34433
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Pop Goes the Ed",
+						"air_date": "1999-01-11",
+						"id": 34435
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Over Your Ed",
+						"air_date": "1999-01-11",
+						"id": 34438
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Sir Ed-a-Lot",
+						"air_date": "1999-01-18",
+						"id": 34439
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "A Pinch to Grow an Ed",
+						"air_date": "1999-01-18",
+						"id": 34441
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Dawn of the Eds",
+						"air_date": "1999-01-25",
+						"id": 34443
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Virt-Ed-Go",
+						"air_date": "1999-01-25",
+						"id": 34446
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Read All About Ed",
+						"air_date": "1999-02-01",
+						"id": 34447
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Quick Shot Ed",
+						"air_date": "1999-02-01",
+						"id": 34450
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "An Ed Too Many",
+						"air_date": "1999-02-08",
+						"id": 34451
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Ed-n-Seek",
+						"air_date": "1999-02-08",
+						"id": 34453
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Look Into My Eds",
+						"air_date": "1999-03-01",
+						"id": 34455
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Tag Yer Ed",
+						"air_date": "1999-03-01",
+						"id": 1355064
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Fool on the Ed",
+						"air_date": "1999-03-08",
+						"id": 1355067
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "A Boy and His Ed",
+						"air_date": "1999-03-08",
+						"id": 1355398
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "It's Way Ed",
+						"air_date": "1999-03-15",
+						"id": 1355397
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Laugh Ed Laugh",
+						"air_date": "1999-03-15",
+						"id": 1355396
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "A Glass of Warm Ed",
+						"air_date": "1999-04-12",
+						"id": 1355395
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Flea-Bitten Ed",
+						"air_date": "1999-04-12",
+						"id": 1355394
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Who, What, Where, Ed",
+						"air_date": "1999-04-19",
+						"id": 1355391
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Keeping Up With the Eds",
+						"air_date": "1999-04-19",
+						"id": 1355390
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Eds-Aggerate",
+						"air_date": "1999-04-26",
+						"id": 1355079
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "Oath to an Ed",
+						"air_date": "1999-04-26",
+						"id": 1355399
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "Button Yer Ed",
+						"air_date": "1999-06-11",
+						"id": 1355401
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "Avast Ye Eds",
+						"air_date": "1999-06-11",
+						"id": 1355400
+					}
+				]
+			},
+			"606/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Know it All Ed",
+						"air_date": "1999-11-26",
+						"id": 34461
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Dear Ed",
+						"air_date": "1999-11-26",
+						"id": 34462
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Knock Knock Who's Ed?",
+						"air_date": "2000-02-11",
+						"id": 34459
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "One + One = Ed",
+						"air_date": "2000-02-11",
+						"id": 34460
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Eeny, Meeny, Miney, Ed",
+						"air_date": "2000-03-03",
+						"id": 34457
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Ready, Set, Ed",
+						"air_date": "2000-03-03",
+						"id": 34458
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Hands Across Ed",
+						"air_date": "2000-03-24",
+						"id": 34463
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Floss Your Ed",
+						"air_date": "2000-03-24",
+						"id": 34464
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "In Like Ed",
+						"air_date": "2000-04-07",
+						"id": 34465
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "Who Let the Ed In?",
+						"air_date": "2000-04-07",
+						"id": 34466
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "Home Cooked Eds",
+						"air_date": "2000-05-12",
+						"id": 34467
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Rambling Ed",
+						"air_date": "2000-05-12",
+						"id": 34468
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "To Sir with Ed",
+						"air_date": "2000-06-23",
+						"id": 34469
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "Key to My Ed",
+						"air_date": "2000-06-23",
+						"id": 34470
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "Urban Ed",
+						"air_date": "2000-07-21",
+						"id": 34473
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "Stop, Look and Ed",
+						"air_date": "2000-07-21",
+						"id": 34474
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "Honor Thy Ed",
+						"air_date": "2000-08-04",
+						"id": 34471
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "Scrambled Ed",
+						"air_date": "2000-08-04",
+						"id": 34472
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "Rent-a-Ed",
+						"air_date": "2000-08-18",
+						"id": 34475
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "Shoo Ed",
+						"air_date": "2000-08-18",
+						"id": 34476
+					},
+					{
+						"episode_number": 21,
+						"season_number": 2,
+						"name": "Ed in a Halfshell",
+						"air_date": "2000-09-08",
+						"id": 34477
+					},
+					{
+						"episode_number": 22,
+						"season_number": 2,
+						"name": "Mirror, Mirror, on the Ed",
+						"air_date": "2000-09-08",
+						"id": 34478
+					},
+					{
+						"episode_number": 23,
+						"season_number": 2,
+						"name": "Hot Buttered Ed",
+						"air_date": "2000-10-27",
+						"id": 34479
+					},
+					{
+						"episode_number": 24,
+						"season_number": 2,
+						"name": "High Heeled Ed",
+						"air_date": "2000-10-27",
+						"id": 34480
+					},
+					{
+						"episode_number": 25,
+						"season_number": 2,
+						"name": "Fa, La, La, La, Ed",
+						"air_date": "2000-12-22",
+						"id": 34481
+					},
+					{
+						"episode_number": 26,
+						"season_number": 2,
+						"name": "Cry Ed",
+						"air_date": "2000-12-22",
+						"id": 34482
+					}
+				]
+			},
+			"606/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "Wish You Were Ed",
+						"air_date": "2001-04-06",
+						"id": 34483
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "Momma's Little Ed",
+						"air_date": "2001-04-06",
+						"id": 34484
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Once Upon an Ed",
+						"air_date": "2001-05-25",
+						"id": 34485
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "For Your Ed Only",
+						"air_date": "2001-05-25",
+						"id": 34486
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "It Came From Outer Ed",
+						"air_date": "2001-09-19",
+						"id": 34487
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "3 Squares and an Ed",
+						"air_date": "2001-09-19",
+						"id": 34488
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "Dueling Eds",
+						"air_date": "2001-09-20",
+						"id": 34489
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "Dim Lit Ed",
+						"air_date": "2001-09-20",
+						"id": 34490
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "Will Work for Ed",
+						"air_date": "2002-01-04",
+						"id": 34491
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "Ed, Ed and Away",
+						"air_date": "2002-01-04",
+						"id": 34492
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "X Marks the Ed",
+						"air_date": "2002-01-25",
+						"id": 34493
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "From Here to Ed",
+						"air_date": "2002-01-25",
+						"id": 34494
+					},
+					{
+						"episode_number": 13,
+						"season_number": 3,
+						"name": "Boys Will Be Eds",
+						"air_date": "2002-02-15",
+						"id": 34495
+					},
+					{
+						"episode_number": 14,
+						"season_number": 3,
+						"name": "Ed or Tails",
+						"air_date": "2002-02-15",
+						"id": 34496
+					},
+					{
+						"episode_number": 15,
+						"season_number": 3,
+						"name": "Gimme, Gimme Never Ed",
+						"air_date": "2002-03-08",
+						"id": 34497
+					},
+					{
+						"episode_number": 16,
+						"season_number": 3,
+						"name": "My Fair Ed",
+						"air_date": "2002-03-08",
+						"id": 34498
+					},
+					{
+						"episode_number": 17,
+						"season_number": 3,
+						"name": "Rock-a-Bye Ed",
+						"air_date": "2002-03-22",
+						"id": 34499
+					},
+					{
+						"episode_number": 18,
+						"season_number": 3,
+						"name": "O-Ed Eleven",
+						"air_date": "2002-03-22",
+						"id": 34500
+					},
+					{
+						"episode_number": 19,
+						"season_number": 3,
+						"name": "The Luck of the Ed",
+						"air_date": "2002-06-21",
+						"id": 34501
+					},
+					{
+						"episode_number": 20,
+						"season_number": 3,
+						"name": "Ed, Pass it On",
+						"air_date": "2002-06-21",
+						"id": 34502
+					},
+					{
+						"episode_number": 21,
+						"season_number": 3,
+						"name": "Brother, Can You Spare an Ed?",
+						"air_date": "2002-06-28",
+						"id": 34503
+					},
+					{
+						"episode_number": 22,
+						"season_number": 3,
+						"name": "The Day the Ed Stood Still",
+						"air_date": "2002-06-28",
+						"id": 34504
+					},
+					{
+						"episode_number": 23,
+						"season_number": 3,
+						"name": "If It Smells Like an Ed",
+						"air_date": "2002-07-05",
+						"id": 34505
+					},
+					{
+						"episode_number": 24,
+						"season_number": 3,
+						"name": "Don't Rain on My Ed",
+						"air_date": "2002-07-12",
+						"id": 34506
+					},
+					{
+						"episode_number": 25,
+						"season_number": 3,
+						"name": "Once Bitten, Twice Ed",
+						"air_date": "2002-07-12",
+						"id": 34507
+					}
+				]
+			},
+			"606/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 4,
+						"name": "An Ed in the Bush",
+						"air_date": "2002-09-27",
+						"id": 34531
+					},
+					{
+						"episode_number": 2,
+						"season_number": 4,
+						"name": "See No Ed",
+						"air_date": "2002-09-27",
+						"id": 34530
+					},
+					{
+						"episode_number": 3,
+						"season_number": 4,
+						"name": "Is There an Ed in the House?",
+						"air_date": "2002-11-01",
+						"id": 34528
+					},
+					{
+						"episode_number": 4,
+						"season_number": 4,
+						"name": "An Ed is Born",
+						"air_date": "2002-11-01",
+						"id": 34533
+					},
+					{
+						"episode_number": 5,
+						"season_number": 4,
+						"name": "One Size Fits Ed",
+						"air_date": "2002-11-15",
+						"id": 34529
+					},
+					{
+						"episode_number": 6,
+						"season_number": 4,
+						"name": "Pain in the Ed",
+						"air_date": "2002-11-15",
+						"id": 34532
+					},
+					{
+						"episode_number": 7,
+						"season_number": 4,
+						"name": "Ed Overboard",
+						"air_date": "2003-08-24",
+						"id": 34509
+					},
+					{
+						"episode_number": 8,
+						"season_number": 4,
+						"name": "One of Those Eds",
+						"air_date": "2003-08-24",
+						"id": 34510
+					},
+					{
+						"episode_number": 9,
+						"season_number": 4,
+						"name": "They Call Him Mr. Ed",
+						"air_date": "2003-11-10",
+						"id": 34511
+					},
+					{
+						"episode_number": 10,
+						"season_number": 4,
+						"name": "For the Ed, by the Ed",
+						"air_date": "2003-11-10",
+						"id": 34512
+					},
+					{
+						"episode_number": 11,
+						"season_number": 4,
+						"name": "Little Ed Blue",
+						"air_date": "2003-11-17",
+						"id": 34513
+					},
+					{
+						"episode_number": 12,
+						"season_number": 4,
+						"name": "A Twist of Ed",
+						"air_date": "2003-11-17",
+						"id": 34514
+					},
+					{
+						"episode_number": 13,
+						"season_number": 4,
+						"name": "Your Ed Here",
+						"air_date": "2004-01-23",
+						"id": 34515
+					},
+					{
+						"episode_number": 14,
+						"season_number": 4,
+						"name": "The Good Ol' Ed",
+						"air_date": "2004-01-23",
+						"id": 34516
+					},
+					{
+						"episode_number": 15,
+						"season_number": 4,
+						"name": "Thick as an Ed",
+						"air_date": "2004-01-30",
+						"id": 34517
+					},
+					{
+						"episode_number": 16,
+						"season_number": 4,
+						"name": "Sorry, Wrong Ed",
+						"air_date": "2004-01-30",
+						"id": 34518
+					},
+					{
+						"episode_number": 17,
+						"season_number": 4,
+						"name": "Robbin' Ed",
+						"air_date": "2004-02-06",
+						"id": 34519
+					},
+					{
+						"episode_number": 18,
+						"season_number": 4,
+						"name": "A Case of Ed",
+						"air_date": "2004-02-06",
+						"id": 34520
+					},
+					{
+						"episode_number": 19,
+						"season_number": 4,
+						"name": "Run for your Ed",
+						"air_date": "2004-02-13",
+						"id": 34521
+					},
+					{
+						"episode_number": 20,
+						"season_number": 4,
+						"name": "Hand Me Down Ed",
+						"air_date": "2004-02-13",
+						"id": 34522
+					},
+					{
+						"episode_number": 21,
+						"season_number": 4,
+						"name": "Stiff Upper Ed",
+						"air_date": "2004-02-20",
+						"id": 34523
+					},
+					{
+						"episode_number": 22,
+						"season_number": 4,
+						"name": "Here's Mud in Your Ed",
+						"air_date": "2004-02-20",
+						"id": 34524
+					},
+					{
+						"episode_number": 23,
+						"season_number": 4,
+						"name": "Stuck in Ed",
+						"air_date": "2004-02-27",
+						"id": 34525
+					},
+					{
+						"episode_number": 24,
+						"season_number": 4,
+						"name": "Postcards from the Ed",
+						"air_date": "2004-02-27",
+						"id": 34526
+					},
+					{
+						"episode_number": 25,
+						"season_number": 4,
+						"name": "Take This Ed and Shove It",
+						"air_date": "2004-11-05",
+						"id": 34527
+					}
+				]
+			},
+			"606/5": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 5,
+						"name": "Mission Ed-Possible",
+						"air_date": "2005-11-04",
+						"id": 34536
+					},
+					{
+						"episode_number": 2,
+						"season_number": 5,
+						"name": "Every Which Way But Ed",
+						"air_date": "2005-11-04",
+						"id": 34537
+					},
+					{
+						"episode_number": 3,
+						"season_number": 5,
+						"name": "Boom Boom Out Goes the Ed",
+						"air_date": "2005-11-11",
+						"id": 34538
+					},
+					{
+						"episode_number": 4,
+						"season_number": 5,
+						"name": "Cleanliness Is Next to Edness",
+						"air_date": "2005-11-11",
+						"id": 34539
+					},
+					{
+						"episode_number": 5,
+						"season_number": 5,
+						"name": "Out with the Old, In with the Ed",
+						"air_date": "2005-11-18",
+						"id": 34540
+					},
+					{
+						"episode_number": 6,
+						"season_number": 5,
+						"name": "I Am Curious Ed",
+						"air_date": "2005-11-25",
+						"id": 34541
+					},
+					{
+						"episode_number": 7,
+						"season_number": 5,
+						"name": "No Speak Da Ed",
+						"air_date": "2005-11-25",
+						"id": 34542
+					},
+					{
+						"episode_number": 8,
+						"season_number": 5,
+						"name": "Cool-Hand Ed",
+						"air_date": "2006-03-31",
+						"id": 34543
+					},
+					{
+						"episode_number": 9,
+						"season_number": 5,
+						"name": "Too Smart for His Own Ed",
+						"air_date": "2006-03-31",
+						"id": 34544
+					},
+					{
+						"episode_number": 10,
+						"season_number": 5,
+						"name": "Who's Minding the Ed?",
+						"air_date": "2006-06-28",
+						"id": 34545
+					},
+					{
+						"episode_number": 11,
+						"season_number": 5,
+						"name": "Pick an Ed",
+						"air_date": "2006-06-28",
+						"id": 34546
+					},
+					{
+						"episode_number": 12,
+						"season_number": 5,
+						"name": "Truth or Ed",
+						"air_date": "2006-07-03",
+						"id": 34547
+					},
+					{
+						"episode_number": 13,
+						"season_number": 5,
+						"name": "This Won't Hurt an Ed",
+						"air_date": "2006-07-03",
+						"id": 34548
+					},
+					{
+						"episode_number": 14,
+						"season_number": 5,
+						"name": "Tinker Ed",
+						"air_date": "2006-08-14",
+						"id": 34550
+					},
+					{
+						"episode_number": 15,
+						"season_number": 5,
+						"name": "The Good, the Bad and the Ed",
+						"air_date": "2006-08-14",
+						"id": 34549
+					},
+					{
+						"episode_number": 16,
+						"season_number": 5,
+						"name": "Tight End Ed",
+						"air_date": "2006-08-28",
+						"id": 34551
+					},
+					{
+						"episode_number": 17,
+						"season_number": 5,
+						"name": "'Tween a Rock and an Ed Place",
+						"air_date": "2006-08-28",
+						"id": 34552
+					},
+					{
+						"episode_number": 18,
+						"season_number": 5,
+						"name": "All Eds Are Off",
+						"air_date": "2007-04-13",
+						"id": 34557
+					},
+					{
+						"episode_number": 19,
+						"season_number": 5,
+						"name": "Smile for the Ed",
+						"air_date": "2007-04-13",
+						"id": 34554
+					},
+					{
+						"episode_number": 20,
+						"season_number": 5,
+						"name": "Run Ed Run",
+						"air_date": "2007-04-20",
+						"id": 34556
+					},
+					{
+						"episode_number": 21,
+						"season_number": 5,
+						"name": "A Town Called Ed",
+						"air_date": "2007-04-20",
+						"id": 34555
+					},
+					{
+						"episode_number": 22,
+						"season_number": 5,
+						"name": "A Fistful of Ed",
+						"air_date": "2007-04-28",
+						"id": 34553
+					}
+				]
+			},
+			"606/6": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 6,
+						"name": "May I Have This Ed?",
+						"air_date": "2008-06-29",
+						"id": 34559
+					},
+					{
+						"episode_number": 2,
+						"season_number": 6,
+						"name": "Look Before You Ed",
+						"air_date": "2008-06-29",
+						"id": 34558
+					}
+				]
+			},
+			"116727/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Odd Taxi Picture Drama",
+						"air_date": "2022-03-30",
+						"id": 5321087
+					}
+				]
+			},
+			"116727/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "The Eccentric Driver",
+						"air_date": "2021-04-06",
+						"id": 2642098
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "How to Spend a Long Night",
+						"air_date": "2021-04-13",
+						"id": 2853371
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Beware of Borrowed Plumes",
+						"air_date": "2021-04-20",
+						"id": 2866608
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Tanaka's Revolution",
+						"air_date": "2021-04-27",
+						"id": 2866609
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Don't Call Me an Idol",
+						"air_date": "2021-05-04",
+						"id": 2870916
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Let Me Hear You Say, \"What the Hell?\"",
+						"air_date": "2021-05-11",
+						"id": 2870917
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Trick or Treat",
+						"air_date": "2021-05-18",
+						"id": 2870918
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Bless You",
+						"air_date": "2021-05-25",
+						"id": 2870919
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "The Hero's Melancholy",
+						"air_date": "2021-06-01",
+						"id": 2870920
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "We Have No Tomorrow",
+						"air_date": "2021-06-08",
+						"id": 2870921
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "If We Could Go Back to That Day",
+						"air_date": "2021-06-15",
+						"id": 2870922
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Not Enough",
+						"air_date": "2021-06-22",
+						"id": 2870924
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Where To?",
+						"air_date": "2021-06-29",
+						"id": 2870926
+					}
+				]
+			},
+			"93693/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Part One: Submitted for Approval",
+						"air_date": "2019-10-11",
+						"id": 1931490
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Part Two: Opening Night",
+						"air_date": "2019-10-18",
+						"id": 1931491
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Part Three: Destroy All Tophats",
+						"air_date": "2019-10-25",
+						"id": 1931492
+					}
+				]
+			},
+			"93693/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "The Tale of the Haunted Woods",
+						"air_date": "2021-02-12",
+						"id": 2668073
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "The Tale of the Night Frights",
+						"air_date": "2021-02-19",
+						"id": 2668074
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "The Tale of the Phantom Light",
+						"air_date": "2021-02-26",
+						"id": 2668075
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "The Tale of the Danse Macabre",
+						"air_date": "2021-03-05",
+						"id": 2668076
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "The Tale of the Midnight Magic",
+						"air_date": "2021-03-12",
+						"id": 2668077
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "The Tale of the Darkhouse",
+						"air_date": "2021-03-19",
+						"id": 2668078
+					}
+				]
+			},
+			"93693/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "The Tale of Room 13",
+						"air_date": "2022-07-30",
+						"id": 3802062
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "The Tale of the Teen Spirit",
+						"air_date": "2022-07-30",
+						"id": 3807313
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "The Tale of the Looking Glass",
+						"air_date": "2022-08-06",
+						"id": 3847811
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "The Tale of the Other Side",
+						"air_date": "2022-08-13",
+						"id": 3847813
+					}
+				]
+			}
+		},
+		"episodeGroups": {
+			"93693": {
+				"id": 93693,
+				"results": []
+			},
+			"116727": {
+				"id": 116727,
+				"results": [
+					{
+						"id": "68f0b0ba97a06ff5c7e2b95c",
+						"name": "特别篇",
+						"type": 2,
+						"network": null,
+						"description": "",
+						"group_count": 0,
+						"episode_count": 0
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt0103352": null,
+			"tt1701766": "tt0184111",
+			"tt14134550": null
+		},
+		"seasonEpisodes": {
+			"tt14134550/0": {},
+			"tt10473306/1": {
+				"1": "tt10682104",
+				"2": "tt10682108",
+				"3": "tt10682110"
+			},
+			"tt10473306/4": {
+				"1": "tt26761232"
+			},
+			"tt10473306/5": {},
+			"tt10473306/6": {},
+			"tt10473306/7": {},
+			"tt10473306/2": {
+				"1": "tt13405832",
+				"2": "tt13728626",
+				"3": "tt13706796",
+				"4": "tt13706800",
+				"5": "tt13681806",
+				"6": "tt13681810"
+			},
+			"tt10473306/3": {
+				"1": "tt14150188",
+				"2": "tt18079912",
+				"3": "tt18224708",
+				"4": "tt18926402"
+			}
+		},
+		"searchTv": {
+			"Are You Afraid Of The Dark": {
+				"results": [
+					{
+						"id": 2913,
+						"name": "Are You Afraid of the Dark?",
+						"original_name": "Are You Afraid of the Dark?",
+						"first_air_date": "1992-08-15"
+					},
+					{
+						"id": 93693,
+						"name": "Are You Afraid of the Dark?",
+						"original_name": "Are You Afraid of the Dark?",
+						"first_air_date": "2019-10-11"
+					}
+				]
+			}
+		},
+		"tvdbEpisodes": {
+			"77466": {
+				"data": {
+					"episodes": [
+						{
+							"id": 416548,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "Ed, Edd n Eddy's Jingle Jingle Jangle",
+							"aired": "2004-12-03",
+							"runtime": 25
+						},
+						{
+							"id": 416549,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": "Ed, Edd n Eddy's Hanky Panky Hullabaloo",
+							"aired": "2005-02-11",
+							"runtime": 25
+						},
+						{
+							"id": 416550,
+							"seasonNumber": 0,
+							"number": 3,
+							"name": "Ed, Edd n Eddy's Boo Haw Haw",
+							"aired": "2005-10-28",
+							"runtime": 25
+						},
+						{
+							"id": 3119881,
+							"seasonNumber": 0,
+							"number": 5,
+							"name": "The Eds Are Coming, The Eds Are Coming",
+							"aired": "2007-05-11",
+							"runtime": 25
+						},
+						{
+							"id": 3198601,
+							"seasonNumber": 0,
+							"number": 6,
+							"name": "Ed, Edd n Eddy's Big Picture Show",
+							"aired": "2009-11-08",
+							"runtime": 90
+						},
+						{
+							"id": 1562821,
+							"seasonNumber": 0,
+							"number": 7,
+							"name": "My Best Friend Plank",
+							"aired": "2002-07-06",
+							"runtime": 2
+						},
+						{
+							"id": 8939078,
+							"seasonNumber": 0,
+							"number": 8,
+							"name": "The Incredible Shrinking Day",
+							"aired": "2006-07-02",
+							"runtime": 3
+						},
+						{
+							"id": 7885709,
+							"seasonNumber": 0,
+							"number": 10,
+							"name": "The Grim Adventures of the KND",
+							"aired": "2007-11-11",
+							"runtime": 30
+						},
+						{
+							"id": 9450261,
+							"seasonNumber": 0,
+							"number": 11,
+							"name": "How to Make an Ed, Edd n Eddy Cartoon!",
+							"aired": "2022-10-18",
+							"runtime": 3
+						},
+						{
+							"id": 9450263,
+							"seasonNumber": 0,
+							"number": 12,
+							"name": "Interview with the Creator",
+							"aired": "2022-10-18",
+							"runtime": 2
+						},
+						{
+							"id": 9450265,
+							"seasonNumber": 0,
+							"number": 13,
+							"name": "How to Draw Eddy",
+							"aired": "2022-10-18",
+							"runtime": 4
+						},
+						{
+							"id": 10111274,
+							"seasonNumber": 0,
+							"number": 14,
+							"name": "Behind The Eds with Danny Antonucci",
+							"aired": "2022-10-18",
+							"runtime": 10
+						},
+						{
+							"id": 245315,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "The Ed-Touchables",
+							"aired": "1999-01-04",
+							"runtime": 11
+						},
+						{
+							"id": 245316,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "Nagged to Ed",
+							"aired": "1999-01-04",
+							"runtime": 11
+						},
+						{
+							"id": 245317,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "Pop Goes the Ed",
+							"aired": "1999-01-11",
+							"runtime": 11
+						},
+						{
+							"id": 245318,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "Over Your Ed",
+							"aired": "1999-01-11",
+							"runtime": 11
+						},
+						{
+							"id": 245320,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "Sir Ed-a-Lot",
+							"aired": "1999-01-18",
+							"runtime": 11
+						},
+						{
+							"id": 245319,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "A Pinch To Grow an Ed",
+							"aired": "1999-01-18",
+							"runtime": 11
+						},
+						{
+							"id": 245327,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "Dawn of the Eds",
+							"aired": "1999-01-25",
+							"runtime": 11
+						},
+						{
+							"id": 245328,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "Virt-Ed-Go",
+							"aired": "1999-01-25",
+							"runtime": 11
+						},
+						{
+							"id": 245322,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "Read All About Ed",
+							"aired": "1999-02-01",
+							"runtime": 11
+						},
+						{
+							"id": 245321,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "Quick Shot Ed",
+							"aired": "1999-02-01",
+							"runtime": 11
+						},
+						{
+							"id": 245323,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "An Ed Too Many",
+							"aired": "1999-02-08",
+							"runtime": 11
+						},
+						{
+							"id": 245324,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "Ed-n-Seek",
+							"aired": "1999-02-08",
+							"runtime": 11
+						},
+						{
+							"id": 245325,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "Look into My Eds",
+							"aired": "1999-03-01",
+							"runtime": 11
+						},
+						{
+							"id": 245326,
+							"seasonNumber": 1,
+							"number": 14,
+							"name": "Tag Yer Ed",
+							"aired": "1999-03-01",
+							"runtime": 11
+						},
+						{
+							"id": 245331,
+							"seasonNumber": 1,
+							"number": 15,
+							"name": "Fool on the Ed",
+							"aired": "1999-03-08",
+							"runtime": 11
+						},
+						{
+							"id": 245332,
+							"seasonNumber": 1,
+							"number": 16,
+							"name": "A Boy and His Ed",
+							"aired": "1999-03-08",
+							"runtime": 11
+						},
+						{
+							"id": 245334,
+							"seasonNumber": 1,
+							"number": 17,
+							"name": "It's Way Ed",
+							"aired": "1999-03-15",
+							"runtime": 11
+						},
+						{
+							"id": 245333,
+							"seasonNumber": 1,
+							"number": 18,
+							"name": "Laugh Ed Laugh",
+							"aired": "1999-03-15",
+							"runtime": 11
+						},
+						{
+							"id": 245337,
+							"seasonNumber": 1,
+							"number": 19,
+							"name": "A Glass of Warm Ed",
+							"aired": "1999-04-12",
+							"runtime": 11
+						},
+						{
+							"id": 245338,
+							"seasonNumber": 1,
+							"number": 20,
+							"name": "Flea-Bitten Ed",
+							"aired": "1999-04-12",
+							"runtime": 11
+						},
+						{
+							"id": 245330,
+							"seasonNumber": 1,
+							"number": 21,
+							"name": "Who, What, Where, Ed!",
+							"aired": "1999-04-19",
+							"runtime": 11
+						},
+						{
+							"id": 245329,
+							"seasonNumber": 1,
+							"number": 22,
+							"name": "Keeping Up with the Eds",
+							"aired": "1999-04-19",
+							"runtime": 11
+						},
+						{
+							"id": 245335,
+							"seasonNumber": 1,
+							"number": 23,
+							"name": "Eds-Aggerate",
+							"aired": "1999-04-26",
+							"runtime": 11
+						},
+						{
+							"id": 245336,
+							"seasonNumber": 1,
+							"number": 24,
+							"name": "Oath to an Ed",
+							"aired": "1999-04-26",
+							"runtime": 11
+						},
+						{
+							"id": 245339,
+							"seasonNumber": 1,
+							"number": 25,
+							"name": "Button Yer Ed",
+							"aired": "1999-06-11",
+							"runtime": 11
+						},
+						{
+							"id": 245340,
+							"seasonNumber": 1,
+							"number": 26,
+							"name": "Avast Ye Eds",
+							"aired": "1999-06-11",
+							"runtime": 11
+						},
+						{
+							"id": 245345,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "Know-It-All Ed",
+							"aired": "1999-11-26",
+							"runtime": 11
+						},
+						{
+							"id": 245346,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "Dear Ed",
+							"aired": "1999-11-26",
+							"runtime": 11
+						},
+						{
+							"id": 245343,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "Knock Knock, Who's Ed?",
+							"aired": "2000-02-11",
+							"runtime": 11
+						},
+						{
+							"id": 245344,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "One + One = Ed",
+							"aired": "2000-02-11",
+							"runtime": 11
+						},
+						{
+							"id": 245341,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "Eeny, Meeny, Miney, Ed",
+							"aired": "2000-03-03",
+							"runtime": 11
+						},
+						{
+							"id": 245342,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "Ready, Set… Ed!",
+							"aired": "2000-03-03",
+							"runtime": 11
+						},
+						{
+							"id": 245347,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "Hands Across Ed",
+							"aired": "2000-03-24",
+							"runtime": 11
+						},
+						{
+							"id": 245348,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "Floss Your Ed",
+							"aired": "2000-03-24",
+							"runtime": 11
+						},
+						{
+							"id": 245349,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "In Like Ed",
+							"aired": "2000-04-07",
+							"runtime": 11
+						},
+						{
+							"id": 245350,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "Who Let the Ed In?",
+							"aired": "2000-04-07",
+							"runtime": 11
+						},
+						{
+							"id": 245352,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "Home-Cooked Eds",
+							"aired": "2000-05-12",
+							"runtime": 11
+						},
+						{
+							"id": 245351,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "Rambling Ed",
+							"aired": "2000-05-12",
+							"runtime": 11
+						},
+						{
+							"id": 245353,
+							"seasonNumber": 2,
+							"number": 13,
+							"name": "To Sir with Ed",
+							"aired": "2000-06-23",
+							"runtime": 11
+						},
+						{
+							"id": 245354,
+							"seasonNumber": 2,
+							"number": 14,
+							"name": "Key to My Ed",
+							"aired": "2000-06-23",
+							"runtime": 11
+						},
+						{
+							"id": 245357,
+							"seasonNumber": 2,
+							"number": 15,
+							"name": "Urban Ed",
+							"aired": "2000-07-21",
+							"runtime": 11
+						},
+						{
+							"id": 245358,
+							"seasonNumber": 2,
+							"number": 16,
+							"name": "Stop, Look, and Ed",
+							"aired": "2000-07-21",
+							"runtime": 11
+						},
+						{
+							"id": 245355,
+							"seasonNumber": 2,
+							"number": 17,
+							"name": "Honor Thy Ed",
+							"aired": "2000-08-04",
+							"runtime": 11
+						},
+						{
+							"id": 245356,
+							"seasonNumber": 2,
+							"number": 18,
+							"name": "Scrambled Ed",
+							"aired": "2000-08-04",
+							"runtime": 11
+						},
+						{
+							"id": 245359,
+							"seasonNumber": 2,
+							"number": 19,
+							"name": "Rent-a-Ed",
+							"aired": "2000-08-18",
+							"runtime": 11
+						},
+						{
+							"id": 245360,
+							"seasonNumber": 2,
+							"number": 20,
+							"name": "Shoo Ed",
+							"aired": "2000-08-18",
+							"runtime": 11
+						},
+						{
+							"id": 245361,
+							"seasonNumber": 2,
+							"number": 21,
+							"name": "Ed in a Halfshell",
+							"aired": "2000-09-08",
+							"runtime": 11
+						},
+						{
+							"id": 245362,
+							"seasonNumber": 2,
+							"number": 22,
+							"name": "Mirror, Mirror, on the Ed",
+							"aired": "2000-09-08",
+							"runtime": 11
+						},
+						{
+							"id": 245363,
+							"seasonNumber": 2,
+							"number": 23,
+							"name": "Hot-Buttered Ed",
+							"aired": "2000-10-27",
+							"runtime": 11
+						},
+						{
+							"id": 245364,
+							"seasonNumber": 2,
+							"number": 24,
+							"name": "High-Heeled Ed",
+							"aired": "2000-10-27",
+							"runtime": 11
+						},
+						{
+							"id": 245365,
+							"seasonNumber": 2,
+							"number": 25,
+							"name": "Fa-La-La-La-Ed",
+							"aired": "2000-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 245366,
+							"seasonNumber": 2,
+							"number": 26,
+							"name": "Cry Ed",
+							"aired": "2000-12-22",
+							"runtime": 11
+						},
+						{
+							"id": 245367,
+							"seasonNumber": 3,
+							"number": 1,
+							"name": "Wish You Were Ed",
+							"aired": "2001-04-06",
+							"runtime": 11
+						},
+						{
+							"id": 245368,
+							"seasonNumber": 3,
+							"number": 2,
+							"name": "Momma's Little Ed",
+							"aired": "2001-04-06",
+							"runtime": 11
+						},
+						{
+							"id": 245369,
+							"seasonNumber": 3,
+							"number": 3,
+							"name": "Once Upon an Ed",
+							"aired": "2001-05-25",
+							"runtime": 11
+						},
+						{
+							"id": 245370,
+							"seasonNumber": 3,
+							"number": 4,
+							"name": "For Your Ed Only",
+							"aired": "2001-05-25",
+							"runtime": 11
+						},
+						{
+							"id": 245371,
+							"seasonNumber": 3,
+							"number": 5,
+							"name": "It Came from Outer Ed",
+							"aired": "2001-09-19",
+							"runtime": 11
+						},
+						{
+							"id": 245372,
+							"seasonNumber": 3,
+							"number": 6,
+							"name": "3 Squares and an Ed",
+							"aired": "2001-09-19",
+							"runtime": 11
+						},
+						{
+							"id": 245373,
+							"seasonNumber": 3,
+							"number": 7,
+							"name": "Dueling Eds",
+							"aired": "2001-09-20",
+							"runtime": 11
+						},
+						{
+							"id": 245374,
+							"seasonNumber": 3,
+							"number": 8,
+							"name": "Dim Lit Ed",
+							"aired": "2001-09-20",
+							"runtime": 11
+						},
+						{
+							"id": 245375,
+							"seasonNumber": 3,
+							"number": 9,
+							"name": "Will Work for Ed",
+							"aired": "2002-01-04",
+							"runtime": 11
+						},
+						{
+							"id": 245376,
+							"seasonNumber": 3,
+							"number": 10,
+							"name": "Ed, Ed and Away",
+							"aired": "2002-01-04",
+							"runtime": 11
+						},
+						{
+							"id": 245393,
+							"seasonNumber": 3,
+							"number": 11,
+							"name": "X Marks the Ed",
+							"aired": "2002-01-25",
+							"runtime": 11
+						},
+						{
+							"id": 245394,
+							"seasonNumber": 3,
+							"number": 12,
+							"name": "From Here to Ed",
+							"aired": "2002-01-25",
+							"runtime": 11
+						},
+						{
+							"id": 245377,
+							"seasonNumber": 3,
+							"number": 13,
+							"name": "Boys Will Be Eds",
+							"aired": "2002-02-15",
+							"runtime": 11
+						},
+						{
+							"id": 245378,
+							"seasonNumber": 3,
+							"number": 14,
+							"name": "Ed or Tails",
+							"aired": "2002-02-15",
+							"runtime": 11
+						},
+						{
+							"id": 245380,
+							"seasonNumber": 3,
+							"number": 15,
+							"name": "Gimme, Gimme Never Ed",
+							"aired": "2002-03-08",
+							"runtime": 11
+						},
+						{
+							"id": 245379,
+							"seasonNumber": 3,
+							"number": 16,
+							"name": "My Fair Ed",
+							"aired": "2002-03-08",
+							"runtime": 11
+						},
+						{
+							"id": 245395,
+							"seasonNumber": 3,
+							"number": 17,
+							"name": "Rock-a-Bye Ed",
+							"aired": "2002-03-22",
+							"runtime": 11
+						},
+						{
+							"id": 245396,
+							"seasonNumber": 3,
+							"number": 18,
+							"name": "O-Ed Eleven",
+							"aired": "2002-03-22",
+							"runtime": 11
+						},
+						{
+							"id": 245381,
+							"seasonNumber": 3,
+							"number": 19,
+							"name": "The Luck of the Ed",
+							"aired": "2002-06-21",
+							"runtime": 11
+						},
+						{
+							"id": 245382,
+							"seasonNumber": 3,
+							"number": 20,
+							"name": "Ed… Pass It On…",
+							"aired": "2002-06-21",
+							"runtime": 11
+						},
+						{
+							"id": 245383,
+							"seasonNumber": 3,
+							"number": 21,
+							"name": "Brother, Can You Spare an Ed?",
+							"aired": "2002-06-28",
+							"runtime": 11
+						},
+						{
+							"id": 245384,
+							"seasonNumber": 3,
+							"number": 22,
+							"name": "The Day the Ed Stood Still",
+							"aired": "2002-06-28",
+							"runtime": 11
+						},
+						{
+							"id": 245385,
+							"seasonNumber": 3,
+							"number": 23,
+							"name": "If It Smells Like an Ed",
+							"aired": "2002-07-05",
+							"runtime": 22
+						},
+						{
+							"id": 245386,
+							"seasonNumber": 3,
+							"number": 24,
+							"name": "Don't Rain on My Ed",
+							"aired": "2002-07-12",
+							"runtime": 11
+						},
+						{
+							"id": 245387,
+							"seasonNumber": 3,
+							"number": 25,
+							"name": "Once Bitten, Twice Ed",
+							"aired": "2002-07-12",
+							"runtime": 11
+						},
+						{
+							"id": 2052461,
+							"seasonNumber": 4,
+							"number": 1,
+							"name": "An Ed in the Bush",
+							"aired": "2002-09-27",
+							"runtime": 11
+						},
+						{
+							"id": 424089,
+							"seasonNumber": 4,
+							"number": 2,
+							"name": "See No Ed",
+							"aired": "2002-09-27",
+							"runtime": 11
+						},
+						{
+							"id": 424090,
+							"seasonNumber": 4,
+							"number": 3,
+							"name": "Is There an Ed in the House?",
+							"aired": "2002-11-01",
+							"runtime": 11
+						},
+						{
+							"id": 424091,
+							"seasonNumber": 4,
+							"number": 4,
+							"name": "An Ed Is Born",
+							"aired": "2002-11-01",
+							"runtime": 11
+						},
+						{
+							"id": 424092,
+							"seasonNumber": 4,
+							"number": 5,
+							"name": "One Size Fits Ed",
+							"aired": "2002-11-15",
+							"runtime": 11
+						},
+						{
+							"id": 424093,
+							"seasonNumber": 4,
+							"number": 6,
+							"name": "Pain in the Ed",
+							"aired": "2002-11-15",
+							"runtime": 11
+						},
+						{
+							"id": 245399,
+							"seasonNumber": 4,
+							"number": 7,
+							"name": "Ed Overboard",
+							"aired": "2003-08-24",
+							"runtime": 11
+						},
+						{
+							"id": 245400,
+							"seasonNumber": 4,
+							"number": 8,
+							"name": "One of Those Eds",
+							"aired": "2003-08-24",
+							"runtime": 11
+						},
+						{
+							"id": 245401,
+							"seasonNumber": 4,
+							"number": 9,
+							"name": "They Call Him Mr. Ed",
+							"aired": "2003-11-10",
+							"runtime": 11
+						},
+						{
+							"id": 245402,
+							"seasonNumber": 4,
+							"number": 10,
+							"name": "For the Ed, by the Ed",
+							"aired": "2003-11-10",
+							"runtime": 11
+						},
+						{
+							"id": 245403,
+							"seasonNumber": 4,
+							"number": 11,
+							"name": "Little Ed Blue",
+							"aired": "2003-11-17",
+							"runtime": 11
+						},
+						{
+							"id": 245404,
+							"seasonNumber": 4,
+							"number": 12,
+							"name": "A Twist of Ed",
+							"aired": "2003-11-17",
+							"runtime": 11
+						},
+						{
+							"id": 245406,
+							"seasonNumber": 4,
+							"number": 13,
+							"name": "Your Ed Here",
+							"aired": "2004-01-23",
+							"runtime": 11
+						},
+						{
+							"id": 245405,
+							"seasonNumber": 4,
+							"number": 14,
+							"name": "The Good Ol' Ed",
+							"aired": "2004-01-23",
+							"runtime": 11
+						},
+						{
+							"id": 245407,
+							"seasonNumber": 4,
+							"number": 15,
+							"name": "Thick as an Ed",
+							"aired": "2004-01-30",
+							"runtime": 11
+						},
+						{
+							"id": 245408,
+							"seasonNumber": 4,
+							"number": 16,
+							"name": "Sorry, Wrong Ed",
+							"aired": "2004-01-30",
+							"runtime": 11
+						},
+						{
+							"id": 245409,
+							"seasonNumber": 4,
+							"number": 17,
+							"name": "Robbin' Ed",
+							"aired": "2004-02-06",
+							"runtime": 11
+						},
+						{
+							"id": 245410,
+							"seasonNumber": 4,
+							"number": 18,
+							"name": "A Case of Ed",
+							"aired": "2004-02-06",
+							"runtime": 11
+						},
+						{
+							"id": 245412,
+							"seasonNumber": 4,
+							"number": 19,
+							"name": "Run for Your Ed",
+							"aired": "2004-02-13",
+							"runtime": 11
+						},
+						{
+							"id": 245411,
+							"seasonNumber": 4,
+							"number": 20,
+							"name": "Hand Me Down Ed",
+							"aired": "2004-02-13",
+							"runtime": 11
+						},
+						{
+							"id": 245413,
+							"seasonNumber": 4,
+							"number": 21,
+							"name": "Stiff Upper Ed",
+							"aired": "2004-02-20",
+							"runtime": 11
+						},
+						{
+							"id": 245414,
+							"seasonNumber": 4,
+							"number": 22,
+							"name": "Here's Mud in Your Ed",
+							"aired": "2004-02-20",
+							"runtime": 11
+						},
+						{
+							"id": 245415,
+							"seasonNumber": 4,
+							"number": 23,
+							"name": "Stuck in Ed",
+							"aired": "2004-02-27",
+							"runtime": 11
+						},
+						{
+							"id": 245416,
+							"seasonNumber": 4,
+							"number": 24,
+							"name": "Postcards from the Ed",
+							"aired": "2004-02-27",
+							"runtime": 11
+						},
+						{
+							"id": 245417,
+							"seasonNumber": 4,
+							"number": 25,
+							"name": "Take This Ed and Shove It",
+							"aired": "2004-11-05",
+							"runtime": 22
+						},
+						{
+							"id": 245419,
+							"seasonNumber": 5,
+							"number": 1,
+							"name": "Mission Ed-Possible",
+							"aired": "2005-11-04",
+							"runtime": 11
+						},
+						{
+							"id": 245421,
+							"seasonNumber": 5,
+							"number": 2,
+							"name": "Every Which Way But Ed",
+							"aired": "2005-11-04",
+							"runtime": 11
+						},
+						{
+							"id": 245423,
+							"seasonNumber": 5,
+							"number": 3,
+							"name": "Boom Boom Out Goes the Ed",
+							"aired": "2005-11-11",
+							"runtime": 11
+						},
+						{
+							"id": 245424,
+							"seasonNumber": 5,
+							"number": 4,
+							"name": "Cleanliness Is Next to Edness",
+							"aired": "2005-11-11",
+							"runtime": 11
+						},
+						{
+							"id": 245425,
+							"seasonNumber": 5,
+							"number": 5,
+							"name": "Out with the Old, in with the Ed",
+							"aired": "2005-11-18",
+							"runtime": 22
+						},
+						{
+							"id": 424041,
+							"seasonNumber": 5,
+							"number": 6,
+							"name": "I Am Curious Ed",
+							"aired": "2005-11-25",
+							"runtime": 11
+						},
+						{
+							"id": 424042,
+							"seasonNumber": 5,
+							"number": 7,
+							"name": "No Speak Da Ed",
+							"aired": "2005-11-25",
+							"runtime": 11
+						},
+						{
+							"id": 424043,
+							"seasonNumber": 5,
+							"number": 8,
+							"name": "Cool Hand Ed",
+							"aired": "2006-03-31",
+							"runtime": 11
+						},
+						{
+							"id": 424044,
+							"seasonNumber": 5,
+							"number": 9,
+							"name": "Too Smart for His Own Ed",
+							"aired": "2006-03-31",
+							"runtime": 11
+						},
+						{
+							"id": 424045,
+							"seasonNumber": 5,
+							"number": 10,
+							"name": "Who's Minding the Ed?",
+							"aired": "2006-06-28",
+							"runtime": 11
+						},
+						{
+							"id": 424046,
+							"seasonNumber": 5,
+							"number": 11,
+							"name": "Pick an Ed",
+							"aired": "2006-06-28",
+							"runtime": 11
+						},
+						{
+							"id": 424047,
+							"seasonNumber": 5,
+							"number": 12,
+							"name": "Truth or Ed",
+							"aired": "2006-07-03",
+							"runtime": 11
+						},
+						{
+							"id": 424048,
+							"seasonNumber": 5,
+							"number": 13,
+							"name": "This Won't Hurt an Ed",
+							"aired": "2006-07-03",
+							"runtime": 11
+						},
+						{
+							"id": 424049,
+							"seasonNumber": 5,
+							"number": 14,
+							"name": "Tinker Ed",
+							"aired": "2006-08-14",
+							"runtime": 11
+						},
+						{
+							"id": 424050,
+							"seasonNumber": 5,
+							"number": 15,
+							"name": "The Good, the Bad, and the Ed",
+							"aired": "2006-08-14",
+							"runtime": 11
+						},
+						{
+							"id": 424051,
+							"seasonNumber": 5,
+							"number": 16,
+							"name": "Tight End Ed",
+							"aired": "2006-08-28",
+							"runtime": 11
+						},
+						{
+							"id": 424052,
+							"seasonNumber": 5,
+							"number": 17,
+							"name": "'tween a Rock and an Ed Place",
+							"aired": "2006-08-28",
+							"runtime": 11
+						},
+						{
+							"id": 424053,
+							"seasonNumber": 5,
+							"number": 18,
+							"name": "All Eds Are Off",
+							"aired": "2007-04-13",
+							"runtime": 11
+						},
+						{
+							"id": 424054,
+							"seasonNumber": 5,
+							"number": 19,
+							"name": "Smile for the Ed",
+							"aired": "2007-04-13",
+							"runtime": 11
+						},
+						{
+							"id": 424055,
+							"seasonNumber": 5,
+							"number": 20,
+							"name": "Run Ed Run",
+							"aired": "2007-04-20",
+							"runtime": 11
+						},
+						{
+							"id": 424056,
+							"seasonNumber": 5,
+							"number": 21,
+							"name": "A Town Called Ed",
+							"aired": "2007-04-20",
+							"runtime": 11
+						},
+						{
+							"id": 424057,
+							"seasonNumber": 5,
+							"number": 22,
+							"name": "A Fistful of Ed",
+							"aired": "2007-04-28",
+							"runtime": 22
+						},
+						{
+							"id": 1214701,
+							"seasonNumber": 6,
+							"number": 1,
+							"name": "May I Have This Ed?",
+							"aired": "2008-06-29",
+							"runtime": 11
+						},
+						{
+							"id": 1214711,
+							"seasonNumber": 6,
+							"number": 2,
+							"name": "Look Before You Ed",
+							"aired": "2008-06-29",
+							"runtime": 11
+						}
+					]
+				}
+			},
+			"77960": {
+				"data": {
+					"episodes": [
+						{
+							"id": 11615615,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "Pilot",
+							"aired": "1991-10-30",
+							"runtime": 22
+						},
+						{
+							"id": 11660693,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": "“Feel the Fear” Music Video",
+							"aired": "1994-03-22",
+							"runtime": 2
+						},
+						{
+							"id": 11660694,
+							"seasonNumber": 0,
+							"number": 3,
+							"name": "Dr. Vink's Fortune Teller",
+							"aired": "1994-05-31",
+							"runtime": 1
+						},
+						{
+							"id": 11660695,
+							"seasonNumber": 0,
+							"number": 4,
+							"name": "The Tale of Orpheo's Curse",
+							"aired": "1994-11-11",
+							"runtime": 1
+						},
+						{
+							"id": 11660696,
+							"seasonNumber": 0,
+							"number": 5,
+							"name": "Are You Afraid of the Dark?: Tales From The Midnight Society",
+							"aired": "1994-01-01",
+							"runtime": 35
+						},
+						{
+							"id": 11660697,
+							"seasonNumber": 0,
+							"number": 6,
+							"name": "Are You Afraid of the Dark?: More Tales From The Midnight Society",
+							"aired": "1994-01-01",
+							"runtime": 35
+						},
+						{
+							"id": 11660698,
+							"seasonNumber": 0,
+							"number": 7,
+							"name": "The Tale of the Phantom Manor Version 1",
+							"aired": "1994-01-01",
+							"runtime": 36
+						},
+						{
+							"id": 11660699,
+							"seasonNumber": 0,
+							"number": 8,
+							"name": "The Tale of the Phantom Manor Version 2",
+							"aired": "1994-01-01",
+							"runtime": 36
+						},
+						{
+							"id": 11660700,
+							"seasonNumber": 0,
+							"number": 9,
+							"name": "The Tale of the Phantom Manor Version 2",
+							"aired": "1994-01-01",
+							"runtime": 36
+						},
+						{
+							"id": 11660701,
+							"seasonNumber": 0,
+							"number": 10,
+							"name": "The Tale of the Phantom Manor Version 3",
+							"aired": "1994-01-01",
+							"runtime": 36
+						},
+						{
+							"id": 11660702,
+							"seasonNumber": 0,
+							"number": 11,
+							"name": "The Making of “Cutter’s Treasure” ",
+							"aired": "1995-06-13",
+							"runtime": 4
+						},
+						{
+							"id": 12068051,
+							"seasonNumber": 0,
+							"number": 12,
+							"name": "The Tale of Cutter's Treasure (One-Hour Special Version)",
+							"aired": "1995-10-28",
+							"runtime": 55
+						},
+						{
+							"id": 266198,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "The Tale of the Phantom Cab",
+							"aired": "1992-08-15",
+							"runtime": 25
+						},
+						{
+							"id": 266199,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "The Tale of Laughing in the Dark",
+							"aired": "1992-08-22",
+							"runtime": 25
+						},
+						{
+							"id": 266200,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "The Tale of the Lonely Ghost",
+							"aired": "1992-08-29",
+							"runtime": 25
+						},
+						{
+							"id": 266201,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "The Tale of the Twisted Claw",
+							"aired": "1992-09-05",
+							"runtime": 25
+						},
+						{
+							"id": 266202,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "The Tale of the Hungry Hounds",
+							"aired": "1992-09-12",
+							"runtime": 25
+						},
+						{
+							"id": 266203,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "The Tale of the Super Specs",
+							"aired": "1992-09-19",
+							"runtime": 25
+						},
+						{
+							"id": 266204,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "The Tale of the Captured Souls",
+							"aired": "1992-09-26",
+							"runtime": 25
+						},
+						{
+							"id": 266205,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "The Tale of the Nightly Neighbors",
+							"aired": "1992-10-03",
+							"runtime": 25
+						},
+						{
+							"id": 266206,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "The Tale of the Sorcerer's Apprentice",
+							"aired": "1992-10-10",
+							"runtime": 25
+						},
+						{
+							"id": 266207,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "The Tale of Jake and the Leprechaun",
+							"aired": "1992-10-17",
+							"runtime": 25
+						},
+						{
+							"id": 266208,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "The Tale of the Dark Music",
+							"aired": "1992-10-24",
+							"runtime": 25
+						},
+						{
+							"id": 266209,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "The Tale of the Prom Queen",
+							"aired": "1992-11-07",
+							"runtime": 25
+						},
+						{
+							"id": 266210,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "The Tale of the Pinball Wizard",
+							"aired": "1992-11-14",
+							"runtime": 25
+						},
+						{
+							"id": 266211,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "The Tale of the Final Wish",
+							"aired": "1993-06-19",
+							"runtime": 25
+						},
+						{
+							"id": 266212,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "The Tale of the Midnight Madness",
+							"aired": "1993-06-26",
+							"runtime": 25
+						},
+						{
+							"id": 266213,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "The Tale of Locker 22",
+							"aired": "1993-07-03",
+							"runtime": 25
+						},
+						{
+							"id": 266214,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "The Tale of the Thirteenth Floor",
+							"aired": "1993-07-10",
+							"runtime": 25
+						},
+						{
+							"id": 266215,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "The Tale of the Dream Machine",
+							"aired": "1993-07-17",
+							"runtime": 25
+						},
+						{
+							"id": 266216,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "The Tale of the Dark Dragon",
+							"aired": "1993-07-24",
+							"runtime": 25
+						},
+						{
+							"id": 266217,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "The Tale of the Whispering Walls",
+							"aired": "1993-07-31",
+							"runtime": 25
+						},
+						{
+							"id": 266218,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "The Tale of the Frozen Ghost",
+							"aired": "1993-08-14",
+							"runtime": 25
+						},
+						{
+							"id": 266219,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "The Tale of the Full Moon",
+							"aired": "1993-08-21",
+							"runtime": 25
+						},
+						{
+							"id": 266220,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "The Tale of the Shiny Red Bicycle",
+							"aired": "1993-08-28",
+							"runtime": 25
+						},
+						{
+							"id": 266221,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "The Tale of the Magician's Assistant",
+							"aired": "1993-09-11",
+							"runtime": 25
+						},
+						{
+							"id": 266222,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "The Tale of the Hatching",
+							"aired": "1993-09-25",
+							"runtime": 25
+						},
+						{
+							"id": 266223,
+							"seasonNumber": 2,
+							"number": 13,
+							"name": "The Tale of Old Man Corcoran",
+							"aired": "1993-10-02",
+							"runtime": 25
+						},
+						{
+							"id": 266224,
+							"seasonNumber": 3,
+							"number": 1,
+							"name": "The Tale of the Midnight Ride",
+							"aired": "1994-01-08",
+							"runtime": 25
+						},
+						{
+							"id": 266225,
+							"seasonNumber": 3,
+							"number": 2,
+							"name": "The Tale of Apartment 214",
+							"aired": "1994-01-15",
+							"runtime": 25
+						},
+						{
+							"id": 266226,
+							"seasonNumber": 3,
+							"number": 3,
+							"name": "The Tale of Watcher's Woods",
+							"aired": "1994-01-22",
+							"runtime": 25
+						},
+						{
+							"id": 266227,
+							"seasonNumber": 3,
+							"number": 4,
+							"name": "The Tale of the Phone Police",
+							"aired": "1994-01-29",
+							"runtime": 25
+						},
+						{
+							"id": 266228,
+							"seasonNumber": 3,
+							"number": 5,
+							"name": "The Tale of the Dollmaker",
+							"aired": "1994-02-05",
+							"runtime": 25
+						},
+						{
+							"id": 266229,
+							"seasonNumber": 3,
+							"number": 6,
+							"name": "The Tale of the Bookish Babysitter",
+							"aired": "1994-02-12",
+							"runtime": 25
+						},
+						{
+							"id": 266230,
+							"seasonNumber": 3,
+							"number": 7,
+							"name": "The Tale of the Carved Stone",
+							"aired": "1994-02-26",
+							"runtime": 25
+						},
+						{
+							"id": 266231,
+							"seasonNumber": 3,
+							"number": 8,
+							"name": "The Tale of the Guardian's Curse",
+							"aired": "1994-03-05",
+							"runtime": 25
+						},
+						{
+							"id": 266232,
+							"seasonNumber": 3,
+							"number": 9,
+							"name": "The Tale of the Curious Camera",
+							"aired": "1994-03-19",
+							"runtime": 25
+						},
+						{
+							"id": 266233,
+							"seasonNumber": 3,
+							"number": 10,
+							"name": "The Tale of the Dream Girl",
+							"aired": "1994-03-26",
+							"runtime": 25
+						},
+						{
+							"id": 266234,
+							"seasonNumber": 3,
+							"number": 11,
+							"name": "The Tale of the Quicksilver",
+							"aired": "1994-04-02",
+							"runtime": 25
+						},
+						{
+							"id": 266235,
+							"seasonNumber": 3,
+							"number": 12,
+							"name": "The Tale of the Crimson Clown",
+							"aired": "1994-04-09",
+							"runtime": 25
+						},
+						{
+							"id": 266236,
+							"seasonNumber": 3,
+							"number": 13,
+							"name": "The Tale of the Dangerous Soup",
+							"aired": "1994-04-16",
+							"runtime": 25
+						},
+						{
+							"id": 266240,
+							"seasonNumber": 4,
+							"number": 1,
+							"name": "The Tale of the Renegade Virus",
+							"aired": "1994-10-01",
+							"runtime": 25
+						},
+						{
+							"id": 266241,
+							"seasonNumber": 4,
+							"number": 2,
+							"name": "The Tale of the Long Ago Locket",
+							"aired": "1994-10-08",
+							"runtime": 25
+						},
+						{
+							"id": 266239,
+							"seasonNumber": 4,
+							"number": 3,
+							"name": "The Tale of the Water Demons",
+							"aired": "1994-10-15",
+							"runtime": 25
+						},
+						{
+							"id": 266237,
+							"seasonNumber": 4,
+							"number": 4,
+							"name": "The Tale of Cutter's Treasure (1)",
+							"aired": "1994-10-29",
+							"runtime": 25
+						},
+						{
+							"id": 266238,
+							"seasonNumber": 4,
+							"number": 5,
+							"name": "The Tale of Cutter's Treasure (2)",
+							"aired": "1994-10-29",
+							"runtime": 25
+						},
+						{
+							"id": 266242,
+							"seasonNumber": 4,
+							"number": 6,
+							"name": "The Tale of the Quiet Librarian",
+							"aired": "1994-11-05",
+							"runtime": 25
+						},
+						{
+							"id": 266243,
+							"seasonNumber": 4,
+							"number": 7,
+							"name": "The Tale of the Silent Servant",
+							"aired": "1994-11-12",
+							"runtime": 25
+						},
+						{
+							"id": 266244,
+							"seasonNumber": 4,
+							"number": 8,
+							"name": "The Tale of the Room for Rent",
+							"aired": "1994-11-19",
+							"runtime": 25
+						},
+						{
+							"id": 266245,
+							"seasonNumber": 4,
+							"number": 9,
+							"name": "The Tale of the Ghastly Grinner",
+							"aired": "1994-12-03",
+							"runtime": 25
+						},
+						{
+							"id": 266246,
+							"seasonNumber": 4,
+							"number": 10,
+							"name": "The Tale of the Fire Ghost",
+							"aired": "1994-12-10",
+							"runtime": 25
+						},
+						{
+							"id": 266247,
+							"seasonNumber": 4,
+							"number": 11,
+							"name": "The Tale of the Closet Keepers",
+							"aired": "1995-01-07",
+							"runtime": 25
+						},
+						{
+							"id": 266248,
+							"seasonNumber": 4,
+							"number": 12,
+							"name": "The Tale of the Unfinished Painting",
+							"aired": "1995-01-14",
+							"runtime": 25
+						},
+						{
+							"id": 266249,
+							"seasonNumber": 4,
+							"number": 13,
+							"name": "The Tale of Train Magic",
+							"aired": "1995-01-21",
+							"runtime": 25
+						},
+						{
+							"id": 266250,
+							"seasonNumber": 5,
+							"number": 1,
+							"name": "The Tale of the Dead Man's Float",
+							"aired": "1995-10-07",
+							"runtime": 25
+						},
+						{
+							"id": 266261,
+							"seasonNumber": 5,
+							"number": 2,
+							"name": "The Tale of the Jagged Sign",
+							"aired": "1995-10-28",
+							"runtime": 25
+						},
+						{
+							"id": 266251,
+							"seasonNumber": 5,
+							"number": 3,
+							"name": "The Tale of Station 109.1",
+							"aired": "1995-11-04",
+							"runtime": 25
+						},
+						{
+							"id": 266252,
+							"seasonNumber": 5,
+							"number": 4,
+							"name": "The Tale of the Mystical Mirror",
+							"aired": "1995-11-11",
+							"runtime": 25
+						},
+						{
+							"id": 266254,
+							"seasonNumber": 5,
+							"number": 5,
+							"name": "The Tale of Prisoners Past",
+							"aired": "1995-12-02",
+							"runtime": 25
+						},
+						{
+							"id": 266255,
+							"seasonNumber": 5,
+							"number": 6,
+							"name": "The Tale of C7",
+							"aired": "1995-12-09",
+							"runtime": 25
+						},
+						{
+							"id": 266262,
+							"seasonNumber": 5,
+							"number": 7,
+							"name": "The Tale of Badge",
+							"aired": "1995-12-16",
+							"runtime": 25
+						},
+						{
+							"id": 266256,
+							"seasonNumber": 5,
+							"number": 8,
+							"name": "The Tale of the Manaha",
+							"aired": "1995-12-30",
+							"runtime": 25
+						},
+						{
+							"id": 266257,
+							"seasonNumber": 5,
+							"number": 9,
+							"name": "The Tale of the Unexpected Visitor",
+							"aired": "1996-01-06",
+							"runtime": 25
+						},
+						{
+							"id": 266253,
+							"seasonNumber": 5,
+							"number": 10,
+							"name": "The Tale of the Chameleons",
+							"aired": "1996-01-13",
+							"runtime": 25
+						},
+						{
+							"id": 266258,
+							"seasonNumber": 5,
+							"number": 11,
+							"name": "The Tale of the Vacant Lot",
+							"aired": "1996-01-20",
+							"runtime": 25
+						},
+						{
+							"id": 266259,
+							"seasonNumber": 5,
+							"number": 12,
+							"name": "The Tale of a Door Unlocked",
+							"aired": "1996-01-27",
+							"runtime": 25
+						},
+						{
+							"id": 266260,
+							"seasonNumber": 5,
+							"number": 13,
+							"name": "The Tale of the Night Shift",
+							"aired": "1996-02-03",
+							"runtime": 25
+						},
+						{
+							"id": 266263,
+							"seasonNumber": 6,
+							"number": 1,
+							"name": "The Tale of the Forever Game",
+							"aired": "1999-02-06",
+							"runtime": 25
+						},
+						{
+							"id": 266264,
+							"seasonNumber": 6,
+							"number": 2,
+							"name": "The Tale of the Misfortune Cookie",
+							"aired": "1999-02-13",
+							"runtime": 25
+						},
+						{
+							"id": 266265,
+							"seasonNumber": 6,
+							"number": 3,
+							"name": "The Tale of the Virtual Pets",
+							"aired": "1999-02-20",
+							"runtime": 25
+						},
+						{
+							"id": 266266,
+							"seasonNumber": 6,
+							"number": 4,
+							"name": "The Tale of the Zombie Dice",
+							"aired": "1999-02-27",
+							"runtime": 25
+						},
+						{
+							"id": 266267,
+							"seasonNumber": 6,
+							"number": 5,
+							"name": "The Tale of the Gruesome Gourmets",
+							"aired": "1999-03-13",
+							"runtime": 25
+						},
+						{
+							"id": 266268,
+							"seasonNumber": 6,
+							"number": 6,
+							"name": "The Tale of Jake the Snake",
+							"aired": "1999-03-20",
+							"runtime": 25
+						},
+						{
+							"id": 266269,
+							"seasonNumber": 6,
+							"number": 7,
+							"name": "The Tale of the Hunted",
+							"aired": "1999-03-27",
+							"runtime": 25
+						},
+						{
+							"id": 266270,
+							"seasonNumber": 6,
+							"number": 8,
+							"name": "The Tale of the Wisdom Glass",
+							"aired": "1999-04-03",
+							"runtime": 25
+						},
+						{
+							"id": 266271,
+							"seasonNumber": 6,
+							"number": 9,
+							"name": "The Tale of the Walking Shadow",
+							"aired": "1999-04-10",
+							"runtime": 25
+						},
+						{
+							"id": 266272,
+							"seasonNumber": 6,
+							"number": 10,
+							"name": "The Tale of Oblivion",
+							"aired": "1999-04-17",
+							"runtime": 25
+						},
+						{
+							"id": 266273,
+							"seasonNumber": 6,
+							"number": 11,
+							"name": "The Tale of Vampire Town",
+							"aired": "1999-04-24",
+							"runtime": 25
+						},
+						{
+							"id": 266274,
+							"seasonNumber": 6,
+							"number": 12,
+							"name": "The Tale of the Secret Admirer",
+							"aired": "1999-05-08",
+							"runtime": 25
+						},
+						{
+							"id": 266275,
+							"seasonNumber": 6,
+							"number": 13,
+							"name": "The Tale of Bigfoot Ridge",
+							"aired": "1999-05-15",
+							"runtime": 25
+						},
+						{
+							"id": 266276,
+							"seasonNumber": 7,
+							"number": 1,
+							"name": "The Tale of the Silver Sight (1)",
+							"aired": "2000-04-02",
+							"runtime": 25
+						},
+						{
+							"id": 266277,
+							"seasonNumber": 7,
+							"number": 2,
+							"name": "The Tale of the Silver Sight (2)",
+							"aired": "2000-04-02",
+							"runtime": 25
+						},
+						{
+							"id": 266278,
+							"seasonNumber": 7,
+							"number": 3,
+							"name": "The Tale of the Silver Sight (3)",
+							"aired": "2000-04-02",
+							"runtime": 25
+						},
+						{
+							"id": 266279,
+							"seasonNumber": 7,
+							"number": 4,
+							"name": "The Tale of the Lunar Locusts",
+							"aired": "2000-04-09",
+							"runtime": 25
+						},
+						{
+							"id": 266280,
+							"seasonNumber": 7,
+							"number": 5,
+							"name": "The Tale of the Stone Maiden",
+							"aired": "2000-04-16",
+							"runtime": 25
+						},
+						{
+							"id": 266281,
+							"seasonNumber": 7,
+							"number": 6,
+							"name": "The Tale of Highway 13",
+							"aired": "2000-04-23",
+							"runtime": 25
+						},
+						{
+							"id": 266282,
+							"seasonNumber": 7,
+							"number": 7,
+							"name": "The Tale of the Reanimator",
+							"aired": "2000-04-30",
+							"runtime": 25
+						},
+						{
+							"id": 266283,
+							"seasonNumber": 7,
+							"number": 8,
+							"name": "The Tale of the Time Trap",
+							"aired": "2000-05-07",
+							"runtime": 25
+						},
+						{
+							"id": 266284,
+							"seasonNumber": 7,
+							"number": 9,
+							"name": "The Tale of the Photo Finish",
+							"aired": "2000-05-14",
+							"runtime": 25
+						},
+						{
+							"id": 266285,
+							"seasonNumber": 7,
+							"number": 10,
+							"name": "The Tale of the Last Dance",
+							"aired": "2000-05-21",
+							"runtime": 25
+						},
+						{
+							"id": 266286,
+							"seasonNumber": 7,
+							"number": 11,
+							"name": "The Tale of the Laser Maze",
+							"aired": "2000-05-28",
+							"runtime": 25
+						},
+						{
+							"id": 266287,
+							"seasonNumber": 7,
+							"number": 12,
+							"name": "The Tale of Many Faces",
+							"aired": "2000-06-04",
+							"runtime": 25
+						},
+						{
+							"id": 266288,
+							"seasonNumber": 7,
+							"number": 13,
+							"name": "The Tale of the Night Nurse",
+							"aired": "2000-06-11",
+							"runtime": 25
+						}
+					]
+				}
+			},
+			"368145": {
+				"data": {
+					"episodes": [
+						{
+							"id": 7357573,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "Part One: Submitted for Approval",
+							"aired": "2019-10-11",
+							"runtime": 45
+						},
+						{
+							"id": 7357574,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "Part Two: Opening Night",
+							"aired": "2019-10-18",
+							"runtime": 45
+						},
+						{
+							"id": 7357575,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "Part Three: Destroy All Tophats",
+							"aired": "2019-10-25",
+							"runtime": 45
+						},
+						{
+							"id": 8128936,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "The Tale of the Haunted Wood",
+							"aired": "2021-02-12",
+							"runtime": 44
+						},
+						{
+							"id": 8128954,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "The Tale of the Night Frights",
+							"aired": "2021-02-19",
+							"runtime": 44
+						},
+						{
+							"id": 8128957,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "The Tale of the Phantom Light",
+							"aired": "2021-02-26",
+							"runtime": 44
+						},
+						{
+							"id": 8128960,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "The Tale of the Danse Macabre",
+							"aired": "2021-03-05",
+							"runtime": 44
+						},
+						{
+							"id": 8128966,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "The Tale of the Midnight Magic",
+							"aired": "2021-03-12",
+							"runtime": 45
+						},
+						{
+							"id": 8128967,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "The Tale of the Darkhouse",
+							"aired": "2021-03-19",
+							"runtime": 45
+						},
+						{
+							"id": 9233627,
+							"seasonNumber": 3,
+							"number": 1,
+							"name": "The Tale of Room 13",
+							"aired": "2022-07-30",
+							"runtime": 45
+						},
+						{
+							"id": 9233629,
+							"seasonNumber": 3,
+							"number": 2,
+							"name": "The Tale of the Teen Spirit",
+							"aired": "2022-07-30",
+							"runtime": 45
+						},
+						{
+							"id": 9233630,
+							"seasonNumber": 3,
+							"number": 3,
+							"name": "The Tale of the Looking Glass",
+							"aired": "2022-08-06",
+							"runtime": 43
+						},
+						{
+							"id": 9233631,
+							"seasonNumber": 3,
+							"number": 4,
+							"name": "The Tale of the Other Side",
+							"aired": "2022-08-13",
+							"runtime": 44
+						}
+					]
+				}
+			},
+			"397208": {
+				"data": {
+					"episodes": [
+						{
+							"id": 8902924,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "オーディオドラマ第1.3話「幸せのボールペン」",
+							"aired": "2021-04-05",
+							"runtime": 4
+						},
+						{
+							"id": 8902925,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": "オーディオドラマ第2.5話「絶対絶対秘密だよ♥」",
+							"aired": "2021-04-12",
+							"runtime": 5
+						},
+						{
+							"id": 8902926,
+							"seasonNumber": 0,
+							"number": 3,
+							"name": "オーディオドラマ第3.5話「昼のグルメロケ」",
+							"aired": "2021-04-19",
+							"runtime": 7
+						},
+						{
+							"id": 8902927,
+							"seasonNumber": 0,
+							"number": 4,
+							"name": "オーディオドラマ第4.6話「小戸川の鼻唄」",
+							"aired": "2021-04-26",
+							"runtime": 5
+						},
+						{
+							"id": 8902928,
+							"seasonNumber": 0,
+							"number": 5,
+							"name": "オーディオドラマ第5.6話「余計なお世話」",
+							"aired": "2021-05-03",
+							"runtime": 4
+						},
+						{
+							"id": 8902929,
+							"seasonNumber": 0,
+							"number": 6,
+							"name": "オーディオドラマ第6.7話「ルイたんとババにゃん」",
+							"aired": "2021-05-10",
+							"runtime": 4
+						},
+						{
+							"id": 8902930,
+							"seasonNumber": 0,
+							"number": 7,
+							"name": "オーディオドラマ第7.8話「JUSTICE part.2」",
+							"aired": "2021-05-17",
+							"runtime": 4
+						},
+						{
+							"id": 8902931,
+							"seasonNumber": 0,
+							"number": 8,
+							"name": "オーディオドラマ第8.8話「ロートルの戯言」",
+							"aired": "2021-05-24",
+							"runtime": 7
+						},
+						{
+							"id": 8902932,
+							"seasonNumber": 0,
+							"number": 9,
+							"name": "オーディオドラマ第9.9話「ワンマンショー」",
+							"aired": "2021-05-31",
+							"runtime": 4
+						},
+						{
+							"id": 8902933,
+							"seasonNumber": 0,
+							"number": 10,
+							"name": "オーディオドラマ第10.10話「マネージャーの憂鬱」",
+							"aired": "2021-06-07",
+							"runtime": 4
+						},
+						{
+							"id": 8902934,
+							"seasonNumber": 0,
+							"number": 11,
+							"name": "オーディオドラマ第11.10話「The cat is out of the bag.」",
+							"aired": "2021-06-14",
+							"runtime": 4
+						},
+						{
+							"id": 8902935,
+							"seasonNumber": 0,
+							"number": 12,
+							"name": "オーディオドラマ第12.11話「渋谷駅新南口の喧騒」",
+							"aired": "2021-06-21",
+							"runtime": 4
+						},
+						{
+							"id": 8902936,
+							"seasonNumber": 0,
+							"number": 13,
+							"name": "オーディオドラマ第13.13話「本日貸切」",
+							"aired": "2021-06-28",
+							"runtime": 9
+						},
+						{
+							"id": 9152929,
+							"seasonNumber": 0,
+							"number": 14,
+							"name": "これみよがしに",
+							"aired": "2022-03-30",
+							"runtime": 10
+						},
+						{
+							"id": 9152930,
+							"seasonNumber": 0,
+							"number": 15,
+							"name": "映画 「オッドタクシー イン・ザ・ウッズ」",
+							"aired": "2022-04-01",
+							"runtime": 128
+						},
+						{
+							"id": 8242726,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "変わり者の運転手",
+							"aired": "2021-04-06",
+							"runtime": 24
+						},
+						{
+							"id": 8334490,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "長い夜の過ごし方",
+							"aired": "2021-04-13",
+							"runtime": 24
+						},
+						{
+							"id": 8350001,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "付け焼き刃に御用心",
+							"aired": "2021-04-20",
+							"runtime": 24
+						},
+						{
+							"id": 8350002,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "田中革命",
+							"aired": "2021-04-27",
+							"runtime": 24
+						},
+						{
+							"id": 8355802,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "アイドルなんて呼ばないで",
+							"aired": "2021-05-04",
+							"runtime": 24
+						},
+						{
+							"id": 8355803,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "なんでやねんが聞きたいよ",
+							"aired": "2021-05-11",
+							"runtime": 24
+						},
+						{
+							"id": 8355804,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "トリック・オア・トリート",
+							"aired": "2021-05-18",
+							"runtime": 24
+						},
+						{
+							"id": 8355805,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "Bless you",
+							"aired": "2021-05-25",
+							"runtime": 24
+						},
+						{
+							"id": 8355806,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "ヒーローの憂鬱",
+							"aired": "2021-06-01",
+							"runtime": 24
+						},
+						{
+							"id": 8355807,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "俺たちに明日はない",
+							"aired": "2021-06-08",
+							"runtime": 24
+						},
+						{
+							"id": 8355808,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "あの日に戻れたら",
+							"aired": "2021-06-15",
+							"runtime": 24
+						},
+						{
+							"id": 8355809,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "たりないふたり",
+							"aired": "2021-06-22",
+							"runtime": 24
+						},
+						{
+							"id": 8355810,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "どちらまで？",
+							"aired": "2021-06-29",
+							"runtime": 24
+						}
+					]
+				}
+			},
+			"368145/dvd": {
+				"data": {
+					"episodes": []
+				}
+			}
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun (RD, Usenet), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "Are You Afraid Of The Dark Complete Series-JUGGALOTUS",
+				"hash": "3d7ec79963ac299385cd3a2c7ddeadba96d22a0d",
+				"imdbId": "tt0103352",
+				"files": [
+					{
+						"path": "-01 Are You Afraid of the Dark - The Tale of the Phantom Cab.avi",
+						"folder": "Are You Afraid Of The Dark Season 1"
+					},
+					{
+						"path": "-02 Are You Afraid of the Dark - The Tale of the Laughing in the Dark.mpg",
+						"folder": "Are You Afraid Of The Dark Season 1"
+					},
+					{
+						"path": "-03 Are You Afraid Of The Dark - The Lonely Ghost.avi",
+						"folder": "Are You Afraid Of The Dark Season 1"
+					},
+					{
+						"path": "-04 Are You Afraid of the Dark - The Tale of the Twisted Claw.avi",
+						"folder": "Are You Afraid Of The Dark Season 1"
+					},
+					{
+						"path": "-05 Are You Afraid of the Dark -  The Tale of the Hungry Hounds.mpg",
+						"folder": "Are You Afraid Of The Dark Season 1"
+					},
+					{
+						"path": "-06 Are You Afraid of the Dark - The Tale of the Super Specs.avi",
+						"folder": "Are You Afraid Of The Dark Season 1"
+					},
+					{
+						"path": "-07 Are You Afraid Of The Dark - The Tale of the Captured Souls.avi",
+						"folder": "Are You Afraid Of The Dark Season 1"
+					},
+					{
+						"path": "-08 Are You Afraid of the Dark - The Tale of the Nightly Neighbors.avi",
+						"folder": "Are You Afraid Of The Dark Season 1"
+					},
+					{
+						"path": "-09 Are You Afraid Of The Dark - The Tale Of The Sorcerer's Apprentice.avi",
+						"folder": "Are You Afraid Of The Dark Season 1"
+					},
+					{
+						"path": "-10 Are You Afraid of the Dark - The Tale of Jake & the Leprechaun.avi",
+						"folder": "Are You Afraid Of The Dark Season 1"
+					},
+					{
+						"path": "-11 Are You Afraid Of The Dark - The Tale Of The Dark Music.avi",
+						"folder": "Are You Afraid Of The Dark Season 1"
+					},
+					{
+						"path": "-12 Are You Afraid of the Dark - The Tale of the Prom Queen.avi",
+						"folder": "Are You Afraid Of The Dark Season 1"
+					},
+					{
+						"path": "-13 Are You Afraid of the Dark - The Tale of the Pinball Wizard.avi",
+						"folder": "Are You Afraid Of The Dark Season 1"
+					},
+					{
+						"path": "01 - The Tale of Cutter's Treasure (Part 1).avi",
+						"folder": "Are You Afraid Of The Dark Season 4"
+					},
+					{
+						"path": "01 - The Tale of the Mystical Mirror.avi",
+						"folder": "Are You Afraid Of The Dark Season 5"
+					},
+					{
+						"path": "02 - The Tale of Cutter's Treasure (Part 2).avi",
+						"folder": "Are You Afraid Of The Dark Season 4"
+					},
+					{
+						"path": "02 - The Tale of the Prisioners Past.avi",
+						"folder": "Are You Afraid Of The Dark Season 5"
+					},
+					{
+						"path": "03 - The Tale of C7.avi",
+						"folder": "Are You Afraid Of The Dark Season 5"
+					},
+					{
+						"path": "03 - The Tale of the Renegade Virus.avi",
+						"folder": "Are You Afraid Of The Dark Season 4"
+					},
+					{
+						"path": "04 - The Tale of the Badge.avi",
+						"folder": "Are You Afraid Of The Dark Season 5"
+					},
+					{
+						"path": "04 - The Tale of the Quiet Librarian.avi",
+						"folder": "Are You Afraid Of The Dark Season 4"
+					},
+					{
+						"path": "05 - The Tale of the Manaha.avi",
+						"folder": "Are You Afraid Of The Dark Season 5"
+					},
+					{
+						"path": "05 - The Tale of the Water Demons.avi",
+						"folder": "Are You Afraid Of The Dark Season 4"
+					},
+					{
+						"path": "06 - The Tale of the Long Ago Locket.avi",
+						"folder": "Are You Afraid Of The Dark Season 4"
+					},
+					{
+						"path": "06 - The Tale of the Unexpectd Visitor.avi",
+						"folder": "Are You Afraid Of The Dark Season 5"
+					},
+					{
+						"path": "07 - The Tale of the Chameleons.avi",
+						"folder": "Are You Afraid Of The Dark Season 5"
+					},
+					{
+						"path": "07 - The Tale of the Silent Servant.avi",
+						"folder": "Are You Afraid Of The Dark Season 4"
+					},
+					{
+						"path": "08 - The Tale of the Room for Rent.avi",
+						"folder": "Are You Afraid Of The Dark Season 4"
+					},
+					{
+						"path": "08 - The Tale of the Vacant Lot.avi",
+						"folder": "Are You Afraid Of The Dark Season 5"
+					},
+					{
+						"path": "09 - Tale of a Door Unlocked.avi",
+						"folder": "Are You Afraid Of The Dark Season 5"
+					},
+					{
+						"path": "09 - The Tale of the Ghastly Grinner.avi",
+						"folder": "Are You Afraid Of The Dark Season 4"
+					},
+					{
+						"path": "10 - The Tale of the Closet Keepers.avi",
+						"folder": "Are You Afraid Of The Dark Season 4"
+					},
+					{
+						"path": "10 - The Tale of the Night Shift.avi",
+						"folder": "Are You Afraid Of The Dark Season 5"
+					},
+					{
+						"path": "11 - The Tale of the Dead Man's Float.avi",
+						"folder": "Are You Afraid Of The Dark Season 5"
+					},
+					{
+						"path": "11 - The Tale of the Fire Ghost.avi",
+						"folder": "Are You Afraid Of The Dark Season 4"
+					},
+					{
+						"path": "12 - The Tale of the Jagged Sign.avi",
+						"folder": "Are You Afraid Of The Dark Season 5"
+					},
+					{
+						"path": "12 - The Tale of the Unfinished Painting.avi",
+						"folder": "Are You Afraid Of The Dark Season 4"
+					},
+					{
+						"path": "13 - The Tale of Station 109.1.avi",
+						"folder": "Are You Afraid Of The Dark Season 5"
+					},
+					{
+						"path": "13 - The Tale of Train Magic.avi",
+						"folder": "Are You Afraid Of The Dark Season 4"
+					},
+					{
+						"path": "601 - The Tale of the Zombie Dice.avi",
+						"folder": "Are You Afraid Of The Dark Season 6"
+					},
+					{
+						"path": "602 - The Tale of the Forever Game.avi",
+						"folder": "Are You Afraid Of The Dark Season 6"
+					},
+					{
+						"path": "603 - The Tale of Jake the Snake.avi",
+						"folder": "Are You Afraid Of The Dark Season 6"
+					},
+					{
+						"path": "604 - The Tale of the Vitrual Pets.avi",
+						"folder": "Are You Afraid Of The Dark Season 6"
+					},
+					{
+						"path": "605 - The Tale of the Misfourtune Cookie.avi",
+						"folder": "Are You Afraid Of The Dark Season 6"
+					},
+					{
+						"path": "606 - The Tale of the Grusome Gourmets.avi",
+						"folder": "Are You Afraid Of The Dark Season 6"
+					},
+					{
+						"path": "607 - The Tale of the Hunted.avi",
+						"folder": "Are You Afraid Of The Dark Season 6"
+					},
+					{
+						"path": "608 - The Tale of the Vampire Town.avi",
+						"folder": "Are You Afraid Of The Dark Season 6"
+					},
+					{
+						"path": "609 - The Tale of the Wisdom Glass.avi",
+						"folder": "Are You Afraid Of The Dark Season 6"
+					},
+					{
+						"path": "610 - The Tale of the Walking Shadow.avi",
+						"folder": "Are You Afraid Of The Dark Season 6"
+					},
+					{
+						"path": "611 - Tale of Oblivion.avi",
+						"folder": "Are You Afraid Of The Dark Season 6"
+					},
+					{
+						"path": "612 - The Tale of the Secret Admirer.avi",
+						"folder": "Are You Afraid Of The Dark Season 6"
+					},
+					{
+						"path": "613 - The Tale of Bigfoot Ridge.avi",
+						"folder": "Are You Afraid Of The Dark Season 6"
+					},
+					{
+						"path": "701 - The Tale of the Silver Sight(P1).avi",
+						"folder": "Are You Afraid Of The Dark Season 7"
+					},
+					{
+						"path": "702 - Tale of the Silver Sight(P2).avi",
+						"folder": "Are You Afraid Of The Dark Season 7"
+					},
+					{
+						"path": "703 - The Tale of the Silver Sight(P3).avi",
+						"folder": "Are You Afraid Of The Dark Season 7"
+					},
+					{
+						"path": "704 - The Tale of the Stone Maiden.avi",
+						"folder": "Are You Afraid Of The Dark Season 7"
+					},
+					{
+						"path": "705 - The Tale of Highway 13.avi",
+						"folder": "Are You Afraid Of The Dark Season 7"
+					},
+					{
+						"path": "706 - Tale of the Lunar Locusts.avi",
+						"folder": "Are You Afraid Of The Dark Season 7"
+					},
+					{
+						"path": "707 - The Tale of the Time Trap.avi",
+						"folder": "Are You Afraid Of The Dark Season 7"
+					},
+					{
+						"path": "708 - The Tale of the Reanimator.avi",
+						"folder": "Are You Afraid Of The Dark Season 7"
+					},
+					{
+						"path": "709 - The Tale of the Photo Finish.avi",
+						"folder": "Are You Afraid Of The Dark Season 7"
+					},
+					{
+						"path": "710 - The Tale of the Laser Maze.avi",
+						"folder": "Are You Afraid Of The Dark Season 7"
+					},
+					{
+						"path": "711 - The Tale of the Last Dance.avi",
+						"folder": "Are You Afraid Of The Dark Season 7"
+					},
+					{
+						"path": "712 - The Tale of the Many Faces.avi",
+						"folder": "Are You Afraid Of The Dark Season 7"
+					},
+					{
+						"path": "713 - The Tale of the Night Nurse.avi",
+						"folder": "Are You Afraid Of The Dark Season 7"
+					},
+					{
+						"path": "AYAOTD - S02E01 - The Tale of the Final Wish.avi",
+						"folder": "Are You Afraid Of The Dark Season 2"
+					},
+					{
+						"path": "AYAOTD - S02E02 - The Tale of Locker 22.avi",
+						"folder": "Are You Afraid Of The Dark Season 2"
+					},
+					{
+						"path": "AYAOTD - S02E03 - The Tale of the Hatching.avi",
+						"folder": "Are You Afraid Of The Dark Season 2"
+					},
+					{
+						"path": "AYAOTD - S02E04 - The Tale of the Frozen Ghost.avi",
+						"folder": "Are You Afraid Of The Dark Season 2"
+					},
+					{
+						"path": "AYAOTD - S02E05 - The Tale of the Thirteenth Floor.avi",
+						"folder": "Are You Afraid Of The Dark Season 2"
+					},
+					{
+						"path": "AYAOTD - S02E06 - The Tale of the Midnight Madness.avi",
+						"folder": "Are You Afraid Of The Dark Season 2"
+					},
+					{
+						"path": "AYAOTD - S02E07 - The Tale of the Dream Machine.avi",
+						"folder": "Are You Afraid Of The Dark Season 2"
+					},
+					{
+						"path": "AYAOTD - S02E08 - The Tale of the Magician's Assistant.avi",
+						"folder": "Are You Afraid Of The Dark Season 2"
+					},
+					{
+						"path": "AYAOTD - S02E09 - The Tale of Old Man Corcoran.avi",
+						"folder": "Are You Afraid Of The Dark Season 2"
+					},
+					{
+						"path": "AYAOTD - S02E10 - The Tale of the Full Moon.avi",
+						"folder": "Are You Afraid Of The Dark Season 2"
+					},
+					{
+						"path": "AYAOTD - S02E11 - The Tale of the Whispering Walls.avi",
+						"folder": "Are You Afraid Of The Dark Season 2"
+					},
+					{
+						"path": "AYAOTD - S02E12 - The Tale of the Shiny Red Bicycle.avi",
+						"folder": "Are You Afraid Of The Dark Season 2"
+					},
+					{
+						"path": "AYAOTD - S02E13 - The Tale of the Dark Dragon.avi",
+						"folder": "Are You Afraid Of The Dark Season 2"
+					},
+					{
+						"path": "AYAOTD - S03E01 - The Tale of the Midnight Ride.avi",
+						"folder": "Are You Afraid Of The Dark Season 3"
+					},
+					{
+						"path": "AYAOTD - S03E02 - The Tale of Watcher's Woods.avi",
+						"folder": "Are You Afraid Of The Dark Season 3"
+					},
+					{
+						"path": "AYAOTD - S03E03 - The Tale of Apartment 214.avi",
+						"folder": "Are You Afraid Of The Dark Season 3"
+					},
+					{
+						"path": "AYAOTD - S03E04 - The Tale of the Phone Police.avi",
+						"folder": "Are You Afraid Of The Dark Season 3"
+					},
+					{
+						"path": "AYAOTD - S03E05 - The Tale of the Doll Maker.avi",
+						"folder": "Are You Afraid Of The Dark Season 3"
+					},
+					{
+						"path": "AYAOTD - S03E06 - The Tale of the Bookish Babysitter.avi",
+						"folder": "Are You Afraid Of The Dark Season 3"
+					},
+					{
+						"path": "AYAOTD - S03E07 - The Tale of the Carved Stone.avi",
+						"folder": "Are You Afraid Of The Dark Season 3"
+					},
+					{
+						"path": "AYAOTD - S03E08 - The Tale of the Guardian's Curse.avi",
+						"folder": "Are You Afraid Of The Dark Season 3"
+					},
+					{
+						"path": "AYAOTD - S03E09 - The Tale of the Quicksilver.avi",
+						"folder": "Are You Afraid Of The Dark Season 3"
+					},
+					{
+						"path": "AYAOTD - S03E10 - The Tale of the Dream Girl.avi",
+						"folder": "Are You Afraid Of The Dark Season 3"
+					},
+					{
+						"path": "AYAOTD - S03E11 - The Tale of the Curious Camera.avi",
+						"folder": "Are You Afraid Of The Dark Season 3"
+					},
+					{
+						"path": "AYAOTD - S03E12 - The Tale of the Crimson Clown.avi",
+						"folder": "Are You Afraid Of The Dark Season 3"
+					},
+					{
+						"path": "AYAOTD - S03E13 - The Tale of the Dangerous Soup.avi",
+						"folder": "Are You Afraid Of The Dark Season 3"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0103352",
+				"tmdbId": 2913,
+				"files": [
+					{
+						"path": "-01 Are You Afraid of the Dark - The Tale of the Phantom Cab.avi",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222603
+					},
+					{
+						"path": "-02 Are You Afraid of the Dark - The Tale of the Laughing in the Dark.mpg",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222516
+					},
+					{
+						"path": "-03 Are You Afraid Of The Dark - The Lonely Ghost.avi",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1057765
+					},
+					{
+						"path": "-04 Are You Afraid of the Dark - The Tale of the Twisted Claw.avi",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222557
+					},
+					{
+						"path": "-05 Are You Afraid of the Dark -  The Tale of the Hungry Hounds.mpg",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222558
+					},
+					{
+						"path": "-06 Are You Afraid of the Dark - The Tale of the Super Specs.avi",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222559
+					},
+					{
+						"path": "-07 Are You Afraid Of The Dark - The Tale of the Captured Souls.avi",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222560
+					},
+					{
+						"path": "-08 Are You Afraid of the Dark - The Tale of the Nightly Neighbors.avi",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222585
+					},
+					{
+						"path": "-09 Are You Afraid Of The Dark - The Tale Of The Sorcerer's Apprentice.avi",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222589
+					},
+					{
+						"path": "-10 Are You Afraid of the Dark - The Tale of Jake & the Leprechaun.avi",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222592
+					},
+					{
+						"path": "-11 Are You Afraid Of The Dark - The Tale Of The Dark Music.avi",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222593
+					},
+					{
+						"path": "-12 Are You Afraid of the Dark - The Tale of the Prom Queen.avi",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222594
+					},
+					{
+						"path": "-13 Are You Afraid of the Dark - The Tale of the Pinball Wizard.avi",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222595
+					},
+					{
+						"path": "01 - The Tale of Cutter's Treasure (Part 1).avi",
+						"season": 4,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222670
+					},
+					{
+						"path": "01 - The Tale of the Mystical Mirror.avi",
+						"season": 5,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222802
+					},
+					{
+						"path": "02 - The Tale of Cutter's Treasure (Part 2).avi",
+						"season": 4,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222681
+					},
+					{
+						"path": "02 - The Tale of the Prisioners Past.avi",
+						"season": 5,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222811
+					},
+					{
+						"path": "03 - The Tale of C7.avi",
+						"season": 5,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222821
+					},
+					{
+						"path": "03 - The Tale of the Renegade Virus.avi",
+						"season": 4,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222658
+					},
+					{
+						"path": "04 - The Tale of the Badge.avi",
+						"season": 5,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222828
+					},
+					{
+						"path": "04 - The Tale of the Quiet Librarian.avi",
+						"season": 4,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222686
+					},
+					{
+						"path": "05 - The Tale of the Manaha.avi",
+						"season": 5,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1173553
+					},
+					{
+						"path": "05 - The Tale of the Water Demons.avi",
+						"season": 4,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222668
+					},
+					{
+						"path": "06 - The Tale of the Long Ago Locket.avi",
+						"season": 4,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222661
+					},
+					{
+						"path": "06 - The Tale of the Unexpectd Visitor.avi",
+						"season": 5,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1173558
+					},
+					{
+						"path": "07 - The Tale of the Chameleons.avi",
+						"season": 5,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222880
+					},
+					{
+						"path": "07 - The Tale of the Silent Servant.avi",
+						"season": 4,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222691
+					},
+					{
+						"path": "08 - The Tale of the Room for Rent.avi",
+						"season": 4,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222731
+					},
+					{
+						"path": "08 - The Tale of the Vacant Lot.avi",
+						"season": 5,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222929
+					},
+					{
+						"path": "09 - Tale of a Door Unlocked.avi",
+						"season": 5,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222944
+					},
+					{
+						"path": "09 - The Tale of the Ghastly Grinner.avi",
+						"season": 4,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222737
+					},
+					{
+						"path": "10 - The Tale of the Closet Keepers.avi",
+						"season": 4,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222743
+					},
+					{
+						"path": "10 - The Tale of the Night Shift.avi",
+						"season": 5,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222959
+					},
+					{
+						"path": "11 - The Tale of the Dead Man's Float.avi",
+						"season": 5,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222768
+					},
+					{
+						"path": "11 - The Tale of the Fire Ghost.avi",
+						"season": 4,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222741
+					},
+					{
+						"path": "12 - The Tale of the Jagged Sign.avi",
+						"season": 5,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222782
+					},
+					{
+						"path": "12 - The Tale of the Unfinished Painting.avi",
+						"season": 4,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222746
+					},
+					{
+						"path": "13 - The Tale of Station 109.1.avi",
+						"season": 5,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222796
+					},
+					{
+						"path": "13 - The Tale of Train Magic.avi",
+						"season": 4,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222757
+					},
+					{
+						"path": "601 - The Tale of the Zombie Dice.avi",
+						"season": 6,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1173547
+					},
+					{
+						"path": "602 - The Tale of the Forever Game.avi",
+						"season": 6,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222960
+					},
+					{
+						"path": "603 - The Tale of Jake the Snake.avi",
+						"season": 6,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1173548
+					},
+					{
+						"path": "604 - The Tale of the Vitrual Pets.avi",
+						"season": 6,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223019
+					},
+					{
+						"path": "605 - The Tale of the Misfourtune Cookie.avi",
+						"season": 6,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223022
+					},
+					{
+						"path": "606 - The Tale of the Grusome Gourmets.avi",
+						"season": 6,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223029
+					},
+					{
+						"path": "607 - The Tale of the Hunted.avi",
+						"season": 6,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223035
+					},
+					{
+						"path": "608 - The Tale of the Vampire Town.avi",
+						"season": 6,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223049
+					},
+					{
+						"path": "609 - The Tale of the Wisdom Glass.avi",
+						"season": 6,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223070
+					},
+					{
+						"path": "610 - The Tale of the Walking Shadow.avi",
+						"season": 6,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223073
+					},
+					{
+						"path": "611 - Tale of Oblivion.avi",
+						"season": 6,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223083
+					},
+					{
+						"path": "612 - The Tale of the Secret Admirer.avi",
+						"season": 6,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223084
+					},
+					{
+						"path": "613 - The Tale of Bigfoot Ridge.avi",
+						"season": 6,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223134
+					},
+					{
+						"path": "701 - The Tale of the Silver Sight(P1).avi",
+						"season": 7,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223142
+					},
+					{
+						"path": "702 - Tale of the Silver Sight(P2).avi",
+						"season": 7,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223199
+					},
+					{
+						"path": "703 - The Tale of the Silver Sight(P3).avi",
+						"season": 7,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1173545
+					},
+					{
+						"path": "704 - The Tale of the Stone Maiden.avi",
+						"season": 7,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1173546
+					},
+					{
+						"path": "705 - The Tale of Highway 13.avi",
+						"season": 7,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223226
+					},
+					{
+						"path": "706 - Tale of the Lunar Locusts.avi",
+						"season": 7,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223208
+					},
+					{
+						"path": "707 - The Tale of the Time Trap.avi",
+						"season": 7,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223277
+					},
+					{
+						"path": "708 - The Tale of the Reanimator.avi",
+						"season": 7,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223229
+					},
+					{
+						"path": "709 - The Tale of the Photo Finish.avi",
+						"season": 7,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223285
+					},
+					{
+						"path": "710 - The Tale of the Laser Maze.avi",
+						"season": 7,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223293
+					},
+					{
+						"path": "711 - The Tale of the Last Dance.avi",
+						"season": 7,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1173544
+					},
+					{
+						"path": "712 - The Tale of the Many Faces.avi",
+						"season": 7,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 223294
+					},
+					{
+						"path": "713 - The Tale of the Night Nurse.avi",
+						"season": 7,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1206371
+					},
+					{
+						"path": "AYAOTD - S02E01 - The Tale of the Final Wish.avi",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222604
+					},
+					{
+						"path": "AYAOTD - S02E02 - The Tale of Locker 22.avi",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222605
+					},
+					{
+						"path": "AYAOTD - S02E03 - The Tale of the Hatching.avi",
+						"season": 2,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222635
+					},
+					{
+						"path": "AYAOTD - S02E04 - The Tale of the Frozen Ghost.avi",
+						"season": 2,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222625
+					},
+					{
+						"path": "AYAOTD - S02E05 - The Tale of the Thirteenth Floor.avi",
+						"season": 2,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222647
+					},
+					{
+						"path": "AYAOTD - S02E06 - The Tale of the Midnight Madness.avi",
+						"season": 2,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222649
+					},
+					{
+						"path": "AYAOTD - S02E07 - The Tale of the Dream Machine.avi",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222618
+					},
+					{
+						"path": "AYAOTD - S02E08 - The Tale of the Magician's Assistant.avi",
+						"season": 2,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222634
+					},
+					{
+						"path": "AYAOTD - S02E09 - The Tale of Old Man Corcoran.avi",
+						"season": 2,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222643
+					},
+					{
+						"path": "AYAOTD - S02E10 - The Tale of the Full Moon.avi",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222632
+					},
+					{
+						"path": "AYAOTD - S02E11 - The Tale of the Whispering Walls.avi",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222622
+					},
+					{
+						"path": "AYAOTD - S02E12 - The Tale of the Shiny Red Bicycle.avi",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222633
+					},
+					{
+						"path": "AYAOTD - S02E13 - The Tale of the Dark Dragon.avi",
+						"season": 2,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 222619
+					},
+					{
+						"path": "AYAOTD - S03E01 - The Tale of the Midnight Ride.avi",
+						"season": 3,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 962466
+					},
+					{
+						"path": "AYAOTD - S03E02 - The Tale of Watcher's Woods.avi",
+						"season": 3,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 962431
+					},
+					{
+						"path": "AYAOTD - S03E03 - The Tale of Apartment 214.avi",
+						"season": 3,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 962467
+					},
+					{
+						"path": "AYAOTD - S03E04 - The Tale of the Phone Police.avi",
+						"season": 3,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 962432
+					},
+					{
+						"path": "AYAOTD - S03E05 - The Tale of the Doll Maker.avi",
+						"season": 3,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 962433
+					},
+					{
+						"path": "AYAOTD - S03E06 - The Tale of the Bookish Babysitter.avi",
+						"season": 3,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 962458
+					},
+					{
+						"path": "AYAOTD - S03E07 - The Tale of the Carved Stone.avi",
+						"season": 3,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 962434
+					},
+					{
+						"path": "AYAOTD - S03E08 - The Tale of the Guardian's Curse.avi",
+						"season": 3,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 962435
+					},
+					{
+						"path": "AYAOTD - S03E09 - The Tale of the Quicksilver.avi",
+						"season": 3,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 962438
+					},
+					{
+						"path": "AYAOTD - S03E10 - The Tale of the Dream Girl.avi",
+						"season": 3,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 962437
+					},
+					{
+						"path": "AYAOTD - S03E11 - The Tale of the Curious Camera.avi",
+						"season": 3,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 962436
+					},
+					{
+						"path": "AYAOTD - S03E12 - The Tale of the Crimson Clown.avi",
+						"season": 3,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 962439
+					},
+					{
+						"path": "AYAOTD - S03E13 - The Tale of the Dangerous Soup.avi",
+						"season": 3,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 962440
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD, Usenet), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "Ed, Edd n Eddy (1999) Season 6 S06 + Specials (1080p AI4K x265 HEVC 10bit AC3 2.0 ImE)",
+				"hash": "7e0fa20fc55964dec6cffa69693c6ce04f3750a6",
+				"imdbId": "tt1701766",
+				"files": [
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E01 - My Best Friend Plank (1080p x265 ImE).mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E02 - Jingle Jingle Jangle (1080p AI4K x265 ImE) REPACK.mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E03 - Hanky Panky Hullabaloo (1080p AI4K x265 ImE).mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E04 - Boo Haw Haw (1080p AI4K x265 ImE).mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E05 - Big Picture Show (1080p AI4K x265 ImE).mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E06 - The Incredible Shrinking Day (1080p x265 ImE).mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E07 - The Eds are Coming, the Eds are Coming (1080p AI4K x265 ImE).mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E08 - The Grim Adventures of the KND (480p DVD x265 Ghost).mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S06E01 - May I Have This Ed (1080p AI4K x265 ImE).mkv",
+						"folder": ""
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S06E02 - Look Before You Ed (1080p AI4K x265 ImE).mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0184111",
+				"tmdbId": 606,
+				"files": [
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E01 - My Best Friend Plank (1080p x265 ImE).mkv",
+						"season": 0,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 34561
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E02 - Jingle Jingle Jangle (1080p AI4K x265 ImE) REPACK.mkv",
+						"season": 0,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 34571
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E03 - Hanky Panky Hullabaloo (1080p AI4K x265 ImE).mkv",
+						"season": 0,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 34570
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E04 - Boo Haw Haw (1080p AI4K x265 ImE).mkv",
+						"season": 0,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 34562
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E05 - Big Picture Show (1080p AI4K x265 ImE).mkv",
+						"season": 0,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 6039225
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E06 - The Incredible Shrinking Day (1080p x265 ImE).mkv",
+						"season": 0,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1936126
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E07 - The Eds are Coming, the Eds are Coming (1080p AI4K x265 ImE).mkv",
+						"season": 0,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 34569
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S00E08 - The Grim Adventures of the KND (480p DVD x265 Ghost).mkv",
+						"season": 0,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 34564
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S06E01 - May I Have This Ed (1080p AI4K x265 ImE).mkv",
+						"season": 6,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 34559
+					},
+					{
+						"path": "Ed, Edd n Eddy (1999) - S06E02 - Look Before You Ed (1080p AI4K x265 ImE).mkv",
+						"season": 6,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 34558
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD, Usenet), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "[Anime Time] Odd Taxi (Season 1-Extras) [Dual Audio][BD][1080p][HEVC 10bit x265][AAC][Eng Sub]",
+				"hash": null,
+				"imdbId": "tt14134550",
+				"files": [
+					{
+						"path": "[Anime Time] ODDTAXI - NCED.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - NCOP.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S00E14 [Picture Drama].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E01.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E03.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E04.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E05.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E06.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E07.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E08.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E09.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E10.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E11.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E12.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E13.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - NCED.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - NCOP.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt14134550",
+				"tmdbId": 116727,
+				"files": [
+					{
+						"path": "[Anime Time] ODDTAXI - NCED.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - NCOP.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S00E14 [Picture Drama].mkv",
+						"season": 0,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 5321087
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E01.mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2642098
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E03.mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2866608
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E04.mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2866609
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E05.mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2870916
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E06.mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2870917
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E07.mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2870918
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E08.mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2870919
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E09.mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2870920
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E10.mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2870921
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E11.mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2870922
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E12.mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2870924
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - S01E13.mkv",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2870926
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - NCED.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Anime Time] ODDTAXI - NCOP.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		}
+	]
+}

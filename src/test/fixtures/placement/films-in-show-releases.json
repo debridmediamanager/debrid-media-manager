@@ -1,0 +1,4806 @@
+{
+	"answers": {
+		"find": {
+			"tt0096686": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 57706,
+						"name": "Ranma ½",
+						"first_air_date": "1989-04-15"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt12343534": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 95479,
+						"name": "JUJUTSU KAISEN",
+						"first_air_date": "2020-10-03"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt2622240": {
+				"movie_results": [],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt14331144": {
+				"movie_results": [
+					{
+						"id": 810693,
+						"title": "Jujutsu Kaisen 0",
+						"release_date": "2021-12-24"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt6263850": {
+				"movie_results": [
+					{
+						"id": 533535,
+						"title": "Deadpool & Wolverine",
+						"release_date": "2024-07-24"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt32766897": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 259140,
+						"name": "Ranma1/2",
+						"first_air_date": "2024-10-06"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0096685": {
+				"movie_results": [],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt4778940": {
+				"movie_results": [],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt1800493": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 37760,
+						"name": "Exile",
+						"first_air_date": "2011-05-01"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0101583": {
+				"movie_results": [
+					{
+						"id": 37024,
+						"title": "Ranma 1/2 the Movie: Big Trouble in Nekonron, China",
+						"release_date": "1991-11-02"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt0104604": {
+				"movie_results": [
+					{
+						"id": 37021,
+						"title": "Ranma 1/2 the Movie 2: Nihao My Concubine",
+						"release_date": "1992-08-02"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"37760": {
+				"id": 37760,
+				"name": "Exile",
+				"original_name": "Exile",
+				"first_air_date": "2011-05-01",
+				"original_language": "en",
+				"origin_country": ["GB"],
+				"genres": [
+					{
+						"id": 9648,
+						"name": "Mystery"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 417,
+							"name": "corruption"
+						},
+						{
+							"id": 2689,
+							"name": "dementia"
+						},
+						{
+							"id": 3371,
+							"name": "family history"
+						},
+						{
+							"id": 5903,
+							"name": "alzheimer's disease"
+						},
+						{
+							"id": 12565,
+							"name": "psychological thriller"
+						},
+						{
+							"id": 240119,
+							"name": "father son relationship"
+						},
+						{
+							"id": 272553,
+							"name": "psychological"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt1800493",
+					"tvdb_id": 187991
+				},
+				"networks": [
+					{
+						"id": 4,
+						"name": "BBC One"
+					}
+				],
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 3,
+						"air_date": "2011-05-01",
+						"name": "Miniseries"
+					}
+				]
+			},
+			"57706": {
+				"id": 57706,
+				"name": "Ranma ½",
+				"original_name": "らんま1/2",
+				"first_air_date": "1989-04-15",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 9194,
+							"name": "harem"
+						},
+						{
+							"id": 9799,
+							"name": "romcom"
+						},
+						{
+							"id": 9840,
+							"name": "romance"
+						},
+						{
+							"id": 9917,
+							"name": "mixed martial arts (mma)"
+						},
+						{
+							"id": 10541,
+							"name": "curse"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 41538,
+							"name": "turns into animal"
+						},
+						{
+							"id": 207826,
+							"name": "shounen"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 210710,
+							"name": "absurdist"
+						},
+						{
+							"id": 232592,
+							"name": "gender swap"
+						},
+						{
+							"id": 239884,
+							"name": "love polygon"
+						},
+						{
+							"id": 325782,
+							"name": "cheerful"
+						},
+						{
+							"id": 325832,
+							"name": "joyful"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0096686",
+					"tvdb_id": 76932
+				},
+				"networks": [
+					{
+						"id": 1,
+						"name": "Fuji TV"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Ranma 1-2",
+							"iso_3166_1": "BR"
+						},
+						{
+							"title": "乱马1/2",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "乱马½ 热斗篇",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Ranma 1.5",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Ranma y medio",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Ranma 1/2",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Ranma Un Demi",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Ranma 1/2 Nettouhen",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "らんま1/2熱闘編",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Ranma Nibun no Ichi",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Ranma 1/2: Tenô ke sukuranburu kurisumasu",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Ranma 1/2 - Gakuen ni fukuarashi! Adarutochenji Hinako sensei",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "らんま½ よみがえる記憶・下巻",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "らんま½ SUPER ああ呪いの破恋洞!我が愛は永遠に",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "らんま½ SUPER 二人のあかね『乱馬、私を見て！』",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "らんま½ あかねＶＳらんま　お母さんの味は私が守る！",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "らんま½ SUPER 邪悪の鬼",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "らんま½ 道を継ぐ者・前編",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "悪夢! 春眠香",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "らんま1/2 学園に吹く嵐! アダルトチェンジひな子先生",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "らんま1/2 熱闘歌合戦",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Ranma 1/2: Nettou Uta Gasse",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "らんま1/2 ああ呪いの破恋洞! 我が愛は永遠に",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "らんま½",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "란마1/2",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "란마 1／2",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "란마 ½",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "رانما 1/2",
+							"iso_3166_1": "SA"
+						},
+						{
+							"title": "亂馬1/2",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "Ранма - напівтора",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "Ranma 1/2: Tendo Family Christmas Scramble",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2: Akane vs. Ranma! I'll Be the One to Inherit Mother's Recipes!",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2: The One to Carry On Part One",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2: The Evil Ogre! Hell Hath No Fury Like Kasumi Scorned",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2: The Two Akanes! \"Ranma, Look at Me!\"",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2: Oh, Cursed Tunnel of Lost Love! Let My Love Be Forever",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2: Reawakening Memories Part One",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2: Shampoo's Sudden Switch - The Curse of the Contrary Jewel",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma ½: Nightmare! Incense of Spring Sleep",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2: Stormy Weather Comes to School! Growing Up with Miss Hinako",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2: Hot Song Contest",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma One Half",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2 OVA Series: One Grew Over the Kuno's Nest",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2: Curse of the Contrary Jewel",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2 OAV Series 1: Desperately Seeking Shampoo",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2 OAV Series: Like Water for Ranma",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2: The One to Carry On Part Two",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2 OAV Series: Akane and Her Sisters",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2: Reawakening Memories Part Two",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2 OAV Series: An Akane to Remember",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2 OAV Series: Faster, Kasumi! Kill! Kill!",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 16,
+						"air_date": "1990-11-07",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 161,
+						"air_date": "1989-04-15",
+						"name": "Season 1"
+					}
+				]
+			},
+			"95479": {
+				"id": 95479,
+				"name": "JUJUTSU KAISEN",
+				"original_name": "呪術廻戦",
+				"first_air_date": "2020-10-03",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 2626,
+							"name": "exorcism"
+						},
+						{
+							"id": 3271,
+							"name": "secret organization"
+						},
+						{
+							"id": 5147,
+							"name": "sorcery"
+						},
+						{
+							"id": 6152,
+							"name": "supernatural"
+						},
+						{
+							"id": 9712,
+							"name": "possession"
+						},
+						{
+							"id": 9853,
+							"name": "paranormal"
+						},
+						{
+							"id": 10541,
+							"name": "curse"
+						},
+						{
+							"id": 10614,
+							"name": "tragedy"
+						},
+						{
+							"id": 10821,
+							"name": "sorcerer"
+						},
+						{
+							"id": 10873,
+							"name": "school"
+						},
+						{
+							"id": 12648,
+							"name": "bromance"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 13153,
+							"name": "spirit"
+						},
+						{
+							"id": 15001,
+							"name": "demon"
+						},
+						{
+							"id": 161261,
+							"name": "demonic possession"
+						},
+						{
+							"id": 177895,
+							"name": "dark fantasy"
+						},
+						{
+							"id": 190116,
+							"name": "school life"
+						},
+						{
+							"id": 196509,
+							"name": "youkai"
+						},
+						{
+							"id": 202760,
+							"name": "hopeless"
+						},
+						{
+							"id": 203493,
+							"name": "domineering"
+						},
+						{
+							"id": 207826,
+							"name": "shounen"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 211659,
+							"name": "somber"
+						},
+						{
+							"id": 235578,
+							"name": "superhuman abilities"
+						},
+						{
+							"id": 235790,
+							"name": "japanese high school"
+						},
+						{
+							"id": 254630,
+							"name": "occultism"
+						},
+						{
+							"id": 263959,
+							"name": "vindictive"
+						},
+						{
+							"id": 290492,
+							"name": "supernatural ability"
+						},
+						{
+							"id": 298549,
+							"name": "urban fantasy"
+						},
+						{
+							"id": 304115,
+							"name": "cursed object"
+						},
+						{
+							"id": 325761,
+							"name": "admiring"
+						},
+						{
+							"id": 325808,
+							"name": "enraged"
+						},
+						{
+							"id": 325812,
+							"name": "exhilarated"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt12343534",
+					"tvdb_id": 377543
+				},
+				"networks": [
+					{
+						"id": 94,
+						"name": "MBS"
+					},
+					{
+						"id": 160,
+						"name": "TBS"
+					},
+					{
+						"id": 201,
+						"name": "CBC"
+					},
+					{
+						"id": 896,
+						"name": "Tulip Television"
+					},
+					{
+						"id": 1559,
+						"name": "SBC"
+					},
+					{
+						"id": 2460,
+						"name": "BSN"
+					},
+					{
+						"id": 2461,
+						"name": "tys"
+					},
+					{
+						"id": 2462,
+						"name": "NBC"
+					},
+					{
+						"id": 3658,
+						"name": "HBC"
+					},
+					{
+						"id": 3705,
+						"name": "RKK"
+					},
+					{
+						"id": 3969,
+						"name": "i-Television"
+					},
+					{
+						"id": 3970,
+						"name": "SBS"
+					},
+					{
+						"id": 3971,
+						"name": "IBC"
+					},
+					{
+						"id": 3972,
+						"name": "BSS"
+					},
+					{
+						"id": 3973,
+						"name": "MRO"
+					},
+					{
+						"id": 3974,
+						"name": "OBS"
+					},
+					{
+						"id": 3975,
+						"name": "TUF"
+					},
+					{
+						"id": 3977,
+						"name": "RSK"
+					},
+					{
+						"id": 3978,
+						"name": "TUY"
+					},
+					{
+						"id": 3979,
+						"name": "tbc"
+					},
+					{
+						"id": 4748,
+						"name": "RKB"
+					},
+					{
+						"id": 4792,
+						"name": "KUTV"
+					},
+					{
+						"id": 4859,
+						"name": "RBC"
+					},
+					{
+						"id": 6171,
+						"name": "UTY"
+					},
+					{
+						"id": 6172,
+						"name": "RCC"
+					},
+					{
+						"id": 6173,
+						"name": "MRT"
+					},
+					{
+						"id": 6174,
+						"name": "ATV"
+					},
+					{
+						"id": 6175,
+						"name": "MBC"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Jujutsu Kaisen",
+							"iso_3166_1": "BR"
+						},
+						{
+							"title": "咒术回战",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "咒术回战 第一季",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "咒术回战 第二季",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "咒术回战 第三季",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "咒術迴戰",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Jujutsu Kaisen: Guerra de hechiceros",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Jujutsu Kaisen",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Jujutsu Kaisen",
+							"iso_3166_1": "GB"
+						},
+						{
+							"title": "अभिशाप नेटवर्क",
+							"iso_3166_1": "IN"
+						},
+						{
+							"title": "Jujutsu Kaisen",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "呪術廻戦 懐玉・玉折",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "呪術廻戦 渋谷事変",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "呪術廻戦 死滅回游 前編",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Jujutsu Kaisen: Shimetsu Kaiyuu - Zenpen",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "주술회전 2기: 회옥·옥절 / 시부야 사변",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "주술회전 3기: 사멸회유 전편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "주술회전 4기: 사멸회유 후편",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Guerra de magia",
+							"iso_3166_1": "MX"
+						},
+						{
+							"title": "Магическая битва",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "มหาเวทย์ผนึกมาร",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "咒術迴戰 死滅迴游 前篇",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "Магічна битва",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "Sorcery Fight",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "JJK",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "JUJUTSU KAISEN Season 3: The Culling Game Part 1",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Chú Thuật Hồi Chiến",
+							"iso_3166_1": "VN"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 10,
+						"air_date": "2021-01-08",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 59,
+						"air_date": "2020-10-03",
+						"name": "Season 1"
+					}
+				]
+			},
+			"259140": {
+				"id": 259140,
+				"name": "Ranma1/2",
+				"original_name": "らんま1/2",
+				"first_air_date": "2024-10-06",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 779,
+							"name": "martial arts"
+						},
+						{
+							"id": 2692,
+							"name": "arranged marriage"
+						},
+						{
+							"id": 9194,
+							"name": "harem"
+						},
+						{
+							"id": 9714,
+							"name": "remake"
+						},
+						{
+							"id": 9799,
+							"name": "romcom"
+						},
+						{
+							"id": 9840,
+							"name": "romance"
+						},
+						{
+							"id": 10541,
+							"name": "curse"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 41538,
+							"name": "turns into animal"
+						},
+						{
+							"id": 207826,
+							"name": "shounen"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 232592,
+							"name": "gender swap"
+						},
+						{
+							"id": 239884,
+							"name": "love polygon"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt32766897",
+					"tvdb_id": 451479
+				},
+				"networks": [
+					{
+						"id": 57,
+						"name": "Nippon TV"
+					},
+					{
+						"id": 2728,
+						"name": "RNB"
+					},
+					{
+						"id": 4790,
+						"name": "YBS"
+					},
+					{
+						"id": 4815,
+						"name": "RAB"
+					},
+					{
+						"id": 4816,
+						"name": "TVI"
+					},
+					{
+						"id": 6155,
+						"name": "YBC"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Ranma ½",
+							"iso_3166_1": "AR"
+						},
+						{
+							"title": "乱马½",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Nekomoe Kissaten Ranma ½",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "乱马1/2",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "乱马1/2 第三季",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Ranma ½",
+							"iso_3166_1": "CO"
+						},
+						{
+							"title": "Ranma ½",
+							"iso_3166_1": "EC"
+						},
+						{
+							"title": "Ranma ½",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Ranma ½",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Ranma ½ (2024)",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Ranma 1-2 (2024)",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Ranma 1-2",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "ראנמה 0.5",
+							"iso_3166_1": "IL"
+						},
+						{
+							"title": "ראנמה וחצי",
+							"iso_3166_1": "IL"
+						},
+						{
+							"title": "Ranma ½ (2024)",
+							"iso_3166_1": "IT"
+						},
+						{
+							"title": "Ranma ½",
+							"iso_3166_1": "IT"
+						},
+						{
+							"title": "らんま1／2",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Ranma Nibun-no-Ichi",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "らんま½ (2024)",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "란마12",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "란마½",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "란마1／2",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "란마 1/2",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "란마 ½",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "란마 1／2",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Ranma ½",
+							"iso_3166_1": "MX"
+						},
+						{
+							"title": "Ranma 1/2",
+							"iso_3166_1": "PT"
+						},
+						{
+							"title": "Ranma ½ (2024)",
+							"iso_3166_1": "PT"
+						},
+						{
+							"title": "Ranma 1/2 (2024)",
+							"iso_3166_1": "PT"
+						},
+						{
+							"title": "Ранма 1/2",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "Ранма 1/2: Ремейк",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "รันม่า ½",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "รันม่า 1/2",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "รันม่าไอ้หนุ่มกังฟู",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "亂馬 1/2",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "亂馬½",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "Ranma ½",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma 1/2",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma One Half",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma Half",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Ranma One-Half",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 36,
+						"air_date": "2024-10-06",
+						"name": "Season 1"
+					}
+				]
+			}
+		},
+		"season": {
+			"57706/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Hot Song Contest (1)",
+						"air_date": "1990-11-07",
+						"id": 2392496
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Hot Song Contest (2)",
+						"air_date": "1990-11-21",
+						"id": 2392498
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "Tendo Family's Annoying Acquaintances",
+						"air_date": "1992-08-30",
+						"id": 2392578
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "Shampoo's Sudden Switch - The Curse of the Contrary Jewel",
+						"air_date": "1993-10-21",
+						"id": 960751
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "Tendo Family Christmas Scramble",
+						"air_date": "1993-12-17",
+						"id": 944303
+					},
+					{
+						"episode_number": 6,
+						"season_number": 0,
+						"name": "Akane vs. Ranma! I'll Be the One to Inherit Mother's Recipes!",
+						"air_date": "1994-02-18",
+						"id": 960520
+					},
+					{
+						"episode_number": 7,
+						"season_number": 0,
+						"name": "Stormy Weather Comes to School! Growing Up with Miss Hinako",
+						"air_date": "1994-04-21",
+						"id": 944304
+					},
+					{
+						"episode_number": 8,
+						"season_number": 0,
+						"name": "The One to Carry On (1)",
+						"air_date": "1994-06-17",
+						"id": 944305
+					},
+					{
+						"episode_number": 9,
+						"season_number": 0,
+						"name": "The One to Carry On (2)",
+						"air_date": "1994-08-19",
+						"id": 960723
+					},
+					{
+						"episode_number": 10,
+						"season_number": 0,
+						"name": "Reawakening Memories (1)",
+						"air_date": "1994-12-16",
+						"id": 960521
+					},
+					{
+						"episode_number": 11,
+						"season_number": 0,
+						"name": "Reawakening Memories (2)",
+						"air_date": "1995-02-17",
+						"id": 944306
+					},
+					{
+						"episode_number": 12,
+						"season_number": 0,
+						"name": "Huge Battle! 29 Unteachable Fools",
+						"air_date": "1995-03-03",
+						"id": 2392587
+					},
+					{
+						"episode_number": 13,
+						"season_number": 0,
+						"name": "Oh, Cursed Tunnel of Lost Love! Let My Love Be Forever",
+						"air_date": "1995-09-21",
+						"id": 944308
+					},
+					{
+						"episode_number": 14,
+						"season_number": 0,
+						"name": "The Evil Ogre! Hell Hath No Fury Like Kasumi Scorned",
+						"air_date": "1995-11-17",
+						"id": 944309
+					},
+					{
+						"episode_number": 15,
+						"season_number": 0,
+						"name": "The Two Akanes! \"Ranma, Look at Me!\"",
+						"air_date": "1996-01-19",
+						"id": 944310
+					},
+					{
+						"episode_number": 16,
+						"season_number": 0,
+						"name": "Nightmare! The Incense of Spring Sleep",
+						"air_date": "2008-07-31",
+						"id": 944311
+					}
+				]
+			},
+			"57706/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Here's Ranma",
+						"air_date": "1989-04-15",
+						"id": 1168010
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "School Is No Place for Horsing Around",
+						"air_date": "1989-04-21",
+						"id": 1168168
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "A Sudden Storm of Love... Hey, Wait a Minute!",
+						"air_date": "1989-04-29",
+						"id": 1168169
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Ranma and... Ranma? If It's Not One Thing, It's Another",
+						"air_date": "1989-05-05",
+						"id": 1168171
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Love Me to the Bone! The Compound Fracture of Akane's Heart",
+						"air_date": "1989-05-12",
+						"id": 1168173
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Akane's Lost Love... These Things Happen, You Know",
+						"air_date": "1989-05-19",
+						"id": 1168174
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Enter Ryoga! The Eternal 'Lost Boy'",
+						"air_date": "1989-05-26",
+						"id": 1168176
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "School Is a Battlefield! Ranma vs. Ryoga",
+						"air_date": "1989-06-02",
+						"id": 1168179
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "True Confessions! A Girl's Hair Is Her Life!",
+						"air_date": "1989-06-16",
+						"id": 1168183
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "P-P-P-Chan! He's Good for Nothin'",
+						"air_date": "1989-06-30",
+						"id": 1168185
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Ranma Meets Love Head-On! Enter the Delinquent Juvenile Gymnast!",
+						"air_date": "1989-07-14",
+						"id": 1168189
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "A Woman's Love is War! The Martial Arts Rhythmic Gymnastics Challenge!",
+						"air_date": "1989-07-21",
+						"id": 1168192
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "A Tear in a Girl-Delinquent's Eye? The End of the Martial Arts Rhythmic Gymnastics Challenge!",
+						"air_date": "1989-07-28",
+						"id": 1168194
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Pelvic Fortune-Telling? Ranma is the No. One Bride in Japan",
+						"air_date": "1989-08-18",
+						"id": 1168203
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Enter Shampoo, the Gung-Ho Girl! I Put My Life in Your Hands",
+						"air_date": "1989-08-15",
+						"id": 1168206
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Shampoo's Revenge! The Shiatsu Technique That Steals Heart and Soul",
+						"air_date": "1989-09-01",
+						"id": 1168208
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "I Love You, Ranma! Please Don't Say Goodbye",
+						"air_date": "1989-09-08",
+						"id": 1168211
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "I Am a Man! Ranma's Going Back to China!?",
+						"air_date": "1989-09-15",
+						"id": 1168212
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Clash of the Delivery Girls! The Martial Arts Takeout Race",
+						"air_date": "1989-10-20",
+						"id": 1948990
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "You Really Do Hate Cats!",
+						"air_date": "1989-11-03",
+						"id": 1948991
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "This Ol' Gal's the Leader of the Amazon Tribe!",
+						"air_date": "1989-11-10",
+						"id": 1948992
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Behold! The 'Chestnuts Roasting on an Open Fire' Technique",
+						"air_date": "1989-11-17",
+						"id": 1948993
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Enter Mousse! The Fist of the White Swan",
+						"air_date": "1989-11-24",
+						"id": 1948994
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "Cool Runnings! The Race of the Snowmen",
+						"air_date": "1989-12-01",
+						"id": 1948995
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "The Abduction of P-Chan",
+						"air_date": "1989-12-08",
+						"id": 1948996
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "Close Call! The Dance of Death... On Ice!",
+						"air_date": "1989-12-15",
+						"id": 1948997
+					},
+					{
+						"episode_number": 27,
+						"season_number": 1,
+						"name": "P-Chan Explodes! The Icy Fountain of Love!",
+						"air_date": "1989-12-22",
+						"id": 1948998
+					},
+					{
+						"episode_number": 28,
+						"season_number": 1,
+						"name": "Ranma Trains on Mt. Terror",
+						"air_date": "1990-01-12",
+						"id": 1948999
+					},
+					{
+						"episode_number": 29,
+						"season_number": 1,
+						"name": "The Breaking Point!? Ryoga's Great Revenge",
+						"air_date": "1990-01-19",
+						"id": 1949000
+					},
+					{
+						"episode_number": 30,
+						"season_number": 1,
+						"name": "Danger at the Tendo Dojo!",
+						"air_date": "1990-01-26",
+						"id": 1949001
+					},
+					{
+						"episode_number": 31,
+						"season_number": 1,
+						"name": "The Abduction of Akane!",
+						"air_date": "1990-02-02",
+						"id": 1949002
+					},
+					{
+						"episode_number": 32,
+						"season_number": 1,
+						"name": "Ranma vs. Mousse! To Lose Is to Win",
+						"air_date": "1990-02-09",
+						"id": 1949003
+					},
+					{
+						"episode_number": 33,
+						"season_number": 1,
+						"name": "Enter Happosai, the Lustful Lecher!",
+						"air_date": "1990-02-16",
+						"id": 1949004
+					},
+					{
+						"episode_number": 34,
+						"season_number": 1,
+						"name": "Assault on the Girls' Locker Room",
+						"air_date": "1990-02-23",
+						"id": 1949005
+					},
+					{
+						"episode_number": 35,
+						"season_number": 1,
+						"name": "Kuno's House of Gadgets! Guests Check in, But They Don't Check Out",
+						"air_date": "1990-03-02",
+						"id": 1949006
+					},
+					{
+						"episode_number": 36,
+						"season_number": 1,
+						"name": "Goodbye Girl-Type",
+						"air_date": "1990-03-09",
+						"id": 1949007
+					},
+					{
+						"episode_number": 37,
+						"season_number": 1,
+						"name": "It's a Fine Line Between Pleasure and Pain",
+						"air_date": "1990-03-16",
+						"id": 1949008
+					},
+					{
+						"episode_number": 38,
+						"season_number": 1,
+						"name": "S.O.S.! The Wrath of Happosai",
+						"air_date": "1990-03-23",
+						"id": 1949009
+					},
+					{
+						"episode_number": 39,
+						"season_number": 1,
+						"name": "Kissing Is Such Sweet Sorrow! The Taking of Akane's Lips",
+						"air_date": "1990-04-06",
+						"id": 1949010
+					},
+					{
+						"episode_number": 40,
+						"season_number": 1,
+						"name": "Bathhouse Battle! We're in Some Hot Water Now",
+						"air_date": "1990-04-13",
+						"id": 1949011
+					},
+					{
+						"episode_number": 41,
+						"season_number": 1,
+						"name": "Ranma Gains Yet Another Suitor",
+						"air_date": "1990-04-20",
+						"id": 1949012
+					},
+					{
+						"episode_number": 42,
+						"season_number": 1,
+						"name": "Ryoga and Akane: 2-Gether, 4-Ever",
+						"air_date": "1990-04-27",
+						"id": 1949013
+					},
+					{
+						"episode_number": 43,
+						"season_number": 1,
+						"name": "Sneeze Me, Squeeze Me, Please Me! Shampoo's Recipe for Disaster",
+						"air_date": "1990-05-04",
+						"id": 1949014
+					},
+					{
+						"episode_number": 44,
+						"season_number": 1,
+						"name": "Rub-A-Dub-Dub! There's a Pervert in the Tub",
+						"air_date": "1990-05-11",
+						"id": 1949015
+					},
+					{
+						"episode_number": 45,
+						"season_number": 1,
+						"name": "I Love You! My Dear, Dear Ukyo",
+						"air_date": "1990-05-18",
+						"id": 1949016
+					},
+					{
+						"episode_number": 46,
+						"season_number": 1,
+						"name": "The Witch Who Loved Me: A Japanese Ghost Story",
+						"air_date": "1990-05-25",
+						"id": 1949017
+					},
+					{
+						"episode_number": 47,
+						"season_number": 1,
+						"name": "Transform! Akane the Super-Duper Girl",
+						"air_date": "1990-06-01",
+						"id": 1949018
+					},
+					{
+						"episode_number": 48,
+						"season_number": 1,
+						"name": "The Killer from Jusenkyo",
+						"air_date": "1990-06-08",
+						"id": 1949019
+					},
+					{
+						"episode_number": 49,
+						"season_number": 1,
+						"name": "Am I... Pretty? Ranma's Declaration of Womanhood",
+						"air_date": "1990-06-15",
+						"id": 1949020
+					},
+					{
+						"episode_number": 50,
+						"season_number": 1,
+						"name": "Final Facedown! Happosai vs. The Invisble Man",
+						"air_date": "1990-06-22",
+						"id": 1949021
+					},
+					{
+						"episode_number": 51,
+						"season_number": 1,
+						"name": "Les Miserables of the Kuno Estate",
+						"air_date": "1990-06-29",
+						"id": 1949022
+					},
+					{
+						"episode_number": 52,
+						"season_number": 1,
+						"name": "Ghost Story! Ranma and the Magic Sword",
+						"air_date": "1990-07-06",
+						"id": 1949023
+					},
+					{
+						"episode_number": 53,
+						"season_number": 1,
+						"name": "All It Takes Is One! The Kiss Of Love Is the Kiss of Death",
+						"air_date": "1990-07-13",
+						"id": 1949024
+					},
+					{
+						"episode_number": 54,
+						"season_number": 1,
+						"name": "The Ultimate Team-up!? The Ryoga / Mousse Alliance",
+						"air_date": "1990-07-20",
+						"id": 1949025
+					},
+					{
+						"episode_number": 55,
+						"season_number": 1,
+						"name": "Back to the Happosai!",
+						"air_date": "1990-07-27",
+						"id": 1949026
+					},
+					{
+						"episode_number": 56,
+						"season_number": 1,
+						"name": "Kodachi the Black Rose! The Beeline to True Love",
+						"air_date": "1990-08-03",
+						"id": 1949027
+					},
+					{
+						"episode_number": 57,
+						"season_number": 1,
+						"name": "The Last Days of Happosai...?",
+						"air_date": "1990-08-10",
+						"id": 1949028
+					},
+					{
+						"episode_number": 58,
+						"season_number": 1,
+						"name": "Two, Too Violent Girls: Ling-Ling and Lung-Lung",
+						"air_date": "1990-08-17",
+						"id": 1949029
+					},
+					{
+						"episode_number": 59,
+						"season_number": 1,
+						"name": "Ranma and the Evil Within",
+						"air_date": "1990-08-24",
+						"id": 1949030
+					},
+					{
+						"episode_number": 60,
+						"season_number": 1,
+						"name": "Enter Ken and His Copycat Kerchief",
+						"air_date": "1990-08-31",
+						"id": 1949031
+					},
+					{
+						"episode_number": 61,
+						"season_number": 1,
+						"name": "Ryoga's Miracle Cure! Hand Over That Soap",
+						"air_date": "1990-09-07",
+						"id": 1949032
+					},
+					{
+						"episode_number": 62,
+						"season_number": 1,
+						"name": "Fight! The Anything-Goes Obstacle Course Race",
+						"air_date": "1990-09-14",
+						"id": 1949033
+					},
+					{
+						"episode_number": 63,
+						"season_number": 1,
+						"name": "Ranma Goes Back to Jusenkyo at Last",
+						"air_date": "1990-09-28",
+						"id": 1949035
+					},
+					{
+						"episode_number": 64,
+						"season_number": 1,
+						"name": "The Return of The Hawai'ian Headmaster from Hell",
+						"air_date": "1990-10-05",
+						"id": 1949037
+					},
+					{
+						"episode_number": 65,
+						"season_number": 1,
+						"name": "Enter Kuno, the Night-Prowling Knight",
+						"air_date": "1990-10-12",
+						"id": 1949038
+					},
+					{
+						"episode_number": 66,
+						"season_number": 1,
+						"name": "Ranma Gets Weak!",
+						"air_date": "1990-10-19",
+						"id": 1949039
+					},
+					{
+						"episode_number": 67,
+						"season_number": 1,
+						"name": "Eureka! The Desperate Move of Desperation",
+						"air_date": "1990-10-26",
+						"id": 1949040
+					},
+					{
+						"episode_number": 68,
+						"season_number": 1,
+						"name": "Showdown! Can Ranma Make a Comeback?",
+						"air_date": "1990-11-02",
+						"id": 1949041
+					},
+					{
+						"episode_number": 69,
+						"season_number": 1,
+						"name": "Ukyo's Skirt! The Great Girly-Girl Gambit",
+						"air_date": "1990-11-09",
+						"id": 1949044
+					},
+					{
+						"episode_number": 70,
+						"season_number": 1,
+						"name": "Here Comes Ranma's Mom!",
+						"air_date": "1990-11-16",
+						"id": 1949042
+					},
+					{
+						"episode_number": 71,
+						"season_number": 1,
+						"name": "From Ryoga with Love",
+						"air_date": "1990-11-23",
+						"id": 1949043
+					},
+					{
+						"episode_number": 72,
+						"season_number": 1,
+						"name": "My Fiance, the Cat",
+						"air_date": "1990-11-30",
+						"id": 1949045
+					},
+					{
+						"episode_number": 73,
+						"season_number": 1,
+						"name": "Blow, Wind! To Be Young Is to Go Gung-Ho",
+						"air_date": "1990-12-07",
+						"id": 1949046
+					},
+					{
+						"episode_number": 74,
+						"season_number": 1,
+						"name": "A Formidable New Disciple Appears",
+						"air_date": "1990-12-14",
+						"id": 1949047
+					},
+					{
+						"episode_number": 75,
+						"season_number": 1,
+						"name": "Step Outside!",
+						"air_date": "1990-12-21",
+						"id": 1949048
+					},
+					{
+						"episode_number": 76,
+						"season_number": 1,
+						"name": "Ryoga's Tendo Dojo Houseguest Diary",
+						"air_date": "1991-01-11",
+						"id": 1949050
+					},
+					{
+						"episode_number": 77,
+						"season_number": 1,
+						"name": "Happosai's Happy Heart!",
+						"air_date": "1991-01-18",
+						"id": 1949051
+					},
+					{
+						"episode_number": 78,
+						"season_number": 1,
+						"name": "Extra, Extra! Kuno and Nabiki: Read All About It!",
+						"air_date": "1991-01-25",
+						"id": 1949052
+					},
+					{
+						"episode_number": 79,
+						"season_number": 1,
+						"name": "Ryoga the Strong... Too Strong",
+						"air_date": "1991-02-01",
+						"id": 1949053
+					},
+					{
+						"episode_number": 80,
+						"season_number": 1,
+						"name": "Close Call! P-chan's Secret",
+						"air_date": "1991-02-08",
+						"id": 1949054
+					},
+					{
+						"episode_number": 81,
+						"season_number": 1,
+						"name": "The Egg-Catcher Man",
+						"air_date": "1991-02-15",
+						"id": 1949055
+					},
+					{
+						"episode_number": 82,
+						"season_number": 1,
+						"name": "Ranma And Kuno's... First Kiss",
+						"air_date": "1991-02-22",
+						"id": 1949056
+					},
+					{
+						"episode_number": 83,
+						"season_number": 1,
+						"name": "Shampoo's Red Thread Of Dread!",
+						"air_date": "1991-03-01",
+						"id": 1949057
+					},
+					{
+						"episode_number": 84,
+						"season_number": 1,
+						"name": "Mousse Goes Home to the Country!",
+						"air_date": "1991-03-08",
+						"id": 1949058
+					},
+					{
+						"episode_number": 85,
+						"season_number": 1,
+						"name": "The Dumbest Bet in History!",
+						"air_date": "1991-03-15",
+						"id": 1949059
+					},
+					{
+						"episode_number": 86,
+						"season_number": 1,
+						"name": "Kuno Becomes a Marianne!",
+						"air_date": "1991-03-22",
+						"id": 1949060
+					},
+					{
+						"episode_number": 87,
+						"season_number": 1,
+						"name": "Ranma, You Are Such a Jerk!",
+						"air_date": "1991-03-29",
+						"id": 1949061
+					},
+					{
+						"episode_number": 88,
+						"season_number": 1,
+						"name": "Gimme That Pigtail",
+						"air_date": "1991-04-05",
+						"id": 1949063
+					},
+					{
+						"episode_number": 89,
+						"season_number": 1,
+						"name": "When a Guy's Pride and Joy Is Gone",
+						"air_date": "1991-04-12",
+						"id": 1949064
+					},
+					{
+						"episode_number": 90,
+						"season_number": 1,
+						"name": "Ling-Ling and Lung-Lung Strike Back!",
+						"air_date": "1991-04-19",
+						"id": 1949065
+					},
+					{
+						"episode_number": 91,
+						"season_number": 1,
+						"name": "Ryoga's Proposal",
+						"air_date": "1991-04-26",
+						"id": 1949066
+					},
+					{
+						"episode_number": 92,
+						"season_number": 1,
+						"name": "Genma Takes a Walk",
+						"air_date": "1991-05-03",
+						"id": 1949067
+					},
+					{
+						"episode_number": 93,
+						"season_number": 1,
+						"name": "The Gentle Art of Martial Tea Ceremony",
+						"air_date": "1991-05-10",
+						"id": 1949068
+					},
+					{
+						"episode_number": 94,
+						"season_number": 1,
+						"name": "And the Challenger Is... a Girl?!",
+						"air_date": "1991-05-17",
+						"id": 1949069
+					},
+					{
+						"episode_number": 95,
+						"season_number": 1,
+						"name": "Hot Springs Battle Royale!",
+						"air_date": "1991-05-24",
+						"id": 1949070
+					},
+					{
+						"episode_number": 96,
+						"season_number": 1,
+						"name": "Me Is Kuno's Daddy, Me Is",
+						"air_date": "1991-05-31",
+						"id": 1949071
+					},
+					{
+						"episode_number": 97,
+						"season_number": 1,
+						"name": "The Matriarch Takes a Stand",
+						"air_date": "1991-06-07",
+						"id": 1949072
+					},
+					{
+						"episode_number": 98,
+						"season_number": 1,
+						"name": "A Leotard Is a Girl's Burden",
+						"air_date": "1991-06-14",
+						"id": 1949073
+					},
+					{
+						"episode_number": 99,
+						"season_number": 1,
+						"name": "The Mixed-Bath Horror!",
+						"air_date": "1991-06-21",
+						"id": 1949074
+					},
+					{
+						"episode_number": 100,
+						"season_number": 1,
+						"name": "The Frogman's Curse!",
+						"air_date": "1991-06-28",
+						"id": 1949075
+					},
+					{
+						"episode_number": 101,
+						"season_number": 1,
+						"name": "Revenge! Raging Okonomiyaki...!",
+						"air_date": "1991-07-05",
+						"id": 1949076
+					},
+					{
+						"episode_number": 102,
+						"season_number": 1,
+						"name": "Ranma the Lady-Killer",
+						"air_date": "1991-07-12",
+						"id": 1949077
+					},
+					{
+						"episode_number": 103,
+						"season_number": 1,
+						"name": "Shogi Showdown",
+						"air_date": "1991-07-19",
+						"id": 1949078
+					},
+					{
+						"episode_number": 104,
+						"season_number": 1,
+						"name": "Sasuke's Mission: Improbable",
+						"air_date": "1991-07-26",
+						"id": 1949079
+					},
+					{
+						"episode_number": 105,
+						"season_number": 1,
+						"name": "Bonjour, Furinkan!",
+						"air_date": "1991-08-02",
+						"id": 1949080
+					},
+					{
+						"episode_number": 106,
+						"season_number": 1,
+						"name": "Dinner at Ringside!",
+						"air_date": "1991-08-09",
+						"id": 1949081
+					},
+					{
+						"episode_number": 107,
+						"season_number": 1,
+						"name": "Swimming with Psychos",
+						"air_date": "1991-08-16",
+						"id": 1949082
+					},
+					{
+						"episode_number": 108,
+						"season_number": 1,
+						"name": "Ryoga, Run Into the Sunset",
+						"air_date": "1991-08-23",
+						"id": 1949083
+					},
+					{
+						"episode_number": 109,
+						"season_number": 1,
+						"name": "Into the Darkness",
+						"air_date": "1991-08-30",
+						"id": 1949084
+					},
+					{
+						"episode_number": 110,
+						"season_number": 1,
+						"name": "Nabiki, Ranma's New Fiance!",
+						"air_date": "1991-09-06",
+						"id": 1949085
+					},
+					{
+						"episode_number": 111,
+						"season_number": 1,
+						"name": "Case of the Missing Takoyaki!",
+						"air_date": "1991-09-13",
+						"id": 1949086
+					},
+					{
+						"episode_number": 112,
+						"season_number": 1,
+						"name": "Ranma Versus Shadow Ranma!",
+						"air_date": "1991-09-20",
+						"id": 1949087
+					},
+					{
+						"episode_number": 113,
+						"season_number": 1,
+						"name": "Dear Daddy... Love, Kodachi!",
+						"air_date": "1991-09-27",
+						"id": 1949088
+					},
+					{
+						"episode_number": 114,
+						"season_number": 1,
+						"name": "Enter Gosunkugi, the New Rival!?",
+						"air_date": "1991-10-04",
+						"id": 1949089
+					},
+					{
+						"episode_number": 115,
+						"season_number": 1,
+						"name": "Ranma's Calligraphy Challenge",
+						"air_date": "1991-10-11",
+						"id": 1949090
+					},
+					{
+						"episode_number": 116,
+						"season_number": 1,
+						"name": "The Secret Don of Furinkan High",
+						"air_date": "1991-10-18",
+						"id": 1949091
+					},
+					{
+						"episode_number": 117,
+						"season_number": 1,
+						"name": "Back to the Way We Were... Please!",
+						"air_date": "1991-10-25",
+						"id": 1949092
+					},
+					{
+						"episode_number": 118,
+						"season_number": 1,
+						"name": "Ryoga Inherits the Saotome School?",
+						"air_date": "1991-11-01",
+						"id": 1949093
+					},
+					{
+						"episode_number": 119,
+						"season_number": 1,
+						"name": "Tendo Family Goes to the Amusement Park!",
+						"air_date": "1991-11-15",
+						"id": 1949094
+					},
+					{
+						"episode_number": 120,
+						"season_number": 1,
+						"name": "The Case of the Furinkan Stalker!",
+						"air_date": "1991-11-29",
+						"id": 1949095
+					},
+					{
+						"episode_number": 121,
+						"season_number": 1,
+						"name": "The Demon from Jusenkyo - Part One",
+						"air_date": "1991-12-06",
+						"id": 1949097
+					},
+					{
+						"episode_number": 122,
+						"season_number": 1,
+						"name": "The Demon from Jusenkyo - Part Two",
+						"air_date": "1991-12-13",
+						"id": 1949098
+					},
+					{
+						"episode_number": 123,
+						"season_number": 1,
+						"name": "A Xmas Without Ranma",
+						"air_date": "1991-12-20",
+						"id": 1949099
+					},
+					{
+						"episode_number": 124,
+						"season_number": 1,
+						"name": "A Cold Day in Furinkan",
+						"air_date": "1992-01-10",
+						"id": 1949100
+					},
+					{
+						"episode_number": 125,
+						"season_number": 1,
+						"name": "Curse of the Scribbled Panda",
+						"air_date": "1992-01-17",
+						"id": 1949101
+					},
+					{
+						"episode_number": 126,
+						"season_number": 1,
+						"name": "The Date-Monster of Watermelon Island",
+						"air_date": "1992-01-24",
+						"id": 1949102
+					},
+					{
+						"episode_number": 127,
+						"season_number": 1,
+						"name": "Legend of the Lucky Panda!",
+						"air_date": "1992-01-31",
+						"id": 1949103
+					},
+					{
+						"episode_number": 128,
+						"season_number": 1,
+						"name": "Ukyo's Secret Sauce - Part One",
+						"air_date": "1992-02-07",
+						"id": 1949104
+					},
+					{
+						"episode_number": 129,
+						"season_number": 1,
+						"name": "Ukyo's Secret Sauce - Part Two",
+						"air_date": "1992-02-14",
+						"id": 1949105
+					},
+					{
+						"episode_number": 130,
+						"season_number": 1,
+						"name": "The Missing Matriarch of Martial Arts Tea!",
+						"air_date": "1992-02-21",
+						"id": 1949106
+					},
+					{
+						"episode_number": 131,
+						"season_number": 1,
+						"name": "Akane Goes to the Hospital!",
+						"air_date": "1992-02-28",
+						"id": 1949107
+					},
+					{
+						"episode_number": 132,
+						"season_number": 1,
+						"name": "Mystery of the Marauding Octopus Pot!",
+						"air_date": "1992-03-06",
+						"id": 1949108
+					},
+					{
+						"episode_number": 133,
+						"season_number": 1,
+						"name": "Gosunkugi's Paper Dolls of Love",
+						"air_date": "1992-03-13",
+						"id": 1949109
+					},
+					{
+						"episode_number": 134,
+						"season_number": 1,
+						"name": "Akane's Unfathomable Heart",
+						"air_date": "1992-03-20",
+						"id": 1949110
+					},
+					{
+						"episode_number": 135,
+						"season_number": 1,
+						"name": "A Teenage Ghost Story",
+						"air_date": "1992-03-27",
+						"id": 1949111
+					},
+					{
+						"episode_number": 136,
+						"season_number": 1,
+						"name": "Master and Student... Forever!?",
+						"air_date": "1992-04-03",
+						"id": 1949112
+					},
+					{
+						"episode_number": 137,
+						"season_number": 1,
+						"name": "Tatewaki Kuno, Substitute Principal",
+						"air_date": "1992-04-10",
+						"id": 1949114
+					},
+					{
+						"episode_number": 138,
+						"season_number": 1,
+						"name": "Ranma's Greatest Challenge!?",
+						"air_date": "1992-04-17",
+						"id": 1949115
+					},
+					{
+						"episode_number": 139,
+						"season_number": 1,
+						"name": "Nihao! Jusenkyo Guide",
+						"air_date": "1992-04-24",
+						"id": 1949116
+					},
+					{
+						"episode_number": 140,
+						"season_number": 1,
+						"name": "Pick-a-Peck o' Happosai",
+						"air_date": "1992-05-01",
+						"id": 1949117
+					},
+					{
+						"episode_number": 141,
+						"season_number": 1,
+						"name": "From the Depths of Despair - Part One",
+						"air_date": "1992-05-08",
+						"id": 1949118
+					},
+					{
+						"episode_number": 142,
+						"season_number": 1,
+						"name": "From the Depths of Despair - Part Two",
+						"air_date": "1992-05-15",
+						"id": 1949119
+					},
+					{
+						"episode_number": 143,
+						"season_number": 1,
+						"name": "Shampoo's Cursed Kiss",
+						"air_date": "1992-05-22",
+						"id": 1949120
+					},
+					{
+						"episode_number": 144,
+						"season_number": 1,
+						"name": "Run Away With Me, Ranma!",
+						"air_date": "1992-05-29",
+						"id": 1949121
+					},
+					{
+						"episode_number": 145,
+						"season_number": 1,
+						"name": "Let's Go to the Mushroom Temple",
+						"air_date": "1992-06-05",
+						"id": 1949122
+					},
+					{
+						"episode_number": 146,
+						"season_number": 1,
+						"name": "The Cradle from Hell",
+						"air_date": "1992-06-12",
+						"id": 1949123
+					},
+					{
+						"episode_number": 147,
+						"season_number": 1,
+						"name": "Madame Saint Paul's Cry for Help",
+						"air_date": "1992-06-19",
+						"id": 1949124
+					},
+					{
+						"episode_number": 148,
+						"season_number": 1,
+						"name": "Meet You in the Milky Way",
+						"air_date": "1992-06-26",
+						"id": 1949125
+					},
+					{
+						"episode_number": 149,
+						"season_number": 1,
+						"name": "Wretched Rice Cakes of Love",
+						"air_date": "1992-07-03",
+						"id": 1949126
+					},
+					{
+						"episode_number": 150,
+						"season_number": 1,
+						"name": "The Dreaded Happo Mold-Burst",
+						"air_date": "1992-07-10",
+						"id": 1949127
+					},
+					{
+						"episode_number": 151,
+						"season_number": 1,
+						"name": "The Kuno Sibling Scandal",
+						"air_date": "1992-07-17",
+						"id": 1949128
+					},
+					{
+						"episode_number": 152,
+						"season_number": 1,
+						"name": "Battle for the Golden Tea Set",
+						"air_date": "1992-07-24",
+						"id": 1949130
+					},
+					{
+						"episode_number": 153,
+						"season_number": 1,
+						"name": "Gosunkugi's Summer Affair",
+						"air_date": "1992-07-31",
+						"id": 1949131
+					},
+					{
+						"episode_number": 154,
+						"season_number": 1,
+						"name": "Love of the Cheer Leader - Part One",
+						"air_date": "1992-08-07",
+						"id": 1949132
+					},
+					{
+						"episode_number": 155,
+						"season_number": 1,
+						"name": "Love of the Cheer Leader - Part Two",
+						"air_date": "1992-08-14",
+						"id": 1949133
+					},
+					{
+						"episode_number": 156,
+						"season_number": 1,
+						"name": "Battle for Miss Beachside",
+						"air_date": "1992-08-21",
+						"id": 1949134
+					},
+					{
+						"episode_number": 157,
+						"season_number": 1,
+						"name": "The Musical Instruments of Destruction",
+						"air_date": "1992-08-28",
+						"id": 1949135
+					},
+					{
+						"episode_number": 158,
+						"season_number": 1,
+						"name": "A Ninja's Dog Is Black and White",
+						"air_date": "1992-09-04",
+						"id": 1949136
+					},
+					{
+						"episode_number": 159,
+						"season_number": 1,
+						"name": "The Tendo Dragon Legend",
+						"air_date": "1992-09-11",
+						"id": 1949137
+					},
+					{
+						"episode_number": 160,
+						"season_number": 1,
+						"name": "Boy Meets Mom - Part One",
+						"air_date": "1992-09-18",
+						"id": 1949138
+					},
+					{
+						"episode_number": 161,
+						"season_number": 1,
+						"name": "Boy Meets Mom - Part Two",
+						"air_date": "1992-09-25",
+						"id": 1949139
+					}
+				]
+			},
+			"259140/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Here's Ranma",
+						"air_date": "2024-10-06",
+						"id": 5475552
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "I Hate Men!",
+						"air_date": "2024-10-13",
+						"id": 5518270
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Because There's Someone He Likes",
+						"air_date": "2024-10-20",
+						"id": 5518272
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "The Hunter",
+						"air_date": "2024-10-27",
+						"id": 5518273
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Who Says You're Cute",
+						"air_date": "2024-11-03",
+						"id": 5521716
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Kodachi, The Black Rose",
+						"air_date": "2024-11-10",
+						"id": 5521717
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Hot Competition",
+						"air_date": "2024-11-17",
+						"id": 5521718
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Darling Charlotte",
+						"air_date": "2024-11-24",
+						"id": 5521719
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "I'll Never Let Go",
+						"air_date": "2024-12-01",
+						"id": 5521720
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Kiss of Death",
+						"air_date": "2024-12-08",
+						"id": 5521721
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "You I Love",
+						"air_date": "2024-12-15",
+						"id": 5521722
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Shampoo Cleans Up",
+						"air_date": "2024-12-22",
+						"id": 5521723
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Ranma's Weakness",
+						"air_date": "2025-10-05",
+						"id": 6578500
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Attack of the Wild Mousse",
+						"air_date": "2025-10-12",
+						"id": 6578502
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Chestnuts Roasting on an Open Fire",
+						"air_date": "2025-10-19",
+						"id": 6594497
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Naval Engagement",
+						"air_date": "2025-10-26",
+						"id": 6611358
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "It's Fast or It's Free",
+						"air_date": "2025-11-02",
+						"id": 6629771
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "The Evil Wakes",
+						"air_date": "2025-11-09",
+						"id": 6649469
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Instant Spring",
+						"air_date": "2025-11-16",
+						"id": 6666898
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "\"Okonomiyaki\" Means \"I Love You\"",
+						"air_date": "2025-11-23",
+						"id": 6690472
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Love Letters in the Sauce",
+						"air_date": "2025-11-30",
+						"id": 6710416
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Not Your Typical Juliet",
+						"air_date": "2025-12-07",
+						"id": 6726563
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Abduction of ...Akane?",
+						"air_date": "2025-12-14",
+						"id": 6744266
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "Fowl Play",
+						"air_date": "2025-12-21",
+						"id": 6761972
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "Training Meals",
+						"air_date": "2026-10-04",
+						"id": 7593562
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "The Breaking Point",
+						"air_date": "2026-10-11",
+						"id": 7903913
+					},
+					{
+						"episode_number": 27,
+						"season_number": 1,
+						"name": "Happosai Days Are Here Again",
+						"air_date": "2026-10-18",
+						"id": 7903914
+					},
+					{
+						"episode_number": 28,
+						"season_number": 1,
+						"name": "The Way of Tea",
+						"air_date": "2026-10-25",
+						"id": 7903915
+					},
+					{
+						"episode_number": 29,
+						"season_number": 1,
+						"name": "The Way the Cookie Crumbles",
+						"air_date": "2026-11-01",
+						"id": 7903916
+					},
+					{
+						"episode_number": 30,
+						"season_number": 1,
+						"name": "I Ate the Whole Thing",
+						"air_date": "2026-11-08",
+						"id": 7903917
+					},
+					{
+						"episode_number": 31,
+						"season_number": 1,
+						"name": "Episode 31",
+						"air_date": "2026-11-15",
+						"id": 7903919
+					},
+					{
+						"episode_number": 32,
+						"season_number": 1,
+						"name": "Episode 32",
+						"air_date": "2026-11-22",
+						"id": 7903921
+					},
+					{
+						"episode_number": 33,
+						"season_number": 1,
+						"name": "Episode 33",
+						"air_date": "2026-11-29",
+						"id": 7903922
+					},
+					{
+						"episode_number": 34,
+						"season_number": 1,
+						"name": "Episode 34",
+						"air_date": "2026-12-06",
+						"id": 7903923
+					},
+					{
+						"episode_number": 35,
+						"season_number": 1,
+						"name": "Episode 35",
+						"air_date": "2026-12-13",
+						"id": 7903924
+					},
+					{
+						"episode_number": 36,
+						"season_number": 1,
+						"name": "Episode 36",
+						"air_date": "2026-12-20",
+						"id": 7903925
+					}
+				]
+			},
+			"37760/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Episode 1",
+						"air_date": "2011-05-01",
+						"id": 851383
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Episode 2",
+						"air_date": "2011-05-02",
+						"id": 851384
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Episode 3",
+						"air_date": "2011-05-03",
+						"id": 851385
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt0096686": null,
+			"tt12343534": null,
+			"tt2622240": null
+		},
+		"searchTv": {
+			"ranma": {
+				"results": [
+					{
+						"id": 57706,
+						"name": "Ranma ½",
+						"original_name": "らんま1/2",
+						"first_air_date": "1989-04-15"
+					},
+					{
+						"id": 259140,
+						"name": "Ranma1/2",
+						"original_name": "らんま1/2",
+						"first_air_date": "2024-10-06"
+					},
+					{
+						"id": 222365,
+						"name": "Ranman",
+						"original_name": "らんまん",
+						"first_air_date": "2023-04-03"
+					},
+					{
+						"id": 94498,
+						"name": "Appare-Ranman!",
+						"original_name": "天晴爛漫！",
+						"first_air_date": "2020-04-10"
+					},
+					{
+						"id": 116224,
+						"name": "Fairy Ranmaru",
+						"original_name": "Fairy蘭丸～あなたの心お助けします～",
+						"first_air_date": "2021-04-08"
+					},
+					{
+						"id": 218638,
+						"name": "Kiyoko Ranman",
+						"original_name": "潔子爛漫～きよこらんまん～",
+						"first_air_date": "2013-09-02"
+					}
+				]
+			},
+			"ranma ½": {
+				"results": [
+					{
+						"id": 57706,
+						"name": "Ranma ½",
+						"original_name": "らんま1/2",
+						"first_air_date": "1989-04-15"
+					},
+					{
+						"id": 259140,
+						"name": "Ranma1/2",
+						"original_name": "らんま1/2",
+						"first_air_date": "2024-10-06"
+					}
+				]
+			}
+		},
+		"imdbSeries": {
+			"tt2622240": {
+				"titleType": "tvSeries",
+				"title": "Deadpool",
+				"episodes": [
+					{
+						"season": 1,
+						"episode": 1,
+						"name": "There's Something About Mary"
+					},
+					{
+						"season": 1,
+						"episode": 2,
+						"name": "Curse You Gingerbread Man!"
+					},
+					{
+						"season": 1,
+						"episode": 3,
+						"name": "A Nightmare on Pool Street"
+					}
+				]
+			}
+		},
+		"identifier": {
+			"Deadpool": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt2622240",
+						"score": 2.0562,
+						"title": "Deadpool",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt3781670",
+						"score": -6.3959,
+						"title": "The Pool Master",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt39364238",
+						"score": -6.9602,
+						"title": "DeadPool Just Another Day",
+						"year": null
+					},
+					{
+						"imdbId": "tt37749017",
+						"score": -7.0475,
+						"title": "Pool Boy",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt5478670",
+						"score": -7.2956,
+						"title": "The Deadpool Series: Fan Films",
+						"year": 2008
+					}
+				],
+				"parsedTitle": "Deadpool",
+				"parsedYear": null,
+				"probability": 0.5803
+			},
+			"Jujutsu Kaisen 0 (2021) [BD Remux 1080p AVC TrueHD] [E53451A1]": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt14331144",
+						"score": 4.3516,
+						"title": "Jujutsu Kaisen 0",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt36956670",
+						"score": -4.0478,
+						"title": "Jujutsu Kaisen: Hidden Inventory / Premature Death - The Movie",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt38121182",
+						"score": -4.286,
+						"title": "Jujutsu Kaisen: Execution",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt4854098",
+						"score": -7.4749,
+						"title": "2021",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt16160980",
+						"score": -7.544,
+						"title": "Juju",
+						"year": 2022
+					}
+				],
+				"parsedTitle": "Jujutsu Kaisen 0",
+				"parsedYear": 2021,
+				"probability": 0.957
+			},
+			"Deadpool.Wolverine.2024.720p.WEBRip.x264.AAC-[YTS.MX]": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6263850",
+						"score": 1.0679,
+						"title": "Deadpool & Wolverine",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt1430132",
+						"score": -3.7315,
+						"title": "The Wolverine",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt1431045",
+						"score": -3.7823,
+						"title": "Deadpool",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt0458525",
+						"score": -4.4509,
+						"title": "X-Men Origins: Wolverine",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt3315342",
+						"score": -4.8545,
+						"title": "Logan",
+						"year": 2017
+					}
+				],
+				"parsedTitle": "Deadpool Wolverine",
+				"parsedYear": 2024,
+				"probability": 0.8924
+			},
+			"[Exiled-Destiny]_Ranma": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt32766897",
+						"score": 2.3754,
+						"title": "Ranma ½",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt0096686",
+						"score": 0.7562,
+						"title": "Ranma ½",
+						"year": 1989
+					},
+					{
+						"imdbId": "tt0096685",
+						"score": -0.992,
+						"title": "Ranma ½",
+						"year": 1989
+					},
+					{
+						"imdbId": "tt4778940",
+						"score": -2.2647,
+						"title": "Ranma ½ OVA",
+						"year": 1993
+					},
+					{
+						"imdbId": "tt1800493",
+						"score": -2.9141,
+						"title": "Exile",
+						"year": 2011
+					}
+				],
+				"parsedTitle": "Ranma",
+				"parsedYear": null,
+				"probability": 0.4994
+			},
+			"[Exiled-Destiny]_Ranma_½_TV_Ep001_(E5B63FCA)": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2072214",
+						"score": 0.5574,
+						"title": "Ranma ½",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0101583",
+						"score": -0.348,
+						"title": "Ranma ½: The Movie, Big Trouble in Nekonron, China",
+						"year": 1991
+					},
+					{
+						"imdbId": "tt0796212",
+						"score": -2.729,
+						"title": "Exiled",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt0164023",
+						"score": -3.4005,
+						"title": "Exiled",
+						"year": 1998
+					},
+					{
+						"imdbId": "tt4261942",
+						"score": -4.3855,
+						"title": "Exiled",
+						"year": 2016
+					}
+				],
+				"parsedTitle": "Ranma ½ TV",
+				"parsedYear": null,
+				"probability": 0.1156
+			},
+			"Ranma_½_Movie_Big_Trouble_In_Nekonron_China_(5726FB60)": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0101583",
+						"score": 3.1611,
+						"title": "Ranma ½: The Movie, Big Trouble in Nekonron, China",
+						"year": 1991
+					},
+					{
+						"imdbId": "tt0090728",
+						"score": -2.9544,
+						"title": "Big Trouble in Little China",
+						"year": 1986
+					},
+					{
+						"imdbId": "tt2072214",
+						"score": -3.1459,
+						"title": "Ranma ½",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0246464",
+						"score": -3.3437,
+						"title": "Big Trouble",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt0104604",
+						"score": -3.8228,
+						"title": "Ranma ½: The Movie 2, Nihao My Concubine",
+						"year": 1992
+					}
+				],
+				"parsedTitle": "Ranma ½ Movie Big Trouble In Nekonron China",
+				"parsedYear": null,
+				"probability": 0.9827
+			},
+			"Ranma_½_Movie_Nihao_My_Concubine_(B5984228)": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0104604",
+						"score": 2.3629,
+						"title": "Ranma ½: The Movie 2, Nihao My Concubine",
+						"year": 1992
+					},
+					{
+						"imdbId": "tt2072214",
+						"score": -2.4327,
+						"title": "Ranma ½",
+						"year": 2011
+					},
+					{
+						"imdbId": "tt0101583",
+						"score": -2.8956,
+						"title": "Ranma ½: The Movie, Big Trouble in Nekonron, China",
+						"year": 1991
+					},
+					{
+						"imdbId": "tt2544120",
+						"score": -3.2251,
+						"title": "The Concubine",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0106332",
+						"score": -3.8769,
+						"title": "Farewell My Concubine",
+						"year": 1993
+					}
+				],
+				"parsedTitle": "Ranma ½ Movie Nihao My Concubine",
+				"parsedYear": null,
+				"probability": 0.9632
+			}
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun (RD), 2026-11-09, or DMM's PlacementMiss: the release's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "[Exiled-Destiny]_Ranma",
+				"hash": "3c9061d8d4839fa1419785b7d91b161587bb69c4",
+				"imdbId": "tt0096686",
+				"files": [
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_Extras_Ep01_(5A0C1706)-other.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_Extras_Ep02_(C5C675B5)-other.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_Movie_Big_Trouble_In_Nekonron_China_(5726FB60).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_Movie_Nihao_My_Concubine_(B5984228).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep01_(96AA5050)-other.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep02_(51CACBD9)-other.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep03_(60C66258)-other.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep04_(6BBDE117)-other.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep05_(F6100CC2)-other.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep06_(8502B80F)-other.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep07_(98CC728B)-other.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep08_(3BCFC424)-other.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep09_(55B23EA1)-other.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep10_(40027F6D)-other.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep11_(F92B7E0F)-other.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep12_(51865CF1)-other.mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep001_(E5B63FCA).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep002_(D7E08181).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep003_(786E6B0F).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep004_(5F99E3DA).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep005_(F67212D4).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep007_(E3C87D5E).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep009_(2E6FF5D4).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep010_(160ECF10).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep011_(B43C6247).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep012_(C06099E4).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep013_(68DFE3C2).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep014_(2865DFC4).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep015_(08BAB528).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep016_(FE87E5D5).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep017_(DCDB417F).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep019_(E708E890).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep020_(73CA300C).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep023_(80D6A137).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep024_(B3CF3BE2).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep025_(0E08A767).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep027_(4E639B01).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep028_(CB61F999).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep029_(32181068).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep030_(675A2DB8).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep031_(620BB388).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep032_(645A3E5A).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep033_(3C2216A6).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep035_(671D7783).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep038_(BD23B56E).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep039_(E4B3113A).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep041_(63C53E47).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep042_(C61853E0).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep043_(6F8A14F9).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep044_(42D1D418).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep045_(EAA79F31).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep049_(6CF76797).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep050_(9B8EA938).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep051_(C58C52D4).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep052_(BC83181B).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep053_(7C572789).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep055_(FF2A0465).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep057_(02BDF453).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep058_(489BDF03).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep059_(07A73FE1).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep060_(F71AFF63).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep061_(451E1343).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep063_(3AB94455).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep064_(A8F6A745).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep065_(43EE069E).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep066_(A9279CDD).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep067_(B1A80CC5).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep068_(B9196642).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep069_(E8AD70AC).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep070_(C49CA078).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep073_(C5179473).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep075_(B330C2B2).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep076_(10833776).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep077_(4E883AA1).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep080_(B003D3C2).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep081_(EC7A900C).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep082_(E4AF1077).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep083_(8AB6C5EE).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep084_(90926759).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep085_(8D467F11).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep086_(FAF1EE1E).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep087_(77035DC4).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep089_(2C86A8C4).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep091_(08DE5BA5).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep093_(E065341B).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep094_(082C2FB0).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep095_(A85AB0F8).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep097_(B7F5E4C0).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep098_(29A80FFD).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep099_(7B50DDE2).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep100_(B437A0DB).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep101_(FCE6541F).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep102_(61A4B063).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep103_(8DCB8E43).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep104_(2270FAB4).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep105_(D1F8540E).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep107_(65A72065).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep108_(3D543FBA).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep109_(527F7C30).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep111_(771F702F).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep112_(0DBB7CAC).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep113_(0882AB7F).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep115_(A6C0D5A5).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep118_(1643066F).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep119_(5DA165C0).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep120_(452FFB3D).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep121_(6EF840DB).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep123_(435A4588).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep124_(058CF062).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep125_(92AD342C).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep127_(B68CDFC5).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep129_(9BD3EE6B).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep130_(D51573E2).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep131_(63E39465).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep132_(E0AF7B68).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep133_(5C2611FC).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep134_(A719ED24).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep135_(170C05B6).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep136_(39C0A072).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep137_(C36C03A2).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep138_(439EAF74).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep139_(73DCDD25).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep140_(7EF1762B).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep141_(E14B240E).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep142_(74865D26).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep143_(592F3CAC).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep146_(76A66D19).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep147_(F1024BDD).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep148_(CF1B4284).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep149_(48624FB2).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep150_(FE00E3B8).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep153_(21E04141).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep154_(8BBABC5C).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep155_(DB78297A).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep156_(47FEFBA3).mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep159_(F24D6DD2).mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0096686",
+				"tmdbId": 57706,
+				"files": [
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_Extras_Ep01_(5A0C1706)-other.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_Extras_Ep02_(C5C675B5)-other.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_Movie_Big_Trouble_In_Nekonron_China_(5726FB60).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt0101583",
+						"tmdbId": 37024
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_Movie_Nihao_My_Concubine_(B5984228).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt0104604",
+						"tmdbId": 37021
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep01_(96AA5050)-other.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep02_(51CACBD9)-other.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep03_(60C66258)-other.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep04_(6BBDE117)-other.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep05_(F6100CC2)-other.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep06_(8502B80F)-other.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep07_(98CC728B)-other.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep08_(3BCFC424)-other.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep09_(55B23EA1)-other.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep10_(40027F6D)-other.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep11_(F92B7E0F)-other.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_OVA_Ep12_(51865CF1)-other.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep001_(E5B63FCA).mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1168010
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep002_(D7E08181).mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1168168
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep003_(786E6B0F).mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1168169
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep004_(5F99E3DA).mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1168171
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep005_(F67212D4).mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1168173
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep007_(E3C87D5E).mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1168176
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep009_(2E6FF5D4).mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1168183
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep010_(160ECF10).mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1168185
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep011_(B43C6247).mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1168189
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep012_(C06099E4).mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1168192
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep013_(68DFE3C2).mkv",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1168194
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep014_(2865DFC4).mkv",
+						"season": 1,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1168203
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep015_(08BAB528).mkv",
+						"season": 1,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1168206
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep016_(FE87E5D5).mkv",
+						"season": 1,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1168208
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep017_(DCDB417F).mkv",
+						"season": 1,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1168211
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep019_(E708E890).mkv",
+						"season": 1,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1948990
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep020_(73CA300C).mkv",
+						"season": 1,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1948991
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep023_(80D6A137).mkv",
+						"season": 1,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1948994
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep024_(B3CF3BE2).mkv",
+						"season": 1,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1948995
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep025_(0E08A767).mkv",
+						"season": 1,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1948996
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep027_(4E639B01).mkv",
+						"season": 1,
+						"episode": 27,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1948998
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep028_(CB61F999).mkv",
+						"season": 1,
+						"episode": 28,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1948999
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep029_(32181068).mkv",
+						"season": 1,
+						"episode": 29,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949000
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep030_(675A2DB8).mkv",
+						"season": 1,
+						"episode": 30,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949001
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep031_(620BB388).mkv",
+						"season": 1,
+						"episode": 31,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949002
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep032_(645A3E5A).mkv",
+						"season": 1,
+						"episode": 32,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949003
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep033_(3C2216A6).mkv",
+						"season": 1,
+						"episode": 33,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949004
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep035_(671D7783).mkv",
+						"season": 1,
+						"episode": 35,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949006
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep038_(BD23B56E).mkv",
+						"season": 1,
+						"episode": 38,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949009
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep039_(E4B3113A).mkv",
+						"season": 1,
+						"episode": 39,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949010
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep041_(63C53E47).mkv",
+						"season": 1,
+						"episode": 41,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949012
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep042_(C61853E0).mkv",
+						"season": 1,
+						"episode": 42,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949013
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep043_(6F8A14F9).mkv",
+						"season": 1,
+						"episode": 43,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949014
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep044_(42D1D418).mkv",
+						"season": 1,
+						"episode": 44,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949015
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep045_(EAA79F31).mkv",
+						"season": 1,
+						"episode": 45,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949016
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep049_(6CF76797).mkv",
+						"season": 1,
+						"episode": 49,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949020
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep050_(9B8EA938).mkv",
+						"season": 1,
+						"episode": 50,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949021
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep051_(C58C52D4).mkv",
+						"season": 1,
+						"episode": 51,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949022
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep052_(BC83181B).mkv",
+						"season": 1,
+						"episode": 52,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949023
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep053_(7C572789).mkv",
+						"season": 1,
+						"episode": 53,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949024
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep055_(FF2A0465).mkv",
+						"season": 1,
+						"episode": 55,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949026
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep057_(02BDF453).mkv",
+						"season": 1,
+						"episode": 57,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949028
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep058_(489BDF03).mkv",
+						"season": 1,
+						"episode": 58,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949029
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep059_(07A73FE1).mkv",
+						"season": 1,
+						"episode": 59,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949030
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep060_(F71AFF63).mkv",
+						"season": 1,
+						"episode": 60,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949031
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep061_(451E1343).mkv",
+						"season": 1,
+						"episode": 61,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949032
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep063_(3AB94455).mkv",
+						"season": 1,
+						"episode": 63,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949035
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep064_(A8F6A745).mkv",
+						"season": 1,
+						"episode": 64,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949037
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep065_(43EE069E).mkv",
+						"season": 1,
+						"episode": 65,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949038
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep066_(A9279CDD).mkv",
+						"season": 1,
+						"episode": 66,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949039
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep067_(B1A80CC5).mkv",
+						"season": 1,
+						"episode": 67,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949040
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep068_(B9196642).mkv",
+						"season": 1,
+						"episode": 68,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949041
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep069_(E8AD70AC).mkv",
+						"season": 1,
+						"episode": 69,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949044
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep070_(C49CA078).mkv",
+						"season": 1,
+						"episode": 70,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949042
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep073_(C5179473).mkv",
+						"season": 1,
+						"episode": 73,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949046
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep075_(B330C2B2).mkv",
+						"season": 1,
+						"episode": 75,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949048
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep076_(10833776).mkv",
+						"season": 1,
+						"episode": 76,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949050
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep077_(4E883AA1).mkv",
+						"season": 1,
+						"episode": 77,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949051
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep080_(B003D3C2).mkv",
+						"season": 1,
+						"episode": 80,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949054
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep081_(EC7A900C).mkv",
+						"season": 1,
+						"episode": 81,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949055
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep082_(E4AF1077).mkv",
+						"season": 1,
+						"episode": 82,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949056
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep083_(8AB6C5EE).mkv",
+						"season": 1,
+						"episode": 83,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949057
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep084_(90926759).mkv",
+						"season": 1,
+						"episode": 84,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949058
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep085_(8D467F11).mkv",
+						"season": 1,
+						"episode": 85,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949059
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep086_(FAF1EE1E).mkv",
+						"season": 1,
+						"episode": 86,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949060
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep087_(77035DC4).mkv",
+						"season": 1,
+						"episode": 87,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949061
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep089_(2C86A8C4).mkv",
+						"season": 1,
+						"episode": 89,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949064
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep091_(08DE5BA5).mkv",
+						"season": 1,
+						"episode": 91,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949066
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep093_(E065341B).mkv",
+						"season": 1,
+						"episode": 93,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949068
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep094_(082C2FB0).mkv",
+						"season": 1,
+						"episode": 94,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949069
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep095_(A85AB0F8).mkv",
+						"season": 1,
+						"episode": 95,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949070
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep097_(B7F5E4C0).mkv",
+						"season": 1,
+						"episode": 97,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949072
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep098_(29A80FFD).mkv",
+						"season": 1,
+						"episode": 98,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949073
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep099_(7B50DDE2).mkv",
+						"season": 1,
+						"episode": 99,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949074
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep100_(B437A0DB).mkv",
+						"season": 1,
+						"episode": 100,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949075
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep101_(FCE6541F).mkv",
+						"season": 1,
+						"episode": 101,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949076
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep102_(61A4B063).mkv",
+						"season": 1,
+						"episode": 102,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949077
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep103_(8DCB8E43).mkv",
+						"season": 1,
+						"episode": 103,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949078
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep104_(2270FAB4).mkv",
+						"season": 1,
+						"episode": 104,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949079
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep105_(D1F8540E).mkv",
+						"season": 1,
+						"episode": 105,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949080
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep107_(65A72065).mkv",
+						"season": 1,
+						"episode": 107,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949082
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep108_(3D543FBA).mkv",
+						"season": 1,
+						"episode": 108,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949083
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep109_(527F7C30).mkv",
+						"season": 1,
+						"episode": 109,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949084
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep111_(771F702F).mkv",
+						"season": 1,
+						"episode": 111,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949086
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep112_(0DBB7CAC).mkv",
+						"season": 1,
+						"episode": 112,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949087
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep113_(0882AB7F).mkv",
+						"season": 1,
+						"episode": 113,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949088
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep115_(A6C0D5A5).mkv",
+						"season": 1,
+						"episode": 115,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949090
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep118_(1643066F).mkv",
+						"season": 1,
+						"episode": 118,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949093
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep119_(5DA165C0).mkv",
+						"season": 1,
+						"episode": 119,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949094
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep120_(452FFB3D).mkv",
+						"season": 1,
+						"episode": 120,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949095
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep121_(6EF840DB).mkv",
+						"season": 1,
+						"episode": 121,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949097
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep123_(435A4588).mkv",
+						"season": 1,
+						"episode": 123,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949099
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep124_(058CF062).mkv",
+						"season": 1,
+						"episode": 124,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949100
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep125_(92AD342C).mkv",
+						"season": 1,
+						"episode": 125,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949101
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep127_(B68CDFC5).mkv",
+						"season": 1,
+						"episode": 127,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949103
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep129_(9BD3EE6B).mkv",
+						"season": 1,
+						"episode": 129,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949105
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep130_(D51573E2).mkv",
+						"season": 1,
+						"episode": 130,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949106
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep131_(63E39465).mkv",
+						"season": 1,
+						"episode": 131,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949107
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep132_(E0AF7B68).mkv",
+						"season": 1,
+						"episode": 132,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949108
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep133_(5C2611FC).mkv",
+						"season": 1,
+						"episode": 133,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949109
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep134_(A719ED24).mkv",
+						"season": 1,
+						"episode": 134,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949110
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep135_(170C05B6).mkv",
+						"season": 1,
+						"episode": 135,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949111
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep136_(39C0A072).mkv",
+						"season": 1,
+						"episode": 136,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949112
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep137_(C36C03A2).mkv",
+						"season": 1,
+						"episode": 137,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949114
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep138_(439EAF74).mkv",
+						"season": 1,
+						"episode": 138,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949115
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep139_(73DCDD25).mkv",
+						"season": 1,
+						"episode": 139,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949116
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep140_(7EF1762B).mkv",
+						"season": 1,
+						"episode": 140,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949117
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep141_(E14B240E).mkv",
+						"season": 1,
+						"episode": 141,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949118
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep142_(74865D26).mkv",
+						"season": 1,
+						"episode": 142,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949119
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep143_(592F3CAC).mkv",
+						"season": 1,
+						"episode": 143,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949120
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep146_(76A66D19).mkv",
+						"season": 1,
+						"episode": 146,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949123
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep147_(F1024BDD).mkv",
+						"season": 1,
+						"episode": 147,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949124
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep148_(CF1B4284).mkv",
+						"season": 1,
+						"episode": 148,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949125
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep149_(48624FB2).mkv",
+						"season": 1,
+						"episode": 149,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949126
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep150_(FE00E3B8).mkv",
+						"season": 1,
+						"episode": 150,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949127
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep153_(21E04141).mkv",
+						"season": 1,
+						"episode": 153,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949131
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep154_(8BBABC5C).mkv",
+						"season": 1,
+						"episode": 154,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949132
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep155_(DB78297A).mkv",
+						"season": 1,
+						"episode": 155,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949133
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep156_(47FEFBA3).mkv",
+						"season": 1,
+						"episode": 156,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949134
+					},
+					{
+						"path": "[Exiled-Destiny]_Ranma_½_TV_Ep159_(F24D6DD2).mkv",
+						"season": 1,
+						"episode": 159,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 1949137
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD), 2026-11-09, or DMM's PlacementMiss: the release's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "[RaptoR] Jujutsu Kaisen 0 (2021) [BD Remux 1080p AVC TrueHD] [E53451A1].mkv",
+				"hash": "8deed0d431770c96b7404173c3be61e52031cc31",
+				"imdbId": "tt12343534",
+				"files": [
+					{
+						"path": "[RaptoR] Jujutsu Kaisen 0 (2021) [BD Remux 1080p AVC TrueHD] [E53451A1].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt12343534",
+				"tmdbId": 95479,
+				"files": [
+					{
+						"path": "[RaptoR] Jujutsu Kaisen 0 (2021) [BD Remux 1080p AVC TrueHD] [E53451A1].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt14331144",
+						"tmdbId": 810693
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD), 2026-11-09, or DMM's PlacementMiss: the release's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "Deadpool",
+				"hash": "9a9598a1343d80c9e485acccd43c722841db45f4",
+				"imdbId": "tt2622240",
+				"files": [
+					{
+						"path": "Deadpool.Wolverine.2024.720p.WEBRip.x264.AAC-[YTS.MX].mp4",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2622240",
+				"tmdbId": null,
+				"files": [
+					{
+						"path": "Deadpool.Wolverine.2024.720p.WEBRip.x264.AAC-[YTS.MX].mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt6263850",
+						"tmdbId": 533535
+					}
+				]
+			}
+		}
+	]
+}

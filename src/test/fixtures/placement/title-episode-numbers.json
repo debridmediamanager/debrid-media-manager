@@ -1,0 +1,2076 @@
+{
+	"answers": {
+		"find": {
+			"tt0121220": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 12971,
+						"name": "Dragon Ball Z",
+						"first_air_date": "1989-04-26"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0214341": {
+				"movie_results": [],
+				"tv_results": [],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"12971": {
+				"id": 12971,
+				"name": "Dragon Ball Z",
+				"original_name": "ドラゴンボールゼット",
+				"first_air_date": "1989-04-26",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 271,
+							"name": "competition"
+						},
+						{
+							"id": 679,
+							"name": "cyborg"
+						},
+						{
+							"id": 779,
+							"name": "martial arts"
+						},
+						{
+							"id": 803,
+							"name": "android"
+						},
+						{
+							"id": 6054,
+							"name": "friendship"
+						},
+						{
+							"id": 9663,
+							"name": "sequel"
+						},
+						{
+							"id": 11477,
+							"name": "anthropomorphism"
+						},
+						{
+							"id": 12380,
+							"name": "tournament"
+						},
+						{
+							"id": 12554,
+							"name": "dragon"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 14955,
+							"name": "fighting"
+						},
+						{
+							"id": 18543,
+							"name": "combat"
+						},
+						{
+							"id": 33637,
+							"name": "super power"
+						},
+						{
+							"id": 200234,
+							"name": "shocking"
+						},
+						{
+							"id": 207826,
+							"name": "shounen"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 244663,
+							"name": "time skip"
+						},
+						{
+							"id": 293198,
+							"name": "fantasy"
+						},
+						{
+							"id": 303310,
+							"name": "joyous"
+						},
+						{
+							"id": 322942,
+							"name": "adventure"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0121220",
+					"tvdb_id": 81472
+				},
+				"networks": [
+					{
+						"id": 1,
+						"name": "Fuji TV"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Dragon Ball Z",
+							"iso_3166_1": "BA"
+						},
+						{
+							"title": "Dragon Ball Z",
+							"iso_3166_1": "BR"
+						},
+						{
+							"title": "Dragon Ball Z",
+							"iso_3166_1": "CL"
+						},
+						{
+							"title": "龙珠Z",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "DBZ",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Dragon Ball Z",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Bola de Dragón Z",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Bola de Drac Z",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Dragoi Bola Z",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Dragón Z",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "DragonBall Z",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Dragon Ball Z",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "DBZ",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "龙珠二世",
+							"iso_3166_1": "HK"
+						},
+						{
+							"title": "דרגון בול זי",
+							"iso_3166_1": "IL"
+						},
+						{
+							"title": "What's My Destiny Dragon Ball",
+							"iso_3166_1": "IT"
+						},
+						{
+							"title": "Doragon Bōru Zetto",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "ドラゴンボールＺ",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Dragon Ball Z",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "드래곤 볼 Z",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "드래곤볼Z",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Dragon Ball Z",
+							"iso_3166_1": "MX"
+						},
+						{
+							"title": "Dragon Ball Z",
+							"iso_3166_1": "PT"
+						},
+						{
+							"title": "Dragon Ball Z",
+							"iso_3166_1": "SA"
+						},
+						{
+							"title": "Dragon Ball Z",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "Dragon Ball Z",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "DBZ",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 10,
+						"air_date": "1990-10-17",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 39,
+						"air_date": "1989-04-26",
+						"name": "Saiyan Saga"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 35,
+						"air_date": "1990-03-14",
+						"name": "Namek Saga"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 33,
+						"air_date": "1991-01-30",
+						"name": "Frieza Saga"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 32,
+						"air_date": "1991-09-18",
+						"name": "Androids Saga"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 26,
+						"air_date": "1992-05-20",
+						"name": "Cell Saga"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 29,
+						"air_date": "1992-11-25",
+						"name": "Cell Games Saga"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 25,
+						"air_date": "1993-07-28",
+						"name": "World Tournament Saga"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 34,
+						"air_date": "1994-03-09",
+						"name": "Majin Buu Saga"
+					},
+					{
+						"season_number": 9,
+						"episode_count": 38,
+						"air_date": "1995-02-01",
+						"name": "Kid Buu Saga"
+					}
+				]
+			}
+		},
+		"season": {
+			"12971/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Held Captive",
+						"air_date": "1990-03-14",
+						"id": 969620
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Look Out Below",
+						"air_date": "1990-03-21",
+						"id": 969621
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "The Search Continues",
+						"air_date": "1990-04-04",
+						"id": 969622
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "A Friendly Surprise",
+						"air_date": "1990-04-11",
+						"id": 969623
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Brood of Evil",
+						"air_date": "1990-04-18",
+						"id": 969624
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Frieza Strikes!",
+						"air_date": "1990-04-25",
+						"id": 969625
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Defying Orders",
+						"air_date": "1990-05-02",
+						"id": 969626
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Namek's Defense",
+						"air_date": "1990-05-09",
+						"id": 969627
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "The Hunted",
+						"air_date": "1990-05-16",
+						"id": 969628
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "The Prince Fights Back",
+						"air_date": "1990-05-23",
+						"id": 969629
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "Unexpected Problem",
+						"air_date": "1990-05-30",
+						"id": 969630
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Vegeta has a Ball",
+						"air_date": "1990-06-06",
+						"id": 969631
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "The Past and Future",
+						"air_date": "1990-06-20",
+						"id": 969632
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "Zarbon's Surprise",
+						"air_date": "1990-06-27",
+						"id": 969633
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "Guru's Gift",
+						"air_date": "1990-07-04",
+						"id": 969634
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "Piccolo vs. Everyone",
+						"air_date": "1990-07-18",
+						"id": 969635
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "Zarbon's Mission",
+						"air_date": "1990-08-01",
+						"id": 969636
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "Gohan, the Hunted",
+						"air_date": "1990-08-08",
+						"id": 969637
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "Unknown Enemies",
+						"air_date": "1990-08-22",
+						"id": 969638
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "Destination: Guru",
+						"air_date": "1990-08-29",
+						"id": 969639
+					},
+					{
+						"episode_number": 21,
+						"season_number": 2,
+						"name": "Bulma's Big Day",
+						"air_date": "1990-09-05",
+						"id": 969640
+					},
+					{
+						"episode_number": 22,
+						"season_number": 2,
+						"name": "Hidden Power",
+						"air_date": "1990-09-12",
+						"id": 969641
+					},
+					{
+						"episode_number": 23,
+						"season_number": 2,
+						"name": "New Ally, New Problem",
+						"air_date": "1990-09-19",
+						"id": 969642
+					},
+					{
+						"episode_number": 24,
+						"season_number": 2,
+						"name": "Guldo's Mind Binds",
+						"air_date": "1990-09-26",
+						"id": 969643
+					},
+					{
+						"episode_number": 25,
+						"season_number": 2,
+						"name": "Recoome Unleashed",
+						"air_date": "1990-10-24",
+						"id": 969644
+					},
+					{
+						"episode_number": 26,
+						"season_number": 2,
+						"name": "Let the Battle Begin",
+						"air_date": "1990-10-31",
+						"id": 969645
+					},
+					{
+						"episode_number": 27,
+						"season_number": 2,
+						"name": "Goku's New Power",
+						"air_date": "1990-11-07",
+						"id": 969646
+					},
+					{
+						"episode_number": 28,
+						"season_number": 2,
+						"name": "A Legend Revealed",
+						"air_date": "1990-11-14",
+						"id": 969647
+					},
+					{
+						"episode_number": 29,
+						"season_number": 2,
+						"name": "Ginyu Assault",
+						"air_date": "1990-11-21",
+						"id": 969648
+					},
+					{
+						"episode_number": 30,
+						"season_number": 2,
+						"name": "Incredible Force!",
+						"air_date": "1990-11-28",
+						"id": 969649
+					},
+					{
+						"episode_number": 31,
+						"season_number": 2,
+						"name": "Frieza Approaches",
+						"air_date": "1990-12-05",
+						"id": 969650
+					},
+					{
+						"episode_number": 32,
+						"season_number": 2,
+						"name": "Goku Is Ginyu and Ginyu Is Goku",
+						"air_date": "1990-12-12",
+						"id": 969651
+					},
+					{
+						"episode_number": 33,
+						"season_number": 2,
+						"name": "Calling the Eternal Dragon",
+						"air_date": "1990-12-19",
+						"id": 969652
+					},
+					{
+						"episode_number": 34,
+						"season_number": 2,
+						"name": "Gohan, Defeat Your Dad!",
+						"air_date": "1991-01-16",
+						"id": 969653
+					},
+					{
+						"episode_number": 35,
+						"season_number": 2,
+						"name": "Captain Ginyu... The Frog",
+						"air_date": "1991-01-23",
+						"id": 969654
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt0121220": null,
+			"tt0214341": null
+		},
+		"imdbSeries": {
+			"tt0214341": {
+				"titleType": "tvSeries",
+				"title": "Dragon Ball Z",
+				"episodes": [
+					{
+						"season": 1,
+						"episode": 1,
+						"name": "The Arrival of Raditz"
+					},
+					{
+						"season": 1,
+						"episode": 2,
+						"name": "The World's Strongest Team"
+					},
+					{
+						"season": 1,
+						"episode": 3,
+						"name": "Gohan's Hidden Powers"
+					},
+					{
+						"season": 1,
+						"episode": 4,
+						"name": "Goku's Unusual Journey"
+					},
+					{
+						"season": 1,
+						"episode": 5,
+						"name": "Gohan's Metamorphosis"
+					},
+					{
+						"season": 1,
+						"episode": 6,
+						"name": "Gohan Makes a Friend"
+					},
+					{
+						"season": 1,
+						"episode": 7,
+						"name": "Trouble on Arlia"
+					},
+					{
+						"season": 1,
+						"episode": 8,
+						"name": "Home for Infinite Losers"
+					},
+					{
+						"season": 1,
+						"episode": 9,
+						"name": "Princess Snake's Hospitality"
+					},
+					{
+						"season": 1,
+						"episode": 10,
+						"name": "Escape from Piccolo"
+					},
+					{
+						"season": 1,
+						"episode": 11,
+						"name": "Showdown in the Past"
+					},
+					{
+						"season": 1,
+						"episode": 12,
+						"name": "The End of Snake Way"
+					},
+					{
+						"season": 1,
+						"episode": 13,
+						"name": "A Fight Against Gravity... Catch Bubbles!"
+					},
+					{
+						"season": 1,
+						"episode": 14,
+						"name": "The Legend of the Saiyans"
+					},
+					{
+						"season": 1,
+						"episode": 15,
+						"name": "A Black Day for Planet Earth"
+					},
+					{
+						"season": 1,
+						"episode": 16,
+						"name": "The Battle Begins... Goku Where Are You?"
+					},
+					{
+						"season": 1,
+						"episode": 17,
+						"name": "The Saibamen Strike"
+					},
+					{
+						"season": 1,
+						"episode": 18,
+						"name": "Nappa... The Invincible?"
+					},
+					{
+						"season": 1,
+						"episode": 19,
+						"name": "Tien Goes All Out!!"
+					},
+					{
+						"season": 1,
+						"episode": 20,
+						"name": "Time's Up!"
+					},
+					{
+						"season": 1,
+						"episode": 21,
+						"name": "The Return of Goku"
+					},
+					{
+						"season": 1,
+						"episode": 22,
+						"name": "Goku Strikes Back"
+					},
+					{
+						"season": 1,
+						"episode": 23,
+						"name": "Goku vs. Vegeta... a Saiyan Duel!"
+					},
+					{
+						"season": 1,
+						"episode": 24,
+						"name": "Vegeta... Saiyan Style!"
+					},
+					{
+						"season": 1,
+						"episode": 25,
+						"name": "Stop Vegeta Now!"
+					},
+					{
+						"season": 1,
+						"episode": 26,
+						"name": "The Battle Ends"
+					},
+					{
+						"season": 2,
+						"episode": 1,
+						"name": "A New Goal... Namek!"
+					},
+					{
+						"season": 2,
+						"episode": 2,
+						"name": "Journey to Namek"
+					},
+					{
+						"season": 2,
+						"episode": 3,
+						"name": "Friends or Foes?"
+					},
+					{
+						"season": 2,
+						"episode": 4,
+						"name": "Hunt for a Dragonball"
+					},
+					{
+						"season": 2,
+						"episode": 5,
+						"name": "Who's Who?!"
+					},
+					{
+						"season": 2,
+						"episode": 6,
+						"name": "Touchdown on Namek"
+					},
+					{
+						"season": 2,
+						"episode": 7,
+						"name": "Face-Off on Namek"
+					},
+					{
+						"season": 2,
+						"episode": 8,
+						"name": "The Ruthless Frieza"
+					},
+					{
+						"season": 2,
+						"episode": 9,
+						"name": "The Nameks Versus Frieza"
+					},
+					{
+						"season": 2,
+						"episode": 10,
+						"name": "Escape from Dodoria"
+					},
+					{
+						"season": 2,
+						"episode": 11,
+						"name": "Secrets Revealed"
+					},
+					{
+						"season": 2,
+						"episode": 12,
+						"name": "A Collision Course"
+					},
+					{
+						"season": 2,
+						"episode": 13,
+						"name": "Stay Away from Frieza"
+					},
+					{
+						"season": 2,
+						"episode": 14,
+						"name": "Zarbon Transformed"
+					},
+					{
+						"season": 2,
+						"episode": 15,
+						"name": "The Eldest Namek"
+					},
+					{
+						"season": 2,
+						"episode": 16,
+						"name": "Get Vegeta!"
+					},
+					{
+						"season": 2,
+						"episode": 17,
+						"name": "Vegeta Revived"
+					},
+					{
+						"season": 2,
+						"episode": 18,
+						"name": "A Heavy Burden"
+					},
+					{
+						"season": 2,
+						"episode": 19,
+						"name": "Immortality Denied"
+					},
+					{
+						"season": 2,
+						"episode": 20,
+						"name": "Big Trouble for Bulma"
+					},
+					{
+						"season": 2,
+						"episode": 21,
+						"name": "Scramble for the Dragon Balls!"
+					},
+					{
+						"season": 2,
+						"episode": 22,
+						"name": "Arrival of the Ginyu Force"
+					},
+					{
+						"season": 2,
+						"episode": 23,
+						"name": "Elite Fighters of the Universe... The Ginyu Force"
+					},
+					{
+						"season": 2,
+						"episode": 24,
+						"name": "Time Tricks and Body Binds"
+					},
+					{
+						"season": 2,
+						"episode": 25,
+						"name": "No Refuge from Recoome"
+					},
+					{
+						"season": 2,
+						"episode": 26,
+						"name": "Enter Goku"
+					},
+					{
+						"season": 2,
+						"episode": 27,
+						"name": "Goku... Super Saiyan?"
+					},
+					{
+						"season": 3,
+						"episode": 1,
+						"name": "Ginyu Assault"
+					},
+					{
+						"season": 3,
+						"episode": 2,
+						"name": "Incredible Force!"
+					},
+					{
+						"season": 3,
+						"episode": 3,
+						"name": "Frieza Approaches"
+					},
+					{
+						"season": 3,
+						"episode": 4,
+						"name": "Goku is Ginyu and Ginyu is Goku"
+					},
+					{
+						"season": 3,
+						"episode": 5,
+						"name": "Calling the Eternal Dragon"
+					},
+					{
+						"season": 3,
+						"episode": 6,
+						"name": "Gohan, Defeat Your Dad!!"
+					},
+					{
+						"season": 3,
+						"episode": 7,
+						"name": "Captain Ginyu... The Frog"
+					},
+					{
+						"season": 4,
+						"episode": 1,
+						"name": "Password is Porunga"
+					},
+					{
+						"season": 4,
+						"episode": 2,
+						"name": "Piccolo's Return"
+					},
+					{
+						"season": 4,
+						"episode": 3,
+						"name": "The Fusion"
+					},
+					{
+						"season": 4,
+						"episode": 4,
+						"name": "Fighting Power: One Million??"
+					},
+					{
+						"season": 4,
+						"episode": 5,
+						"name": "Gohan Attacks"
+					},
+					{
+						"season": 4,
+						"episode": 6,
+						"name": "Piccolo the Super-Namek"
+					},
+					{
+						"season": 4,
+						"episode": 7,
+						"name": "Déjà vu"
+					},
+					{
+						"season": 4,
+						"episode": 8,
+						"name": "Frieza's Second Transformation"
+					},
+					{
+						"season": 4,
+						"episode": 9,
+						"name": "Another Transformation"
+					},
+					{
+						"season": 4,
+						"episode": 10,
+						"name": "Dende's Demise"
+					},
+					{
+						"season": 4,
+						"episode": 11,
+						"name": "The Renewed Goku"
+					},
+					{
+						"season": 4,
+						"episode": 12,
+						"name": "The End of Vegeta"
+					},
+					{
+						"season": 4,
+						"episode": 13,
+						"name": "The Ultimate Battle"
+					},
+					{
+						"season": 4,
+						"episode": 14,
+						"name": "Clash of the Super Powers"
+					},
+					{
+						"season": 4,
+						"episode": 15,
+						"name": "Frieza's Boast"
+					},
+					{
+						"season": 4,
+						"episode": 16,
+						"name": "Bold and Fearless"
+					},
+					{
+						"season": 4,
+						"episode": 17,
+						"name": "Embodiment of Fire"
+					},
+					{
+						"season": 4,
+						"episode": 18,
+						"name": "Trump Card"
+					},
+					{
+						"season": 4,
+						"episode": 19,
+						"name": "Keep the Chance Alive"
+					},
+					{
+						"season": 4,
+						"episode": 20,
+						"name": "Power of the Spirit"
+					},
+					{
+						"season": 4,
+						"episode": 21,
+						"name": "Transformed at Last"
+					},
+					{
+						"season": 4,
+						"episode": 22,
+						"name": "Explosion of Anger"
+					},
+					{
+						"season": 4,
+						"episode": 23,
+						"name": "Namek's Destruction"
+					},
+					{
+						"season": 4,
+						"episode": 24,
+						"name": "A Final Attack"
+					},
+					{
+						"season": 4,
+						"episode": 25,
+						"name": "Approaching Destruction"
+					},
+					{
+						"season": 4,
+						"episode": 26,
+						"name": "Gohan Returns"
+					},
+					{
+						"season": 4,
+						"episode": 27,
+						"name": "The Last Wish"
+					},
+					{
+						"season": 4,
+						"episode": 28,
+						"name": "Duel on a Vanishing Planet"
+					},
+					{
+						"season": 4,
+						"episode": 29,
+						"name": "Pathos of Frieza"
+					},
+					{
+						"season": 4,
+						"episode": 30,
+						"name": "Frieza Defeated!!"
+					},
+					{
+						"season": 4,
+						"episode": 31,
+						"name": "Mighty Blast of Rage"
+					},
+					{
+						"season": 4,
+						"episode": 32,
+						"name": "Namek's Explosion... Goku's End?"
+					},
+					{
+						"season": 4,
+						"episode": 33,
+						"name": "Goku's Alive!"
+					},
+					{
+						"season": 5,
+						"episode": 1,
+						"name": "The Heavens Tremble"
+					},
+					{
+						"season": 5,
+						"episode": 2,
+						"name": "Black Fog of Terror"
+					},
+					{
+						"season": 5,
+						"episode": 3,
+						"name": "Battle in Kami's Lookout"
+					},
+					{
+						"season": 5,
+						"episode": 4,
+						"name": "Fight with Piccolo"
+					},
+					{
+						"season": 5,
+						"episode": 5,
+						"name": "Call for Restoration"
+					},
+					{
+						"season": 5,
+						"episode": 6,
+						"name": "Suicidal Course"
+					},
+					{
+						"season": 5,
+						"episode": 7,
+						"name": "Extreme Measures"
+					},
+					{
+						"season": 5,
+						"episode": 8,
+						"name": "The World Awakens"
+					},
+					{
+						"season": 5,
+						"episode": 9,
+						"name": "Brief Chance for Victory"
+					},
+					{
+						"season": 5,
+						"episode": 10,
+						"name": "Krillin's Proposal"
+					},
+					{
+						"season": 6,
+						"episode": 1,
+						"name": "Frieza's Counterattack"
+					},
+					{
+						"season": 6,
+						"episode": 2,
+						"name": "The Mysterious Youth"
+					},
+					{
+						"season": 6,
+						"episode": 3,
+						"name": "Another Super Saiyan?"
+					},
+					{
+						"season": 6,
+						"episode": 4,
+						"name": "Welcome Back Goku"
+					},
+					{
+						"season": 6,
+						"episode": 5,
+						"name": "Mystery Revealed"
+					},
+					{
+						"season": 6,
+						"episode": 6,
+						"name": "Goku's Special Technique"
+					},
+					{
+						"season": 6,
+						"episode": 7,
+						"name": "Z Warriors Prepare"
+					},
+					{
+						"season": 6,
+						"episode": 8,
+						"name": "Goku's Ordeal"
+					},
+					{
+						"season": 7,
+						"episode": 1,
+						"name": "The Androids Appear"
+					},
+					{
+						"season": 7,
+						"episode": 2,
+						"name": "A Handy Trick"
+					},
+					{
+						"season": 7,
+						"episode": 3,
+						"name": "Double Trouble for Goku"
+					},
+					{
+						"season": 7,
+						"episode": 4,
+						"name": "Upgrade to Super Saiyan"
+					},
+					{
+						"season": 7,
+						"episode": 5,
+						"name": "The Secret of Dr. Gero"
+					},
+					{
+						"season": 7,
+						"episode": 6,
+						"name": "More Androids?!"
+					},
+					{
+						"season": 7,
+						"episode": 7,
+						"name": "Follow Dr. Gero"
+					},
+					{
+						"season": 7,
+						"episode": 8,
+						"name": "Nightmare Comes True"
+					},
+					{
+						"season": 7,
+						"episode": 9,
+						"name": "Goku's Assassin"
+					},
+					{
+						"season": 7,
+						"episode": 10,
+						"name": "Deadly Beauty"
+					},
+					{
+						"season": 7,
+						"episode": 11,
+						"name": "No Match for the Androids"
+					},
+					{
+						"season": 7,
+						"episode": 12,
+						"name": "Last Ditch Effort"
+					},
+					{
+						"season": 7,
+						"episode": 13,
+						"name": "Closing In"
+					},
+					{
+						"season": 7,
+						"episode": 14,
+						"name": "Unwelcome Discovery"
+					},
+					{
+						"season": 8,
+						"episode": 1,
+						"name": "Seized with Fear"
+					},
+					{
+						"season": 8,
+						"episode": 2,
+						"name": "The Reunion"
+					},
+					{
+						"season": 8,
+						"episode": 3,
+						"name": "Borrowed Powers"
+					},
+					{
+						"season": 8,
+						"episode": 4,
+						"name": "His Name Is Cell"
+					},
+					{
+						"season": 8,
+						"episode": 5,
+						"name": "Piccolo's Folly"
+					},
+					{
+						"season": 8,
+						"episode": 6,
+						"name": "Laboratory Basement"
+					},
+					{
+						"season": 8,
+						"episode": 7,
+						"name": "Our Hero Awakens"
+					},
+					{
+						"season": 8,
+						"episode": 8,
+						"name": "Time Chamber"
+					},
+					{
+						"season": 8,
+						"episode": 9,
+						"name": "The Monster Is Coming"
+					},
+					{
+						"season": 8,
+						"episode": 10,
+						"name": "He's Here"
+					},
+					{
+						"season": 8,
+						"episode": 11,
+						"name": "Up to Piccolo"
+					},
+					{
+						"season": 8,
+						"episode": 12,
+						"name": "Silent Warrior"
+					},
+					{
+						"season": 8,
+						"episode": 13,
+						"name": "Say Goodbye, 17"
+					},
+					{
+						"season": 9,
+						"episode": 1,
+						"name": "Sacrifice"
+					},
+					{
+						"season": 9,
+						"episode": 2,
+						"name": "Saiyans Emerge"
+					},
+					{
+						"season": 9,
+						"episode": 3,
+						"name": "Super Vegeta"
+					},
+					{
+						"season": 9,
+						"episode": 4,
+						"name": "Bow to the Prince"
+					},
+					{
+						"season": 9,
+						"episode": 5,
+						"name": "Hour of Temptation"
+					},
+					{
+						"season": 9,
+						"episode": 6,
+						"name": "Krillin's Decision"
+					},
+					{
+						"season": 9,
+						"episode": 7,
+						"name": "The Last Defense"
+					},
+					{
+						"season": 9,
+						"episode": 8,
+						"name": "Cell Is Complete"
+					},
+					{
+						"season": 9,
+						"episode": 9,
+						"name": "Vegeta Must Pay"
+					},
+					{
+						"season": 9,
+						"episode": 10,
+						"name": "Trunks Ascends"
+					},
+					{
+						"season": 9,
+						"episode": 11,
+						"name": "Saving Throw"
+					},
+					{
+						"season": 9,
+						"episode": 12,
+						"name": "Ghosts from Tomorrow"
+					},
+					{
+						"season": 9,
+						"episode": 13,
+						"name": "The Cell Games"
+					},
+					{
+						"season": 10,
+						"episode": 1,
+						"name": "What Is the Tournament?"
+					},
+					{
+						"season": 10,
+						"episode": 2,
+						"name": "The Doomsday Broadcast"
+					},
+					{
+						"season": 10,
+						"episode": 3,
+						"name": "Meet Me in the Ring"
+					},
+					{
+						"season": 10,
+						"episode": 4,
+						"name": "No Worries Here"
+					},
+					{
+						"season": 10,
+						"episode": 5,
+						"name": "A Girl Named Lime"
+					},
+					{
+						"season": 10,
+						"episode": 6,
+						"name": "Memories of Gohan"
+					},
+					{
+						"season": 10,
+						"episode": 7,
+						"name": "A New Guardian"
+					},
+					{
+						"season": 10,
+						"episode": 8,
+						"name": "Dende's Dragon"
+					},
+					{
+						"season": 10,
+						"episode": 9,
+						"name": "The Puzzle of General Tao"
+					},
+					{
+						"season": 10,
+						"episode": 10,
+						"name": "The Games Begin"
+					},
+					{
+						"season": 10,
+						"episode": 11,
+						"name": "Losers Fight First"
+					},
+					{
+						"season": 10,
+						"episode": 12,
+						"name": "Goku vs. Cell"
+					},
+					{
+						"season": 10,
+						"episode": 13,
+						"name": "Cell's Bag of Tricks"
+					},
+					{
+						"season": 10,
+						"episode": 14,
+						"name": "No More Rules"
+					},
+					{
+						"season": 10,
+						"episode": 15,
+						"name": "The Fight Is Over"
+					},
+					{
+						"season": 10,
+						"episode": 16,
+						"name": "Faith in a Boy"
+					},
+					{
+						"season": 10,
+						"episode": 17,
+						"name": "Gohan's Plea"
+					},
+					{
+						"season": 10,
+						"episode": 18,
+						"name": "Android Explosion"
+					},
+					{
+						"season": 10,
+						"episode": 19,
+						"name": "Cell Juniors Attack!"
+					},
+					{
+						"season": 10,
+						"episode": 20,
+						"name": "The Unleashing"
+					},
+					{
+						"season": 10,
+						"episode": 21,
+						"name": "The Unstoppable Gohan"
+					},
+					{
+						"season": 10,
+						"episode": 22,
+						"name": "Cell's Break Down"
+					},
+					{
+						"season": 10,
+						"episode": 23,
+						"name": "A Hero's Farewell"
+					},
+					{
+						"season": 10,
+						"episode": 24,
+						"name": "Cell Returns!"
+					},
+					{
+						"season": 10,
+						"episode": 25,
+						"name": "The Horror Won't End"
+					},
+					{
+						"season": 10,
+						"episode": 26,
+						"name": "Save the World"
+					},
+					{
+						"season": 10,
+						"episode": 27,
+						"name": "Goku's Decision"
+					},
+					{
+						"season": 10,
+						"episode": 28,
+						"name": "One More Wish"
+					},
+					{
+						"season": 10,
+						"episode": 29,
+						"name": "Free the Future"
+					},
+					{
+						"season": 11,
+						"episode": 1,
+						"name": "Warriors of the Dead"
+					},
+					{
+						"season": 11,
+						"episode": 2,
+						"name": "Tournament Begins"
+					},
+					{
+						"season": 11,
+						"episode": 3,
+						"name": "Water Fight"
+					},
+					{
+						"season": 11,
+						"episode": 4,
+						"name": "Final Round"
+					},
+					{
+						"season": 11,
+						"episode": 5,
+						"name": "Goku vs. Pikkon"
+					},
+					{
+						"season": 11,
+						"episode": 6,
+						"name": "Gohan Goes to High School"
+					},
+					{
+						"season": 11,
+						"episode": 7,
+						"name": "I Am Saiyaman"
+					},
+					{
+						"season": 11,
+						"episode": 8,
+						"name": "Gohan's First Date"
+					},
+					{
+						"season": 11,
+						"episode": 9,
+						"name": "Rescue Videl"
+					},
+					{
+						"season": 11,
+						"episode": 10,
+						"name": "Blackmail"
+					},
+					{
+						"season": 11,
+						"episode": 11,
+						"name": "I'll Fight Too!"
+					},
+					{
+						"season": 11,
+						"episode": 12,
+						"name": "The Newest Super Saiyan"
+					},
+					{
+						"season": 11,
+						"episode": 13,
+						"name": "Take Flight Videl"
+					},
+					{
+						"season": 11,
+						"episode": 14,
+						"name": "Gather for the Tournament"
+					},
+					{
+						"season": 11,
+						"episode": 15,
+						"name": "Camera Shy"
+					},
+					{
+						"season": 12,
+						"episode": 1,
+						"name": "The World Tournament"
+					},
+					{
+						"season": 12,
+						"episode": 2,
+						"name": "Trunks vs. Goten"
+					},
+					{
+						"season": 12,
+						"episode": 3,
+						"name": "Best of the Boys"
+					},
+					{
+						"season": 12,
+						"episode": 4,
+						"name": "Big Trouble, Little Trunks"
+					},
+					{
+						"season": 12,
+						"episode": 5,
+						"name": "Who Will Fight Who?"
+					},
+					{
+						"season": 12,
+						"episode": 6,
+						"name": "Forfeit of Piccolo"
+					},
+					{
+						"season": 12,
+						"episode": 7,
+						"name": "A Dark and Secret Power"
+					},
+					{
+						"season": 12,
+						"episode": 8,
+						"name": "Videl Is Crushed"
+					},
+					{
+						"season": 12,
+						"episode": 9,
+						"name": "Identities Revealed"
+					},
+					{
+						"season": 12,
+						"episode": 10,
+						"name": "Energy Drain"
+					},
+					{
+						"season": 13,
+						"episode": 1,
+						"name": "The Wizard's Curse"
+					},
+					{
+						"season": 13,
+						"episode": 2,
+						"name": "King of the Demons"
+					},
+					{
+						"season": 13,
+						"episode": 3,
+						"name": "Vegeta Attacks"
+					},
+					{
+						"season": 13,
+						"episode": 4,
+						"name": "Next Up, Goku"
+					},
+					{
+						"season": 13,
+						"episode": 5,
+						"name": "Battle Supreme"
+					},
+					{
+						"season": 13,
+						"episode": 6,
+						"name": "Eighteen Unmasks"
+					},
+					{
+						"season": 13,
+						"episode": 7,
+						"name": "Pay to Win"
+					},
+					{
+						"season": 13,
+						"episode": 8,
+						"name": "Heart of a Villain"
+					},
+					{
+						"season": 13,
+						"episode": 9,
+						"name": "The Dark Prince Returns"
+					},
+					{
+						"season": 13,
+						"episode": 10,
+						"name": "Vegeta's Pride"
+					},
+					{
+						"season": 13,
+						"episode": 11,
+						"name": "The Long Awaited Fight"
+					},
+					{
+						"season": 13,
+						"episode": 12,
+						"name": "Magical Ball of Buu"
+					},
+					{
+						"season": 14,
+						"episode": 1,
+						"name": "Buu Is Hatched"
+					},
+					{
+						"season": 14,
+						"episode": 2,
+						"name": "The Losses Begin"
+					},
+					{
+						"season": 14,
+						"episode": 3,
+						"name": "The Terror of Mr. Buu"
+					},
+					{
+						"season": 14,
+						"episode": 4,
+						"name": "Meal Time"
+					},
+					{
+						"season": 14,
+						"episode": 5,
+						"name": "The Warrior's Decision"
+					},
+					{
+						"season": 14,
+						"episode": 6,
+						"name": "Final Atonement"
+					},
+					{
+						"season": 14,
+						"episode": 7,
+						"name": "Evil Lives On"
+					},
+					{
+						"season": 14,
+						"episode": 8,
+						"name": "Find the Dragon Balls"
+					},
+					{
+						"season": 14,
+						"episode": 9,
+						"name": "Revival"
+					},
+					{
+						"season": 14,
+						"episode": 10,
+						"name": "Global Announcement"
+					},
+					{
+						"season": 14,
+						"episode": 11,
+						"name": "Learn to Fuse!"
+					},
+					{
+						"season": 14,
+						"episode": 12,
+						"name": "The Z Sword"
+					},
+					{
+						"season": 14,
+						"episode": 13,
+						"name": "Race to Capsule Corp."
+					},
+					{
+						"season": 14,
+						"episode": 14,
+						"name": "Super Saiyan 3?!"
+					},
+					{
+						"season": 14,
+						"episode": 15,
+						"name": "Buu's Mutiny"
+					},
+					{
+						"season": 14,
+						"episode": 16,
+						"name": "The Fusion Dance"
+					},
+					{
+						"season": 14,
+						"episode": 17,
+						"name": "Goku's Time Is Up"
+					},
+					{
+						"season": 14,
+						"episode": 18,
+						"name": "Return to the Other World"
+					},
+					{
+						"season": 14,
+						"episode": 19,
+						"name": "Out from the Broken Sword"
+					},
+					{
+						"season": 14,
+						"episode": 20,
+						"name": "Gotenks Is Born"
+					},
+					{
+						"season": 14,
+						"episode": 21,
+						"name": "Unlikely Friendship"
+					},
+					{
+						"season": 14,
+						"episode": 22,
+						"name": "I Kill No More"
+					},
+					{
+						"season": 15,
+						"episode": 1,
+						"name": "The Evil of Men"
+					},
+					{
+						"season": 15,
+						"episode": 2,
+						"name": "Buu Against Buu"
+					},
+					{
+						"season": 15,
+						"episode": 3,
+						"name": "Empty Planet"
+					},
+					{
+						"season": 15,
+						"episode": 4,
+						"name": "Time Struggle"
+					},
+					{
+						"season": 15,
+						"episode": 5,
+						"name": "Super Moves of Gotenks"
+					},
+					{
+						"season": 15,
+						"episode": 6,
+						"name": "Trapped in Forever"
+					},
+					{
+						"season": 15,
+						"episode": 7,
+						"name": "Feeding Frenzy"
+					},
+					{
+						"season": 15,
+						"episode": 8,
+						"name": "Gotenks Is Awesome"
+					},
+					{
+						"season": 15,
+						"episode": 9,
+						"name": "Unlucky Break"
+					},
+					{
+						"season": 15,
+						"episode": 10,
+						"name": "A Whole New Gohan"
+					},
+					{
+						"season": 15,
+						"episode": 11,
+						"name": "Search for Survivors"
+					},
+					{
+						"season": 15,
+						"episode": 12,
+						"name": "Majin Buu Transforms"
+					},
+					{
+						"season": 15,
+						"episode": 13,
+						"name": "The Old Kai's Weapon"
+					},
+					{
+						"season": 15,
+						"episode": 14,
+						"name": "Ready to Fuse?"
+					},
+					{
+						"season": 15,
+						"episode": 15,
+						"name": "Union of Rivals"
+					},
+					{
+						"season": 15,
+						"episode": 16,
+						"name": "Meet Vegito"
+					},
+					{
+						"season": 15,
+						"episode": 17,
+						"name": "Rip in the Universe"
+					},
+					{
+						"season": 15,
+						"episode": 18,
+						"name": "Vegito... Downsized"
+					},
+					{
+						"season": 15,
+						"episode": 19,
+						"name": "The Incredible Fighting Candy"
+					},
+					{
+						"season": 15,
+						"episode": 20,
+						"name": "The Innards of Buu"
+					},
+					{
+						"season": 15,
+						"episode": 21,
+						"name": "Mind Trap"
+					},
+					{
+						"season": 15,
+						"episode": 22,
+						"name": "Deadly Vision"
+					},
+					{
+						"season": 16,
+						"episode": 1,
+						"name": "Evil Kid Buu"
+					},
+					{
+						"season": 16,
+						"episode": 2,
+						"name": "End of Earth"
+					},
+					{
+						"season": 16,
+						"episode": 3,
+						"name": "True Saiyans Fight Alone"
+					},
+					{
+						"season": 16,
+						"episode": 4,
+						"name": "Battle for the Universe Begins"
+					},
+					{
+						"season": 16,
+						"episode": 5,
+						"name": "Vegeta's Respect"
+					},
+					{
+						"season": 16,
+						"episode": 6,
+						"name": "Minute of Desperation"
+					},
+					{
+						"season": 16,
+						"episode": 7,
+						"name": "Old Buu Emerges"
+					},
+					{
+						"season": 16,
+						"episode": 8,
+						"name": "Earth Reborn"
+					},
+					{
+						"season": 16,
+						"episode": 9,
+						"name": "Call to Action"
+					},
+					{
+						"season": 16,
+						"episode": 10,
+						"name": "People of Earth Unite"
+					},
+					{
+						"season": 16,
+						"episode": 11,
+						"name": "Spirit Bomb Triumphant"
+					},
+					{
+						"season": 16,
+						"episode": 12,
+						"name": "Celebrations with Majin Buu"
+					},
+					{
+						"season": 16,
+						"episode": 13,
+						"name": "He's Always Late"
+					},
+					{
+						"season": 16,
+						"episode": 14,
+						"name": "Granddaughter Pan"
+					},
+					{
+						"season": 16,
+						"episode": 15,
+						"name": "Buu's Reincarnation"
+					},
+					{
+						"season": 16,
+						"episode": 16,
+						"name": "Goku's Next Journey"
+					}
+				]
+			}
+		},
+		"identifier": {
+			"Dragonball.Z.061.1080p.BluRay.x264-DHD-AsRequested": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0121220",
+						"score": 3.5677,
+						"title": "Dragon Ball Z",
+						"year": 1989
+					},
+					{
+						"imdbId": "tt0214341",
+						"score": 2.1403,
+						"title": "Dragon Ball Z",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt0088509",
+						"score": -0.4422,
+						"title": "Dragon Ball",
+						"year": 1986
+					},
+					{
+						"imdbId": "tt0280249",
+						"score": -0.6397,
+						"title": "Dragon Ball",
+						"year": 1995
+					},
+					{
+						"imdbId": "tt0139774",
+						"score": -2.9236,
+						"title": "Dragon Ball GT",
+						"year": 1996
+					}
+				],
+				"parsedTitle": "Dragonball Z 061",
+				"parsedYear": null,
+				"probability": 0.3896
+			},
+			"5a81a0d75a564831baa8108bef4e6bd9": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2762970",
+						"score": -4.3938,
+						"title": "Cloud 9",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt2304933",
+						"score": -6.258,
+						"title": "The 5th Wave",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt1641619",
+						"score": -7.2162,
+						"title": "108",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt1278074",
+						"score": -7.4849,
+						"title": "108",
+						"year": 2008
+					},
+					{
+						"imdbId": "tt32133624",
+						"score": -7.7083,
+						"title": "831",
+						"year": 2011
+					}
+				],
+				"parsedTitle": "5a81a0d75a564831baa8108bef4e6bd9",
+				"parsedYear": null,
+				"probability": 0.0028
+			}
+		},
+		"identify": {
+			"Dragonball.Z.061.1080p.BluRay.x264-DHD-AsRequested": null
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and its one video file, named by a hash, as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "Dragonball.Z.061.1080p.BluRay.x264-DHD-AsRequested",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "5a81a0d75a564831baa8108bef4e6bd9.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0121220",
+				"tmdbId": 12971,
+				"files": [
+					{
+						"path": "5a81a0d75a564831baa8108bef4e6bd9.mkv",
+						"season": 2,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 969641
+					}
+				]
+			}
+		}
+	]
+}

@@ -87374,11 +87374,11 @@
 				"files": [
 					{
 						"path": "Star.Wars.Rebels.S02E01.The.Siege.of.Lothal.Part1.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 6,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1164102
 					},
 					{
 						"path": "Star.Wars.Rebels.S02E02.The.Siege.of.Lothal.Part2.1080p.BluRay.REMUX.AVC.DD5.1-NOGRP.mkv",
@@ -88855,11 +88855,11 @@
 					},
 					{
 						"path": "MythBusters.2004e17.Viewers choice - Christmas Special [Special].mkv",
-						"season": null,
-						"episode": null,
+						"season": 2,
+						"episode": 17,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1212610
 					},
 					{
 						"path": "MythBusters.2005e01.Buster Special [Special].avi",
@@ -89639,11 +89639,11 @@
 					},
 					{
 						"path": "MythBusters.2008e19.End with a bang.mkv",
-						"season": null,
-						"episode": null,
+						"season": 6,
+						"episode": 19,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 65345
 					},
 					{
 						"path": "MythBusters.2008e20.Viewers Special threequel!.mkv",
@@ -90695,11 +90695,11 @@
 					},
 					{
 						"path": "MythBusters.2015e14.Star Wars - The Myths strike back.mkv",
-						"season": null,
-						"episode": null,
+						"season": 13,
+						"episode": 14,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1158619
 					},
 					{
 						"path": "MythBusters.2016e01.MythBusters Revealed.mkv",
@@ -90783,11 +90783,11 @@
 					},
 					{
 						"path": "MythBusters.2016e11.MythBusters - The Reunion.mkv",
-						"season": null,
-						"episode": null,
+						"season": 14,
+						"episode": 11,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1158631
 					},
 					{
 						"path": "MythBusters.2016e12.Duct tape - The return.mp4",
@@ -91080,11 +91080,11 @@
 					},
 					{
 						"path": "s03e02 - Journey to the Red Centre.mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 4,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 120258
 					},
 					{
 						"path": "s04e02 - Sidewinders of Arizona.mkv",
@@ -91939,7 +91939,7 @@
 						"path": "Hey Arnold! - S01E02 - The Little Pink Book + Field Trip.mkv",
 						"season": 1,
 						"episode": 3,
-						"episodeEnd": null,
+						"episodeEnd": 4,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30155
 					},
@@ -91947,7 +91947,7 @@
 						"path": "Hey Arnold! - S01E03 - Arnold's Hat + Stoop Kid.mkv",
 						"season": 1,
 						"episode": 5,
-						"episodeEnd": null,
+						"episodeEnd": 6,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30157
 					},
@@ -91955,7 +91955,7 @@
 						"path": "Hey Arnold! - S01E04 - Helga's Makeover + The Old Building.mkv",
 						"season": 1,
 						"episode": 7,
-						"episodeEnd": null,
+						"episodeEnd": 8,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30161
 					},
@@ -91971,7 +91971,7 @@
 						"path": "Hey Arnold! - S01E06 - Heat + Snow.mkv",
 						"season": 1,
 						"episode": 11,
-						"episodeEnd": null,
+						"episodeEnd": 12,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30159
 					},
@@ -91979,7 +91979,7 @@
 						"path": "Hey Arnold! - S01E07 - Operation Ruthless + The Vacant Lot.mkv",
 						"season": 1,
 						"episode": 13,
-						"episodeEnd": null,
+						"episodeEnd": 14,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30160
 					},
@@ -91987,7 +91987,7 @@
 						"path": "Hey Arnold! - S01E08 - The List + Haunted Train.mkv",
 						"season": 1,
 						"episode": 15,
-						"episodeEnd": null,
+						"episodeEnd": 16,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30171
 					},
@@ -91995,7 +91995,7 @@
 						"path": "Hey Arnold! - S01E09 - Mugged + Roughin' It.mkv",
 						"season": 1,
 						"episode": 17,
-						"episodeEnd": null,
+						"episodeEnd": 18,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30167
 					},
@@ -92003,7 +92003,7 @@
 						"path": "Hey Arnold! - S01E10 - Door #16 + Arnold as Cupid.mkv",
 						"season": 1,
 						"episode": 19,
-						"episodeEnd": null,
+						"episodeEnd": 20,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30168
 					},
@@ -92019,7 +92019,7 @@
 						"path": "Hey Arnold! - S01E12 - Benchwarmer + Cool Jerk.mkv",
 						"season": 1,
 						"episode": 22,
-						"episodeEnd": null,
+						"episodeEnd": 23,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30162
 					},
@@ -92027,23 +92027,23 @@
 						"path": "Hey Arnold! - S01E13 - Das Subway + Wheezin' Ed.mkv",
 						"season": 1,
 						"episode": 24,
-						"episodeEnd": null,
+						"episodeEnd": 25,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30170
 					},
 					{
 						"path": "Hey Arnold! - S01E14 - Tutoring Torvald + Gerald Comes Over.mkv",
-						"season": null,
-						"episode": null,
-						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"season": 1,
+						"episode": 26,
+						"episodeEnd": 27,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30166
 					},
 					{
 						"path": "Hey Arnold! - S01E15 - Spelling Bee + Pigeon Man.mkv",
 						"season": 1,
 						"episode": 28,
-						"episodeEnd": null,
+						"episodeEnd": 29,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30163
 					},
@@ -92051,7 +92051,7 @@
 						"path": "Hey Arnold! - S01E16 - Olga Comes Home + Sally's Comet.mkv",
 						"season": 1,
 						"episode": 30,
-						"episodeEnd": null,
+						"episodeEnd": 31,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30165
 					},
@@ -92059,7 +92059,7 @@
 						"path": "Hey Arnold! - S01E17 - Abner Come Home + The Sewer King.mkv",
 						"season": 1,
 						"episode": 32,
-						"episodeEnd": null,
+						"episodeEnd": 33,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30164
 					},
@@ -92067,7 +92067,7 @@
 						"path": "Hey Arnold! - S01E18 - False Alarm + World Records.mkv",
 						"season": 1,
 						"episode": 34,
-						"episodeEnd": null,
+						"episodeEnd": 35,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30169
 					},
@@ -92075,7 +92075,7 @@
 						"path": "Hey Arnold! - S01E19 - Magic Show + 24 Hours to Live.mkv",
 						"season": 1,
 						"episode": 36,
-						"episodeEnd": null,
+						"episodeEnd": 37,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30173
 					},
@@ -92099,7 +92099,7 @@
 						"path": "Hey Arnold! - S02E02 - Helga's Love Potion + Gerald's Secret.mkv",
 						"season": 2,
 						"episode": 3,
-						"episodeEnd": null,
+						"episodeEnd": 4,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30106
 					},
@@ -92107,7 +92107,7 @@
 						"path": "Hey Arnold! - S02E03 - The Big Scoop + Harold's Kitty.mkv",
 						"season": 2,
 						"episode": 5,
-						"episodeEnd": null,
+						"episodeEnd": 6,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30107
 					},
@@ -92115,7 +92115,7 @@
 						"path": "Hey Arnold! - S02E04 - Longest Monday + Eugene's Pet.mkv",
 						"season": 2,
 						"episode": 7,
-						"episodeEnd": null,
+						"episodeEnd": 8,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30113
 					},
@@ -92123,7 +92123,7 @@
 						"path": "Hey Arnold! - S02E05 - Monkey Business + Big Caesar.mkv",
 						"season": 2,
 						"episode": 9,
-						"episodeEnd": null,
+						"episodeEnd": 10,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30110
 					},
@@ -92139,7 +92139,7 @@
 						"path": "Hey Arnold! - S02E07 - Arnold Saves Sid + Hookey.mkv",
 						"season": 2,
 						"episode": 14,
-						"episodeEnd": null,
+						"episodeEnd": 15,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30109
 					},
@@ -92147,7 +92147,7 @@
 						"path": "Hey Arnold! - S02E08 - Freeze Frame + Phoebe Cheats.mkv",
 						"season": 2,
 						"episode": 16,
-						"episodeEnd": null,
+						"episodeEnd": 17,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30112
 					},
@@ -92155,7 +92155,7 @@
 						"path": "Hey Arnold! - S02E09 - Mud Bowl + Gerald Moves Out.mkv",
 						"season": 2,
 						"episode": 18,
-						"episodeEnd": null,
+						"episodeEnd": 19,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30114
 					},
@@ -92163,7 +92163,7 @@
 						"path": "Hey Arnold! - S02E10 - The High Life + Best Friends.mkv",
 						"season": 2,
 						"episode": 20,
-						"episodeEnd": null,
+						"episodeEnd": 21,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30122
 					},
@@ -92179,7 +92179,7 @@
 						"path": "Hey Arnold! - S02E12 - Steely Phil + Quantity Time.mkv",
 						"season": 2,
 						"episode": 22,
-						"episodeEnd": null,
+						"episodeEnd": 23,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30116
 					},
@@ -92187,7 +92187,7 @@
 						"path": "Hey Arnold! - S02E13 - Eating Contest + Rhonda's Glasses.mkv",
 						"season": 2,
 						"episode": 24,
-						"episodeEnd": null,
+						"episodeEnd": 25,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30117
 					},
@@ -92195,7 +92195,7 @@
 						"path": "Hey Arnold! - S02E14 - Helga's Boyfriend + Crush on Teacher.mkv",
 						"season": 2,
 						"episode": 26,
-						"episodeEnd": null,
+						"episodeEnd": 27,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30123
 					},
@@ -92203,7 +92203,7 @@
 						"path": "Hey Arnold! - S02E15 - Hall Monitor + Harold's Bar Mitzvah.mkv",
 						"season": 2,
 						"episode": 28,
-						"episodeEnd": null,
+						"episodeEnd": 29,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30120
 					},
@@ -92211,7 +92211,7 @@
 						"path": "Hey Arnold! - S02E16 - Coach Wittenberg + Four-Eyed Jack.mkv",
 						"season": 2,
 						"episode": 30,
-						"episodeEnd": null,
+						"episodeEnd": 31,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30118
 					},
@@ -92227,7 +92227,7 @@
 						"path": "Hey Arnold! - S02E18 - Tour de Pond + Teacher's Strike.mkv",
 						"season": 2,
 						"episode": 34,
-						"episodeEnd": null,
+						"episodeEnd": 35,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30121
 					},
@@ -92235,7 +92235,7 @@
 						"path": "Hey Arnold! - S02E19 - Runaway Float + Partners.mkv",
 						"season": 2,
 						"episode": 36,
-						"episodeEnd": null,
+						"episodeEnd": 37,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30124
 					},
@@ -92259,7 +92259,7 @@
 						"path": "Hey Arnold! - S03E03 - Casa Paradiso + Gerald's Tonsils.mkv",
 						"season": 3,
 						"episode": 5,
-						"episodeEnd": null,
+						"episodeEnd": 6,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30176
 					},
@@ -92275,7 +92275,7 @@
 						"path": "Hey Arnold! - S03E05 - Stinky Goes Hollywood + Olga Gets Engaged.mkv",
 						"season": 3,
 						"episode": 9,
-						"episodeEnd": null,
+						"episodeEnd": 10,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30183
 					},
@@ -92283,7 +92283,7 @@
 						"path": "Hey Arnold! - S03E06 - Curly Snaps + Pre-Teen Scream.mkv",
 						"season": 3,
 						"episode": 11,
-						"episodeEnd": null,
+						"episodeEnd": 12,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30181
 					},
@@ -92291,7 +92291,7 @@
 						"path": "Hey Arnold! - S03E07 - Grandpa's Birthday + Road Trip.mkv",
 						"season": 3,
 						"episode": 13,
-						"episodeEnd": null,
+						"episodeEnd": 14,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30180
 					},
@@ -92299,7 +92299,7 @@
 						"path": "Hey Arnold! - S03E08 - Sid's Revenge + Roller Coaster.mkv",
 						"season": 3,
 						"episode": 15,
-						"episodeEnd": null,
+						"episodeEnd": 16,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30177
 					},
@@ -92307,7 +92307,7 @@
 						"path": "Hey Arnold! - S03E09 - The Aptitude Test + Oskar Gets a Job.mkv",
 						"season": 3,
 						"episode": 17,
-						"episodeEnd": null,
+						"episodeEnd": 18,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30184
 					},
@@ -92315,7 +92315,7 @@
 						"path": "Hey Arnold! - S03E10 - Arnold Betrays Iggy + Helga and the Nanny.mkv",
 						"season": 3,
 						"episode": 19,
-						"episodeEnd": null,
+						"episodeEnd": 20,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30179
 					},
@@ -92323,7 +92323,7 @@
 						"path": "Hey Arnold! - S03E11 - Career Day + Hey Harold!.mkv",
 						"season": 3,
 						"episode": 21,
-						"episodeEnd": null,
+						"episodeEnd": 22,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30178
 					},
@@ -92331,7 +92331,7 @@
 						"path": "Hey Arnold! - S03E12 - Best Man + Cool Party.mkv",
 						"season": 3,
 						"episode": 23,
-						"episodeEnd": null,
+						"episodeEnd": 24,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30188
 					},
@@ -92339,7 +92339,7 @@
 						"path": "Hey Arnold! - S03E13 - Arnold & Lila + Grand Prix.mkv",
 						"season": 3,
 						"episode": 25,
-						"episodeEnd": null,
+						"episodeEnd": 26,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30186
 					},
@@ -92355,7 +92355,7 @@
 						"path": "Hey Arnold! - S03E15 - Helga's Show + The Flood.mkv",
 						"season": 3,
 						"episode": 28,
-						"episodeEnd": null,
+						"episodeEnd": 29,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30193
 					},
@@ -92363,7 +92363,7 @@
 						"path": "Hey Arnold! - S03E16 - Phoebe Takes the Fall + The Pig War.mkv",
 						"season": 3,
 						"episode": 30,
-						"episodeEnd": null,
+						"episodeEnd": 31,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30190
 					},
@@ -92371,7 +92371,7 @@
 						"path": "Hey Arnold! - S03E17 - Part-Time Friends + Bio Square.mkv",
 						"season": 3,
 						"episode": 32,
-						"episodeEnd": null,
+						"episodeEnd": 33,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30187
 					},
@@ -92387,7 +92387,7 @@
 						"path": "Hey Arnold! - S03E19 - Girl Trouble + School Dance.mkv",
 						"season": 3,
 						"episode": 36,
-						"episodeEnd": null,
+						"episodeEnd": 37,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30191
 					},
@@ -92419,7 +92419,7 @@
 						"path": "Hey Arnold! - S04E03 - Eugene's Birthday + Stinky's Pumpkin.mkv",
 						"season": 4,
 						"episode": 5,
-						"episodeEnd": null,
+						"episodeEnd": 6,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30131
 					},
@@ -92427,7 +92427,7 @@
 						"path": "Hey Arnold! - S04E04 - The Beeper Queen + Oskar Can't Read.mkv",
 						"season": 4,
 						"episode": 7,
-						"episodeEnd": null,
+						"episodeEnd": 8,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30129
 					},
@@ -92435,7 +92435,7 @@
 						"path": "Hey Arnold! - S04E05 - Dinner for Four + Phoebe Skips.mkv",
 						"season": 4,
 						"episode": 9,
-						"episodeEnd": null,
+						"episodeEnd": 10,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30132
 					},
@@ -92443,7 +92443,7 @@
 						"path": "Hey Arnold! - S04E06 - Helga's Parrot + Chocolate Turtles.mkv",
 						"season": 4,
 						"episode": 11,
-						"episodeEnd": null,
+						"episodeEnd": 12,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30136
 					},
@@ -92451,7 +92451,7 @@
 						"path": "Hey Arnold! - S04E07 - Love and Cheese + Weighing Harold.mkv",
 						"season": 4,
 						"episode": 13,
-						"episodeEnd": null,
+						"episodeEnd": 14,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30138
 					},
@@ -92459,7 +92459,7 @@
 						"path": "Hey Arnold! - S04E08 - Back to School + Egg Story.mkv",
 						"season": 4,
 						"episode": 15,
-						"episodeEnd": null,
+						"episodeEnd": 16,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30139
 					},
@@ -92467,7 +92467,7 @@
 						"path": "Hey Arnold! - S04E09 - It Girl + Deconstructing Arnold.mkv",
 						"season": 4,
 						"episode": 17,
-						"episodeEnd": null,
+						"episodeEnd": 18,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30134
 					},
@@ -92475,7 +92475,7 @@
 						"path": "Hey Arnold! - S04E10 - Grudge Match + Polishing Rhonda.mkv",
 						"season": 4,
 						"episode": 19,
-						"episodeEnd": null,
+						"episodeEnd": 20,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30142
 					},
@@ -92483,7 +92483,7 @@
 						"path": "Hey Arnold! - S04E11 - Weird Cousin + Baby Oskar.mkv",
 						"season": 4,
 						"episode": 21,
-						"episodeEnd": null,
+						"episodeEnd": 22,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30144
 					},
@@ -92491,7 +92491,7 @@
 						"path": "Hey Arnold! - S04E12 - Grandpa's Sister + Synchronized Swimming.mkv",
 						"season": 4,
 						"episode": 23,
-						"episodeEnd": null,
+						"episodeEnd": 24,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30146
 					},
@@ -92499,7 +92499,7 @@
 						"path": "Hey Arnold! - S04E13 - Helga Sleepwalks + Fighting Families.mkv",
 						"season": 4,
 						"episode": 25,
-						"episodeEnd": null,
+						"episodeEnd": 26,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30148
 					},
@@ -92507,7 +92507,7 @@
 						"path": "Hey Arnold! - S04E14 - Headless Cabbie + Friday the 13th.mkv",
 						"season": 4,
 						"episode": 27,
-						"episodeEnd": null,
+						"episodeEnd": 28,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30150
 					},
@@ -92555,7 +92555,7 @@
 						"path": "Hey Arnold! - S05E03 - Sid the Vampire Slayer + Big Sis.mkv",
 						"season": 5,
 						"episode": 5,
-						"episodeEnd": null,
+						"episodeEnd": 6,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30196
 					},
@@ -92563,7 +92563,7 @@
 						"path": "Hey Arnold! - S05E04 - Bag of Money + Principal Simmons.mkv",
 						"season": 5,
 						"episode": 7,
-						"episodeEnd": null,
+						"episodeEnd": 8,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30201
 					},
@@ -92571,7 +92571,7 @@
 						"path": "Hey Arnold! - S05E05 - New Bully on the Block + Phoebe Breaks a Leg.mkv",
 						"season": 5,
 						"episode": 9,
-						"episodeEnd": null,
+						"episodeEnd": 10,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30202
 					},
@@ -92611,7 +92611,7 @@
 						"path": "Hey Arnold! - S05E10 - Stuck in a Tree + Rhonda Goes Broke.mkv",
 						"season": 5,
 						"episode": 17,
-						"episodeEnd": null,
+						"episodeEnd": 18,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30211
 					},
@@ -92619,7 +92619,7 @@
 						"path": "Hey Arnold! - S05E11 - Beaned + Old Iron Man.mkv",
 						"season": 5,
 						"episode": 19,
-						"episodeEnd": null,
+						"episodeEnd": 20,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30208
 					},
@@ -92627,7 +92627,7 @@
 						"path": "Hey Arnold! - S05E12 - Arnold Visits Arnie + Chocolate Boy.mkv",
 						"season": 5,
 						"episode": 21,
-						"episodeEnd": null,
+						"episodeEnd": 22,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30210
 					},
@@ -92651,7 +92651,7 @@
 						"path": "Hey Arnold! - S05E15 - Gerald's Game + Fishing Trip.mkv",
 						"season": 5,
 						"episode": 26,
-						"episodeEnd": null,
+						"episodeEnd": 27,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30203
 					},
@@ -92667,7 +92667,7 @@
 						"path": "Hey Arnold! - S05E17 - On The Lam + Family Man.mkv",
 						"season": 5,
 						"episode": 29,
-						"episodeEnd": null,
+						"episodeEnd": 30,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30209
 					},
@@ -92675,7 +92675,7 @@
 						"path": "Hey Arnold! - S05E18 - The Racing Mule + Curly's Girl.mkv",
 						"season": 5,
 						"episode": 31,
-						"episodeEnd": null,
+						"episodeEnd": 32,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30215
 					},
@@ -92715,7 +92715,7 @@
 						"path": "Hey Arnold! - S05E23 - A Day in the Life of a Classroom + Big Bob's Crisis.mkv",
 						"season": 5,
 						"episode": 39,
-						"episodeEnd": null,
+						"episodeEnd": 40,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30216
 					},
@@ -92723,7 +92723,7 @@
 						"path": "Hey Arnold! - S05E24 - Phoebe's Little Problem + Grandpa's Packard.mkv",
 						"season": 5,
 						"episode": 41,
-						"episodeEnd": null,
+						"episodeEnd": 42,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30217
 					},
@@ -94874,7 +94874,7 @@
 						"path": "Jimmy Neutron - S01E03 - Brobot; The Big Pinch.mkv",
 						"season": 1,
 						"episode": 4,
-						"episodeEnd": null,
+						"episodeEnd": 5,
 						"how": "tmdb",
 						"tmdbEpisodeId": 149594
 					},
@@ -94882,31 +94882,31 @@
 						"path": "Jimmy Neutron - S01E04 - Granny Baby; Time is Money.mkv",
 						"season": 1,
 						"episode": 6,
-						"episodeEnd": null,
+						"episodeEnd": 7,
 						"how": "tmdb",
 						"tmdbEpisodeId": 149595
 					},
 					{
 						"path": "Jimmy Neutron - S01E05 - I Dream of Jimmy; Raise the Oozy Scab.mkv",
 						"season": 1,
-						"episode": 9,
-						"episodeEnd": null,
+						"episode": 8,
+						"episodeEnd": 9,
 						"how": "tmdb",
-						"tmdbEpisodeId": 149617
+						"tmdbEpisodeId": 149596
 					},
 					{
 						"path": "Jimmy Neutron - S01E06 - Battle of the Band; Jimmy on Ice.mkv",
 						"season": 1,
-						"episode": 11,
-						"episodeEnd": null,
+						"episode": 10,
+						"episodeEnd": 11,
 						"how": "tmdb",
-						"tmdbEpisodeId": 149618
+						"tmdbEpisodeId": 149597
 					},
 					{
 						"path": "Jimmy Neutron - S01E07 - See Jimmy Run; Trading Faces.mkv",
 						"season": 1,
 						"episode": 12,
-						"episodeEnd": null,
+						"episodeEnd": 13,
 						"how": "tmdb",
 						"tmdbEpisodeId": 149598
 					},
@@ -94922,7 +94922,7 @@
 						"path": "Jimmy Neutron - S01E09 - Hall Monster; Hypno-Birthday to You.mkv",
 						"season": 1,
 						"episode": 16,
-						"episodeEnd": null,
+						"episodeEnd": 17,
 						"how": "tmdb",
 						"tmdbEpisodeId": 149600
 					},
@@ -94930,17 +94930,17 @@
 						"path": "Jimmy Neutron - S01E10 - Krunch Time; Substitute Creature.mkv",
 						"season": 1,
 						"episode": 18,
-						"episodeEnd": null,
+						"episodeEnd": 19,
 						"how": "tmdb",
 						"tmdbEpisodeId": 149601
 					},
 					{
 						"path": "Jimmy Neutron - S01E11 - Saftey First; Crime Sheen Investigation.mkv",
-						"season": null,
-						"episode": null,
-						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"season": 1,
+						"episode": 20,
+						"episodeEnd": 21,
+						"how": "tmdb",
+						"tmdbEpisodeId": 149602
 					},
 					{
 						"path": "Jimmy Neutron - S01E12 - Professor Calamitous; Journey to the Center of Carl.mkv",
@@ -94986,7 +94986,7 @@
 						"path": "Jimmy Neutron - S01E17 - Maximum Hugh; Aaugh! Wilderness.mkv",
 						"season": 1,
 						"episode": 28,
-						"episodeEnd": null,
+						"episodeEnd": 29,
 						"how": "tmdb",
 						"tmdbEpisodeId": 149613
 					},
@@ -95058,7 +95058,7 @@
 						"path": "Jimmy Neutron - S02E06 - Monster Hunt; Jimmy for President.mkv",
 						"season": 2,
 						"episode": 5,
-						"episodeEnd": null,
+						"episodeEnd": 6,
 						"how": "tmdb",
 						"tmdbEpisodeId": 149627
 					},
@@ -95106,7 +95106,7 @@
 						"path": "Jimmy Neutron - S02E12 - The Great Egg Heist; The Feud.mkv",
 						"season": 2,
 						"episode": 13,
-						"episodeEnd": null,
+						"episodeEnd": 14,
 						"how": "tmdb",
 						"tmdbEpisodeId": 149633
 					},
@@ -95146,7 +95146,7 @@
 						"path": "Jimmy Neutron - S02E17 - The Mighty Wheezers; Billion Dollar Baby.mkv",
 						"season": 2,
 						"episode": 20,
-						"episodeEnd": null,
+						"episodeEnd": 21,
 						"how": "tmdb",
 						"tmdbEpisodeId": 149638
 					},
@@ -95250,7 +95250,7 @@
 						"path": "Jimmy Neutron - S03E11 - Who's Your Mommy; Clash of the Cousins.mkv",
 						"season": 3,
 						"episode": 7,
-						"episodeEnd": null,
+						"episodeEnd": 8,
 						"how": "tmdb",
 						"tmdbEpisodeId": 149574
 					},
@@ -95282,7 +95282,7 @@
 						"path": "Jimmy Neutron - S03E15 - One of Us; Vanishing Act.mkv",
 						"season": 3,
 						"episode": 12,
-						"episodeEnd": null,
+						"episodeEnd": 13,
 						"how": "tmdb",
 						"tmdbEpisodeId": 149579
 					},
@@ -95306,7 +95306,7 @@
 						"path": "Jimmy Neutron - S03E18 - Who Framed Jimmy Neutron; Flippy.mkv",
 						"season": 3,
 						"episode": 17,
-						"episodeEnd": null,
+						"episodeEnd": 18,
 						"how": "tmdb",
 						"tmdbEpisodeId": 149582
 					},
@@ -95330,7 +95330,7 @@
 						"path": "Jimmy Neutron - S03E21 - El Magnifico; Best in Show.mkv",
 						"season": 3,
 						"episode": 22,
-						"episodeEnd": null,
+						"episodeEnd": 23,
 						"how": "tmdb",
 						"tmdbEpisodeId": 149584
 					},
@@ -95431,7 +95431,7 @@
 						"path": "Hey Arnold! S01E02 - The Little Pink Book - Field Trip (1080p).mp4",
 						"season": 1,
 						"episode": 3,
-						"episodeEnd": null,
+						"episodeEnd": 4,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30155
 					},
@@ -95439,23 +95439,23 @@
 						"path": "Hey Arnold! S01E03 - Arnold's Hat - The Stoop Kid (1080p).mp4",
 						"season": 1,
 						"episode": 5,
-						"episodeEnd": null,
+						"episodeEnd": 6,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30157
 					},
 					{
 						"path": "Hey Arnold! S01E05 - Sixth Grade Girls - The Baseball (1080p).mp4",
-						"season": null,
-						"episode": null,
-						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": 10,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30158
 					},
 					{
 						"path": "Hey Arnold! S01E09 - Mugged - Roughin' It (1080p).mp4",
 						"season": 1,
 						"episode": 17,
-						"episodeEnd": null,
+						"episodeEnd": 18,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30167
 					},
@@ -95463,7 +95463,7 @@
 						"path": "Hey Arnold! S01E10 - Door 16 - Arnold As Cupid (1080p).mp4",
 						"season": 1,
 						"episode": 19,
-						"episodeEnd": null,
+						"episodeEnd": 20,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30168
 					},
@@ -95471,7 +95471,7 @@
 						"path": "Hey Arnold! S01E11 - Bench Warmer - Cool Jerk (1080p).mp4",
 						"season": 1,
 						"episode": 22,
-						"episodeEnd": null,
+						"episodeEnd": 23,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30162
 					},
@@ -95479,7 +95479,7 @@
 						"path": "Hey Arnold! S01E12 - Das Subway - Wheezin' Ed (1080p).mp4",
 						"season": 1,
 						"episode": 24,
-						"episodeEnd": null,
+						"episodeEnd": 25,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30170
 					},
@@ -95487,7 +95487,7 @@
 						"path": "Hey Arnold! S01E14 - The Spelling Bee - Pigeon Man (1080p).mp4",
 						"season": 1,
 						"episode": 28,
-						"episodeEnd": null,
+						"episodeEnd": 29,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30163
 					},
@@ -95495,23 +95495,23 @@
 						"path": "Hey Arnold! S01E15 - Olga Comes Home - Salley's Comet (1080p).mp4",
 						"season": 1,
 						"episode": 30,
-						"episodeEnd": null,
+						"episodeEnd": 31,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30165
 					},
 					{
 						"path": "Hey Arnold! S01E16 - Abner Comes Home - The Sewer King (1080p).mp4",
-						"season": null,
-						"episode": null,
-						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"season": 1,
+						"episode": 32,
+						"episodeEnd": 33,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30164
 					},
 					{
 						"path": "Hey Arnold! S01E17 - False Alarm - World Records (1080p).mp4",
 						"season": 1,
 						"episode": 34,
-						"episodeEnd": null,
+						"episodeEnd": 35,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30169
 					},
@@ -96088,7 +96088,7 @@
 						"path": "103a-b - The Magnificent Few; S'Winter.mkv",
 						"season": 1,
 						"episode": 10,
-						"episodeEnd": null,
+						"episodeEnd": 11,
 						"how": "tmdb",
 						"tmdbEpisodeId": 114712
 					},
@@ -96152,7 +96152,7 @@
 						"path": "111a-b - Mom's Birthday; Journey to the Center of Candace.mkv",
 						"season": 1,
 						"episode": 19,
-						"episodeEnd": null,
+						"episodeEnd": 20,
 						"how": "tmdb",
 						"tmdbEpisodeId": 114782
 					},
@@ -96200,7 +96200,7 @@
 						"path": "117a-b - Greece Lightning; Leave the Busting to Us!.mkv",
 						"season": 1,
 						"episode": 25,
-						"episodeEnd": null,
+						"episodeEnd": 26,
 						"how": "tmdb",
 						"tmdbEpisodeId": 114810
 					},
@@ -96208,7 +96208,7 @@
 						"path": "118a-b - Crack That Whip; The Best Lazy Day Ever.mkv",
 						"season": 1,
 						"episode": 27,
-						"episodeEnd": null,
+						"episodeEnd": 28,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1314930
 					},
@@ -96216,7 +96216,7 @@
 						"path": "119a-b - Boyfriend From 27,000 B.C.; Voyage to the Bottom of Buford.mkv",
 						"season": 1,
 						"episode": 29,
-						"episodeEnd": null,
+						"episodeEnd": 30,
 						"how": "tmdb",
 						"tmdbEpisodeId": 114818
 					},
@@ -96224,7 +96224,7 @@
 						"path": "120a-b - Put That Putter Away; Does This Duckbill Make Me Look Fat_.mkv",
 						"season": 1,
 						"episode": 36,
-						"episodeEnd": null,
+						"episodeEnd": 37,
 						"how": "tmdb",
 						"tmdbEpisodeId": 114870
 					},
@@ -96232,7 +96232,7 @@
 						"path": "121a-b - Traffic Cam Caper; Bowl-R-Ama Drama.mkv",
 						"season": 1,
 						"episode": 32,
-						"episodeEnd": null,
+						"episodeEnd": 33,
 						"how": "tmdb",
 						"tmdbEpisodeId": 114826
 					},
@@ -96240,17 +96240,17 @@
 						"path": "122a-b - The Monster of Phineas-n-Ferbenstein; Oil on Candace.mkv",
 						"season": 1,
 						"episode": 40,
-						"episodeEnd": null,
+						"episodeEnd": 41,
 						"how": "tmdb",
 						"tmdbEpisodeId": 114840
 					},
 					{
 						"path": "123a-b - Unfair Science Fair; Redux (Another Story).mkv",
 						"season": 1,
-						"episode": 47,
-						"episodeEnd": null,
+						"episode": 46,
+						"episodeEnd": 47,
 						"how": "tmdb",
-						"tmdbEpisodeId": 114887
+						"tmdbEpisodeId": 114845
 					},
 					{
 						"path": "124 - Out to Launch.mkv",
@@ -96264,7 +96264,7 @@
 						"path": "125a-b - Got Game_; Comet Kermillian.mkv",
 						"season": 1,
 						"episode": 34,
-						"episodeEnd": null,
+						"episodeEnd": 35,
 						"how": "tmdb",
 						"tmdbEpisodeId": 114831
 					},
@@ -96272,7 +96272,7 @@
 						"path": "126a-b - Out of Toon; Hail Doofania!.mkv",
 						"season": 1,
 						"episode": 42,
-						"episodeEnd": null,
+						"episodeEnd": 43,
 						"how": "tmdb",
 						"tmdbEpisodeId": 114836
 					},
@@ -96296,7 +96296,7 @@
 						"path": "203a-b - Attack of the 50 Foot Sister; Backyard Aquarium.mkv",
 						"season": 2,
 						"episode": 4,
-						"episodeEnd": null,
+						"episodeEnd": 5,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115002
 					},
@@ -96304,7 +96304,7 @@
 						"path": "204a-b - Day of the Living Gelatin; Elementary My Dear Stacy.mkv",
 						"season": 2,
 						"episode": 6,
-						"episodeEnd": null,
+						"episodeEnd": 7,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115004
 					},
@@ -96312,7 +96312,7 @@
 						"path": "205a-b - Don't Even Blink; Chez Platypus.mkv",
 						"season": 2,
 						"episode": 8,
-						"episodeEnd": null,
+						"episodeEnd": 9,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115005
 					},
@@ -96320,7 +96320,7 @@
 						"path": "206a-b - Perry Lays an Egg; Gaming the System.mkv",
 						"season": 2,
 						"episode": 10,
-						"episodeEnd": null,
+						"episodeEnd": 11,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115007
 					},
@@ -96336,7 +96336,7 @@
 						"path": "208a-b - Thaddeus and Thor; De Plane! De Plane!.mkv",
 						"season": 2,
 						"episode": 13,
-						"episodeEnd": null,
+						"episodeEnd": 14,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115010
 					},
@@ -96344,7 +96344,7 @@
 						"path": "209a-b - Lets Take a Quiz; At the Car Wash.mkv",
 						"season": 2,
 						"episode": 15,
-						"episodeEnd": null,
+						"episodeEnd": 16,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115013
 					},
@@ -96376,7 +96376,7 @@
 						"path": "213a-b - Hide and Seek; That Sinking Feeling.mkv",
 						"season": 2,
 						"episode": 19,
-						"episodeEnd": null,
+						"episodeEnd": 20,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115017
 					},
@@ -96384,7 +96384,7 @@
 						"path": "214a-b - The Baljeatles; Vanessassary Roughness.mkv",
 						"season": 2,
 						"episode": 21,
-						"episodeEnd": null,
+						"episodeEnd": 22,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115022
 					},
@@ -96400,7 +96400,7 @@
 						"path": "216a-b - Bubble Boys; Isabella and the Temple of Sap.mkv",
 						"season": 2,
 						"episode": 27,
-						"episodeEnd": null,
+						"episodeEnd": 28,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115034
 					},
@@ -96408,7 +96408,7 @@
 						"path": "217a-b - Cheer Up Candace; Fireside Girl Jamboree.mkv",
 						"season": 2,
 						"episode": 29,
-						"episodeEnd": null,
+						"episodeEnd": 30,
 						"how": "tmdb",
 						"tmdbEpisodeId": 114992
 					},
@@ -96416,7 +96416,7 @@
 						"path": "218a-b - The Bully Code; Finding Mary McGuffin.mkv",
 						"season": 2,
 						"episode": 31,
-						"episodeEnd": null,
+						"episodeEnd": 32,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1317371
 					},
@@ -96424,7 +96424,7 @@
 						"path": "219a-b - What Do It Do_; Atlantis.mkv",
 						"season": 2,
 						"episode": 35,
-						"episodeEnd": null,
+						"episodeEnd": 36,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115049
 					},
@@ -96432,7 +96432,7 @@
 						"path": "220a-b - Picture This; Nerdy Dancin.mkv",
 						"season": 2,
 						"episode": 33,
-						"episodeEnd": null,
+						"episodeEnd": 34,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115046
 					},
@@ -96440,7 +96440,7 @@
 						"path": "221a-b - I Was a Middle Aged Robot; Suddenly Suzy.mkv",
 						"season": 2,
 						"episode": 40,
-						"episodeEnd": null,
+						"episodeEnd": 41,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115052
 					},
@@ -96456,7 +96456,7 @@
 						"path": "223a-b - Undercover Carl; Hip Hip Parade.mkv",
 						"season": 2,
 						"episode": 42,
-						"episodeEnd": null,
+						"episodeEnd": 43,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115054
 					},
@@ -96464,7 +96464,7 @@
 						"path": "224 - Just Passing Through; Candace's Big Day.mkv",
 						"season": 2,
 						"episode": 38,
-						"episodeEnd": null,
+						"episodeEnd": 39,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115050
 					},
@@ -96472,7 +96472,7 @@
 						"path": "225a-b - Invasion of the Ferb Snatchers; Ain't No Kiddie Ride.mkv",
 						"season": 2,
 						"episode": 44,
-						"episodeEnd": null,
+						"episodeEnd": 45,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115055
 					},
@@ -96496,7 +96496,7 @@
 						"path": "228a-b - Not Phineas and Ferb; Phineas and Ferb-Busters!.mkv",
 						"season": 2,
 						"episode": 46,
-						"episodeEnd": null,
+						"episodeEnd": 47,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115058
 					},
@@ -96504,7 +96504,7 @@
 						"path": "229a-b - The Lizard Whisperer; Robot Rodeo.mkv",
 						"season": 2,
 						"episode": 48,
-						"episodeEnd": null,
+						"episodeEnd": 49,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115061
 					},
@@ -96512,7 +96512,7 @@
 						"path": "230a-b - The Secret of Success; The Doof Side of the Moon.mkv",
 						"season": 2,
 						"episode": 60,
-						"episodeEnd": null,
+						"episodeEnd": 61,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115068
 					},
@@ -96520,7 +96520,7 @@
 						"path": "231a-b - She's the Mayor; The Lemonade Stand.mkv",
 						"season": 2,
 						"episode": 51,
-						"episodeEnd": null,
+						"episodeEnd": 52,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115062
 					},
@@ -96552,7 +96552,7 @@
 						"path": "235a-b - Split Personality; Brain Drain.mkv",
 						"season": 2,
 						"episode": 62,
-						"episodeEnd": null,
+						"episodeEnd": 63,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1317373
 					},
@@ -96560,7 +96560,7 @@
 						"path": "236a-b - Make Play; Candace Gets Busted.mkv",
 						"season": 2,
 						"episode": 65,
-						"episodeEnd": null,
+						"episodeEnd": 66,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115078
 					},
@@ -96592,7 +96592,7 @@
 						"path": "302a-b - The Great Indoors; Canderemy.mkv",
 						"season": 3,
 						"episode": 1,
-						"episodeEnd": null,
+						"episodeEnd": 2,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115090
 					},
@@ -96600,7 +96600,7 @@
 						"path": "303a-b - Belly of the Beast; Moon Farm.mkv",
 						"season": 3,
 						"episode": 6,
-						"episodeEnd": null,
+						"episodeEnd": 7,
 						"how": "tmdb",
 						"tmdbEpisodeId": 954500
 					},
@@ -96616,7 +96616,7 @@
 						"path": "305a-b - Ask a Foolish Question; Misperceived Monotreme.mkv",
 						"season": 3,
 						"episode": 8,
-						"episodeEnd": null,
+						"episodeEnd": 9,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115110
 					},
@@ -96624,7 +96624,7 @@
 						"path": "306a-b - Candace Disconnected; Magic Carpet Ride.mkv",
 						"season": 3,
 						"episode": 10,
-						"episodeEnd": null,
+						"episodeEnd": 11,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1412604
 					},
@@ -96632,7 +96632,7 @@
 						"path": "307a-b - Bad Hair Day; Meatloaf Surprise.mkv",
 						"season": 3,
 						"episode": 12,
-						"episodeEnd": null,
+						"episodeEnd": 13,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115115
 					},
@@ -96640,7 +96640,7 @@
 						"path": "308a-b - Tri-Stone Area; Doof Dynasty.mkv",
 						"season": 3,
 						"episode": 28,
-						"episodeEnd": null,
+						"episodeEnd": 29,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115154
 					},
@@ -96648,7 +96648,7 @@
 						"path": "309a-b - Phineas and Ferb Interrupted; A Real Boy.mkv",
 						"season": 3,
 						"episode": 14,
-						"episodeEnd": null,
+						"episodeEnd": 15,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1412605
 					},
@@ -96656,7 +96656,7 @@
 						"path": "310a-b - Mommy Can You Hear Me_; Road Trip.mkv",
 						"season": 3,
 						"episode": 16,
-						"episodeEnd": null,
+						"episodeEnd": 17,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115126
 					},
@@ -96688,7 +96688,7 @@
 						"path": "314a-b - That's the Spirit!; The Curse of Candace.mkv",
 						"season": 3,
 						"episode": 22,
-						"episodeEnd": null,
+						"episodeEnd": 23,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115138
 					},
@@ -96744,7 +96744,7 @@
 						"path": "321a-b - Monster from the Id; Gi-Ants.mkv",
 						"season": 3,
 						"episode": 32,
-						"episodeEnd": null,
+						"episodeEnd": 33,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115167
 					},
@@ -96784,7 +96784,7 @@
 						"path": "326a-b - Sleepwalk Surprise; Sci-Fi Pie Fly.mkv",
 						"season": 3,
 						"episode": 49,
-						"episodeEnd": null,
+						"episodeEnd": 50,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115216
 					},
@@ -96800,7 +96800,7 @@
 						"path": "328a-b - The Mom Attractor; Cranius Maximus.mkv",
 						"season": 3,
 						"episode": 44,
-						"episodeEnd": null,
+						"episodeEnd": 45,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115200
 					},
@@ -96808,7 +96808,7 @@
 						"path": "329a-b - Sipping With the Enemy; Tri-State Treasure- Boot of Secrets.mkv",
 						"season": 3,
 						"episode": 51,
-						"episodeEnd": null,
+						"episodeEnd": 52,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1412609
 					},
@@ -96872,7 +96872,7 @@
 						"path": "402a-b - For Your Ice Only; Happy New Year!.mkv",
 						"season": 4,
 						"episode": 1,
-						"episodeEnd": null,
+						"episodeEnd": 2,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115258
 					},
@@ -96896,7 +96896,7 @@
 						"path": "405a-b - Bee Day; Bee Story.mkv",
 						"season": 4,
 						"episode": 11,
-						"episodeEnd": null,
+						"episodeEnd": 12,
 						"how": "tmdb",
 						"tmdbEpisodeId": 115264
 					},
@@ -97024,7 +97024,7 @@
 						"path": "422a-b - Operation Crumb Cake; Mandace.mkv",
 						"season": 4,
 						"episode": 39,
-						"episodeEnd": null,
+						"episodeEnd": 40,
 						"how": "tmdb",
 						"tmdbEpisodeId": 988330
 					},
@@ -97048,7 +97048,7 @@
 						"path": "425a-b - Lost in Danville; The Inator Method.mkv",
 						"season": 4,
 						"episode": 42,
-						"episodeEnd": null,
+						"episodeEnd": 43,
 						"how": "tmdb",
 						"tmdbEpisodeId": 994152
 					},
@@ -97086,19 +97086,19 @@
 					},
 					{
 						"path": "436-7 - Phineas and Ferb- Last Day of Summer.mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 48,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1075438
 					},
 					{
 						"path": "440 - Phineas and Ferb- Musical Cliptastic Countdown, Hosted by Kelly Osbourne.mkv",
-						"season": null,
-						"episode": null,
+						"season": 4,
+						"episode": 15,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 115249
 					},
 					{
 						"path": "O.W.C.A. Files.mkv",
@@ -103975,10 +103975,10 @@
 					{
 						"path": "Beavis and Butt-head S08E02 Daughter's Hand, Tech Support.mp4",
 						"season": 8,
-						"episode": 2,
-						"episodeEnd": null,
+						"episode": 3,
+						"episodeEnd": 4,
 						"how": "tmdb",
-						"tmdbEpisodeId": 510323
+						"tmdbEpisodeId": 510321
 					},
 					{
 						"path": "Beavis and Butt-head S08E03 Holy Cornholio.mp4",
@@ -103998,67 +103998,67 @@
 					},
 					{
 						"path": "Beavis and Butt-head S08E05 Supersize Me, Bathroom Break.mp4",
-						"season": null,
-						"episode": null,
-						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
-					},
-					{
-						"path": "Beavis and Butt-head S08E06 The Rat, Spill.mp4",
-						"season": null,
-						"episode": null,
-						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
-					},
-					{
-						"path": "Beavis and Butt-head S08E07 Doomsday, Dumb Design.mp4",
 						"season": 8,
 						"episode": 7,
-						"episodeEnd": null,
+						"episodeEnd": 8,
 						"how": "tmdb",
 						"tmdbEpisodeId": 510306
 					},
 					{
-						"path": "Beavis and Butt-head S08E08 Copy Machine, Holding.mp4",
-						"season": 8,
-						"episode": 8,
-						"episodeEnd": null,
-						"how": "tmdb",
-						"tmdbEpisodeId": 510304
-					},
-					{
-						"path": "Beavis and Butt-head S08E09 Used Car, Bounty Hunters.mp4",
+						"path": "Beavis and Butt-head S08E06 The Rat, Spill.mp4",
 						"season": 8,
 						"episode": 9,
-						"episodeEnd": null,
+						"episodeEnd": 10,
 						"how": "tmdb",
 						"tmdbEpisodeId": 510308
 					},
 					{
-						"path": "Beavis and Butt-head S08E10 Time Machine, Massage.mp4",
-						"season": 8,
-						"episode": 10,
-						"episodeEnd": null,
-						"how": "tmdb",
-						"tmdbEpisodeId": 510307
-					},
-					{
-						"path": "Beavis and Butt-head S08E11 School Test, Snitchers.mp4",
+						"path": "Beavis and Butt-head S08E07 Doomsday, Dumb Design.mp4",
 						"season": 8,
 						"episode": 11,
-						"episodeEnd": null,
+						"episodeEnd": 12,
 						"how": "tmdb",
 						"tmdbEpisodeId": 510311
 					},
 					{
+						"path": "Beavis and Butt-head S08E08 Copy Machine, Holding.mp4",
+						"season": 8,
+						"episode": 13,
+						"episodeEnd": 14,
+						"how": "tmdb",
+						"tmdbEpisodeId": 510310
+					},
+					{
+						"path": "Beavis and Butt-head S08E09 Used Car, Bounty Hunters.mp4",
+						"season": 8,
+						"episode": 15,
+						"episodeEnd": 16,
+						"how": "tmdb",
+						"tmdbEpisodeId": 510312
+					},
+					{
+						"path": "Beavis and Butt-head S08E10 Time Machine, Massage.mp4",
+						"season": 8,
+						"episode": 17,
+						"episodeEnd": 18,
+						"how": "tmdb",
+						"tmdbEpisodeId": 510314
+					},
+					{
+						"path": "Beavis and Butt-head S08E11 School Test, Snitchers.mp4",
+						"season": 8,
+						"episode": 19,
+						"episodeEnd": 20,
+						"how": "tmdb",
+						"tmdbEpisodeId": 510316
+					},
+					{
 						"path": "Beavis and Butt-head S08E12 Whorehouse, Going Down.mp4",
 						"season": 8,
-						"episode": 12,
-						"episodeEnd": null,
+						"episode": 21,
+						"episodeEnd": 22,
 						"how": "tmdb",
-						"tmdbEpisodeId": 510309
+						"tmdbEpisodeId": 510320
 					},
 					{
 						"path": "Cher, Beavis And Butt-Head - I Got You Babe-other.mp4",
@@ -106423,11 +106423,11 @@
 				"files": [
 					{
 						"path": "Fate Grand Order - Absolute Demonic Front Babylonia S01E00 Initium Iter.mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 1,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1873268
 					},
 					{
 						"path": "Fate Grand Order - Absolute Demonic Front Babylonia S01E01 Absolute Demonic Front Babylonia.mkv",
@@ -106726,7 +106726,7 @@
 						"path": "02. Pup Pup Boogie + Pups in a Fog.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 3,
-						"episodeEnd": null,
+						"episodeEnd": 4,
 						"how": "tmdb",
 						"tmdbEpisodeId": 943006
 					},
@@ -106734,7 +106734,7 @@
 						"path": "03. Pups Save the Sea Turtles + Pup and the Very Big Baby.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 5,
-						"episodeEnd": null,
+						"episodeEnd": 6,
 						"how": "tmdb",
 						"tmdbEpisodeId": 943005
 					},
@@ -106742,7 +106742,7 @@
 						"path": "04. Pups Save the Circus + Pup A Doodle Do.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 7,
-						"episodeEnd": null,
+						"episodeEnd": 8,
 						"how": "tmdb",
 						"tmdbEpisodeId": 943004
 					},
@@ -106750,7 +106750,7 @@
 						"path": "05. Pup Pup Goose + Pup Pup and Away.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 9,
-						"episodeEnd": null,
+						"episodeEnd": 10,
 						"how": "tmdb",
 						"tmdbEpisodeId": 943003
 					},
@@ -106758,7 +106758,7 @@
 						"path": "06. Pups Pit Crew + Pups Fight Fire.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 11,
-						"episodeEnd": null,
+						"episodeEnd": 12,
 						"how": "tmdb",
 						"tmdbEpisodeId": 943002
 					},
@@ -106766,7 +106766,7 @@
 						"path": "07. Pups Save the Bunnies + Puptacular.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 13,
-						"episodeEnd": null,
+						"episodeEnd": 14,
 						"how": "tmdb",
 						"tmdbEpisodeId": 943001
 					},
@@ -106774,7 +106774,7 @@
 						"path": "08. Pups Save the Bay + Pups Save a Goodway.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 15,
-						"episodeEnd": null,
+						"episodeEnd": 16,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1019779
 					},
@@ -106782,7 +106782,7 @@
 						"path": "09. Pups Get a Rubble + Pups Save a Walrus.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 17,
-						"episodeEnd": null,
+						"episodeEnd": 18,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1019790
 					},
@@ -106790,7 +106790,7 @@
 						"path": "10. Pups Save the Treats + Pups Get a Lift.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 19,
-						"episodeEnd": null,
+						"episodeEnd": 20,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1019791
 					},
@@ -106798,7 +106798,7 @@
 						"path": "11. Pups Save a Hoedown + Pups Save Alex.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 21,
-						"episodeEnd": null,
+						"episodeEnd": 22,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1019792
 					},
@@ -106814,7 +106814,7 @@
 						"path": "13. Pups Save a School Day + Pups Turn on the Lights.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 24,
-						"episodeEnd": null,
+						"episodeEnd": 25,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1019794
 					},
@@ -106822,7 +106822,7 @@
 						"path": "14. Pups Save a Pool Day + Circus Pup Formers.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 26,
-						"episodeEnd": null,
+						"episodeEnd": 27,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1019795
 					},
@@ -106830,7 +106830,7 @@
 						"path": "15. Pups Make a Splash + Pups Fall Festival.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 28,
-						"episodeEnd": null,
+						"episodeEnd": 29,
 						"how": "tmdb",
 						"tmdbEpisodeId": 943011
 					},
@@ -106846,7 +106846,7 @@
 						"path": "17. Pups On Ice + Pups and the Snow Monster.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 31,
-						"episodeEnd": null,
+						"episodeEnd": 32,
 						"how": "tmdb",
 						"tmdbEpisodeId": 943009
 					},
@@ -106854,7 +106854,7 @@
 						"path": "18. Pups Save a Super Pup + Pups Save Ryder's Robot.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 33,
-						"episodeEnd": null,
+						"episodeEnd": 34,
 						"how": "tmdb",
 						"tmdbEpisodeId": 943008
 					},
@@ -106862,7 +106862,7 @@
 						"path": "19. Pups Go All Monkey + Pups Save a Hoot.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 35,
-						"episodeEnd": null,
+						"episodeEnd": 36,
 						"how": "tmdb",
 						"tmdbEpisodeId": 943013
 					},
@@ -106870,7 +106870,7 @@
 						"path": "20. Pups Save a Bat + Pups Save a Toof.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 37,
-						"episodeEnd": null,
+						"episodeEnd": 38,
 						"how": "tmdb",
 						"tmdbEpisodeId": 943012
 					},
@@ -106886,7 +106886,7 @@
 						"path": "22. Pups and the Lighthouse Boogie + Pups Save Ryder.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 40,
-						"episodeEnd": null,
+						"episodeEnd": 41,
 						"how": "tmdb",
 						"tmdbEpisodeId": 943014
 					},
@@ -106894,7 +106894,7 @@
 						"path": "23. Pups Great Race + Pups Take the Cake.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 42,
-						"episodeEnd": null,
+						"episodeEnd": 43,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1019797
 					},
@@ -106902,7 +106902,7 @@
 						"path": "24. Pups and the Beanstalk + Pups Save the Turbots.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 44,
-						"episodeEnd": null,
+						"episodeEnd": 45,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1019798
 					},
@@ -106910,7 +106910,7 @@
 						"path": "25. Pups Save the Camping Trip + Pups and the Trouble with Turtles.HD.rus.eng.mkv",
 						"season": 1,
 						"episode": 46,
-						"episodeEnd": null,
+						"episodeEnd": 47,
 						"how": "tmdb",
 						"tmdbEpisodeId": 1019799
 					}

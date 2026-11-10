@@ -35,8 +35,11 @@ import {
 	parseName,
 	placeFile,
 	specialOf,
+	spelledAlike,
 	stackedParts,
+	TITLE_EPISODE,
 	titleOf,
+	titleText,
 	yieldToTitles,
 	type AlignedEpisode,
 	type AnimeIndex,
@@ -59,7 +62,7 @@ import { getTmdbAuth } from '@/utils/tmdbAuth';
  * releases they discarded). A caller that starts reading a field decides for itself whether to
  * ask again (zurg's placementReader). Deploys that place nothing differently keep it.
  */
-export const PLACEMENT_RULES = '2026-11-09.11';
+export const PLACEMENT_RULES = '2026-11-10.3';
 
 export interface PlaceRequest {
 	name: string;
@@ -69,6 +72,8 @@ export interface PlaceRequest {
 	files: { path: string; folder: string | null }[];
 	/** The caller reads `part`: a file may be placed as one part of TMDB's episode. */
 	parts?: true;
+	/** The caller reads a file's own show (`kind` `tv` on a file): a file may be placed on another show than its release's. */
+	shows?: true;
 }
 
 export interface PlacedFile {
@@ -91,14 +96,20 @@ export interface PlacedFile {
 	part?: number | null;
 	/**
 	 * A film inside a show's release, named on its own (`[Movie 02] Heroes Rising` in a My Hero
-	 * Academia pack): `kind` `movie` with the film's ids, present only on such files.
+	 * Academia pack): `kind` `movie` with the film's ids, present only on such files. Or, for a
+	 * request that sends `shows`, an episode of another show than the release's (`The New Batman
+	 * Adventures - S01 E01 - Holiday Knights` in a Batman: The Animated Series pack): `kind` `tv`
+	 * with that show's ids, the file's numbers being on it.
 	 */
-	kind?: 'movie';
+	kind?: 'movie' | 'tv';
 	imdbId?: string;
 	tmdbId?: number;
-	/** That film's TMDB title and year, which a client names its folder by. */
+	/** That film's or show's TMDB title and year, which a client names its folder by. */
 	title?: string;
 	year?: number;
+	/** That show's TheTVDB id and whether it is anime, as a release's `tvdbId` and `anime`. */
+	tvdbId?: number;
+	anime?: boolean;
 	/** The file's episode of its release's `series`, present only on a file the series numbers. */
 	series?: SeriesEpisode;
 }
@@ -184,7 +195,7 @@ export interface PlacementSources {
 	/** TMDB's TV search for a title (`search/tv`). */
 	searchTv(query: string): Promise<any | null>;
 	/** TMDB's movie search for a title in a year (`search/movie`); absent or null where it cannot be asked. */
-	searchMovie?(query: string, year: number): Promise<any | null>;
+	searchMovie?(query: string, year?: number): Promise<any | null>;
 	/** TMDB's external ids of a movie (`movie/{id}/external_ids`); absent or null where it cannot be asked. */
 	movieIds?(tmdbId: number): Promise<any | null>;
 	/** A series and its episodes as IMDb lists them (dmmdb's imdb_title_*); null when IMDb has no such title. */
@@ -302,6 +313,8 @@ export async function placeReleases(
 			if (!waits) out[at] = await filmLook(release, out[at], sources);
 			if (!waits) out[at] = await tvdbLook(out[at], sources);
 			if (!waits) out[at] = await revivalLook(release, out[at], sources);
+			if (!waits) out[at] = await spellingLook(release, out[at], sources);
+			if (!waits) out[at] = await otherShowLook(release, out[at], sources, anime);
 		}
 	};
 	await Promise.all(Array.from({ length: CONCURRENCY }, worker));
@@ -368,8 +381,8 @@ export async function titled(
 	const own = await tmdbTitle(placed.kind, placed.imdbId, placed.tmdbId, sources);
 	const files = await Promise.all(
 		placed.files.map(async (file) =>
-			file.kind === 'movie' && file.tmdbId
-				? { ...file, ...(await tmdbTitle('movie', file.imdbId, file.tmdbId, sources)) }
+			file.kind && file.tmdbId
+				? { ...file, ...(await tmdbTitle(file.kind, file.imdbId, file.tmdbId, sources)) }
 				: file
 		)
 	);
@@ -535,6 +548,205 @@ async function revivalLook(
 }
 
 /**
+ * The files of another show a show's release holds, each answered as that show's episode, for a
+ * caller that reads them (`shows`): a release is placed whole on one show (`siblingLook`), and the
+ * files left unplaced there may name another. A file is taken only where its own name, before its
+ * numbers, names that show (its letters within the show's name), and on one other show alone:
+ * - the show of a season TVDB lists under the release's series and TMDB as a show of its own, by
+ *   TVDB's episode (`revivalLook`): Whose Line Is It Anyway (US)'s `S09E01 - Lauren Cohan` is the 2013
+ *   revival (TMDB 64978), which TVDB numbers on as the 1998 series' season 9;
+ * - a show the file's own title places it on (`titled`), one TMDB titles as the file's name where the
+ *   release's show's name does not hold it (a Batman: The Animated Series pack's `The New Batman
+ *   Adventures - S01 E01 - Holiday Knights`), or the one the id sent names, which the release was
+ *   taken from (`Batman - 066 - Sideshow` in a pack of Batman TAS seasons 2-3 that most of its
+ *   files place on The New Batman Adventures).
+ * Each such file carries `kind` `tv` and that show's ids beside its numbers on it. Asked last, of
+ * files no other rule placed, so the release and its other files stay as they are.
+ */
+async function otherShowLook(
+	release: PlaceRequest,
+	placed: PlacedRelease,
+	sources: PlacementSources,
+	anime: AnimeIndex | null
+): Promise<PlacedRelease> {
+	const own = placed.tmdbId;
+	if (!release.shows || placed.skipped || placed.kind !== 'tv' || own === null) return placed;
+	const shown = await sources.show(own);
+	const names = (details: any) =>
+		[details?.name, details?.original_name].map((name) => letters(name)).filter(Boolean);
+	const single = release.files.length === 1;
+	const left = release.files.flatMap((file, at) => {
+		const numbers =
+			placed.files[at].season === null && !placed.files[at].kind
+				? fileNumbers(release.name, file.folder, file.path, single)
+				: null;
+		const stem = file.path.split('/').pop() ?? file.path;
+		const show = numbers ? parseName(stem).title : '';
+		const title = numbers && titleOf(stem, numbers);
+		// the name before the numbers, never the title after them (`s03e02 - Journey to the Red Centre`)
+		const named =
+			letters(show).length >= 4 && !(title && letters(show).includes(letters(title.first)));
+		return named ? [{ at, numbers: numbers!, show }] : [];
+	});
+	if (!left.length) return placed;
+	const found = new Map<number, { answer: PlacedRelease; file: PlacedFile }[]>();
+	const take = (rows: typeof left, answer: PlacedRelease, keep: (n: number) => boolean) =>
+		rows.forEach(({ at }, n) => {
+			if (answer.tmdbId === null || answer.tmdbId === own || !keep(n)) return;
+			found.set(at, [...(found.get(at) ?? []), { answer, file: answer.files[n] }]);
+		});
+	const part = (rows: typeof left): PlaceRequest => ({
+		...release,
+		files: rows.map(({ at }) => release.files[at]),
+	});
+	const none = (asked: PlaceRequest): PlacedRelease => ({
+		...placed,
+		files: asked.files.map((file) => unplaced(file.path)),
+	});
+	const listed = new Set(((shown?.seasons as any[]) ?? []).map((row) => row?.season_number));
+	const later = left.filter(
+		({ numbers }) =>
+			numbers.season !== null && numbers.season > 0 && !listed.has(numbers.season)
+	);
+	if (later.length) {
+		const asked = part(later);
+		const there = await revivalLook(asked, none(asked), sources);
+		take(later, there, (n) => there.files[n].season !== null);
+	}
+	const shows = new Set<number>();
+	const sent = release.imdbId ? await resolve(release.imdbId, 'tv', release, sources) : null;
+	if (sent?.kind === 'tv' && sent.tmdbId !== null) shows.add(sent.tmdbId);
+	for (const show of new Set(left.map((row) => row.show))) {
+		if (names(shown).some((name) => name.includes(letters(show)))) continue;
+		for (const row of ((await sources.searchTv(show))?.results ?? []).slice(0, 8))
+			if (names(row).includes(letters(show)) && typeof row.id === 'number') shows.add(row.id);
+	}
+	shows.delete(own);
+	const asked = part(left);
+	for (const tmdbId of [...shows].slice(0, 8)) {
+		const external = (await sources.show(tmdbId))?.external_ids?.imdb_id;
+		const imdbId =
+			typeof external === 'string' && /^tt\d{7,}$/.test(external) ? external : null;
+		const there = await placeOnShow(
+			asked,
+			{ kind: 'tv', imdbId, tmdbId },
+			false,
+			sources,
+			anime
+		);
+		const byTitle = titledEach.get(there) ?? [];
+		if (!there.skipped) take(left, there, (n) => byTitle[n] && there.files[n].season !== null);
+	}
+	const files = [...placed.files];
+	for (const { at, show } of left) {
+		const hits = found.get(at) ?? [];
+		if (new Set(hits.map((hit) => hit.answer.tmdbId)).size !== 1) continue;
+		const [{ answer, file }] = hits;
+		const other = await sources.show(answer.tmdbId!);
+		// the file's own name names that show: one the release's show's name does not hold, the one
+		// the id sent names, or the one TVDB numbers as the release's series
+		const theirs = names(other).some((name) => name.includes(letters(show)));
+		const ours = names(shown).some((name) => name.includes(letters(show)));
+		if (!theirs || (ours && answer.tmdbId !== sent?.tmdbId && file.how !== 'tvdbSeries'))
+			continue;
+		files[at] = {
+			...file,
+			path: files[at].path,
+			kind: 'tv',
+			...(answer.imdbId ? { imdbId: answer.imdbId } : {}),
+			tmdbId: answer.tmdbId!,
+			...(answer.tvdbId ? { tvdbId: answer.tvdbId } : {}),
+		};
+	}
+	return { ...placed, files };
+}
+
+/**
+ * A file its release's show left unplaced whose title is TMDB's but for its spelling
+ * (`spelledAlike`), in its own season or the one before or after: The Backyardigans' `S04E04
+ * Attack of the 50 Foot Worman` is S4E12 "Attack of the Fifty-Foot Worman", The Crocodile Hunter's
+ * `s03e02 - Journey to the Red Centre` S4E4 "Journey to the Red Center". Asked last, of the files
+ * every other rule left unplaced, so it moves no file and decides no show; an episode another
+ * file holds is not given twice.
+ */
+async function spellingLook(
+	release: PlaceRequest,
+	placed: PlacedRelease,
+	sources: PlacementSources
+): Promise<PlacedRelease> {
+	const { tmdbId } = placed;
+	if (placed.skipped || placed.kind !== 'tv' || tmdbId === null) return placed;
+	// numbered as TVDB or IMDb do, not on TMDB's lists
+	if (placed.files.some((file) => file.how === 'tvdbSeries' || file.how === 'imdb'))
+		return placed;
+	const single = release.files.length === 1;
+	const asked = release.files.flatMap((file, at) => {
+		const numbers =
+			placed.files[at].season === null && !placed.files[at].kind
+				? fileNumbers(release.name, file.folder, file.path, single)
+				: null;
+		const title =
+			numbers?.season != null && numbers.end === null
+				? titleOf(file.path.split('/').pop() ?? file.path, numbers)
+				: null;
+		return title ? [{ at, season: numbers!.season!, title: title.whole }] : [];
+	});
+	if (!asked.length) return placed;
+	const listed = new Set(
+		(((await sources.show(tmdbId))?.seasons as any[]) ?? []).map((row) => row?.season_number)
+	);
+	const lists = new Map<
+		number,
+		Promise<{ season: number; episode: number; name: string; id: unknown }[]>
+	>();
+	const episodes = (season: number) => {
+		if (!lists.has(season))
+			lists.set(
+				season,
+				sources.season(tmdbId, season).then((list) =>
+					((list?.episodes as any[]) ?? []).flatMap((row) =>
+						Number.isInteger(row?.episode_number) && typeof row.name === 'string'
+							? [
+									{
+										season,
+										episode: row.episode_number as number,
+										name: row.name as string,
+										id: row.id,
+									},
+								]
+							: []
+					)
+				)
+			);
+		return lists.get(season)!;
+	};
+	const taken = new Set(
+		placed.files.flatMap((file) =>
+			file.season === null ? [] : [`${file.season}|${file.episode}`]
+		)
+	);
+	const files = [...placed.files];
+	for (const { at, season, title } of asked) {
+		// specials only for a special
+		const near = [season - 1, season, season + 1].filter(
+			(n) => listed.has(n) && (n > 0 || season === 0)
+		);
+		const found = spelledAlike(title, (await Promise.all(near.map(episodes))).flat());
+		const key = found && `${found.season}|${found.episode}`;
+		if (!found || taken.has(key!)) continue;
+		taken.add(key!);
+		files[at] = {
+			...files[at],
+			season: found.season,
+			episode: found.episode,
+			how: 'tmdb',
+			tmdbEpisodeId: Number.isInteger(found.id) ? (found.id as number) : null,
+		};
+	}
+	return { ...placed, files };
+}
+
+/**
  * Another look at a release DMM could not name, or whose show holds none of its numbered
  * files: the identifier's own answers for the release's name and, when that names nothing,
  * for its first numbered file (`Season 3`, a folder of `Dragon Ball Z Abridged - S03E25 …`).
@@ -631,7 +843,11 @@ async function siblingLook(
  * [Season 1]` is the 11-episode drama (34142), the 23 files the anime of that name (45527); TMDB
  * files `[Delta] Rascal Does Not Dream of Santa Claus S02` as season 2, "Rascal Does Not Dream of
  * Santa Claus", of Bunny Girl Senpai (82739), and that title's own show is a one-episode stub.
- * Taken only where one such show places more of the files than any other and than the one it had.
+ * Taken only where one such show places more of the files than any other and than the one it had,
+ * or, of those that place as many, is the one made for the service the name was taken from
+ * (`streamedOn`). A release DMM named nothing is looked for so too: the identifier reads
+ * `JoJos.Bizarre.Adventure.E25…` as a film, and of TMDB's two JoJo's Bizarre Adventure only the
+ * 2012 series has an E25, not the 13-episode OVA of 1993.
  */
 async function namesakeLook(
 	release: PlaceRequest,
@@ -639,7 +855,9 @@ async function namesakeLook(
 	sources: PlacementSources,
 	anime: AnimeIndex | null
 ): Promise<PlacedRelease> {
-	if (placed.skipped || placed.kind !== 'tv' || placed.tmdbId === null) return placed;
+	const unnamed = !placed.kind && !placed.imdbId;
+	if (placed.skipped || (!unnamed && (placed.kind !== 'tv' || placed.tmdbId === null)))
+		return placed;
 	const single = release.files.length === 1;
 	const numbered = release.files.filter(
 		(file) => fileNumbers(release.name, file.folder, file.path, single) !== null
@@ -647,14 +865,15 @@ async function namesakeLook(
 	const count = (answer: PlacedRelease) =>
 		answer.files.filter((file) => file.season !== null).length;
 	if (!numbered || count(placed) >= numbered) return placed;
+	// a number by a day written year, month and day is a site's scene, no episode: `Freeze.25.03.21…`
+	if (unnamed && SHORT_DATE.test(release.name)) return placed;
 	const title = letters(parseName(release.name).title);
 	if (title.length < 4) return placed;
 	const named = ((await sources.searchTv(parseName(release.name).title))?.results ?? [])
 		.map((row: any) => row?.id)
 		.filter((id: unknown): id is number => typeof id === 'number' && id !== placed.tmdbId)
 		.slice(0, 8);
-	let best = placed;
-	let tie = false;
+	const better: PlacedRelease[] = [];
 	for (const tmdbId of named) {
 		const details = await sources.show(tmdbId);
 		const names = [
@@ -673,21 +892,52 @@ async function namesakeLook(
 			sources,
 			anime
 		);
-		if (there.skipped) continue;
-		if (count(there) > count(best)) [best, tie] = [there, false];
-		else if (best !== placed && count(there) === count(best)) tie = true;
+		if (!there.skipped && count(there) > count(placed)) better.push(there);
 	}
-	return tie ? placed : best;
+	const most = better.filter((there) => count(there) === Math.max(...better.map(count)));
+	const [best, ...tied] = most.length > 1 ? await streamedOn(release, most, sources) : most;
+	return best && !tied.length ? best : placed;
+}
+
+const SHORT_DATE = /(?<!\d)\d{2}([\s._-])(?:0[1-9]|1[0-2])\1(?:0[1-9]|[12]\d|3[01])(?!\d)/;
+
+// The service a scene name says it was taken from, as TMDB's network id: `Kingdom.S02E02.1080p.NF.
+// WEB-DL…-ExREN` is Netflix's Korean Kingdom, beside three other Kingdoms that hold an S02E02
+const SERVICES: [RegExp, number][] = [
+	[/(?:^|[\s._-])NF(?=[\s._-]|$)/i, 213], // Netflix
+	[/(?:^|[\s._-])AMZN(?=[\s._-]|$)/i, 1024], // Prime Video
+	[/(?:^|[\s._-])DSNP(?=[\s._-]|$)/i, 2739], // Disney+
+	[/(?:^|[\s._-])ATVP(?=[\s._-]|$)/i, 2552], // Apple TV
+	[/(?:^|[\s._-])HULU(?=[\s._-]|$)/i, 453], // Hulu
+];
+
+/** Of shows a release places as well on, those TMDB lists as made for the service its name says it was taken from. */
+async function streamedOn(
+	release: PlaceRequest,
+	shows: PlacedRelease[],
+	sources: PlacementSources
+): Promise<PlacedRelease[]> {
+	const network = SERVICES.find(([tag]) => tag.test(release.name))?.[1];
+	if (network === undefined) return shows;
+	const made = await Promise.all(
+		shows.map(async (there) =>
+			((await sources.show(there.tmdbId!))?.networks ?? []).some(
+				(row: any) => row?.id === network
+			)
+		)
+	);
+	return shows.filter((_, at) => made[at]);
 }
 
 // A film a show's release carries beside its episodes: `[Movie 02] Heroes Rising`, `One Piece Movie
 // 05 (2004) - The Cursed Holy Sword`, `Mask of The Phantasm (1993 - 1080p BluRay)`, a `Movies` folder.
+// A title's words: a number (`Jujutsu Kaisen 0`), never an article (`Ranma ½: The Movie, Big Trouble…`).
 const titleWords = (text: string) =>
 	text
 		.toLowerCase()
 		.replace(/['’`]/g, '')
 		.split(/[^\p{L}\p{N}]+/u)
-		.filter((word) => word.length > 2);
+		.filter((word) => (word.length > 2 || /^\d+$/.test(word)) && word !== 'the');
 const FILM_WORD = /(?:^|[^a-z])(?:movies?|films?)(?:[^a-z]|$)/i;
 const FILM_YEAR = /[[(]\s*(?:19|20)\d{2}\b/;
 const FILM_FOLDER = /(?:^|\/)[^/]*\b(?:movies?|films?|tv movies)\b[^/]*$/i;
@@ -710,8 +960,12 @@ async function filmLook(
 		if (file.season !== null) return [];
 		const { path, folder } = release.files[at];
 		const stem = (path.split('/').pop() ?? path).replace(/\.[a-z0-9]{2,4}$/i, '');
+		// or a release's one file: `[Arid] Fate kaleid liner Prisma☆Illya Prisma☆Phantasm`
 		const shaped =
-			FILM_WORD.test(stem) || FILM_YEAR.test(stem) || FILM_FOLDER.test(folder ?? '');
+			FILM_WORD.test(stem) ||
+			FILM_YEAR.test(stem) ||
+			FILM_FOLDER.test(folder ?? '') ||
+			release.files.length === 1;
 		if (!shaped) return [];
 		const own = stem.replace(/^\s*(?:\[[^\]]*\][\s._-]*)+/, '');
 		const name = letters(own).includes(letters(show)) ? own : `${show} ${own}`;
@@ -731,14 +985,74 @@ async function filmLook(
 		// the film's own title in the name, the show's words aside: `Beavis and Butt-Head {1995}
 		// Virtual Stupidity` is no Beavis and Butt-Head Do America, and the Six Million Dollar Man's
 		// three pilot films all read as the one titled as the show
-		const own = titleWords(top.title).filter((word) => !titleWords(show).includes(word));
+		// or, the film's words and number left out, as the name may leave them (`Ranma ½: The Movie 2,
+		// Nihao My Concubine` is `Ranma_½_Movie_Nihao_My_Concubine`)
 		const named = titleWords(name);
-		if (!own.length || !own.every((word) => named.includes(word))) continue;
+		const holds = (title: string) => {
+			const own = titleWords(title).filter((word) => !titleWords(show).includes(word));
+			return own.length > 0 && own.every((word) => named.includes(word));
+		};
+		if (!holds(top.title) && !holds(top.title.replace(/\b(?:movie|film)s?\s*\d*/gi, ' ')))
+			continue;
 		const movie = (await sources.find(top.imdbId))?.movie_results?.[0]?.id;
 		if (typeof movie !== 'number') continue;
 		files[at] = { ...files[at], kind: 'movie', imdbId: top.imdbId, tmdbId: movie };
 	}
+	// else TMDB's one film titled as the show and the words the file names beyond it, in the year the
+	// name gives if it does: `[Anime Time] Fairy Tail - Movie 01 - Dragon Cry` is "Fairy Tail: Dragon
+	// Cry", `[SubsPlease] Kaijuu 8-gou - Mission Recon` "Kaiju No. 8: Mission Recon" (a fansub's title
+	// before its first ` - ` is the show's, however it spells it)
+	for (const { at } of asked) {
+		if (files[at].kind || !sources.searchMovie || !sources.movieIds) continue;
+		const stem = (release.files[at].path.split('/').pop() ?? release.files[at].path)
+			.replace(/\.[a-z0-9]{2,4}$/i, '')
+			.replace(/^\s*(?:\[[^\]]*\][\s._-]*)+/, '');
+		const dashed = fansubShaped(release.files[at].path) ? stem.split(' - ') : [];
+		const own = filmWords(dashed.length > 1 ? dashed.slice(1).join(' - ') : stem, show);
+		if (letters(own).length < 4) continue;
+		const { year } = parseName(stem);
+		const yearOf = (row: any) => Number(String(row?.release_date ?? '').slice(0, 4));
+		// a name with no year that says no film names only one titled with the show's name too:
+		// `Rivales [HDTV] 1080p][Cap.208]`, sent with Rivals' id, is no part of the 2008 film Rivales
+		const withShow = (title: string) => {
+			const all = new Set(titleText(title)?.whole.split(' ') ?? []);
+			return (titleText(show)?.whole.split(' ') ?? []).every((word) => all.has(word));
+		};
+		const found = (
+			(await sources.searchMovie(`${show} ${own}`, year ?? undefined))?.results ?? []
+		).filter(
+			(row: any) =>
+				typeof row?.title === 'string' &&
+				filmWords(row.title, show) === own &&
+				(year
+					? Math.abs(yearOf(row) - year) <= 1
+					: FILM_WORD.test(stem) || withShow(row.title))
+		);
+		const imdbId = found.length === 1 ? (await sources.movieIds(found[0].id))?.imdb_id : null;
+		if (typeof imdbId === 'string' && /^tt\d{7,}$/.test(imdbId))
+			files[at] = { ...files[at], kind: 'movie', imdbId, tmdbId: found[0].id };
+	}
 	return { ...placed, files };
+}
+
+/**
+ * A film's title as words, the show's, a film's words and its number in the series, an episode token
+ * and the release's tags left out: `Movie 01 - Dragon Cry` and "Fairy Tail: Dragon Cry" are both
+ * `dragon cry` beside Fairy Tail.
+ */
+function filmWords(text: string, show: string): string {
+	const shown = new Set(titleText(show)?.whole.split(' ') ?? []);
+	const list = (titleText(text.replace(/[[(][^\])]*[\])]/g, ' '))?.whole ?? '').split(' ');
+	return list
+		.filter(
+			(word, n) =>
+				word &&
+				!shown.has(word) &&
+				!/^(?:movies?|films?|the|an?)$/.test(word) &&
+				!/^s\d{1,2}e\d{1,3}$/.test(word) &&
+				!(/^\d+$/.test(word) && /^(?:movies?|films?)$/.test(list[n - 1] ?? ''))
+		)
+		.join(' ');
 }
 
 async function secondLook(
@@ -785,6 +1099,7 @@ async function secondLook(
 		// it: `Would.I.Lie.to.You-S16E03-Shirley.Ballas…` is one title to the identifier, and
 		// `[philosophy-raws][Samurai Champloo][26]…` none
 		const spelled = [answer.parsedTitle, parseName(name).title]
+			.flatMap((title = '') => [title, title.replace(TITLE_EPISODE, '')])
 			.map((title) => letters(title))
 			.filter((title) => title.length >= 3);
 		const own = (match: IdentifierMatch) => spelled.includes(letters(match.title));
@@ -891,18 +1206,19 @@ async function secondLook(
  * the 1915 and 1917 shorts. Only for a release DMM knows nothing of, with no numbered file, and
  * only where one film of that year (a year either way, where none is of it) is titled as the name
  * by letters, under its title or else its original title (`Macbeth.2010` is the English TV film,
- * not the Polish `Makbet` TMDB also titles Macbeth), and TMDB knows its IMDb id.
+ * not the Polish `Makbet` TMDB also titles Macbeth), and TMDB knows its IMDb id. A release placed
+ * on a show that first aired after that year is no episode of it either (`laterShow`).
  */
 async function filmByTitle(
 	release: PlaceRequest,
 	placed: PlacedRelease,
 	sources: PlacementSources
 ): Promise<PlacedRelease> {
-	if (placed.skipped || placed.kind || placed.imdbId || !sources.searchMovie || !sources.movieIds)
-		return placed;
+	if (placed.skipped || !sources.searchMovie || !sources.movieIds) return placed;
 	if (releaseNumbers(release).some(Boolean)) return placed;
 	const { title, year } = parseName(release.name);
 	if (!year || letters(title).length < 3) return placed;
+	if ((placed.kind || placed.imdbId) && !(await laterShow(placed, year, sources))) return placed;
 	const yearOf = (row: any) => Number(String(row?.release_date ?? '').slice(0, 4));
 	const results: any[] = (await sources.searchMovie(title, year))?.results ?? [];
 	const near = results.filter((row) => Math.abs(yearOf(row) - year) <= 1);
@@ -911,8 +1227,12 @@ async function filmByTitle(
 			[row?.title, row?.original_title].some((text) => spell(text) === spell(title))
 		);
 	// a leading article only where nothing is titled as the name: `Burlesque.on.Carmen.1915` is A
-	// Burlesque on Carmen
-	const titled = titledAs(letters).length ? titledAs(letters) : titledAs(unarticled);
+	// Burlesque on Carmen; the title before its colon only where neither is: `Berlin.1927` is Berlin:
+	// Symphony of a Great City, `Puffs.2018` Puffs: Filmed Live Off Broadway
+	const titled =
+		[letters, unarticled, (text = '') => letters(text.split(':')[0])]
+			.map(titledAs)
+			.find((rows) => rows.length) ?? [];
 	const exact = titled.filter((row: any) => yearOf(row) === year);
 	let found = exact.length ? exact : titled;
 	if (found.length > 1)
@@ -920,10 +1240,30 @@ async function filmByTitle(
 	if (found.length !== 1) return placed;
 	const imdbId = (await sources.movieIds(found[0].id))?.imdb_id;
 	if (typeof imdbId !== 'string' || !/^tt\d{7,}$/.test(imdbId)) return placed;
+	const files = release.files.map((file) => unplaced(file.path));
 	const film = await resolve(imdbId, 'movie', release, sources);
-	return film?.kind === 'movie' && film.tmdbId !== null
-		? { ...film, files: release.files.map((file) => unplaced(file.path)) }
-		: placed;
+	if (film?.kind === 'movie' && film.tmdbId !== null) return { ...film, files };
+	// TMDB's film of an IMDb id IMDb lists as an episode, which resolves to its series:
+	// `Falsettos.2017` is IMDb's episode of Live from Lincoln Center and TMDB's film of it alone
+	const own = ((await sources.find(imdbId))?.movie_results ?? []).some(
+		(row: any) => row?.id === found[0].id
+	);
+	return own ? { kind: 'movie', imdbId, tmdbId: found[0].id, files } : placed;
+}
+
+/**
+ * Whether a release of no numbered file was placed on a show that first aired after the year its
+ * name gives, and holds none of it: the ids zurg sent with `Wings.1927…`, `The.Great.Train.Robbery.1903…`
+ * and `Behind.The.Screen.1916…` name the 1990 sitcom, the 2013 miniseries and the 1981 soap.
+ */
+async function laterShow(
+	placed: PlacedRelease,
+	year: number,
+	sources: PlacementSources
+): Promise<boolean> {
+	if (placed.kind !== 'tv' || placed.tmdbId === null || placesFiles(placed)) return false;
+	const aired = (await sources.show(placed.tmdbId))?.first_air_date;
+	return Number(String(aired ?? '').slice(0, 4)) > year + 1;
 }
 
 /**
@@ -1323,40 +1663,44 @@ async function placeFiles(
 	const dropped = yielded.map((found, at) =>
 		found && !found.titled && titles[at] && (moved || (byTitle && counted(at))) ? null : found
 	);
-	// a file its title and numbers placed nowhere, between the files numbered just before and after
-	// it that their titles placed one episode apart from it: Hell's Paradise's `S02E06.Conflict.and.
-	// Growing.Together` is TMDB's S1E19 "Hindering and Restoration", `S02E05` and `S02E07` S1E18 and
-	// S1E20 by their titles
+	// a file its title and numbers placed nowhere, between the nearest files numbered before and after
+	// it that their titles placed as many episodes apart as their numbers are: Hell's Paradise's
+	// `S02E06.Conflict.and.Growing.Together` is TMDB's S1E19 "Hindering and Restoration", `S02E05` and
+	// `S02E07` S1E18 and S1E20 by their titles; [bonkai77]'s `Bleach.Episode.35`-`38` lie between
+	// `Episode.34` and `Episode.39`, S1E34 and S1E39 by theirs
 	const taken = new Set(dropped.flatMap((p) => (p ? [`${p.season}|${p.episode}`] : [])));
-	const titledAt = (season: number | null, episode: number) => {
-		const at = numbers.findIndex(
-			(n, i) =>
-				n &&
-				n.season === season &&
-				n.episode === episode &&
-				n.end === null &&
-				dropped[i]?.titled
-		);
-		return at < 0 ? null : dropped[at];
+	const titledAt = new Map<string, Placement>();
+	numbers.forEach((n, i) => {
+		const found = dropped[i];
+		const key = `${n?.season}|${n?.episode}`;
+		if (n && n.end === null && found?.titled && !titledAt.has(key)) titledAt.set(key, found);
+	});
+	// ponytail: a gap of up to a cour's episodes; widen it when a longer one turns up
+	const nearest = (season: number | null, episode: number, step: 1 | -1) => {
+		for (let k = 1; k <= 13; k++) {
+			const found = titledAt.get(`${season}|${episode + step * k}`);
+			if (found) return { found, k };
+		}
+		return null;
 	};
 	const kept = dropped.map((found, at) => {
 		const own = numbers[at];
 		if (found || !own || own.end !== null) return found;
 		const [before, after] = [
-			titledAt(own.season, own.episode - 1),
-			titledAt(own.season, own.episode + 1),
+			nearest(own.season, own.episode, -1),
+			nearest(own.season, own.episode, 1),
 		];
 		if (
 			!before ||
 			!after ||
-			before.season !== after.season ||
-			after.episode !== before.episode + 2
+			before.found.season !== after.found.season ||
+			after.found.episode - before.found.episode !== before.k + after.k
 		)
 			return found;
-		const between = { season: before.season, episode: before.episode + 1 };
+		const between = { season: before.found.season, episode: before.found.episode + before.k };
 		return taken.has(`${between.season}|${between.episode}`)
 			? found
-			: { ...between, episodeEnd: null, how: before.how };
+			: { ...between, episodeEnd: null, how: before.found.how };
 	});
 	// the one file of an episode beside a later part of it named so is its first: `Lost.S01E24`
 	// beside `Lost.S01E24.Part.2`
@@ -1400,6 +1744,10 @@ async function placeFiles(
 		)
 	);
 	titledFiles.set(placedAnswer, kept.filter((found) => found?.titled).length);
+	titledEach.set(
+		placedAnswer,
+		kept.map((found) => Boolean(found?.titled))
+	);
 	agreedFiles.set(placedAnswer, kept.filter((found, at) => found?.titled && !movedBy[at]).length);
 	return placedAnswer;
 }
@@ -1456,6 +1804,8 @@ async function placeOnImdb(
 const titledFiles = new WeakMap<PlacedRelease, number>();
 /** How many of those its titles placed on the episode its numbers name as well. */
 const agreedFiles = new WeakMap<PlacedRelease, number>();
+/** Which of an answer's files placeOnShow placed by their own titles. */
+const titledEach = new WeakMap<PlacedRelease, boolean[]>();
 
 // TMDB names Detective Conan's "Aired Order (TheTVDB)": `S33E26.a.Ghost` (Crunchyroll's, TVDB's
 // season 33) is its S1E1173 "It's a Ghost!"

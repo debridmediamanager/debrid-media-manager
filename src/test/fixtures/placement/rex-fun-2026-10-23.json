@@ -70949,11 +70949,11 @@
 					},
 					{
 						"path": "Sesame Street - Episode 4013 - Snuffy's grandma visits.mp4",
-						"season": null,
-						"episode": null,
+						"season": 33,
+						"episode": 33,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 27280
 					},
 					{
 						"path": "Sesame Street - Episode 4016 - Zoe and Rosita have a play date with Rocco.mp4",
@@ -70997,11 +70997,11 @@
 					},
 					{
 						"path": "Sesame Street - Episode 4021 - Big Bird's pen pal.mp4",
-						"season": null,
-						"episode": null,
+						"season": 33,
+						"episode": 41,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 27288
 					},
 					{
 						"path": "Sesame Street - Episode 4022 - Gina takes the day off to spend time with Elmo.mp4",

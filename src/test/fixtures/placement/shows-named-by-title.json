@@ -1,0 +1,7124 @@
+{
+	"answers": {
+		"find": {
+			"tt38848632": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 301991,
+						"name": "Kingdom",
+						"first_air_date": "2025-11-09"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt3673794": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 61427,
+						"name": "Kingdom",
+						"first_air_date": "2014-10-08"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt2404499": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 46437,
+						"name": "Kingdom",
+						"first_air_date": "2012-06-04"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0841961": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 5287,
+						"name": "Kingdom",
+						"first_air_date": "2007-04-22"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt6611916": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 70593,
+						"name": "Kingdom",
+						"first_air_date": "2019-01-25"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"4267": {
+				"id": 4267,
+				"name": "The Kingdom",
+				"original_name": "Riget",
+				"first_air_date": "1994-11-24",
+				"original_language": "da",
+				"origin_country": ["DK"],
+				"genres": [
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 9648,
+						"name": "Mystery"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 509,
+							"name": "denmark"
+						},
+						{
+							"id": 1546,
+							"name": "ambulance"
+						},
+						{
+							"id": 3030,
+							"name": "nightmare"
+						},
+						{
+							"id": 4715,
+							"name": "autopsy"
+						},
+						{
+							"id": 10123,
+							"name": "dark comedy"
+						},
+						{
+							"id": 10941,
+							"name": "disappearance"
+						},
+						{
+							"id": 11612,
+							"name": "hospital"
+						},
+						{
+							"id": 13005,
+							"name": "doctor"
+						},
+						{
+							"id": 15106,
+							"name": "psychiatrist"
+						},
+						{
+							"id": 161261,
+							"name": "demonic possession"
+						},
+						{
+							"id": 162846,
+							"name": "ghost"
+						},
+						{
+							"id": 163055,
+							"name": "satanic cult"
+						},
+						{
+							"id": 295907,
+							"name": "psychological horror"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0108906",
+					"tvdb_id": 79137
+				},
+				"networks": [
+					{
+						"id": 391,
+						"name": "DR1"
+					},
+					{
+						"id": 2869,
+						"name": "Viaplay"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Krallıq",
+							"iso_3166_1": "AZ"
+						},
+						{
+							"title": "Le royaume",
+							"iso_3166_1": "CA"
+						},
+						{
+							"title": "Geister II",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Geister - Exodus",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Hospital der Geister - Teil 2",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Hospital der Geister - The Kingdom",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Riget Exodus",
+							"iso_3166_1": "DK"
+						},
+						{
+							"title": "Lars von Triers Riget II",
+							"iso_3166_1": "DK"
+						},
+						{
+							"title": "Lars von Trier præsenterer: Riget",
+							"iso_3166_1": "DK"
+						},
+						{
+							"title": "Lars von Triers Riget I",
+							"iso_3166_1": "DK"
+						},
+						{
+							"title": "Riget II",
+							"iso_3166_1": "DK"
+						},
+						{
+							"title": "Kuningriik. Exodus",
+							"iso_3166_1": "EE"
+						},
+						{
+							"title": "Valtakunta",
+							"iso_3166_1": "FI"
+						},
+						{
+							"title": "The Kingdom, meros V'",
+							"iso_3166_1": "GR"
+						},
+						{
+							"title": "Birodalom II.",
+							"iso_3166_1": "HU"
+						},
+						{
+							"title": "Karalija: Egzodas",
+							"iso_3166_1": "LT"
+						},
+						{
+							"title": "Karaliste",
+							"iso_3166_1": "LV"
+						},
+						{
+							"title": "El reino II",
+							"iso_3166_1": "MX"
+						},
+						{
+							"title": "Riket 2",
+							"iso_3166_1": "NO"
+						},
+						{
+							"title": "Królestwo II",
+							"iso_3166_1": "PL"
+						},
+						{
+							"title": "Krallık Çıkış",
+							"iso_3166_1": "TR"
+						},
+						{
+							"title": "醫院風雲Ⅱ",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "醫院風雲：出埃及記",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "The Kingdom Exodus",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "The Kingdom II",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 5,
+						"air_date": null,
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 4,
+						"air_date": "1994-11-24",
+						"name": "The Kingdom I"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 4,
+						"air_date": "1997-11-01",
+						"name": "The Kingdom II"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 5,
+						"air_date": "2022-10-09",
+						"name": "Exodus"
+					}
+				]
+			},
+			"5287": {
+				"id": 5287,
+				"name": "Kingdom",
+				"original_name": "Kingdom",
+				"first_air_date": "2007-04-22",
+				"original_language": "en",
+				"origin_country": ["GB"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 392,
+							"name": "england"
+						},
+						{
+							"id": 1415,
+							"name": "small town"
+						},
+						{
+							"id": 10909,
+							"name": "lawyer"
+						},
+						{
+							"id": 180546,
+							"name": "norfolk"
+						},
+						{
+							"id": 187224,
+							"name": "seaside town"
+						},
+						{
+							"id": 203322,
+							"name": "dramedy"
+						},
+						{
+							"id": 222517,
+							"name": "legal drama"
+						},
+						{
+							"id": 265555,
+							"name": "solicitor"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0841961",
+					"tvdb_id": 80201
+				},
+				"networks": [
+					{
+						"id": 9,
+						"name": "ITV1"
+					}
+				],
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 1,
+						"air_date": null,
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 6,
+						"air_date": "2007-04-21",
+						"name": "Series 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 6,
+						"air_date": "2008-01-12",
+						"name": "Series 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 6,
+						"air_date": "2009-06-06",
+						"name": "Series 3"
+					}
+				]
+			},
+			"21746": {
+				"id": 21746,
+				"name": "Freeze TV",
+				"original_name": "Freeze TV",
+				"first_air_date": "",
+				"original_language": "en",
+				"origin_country": ["NZ"],
+				"genres": [],
+				"keywords": {
+					"results": []
+				},
+				"external_ids": {
+					"imdb_id": null,
+					"tvdb_id": null
+				},
+				"networks": [
+					{
+						"id": 2432,
+						"name": "Sky Sport"
+					}
+				],
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": []
+			},
+			"45790": {
+				"id": 45790,
+				"name": "JoJo's Bizarre Adventure",
+				"original_name": "ジョジョの奇妙な冒険",
+				"first_air_date": "2012-10-06",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 2343,
+							"name": "magic"
+						},
+						{
+							"id": 3133,
+							"name": "vampire"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 175428,
+							"name": "adventurer"
+						},
+						{
+							"id": 194034,
+							"name": "globetrotting"
+						},
+						{
+							"id": 207826,
+							"name": "shounen"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 211674,
+							"name": "muscles"
+						},
+						{
+							"id": 251513,
+							"name": "supernatural power"
+						},
+						{
+							"id": 315058,
+							"name": "horror"
+						},
+						{
+							"id": 322942,
+							"name": "adventure"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt2359704",
+					"tvdb_id": 262954
+				},
+				"networks": [
+					{
+						"id": 213,
+						"name": "Netflix"
+					},
+					{
+						"id": 614,
+						"name": "TOKYO MX"
+					},
+					{
+						"id": 861,
+						"name": "BS11"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Чудноватото приключение на Джоджо",
+							"iso_3166_1": "BG"
+						},
+						{
+							"title": "乔乔的奇妙冒险",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "JOJO的奇妙冒险 石之海篇",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "JOJO的奇妙冒险 黄金之风篇",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "JOJO的奇妙冒险 不灭钻石篇",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "JOJO的奇妙冒险 星尘斗士篇",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "JOJO的奇妙冒险 幻影之血和战斗潮流篇",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "JOJO的奇妙冒险 特别篇",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "飙马野郎 JOJO的奇妙冒险",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "JoJo's Bizarre Adventure : Golden Wind",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "JoJo's Bizarre Adventure : Stardust Crusaders - Battle in Egypt",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "JoJo's Bizarre Adventure : Stardust Crusaders",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "JoJo's Bizarre Adventure : Diamond is Unbreakable",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "飆馬野郎 JOJO 的奇妙冒險",
+							"iso_3166_1": "HK"
+						},
+						{
+							"title": "JoJo no Kimyō na Bōken",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "JoJo no Kimyou na Bouken",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "ジョジョの奇妙な冒険 スターダストクルセイダース",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "ジョジョの奇妙な冒険ダイヤモンド は砕けない",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "ジョジョの奇妙な冒険 黄金の風",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "ジョジョの奇妙な冒険 ストーンオーシャン",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "JoJo no Kimyou na Bouken Stone Ocean 2nd",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "スティール・ボール・ラン ジョジョの奇妙な冒険",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "JoJo no Kimyou na Bouken - Steel Ball Run",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "죠죠의 기묘한 모험 스톤 오션",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "죠죠의 기묘한 모험 팬텀 블러드 & 전투조류",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "죠죠의 기묘한 모험 스타더스트 크루세이더즈",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "죠죠의 기묘한 모험 다이아몬드는 부서지지 않는다",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "죠죠의 기묘한 모험 황금의 바람",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "죠죠의 기묘한 모험 스틸 볼 런",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Химерні пригоди ДжоДжо",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "JoJo's Bizarre Adventure: Stardust Crusaders",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "JoJo's Bizarre Adventure: Diamond Is Unbreakable",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "JoJo's Bizarre Adventure: Stardust Crusaders - Battle in Egypt",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "JoJo's Bizarre Adventure: Battle Tendency",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "JoJo's Bizarre Adventure STONE OCEAN",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "JoJo's Bizarre Adventure: Phantom Blood",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "JoJo's Bizarre Adventure: Golden Wind",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "STEEL BALL RUN JoJo's Bizarre Adventure",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Cuộc Phiêu Lưu Kì Bí của JoJo",
+							"iso_3166_1": "VN"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 7,
+						"air_date": "2017-09-20",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 26,
+						"air_date": "2012-10-06",
+						"name": "Phantom Blood & Battle Tendency"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 48,
+						"air_date": "2014-04-05",
+						"name": "Stardust Crusaders"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 39,
+						"air_date": "2016-04-02",
+						"name": "Diamond Is Unbreakable"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 39,
+						"air_date": "2018-10-06",
+						"name": "Golden Wind"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 38,
+						"air_date": "2022-01-08",
+						"name": "STONE OCEAN"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 12,
+						"air_date": "2026-03-19",
+						"name": "STEEL BALL RUN"
+					}
+				]
+			},
+			"46437": {
+				"id": 46437,
+				"name": "Kingdom",
+				"original_name": "キングダム",
+				"first_air_date": "2012-06-04",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 478,
+							"name": "china"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 165725,
+							"name": "rise to power"
+						},
+						{
+							"id": 188277,
+							"name": "power struggle"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 221554,
+							"name": "ancient times"
+						},
+						{
+							"id": 223738,
+							"name": "warring states period"
+						},
+						{
+							"id": 273967,
+							"name": "war"
+						},
+						{
+							"id": 284812,
+							"name": "china history"
+						},
+						{
+							"id": 295029,
+							"name": "ancient china"
+						},
+						{
+							"id": 344761,
+							"name": "qin dinasty, china"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt2404499",
+					"tvdb_id": 259635
+				},
+				"networks": [
+					{
+						"id": 469,
+						"name": "NHK G"
+					},
+					{
+						"id": 2306,
+						"name": "NHK BS Premium"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Krallıq",
+							"iso_3166_1": "AZ"
+						},
+						{
+							"title": "Kingdom: the animation",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "战国英雄",
+							"iso_3166_1": "HK"
+						},
+						{
+							"title": "Kingudamu",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Kingdom",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Kingdom",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "킹덤 1기",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "킹덤 2기",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "킹덤 3기",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "킹덤 4기",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "킹덤 5기",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Королевство",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "كينقدوم",
+							"iso_3166_1": "SA"
+						},
+						{
+							"title": "كينجدوم",
+							"iso_3166_1": "SA"
+						},
+						{
+							"title": "王者天下第四季",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "王者天下 第五季",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "王者天下第五季",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "王者天下",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "Legend",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Vương Giả Thiên Hạ",
+							"iso_3166_1": "VN"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 38,
+						"air_date": "2012-06-04",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 39,
+						"air_date": "2013-06-08",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 26,
+						"air_date": "2020-04-06",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 26,
+						"air_date": "2022-04-10",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 13,
+						"air_date": "2024-01-14",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 14,
+						"air_date": "2025-10-05",
+						"name": "Season 6"
+					}
+				]
+			},
+			"55010": {
+				"id": 55010,
+				"name": "Freeze",
+				"original_name": "프리즈",
+				"first_air_date": "2006-10-27",
+				"original_language": "ko",
+				"origin_country": ["KR"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 3133,
+							"name": "vampire"
+						},
+						{
+							"id": 6152,
+							"name": "supernatural"
+						},
+						{
+							"id": 9840,
+							"name": "romance"
+						},
+						{
+							"id": 212760,
+							"name": "interspecies romance"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt5122784",
+					"tvdb_id": 171761
+				},
+				"networks": [
+					{
+						"id": 934,
+						"name": "OCN movies"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Peurijeu",
+							"iso_3166_1": "KR"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 5,
+						"air_date": "2006-10-27",
+						"name": "Season 1"
+					}
+				]
+			},
+			"56731": {
+				"id": 56731,
+				"name": "Cryonics – Freeze Me",
+				"original_name": "Cryonics – Freeze Me",
+				"first_air_date": "",
+				"original_language": "en",
+				"origin_country": [],
+				"genres": [],
+				"keywords": {
+					"results": []
+				},
+				"external_ids": {
+					"imdb_id": null,
+					"tvdb_id": null
+				},
+				"networks": [],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Cryonics - Freeze Me",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Death in the Deep Freeze",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": []
+			},
+			"60862": {
+				"id": 60862,
+				"name": "JoJo's Bizarre Adventure",
+				"original_name": "ジョジョの奇妙な冒険",
+				"first_air_date": "1993-11-19",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 3133,
+							"name": "vampire"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 207826,
+							"name": "shounen"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 259583,
+							"name": "original video animation (ova)"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0248119",
+					"tvdb_id": 83950
+				},
+				"networks": [],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "JOJO的奇妙冒险OVA",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "JoJo no Kimyō na Bōken",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "JoJo no Kimyou na Bouken",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "죠죠의 기묘한 모험 (1993 OVA)",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "JoJo’s Bizarre Adventure (1993)",
+							"iso_3166_1": "PE"
+						},
+						{
+							"title": "JoJo's Bizarre Adventure (1993)",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 6,
+						"air_date": "1993-11-17",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 7,
+						"air_date": "2000-05-04",
+						"name": "Season 2"
+					}
+				]
+			},
+			"61427": {
+				"id": 61427,
+				"name": "Kingdom",
+				"original_name": "Kingdom",
+				"first_air_date": "2014-10-08",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 271,
+							"name": "competition"
+						},
+						{
+							"id": 380,
+							"name": "sibling relationship"
+						},
+						{
+							"id": 726,
+							"name": "drug abuse"
+						},
+						{
+							"id": 970,
+							"name": "parent child relationship"
+						},
+						{
+							"id": 4613,
+							"name": "training"
+						},
+						{
+							"id": 6075,
+							"name": "sports"
+						},
+						{
+							"id": 9917,
+							"name": "mixed martial arts (mma)"
+						},
+						{
+							"id": 11524,
+							"name": "in the closet"
+						},
+						{
+							"id": 33610,
+							"name": "gym"
+						},
+						{
+							"id": 156121,
+							"name": "ex-con"
+						},
+						{
+							"id": 236472,
+							"name": "lower class"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt3673794",
+					"tvdb_id": 283761
+				},
+				"networks": [
+					{
+						"id": 251,
+						"name": "Audience"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Navy Street",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 10,
+						"air_date": "2014-10-08",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 20,
+						"air_date": "2015-10-14",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 10,
+						"air_date": "2017-05-31",
+						"name": "Season 3"
+					}
+				]
+			},
+			"63333": {
+				"id": 63333,
+				"name": "The Last Kingdom",
+				"original_name": "The Last Kingdom",
+				"first_air_date": "2015-10-10",
+				"original_language": "en",
+				"origin_country": ["GB"],
+				"genres": [
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 10768,
+						"name": "War & Politics"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 818,
+							"name": "based on novel or book"
+						},
+						{
+							"id": 5895,
+							"name": "vikings (norsemen)"
+						},
+						{
+							"id": 9920,
+							"name": "royalty"
+						},
+						{
+							"id": 12995,
+							"name": "historical fiction"
+						},
+						{
+							"id": 13084,
+							"name": "king"
+						},
+						{
+							"id": 15126,
+							"name": "historical"
+						},
+						{
+							"id": 192772,
+							"name": "historical drama"
+						},
+						{
+							"id": 195013,
+							"name": "costume drama"
+						},
+						{
+							"id": 207374,
+							"name": "saxons"
+						},
+						{
+							"id": 223786,
+							"name": "northumbria"
+						},
+						{
+							"id": 252544,
+							"name": "9th century"
+						},
+						{
+							"id": 259094,
+							"name": "dark"
+						},
+						{
+							"id": 286125,
+							"name": "gritty"
+						},
+						{
+							"id": 286194,
+							"name": "period piece"
+						},
+						{
+							"id": 317728,
+							"name": "sword and sandal"
+						},
+						{
+							"id": 322496,
+							"name": "action"
+						},
+						{
+							"id": 322942,
+							"name": "adventure"
+						},
+						{
+							"id": 342828,
+							"name": "violent"
+						},
+						{
+							"id": 355987,
+							"name": "middle ages"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt4179452",
+					"tvdb_id": 298566
+				},
+				"networks": [
+					{
+						"id": 213,
+						"name": "Netflix"
+					},
+					{
+						"id": 332,
+						"name": "BBC Two"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Sonuncu Krallıq",
+							"iso_3166_1": "AZ"
+						},
+						{
+							"title": "Последното кралство",
+							"iso_3166_1": "BG"
+						},
+						{
+							"title": "O Último Reino",
+							"iso_3166_1": "BR"
+						},
+						{
+							"title": "孤国春秋",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "最后的王国",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Το Τελευταίο Βασίλειο",
+							"iso_3166_1": "GR"
+						},
+						{
+							"title": "最後的王國",
+							"iso_3166_1": "HK"
+						},
+						{
+							"title": "Posljednje kraljevstvo",
+							"iso_3166_1": "HR"
+						},
+						{
+							"title": "Az utolsó királyság",
+							"iso_3166_1": "HU"
+						},
+						{
+							"title": "آخرین پادشاهی",
+							"iso_3166_1": "IR"
+						},
+						{
+							"title": "ラスト・キングダム",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "라스트 킹덤",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Paskutinioji karalystė",
+							"iso_3166_1": "LT"
+						},
+						{
+							"title": "Det siste kongeriket",
+							"iso_3166_1": "NO"
+						},
+						{
+							"title": "Upadek królestwa",
+							"iso_3166_1": "PL"
+						},
+						{
+							"title": "Poslednje kraljevstvo",
+							"iso_3166_1": "RS"
+						},
+						{
+							"title": "Последнее королевство",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "المملكة الأخيرة",
+							"iso_3166_1": "SA"
+						},
+						{
+							"title": "Posledné kráľovstvo",
+							"iso_3166_1": "SK"
+						},
+						{
+							"title": "Son Krallık",
+							"iso_3166_1": "TR"
+						},
+						{
+							"title": "最後的王國",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "Останнє Королівство",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "Vương Triều Cuối Cùng",
+							"iso_3166_1": "VN"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 1,
+						"air_date": "2017-03-08",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 8,
+						"air_date": "2015-10-10",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 8,
+						"air_date": "2017-03-16",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 10,
+						"air_date": "2018-11-19",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 10,
+						"air_date": "2020-04-26",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 10,
+						"air_date": "2022-03-09",
+						"name": "Season 5"
+					}
+				]
+			},
+			"66025": {
+				"id": 66025,
+				"name": "Animal Kingdom",
+				"original_name": "Animal Kingdom",
+				"first_air_date": "2016-06-14",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 80,
+						"name": "Crime"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 9503,
+							"name": "outlaw"
+						},
+						{
+							"id": 10041,
+							"name": "dysfunctional family"
+						},
+						{
+							"id": 33421,
+							"name": "crime family"
+						},
+						{
+							"id": 186219,
+							"name": "southern california"
+						},
+						{
+							"id": 223474,
+							"name": "female gangleader"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt5574490",
+					"tvdb_id": 304262
+				},
+				"networks": [
+					{
+						"id": 41,
+						"name": "TNT"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "أنيمال كينغدوم",
+							"iso_3166_1": "AE"
+						},
+						{
+							"title": "Животинско царство",
+							"iso_3166_1": "BG"
+						},
+						{
+							"title": "アニマル・キングダム",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Gyvuliu karalyste",
+							"iso_3166_1": "LT"
+						},
+						{
+							"title": "Królestwo zwierząt",
+							"iso_3166_1": "PL"
+						},
+						{
+							"title": "Împaratia fiarelor",
+							"iso_3166_1": "RO"
+						},
+						{
+							"title": "Животињско краљевство",
+							"iso_3166_1": "RS"
+						},
+						{
+							"title": "Царство животных",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "野獸家族",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "За законами вовків",
+							"iso_3166_1": "UA"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 10,
+						"air_date": "2016-06-14",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 13,
+						"air_date": "2017-05-30",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 13,
+						"air_date": "2018-05-29",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 13,
+						"air_date": "2019-05-28",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 13,
+						"air_date": "2021-07-11",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 13,
+						"air_date": "2022-06-19",
+						"name": "Season 6"
+					}
+				]
+			},
+			"70593": {
+				"id": 70593,
+				"name": "Kingdom",
+				"original_name": "킹덤",
+				"first_air_date": "2019-01-25",
+				"original_language": "ko",
+				"origin_country": ["KR"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 9648,
+						"name": "Mystery"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 3071,
+							"name": "prince"
+						},
+						{
+							"id": 4152,
+							"name": "kingdom"
+						},
+						{
+							"id": 4833,
+							"name": "royal family"
+						},
+						{
+							"id": 9717,
+							"name": "based on comic"
+						},
+						{
+							"id": 9744,
+							"name": "outbreak"
+						},
+						{
+							"id": 10292,
+							"name": "gore"
+						},
+						{
+							"id": 10349,
+							"name": "survival"
+						},
+						{
+							"id": 12377,
+							"name": "zombie"
+						},
+						{
+							"id": 17995,
+							"name": "epidemic"
+						},
+						{
+							"id": 50009,
+							"name": "survival horror"
+						},
+						{
+							"id": 191599,
+							"name": "palace intrigue"
+						},
+						{
+							"id": 192772,
+							"name": "historical drama"
+						},
+						{
+							"id": 208244,
+							"name": "16th century"
+						},
+						{
+							"id": 232421,
+							"name": "joseon dynasty (1392–1910)"
+						},
+						{
+							"id": 232649,
+							"name": "busan, south korea"
+						},
+						{
+							"id": 315058,
+							"name": "horror"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt6611916",
+					"tvdb_id": 355228
+				},
+				"networks": [
+					{
+						"id": 213,
+						"name": "Netflix"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Krallıq",
+							"iso_3166_1": "AZ"
+						},
+						{
+							"title": "李尸朝鲜",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "王国",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "李屍朝鮮",
+							"iso_3166_1": "HK"
+						},
+						{
+							"title": "Koningrijk",
+							"iso_3166_1": "NL"
+						},
+						{
+							"title": "FR Kingdom",
+							"iso_3166_1": "SA"
+						},
+						{
+							"title": "李屍朝鮮",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "Kingdom",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 6,
+						"air_date": "2019-01-25",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 6,
+						"air_date": "2020-03-13",
+						"name": "Season 2"
+					}
+				]
+			},
+			"76849": {
+				"id": 76849,
+				"name": "Brain Freeze",
+				"original_name": "Brain Freeze",
+				"first_air_date": "2014-01-01",
+				"original_language": "en",
+				"origin_country": [],
+				"genres": [],
+				"keywords": {
+					"results": []
+				},
+				"external_ids": {
+					"imdb_id": null,
+					"tvdb_id": null
+				},
+				"networks": [],
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 1,
+						"air_date": "2014-01-01",
+						"name": "Season 1"
+					}
+				]
+			},
+			"82620": {
+				"id": 82620,
+				"name": "HITOSHI MATSUMOTO Presents FREEZE",
+				"original_name": "HITOSHI MATSUMOTO Presents FREEZE",
+				"first_air_date": "2018-09-19",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 35,
+						"name": "Comedy"
+					}
+				],
+				"keywords": {
+					"results": []
+				},
+				"external_ids": {
+					"imdb_id": "tt9037296",
+					"tvdb_id": 354286
+				},
+				"networks": [
+					{
+						"id": 1024,
+						"name": "Prime Video"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "HITOSHI MATSUMOTO Presents FREEZE（フリーズ）",
+							"iso_3166_1": "JP"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 2,
+						"air_date": "2018-08-24",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 5,
+						"air_date": "2018-09-19",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 5,
+						"air_date": "2020-07-10",
+						"name": "Season 2"
+					}
+				]
+			},
+			"157917": {
+				"id": 157917,
+				"name": "Freeze",
+				"original_name": "Freeze",
+				"first_air_date": "2022-02-05",
+				"original_language": "en",
+				"origin_country": ["GB"],
+				"genres": [
+					{
+						"id": 99,
+						"name": "Documentary"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 10671,
+							"name": "figure skating"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt17640466",
+					"tvdb_id": 415866
+				},
+				"networks": [
+					{
+						"id": 3,
+						"name": "BBC Three"
+					}
+				],
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 4,
+						"air_date": "2022-02-05",
+						"name": "Skating on the Edge"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 4,
+						"air_date": "2022-03-21",
+						"name": "Back on Thin Ice"
+					}
+				]
+			},
+			"197466": {
+				"id": 197466,
+				"name": "Freeze the Fear with Wim Hof",
+				"original_name": "Freeze the Fear with Wim Hof",
+				"first_air_date": "2022-04-12",
+				"original_language": "en",
+				"origin_country": ["GB"],
+				"genres": [],
+				"keywords": {
+					"results": []
+				},
+				"external_ids": {
+					"imdb_id": "tt18411980",
+					"tvdb_id": 418537
+				},
+				"networks": [
+					{
+						"id": 4,
+						"name": "BBC One"
+					}
+				],
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 6,
+						"air_date": "2022-04-12",
+						"name": "Season 1"
+					}
+				]
+			},
+			"301991": {
+				"id": 301991,
+				"name": "Kingdom",
+				"original_name": "Kingdom",
+				"first_air_date": "2025-11-09",
+				"original_language": "en",
+				"origin_country": ["GB"],
+				"genres": [
+					{
+						"id": 99,
+						"name": "Documentary"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 11162,
+							"name": "miniseries"
+						},
+						{
+							"id": 18165,
+							"name": "animals"
+						},
+						{
+							"id": 18330,
+							"name": "nature"
+						},
+						{
+							"id": 221355,
+							"name": "nature documentary"
+						},
+						{
+							"id": 251493,
+							"name": "big cats"
+						},
+						{
+							"id": 324404,
+							"name": "wildlife documentary"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt38848632",
+					"tvdb_id": 469578
+				},
+				"networks": [
+					{
+						"id": 4,
+						"name": "BBC One"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Valtakunta",
+							"iso_3166_1": "FI"
+						},
+						{
+							"title": "Planet Earth: Kingdom",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 6,
+						"air_date": "2025-11-09",
+						"name": "Miniseries"
+					}
+				]
+			},
+			"314580": {
+				"id": 314580,
+				"name": "Freeze",
+				"original_name": "فريز",
+				"first_air_date": "2026-02-18",
+				"original_language": "ar",
+				"origin_country": ["AE"],
+				"genres": [],
+				"keywords": {
+					"results": []
+				},
+				"external_ids": {
+					"imdb_id": null,
+					"tvdb_id": null
+				},
+				"networks": [
+					{
+						"id": 8893,
+						"name": "Dubai+"
+					}
+				],
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 30,
+						"air_date": "2026-02-18",
+						"name": "Season 1"
+					}
+				]
+			}
+		},
+		"season": {
+			"45790/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Dio the Invader",
+						"air_date": "2012-10-06",
+						"id": 904520
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "A Letter from the Past",
+						"air_date": "2012-10-13",
+						"id": 904517
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Youth with Dio",
+						"air_date": "2012-10-20",
+						"id": 904518
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Overdrive",
+						"air_date": "2012-10-27",
+						"id": 904515
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "The Dark Knights",
+						"air_date": "2012-11-03",
+						"id": 904516
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Tomorrow's Courage",
+						"air_date": "2012-11-10",
+						"id": 904514
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Sorrowful Successor",
+						"air_date": "2012-11-17",
+						"id": 904521
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Bloody Battle! JoJo & Dio",
+						"air_date": "2012-11-24",
+						"id": 986250
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "The Final Ripple!",
+						"air_date": "2012-12-01",
+						"id": 904519
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "New York's JoJo",
+						"air_date": "2012-12-08",
+						"id": 904513
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "The Game Master",
+						"air_date": "2012-12-15",
+						"id": 904525
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "The Pillar Man",
+						"air_date": "2012-12-22",
+						"id": 904512
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "JoJo vs. the Ultimate Lifeform",
+						"air_date": "2013-01-05",
+						"id": 904503
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Ultimate Warriors from Ancient Times",
+						"air_date": "2013-01-12",
+						"id": 904504
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "A Hero's Proof",
+						"air_date": "2013-01-19",
+						"id": 904522
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Lisa Lisa, Hamon Coach",
+						"air_date": "2013-01-26",
+						"id": 904502
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "The Deeper Plan",
+						"air_date": "2013-02-02",
+						"id": 904501
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Von Stroheim's Revenge",
+						"air_date": "2013-02-09",
+						"id": 904510
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "A Race Toward the Brink",
+						"air_date": "2013-02-16",
+						"id": 904511
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Young Caesar",
+						"air_date": "2013-02-23",
+						"id": 904508
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "A Hundred Against Two",
+						"air_date": "2013-03-02",
+						"id": 904509
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "A True Warrior",
+						"air_date": "2013-03-09",
+						"id": 904523
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "The Warrior of Wind",
+						"air_date": "2013-03-16",
+						"id": 904507
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "The Ties That Bind JoJo",
+						"air_date": "2013-03-23",
+						"id": 904505
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "The Birth of a Superbeing",
+						"air_date": "2013-03-30",
+						"id": 904506
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "The Ascendant One",
+						"air_date": "2013-04-06",
+						"id": 904524
+					}
+				]
+			},
+			"60862/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Iggy the Fool and N'Dool the GEB (Part I)",
+						"air_date": "1993-11-19",
+						"id": 986162
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Iggy the Fool and N'Dool the GEB (Part. II)",
+						"air_date": "1993-12-17",
+						"id": 986161
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "D'Arby the Gambler",
+						"air_date": "1994-07-21",
+						"id": 986160
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Dio's World: The Warrior of the Void: Vanilla Ice",
+						"air_date": "1994-08-09",
+						"id": 986159
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Dio's World: Kakyoin - Duel in the Barrier",
+						"air_date": "1994-10-21",
+						"id": 986164
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Dio's World: Farewell, My Friends",
+						"air_date": "1994-11-18",
+						"id": 986158
+					}
+				]
+			},
+			"301991/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Four Crowns, One Kingdom",
+						"air_date": "2025-11-09",
+						"id": 6567448
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Storm's Retreat",
+						"air_date": "2025-11-16",
+						"id": 6638111
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "The Lions Fall",
+						"air_date": "2025-11-23",
+						"id": 6638113
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Flint and the Crocodile",
+						"air_date": "2025-11-30",
+						"id": 6638115
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Olimba's Last Chance",
+						"air_date": "2025-12-07",
+						"id": 6638117
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "The Secret Story of Kingdom",
+						"air_date": "2025-12-14",
+						"id": 6638118
+					}
+				]
+			},
+			"61427/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Set Yourself on Fire",
+						"air_date": "2014-10-08",
+						"id": 1010766
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Glass Eye",
+						"air_date": "2014-10-15",
+						"id": 1010771
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Piece of Plastic",
+						"air_date": "2014-10-23",
+						"id": 1010772
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Flowers",
+						"air_date": "2014-10-30",
+						"id": 1010773
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Eat Your Own Cooking",
+						"air_date": "2014-11-06",
+						"id": 1010774
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Please Refrain from Crying",
+						"air_date": "2014-11-13",
+						"id": 1010775
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Animator/Annihilator",
+						"air_date": "2014-11-20",
+						"id": 1010776
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "The Gentle Slope",
+						"air_date": "2014-11-27",
+						"id": 1010777
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Cut Day",
+						"air_date": "2014-12-04",
+						"id": 1010778
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "King Beast",
+						"air_date": "2014-12-11",
+						"id": 1010779
+					}
+				]
+			},
+			"61427/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "New Money",
+						"air_date": "2015-10-14",
+						"id": 1117501
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Simulations",
+						"air_date": "2015-10-21",
+						"id": 1118202
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Broken or Missing",
+						"air_date": "2015-10-28",
+						"id": 1118203
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Be First",
+						"air_date": "2015-11-04",
+						"id": 1118204
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Happy Hour",
+						"air_date": "2015-11-11",
+						"id": 1118205
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Pink at Night",
+						"air_date": "2015-11-18",
+						"id": 1118206
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "The Demon Had A Spell",
+						"air_date": "2015-11-25",
+						"id": 1118207
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Smoker",
+						"air_date": "2015-12-02",
+						"id": 1118208
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Living Down",
+						"air_date": "2015-12-09",
+						"id": 1118209
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "Traveling Alone",
+						"air_date": "2015-12-16",
+						"id": 1118210
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "Lay and Pray",
+						"air_date": "2016-06-01",
+						"id": 1194491
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "No Fault",
+						"air_date": "2016-06-08",
+						"id": 1196777
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "Woke Up Lonely",
+						"air_date": "2016-06-15",
+						"id": 1196778
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "Do Not Disturb",
+						"air_date": "2016-06-22",
+						"id": 1196779
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "Take Pills",
+						"air_date": "2016-06-29",
+						"id": 1196780
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "Halos",
+						"air_date": "2016-07-06",
+						"id": 1196781
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "Help Wanted",
+						"air_date": "2016-07-13",
+						"id": 1196782
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "Cut Man",
+						"air_date": "2016-07-20",
+						"id": 1196783
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "Late to Leave",
+						"air_date": "2016-07-27",
+						"id": 1196784
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "No Sharp Objects",
+						"air_date": "2016-08-03",
+						"id": 1196785
+					}
+				]
+			},
+			"61427/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "Wolf Tickets",
+						"air_date": "2017-05-31",
+						"id": 1270409
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "Ritual",
+						"air_date": "2017-06-07",
+						"id": 1322461
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Thank You, Boys",
+						"air_date": "2017-06-14",
+						"id": 1325048
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "Headhunter",
+						"air_date": "2017-06-21",
+						"id": 1328781
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Please Give",
+						"air_date": "2017-06-28",
+						"id": 1328782
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "All Talk",
+						"air_date": "2017-07-05",
+						"id": 1328783
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "Platinum Level",
+						"air_date": "2017-07-12",
+						"id": 1328784
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "Old Pueblo",
+						"air_date": "2017-07-19",
+						"id": 1328786
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "Cactus",
+						"air_date": "2017-07-26",
+						"id": 1328788
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "Lie Down in the Light",
+						"air_date": "2017-08-02",
+						"id": 1328787
+					}
+				]
+			},
+			"157917/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Episode 1",
+						"air_date": "2022-02-05",
+						"id": 3510801
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Episode 2",
+						"air_date": "2022-02-18",
+						"id": 3510802
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Episode 3",
+						"air_date": "2022-02-20",
+						"id": 3510803
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Episode 4",
+						"air_date": "2022-02-25",
+						"id": 3742320
+					}
+				]
+			},
+			"157917/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Episode 1",
+						"air_date": "2022-03-21",
+						"id": 6989630
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Episode 2",
+						"air_date": "2022-03-28",
+						"id": 6989633
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Episode 3",
+						"air_date": "2022-04-04",
+						"id": 6989634
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Episode 4",
+						"air_date": "2022-04-11",
+						"id": 6989635
+					}
+				]
+			},
+			"55010/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Episode One",
+						"air_date": "2006-10-27",
+						"id": 927400
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Episode Two",
+						"air_date": "2006-10-28",
+						"id": 927401
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Episode Three",
+						"air_date": "2006-10-29",
+						"id": 927402
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Episode Four",
+						"air_date": "2006-10-30",
+						"id": 927403
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Episode Five",
+						"air_date": "2006-10-31",
+						"id": 927404
+					}
+				]
+			},
+			"314580/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Episode 1",
+						"air_date": "2026-02-18",
+						"id": 6967000
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Episode 2",
+						"air_date": "2026-02-19",
+						"id": 6967012
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Episode 3",
+						"air_date": "2026-02-20",
+						"id": 6967015
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Episode 4",
+						"air_date": "2026-02-21",
+						"id": 6967016
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Episode 5",
+						"air_date": "2026-02-22",
+						"id": 6967017
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Episode 6",
+						"air_date": "2026-02-23",
+						"id": 6967018
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Episode 7",
+						"air_date": "2026-02-24",
+						"id": 6967019
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Episode 8",
+						"air_date": "2026-02-25",
+						"id": 6967020
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Episode 9",
+						"air_date": "2026-02-26",
+						"id": 6967021
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Episode 10",
+						"air_date": "2026-02-27",
+						"id": 6967022
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Episode 11",
+						"air_date": "2026-02-28",
+						"id": 6967024
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Episode 12",
+						"air_date": "2026-03-01",
+						"id": 6967025
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Episode 13",
+						"air_date": "2026-03-02",
+						"id": 6967026
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Episode 14",
+						"air_date": "2026-03-03",
+						"id": 6967027
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Episode 15",
+						"air_date": "2026-03-04",
+						"id": 6967028
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Episode 16",
+						"air_date": "2026-03-05",
+						"id": 6967030
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "Episode 17",
+						"air_date": "2026-03-06",
+						"id": 6967031
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Episode 18",
+						"air_date": "2026-03-07",
+						"id": 6967032
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Episode 19",
+						"air_date": "2026-03-08",
+						"id": 6967033
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Episode 20",
+						"air_date": "2026-03-09",
+						"id": 6967034
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Episode 21",
+						"air_date": "2026-03-10",
+						"id": 6967035
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Episode 22",
+						"air_date": null,
+						"id": 6967037
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Episode 23",
+						"air_date": null,
+						"id": 6967038
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "Episode 24",
+						"air_date": null,
+						"id": 6967040
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "Episode 25",
+						"air_date": null,
+						"id": 6967041
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "Episode 26",
+						"air_date": null,
+						"id": 6967042
+					},
+					{
+						"episode_number": 27,
+						"season_number": 1,
+						"name": "Episode 27",
+						"air_date": null,
+						"id": 6967045
+					},
+					{
+						"episode_number": 28,
+						"season_number": 1,
+						"name": "Episode 28",
+						"air_date": null,
+						"id": 6967046
+					},
+					{
+						"episode_number": 29,
+						"season_number": 1,
+						"name": "Episode 29",
+						"air_date": null,
+						"id": 6967048
+					},
+					{
+						"episode_number": 30,
+						"season_number": 1,
+						"name": "Episode 30",
+						"air_date": null,
+						"id": 6967049
+					}
+				]
+			},
+			"46437/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "New Era",
+						"air_date": "2013-06-08",
+						"id": 1630061
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "A Quiet Battlefield",
+						"air_date": "2013-06-15",
+						"id": 1630062
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "A Tumultuous Banquet",
+						"air_date": "2013-06-22",
+						"id": 1630063
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Kings and Ants",
+						"air_date": "2013-06-29",
+						"id": 1630064
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "A Third Force",
+						"air_date": "2013-07-06",
+						"id": 1630065
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Beautiful Venom",
+						"air_date": "2013-07-13",
+						"id": 1630066
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "A Cursed Prince",
+						"air_date": "2013-07-20",
+						"id": 1630067
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Zheng and Zi Xia",
+						"air_date": "2013-07-27",
+						"id": 1630068
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Binding Wish",
+						"air_date": "2013-08-03",
+						"id": 1630069
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "Broken Love",
+						"air_date": "2013-08-10",
+						"id": 1630070
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "Assemblage",
+						"air_date": "2013-08-17",
+						"id": 1630071
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Siege of Gaolang Castle",
+						"air_date": "2013-08-24",
+						"id": 1630072
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "My Way of Fighting",
+						"air_date": "2013-08-31",
+						"id": 1630073
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "The Man Lian Po",
+						"air_date": "2013-09-07",
+						"id": 1630074
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "Air of a Military Commander",
+						"air_date": "2013-09-14",
+						"id": 1630075
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "Midnight Great General",
+						"air_date": "2013-09-21",
+						"id": 1630076
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "The Night Before the Start of War",
+						"air_date": "2013-09-28",
+						"id": 1630077
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "Clash!",
+						"air_date": "2013-10-06",
+						"id": 1630078
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "Xuan Feng's Scheme",
+						"air_date": "2013-10-13",
+						"id": 1630079
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "The Feixin Unit's Counterattack",
+						"air_date": "2013-10-20",
+						"id": 1630080
+					},
+					{
+						"episode_number": 21,
+						"season_number": 2,
+						"name": "The Thief vs. The Strategist",
+						"air_date": "2013-10-27",
+						"id": 1630081
+					},
+					{
+						"episode_number": 22,
+						"season_number": 2,
+						"name": "Meng Tian's Proposal",
+						"air_date": "2013-11-03",
+						"id": 1630082
+					},
+					{
+						"episode_number": 23,
+						"season_number": 2,
+						"name": "United Front of Three Units",
+						"air_date": "2013-11-10",
+						"id": 1630083
+					},
+					{
+						"episode_number": 24,
+						"season_number": 2,
+						"name": "A Wall That Must be Overcome",
+						"air_date": "2013-11-17",
+						"id": 1630084
+					},
+					{
+						"episode_number": 25,
+						"season_number": 2,
+						"name": "Double Bluff",
+						"air_date": "2013-11-24",
+						"id": 1630085
+					},
+					{
+						"episode_number": 26,
+						"season_number": 2,
+						"name": "The Caliber of a General",
+						"air_date": "2013-12-01",
+						"id": 1630086
+					},
+					{
+						"episode_number": 27,
+						"season_number": 2,
+						"name": "The Hour of Conclusion",
+						"air_date": "2013-12-08",
+						"id": 1630087
+					},
+					{
+						"episode_number": 28,
+						"season_number": 2,
+						"name": "The Final Plan",
+						"air_date": "2013-12-15",
+						"id": 1630088
+					},
+					{
+						"episode_number": 29,
+						"season_number": 2,
+						"name": "A Single Moment",
+						"air_date": "2013-12-22",
+						"id": 1630089
+					},
+					{
+						"episode_number": 30,
+						"season_number": 2,
+						"name": "Precious Comrades",
+						"air_date": "2013-12-29",
+						"id": 1630090
+					},
+					{
+						"episode_number": 31,
+						"season_number": 2,
+						"name": "Meng Ao, Standing Firm",
+						"air_date": "2014-01-05",
+						"id": 1630091
+					},
+					{
+						"episode_number": 32,
+						"season_number": 2,
+						"name": "Unfading Era",
+						"air_date": "2014-01-12",
+						"id": 1630092
+					},
+					{
+						"episode_number": 33,
+						"season_number": 2,
+						"name": "Victory... And...",
+						"air_date": "2014-01-19",
+						"id": 1630093
+					},
+					{
+						"episode_number": 34,
+						"season_number": 2,
+						"name": "The Strategist Arrives",
+						"air_date": "2014-01-26",
+						"id": 1630094
+					},
+					{
+						"episode_number": 35,
+						"season_number": 2,
+						"name": "Trial and Resolve",
+						"air_date": "2014-02-02",
+						"id": 1630095
+					},
+					{
+						"episode_number": 36,
+						"season_number": 2,
+						"name": "Outwit",
+						"air_date": "2014-02-09",
+						"id": 1630096
+					},
+					{
+						"episode_number": 37,
+						"season_number": 2,
+						"name": "Distant Thunder",
+						"air_date": "2014-02-16",
+						"id": 1630097
+					},
+					{
+						"episode_number": 38,
+						"season_number": 2,
+						"name": "Stage of Strategy",
+						"air_date": "2014-02-23",
+						"id": 1630098
+					},
+					{
+						"episode_number": 39,
+						"season_number": 2,
+						"name": "A New Legend",
+						"air_date": "2014-03-02",
+						"id": 1630099
+					}
+				]
+			},
+			"46437/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "The Boy With No Name",
+						"air_date": "2012-06-04",
+						"id": 1630010
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Fated Meeting",
+						"air_date": "2012-06-11",
+						"id": 1630011
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Friend!",
+						"air_date": "2012-06-18",
+						"id": 1630012
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "The King and the Sword",
+						"air_date": "2012-06-25",
+						"id": 1630013
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "An Unbreakable Heart",
+						"air_date": "2012-07-02",
+						"id": 1630014
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "The Path to a Great General",
+						"air_date": "2012-07-09",
+						"id": 1630015
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "The Terrifying Mountain People",
+						"air_date": "2012-07-16",
+						"id": 1630016
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Each One's Dream",
+						"air_date": "2012-07-23",
+						"id": 1630017
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Now, to Xianyang!",
+						"air_date": "2012-07-30",
+						"id": 1630019
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Invading the Royal Capital",
+						"air_date": "2012-08-06",
+						"id": 1630020
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "The Fierce Fighting Begins",
+						"air_date": "2012-08-13",
+						"id": 1630021
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "The Ultimate Blade",
+						"air_date": "2012-08-20",
+						"id": 1630022
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "The Roar of Lankai",
+						"air_date": "2012-08-27",
+						"id": 1630023
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "The Power of the Sword",
+						"air_date": "2012-09-03",
+						"id": 1630024
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Qualifications of a King",
+						"air_date": "2012-09-10",
+						"id": 1630025
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Lü Buwei",
+						"air_date": "2012-09-17",
+						"id": 1630026
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "First Campaign",
+						"air_date": "2012-09-24",
+						"id": 1630028
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "The Threat of the Chariot Corps",
+						"air_date": "2012-10-01",
+						"id": 1630030
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "A Blazing Battle",
+						"air_date": "2012-10-08",
+						"id": 1630032
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Wang Qi Intrudes",
+						"air_date": "2012-10-15",
+						"id": 1630033
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "The Meaning of General",
+						"air_date": "2012-10-22",
+						"id": 1630035
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Wise General vs Courageous General",
+						"air_date": "2012-10-29",
+						"id": 1630037
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Night Tale",
+						"air_date": "2012-11-05",
+						"id": 1630040
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "A New Trial",
+						"air_date": "2012-11-12",
+						"id": 1630042
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "Appointment",
+						"air_date": "2012-11-19",
+						"id": 1630043
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "War God Pang Nuan",
+						"air_date": "2012-11-26",
+						"id": 1630045
+					},
+					{
+						"episode_number": 27,
+						"season_number": 1,
+						"name": "Birth of the Feixin Unit",
+						"air_date": "2012-12-03",
+						"id": 1630046
+					},
+					{
+						"episode_number": 28,
+						"season_number": 1,
+						"name": "Wang Qi's Flying Arrow",
+						"air_date": "2012-12-10",
+						"id": 1630048
+					},
+					{
+						"episode_number": 29,
+						"season_number": 1,
+						"name": "Sudden Change in the Tide of Battle",
+						"air_date": "2012-12-17",
+						"id": 1630050
+					},
+					{
+						"episode_number": 30,
+						"season_number": 1,
+						"name": "Disaster",
+						"air_date": "2012-12-24",
+						"id": 1630052
+					},
+					{
+						"episode_number": 31,
+						"season_number": 1,
+						"name": "The Power of a Group",
+						"air_date": "2013-01-07",
+						"id": 1630053
+					},
+					{
+						"episode_number": 32,
+						"season_number": 1,
+						"name": "The Feixin Unit Flees",
+						"air_date": "2013-01-14",
+						"id": 1630054
+					},
+					{
+						"episode_number": 33,
+						"season_number": 1,
+						"name": "Wang Qi Takes to the Field!",
+						"air_date": "2013-01-21",
+						"id": 1630055
+					},
+					{
+						"episode_number": 34,
+						"season_number": 1,
+						"name": "Central Performers",
+						"air_date": "2013-01-28",
+						"id": 1630056
+					},
+					{
+						"episode_number": 35,
+						"season_number": 1,
+						"name": "Confrontation of Supreme Commanders",
+						"air_date": "2013-02-04",
+						"id": 1630057
+					},
+					{
+						"episode_number": 36,
+						"season_number": 1,
+						"name": "Wang Qi and Liao",
+						"air_date": "2013-02-11",
+						"id": 1630058
+					},
+					{
+						"episode_number": 37,
+						"season_number": 1,
+						"name": "I Am at the Verge of Death",
+						"air_date": "2013-02-18",
+						"id": 1630059
+					},
+					{
+						"episode_number": 38,
+						"season_number": 1,
+						"name": "Succession",
+						"air_date": "2013-02-25",
+						"id": 1630060
+					}
+				]
+			},
+			"46437/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "The Encroaching Coalition Army",
+						"air_date": "2020-04-06",
+						"id": 2211277
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "A Coming Together",
+						"air_date": "2020-04-13",
+						"id": 2211278
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "The Battle of Hangu Pass",
+						"air_date": "2020-04-20",
+						"id": 2211279
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "Two Battlefields",
+						"air_date": "2020-04-27",
+						"id": 2211281
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Rise of a Young General",
+						"air_date": "2021-05-03",
+						"id": 2211282
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "A Mutual Self-Confidence",
+						"air_date": "2021-05-10",
+						"id": 2211283
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "A Wasteland Riddled with Holes",
+						"air_date": "2021-05-17",
+						"id": 2211284
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "Wa Lin: A Spirited Woman",
+						"air_date": "2021-05-24",
+						"id": 2211285
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "Meng Wu's Proclamation",
+						"air_date": "2021-05-31",
+						"id": 2211286
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "A Promotion in a Predicament",
+						"air_date": "2021-06-07",
+						"id": 2211287
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "A General's Pride",
+						"air_date": "2021-06-14",
+						"id": 2211288
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "The Wa Lin Army's Charge",
+						"air_date": "2021-06-21",
+						"id": 2211289
+					},
+					{
+						"episode_number": 13,
+						"season_number": 3,
+						"name": "The Strongest",
+						"air_date": "2021-06-28",
+						"id": 3036276
+					},
+					{
+						"episode_number": 14,
+						"season_number": 3,
+						"name": "The Mightiest Man",
+						"air_date": "2021-07-19",
+						"id": 3036277
+					},
+					{
+						"episode_number": 15,
+						"season_number": 3,
+						"name": "Beyond Hangu Pass",
+						"air_date": "2021-07-26",
+						"id": 3036278
+					},
+					{
+						"episode_number": 16,
+						"season_number": 3,
+						"name": "Li Mu's Whereabouts",
+						"air_date": "2021-08-02",
+						"id": 3036279
+					},
+					{
+						"episode_number": 17,
+						"season_number": 3,
+						"name": "The Ultimate Instinctive Type",
+						"air_date": "2021-08-16",
+						"id": 3036280
+					},
+					{
+						"episode_number": 18,
+						"season_number": 3,
+						"name": "Zheng's Decision",
+						"air_date": "2021-08-23",
+						"id": 3036281
+					},
+					{
+						"episode_number": 19,
+						"season_number": 3,
+						"name": "Zheng Speaks",
+						"air_date": "2021-08-30",
+						"id": 3036282
+					},
+					{
+						"episode_number": 20,
+						"season_number": 3,
+						"name": "The First Night",
+						"air_date": "2021-09-06",
+						"id": 3036283
+					},
+					{
+						"episode_number": 21,
+						"season_number": 3,
+						"name": "A Secret Revealed",
+						"air_date": "2021-09-13",
+						"id": 3036284
+					},
+					{
+						"episode_number": 22,
+						"season_number": 3,
+						"name": "With All We Have",
+						"air_date": "2021-09-20",
+						"id": 3036285
+					},
+					{
+						"episode_number": 23,
+						"season_number": 3,
+						"name": "Unprecedented Aid",
+						"air_date": "2021-09-27",
+						"id": 3036286
+					},
+					{
+						"episode_number": 24,
+						"season_number": 3,
+						"name": "Deepest Gratitude",
+						"air_date": "2021-10-04",
+						"id": 3036287
+					},
+					{
+						"episode_number": 25,
+						"season_number": 3,
+						"name": "Difference in Dances",
+						"air_date": "2021-10-11",
+						"id": 3036288
+					},
+					{
+						"episode_number": 26,
+						"season_number": 3,
+						"name": "A Different Path",
+						"air_date": "2021-10-18",
+						"id": 3036289
+					}
+				]
+			},
+			"46437/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 4,
+						"name": "Seven Nations, After the War",
+						"air_date": "2022-04-10",
+						"id": 3495200
+					},
+					{
+						"episode_number": 2,
+						"season_number": 4,
+						"name": "Omnious Shadow",
+						"air_date": "2022-04-17",
+						"id": 3668301
+					},
+					{
+						"episode_number": 3,
+						"season_number": 4,
+						"name": "The Punitive Force Moves Out",
+						"air_date": "2022-04-24",
+						"id": 3668302
+					},
+					{
+						"episode_number": 4,
+						"season_number": 4,
+						"name": "Assault on Tunliu",
+						"air_date": "2022-05-01",
+						"id": 3668303
+					},
+					{
+						"episode_number": 5,
+						"season_number": 4,
+						"name": "Sword and Shield",
+						"air_date": "2022-05-08",
+						"id": 3707984
+					},
+					{
+						"episode_number": 6,
+						"season_number": 4,
+						"name": "A New Strategic Base",
+						"air_date": "2022-05-15",
+						"id": 3707985
+					},
+					{
+						"episode_number": 7,
+						"season_number": 4,
+						"name": "The Call",
+						"air_date": "2022-05-22",
+						"id": 3707986
+					},
+					{
+						"episode_number": 8,
+						"season_number": 4,
+						"name": "Diao",
+						"air_date": "2022-05-29",
+						"id": 3707987
+					},
+					{
+						"episode_number": 9,
+						"season_number": 4,
+						"name": "Zi Bai's Name",
+						"air_date": "2022-06-05",
+						"id": 3707988
+					},
+					{
+						"episode_number": 10,
+						"season_number": 4,
+						"name": "The Eyes of the Middle Kingdom",
+						"air_date": "2022-06-12",
+						"id": 3707989
+					},
+					{
+						"episode_number": 11,
+						"season_number": 4,
+						"name": "Training Days",
+						"air_date": "2022-06-19",
+						"id": 3779111
+					},
+					{
+						"episode_number": 12,
+						"season_number": 4,
+						"name": "Age of Giants",
+						"air_date": "2022-06-26",
+						"id": 3804573
+					},
+					{
+						"episode_number": 13,
+						"season_number": 4,
+						"name": "Movement in Xianyang",
+						"air_date": "2022-07-03",
+						"id": 3805819
+					},
+					{
+						"episode_number": 14,
+						"season_number": 4,
+						"name": "A New Nation",
+						"air_date": "2022-07-10",
+						"id": 3816982
+					},
+					{
+						"episode_number": 15,
+						"season_number": 4,
+						"name": "The Man Who Was Nothing",
+						"air_date": "2022-07-17",
+						"id": 3830682
+					},
+					{
+						"episode_number": 16,
+						"season_number": 4,
+						"name": "The Crowning Ceremony",
+						"air_date": "2022-07-24",
+						"id": 3839226
+					},
+					{
+						"episode_number": 17,
+						"season_number": 4,
+						"name": "Three Sides, Unyielding",
+						"air_date": "2022-07-30",
+						"id": 3860687
+					},
+					{
+						"episode_number": 18,
+						"season_number": 4,
+						"name": "River-Crossing Battle",
+						"air_date": "2022-08-07",
+						"id": 3865428
+					},
+					{
+						"episode_number": 19,
+						"season_number": 4,
+						"name": "A Parting of Ways",
+						"air_date": "2022-08-14",
+						"id": 3875990
+					},
+					{
+						"episode_number": 20,
+						"season_number": 4,
+						"name": "A Dream Nation",
+						"air_date": "2022-08-21",
+						"id": 3875991
+					},
+					{
+						"episode_number": 21,
+						"season_number": 4,
+						"name": "Our One Shot at Victory",
+						"air_date": "2022-08-28",
+						"id": 3875993
+					},
+					{
+						"episode_number": 22,
+						"season_number": 4,
+						"name": "Running For Your Lives",
+						"air_date": "2022-09-04",
+						"id": 3875994
+					},
+					{
+						"episode_number": 23,
+						"season_number": 4,
+						"name": "Reversal Rush",
+						"air_date": "2022-09-11",
+						"id": 3875995
+					},
+					{
+						"episode_number": 24,
+						"season_number": 4,
+						"name": "The Rebellion's Conclusion",
+						"air_date": "2022-09-25",
+						"id": 3875996
+					},
+					{
+						"episode_number": 25,
+						"season_number": 4,
+						"name": "A Time for Venturing Forth",
+						"air_date": "2022-09-25",
+						"id": 3875997
+					},
+					{
+						"episode_number": 26,
+						"season_number": 4,
+						"name": "The Six Great Generals' Whereabouts",
+						"air_date": "2022-10-02",
+						"id": 3875998
+					}
+				]
+			},
+			"46437/5": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 5,
+						"name": "Monsters Take the Field",
+						"air_date": "2024-01-14",
+						"id": 4759856
+					},
+					{
+						"episode_number": 2,
+						"season_number": 5,
+						"name": "The Stench of the Battlefield",
+						"air_date": "2024-01-21",
+						"id": 4938490
+					},
+					{
+						"episode_number": 3,
+						"season_number": 5,
+						"name": "Heiyong at Night",
+						"air_date": "2024-01-28",
+						"id": 4938491
+					},
+					{
+						"episode_number": 4,
+						"season_number": 5,
+						"name": "A Lieutenant's Responsibility",
+						"air_date": "2024-02-04",
+						"id": 4938492
+					},
+					{
+						"episode_number": 5,
+						"season_number": 5,
+						"name": "A Determined Crossing",
+						"air_date": "2024-02-11",
+						"id": 4938493
+					},
+					{
+						"episode_number": 6,
+						"season_number": 5,
+						"name": "Heiyong's Crucial Moment",
+						"air_date": "2024-02-18",
+						"id": 4938494
+					},
+					{
+						"episode_number": 7,
+						"season_number": 5,
+						"name": "The Tragedy of Liyǎn",
+						"air_date": "2024-02-25",
+						"id": 4938496
+					},
+					{
+						"episode_number": 8,
+						"season_number": 5,
+						"name": "In an Instant",
+						"air_date": "2024-03-03",
+						"id": 4938499
+					},
+					{
+						"episode_number": 9,
+						"season_number": 5,
+						"name": "Misfortune",
+						"air_date": "2024-03-10",
+						"id": 4938502
+					},
+					{
+						"episode_number": 10,
+						"season_number": 5,
+						"name": "Roar of Pride",
+						"air_date": "2024-03-17",
+						"id": 4938503
+					},
+					{
+						"episode_number": 11,
+						"season_number": 5,
+						"name": "Wei Ping and the Fei Xin Force",
+						"air_date": "2024-03-24",
+						"id": 4938504
+					},
+					{
+						"episode_number": 12,
+						"season_number": 5,
+						"name": "The Small Hours Before a Showdown",
+						"air_date": "2024-03-31",
+						"id": 4938505
+					},
+					{
+						"episode_number": 13,
+						"season_number": 5,
+						"name": "Cai Ze's Honor",
+						"air_date": "2024-03-31",
+						"id": 5248161
+					}
+				]
+			},
+			"46437/6": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 6,
+						"name": "Qin's Stumbling Block",
+						"air_date": "2025-10-05",
+						"id": 6451826
+					},
+					{
+						"episode_number": 2,
+						"season_number": 6,
+						"name": "The Rising Tumult",
+						"air_date": "2025-10-12",
+						"id": 6577447
+					},
+					{
+						"episode_number": 3,
+						"season_number": 6,
+						"name": "The Qin Army Lineup",
+						"air_date": "2025-10-19",
+						"id": 6596373
+					},
+					{
+						"episode_number": 4,
+						"season_number": 6,
+						"name": "Zhao's National Gate",
+						"air_date": "2025-10-26",
+						"id": 6620412
+					},
+					{
+						"episode_number": 5,
+						"season_number": 6,
+						"name": "Storming Liewei",
+						"air_date": "2025-11-02",
+						"id": 6630578
+					},
+					{
+						"episode_number": 6,
+						"season_number": 6,
+						"name": "Liewei's Trap",
+						"air_date": "2025-11-09",
+						"id": 6650053
+					},
+					{
+						"episode_number": 7,
+						"season_number": 6,
+						"name": "Weapons of Conquest",
+						"air_date": "2025-11-16",
+						"id": 6668677
+					},
+					{
+						"episode_number": 8,
+						"season_number": 6,
+						"name": "The Battle Begins",
+						"air_date": "2025-11-23",
+						"id": 6692924
+					},
+					{
+						"episode_number": 9,
+						"season_number": 6,
+						"name": "The Weight of Resolve",
+						"air_date": "2025-11-30",
+						"id": 6710474
+					},
+					{
+						"episode_number": 10,
+						"season_number": 6,
+						"name": "Descendants of the Quanrong",
+						"air_date": "2025-12-07",
+						"id": 6726818
+					},
+					{
+						"episode_number": 11,
+						"season_number": 6,
+						"name": "The One-Hit-Kill Detached Force",
+						"air_date": "2025-12-14",
+						"id": 6746056
+					},
+					{
+						"episode_number": 12,
+						"season_number": 6,
+						"name": "Insufficient Rank",
+						"air_date": "2025-12-21",
+						"id": 6762521
+					},
+					{
+						"episode_number": 13,
+						"season_number": 6,
+						"name": "A Great General's View",
+						"air_date": "2025-12-28",
+						"id": 6775706
+					},
+					{
+						"episode_number": 14,
+						"season_number": 6,
+						"name": "Zoku-hen",
+						"air_date": null,
+						"id": 7690389
+					}
+				]
+			},
+			"5287/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Behind The Scenes",
+						"air_date": null,
+						"id": 3983853
+					}
+				]
+			},
+			"5287/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Episode 1",
+						"air_date": "2007-04-22",
+						"id": 356748
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Episode 2",
+						"air_date": "2007-04-29",
+						"id": 356763
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Episode 3",
+						"air_date": "2007-05-06",
+						"id": 356751
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Episode 4",
+						"air_date": "2007-05-13",
+						"id": 356760
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Episode 5",
+						"air_date": "2007-05-20",
+						"id": 356750
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Episode 6",
+						"air_date": "2007-05-27",
+						"id": 356761
+					}
+				]
+			},
+			"5287/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Episode 1",
+						"air_date": "2008-01-13",
+						"id": 356740
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Episode 2",
+						"air_date": "2008-01-20",
+						"id": 356741
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Episode 3",
+						"air_date": "2008-01-27",
+						"id": 356742
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Episode 4",
+						"air_date": "2008-02-03",
+						"id": 356743
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Episode 5",
+						"air_date": "2008-02-10",
+						"id": 356745
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Episode 6",
+						"air_date": "2008-02-17",
+						"id": 356746
+					}
+				]
+			},
+			"5287/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "Episode 1",
+						"air_date": "2009-06-07",
+						"id": 356765
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "Episode 2",
+						"air_date": "2009-06-14",
+						"id": 356767
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Episode 3",
+						"air_date": "2009-06-21",
+						"id": 356768
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "Episode 4",
+						"air_date": "2009-06-28",
+						"id": 356769
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Episode 5",
+						"air_date": "2009-07-05",
+						"id": 356773
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "Episode 6",
+						"air_date": "2009-07-12",
+						"id": 356772
+					}
+				]
+			},
+			"70593/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Episode 1",
+						"air_date": "2019-01-25",
+						"id": 1282044
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Episode 2",
+						"air_date": "2019-01-25",
+						"id": 1614301
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Episode 3",
+						"air_date": "2019-01-25",
+						"id": 1614302
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Episode 4",
+						"air_date": "2019-01-25",
+						"id": 1645043
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Episode 5",
+						"air_date": "2019-01-25",
+						"id": 1645044
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Episode 6",
+						"air_date": "2019-01-25",
+						"id": 1645045
+					}
+				]
+			},
+			"70593/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Episode 1",
+						"air_date": "2020-03-13",
+						"id": 2071800
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Episode 2",
+						"air_date": "2020-03-13",
+						"id": 2071801
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Episode 3",
+						"air_date": "2020-03-13",
+						"id": 2071802
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Episode 4",
+						"air_date": "2020-03-13",
+						"id": 2071803
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Episode 5",
+						"air_date": "2020-03-13",
+						"id": 2071804
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Episode 6",
+						"air_date": "2020-03-13",
+						"id": 2071805
+					}
+				]
+			}
+		},
+		"episodeGroups": {
+			"5287": {
+				"id": 5287,
+				"results": []
+			},
+			"70593": {
+				"id": 70593,
+				"results": []
+			},
+			"301991": {
+				"id": 301991,
+				"results": []
+			}
+		},
+		"episodeShow": {
+			"tt38848632": null,
+			"tt3673794": null,
+			"tt2404499": null,
+			"tt0841961": null,
+			"tt6611916": null
+		},
+		"seasonEpisodes": {
+			"tt38848632/2": {},
+			"tt0841961/2": {
+				"1": "tt1050919",
+				"2": "tt1050920",
+				"3": "tt1050921",
+				"4": "tt1072912",
+				"5": "tt1072913",
+				"6": "tt1072914"
+			},
+			"tt6611916/2": {
+				"1": "tt9256448",
+				"2": "tt9256450",
+				"3": "tt9256452",
+				"4": "tt9256454",
+				"5": "tt9256456",
+				"6": "tt9256460"
+			}
+		},
+		"searchTv": {
+			"JoJos Bizarre Adventure": {
+				"results": [
+					{
+						"id": 45790,
+						"name": "JoJo's Bizarre Adventure",
+						"original_name": "ジョジョの奇妙な冒険",
+						"first_air_date": "2012-10-06"
+					},
+					{
+						"id": 60862,
+						"name": "JoJo's Bizarre Adventure",
+						"original_name": "ジョジョの奇妙な冒険",
+						"first_air_date": "1993-11-19"
+					}
+				]
+			},
+			"Freeze": {
+				"results": [
+					{
+						"id": 157917,
+						"name": "Freeze",
+						"original_name": "Freeze",
+						"first_air_date": "2022-02-05"
+					},
+					{
+						"id": 55010,
+						"name": "Freeze",
+						"original_name": "프리즈",
+						"first_air_date": "2006-10-27"
+					},
+					{
+						"id": 314580,
+						"name": "Freeze",
+						"original_name": "فريز",
+						"first_air_date": "2026-02-18"
+					},
+					{
+						"id": 21746,
+						"name": "Freeze TV",
+						"original_name": "Freeze TV",
+						"first_air_date": ""
+					},
+					{
+						"id": 76849,
+						"name": "Brain Freeze",
+						"original_name": "Brain Freeze",
+						"first_air_date": "2014-01-01"
+					},
+					{
+						"id": 197466,
+						"name": "Freeze the Fear with Wim Hof",
+						"original_name": "Freeze the Fear with Wim Hof",
+						"first_air_date": "2022-04-12"
+					},
+					{
+						"id": 82620,
+						"name": "HITOSHI MATSUMOTO Presents FREEZE",
+						"original_name": "HITOSHI MATSUMOTO Presents FREEZE",
+						"first_air_date": "2018-09-19"
+					},
+					{
+						"id": 56731,
+						"name": "Cryonics – Freeze Me",
+						"original_name": "Cryonics – Freeze Me",
+						"first_air_date": ""
+					},
+					{
+						"id": 146091,
+						"name": "TOMORROW X TOGETHER 컴백쇼 ′FREEZE′ (프리즈)",
+						"original_name": "TOMORROW X TOGETHER 컴백쇼 ′FREEZE′ (프리즈)",
+						"first_air_date": "2021-05-31"
+					},
+					{
+						"id": 308749,
+						"name": "Freeze - Chi sta fermo vince",
+						"original_name": "Freeze - Chi sta fermo vince",
+						"first_air_date": "2025-09-16"
+					},
+					{
+						"id": 331043,
+						"name": "My Freeze. Their Tears. No Forgiveness",
+						"original_name": "My Freeze. Their Tears. No Forgiveness",
+						"first_air_date": ""
+					},
+					{
+						"id": 9553,
+						"name": "Life in the Freezer",
+						"original_name": "Life in the Freezer",
+						"first_air_date": "1993-11-18"
+					},
+					{
+						"id": 39900,
+						"name": "Freezerburns",
+						"original_name": "Freezerburns",
+						"first_air_date": ""
+					},
+					{
+						"id": 197073,
+						"name": "Love is for Suckers",
+						"original_name": "얼어죽을 연애따위",
+						"first_air_date": "2022-10-05"
+					},
+					{
+						"id": 36530,
+						"name": "Full frys",
+						"original_name": "Full frys",
+						"first_air_date": "1999-01-25"
+					},
+					{
+						"id": 122842,
+						"name": "Watashi no Otto wa Reitouko ni Nemutte Iru",
+						"original_name": "私の夫は冷凍庫に眠っている",
+						"first_air_date": "2021-04-10"
+					}
+				]
+			},
+			"Kingdom": {
+				"results": [
+					{
+						"id": 63333,
+						"name": "The Last Kingdom",
+						"original_name": "The Last Kingdom",
+						"first_air_date": "2015-10-10"
+					},
+					{
+						"id": 46437,
+						"name": "Kingdom",
+						"original_name": "キングダム",
+						"first_air_date": "2012-06-04"
+					},
+					{
+						"id": 66025,
+						"name": "Animal Kingdom",
+						"original_name": "Animal Kingdom",
+						"first_air_date": "2016-06-14"
+					},
+					{
+						"id": 61427,
+						"name": "Kingdom",
+						"original_name": "Kingdom",
+						"first_air_date": "2014-10-08"
+					},
+					{
+						"id": 70593,
+						"name": "Kingdom",
+						"original_name": "킹덤",
+						"first_air_date": "2019-01-25"
+					},
+					{
+						"id": 5287,
+						"name": "Kingdom",
+						"original_name": "Kingdom",
+						"first_air_date": "2007-04-22"
+					},
+					{
+						"id": 4267,
+						"name": "The Kingdom",
+						"original_name": "Riget",
+						"first_air_date": "1994-11-24"
+					},
+					{
+						"id": 301991,
+						"name": "Kingdom",
+						"original_name": "Kingdom",
+						"first_air_date": "2025-11-09"
+					},
+					{
+						"id": 40546,
+						"name": "The 10th Kingdom",
+						"original_name": "The 10th Kingdom",
+						"first_air_date": "2000-02-27"
+					},
+					{
+						"id": 130364,
+						"name": "The Kingdom",
+						"original_name": "El Reino",
+						"first_air_date": "2021-08-13"
+					},
+					{
+						"id": 74911,
+						"name": "Savage Kingdom",
+						"original_name": "Savage Kingdom",
+						"first_air_date": "2016-11-25"
+					},
+					{
+						"id": 202158,
+						"name": "Kingdom Business",
+						"original_name": "Kingdom Business",
+						"first_air_date": "2022-05-19"
+					},
+					{
+						"id": 338266,
+						"name": "Undersea Kingdom",
+						"original_name": "Undersea Kingdom",
+						"first_air_date": "1936-03-27"
+					},
+					{
+						"id": 221646,
+						"name": "Ania Kingdom",
+						"original_name": "冒険大陸 アニアキングダム",
+						"first_air_date": "2023-04-02"
+					},
+					{
+						"id": 114771,
+						"name": "Kingdom Force",
+						"original_name": "Kingdom Force",
+						"first_air_date": "2019-12-06"
+					},
+					{
+						"id": 32388,
+						"name": "Ben & Holly's Little Kingdom",
+						"original_name": "Ben & Holly's Little Kingdom",
+						"first_air_date": "2009-04-06"
+					},
+					{
+						"id": 287609,
+						"name": "The Kingdom",
+						"original_name": "The Kingdom",
+						"first_air_date": "2025-08-14"
+					},
+					{
+						"id": 222165,
+						"name": "The Kingdom",
+						"original_name": "The Kingdom",
+						"first_air_date": "2021-01-10"
+					},
+					{
+						"id": 92278,
+						"name": "Lion Kingdom",
+						"original_name": "Lion Kingdom",
+						"first_air_date": "2017-08-04"
+					},
+					{
+						"id": 66297,
+						"name": "The Other Kingdom",
+						"original_name": "The Other Kingdom",
+						"first_air_date": "2016-04-10"
+					}
+				]
+			}
+		},
+		"identifier": {
+			"Kingdom.S02E10.1280x720.Hi10p.AAC-Obfuscated": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt38848632",
+						"score": 1.9566,
+						"title": "Kingdom",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt3673794",
+						"score": 1.7114,
+						"title": "Kingdom",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt2404499",
+						"score": 1.6216,
+						"title": "Kingdom",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0841961",
+						"score": 1.2315,
+						"title": "Kingdom",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt6611916",
+						"score": 0.7094,
+						"title": "Kingdom",
+						"year": 2019
+					}
+				],
+				"parsedTitle": "Kingdom",
+				"parsedYear": null,
+				"probability": 0.1256
+			},
+			"c5ca882c2111f47b10ba64e0ece9cd2fa17346ac": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt4976192",
+						"score": -3.2896,
+						"title": "211",
+						"year": 2018
+					},
+					{
+						"imdbId": "tt1131724",
+						"score": -5.7784,
+						"title": "2:22",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt3865478",
+						"score": -6.7124,
+						"title": "11 Minutes",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt43092547",
+						"score": -8.0433,
+						"title": "C211",
+						"year": 2026
+					},
+					{
+						"imdbId": "tt10426006",
+						"score": -8.2072,
+						"title": "111 the Force",
+						"year": 2020
+					}
+				],
+				"parsedTitle": "c5ca882c2111f47b10ba64e0ece9cd2fa17346ac",
+				"parsedYear": null,
+				"probability": 0.0052
+			},
+			"Kingdom.S02E02.1080p.NF.WEB-DL.Atmos.DDP5.1.x264-ExREN": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt3673794",
+						"score": 1.8025,
+						"title": "Kingdom",
+						"year": 2014
+					},
+					{
+						"imdbId": "tt38848632",
+						"score": 1.7742,
+						"title": "Kingdom",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt2404499",
+						"score": 1.7443,
+						"title": "Kingdom",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0841961",
+						"score": 1.0466,
+						"title": "Kingdom",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt6611916",
+						"score": 0.6667,
+						"title": "Kingdom",
+						"year": 2019
+					}
+				],
+				"parsedTitle": "Kingdom",
+				"parsedYear": null,
+				"probability": 0.5714
+			},
+			"JoJos.Bizarre.Adventure.E25.MULTi.1080p.WEB.x264-AMB3R": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6105880",
+						"score": 2.4705,
+						"title": "JoJo's Bizarre Adventure: Diamond Is Unbreakable - Chapter 1",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt6490990",
+						"score": -1.9965,
+						"title": "JoJo's Bizarre Adventure: Phantom Blood",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt0037494",
+						"score": -2.7236,
+						"title": "Adventure",
+						"year": 1945
+					},
+					{
+						"imdbId": "tt0093789",
+						"score": -3.3993,
+						"title": "Bizarre",
+						"year": 1987
+					},
+					{
+						"imdbId": "tt1653648",
+						"score": -3.4341,
+						"title": "Adventure",
+						"year": 2010
+					}
+				],
+				"parsedTitle": "JoJos Bizarre Adventure",
+				"parsedYear": null,
+				"probability": 0.3931
+			},
+			"jojos.bizarre.adventure.e25.multi.1080p.web.x264-amb3r": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6105880",
+						"score": 2.4705,
+						"title": "JoJo's Bizarre Adventure: Diamond Is Unbreakable - Chapter 1",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt6490990",
+						"score": -1.9965,
+						"title": "JoJo's Bizarre Adventure: Phantom Blood",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt0037494",
+						"score": -2.7236,
+						"title": "Adventure",
+						"year": 1945
+					},
+					{
+						"imdbId": "tt0093789",
+						"score": -3.3993,
+						"title": "Bizarre",
+						"year": 1987
+					},
+					{
+						"imdbId": "tt1653648",
+						"score": -3.4341,
+						"title": "Adventure",
+						"year": 2010
+					}
+				],
+				"parsedTitle": "jojos bizarre adventure",
+				"parsedYear": null,
+				"probability": 0.3931
+			},
+			"JoJos.Bizarre.Adventure.E01.MULTi.1080p.WEB.x264-AMB3R": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6105880",
+						"score": 2.4705,
+						"title": "JoJo's Bizarre Adventure: Diamond Is Unbreakable - Chapter 1",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt6490990",
+						"score": -1.8956,
+						"title": "JoJo's Bizarre Adventure: Phantom Blood",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt0037494",
+						"score": -2.7236,
+						"title": "Adventure",
+						"year": 1945
+					},
+					{
+						"imdbId": "tt1653648",
+						"score": -3.3418,
+						"title": "Adventure",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt0093789",
+						"score": -3.4006,
+						"title": "Bizarre",
+						"year": 1987
+					}
+				],
+				"parsedTitle": "JoJos Bizarre Adventure",
+				"parsedYear": null,
+				"probability": 0.4206
+			},
+			"jojos.bizarre.adventure.e01.multi.1080p.web.x264-amb3r": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt6105880",
+						"score": 2.4705,
+						"title": "JoJo's Bizarre Adventure: Diamond Is Unbreakable - Chapter 1",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt6490990",
+						"score": -1.8956,
+						"title": "JoJo's Bizarre Adventure: Phantom Blood",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt0037494",
+						"score": -2.7236,
+						"title": "Adventure",
+						"year": 1945
+					},
+					{
+						"imdbId": "tt1653648",
+						"score": -3.3418,
+						"title": "Adventure",
+						"year": 2010
+					},
+					{
+						"imdbId": "tt0093789",
+						"score": -3.4006,
+						"title": "Bizarre",
+						"year": 1987
+					}
+				],
+				"parsedTitle": "jojos bizarre adventure",
+				"parsedYear": null,
+				"probability": 0.4206
+			},
+			"Freeze.25.03.21.J.Pop.Fanatic.1080p": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0116277",
+						"score": -2.1206,
+						"title": "The Fan",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt1372681",
+						"score": -2.4331,
+						"title": "Aa Dekhen Zara",
+						"year": 2009
+					},
+					{
+						"imdbId": "tt21379248",
+						"score": -3.6693,
+						"title": "Freeze",
+						"year": 2022
+					},
+					{
+						"imdbId": "tt9088954",
+						"score": -3.8159,
+						"title": "Fanatic",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt0087592",
+						"score": -4.0004,
+						"title": "The Last Horror Film",
+						"year": 1982
+					}
+				],
+				"parsedTitle": "Freeze 25 03 21 J Pop Fanatic",
+				"parsedYear": null,
+				"probability": 0.0508
+			}
+		},
+		"tvdbEpisodes": {
+			"80201": {
+				"data": {
+					"episodes": [
+						{
+							"id": 5186753,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "Promo",
+							"aired": null,
+							"runtime": 60
+						},
+						{
+							"id": 5186754,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": "Steven Fry on Parkinson",
+							"aired": null,
+							"runtime": 60
+						},
+						{
+							"id": 5779855,
+							"seasonNumber": 0,
+							"number": 3,
+							"name": "Behind the Scenes",
+							"aired": null,
+							"runtime": 60
+						},
+						{
+							"id": 334848,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "Episode 1",
+							"aired": "2007-04-22",
+							"runtime": 60
+						},
+						{
+							"id": 334849,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "Episode 2",
+							"aired": "2007-04-29",
+							"runtime": 60
+						},
+						{
+							"id": 334850,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "Episode 3",
+							"aired": "2007-05-06",
+							"runtime": 60
+						},
+						{
+							"id": 334851,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "Episode 4",
+							"aired": "2007-05-13",
+							"runtime": 60
+						},
+						{
+							"id": 334852,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "Episode 5",
+							"aired": "2007-05-20",
+							"runtime": 60
+						},
+						{
+							"id": 334853,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "Episode 6",
+							"aired": "2007-05-27",
+							"runtime": 60
+						},
+						{
+							"id": 349361,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "Episode 1",
+							"aired": "2008-01-13",
+							"runtime": 60
+						},
+						{
+							"id": 349362,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "Episode 2",
+							"aired": "2008-01-20",
+							"runtime": 60
+						},
+						{
+							"id": 349363,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "Episode 3",
+							"aired": "2008-01-27",
+							"runtime": 60
+						},
+						{
+							"id": 354378,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "Episode 4",
+							"aired": "2008-02-03",
+							"runtime": 60
+						},
+						{
+							"id": 354379,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "Episode 5",
+							"aired": "2008-02-10",
+							"runtime": 60
+						},
+						{
+							"id": 354380,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "Episode 6",
+							"aired": "2008-02-17",
+							"runtime": 60
+						},
+						{
+							"id": 733691,
+							"seasonNumber": 3,
+							"number": 1,
+							"name": "Episode 1",
+							"aired": "2009-06-07",
+							"runtime": 60
+						},
+						{
+							"id": 733701,
+							"seasonNumber": 3,
+							"number": 2,
+							"name": "Episode 2",
+							"aired": "2009-06-14",
+							"runtime": 60
+						},
+						{
+							"id": 733711,
+							"seasonNumber": 3,
+							"number": 3,
+							"name": "Episode 3",
+							"aired": "2009-06-21",
+							"runtime": 60
+						},
+						{
+							"id": 816081,
+							"seasonNumber": 3,
+							"number": 4,
+							"name": "Episode 4",
+							"aired": "2009-06-28",
+							"runtime": 60
+						},
+						{
+							"id": 816091,
+							"seasonNumber": 3,
+							"number": 5,
+							"name": "Episode 5",
+							"aired": "2009-07-05",
+							"runtime": 60
+						},
+						{
+							"id": 816101,
+							"seasonNumber": 3,
+							"number": 6,
+							"name": "Episode 6",
+							"aired": "2009-07-12",
+							"runtime": 60
+						}
+					]
+				}
+			},
+			"171761": {
+				"data": {
+					"episodes": [
+						{
+							"id": 2400281,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": null,
+							"aired": "2006-10-27",
+							"runtime": 60
+						},
+						{
+							"id": 2400291,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": null,
+							"aired": "2006-10-28",
+							"runtime": 60
+						},
+						{
+							"id": 2400301,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": null,
+							"aired": "2006-10-29",
+							"runtime": 60
+						},
+						{
+							"id": 2400311,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": null,
+							"aired": "2006-10-30",
+							"runtime": 60
+						},
+						{
+							"id": 2400331,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": null,
+							"aired": "2006-10-31",
+							"runtime": 60
+						}
+					]
+				}
+			},
+			"259635": {
+				"data": {
+					"episodes": [
+						{
+							"id": 4337852,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "無名の少年",
+							"aired": "2012-06-04",
+							"runtime": 25
+						},
+						{
+							"id": 4337853,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "運命の出会い",
+							"aired": "2012-06-11",
+							"runtime": 25
+						},
+						{
+							"id": 4337854,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "友よ…!",
+							"aired": "2012-06-18",
+							"runtime": 25
+						},
+						{
+							"id": 4337855,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "王と剣",
+							"aired": "2012-06-25",
+							"runtime": 25
+						},
+						{
+							"id": 4337856,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "折れない心",
+							"aired": "2012-07-02",
+							"runtime": 25
+						},
+						{
+							"id": 4355389,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "大将軍への道",
+							"aired": "2012-07-09",
+							"runtime": 25
+						},
+						{
+							"id": 4355390,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "恐ろしき山の民",
+							"aired": "2012-07-16",
+							"runtime": 25
+						},
+						{
+							"id": 4362711,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "それぞれの夢",
+							"aired": "2012-07-23",
+							"runtime": 25
+						},
+						{
+							"id": 4362712,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "いざ咸陽へ",
+							"aired": "2012-07-30",
+							"runtime": 25
+						},
+						{
+							"id": 4362713,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "王都突入",
+							"aired": "2012-08-06",
+							"runtime": 25
+						},
+						{
+							"id": 4377372,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "激戦開始",
+							"aired": "2012-08-13",
+							"runtime": 25
+						},
+						{
+							"id": 4377373,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "究極の一刀",
+							"aired": "2012-08-20",
+							"runtime": 25
+						},
+						{
+							"id": 4377374,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "ランカイ吠える",
+							"aired": "2012-08-27",
+							"runtime": 25
+						},
+						{
+							"id": 4390471,
+							"seasonNumber": 1,
+							"number": 14,
+							"name": "剣の力",
+							"aired": "2012-09-03",
+							"runtime": 25
+						},
+						{
+							"id": 4391731,
+							"seasonNumber": 1,
+							"number": 15,
+							"name": "王の資格",
+							"aired": "2012-09-10",
+							"runtime": 25
+						},
+						{
+							"id": 4391732,
+							"seasonNumber": 1,
+							"number": 16,
+							"name": "呂不韋",
+							"aired": "2012-09-17",
+							"runtime": 25
+						},
+						{
+							"id": 4391733,
+							"seasonNumber": 1,
+							"number": 17,
+							"name": "初陣",
+							"aired": "2012-09-24",
+							"runtime": 25
+						},
+						{
+							"id": 4407185,
+							"seasonNumber": 1,
+							"number": 18,
+							"name": "戦車隊の脅威",
+							"aired": "2012-10-01",
+							"runtime": 25
+						},
+						{
+							"id": 4407186,
+							"seasonNumber": 1,
+							"number": 19,
+							"name": "烈火の戦い",
+							"aired": "2012-10-08",
+							"runtime": 25
+						},
+						{
+							"id": 4407187,
+							"seasonNumber": 1,
+							"number": 20,
+							"name": "王騎乱入",
+							"aired": "2012-10-15",
+							"runtime": 25
+						},
+						{
+							"id": 4407188,
+							"seasonNumber": 1,
+							"number": 21,
+							"name": "将軍の意味",
+							"aired": "2012-10-22",
+							"runtime": 25
+						},
+						{
+							"id": 4407189,
+							"seasonNumber": 1,
+							"number": 22,
+							"name": "猛将対知将",
+							"aired": "2012-10-29",
+							"runtime": 25
+						},
+						{
+							"id": 4436442,
+							"seasonNumber": 1,
+							"number": 23,
+							"name": "夜語り",
+							"aired": "2012-11-05",
+							"runtime": 25
+						},
+						{
+							"id": 4439601,
+							"seasonNumber": 1,
+							"number": 24,
+							"name": "新たなる試練",
+							"aired": "2012-11-12",
+							"runtime": 25
+						},
+						{
+							"id": 4440565,
+							"seasonNumber": 1,
+							"number": 25,
+							"name": "任命",
+							"aired": "2012-11-19",
+							"runtime": 25
+						},
+						{
+							"id": 4444664,
+							"seasonNumber": 1,
+							"number": 26,
+							"name": "武神 龐煖",
+							"aired": "2012-11-26",
+							"runtime": 25
+						},
+						{
+							"id": 4444665,
+							"seasonNumber": 1,
+							"number": 27,
+							"name": "飛信隊誕生",
+							"aired": "2012-12-03",
+							"runtime": 25
+						},
+						{
+							"id": 4454112,
+							"seasonNumber": 1,
+							"number": 28,
+							"name": "王騎の飛矢",
+							"aired": "2012-12-10",
+							"runtime": 25
+						},
+						{
+							"id": 4454113,
+							"seasonNumber": 1,
+							"number": 29,
+							"name": "戦局急転",
+							"aired": "2012-12-17",
+							"runtime": 25
+						},
+						{
+							"id": 4462029,
+							"seasonNumber": 1,
+							"number": 30,
+							"name": "天災",
+							"aired": "2012-12-24",
+							"runtime": 25
+						},
+						{
+							"id": 4462030,
+							"seasonNumber": 1,
+							"number": 31,
+							"name": "集の力",
+							"aired": "2013-01-07",
+							"runtime": 25
+						},
+						{
+							"id": 4478376,
+							"seasonNumber": 1,
+							"number": 32,
+							"name": "敗走の飛信隊",
+							"aired": "2013-01-14",
+							"runtime": 25
+						},
+						{
+							"id": 4478377,
+							"seasonNumber": 1,
+							"number": 33,
+							"name": "王騎 出陣!",
+							"aired": "2013-01-21",
+							"runtime": 25
+						},
+						{
+							"id": 4490956,
+							"seasonNumber": 1,
+							"number": 34,
+							"name": "真打ち!",
+							"aired": "2013-01-28",
+							"runtime": 25
+						},
+						{
+							"id": 4490959,
+							"seasonNumber": 1,
+							"number": 35,
+							"name": "総大将見える",
+							"aired": "2013-02-04",
+							"runtime": 25
+						},
+						{
+							"id": 4501352,
+							"seasonNumber": 1,
+							"number": 36,
+							"name": "王騎と摎",
+							"aired": "2013-02-11",
+							"runtime": 25
+						},
+						{
+							"id": 4501353,
+							"seasonNumber": 1,
+							"number": 37,
+							"name": "我、死線にあり",
+							"aired": "2013-02-18",
+							"runtime": 25
+						},
+						{
+							"id": 4501354,
+							"seasonNumber": 1,
+							"number": 38,
+							"name": "継承",
+							"aired": "2013-02-25",
+							"runtime": 25
+						},
+						{
+							"id": 4516592,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "新時代",
+							"aired": "2013-06-08",
+							"runtime": 25
+						},
+						{
+							"id": 4595068,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "静かなる戦場",
+							"aired": "2013-06-15",
+							"runtime": 25
+						},
+						{
+							"id": 4595400,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "嵐の祝宴",
+							"aired": "2013-06-22",
+							"runtime": 25
+						},
+						{
+							"id": 4603307,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "王と蟻",
+							"aired": "2013-06-29",
+							"runtime": 25
+						},
+						{
+							"id": 4603308,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "第三勢力",
+							"aired": "2013-07-06",
+							"runtime": 25
+						},
+						{
+							"id": 4613879,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "美しき猛毒",
+							"aired": "2013-07-13",
+							"runtime": 25
+						},
+						{
+							"id": 4613880,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "呪われた王子",
+							"aired": "2013-07-20",
+							"runtime": 25
+						},
+						{
+							"id": 4622510,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "政と紫夏",
+							"aired": "2013-07-27",
+							"runtime": 25
+						},
+						{
+							"id": 4622511,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "つなぐ願い",
+							"aired": "2013-08-03",
+							"runtime": 25
+						},
+						{
+							"id": 4632416,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "砕けた愛",
+							"aired": "2013-08-10",
+							"runtime": 25
+						},
+						{
+							"id": 4632417,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "揃い踏み",
+							"aired": "2013-08-17",
+							"runtime": 25
+						},
+						{
+							"id": 4632418,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "高狼城攻略",
+							"aired": "2013-08-24",
+							"runtime": 25
+						},
+						{
+							"id": 4632419,
+							"seasonNumber": 2,
+							"number": 13,
+							"name": "俺の戦り方",
+							"aired": "2013-08-31",
+							"runtime": 25
+						},
+						{
+							"id": 4632420,
+							"seasonNumber": 2,
+							"number": 14,
+							"name": "その男、廉頗",
+							"aired": "2013-09-07",
+							"runtime": 25
+						},
+						{
+							"id": 4642679,
+							"seasonNumber": 2,
+							"number": 15,
+							"name": "武将の空気",
+							"aired": "2013-09-14",
+							"runtime": 25
+						},
+						{
+							"id": 4642680,
+							"seasonNumber": 2,
+							"number": 16,
+							"name": "真夜中の大将軍",
+							"aired": "2013-09-21",
+							"runtime": 25
+						},
+						{
+							"id": 4648485,
+							"seasonNumber": 2,
+							"number": 17,
+							"name": "開戦前夜",
+							"aired": "2013-09-28",
+							"runtime": 25
+						},
+						{
+							"id": 4655616,
+							"seasonNumber": 2,
+							"number": 18,
+							"name": "激突！",
+							"aired": "2013-10-06",
+							"runtime": 25
+						},
+						{
+							"id": 4671512,
+							"seasonNumber": 2,
+							"number": 19,
+							"name": "玄峰の奇策",
+							"aired": "2013-10-13",
+							"runtime": 25
+						},
+						{
+							"id": 4671513,
+							"seasonNumber": 2,
+							"number": 20,
+							"name": "飛信隊逆襲",
+							"aired": "2013-10-20",
+							"runtime": 25
+						},
+						{
+							"id": 4671514,
+							"seasonNumber": 2,
+							"number": 21,
+							"name": "盗賊対軍略家",
+							"aired": "2013-10-27",
+							"runtime": 25
+						},
+						{
+							"id": 4685845,
+							"seasonNumber": 2,
+							"number": 22,
+							"name": "蒙恬の提案",
+							"aired": "2013-11-03",
+							"runtime": 25
+						},
+						{
+							"id": 4685846,
+							"seasonNumber": 2,
+							"number": 23,
+							"name": "三隊共闘",
+							"aired": "2013-11-10",
+							"runtime": 25
+						},
+						{
+							"id": 4697417,
+							"seasonNumber": 2,
+							"number": 24,
+							"name": "越えるべき壁",
+							"aired": "2013-11-17",
+							"runtime": 25
+						},
+						{
+							"id": 4697418,
+							"seasonNumber": 2,
+							"number": 25,
+							"name": "裏の裏",
+							"aired": "2013-11-24",
+							"runtime": 25
+						},
+						{
+							"id": 4703814,
+							"seasonNumber": 2,
+							"number": 26,
+							"name": "将の器",
+							"aired": "2013-12-01",
+							"runtime": 25
+						},
+						{
+							"id": 4709842,
+							"seasonNumber": 2,
+							"number": 27,
+							"name": "決着の刻",
+							"aired": "2013-12-08",
+							"runtime": 25
+						},
+						{
+							"id": 4721368,
+							"seasonNumber": 2,
+							"number": 28,
+							"name": "最後の策",
+							"aired": "2013-12-15",
+							"runtime": 25
+						},
+						{
+							"id": 4721369,
+							"seasonNumber": 2,
+							"number": 29,
+							"name": "一瞬",
+							"aired": "2013-12-22",
+							"runtime": 25
+						},
+						{
+							"id": 4728115,
+							"seasonNumber": 2,
+							"number": 30,
+							"name": "大事な仲間",
+							"aired": "2013-12-29",
+							"runtime": 25
+						},
+						{
+							"id": 4734849,
+							"seasonNumber": 2,
+							"number": 31,
+							"name": "蒙ごう、退（ひ）かず",
+							"aired": "2014-01-05",
+							"runtime": 25
+						},
+						{
+							"id": 4767026,
+							"seasonNumber": 2,
+							"number": 32,
+							"name": "色あせぬ時代",
+							"aired": "2014-01-12",
+							"runtime": 25
+						},
+						{
+							"id": 4767027,
+							"seasonNumber": 2,
+							"number": 33,
+							"name": "勝利…そして",
+							"aired": "2014-01-19",
+							"runtime": 25
+						},
+						{
+							"id": 4768752,
+							"seasonNumber": 2,
+							"number": 34,
+							"name": "軍師の到着",
+							"aired": "2014-01-26",
+							"runtime": 25
+						},
+						{
+							"id": 4768753,
+							"seasonNumber": 2,
+							"number": 35,
+							"name": "試練と覚悟",
+							"aired": "2014-02-02",
+							"runtime": 25
+						},
+						{
+							"id": 4768754,
+							"seasonNumber": 2,
+							"number": 36,
+							"name": "上を行く",
+							"aired": "2014-02-09",
+							"runtime": 25
+						},
+						{
+							"id": 4776551,
+							"seasonNumber": 2,
+							"number": 37,
+							"name": "遠雷",
+							"aired": "2014-02-16",
+							"runtime": 25
+						},
+						{
+							"id": 4781250,
+							"seasonNumber": 2,
+							"number": 38,
+							"name": "謀略の舞台",
+							"aired": "2014-02-23",
+							"runtime": 25
+						},
+						{
+							"id": 4785572,
+							"seasonNumber": 2,
+							"number": 39,
+							"name": "新たなる伝説",
+							"aired": "2014-03-02",
+							"runtime": 25
+						},
+						{
+							"id": 7551557,
+							"seasonNumber": 3,
+							"number": 1,
+							"name": "迫り来る合従軍",
+							"aired": "2020-04-06",
+							"runtime": 25
+						},
+						{
+							"id": 7672044,
+							"seasonNumber": 3,
+							"number": 2,
+							"name": "一堂に会す",
+							"aired": "2020-04-13",
+							"runtime": 25
+						},
+						{
+							"id": 7687259,
+							"seasonNumber": 3,
+							"number": 3,
+							"name": "函谷関攻防戦",
+							"aired": "2020-04-20",
+							"runtime": 25
+						},
+						{
+							"id": 7687263,
+							"seasonNumber": 3,
+							"number": 4,
+							"name": "二つの戦場",
+							"aired": "2020-04-27",
+							"runtime": 25
+						},
+						{
+							"id": 7687266,
+							"seasonNumber": 3,
+							"number": 5,
+							"name": "若き将の台頭",
+							"aired": "2021-05-03",
+							"runtime": 25
+						},
+						{
+							"id": 7687268,
+							"seasonNumber": 3,
+							"number": 6,
+							"name": "互いの自負",
+							"aired": "2021-05-10",
+							"runtime": 25
+						},
+						{
+							"id": 8420670,
+							"seasonNumber": 3,
+							"number": 7,
+							"name": "穴だらけの荒野",
+							"aired": "2021-05-17",
+							"runtime": 25
+						},
+						{
+							"id": 8420671,
+							"seasonNumber": 3,
+							"number": 8,
+							"name": "女傑・媧燐",
+							"aired": "2021-05-24",
+							"runtime": 25
+						},
+						{
+							"id": 8420672,
+							"seasonNumber": 3,
+							"number": 9,
+							"name": "蒙武の檄",
+							"aired": "2021-05-31",
+							"runtime": 25
+						},
+						{
+							"id": 8420673,
+							"seasonNumber": 3,
+							"number": 10,
+							"name": "窮地の大抜擢",
+							"aired": "2021-06-07",
+							"runtime": 25
+						},
+						{
+							"id": 8476959,
+							"seasonNumber": 3,
+							"number": 11,
+							"name": "武将の矜持",
+							"aired": "2021-06-14",
+							"runtime": 25
+						},
+						{
+							"id": 8476960,
+							"seasonNumber": 3,
+							"number": 12,
+							"name": "媧燐軍の突撃",
+							"aired": "2021-06-21",
+							"runtime": 25
+						},
+						{
+							"id": 8476961,
+							"seasonNumber": 3,
+							"number": 13,
+							"name": "至強",
+							"aired": "2021-06-28",
+							"runtime": 25
+						},
+						{
+							"id": 8513551,
+							"seasonNumber": 3,
+							"number": 14,
+							"name": "最強の漢",
+							"aired": "2021-07-19",
+							"runtime": 25
+						},
+						{
+							"id": 8513552,
+							"seasonNumber": 3,
+							"number": 15,
+							"name": "函谷関の裏",
+							"aired": "2021-07-26",
+							"runtime": 25
+						},
+						{
+							"id": 8590048,
+							"seasonNumber": 3,
+							"number": 16,
+							"name": "李牧の行方",
+							"aired": "2021-08-02",
+							"runtime": 25
+						},
+						{
+							"id": 8590049,
+							"seasonNumber": 3,
+							"number": 17,
+							"name": "本能型の極み",
+							"aired": "2021-08-16",
+							"runtime": 25
+						},
+						{
+							"id": 8590050,
+							"seasonNumber": 3,
+							"number": 18,
+							"name": "政の決断",
+							"aired": "2021-08-23",
+							"runtime": 25
+						},
+						{
+							"id": 8590051,
+							"seasonNumber": 3,
+							"number": 19,
+							"name": "政、語りかける",
+							"aired": "2021-08-30",
+							"runtime": 25
+						},
+						{
+							"id": 8590052,
+							"seasonNumber": 3,
+							"number": 20,
+							"name": "最初の夜",
+							"aired": "2021-09-06",
+							"runtime": 25
+						},
+						{
+							"id": 8590053,
+							"seasonNumber": 3,
+							"number": 21,
+							"name": "秘密の露見",
+							"aired": "2021-09-13",
+							"runtime": 25
+						},
+						{
+							"id": 8590054,
+							"seasonNumber": 3,
+							"number": 22,
+							"name": "出し尽くす",
+							"aired": "2021-09-20",
+							"runtime": 25
+						},
+						{
+							"id": 8590055,
+							"seasonNumber": 3,
+							"number": 23,
+							"name": "破格の加勢",
+							"aired": "2021-09-27",
+							"runtime": 25
+						},
+						{
+							"id": 8590056,
+							"seasonNumber": 3,
+							"number": 24,
+							"name": "深謝",
+							"aired": "2021-10-04",
+							"runtime": 25
+						},
+						{
+							"id": 8590057,
+							"seasonNumber": 3,
+							"number": 25,
+							"name": "巫舞の違い",
+							"aired": "2021-10-11",
+							"runtime": 25
+						},
+						{
+							"id": 8590058,
+							"seasonNumber": 3,
+							"number": 26,
+							"name": "別の道",
+							"aired": "2021-10-18",
+							"runtime": 25
+						},
+						{
+							"id": 8993888,
+							"seasonNumber": 4,
+							"number": 1,
+							"name": "戦後の七国",
+							"aired": "2022-04-10",
+							"runtime": 25
+						},
+						{
+							"id": 9103837,
+							"seasonNumber": 4,
+							"number": 2,
+							"name": "不穏な影",
+							"aired": "2022-04-17",
+							"runtime": 25
+						},
+						{
+							"id": 9103838,
+							"seasonNumber": 4,
+							"number": 3,
+							"name": "討伐軍出陣",
+							"aired": "2022-04-24",
+							"runtime": 25
+						},
+						{
+							"id": 9103839,
+							"seasonNumber": 4,
+							"number": 4,
+							"name": "屯留攻城戦",
+							"aired": "2022-05-01",
+							"runtime": 25
+						},
+						{
+							"id": 9103840,
+							"seasonNumber": 4,
+							"number": 5,
+							"name": "剣と盾",
+							"aired": "2022-05-08",
+							"runtime": 25
+						},
+						{
+							"id": 9160188,
+							"seasonNumber": 4,
+							"number": 6,
+							"name": "新たな要所",
+							"aired": "2022-05-15",
+							"runtime": 25
+						},
+						{
+							"id": 9173467,
+							"seasonNumber": 4,
+							"number": 7,
+							"name": "呼びかけ",
+							"aired": "2022-05-22",
+							"runtime": 25
+						},
+						{
+							"id": 9175095,
+							"seasonNumber": 4,
+							"number": 8,
+							"name": "貂の存在",
+							"aired": "2022-05-29",
+							"runtime": 25
+						},
+						{
+							"id": 9175096,
+							"seasonNumber": 4,
+							"number": 9,
+							"name": "紫伯の名",
+							"aired": "2022-06-05",
+							"runtime": 25
+						},
+						{
+							"id": 9175097,
+							"seasonNumber": 4,
+							"number": 10,
+							"name": "中華の注目",
+							"aired": "2022-06-12",
+							"runtime": 25
+						},
+						{
+							"id": 9175098,
+							"seasonNumber": 4,
+							"number": 11,
+							"name": "修練の日々",
+							"aired": "2022-06-19",
+							"runtime": 25
+						},
+						{
+							"id": 9175099,
+							"seasonNumber": 4,
+							"number": 12,
+							"name": "傑物達の世代",
+							"aired": "2022-06-26",
+							"runtime": 25
+						},
+						{
+							"id": 9233411,
+							"seasonNumber": 4,
+							"number": 13,
+							"name": "咸陽の動き",
+							"aired": "2022-07-03",
+							"runtime": 25
+						},
+						{
+							"id": 9233412,
+							"seasonNumber": 4,
+							"number": 14,
+							"name": "新しい国",
+							"aired": "2022-07-10",
+							"runtime": 25
+						},
+						{
+							"id": 9254273,
+							"seasonNumber": 4,
+							"number": 15,
+							"name": "何もない男",
+							"aired": "2022-07-17",
+							"runtime": 25
+						},
+						{
+							"id": 9263511,
+							"seasonNumber": 4,
+							"number": 16,
+							"name": "加冠の儀",
+							"aired": "2022-07-24",
+							"runtime": 25
+						},
+						{
+							"id": 9275293,
+							"seasonNumber": 4,
+							"number": 17,
+							"name": "三方ゆずらず",
+							"aired": "2022-07-31",
+							"runtime": 25
+						},
+						{
+							"id": 9283725,
+							"seasonNumber": 4,
+							"number": 18,
+							"name": "渡河の戦い",
+							"aired": "2022-08-07",
+							"runtime": 25
+						},
+						{
+							"id": 9294190,
+							"seasonNumber": 4,
+							"number": 19,
+							"name": "袂を分かつ",
+							"aired": "2022-08-14",
+							"runtime": 25
+						},
+						{
+							"id": 9305139,
+							"seasonNumber": 4,
+							"number": 20,
+							"name": "夢のような国",
+							"aired": "2022-08-21",
+							"runtime": 25
+						},
+						{
+							"id": 9314360,
+							"seasonNumber": 4,
+							"number": 21,
+							"name": "唯一の勝機",
+							"aired": "2022-08-28",
+							"runtime": 25
+						},
+						{
+							"id": 9314361,
+							"seasonNumber": 4,
+							"number": 22,
+							"name": "命がけの逃避",
+							"aired": "2022-09-04",
+							"runtime": 25
+						},
+						{
+							"id": 9314362,
+							"seasonNumber": 4,
+							"number": 23,
+							"name": "逆転の猛進",
+							"aired": "2022-09-11",
+							"runtime": 25
+						},
+						{
+							"id": 9314363,
+							"seasonNumber": 4,
+							"number": 24,
+							"name": "内乱の終着点",
+							"aired": "2022-09-25",
+							"runtime": 25
+						},
+						{
+							"id": 9314364,
+							"seasonNumber": 4,
+							"number": 25,
+							"name": "雄飛の刻",
+							"aired": "2022-09-25",
+							"runtime": 25
+						},
+						{
+							"id": 9314365,
+							"seasonNumber": 4,
+							"number": 26,
+							"name": "六将の行方",
+							"aired": "2022-10-02",
+							"runtime": 25
+						},
+						{
+							"id": 10116039,
+							"seasonNumber": 5,
+							"number": 1,
+							"name": "化物達の出陣",
+							"aired": "2024-01-14",
+							"runtime": 24
+						},
+						{
+							"id": 10258427,
+							"seasonNumber": 5,
+							"number": 2,
+							"name": "戦場の匂い",
+							"aired": "2024-01-21",
+							"runtime": 24
+						},
+						{
+							"id": 10258428,
+							"seasonNumber": 5,
+							"number": 3,
+							"name": "黒羊の夜",
+							"aired": "2024-01-28",
+							"runtime": 24
+						},
+						{
+							"id": 10258429,
+							"seasonNumber": 5,
+							"number": 4,
+							"name": "副長の責任",
+							"aired": "2024-02-04",
+							"runtime": 24
+						},
+						{
+							"id": 10258430,
+							"seasonNumber": 5,
+							"number": 5,
+							"name": "執念の渡河",
+							"aired": "2024-02-11",
+							"runtime": 24
+						},
+						{
+							"id": 10258431,
+							"seasonNumber": 5,
+							"number": 6,
+							"name": "黒羊の大一番",
+							"aired": "2024-02-18",
+							"runtime": 24
+						},
+						{
+							"id": 10258432,
+							"seasonNumber": 5,
+							"number": 7,
+							"name": "離眼の悲劇",
+							"aired": "2024-02-25",
+							"runtime": 24
+						},
+						{
+							"id": 10258433,
+							"seasonNumber": 5,
+							"number": 8,
+							"name": "一瞬の出来事",
+							"aired": "2024-03-03",
+							"runtime": 24
+						},
+						{
+							"id": 10258434,
+							"seasonNumber": 5,
+							"number": 9,
+							"name": "〝凶〟",
+							"aired": "2024-03-10",
+							"runtime": 24
+						},
+						{
+							"id": 10258435,
+							"seasonNumber": 5,
+							"number": 10,
+							"name": "矜持の咆哮",
+							"aired": "2024-03-17",
+							"runtime": 24
+						},
+						{
+							"id": 10258436,
+							"seasonNumber": 5,
+							"number": 11,
+							"name": "尾平と飛信隊",
+							"aired": "2024-03-24",
+							"runtime": 24
+						},
+						{
+							"id": 10258437,
+							"seasonNumber": 5,
+							"number": 12,
+							"name": "勝敗の夜ふけ",
+							"aired": "2024-03-31",
+							"runtime": 24
+						},
+						{
+							"id": 10402974,
+							"seasonNumber": 5,
+							"number": 13,
+							"name": "蔡沢の矜持",
+							"aired": "2024-03-31",
+							"runtime": 24
+						},
+						{
+							"id": 11089631,
+							"seasonNumber": 6,
+							"number": 1,
+							"name": "秦の障壁",
+							"aired": "2025-10-05",
+							"runtime": 24
+						},
+						{
+							"id": 11378562,
+							"seasonNumber": 6,
+							"number": 2,
+							"name": "激動の起こり",
+							"aired": "2025-10-12",
+							"runtime": 24
+						},
+						{
+							"id": 11392267,
+							"seasonNumber": 6,
+							"number": 3,
+							"name": "秦軍の陣容",
+							"aired": "2025-10-19",
+							"runtime": 24
+						},
+						{
+							"id": 11416963,
+							"seasonNumber": 6,
+							"number": 4,
+							"name": "趙の国門",
+							"aired": "2025-10-26",
+							"runtime": 24
+						},
+						{
+							"id": 11421579,
+							"seasonNumber": 6,
+							"number": 5,
+							"name": "列尾攻城戦",
+							"aired": "2025-11-02",
+							"runtime": 24
+						},
+						{
+							"id": 11427585,
+							"seasonNumber": 6,
+							"number": 6,
+							"name": "列尾の罠",
+							"aired": "2025-11-09",
+							"runtime": 24
+						},
+						{
+							"id": 11427586,
+							"seasonNumber": 6,
+							"number": 7,
+							"name": "陥落の武器",
+							"aired": "2025-11-16",
+							"runtime": 24
+						},
+						{
+							"id": 11427587,
+							"seasonNumber": 6,
+							"number": 8,
+							"name": "火蓋を切る",
+							"aired": "2025-11-23",
+							"runtime": 24
+						},
+						{
+							"id": 11427588,
+							"seasonNumber": 6,
+							"number": 9,
+							"name": "覚悟の比重",
+							"aired": "2025-11-30",
+							"runtime": 24
+						},
+						{
+							"id": 11427589,
+							"seasonNumber": 6,
+							"number": 10,
+							"name": "犬戎の末裔",
+							"aired": "2025-12-07",
+							"runtime": 24
+						},
+						{
+							"id": 11427590,
+							"seasonNumber": 6,
+							"number": 11,
+							"name": "必殺の別働隊",
+							"aired": "2025-12-14",
+							"runtime": 24
+						},
+						{
+							"id": 11427591,
+							"seasonNumber": 6,
+							"number": 12,
+							"name": "格不足",
+							"aired": "2025-12-21",
+							"runtime": 24
+						},
+						{
+							"id": 11516723,
+							"seasonNumber": 6,
+							"number": 13,
+							"name": "大将軍の景色",
+							"aired": "2025-12-28",
+							"runtime": 24
+						},
+						{
+							"id": 11927541,
+							"seasonNumber": 6,
+							"number": 14,
+							"name": "Zoku-hen",
+							"aired": null,
+							"runtime": null
+						}
+					]
+				}
+			},
+			"283761": {
+				"data": {
+					"episodes": [
+						{
+							"id": 4946933,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "Set Yourself on Fire",
+							"aired": "2014-10-08",
+							"runtime": 55
+						},
+						{
+							"id": 5009877,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "Glass Eye",
+							"aired": "2014-10-15",
+							"runtime": 47
+						},
+						{
+							"id": 5012925,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "Piece of Plastic",
+							"aired": "2014-10-22",
+							"runtime": 47
+						},
+						{
+							"id": 5012927,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "Flowers",
+							"aired": "2014-10-29",
+							"runtime": 46
+						},
+						{
+							"id": 5012928,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "Eat Your Own Cooking",
+							"aired": "2014-11-05",
+							"runtime": 52
+						},
+						{
+							"id": 5012929,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "Please Refrain from Crying",
+							"aired": "2014-11-12",
+							"runtime": 46
+						},
+						{
+							"id": 5012930,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "Animator/Annihilator",
+							"aired": "2014-11-19",
+							"runtime": 47
+						},
+						{
+							"id": 5012931,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "Gentle Slope",
+							"aired": "2014-11-26",
+							"runtime": 46
+						},
+						{
+							"id": 5012932,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "Cut Day",
+							"aired": "2014-12-03",
+							"runtime": 46
+						},
+						{
+							"id": 5012933,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "King Beast",
+							"aired": "2014-12-10",
+							"runtime": 49
+						},
+						{
+							"id": 5302944,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "New Money",
+							"aired": "2015-10-14",
+							"runtime": 47
+						},
+						{
+							"id": 5365812,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "Simulations",
+							"aired": "2015-10-21",
+							"runtime": 48
+						},
+						{
+							"id": 5370677,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "Broken or Missing",
+							"aired": "2015-10-28",
+							"runtime": 48
+						},
+						{
+							"id": 5370678,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "Be First",
+							"aired": "2015-11-04",
+							"runtime": 48
+						},
+						{
+							"id": 5370679,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "Happy Hour",
+							"aired": "2015-11-11",
+							"runtime": 47
+						},
+						{
+							"id": 5370680,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "Pink at Night",
+							"aired": "2015-11-18",
+							"runtime": 50
+						},
+						{
+							"id": 5402954,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "The Demon Had a Spell",
+							"aired": "2015-11-25",
+							"runtime": 52
+						},
+						{
+							"id": 5410261,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "Smoker",
+							"aired": "2015-12-02",
+							"runtime": 48
+						},
+						{
+							"id": 5419662,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "Living Down",
+							"aired": "2015-12-09",
+							"runtime": 48
+						},
+						{
+							"id": 5430612,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "Traveling Alone",
+							"aired": "2015-12-16",
+							"runtime": 51
+						},
+						{
+							"id": 5628876,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "Lay and Pray",
+							"aired": "2016-06-01",
+							"runtime": 48
+						},
+						{
+							"id": 5628877,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "No Fault",
+							"aired": "2016-06-08",
+							"runtime": 46
+						},
+						{
+							"id": 5628878,
+							"seasonNumber": 2,
+							"number": 13,
+							"name": "Woke Up Lonely",
+							"aired": "2016-06-15",
+							"runtime": 56
+						},
+						{
+							"id": 5629546,
+							"seasonNumber": 2,
+							"number": 14,
+							"name": "Do Not Disturb",
+							"aired": "2016-06-22",
+							"runtime": 48
+						},
+						{
+							"id": 5629547,
+							"seasonNumber": 2,
+							"number": 15,
+							"name": "Take Pills",
+							"aired": "2016-06-29",
+							"runtime": 50
+						},
+						{
+							"id": 5629548,
+							"seasonNumber": 2,
+							"number": 16,
+							"name": "Halos",
+							"aired": "2016-07-06",
+							"runtime": 49
+						},
+						{
+							"id": 5629549,
+							"seasonNumber": 2,
+							"number": 17,
+							"name": "Help Wanted",
+							"aired": "2016-07-13",
+							"runtime": 47
+						},
+						{
+							"id": 5629550,
+							"seasonNumber": 2,
+							"number": 18,
+							"name": "Cut Man",
+							"aired": "2016-07-20",
+							"runtime": 46
+						},
+						{
+							"id": 5629551,
+							"seasonNumber": 2,
+							"number": 19,
+							"name": "Late to Leave",
+							"aired": "2016-07-27",
+							"runtime": 53
+						},
+						{
+							"id": 5629552,
+							"seasonNumber": 2,
+							"number": 20,
+							"name": "No Sharp Objects",
+							"aired": "2016-08-03",
+							"runtime": 55
+						},
+						{
+							"id": 5911069,
+							"seasonNumber": 3,
+							"number": 1,
+							"name": "Wolf Tickets",
+							"aired": "2017-05-31",
+							"runtime": 48
+						},
+						{
+							"id": 5918860,
+							"seasonNumber": 3,
+							"number": 2,
+							"name": "Ritual",
+							"aired": "2017-06-07",
+							"runtime": 53
+						},
+						{
+							"id": 5918861,
+							"seasonNumber": 3,
+							"number": 3,
+							"name": "Thank You, Boys",
+							"aired": "2017-06-14",
+							"runtime": 51
+						},
+						{
+							"id": 5918862,
+							"seasonNumber": 3,
+							"number": 4,
+							"name": "Headhunter",
+							"aired": "2017-06-21",
+							"runtime": 56
+						},
+						{
+							"id": 5918863,
+							"seasonNumber": 3,
+							"number": 5,
+							"name": "Please Give",
+							"aired": "2017-06-28",
+							"runtime": 53
+						},
+						{
+							"id": 5918864,
+							"seasonNumber": 3,
+							"number": 6,
+							"name": "All Talk",
+							"aired": "2017-07-05",
+							"runtime": 51
+						},
+						{
+							"id": 6025123,
+							"seasonNumber": 3,
+							"number": 7,
+							"name": "Platinum Level",
+							"aired": "2017-07-12",
+							"runtime": 48
+						},
+						{
+							"id": 6025124,
+							"seasonNumber": 3,
+							"number": 8,
+							"name": "Old Pueblo",
+							"aired": "2017-07-19",
+							"runtime": 51
+						},
+						{
+							"id": 6025125,
+							"seasonNumber": 3,
+							"number": 9,
+							"name": "Cactus",
+							"aired": "2017-07-26",
+							"runtime": 50
+						},
+						{
+							"id": 6025126,
+							"seasonNumber": 3,
+							"number": 10,
+							"name": "Lie Down in the Light",
+							"aired": "2017-08-02",
+							"runtime": 59
+						}
+					]
+				}
+			},
+			"355228": {
+				"data": {
+					"episodes": [
+						{
+							"id": 8471300,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "킹덤: 아신전",
+							"aired": "2021-07-23",
+							"runtime": 93
+						},
+						{
+							"id": 6897742,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "1화",
+							"aired": "2019-01-25",
+							"runtime": 57
+						},
+						{
+							"id": 6897745,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "2화",
+							"aired": "2019-01-25",
+							"runtime": 54
+						},
+						{
+							"id": 6897747,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "3화",
+							"aired": "2019-01-25",
+							"runtime": 55
+						},
+						{
+							"id": 6897749,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "4화",
+							"aired": "2019-01-25",
+							"runtime": 46
+						},
+						{
+							"id": 6897754,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "5화",
+							"aired": "2019-01-25",
+							"runtime": 52
+						},
+						{
+							"id": 6897758,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "6화",
+							"aired": "2019-01-25",
+							"runtime": 43
+						},
+						{
+							"id": 7579048,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "1화",
+							"aired": "2020-03-13",
+							"runtime": 52
+						},
+						{
+							"id": 7579059,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "2화",
+							"aired": "2020-03-13",
+							"runtime": 39
+						},
+						{
+							"id": 7579060,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "3화",
+							"aired": "2020-03-13",
+							"runtime": 48
+						},
+						{
+							"id": 7579061,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "4화",
+							"aired": "2020-03-13",
+							"runtime": 42
+						},
+						{
+							"id": 7579062,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "5화",
+							"aired": "2020-03-13",
+							"runtime": 36
+						},
+						{
+							"id": 7579063,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "6화",
+							"aired": "2020-03-13",
+							"runtime": 52
+						}
+					]
+				}
+			},
+			"415866": {
+				"data": {
+					"episodes": [
+						{
+							"id": 8994822,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "Episode 1",
+							"aired": "2022-02-05",
+							"runtime": 45
+						},
+						{
+							"id": 9016872,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "Episode 2",
+							"aired": "2022-02-12",
+							"runtime": 47
+						},
+						{
+							"id": 9016873,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "Episode 3",
+							"aired": "2022-02-19",
+							"runtime": 45
+						},
+						{
+							"id": 9016874,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "Episode 4",
+							"aired": "2022-02-26",
+							"runtime": 45
+						},
+						{
+							"id": 9083842,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "Episode 1",
+							"aired": "2022-03-21",
+							"runtime": 45
+						},
+						{
+							"id": 9083843,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "Episode 2",
+							"aired": "2022-03-28",
+							"runtime": 45
+						},
+						{
+							"id": 9083844,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "Episode 3",
+							"aired": "2022-04-04",
+							"runtime": 45
+						},
+						{
+							"id": 9083845,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "Episode 4",
+							"aired": "2022-04-11",
+							"runtime": 45
+						}
+					]
+				}
+			},
+			"469578": {
+				"data": {
+					"episodes": [
+						{
+							"id": 11431434,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "Four Crowns, One Kingdom",
+							"aired": "2025-11-09",
+							"runtime": 49
+						},
+						{
+							"id": 11431435,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "Storm's Retreat",
+							"aired": "2025-11-16",
+							"runtime": 49
+						},
+						{
+							"id": 11431436,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "The Lions Fall",
+							"aired": "2025-11-23",
+							"runtime": 49
+						},
+						{
+							"id": 11431437,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "Flint and the Crocodile",
+							"aired": "2025-11-30",
+							"runtime": 49
+						},
+						{
+							"id": 11431438,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "Olimba's Last Chance",
+							"aired": "2025-12-07",
+							"runtime": 49
+						},
+						{
+							"id": 11431439,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "The Secret Story of Kingdom",
+							"aired": "2025-12-14",
+							"runtime": 49
+						}
+					]
+				}
+			},
+			"80201/dvd": {
+				"data": {
+					"episodes": []
+				}
+			},
+			"355228/dvd": {
+				"data": {
+					"episodes": [
+						{
+							"id": 6897742,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "1화",
+							"aired": "2019-01-25",
+							"runtime": 57
+						},
+						{
+							"id": 6897745,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "2화",
+							"aired": "2019-01-25",
+							"runtime": 54
+						},
+						{
+							"id": 6897747,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "3화",
+							"aired": "2019-01-25",
+							"runtime": 55
+						},
+						{
+							"id": 6897749,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "4화",
+							"aired": "2019-01-25",
+							"runtime": 46
+						},
+						{
+							"id": 6897754,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "5화",
+							"aired": "2019-01-25",
+							"runtime": 52
+						},
+						{
+							"id": 6897758,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "6화",
+							"aired": "2019-01-25",
+							"runtime": 43
+						},
+						{
+							"id": 7579048,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "1화",
+							"aired": "2020-03-13",
+							"runtime": 52
+						},
+						{
+							"id": 7579059,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "2화",
+							"aired": "2020-03-13",
+							"runtime": 39
+						},
+						{
+							"id": 7579060,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "3화",
+							"aired": "2020-03-13",
+							"runtime": 48
+						},
+						{
+							"id": 7579061,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "4화",
+							"aired": "2020-03-13",
+							"runtime": 42
+						},
+						{
+							"id": 7579062,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "5화",
+							"aired": "2020-03-13",
+							"runtime": 36
+						},
+						{
+							"id": 7579063,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "6화",
+							"aired": "2020-03-13",
+							"runtime": 52
+						}
+					]
+				}
+			}
+		},
+		"identify": {
+			"JoJos.Bizarre.Adventure.E25.MULTi.1080p.WEB.x264-AMB3R": null,
+			"Kingdom.S02E02.1080p.NF.WEB-DL.Atmos.DDP5.1.x264-ExREN": null,
+			"Kingdom.S02E10.1280x720.Hi10p.AAC-Obfuscated": null,
+			"JoJos.Bizarre.Adventure.E01.MULTi.1080p.WEB.x264-AMB3R": null,
+			"Freeze.25.03.21.J.Pop.Fanatic.1080p": null
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg-usenet on fun, 2026-11-09 (the .zurgtorrent's name and video file as zurg asks; no hash, a Usenet copy), and Freeze.25.03.21… from DMM's PlacementMiss (2026-11-09: a sponsor's zurg asked it with its one file)",
+			"request": {
+				"name": "JoJos.Bizarre.Adventure.E25.MULTi.1080p.WEB.x264-AMB3R",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e25.multi.1080p.web.x264-amb3r.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2359704",
+				"tmdbId": 45790,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e25.multi.1080p.web.x264-amb3r.mkv",
+						"season": 1,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "absolute",
+						"tmdbEpisodeId": 904506
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09 (the .zurgtorrent's name and video file as zurg asks; no hash, a Usenet copy), and Freeze.25.03.21… from DMM's PlacementMiss (2026-11-09: a sponsor's zurg asked it with its one file)",
+			"request": {
+				"name": "Kingdom.S02E02.1080p.NF.WEB-DL.Atmos.DDP5.1.x264-ExREN",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "Kingdom.S02E02.1080p.NF.WEB-DL.Atmos.DDP5.1.x264-ExREN.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt6611916",
+				"tmdbId": 70593,
+				"files": [
+					{
+						"path": "Kingdom.S02E02.1080p.NF.WEB-DL.Atmos.DDP5.1.x264-ExREN.mkv",
+						"season": 2,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2071801
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09 (the .zurgtorrent's name and video file as zurg asks; no hash, a Usenet copy), and Freeze.25.03.21… from DMM's PlacementMiss (2026-11-09: a sponsor's zurg asked it with its one file)",
+			"request": {
+				"name": "Kingdom.S02E10.1280x720.Hi10p.AAC-Obfuscated",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "c5ca882c2111f47b10ba64e0ece9cd2fa17346ac.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": null,
+				"imdbId": null,
+				"tmdbId": null,
+				"files": [
+					{
+						"path": "c5ca882c2111f47b10ba64e0ece9cd2fa17346ac.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09 (the .zurgtorrent's name and video file as zurg asks; no hash, a Usenet copy), and Freeze.25.03.21… from DMM's PlacementMiss (2026-11-09: a sponsor's zurg asked it with its one file)",
+			"request": {
+				"name": "JoJos.Bizarre.Adventure.E01.MULTi.1080p.WEB.x264-AMB3R",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e01.multi.1080p.web.x264-amb3r.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": null,
+				"imdbId": null,
+				"tmdbId": null,
+				"files": [
+					{
+						"path": "jojos.bizarre.adventure.e01.multi.1080p.web.x264-amb3r.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09 (the .zurgtorrent's name and video file as zurg asks; no hash, a Usenet copy), and Freeze.25.03.21… from DMM's PlacementMiss (2026-11-09: a sponsor's zurg asked it with its one file)",
+			"request": {
+				"name": "Freeze.25.03.21.J.Pop.Fanatic.1080p",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "Freeze.25.03.21.J.Pop.Fanatic.1080p.mp4",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": null,
+				"imdbId": null,
+				"tmdbId": null,
+				"files": [
+					{
+						"path": "Freeze.25.03.21.J.Pop.Fanatic.1080p.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		}
+	]
+}

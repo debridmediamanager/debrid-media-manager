@@ -1,3 +1,5 @@
+// @vitest-environment node
+
 import CREATED from '@/test/fixtures/torboxUsenet/usenet-create-2026-11-03.json';
 import CACHED from '@/test/fixtures/torboxUsenet/usenet-create-cached-2026-11-03.json';
 import PLAN_RESTRICTED from '@/test/fixtures/torboxUsenet/usenet-create-plan-restricted-2026-11-03.json';

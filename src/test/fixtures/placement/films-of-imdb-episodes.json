@@ -1,0 +1,1400 @@
+{
+	"answers": {
+		"find": {
+			"tt0165042": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 10278,
+						"name": "Live from Lincoln Center",
+						"first_air_date": "1976-01-30"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt16163746": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 219064,
+						"name": "Who Were We Running From?",
+						"first_air_date": "2023-03-24"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt2845166": {
+				"movie_results": [
+					{
+						"id": 408974,
+						"title": "Rodgers and Hammerstein's Carousel: Live from Lincoln Center",
+						"release_date": "2013-04-26"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt5704366": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 69870,
+						"name": "You're My Pet",
+						"first_air_date": "2017-02-06"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0159876": {
+				"movie_results": [
+					{
+						"id": 1424864,
+						"title": "Patsy Cline: Walkin' After Midnight",
+						"release_date": ""
+					}
+				],
+				"tv_results": [
+					{
+						"id": 10029,
+						"name": "Great Performances",
+						"first_air_date": "1971-01-28"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt10285166": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 104663,
+						"name": "Your Honor (IN)",
+						"first_air_date": "2020-06-18"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt7020608": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 72374,
+						"name": "School 2017",
+						"first_air_date": "2017-07-17"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt1570337": {
+				"movie_results": [
+					{
+						"id": 133448,
+						"title": "Macbeth",
+						"release_date": "2010-12-12"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt15477488": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 132117,
+						"name": "Farzi",
+						"first_air_date": "2023-02-10"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt7140738": {
+				"movie_results": [
+					{
+						"id": 609261,
+						"title": "Falsettos",
+						"release_date": "2017-07-12"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"10029": {
+				"id": 10029,
+				"name": "Great Performances",
+				"original_name": "Great Performances",
+				"first_air_date": "1971-01-28",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 99,
+						"name": "Documentary"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 818,
+							"name": "based on novel or book"
+						},
+						{
+							"id": 9706,
+							"name": "anthology"
+						},
+						{
+							"id": 10181,
+							"name": "based on play or musical"
+						},
+						{
+							"id": 186849,
+							"name": "literary adaptation"
+						},
+						{
+							"id": 246884,
+							"name": "filmed theater"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0159876",
+					"tvdb_id": 76548
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "GREAT PERFORMANCES | PBS",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Playhouse New York",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 1,
+						"air_date": "2017-01-20",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 5,
+						"air_date": "1971-01-28",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 3,
+						"air_date": "1972-11-04",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 10,
+						"air_date": "1974-01-23",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 7,
+						"air_date": "1975-01-05",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 9,
+						"air_date": "1976-01-01",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 4,
+						"air_date": "1977-01-12",
+						"name": "Season 6"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 4,
+						"air_date": "1978-01-25",
+						"name": "Season 7"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 1,
+						"air_date": "1979-06-20",
+						"name": "Season 8"
+					},
+					{
+						"season_number": 9,
+						"episode_count": 3,
+						"air_date": "1980-01-01",
+						"name": "Season 9"
+					},
+					{
+						"season_number": 10,
+						"episode_count": 6,
+						"air_date": "1981-01-05",
+						"name": "Season 10"
+					},
+					{
+						"season_number": 11,
+						"episode_count": 1,
+						"air_date": "1982-12-06",
+						"name": "Season 11"
+					},
+					{
+						"season_number": 12,
+						"episode_count": 9,
+						"air_date": "1983-03-07",
+						"name": "Season 12"
+					},
+					{
+						"season_number": 13,
+						"episode_count": 7,
+						"air_date": "1985-10-11",
+						"name": "Season 13"
+					},
+					{
+						"season_number": 14,
+						"episode_count": 7,
+						"air_date": "1985-03-22",
+						"name": "Season 14"
+					},
+					{
+						"season_number": 15,
+						"episode_count": 6,
+						"air_date": "1986-02-07",
+						"name": "Season 15"
+					},
+					{
+						"season_number": 16,
+						"episode_count": 11,
+						"air_date": "1987-01-01",
+						"name": "Season 16"
+					},
+					{
+						"season_number": 17,
+						"episode_count": 6,
+						"air_date": "1988-01-01",
+						"name": "Season 17"
+					},
+					{
+						"season_number": 18,
+						"episode_count": 9,
+						"air_date": "1989-01-01",
+						"name": "Season 18"
+					},
+					{
+						"season_number": 19,
+						"episode_count": 6,
+						"air_date": "1990-01-01",
+						"name": "Season 19"
+					},
+					{
+						"season_number": 20,
+						"episode_count": 7,
+						"air_date": "1991-01-25",
+						"name": "Season 20"
+					},
+					{
+						"season_number": 21,
+						"episode_count": 9,
+						"air_date": "1992-01-01",
+						"name": "Season 21"
+					},
+					{
+						"season_number": 22,
+						"episode_count": 18,
+						"air_date": "1993-09-08",
+						"name": "Season 22"
+					},
+					{
+						"season_number": 23,
+						"episode_count": 15,
+						"air_date": "1993-01-06",
+						"name": "Season 23"
+					},
+					{
+						"season_number": 25,
+						"episode_count": 9,
+						"air_date": "1994-01-01",
+						"name": "Season 25"
+					},
+					{
+						"season_number": 26,
+						"episode_count": 11,
+						"air_date": "1995-01-01",
+						"name": "Season 26"
+					},
+					{
+						"season_number": 27,
+						"episode_count": 5,
+						"air_date": "1996-01-01",
+						"name": "Season 27"
+					},
+					{
+						"season_number": 28,
+						"episode_count": 10,
+						"air_date": "1997-01-01",
+						"name": "Season 28"
+					},
+					{
+						"season_number": 29,
+						"episode_count": 13,
+						"air_date": "1998-01-01",
+						"name": "Season 29"
+					},
+					{
+						"season_number": 30,
+						"episode_count": 12,
+						"air_date": "1999-01-01",
+						"name": "Season 30"
+					},
+					{
+						"season_number": 31,
+						"episode_count": 7,
+						"air_date": "2000-01-01",
+						"name": "Season 31"
+					},
+					{
+						"season_number": 32,
+						"episode_count": 14,
+						"air_date": "2001-01-01",
+						"name": "Season 32"
+					},
+					{
+						"season_number": 33,
+						"episode_count": 9,
+						"air_date": "2002-01-01",
+						"name": "Season 33"
+					},
+					{
+						"season_number": 34,
+						"episode_count": 12,
+						"air_date": "2005-10-05",
+						"name": "Season 34"
+					},
+					{
+						"season_number": 35,
+						"episode_count": 15,
+						"air_date": "2004-01-01",
+						"name": "Season 35"
+					},
+					{
+						"season_number": 36,
+						"episode_count": 12,
+						"air_date": "2008-09-10",
+						"name": "Season 36"
+					},
+					{
+						"season_number": 37,
+						"episode_count": 14,
+						"air_date": "2009-10-21",
+						"name": "Season 37"
+					},
+					{
+						"season_number": 38,
+						"episode_count": 22,
+						"air_date": "2010-10-27",
+						"name": "Season 38"
+					},
+					{
+						"season_number": 39,
+						"episode_count": 24,
+						"air_date": "2011-09-30",
+						"name": "Season 39"
+					},
+					{
+						"season_number": 40,
+						"episode_count": 18,
+						"air_date": "2012-09-07",
+						"name": "Season 40"
+					},
+					{
+						"season_number": 41,
+						"episode_count": 32,
+						"air_date": "2013-09-20",
+						"name": "Season 41"
+					},
+					{
+						"season_number": 42,
+						"episode_count": 23,
+						"air_date": "2014-09-13",
+						"name": "Season 42"
+					},
+					{
+						"season_number": 43,
+						"episode_count": 16,
+						"air_date": "2015-10-23",
+						"name": "Season 43"
+					},
+					{
+						"season_number": 44,
+						"episode_count": 27,
+						"air_date": "2016-10-14",
+						"name": "Season 44"
+					},
+					{
+						"season_number": 45,
+						"episode_count": 28,
+						"air_date": "2017-10-06",
+						"name": "Season 45"
+					},
+					{
+						"season_number": 46,
+						"episode_count": 29,
+						"air_date": "2018-10-05",
+						"name": "Season 46"
+					},
+					{
+						"season_number": 47,
+						"episode_count": 30,
+						"air_date": "2019-09-20",
+						"name": "Season 47"
+					},
+					{
+						"season_number": 48,
+						"episode_count": 31,
+						"air_date": "2020-09-11",
+						"name": "Season 48"
+					},
+					{
+						"season_number": 49,
+						"episode_count": 33,
+						"air_date": "2021-09-03",
+						"name": "Season 49"
+					},
+					{
+						"season_number": 50,
+						"episode_count": 24,
+						"air_date": "2022-09-16",
+						"name": "Season 50"
+					},
+					{
+						"season_number": 51,
+						"episode_count": 22,
+						"air_date": "2023-09-10",
+						"name": "Season 51"
+					},
+					{
+						"season_number": 52,
+						"episode_count": 24,
+						"air_date": "2024-10-25",
+						"name": "Season 52"
+					},
+					{
+						"season_number": 53,
+						"episode_count": 24,
+						"air_date": "2025-10-03",
+						"name": "Season 53"
+					},
+					{
+						"season_number": 54,
+						"episode_count": 6,
+						"air_date": "2026-09-13",
+						"name": "Season 54"
+					},
+					{
+						"season_number": 55,
+						"episode_count": 6,
+						"air_date": "2026-09-13",
+						"name": "Season 55"
+					}
+				]
+			},
+			"10278": {
+				"id": 10278,
+				"name": "Live from Lincoln Center",
+				"original_name": "Live from Lincoln Center",
+				"first_air_date": "1976-01-30",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 99,
+						"name": "Documentary"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 246884,
+							"name": "filmed theater"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0165042",
+					"tvdb_id": 195211
+				},
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 1,
+						"air_date": "1976-01-30",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 1,
+						"air_date": null,
+						"name": "Season 6"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 7"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 8"
+					},
+					{
+						"season_number": 9,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 9"
+					},
+					{
+						"season_number": 10,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 10"
+					},
+					{
+						"season_number": 11,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 11"
+					},
+					{
+						"season_number": 12,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 12"
+					},
+					{
+						"season_number": 13,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 13"
+					},
+					{
+						"season_number": 14,
+						"episode_count": 1,
+						"air_date": "1990-11-07",
+						"name": "Season 14"
+					},
+					{
+						"season_number": 15,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 15"
+					},
+					{
+						"season_number": 16,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 16"
+					},
+					{
+						"season_number": 17,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 17"
+					},
+					{
+						"season_number": 18,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 18"
+					},
+					{
+						"season_number": 19,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 19"
+					},
+					{
+						"season_number": 20,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 20"
+					},
+					{
+						"season_number": 21,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 21"
+					},
+					{
+						"season_number": 22,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 22"
+					},
+					{
+						"season_number": 23,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 23"
+					},
+					{
+						"season_number": 24,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 24"
+					},
+					{
+						"season_number": 25,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 25"
+					},
+					{
+						"season_number": 26,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 26"
+					},
+					{
+						"season_number": 27,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 27"
+					},
+					{
+						"season_number": 28,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 28"
+					},
+					{
+						"season_number": 29,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 29"
+					},
+					{
+						"season_number": 30,
+						"episode_count": 1,
+						"air_date": "2005-03-31",
+						"name": "Season 30"
+					},
+					{
+						"season_number": 31,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 31"
+					},
+					{
+						"season_number": 32,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 32"
+					},
+					{
+						"season_number": 33,
+						"episode_count": 4,
+						"air_date": "2008-09-17",
+						"name": "Season 33"
+					},
+					{
+						"season_number": 34,
+						"episode_count": 2,
+						"air_date": null,
+						"name": "Season 34"
+					},
+					{
+						"season_number": 35,
+						"episode_count": 6,
+						"air_date": "2010-01-21",
+						"name": "Season 35"
+					},
+					{
+						"season_number": 36,
+						"episode_count": 6,
+						"air_date": "2011-02-13",
+						"name": "Season 36"
+					},
+					{
+						"season_number": 37,
+						"episode_count": 4,
+						"air_date": "2012-04-06",
+						"name": "Season 37"
+					},
+					{
+						"season_number": 38,
+						"episode_count": 7,
+						"air_date": "2013-02-15",
+						"name": "Season 38"
+					},
+					{
+						"season_number": 39,
+						"episode_count": 6,
+						"air_date": "2014-01-10",
+						"name": "Season 39"
+					},
+					{
+						"season_number": 40,
+						"episode_count": 3,
+						"air_date": "2015-01-23",
+						"name": "Season 40"
+					},
+					{
+						"season_number": 41,
+						"episode_count": 3,
+						"air_date": "2016-02-05",
+						"name": "Season 41"
+					},
+					{
+						"season_number": 42,
+						"episode_count": 3,
+						"air_date": "2017-02-03",
+						"name": "Season 42"
+					},
+					{
+						"season_number": 43,
+						"episode_count": 5,
+						"air_date": "2018-04-20",
+						"name": "Season 43"
+					},
+					{
+						"season_number": 44,
+						"episode_count": 6,
+						"air_date": "2019-02-08",
+						"name": "Season 44"
+					}
+				]
+			},
+			"69870": {
+				"id": 69870,
+				"name": "You're My Pet",
+				"original_name": "きみはペット",
+				"first_air_date": "2017-02-06",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 35,
+						"name": "Comedy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 233,
+							"name": "japan"
+						},
+						{
+							"id": 9840,
+							"name": "romance"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 157799,
+							"name": "older woman younger man relationship"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt5704366",
+					"tvdb_id": 323130
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Kimi wa Petto",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Kimi Wa Pet",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "きみはペット：2017",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "너는 펫(드라마)",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "2017寵物情人",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "Tramps Like Us",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 16,
+						"air_date": "2017-02-06",
+						"name": "Season 1"
+					}
+				]
+			},
+			"72374": {
+				"id": 72374,
+				"name": "School 2017",
+				"original_name": "학교 2017",
+				"first_air_date": "2017-07-17",
+				"original_language": "ko",
+				"origin_country": ["KR"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 6270,
+							"name": "high school"
+						},
+						{
+							"id": 9840,
+							"name": "romance"
+						},
+						{
+							"id": 10683,
+							"name": "coming of age"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt7020608",
+					"tvdb_id": 328768
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Hakgyo 2017",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Hakgyo 2017",
+							"iso_3166_1": "KR"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 16,
+						"air_date": "2017-07-17",
+						"name": "Season 1"
+					}
+				]
+			},
+			"104663": {
+				"id": 104663,
+				"name": "Your Honor (IN)",
+				"original_name": "योर हॉनर",
+				"first_air_date": "2020-06-18",
+				"original_language": "hi",
+				"origin_country": ["IN"],
+				"genres": [
+					{
+						"id": 9648,
+						"name": "Mystery"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": []
+				},
+				"external_ids": {
+					"imdb_id": "tt10285166",
+					"tvdb_id": null
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Your Honor (IN)",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "Your Honor (SonyLiv)",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 12,
+						"air_date": "2020-06-18",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 10,
+						"air_date": "2021-11-19",
+						"name": "Season 2"
+					}
+				]
+			},
+			"132117": {
+				"id": 132117,
+				"name": "Farzi",
+				"original_name": "फर्जी",
+				"first_air_date": "2023-02-10",
+				"original_language": "hi",
+				"origin_country": ["IN"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 80,
+						"name": "Crime"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 180996,
+							"name": "counterfeit money"
+						},
+						{
+							"id": 314730,
+							"name": "suspenseful"
+						},
+						{
+							"id": 321464,
+							"name": "intense"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt15477488",
+					"tvdb_id": 429133
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "假钞",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "法尔齐",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "金钱骗局",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Farzi",
+							"iso_3166_1": "IN"
+						},
+						{
+							"title": "Falso",
+							"iso_3166_1": "MX"
+						},
+						{
+							"title": "กลเฉือนคม",
+							"iso_3166_1": "TH"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 8,
+						"air_date": "2023-02-10",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 0,
+						"air_date": null,
+						"name": "Season 2"
+					}
+				]
+			},
+			"219064": {
+				"id": 219064,
+				"name": "Who Were We Running From?",
+				"original_name": "Biz Kimden Kaçıyorduk Anne?",
+				"first_air_date": "2023-03-24",
+				"original_language": "tr",
+				"origin_country": ["TR"],
+				"genres": [
+					{
+						"id": 80,
+						"name": "Crime"
+					},
+					{
+						"id": 9648,
+						"name": "Mystery"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 818,
+							"name": "based on novel or book"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt16163746",
+					"tvdb_id": 430458
+				},
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "ممن كنا نهرب يا امي",
+							"iso_3166_1": "SA"
+						},
+						{
+							"title": "แม่ขา... เราหนีใคร",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "Who Were We Running From?",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 7,
+						"air_date": "2023-03-24",
+						"name": "Season 1"
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt2845166": "tt0165042",
+			"tt1570337": "tt0159876",
+			"tt7140738": "tt0165042"
+		},
+		"identifier": {
+			"Rodgers.and.Hammersteins.Carousel.Live.From.Lincoln.Center.2013.1080p.WEBRip.x264-NGP": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt0049055",
+						"score": -0.2649,
+						"title": "Carousel",
+						"year": 1956
+					},
+					{
+						"imdbId": "tt0443272",
+						"score": -1.1538,
+						"title": "Lincoln",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0128996",
+						"score": -3.2311,
+						"title": "Cinderella",
+						"year": 1997
+					},
+					{
+						"imdbId": "tt0059742",
+						"score": -4.1554,
+						"title": "The Sound of Music",
+						"year": 1965
+					},
+					{
+						"imdbId": "tt0049408",
+						"score": -4.3764,
+						"title": "The King and I",
+						"year": 1956
+					}
+				],
+				"parsedTitle": "Rodgers and Hammersteins Carousel Live From Lincoln Center",
+				"parsedYear": 2013,
+				"probability": 0.3263
+			},
+			"Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ": {
+				"confident": false,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt16163746",
+						"score": -2.4782,
+						"title": "Who Were We Running From?",
+						"year": 2023
+					},
+					{
+						"imdbId": "tt5704366",
+						"score": -4.4012,
+						"title": "You're My Pet",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt10285166",
+						"score": -5.805,
+						"title": "Your Honor",
+						"year": 2020
+					},
+					{
+						"imdbId": "tt7020608",
+						"score": -5.9301,
+						"title": "School 2017",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt15477488",
+						"score": -6.4358,
+						"title": "Farzi",
+						"year": 2023
+					}
+				],
+				"parsedTitle": "Falsettos",
+				"parsedYear": 2017,
+				"probability": 0.0135
+			},
+			"Macbeth.2010.1080p.AMZN.WEB-DL.DD.2.0.H.264-monkee": {
+				"confident": false,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt2884018",
+						"score": 1.1544,
+						"title": "Macbeth",
+						"year": 2015
+					},
+					{
+						"imdbId": "tt0067372",
+						"score": -0.2354,
+						"title": "Macbeth",
+						"year": 1971
+					},
+					{
+						"imdbId": "tt0040558",
+						"score": -1.9337,
+						"title": "Macbeth",
+						"year": 1948
+					},
+					{
+						"imdbId": "tt0434541",
+						"score": -2.0008,
+						"title": "Macbeth",
+						"year": 2006
+					},
+					{
+						"imdbId": "tt0379370",
+						"score": -2.0501,
+						"title": "Maqbool",
+						"year": 2003
+					}
+				],
+				"parsedTitle": "Macbeth",
+				"parsedYear": 2010,
+				"probability": 0.3825
+			}
+		},
+		"identify": {
+			"Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ": null,
+			"Rodgers.and.Hammersteins.Carousel.Live.From.Lincoln.Center.2013.1080p.WEBRip.x264-NGP": null,
+			"Macbeth.2010.1080p.AMZN.WEB-DL.DD.2.0.H.264-monkee": null
+		},
+		"searchMovie": {
+			"Rodgers and Hammersteins Carousel Live From Lincoln Center|2013": {
+				"results": [
+					{
+						"id": 408974,
+						"title": "Rodgers and Hammerstein's Carousel: Live from Lincoln Center",
+						"original_title": "Rodgers and Hammerstein's Carousel: Live from Lincoln Center",
+						"release_date": "2013-04-26"
+					}
+				]
+			},
+			"Macbeth|2010": {
+				"results": [
+					{
+						"id": 840248,
+						"title": "Macbeth",
+						"original_title": "Makbet",
+						"release_date": "2010-05-25"
+					},
+					{
+						"id": 133448,
+						"title": "Macbeth",
+						"original_title": "Macbeth",
+						"release_date": "2010-12-12"
+					}
+				]
+			},
+			"Falsettos|2017": {
+				"results": [
+					{
+						"id": 609261,
+						"title": "Falsettos",
+						"original_title": "Falsettos",
+						"release_date": "2017-07-12"
+					}
+				]
+			}
+		},
+		"movieIds": {
+			"133448": {
+				"id": 133448,
+				"imdb_id": "tt1570337"
+			},
+			"408974": {
+				"id": 408974,
+				"imdb_id": "tt2845166"
+			},
+			"609261": {
+				"id": 609261,
+				"imdb_id": "tt7140738"
+			}
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is in one; a file named by a hash, as the release) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt7140738",
+				"tmdbId": 609261,
+				"files": [
+					{
+						"path": "Falsettos.2017.1080p.AMZN.WEB-DL.DDP5.1.H.264-QOQ.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is in one; a file named by a hash, as the release) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "Rodgers.and.Hammersteins.Carousel.Live.From.Lincoln.Center.2013.1080p.WEBRip.x264-NGP",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "Rodgers.and.Hammersteins.Carousel.Live.From.Lincoln.Center.2013.1080p.WEBRip.x264-NGP.mp4",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt2845166",
+				"tmdbId": 408974,
+				"files": [
+					{
+						"path": "Rodgers.and.Hammersteins.Carousel.Live.From.Lincoln.Center.2013.1080p.WEBRip.x264-NGP.mp4",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg-usenet on fun, 2026-11-09: the .zurgtorrent's name and video file (a RAR member's base name where the video is in one; a file named by a hash, as the release) as zurg asks; no hash, a Usenet copy",
+			"request": {
+				"name": "Macbeth.2010.1080p.AMZN.WEB-DL.DD.2.0.H.264-monkee",
+				"hash": null,
+				"imdbId": null,
+				"files": [
+					{
+						"path": "66653026bf4348bab5c32ded4a085b2f.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "movie",
+				"imdbId": "tt1570337",
+				"tmdbId": 133448,
+				"files": [
+					{
+						"path": "66653026bf4348bab5c32ded4a085b2f.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		}
+	]
+}

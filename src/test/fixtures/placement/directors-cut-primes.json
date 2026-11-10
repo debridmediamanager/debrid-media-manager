@@ -1,0 +1,1357 @@
+{
+	"answers": {
+		"find": {
+			"tt0112159": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 890,
+						"name": "Neon Genesis Evangelion",
+						"first_air_date": "1995-10-04"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"890": {
+				"id": 890,
+				"name": "Neon Genesis Evangelion",
+				"original_name": "新世紀エヴァンゲリオン",
+				"first_air_date": "1995-10-04",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					},
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 290,
+							"name": "angel"
+						},
+						{
+							"id": 894,
+							"name": "depression"
+						},
+						{
+							"id": 1715,
+							"name": "symbolism"
+						},
+						{
+							"id": 2803,
+							"name": "affectation"
+						},
+						{
+							"id": 6203,
+							"name": "loss"
+						},
+						{
+							"id": 9673,
+							"name": "love"
+						},
+						{
+							"id": 10046,
+							"name": "mecha"
+						},
+						{
+							"id": 10891,
+							"name": "giant robot"
+						},
+						{
+							"id": 11272,
+							"name": "piloted robot"
+						},
+						{
+							"id": 12190,
+							"name": "cyberpunk"
+						},
+						{
+							"id": 160937,
+							"name": "self love"
+						},
+						{
+							"id": 190388,
+							"name": "self-loathing"
+						},
+						{
+							"id": 192962,
+							"name": "alien attack"
+						},
+						{
+							"id": 199524,
+							"name": "disturbed"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 225219,
+							"name": "reflective"
+						},
+						{
+							"id": 272553,
+							"name": "psychological"
+						},
+						{
+							"id": 281358,
+							"name": "science fiction"
+						},
+						{
+							"id": 287271,
+							"name": "robots"
+						},
+						{
+							"id": 288394,
+							"name": "suspense"
+						},
+						{
+							"id": 314730,
+							"name": "suspenseful"
+						},
+						{
+							"id": 319837,
+							"name": "exciting"
+						},
+						{
+							"id": 323809,
+							"name": "depressing"
+						},
+						{
+							"id": 325761,
+							"name": "admiring"
+						},
+						{
+							"id": 359337,
+							"name": "post-apocalyptic"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0112159",
+					"tvdb_id": 70350
+				},
+				"networks": [
+					{
+						"id": 98,
+						"name": "TV Tokyo"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "EVA",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "新世纪天鹰战士",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "天鹰战士",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "נאון בריאת אוונגליון",
+							"iso_3166_1": "IL"
+						},
+						{
+							"title": "אוונגליון",
+							"iso_3166_1": "IL"
+						},
+						{
+							"title": "נאון ג'נסיס אוונגליון",
+							"iso_3166_1": "IL"
+						},
+						{
+							"title": "Shin Seiki Evangerion",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Shinseiki Evangelion",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "新世紀エヴァンゲリオン：1995",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Евангелион нового поколения",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "Neon Genesis Evangelion",
+							"iso_3166_1": "TR"
+						},
+						{
+							"title": "Gospel of a New Century",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Neon Genesis Evangelion",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "New Century Evangelion",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 26,
+						"air_date": "1995-10-04",
+						"name": "Season 1"
+					}
+				]
+			}
+		},
+		"season": {
+			"890/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Angel Attack",
+						"air_date": "1995-10-04",
+						"id": 949381
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "The Beast",
+						"air_date": "1995-10-11",
+						"id": 949384
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "A Transfer",
+						"air_date": "1995-10-18",
+						"id": 949385
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Hedgehog's Dilemma",
+						"air_date": "1995-10-25",
+						"id": 949382
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Rei I",
+						"air_date": "1995-11-01",
+						"id": 949383
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Rei II",
+						"air_date": "1995-11-08",
+						"id": 949386
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "A Human Work",
+						"air_date": "1995-11-15",
+						"id": 949389
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Asuka Strikes!",
+						"air_date": "1995-11-22",
+						"id": 949388
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Both of You, Dance Like You Want to Win!",
+						"air_date": "1995-11-29",
+						"id": 949387
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Magma Diver",
+						"air_date": "1995-12-06",
+						"id": 949390
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "The Day Tokyo-3 Stood Still",
+						"air_date": "1995-12-13",
+						"id": 949391
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "She said, 'Don't make others suffer for your personal hatred.'",
+						"air_date": "1995-12-20",
+						"id": 949392
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Lilliputian Hitcher",
+						"air_date": "1995-12-27",
+						"id": 949393
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Weaving a Story (1)",
+						"air_date": "1996-01-03",
+						"id": 949397
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Those Women Longed for the Touch of Others' Lips, and Thus Invited Their Kisses.",
+						"air_date": "1996-01-10",
+						"id": 949395
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Splitting of the Breast",
+						"air_date": "1996-01-17",
+						"id": 949394
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "Fourth Children",
+						"air_date": "1996-01-24",
+						"id": 949396
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Ambivalence",
+						"air_date": "1996-01-31",
+						"id": 949399
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Introjection",
+						"air_date": "1996-02-07",
+						"id": 949398
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Weaving a Story (2): Oral Stage",
+						"air_date": "1996-02-14",
+						"id": 949400
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "He Was Aware that He Was Still a Child.",
+						"air_date": "1996-02-21",
+						"id": 949401
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Don't Be.",
+						"air_date": "1996-02-28",
+						"id": 949402
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Rei III",
+						"air_date": "1996-03-06",
+						"id": 949403
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "The Beginning and the End, or 'Knockin' on Heaven's Door'",
+						"air_date": "1996-03-13",
+						"id": 949405
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "Do You Love Me?",
+						"air_date": "1996-03-20",
+						"id": 949404
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "Take Care of Yourself.",
+						"air_date": "1996-03-27",
+						"id": 949406
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt0781951": "tt0112159"
+		},
+		"anime": {
+			"fribb": [
+				{
+					"type": "TV",
+					"anidb_id": 22,
+					"anilist_id": 30,
+					"animecountdown_id": 41254,
+					"animenewsnetwork_id": 49,
+					"anime-planet_id": "neon-genesis-evangelion",
+					"anisearch_id": 345,
+					"imdb_id": ["tt0112159"],
+					"kitsu_id": 21,
+					"livechart_id": 3590,
+					"mal_id": 30,
+					"simkl_id": 41254,
+					"themoviedb_id": {
+						"tv": 890
+					},
+					"tvdb_id": 70350,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 1
+					}
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 202,
+					"anilist_id": 32,
+					"animecountdown_id": 41175,
+					"animenewsnetwork_id": 419,
+					"anime-planet_id": "neon-genesis-evangelion-the-end-of-evangelion",
+					"anisearch_id": 2877,
+					"imdb_id": ["tt0169858"],
+					"kitsu_id": 23,
+					"livechart_id": 3633,
+					"mal_id": 32,
+					"simkl_id": 41175,
+					"themoviedb_id": {
+						"tv": 890
+					},
+					"tvdb_id": 70350,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 1,
+						"tmdb": 1
+					}
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 326,
+					"anilist_id": 31,
+					"animecountdown_id": 36206,
+					"animenewsnetwork_id": 418,
+					"anime-planet_id": "neon-genesis-evangelion-death-and-rebirth",
+					"anisearch_id": 1301,
+					"imdb_id": ["tt0169880"],
+					"kitsu_id": 22,
+					"livechart_id": 4039,
+					"mal_id": 31,
+					"simkl_id": 36206,
+					"themoviedb_id": {
+						"tv": 890
+					},
+					"tvdb_id": 70350,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					}
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 4847,
+					"anilist_id": 2759,
+					"animecountdown_id": 38367,
+					"animenewsnetwork_id": 8420,
+					"anime-planet_id": "evangelion-1-0-you-are-not-alone",
+					"anisearch_id": 3879,
+					"imdb_id": ["tt0923811"],
+					"kitsu_id": 2519,
+					"livechart_id": 3244,
+					"mal_id": 2759,
+					"simkl_id": 38367,
+					"themoviedb_id": {
+						"tv": 890
+					},
+					"tvdb_id": 70350,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 2,
+						"tmdb": 2
+					}
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 6171,
+					"anilist_id": 3784,
+					"animecountdown_id": 38372,
+					"animenewsnetwork_id": 8421,
+					"anime-planet_id": "evangelion-2-0-you-can-not-advance",
+					"anisearch_id": 4678,
+					"imdb_id": ["tt0860906"],
+					"kitsu_id": 3250,
+					"livechart_id": 3243,
+					"mal_id": 3784,
+					"simkl_id": 38372,
+					"themoviedb_id": {
+						"tv": 890
+					},
+					"tvdb_id": 70350,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 3,
+						"tmdb": 3
+					}
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 7565,
+					"anilist_id": 3785,
+					"animecountdown_id": 40761,
+					"animenewsnetwork_id": 8422,
+					"anime-planet_id": "evangelion-3-0-you-can-not-redo",
+					"anisearch_id": 4679,
+					"imdb_id": ["tt0860907"],
+					"kitsu_id": 3251,
+					"livechart_id": 968,
+					"mal_id": 3785,
+					"simkl_id": 40761,
+					"themoviedb_id": {
+						"tv": 890
+					},
+					"tvdb_id": 70350,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 4,
+						"tmdb": 4
+					}
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 8895,
+					"anilist_id": 3786,
+					"animecountdown_id": 38092,
+					"animenewsnetwork_id": 8423,
+					"anime-planet_id": "evangelion-3-0-plus-1-0-thrice-upon-a-time",
+					"anisearch_id": 4680,
+					"imdb_id": ["tt2458948"],
+					"kitsu_id": 3252,
+					"livechart_id": 115,
+					"mal_id": 3786,
+					"simkl_id": 38092,
+					"themoviedb_id": {
+						"tv": 890
+					},
+					"tvdb_id": 70350,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 5,
+						"tmdb": 5
+					}
+				},
+				{
+					"type": "SPECIAL",
+					"anidb_id": 9200,
+					"animecountdown_id": 36358,
+					"anisearch_id": 13065,
+					"imdb_id": ["tt0112159"],
+					"simkl_id": 36358,
+					"themoviedb_id": {
+						"tv": 890
+					},
+					"tvdb_id": 70350,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					}
+				}
+			],
+			"titles": [
+				{
+					"anidbId": 22,
+					"names": [
+						"Shinseiki Evangelion",
+						"Neon Genesis Evangelion",
+						"Evangelion",
+						"ניאון ג`נסיס אוונג`ליון",
+						"新世紀エヴァンゲリオン",
+						"신세기 에반게리온",
+						"Евангелион",
+						"อีวานเกเลี่ยน: มหาสงครามวันพิพากษา",
+						"新世纪福音战士",
+						"NGE",
+						"nge tv",
+						"ева",
+						"єва",
+						"eva",
+						"eva tv",
+						"evatv",
+						"sse",
+						"Neon Genesis Evangelion Renewal",
+						"Neon Genesis Evangelion Platinum",
+						"Evangelion TV",
+						"O Evangelho de uma Nova Gênesis",
+						"Євангеліон",
+						"Євангеліон нового покоління",
+						"Нова ера: Євангеліон",
+						"EVA",
+						"Eva",
+						"Evangelion (1995)",
+						"Ewangelia nowego stworzenia",
+						"Neo Genesis Evangelion",
+						"SSE",
+						"Shin Seiki Evangelion",
+						"Евангелион Нового Поколения",
+						"ניאון ג'נסיס אוונגליון",
+						"อีวานเกเลียน มหาสงครามวันพิพากษา",
+						"新世紀福音戰士"
+					]
+				},
+				{
+					"anidbId": 202,
+					"names": [
+						"Shinseiki Evangelion Gekijouban: Air / Magokoro o, Kimi ni",
+						"Neon Genesis Evangelion: The End of Evangelion",
+						"The End of Evangelion",
+						"O final de Evangelion",
+						"Neon Genesis Evangelion - The End of Evangelion",
+						"新世紀エヴァンゲリオン劇場版 Air / まごころを, 君に",
+						"신세기 에반게리온 - 엔드 오브 에바",
+						"Evangelion: The End of Evangelion",
+						"อีวาเกเลี่ยน: ปัจฉิมภาค",
+						"新世纪福音战士剧场版：Air/真心为你",
+						"Evangelion movie",
+						"End of Eva",
+						"EoE",
+						"eva movie",
+						"Neon Genesis Evangelion: End of Evangelion",
+						"Конец Евангелиона",
+						"Evangelion`un Sonu",
+						"Кінець Євангеліона",
+						"End of Evangelion",
+						"Shinseiki Evangelion Movie: Air/Magokoro wo, Kimi ni",
+						"Evangelion’un Sonu",
+						"Kimi ni",
+						"Neo Genesis Evangelion: El Fin del Evangelion",
+						"Neon Genesis Evangelion: La Fi",
+						"New Century Evangelion Theatrical Edition: Air/Sincerely Yours",
+						"Shin Seiki Evangelion Gekijouban: The End of Evangelion",
+						"Shin Seiki Evangelion Gekijōban: The End of Evangelion: Air/Magokoro o, Kimi ni",
+						"Shin Seiki Evangelion Movie: Air / Magokoro wo, Kimi ni",
+						"Shinseiki Evangelion Gekijouban: The End of Evangelion",
+						"Shinseiki Evangelion Gekijōban: The End of Evangelion",
+						"Shinseiki Evangelion Movie: Air/Magokoro wo",
+						"Shinseiki Evangelion: The End of Evangelion",
+						"The End of Evangelion: Episode 25': Love is Destructive/One More Final: I Need Y",
+						"Евангелион Нового Поколения: Конец Евангелиона",
+						"אוונגליון של הסוף",
+						"הסוף של אוונגליון",
+						"君に",
+						"新世紀エヴァンゲリオン 劇場版 THE END OF EVANGELION Air/まごころを、君に",
+						"新世紀エヴァンゲリオン劇場版 Air / まごころを",
+						"新世紀エヴァンゲリオン劇場版 Air/まごころを、君に",
+						"新世紀エヴァンゲリオン劇場版 THE END OF EVANGELION",
+						"新世紀エヴァンゲリオン劇場版 The End of Evangelion",
+						"新世紀福音戰士劇場版 AIR/將真心獻給你"
+					]
+				},
+				{
+					"anidbId": 326,
+					"names": [
+						"Shinseiki Evangelion Gekijouban: Shi to Shinsei",
+						"Neon Genesis Evangelion: Death & Rebirth",
+						"Θάνατος και Αναγέννηση",
+						"Evangelion: morte e resurrección",
+						"Neon Genesis Evangelion: Surm ja taassünd",
+						"Neon Genesis Evangelion - Death and Rebirth",
+						"Neon Genesis Evangelion - Death & Rebirth",
+						"新世紀エヴァンゲリオン劇場版 シト新生",
+						"신세기 에반게리온 - 죽음과 재생",
+						"Evangelion: Death & Rebirth",
+						"อีวาเกเลี่ยน: จุติภาค",
+						"新世纪福音战士剧场版 死亡与新生",
+						"新世纪福音战士剧场版：死与新生",
+						"NGE D&R",
+						"edr",
+						"evag movie",
+						"NGE DR",
+						"신세기 에반게리온 극장판: 사도신생",
+						"Евангелион: Смерть и Возрождение",
+						"Євангеліон - Смерть & Відродження",
+						"Evangelion - Death",
+						"Evangelion - Death & Rebirth",
+						"Shinseiki Evangelion Movie: Shi to Shinsei",
+						"Evangelion: Death",
+						"Evangelion: Death (True)",
+						"Evangelion: Death (True)²",
+						"Evangelion: Muerte y Renacimiento",
+						"Ewangelia nowego stworzenia",
+						"Neon Genesis Evangelion: Death and Rebirth",
+						"Neon Genesis Evangelion: Morte & Ressurreição",
+						"Revival of Evangelion",
+						"Shin Seiki Evangelion Gekijouban: Shi to Shinsei",
+						"Shin Seiki Evangelion Gekijōban: Death & Rebirth - Shi to Shinsei",
+						"Shin Seiki Evangelion Movie: Shi to Shinsei",
+						"Shinseiki Evangelion Gekijōban: Shi to Shinsei",
+						"Shinseiki Evangelion: Shi to Shinsei",
+						"Евангелион Нового Поколения: Смерть и Перерождение",
+						"新世紀エヴァンゲリオン 劇場版 DEATH & REBIRTH シト新生",
+						"新世紀福音戰士劇場版 死亡與真實"
+					]
+				},
+				{
+					"anidbId": 4847,
+					"names": [
+						"Evangelion Shin Gekijouban: Jo",
+						".إيفانجيليون:1،11 أنت (لست) وحيداً",
+						"Evangelion: 1.11 Monstrum - Nejste sami",
+						"EVANGELION:1.11 DU ER (IKKE) ALENE.",
+						"Evangelion: 1.01 - You are (not) alone",
+						"Evangelion: 1.0 You Are (Not) Alone",
+						"Evangelion 1.0: Sa oled/pole üksinda",
+						"Evangelion : 1.0 You Are (Not) Alone",
+						".אוונגליון 1: (לא) לבד",
+						"ヱヴァンゲリヲン新劇場版:序",
+						"에반게리온: 서",
+						"Evangelions: Tu neesi viens",
+						"EVANGELION:1.11 ANDA (BUKAN) BERSENDIRIAN.",
+						"EVANGELION:1.11 JE BENT (NIET) ALLEEN.",
+						"Evangelion: 1.11 (Nie) jesteś sam.",
+						"Evangelion 1.0 You are not alone",
+						"Evangelion 1.11: Você (Não) Está Só",
+						"Евангелион 1.11: Ты (не) один",
+						"EVANGELION:1.11 DU ÄR (INTE) ENSAM.",
+						"நற்தூதன்:1.11 நீ தனியாக இருக்க(வில்லை).",
+						"ఎవాంజెలియోన్:1.11 నువ్వు ఒంటరి వాడివి (కాదు).",
+						"อีวานเกเลียน:1.11 (ไม่ได้) อยู่ตามลำพัง.",
+						"EVANGELION:1.11 IKAW AY (HINDI) NAG-IISA.",
+						"EVANGELION:1.11 YALNIZSIN (DEĞİLSİN).",
+						"福音战士新剧场版：序",
+						"福音戰士新劇場版：序",
+						"Eva:1.0",
+						"eva1 movie",
+						"Evangelion: 1.11 - You are (not) alone",
+						"Evangelion 1.0",
+						"Evangelion 1.01",
+						"Evangelion 1.11 You Are (Not) Alone",
+						"Evangelion New Theatrical Version: The Beginning",
+						"Rebuild of Evangelion: 1.0",
+						"ヱヴァンゲリヲン 新劇場版 REBUILD OF EVANGELION",
+						"Evangelion: 1.0 Tu (Ne) Vienišas",
+						"Evangelion: 1.0 (Nie) jesteś sam.",
+						"Evangelion: 1.01 (Nie) jesteś sam.",
+						"Evangelion Shin Gekijouban: Rebuild of Evangelion",
+						"Evangelion Movie 1: Jo",
+						"EVANGELION:1.11 (NO) ESTÁS SOLO",
+						"Evangelion 1.0: Você [Não] Está Sozinho",
+						"Evangelion 1.0: Você [Não] Está Só",
+						"Evangelion 1.11 (Nie) jesteś sam",
+						"Evangelion Shin Gekijōban: Jo",
+						"Evangelion Shin Movie: Jo",
+						"Evangelion: 1.0 - You Are (Not) Alone.",
+						"Evangelion: 1.0 You Are [Not] Alone",
+						"Evangelion: 1.01 - You Are (Not) Alone.",
+						"Evangelion: 1.01 You Are (Not) Alone",
+						"Evangelion: 1.11 (Nie) jesteś sam",
+						"Evangelion: 1.11 (No) Estás Solo",
+						"Evangelion: 1.11 - Du bist (nicht) allein.",
+						"Evangelion: 1.11 - You Are (Not) Alone",
+						"Evangelion: 1.11 - You Are (Not) Alone.",
+						"Evangelion: 1.11 Tu (Não) Estás Sozinho.",
+						"Evangelion: 1.11 You Are (Not) Alone",
+						"Evangelion: 1.11 You Are (Not) Alone.",
+						"Evangelion:1.11 Você (Não) Está Sozinho",
+						"Neon Genesis Evangelion: [Nie] Jesteś Sam",
+						"Rebuild of Evangelion",
+						"Rebuild of Evangelion 1.0",
+						"Rebuild of Evangelion 1.11",
+						"Rebuild of Evangelion: 1.0 You Are (Not) Alone",
+						"Reconstrucción de Evangelion",
+						"Shin Evangelion Gekijou-ban: Jo",
+						"Реконструкция Евангелиона - Евангелион: 1.0 Ты [Не] Одинок",
+						"ヱヴァンゲリヲン新劇場版：序"
+					]
+				},
+				{
+					"anidbId": 6171,
+					"names": [
+						"Evangelion Shin Gekijouban: Ha",
+						".إيفانجيليون:2،22 (لا) يمكنك التقدّم",
+						"EVANGELION:2.22 DU KAN (IKKE) AVANCERE.",
+						"Evangelion: 2.22 - You Can (Not) Advance",
+						"Evangelion: 2.0 You Can (Not) Advance",
+						"Evangelion 2.0: Murdumine",
+						"Evangelion : 2.0 You Can (Not) Advance",
+						".אוונגליון 2: (אי) אפשר להתקדם",
+						"ヱヴァンゲリヲン新劇場版:破",
+						"에반게리온: 파",
+						"EVANGELION:2.22 ANDA (TAK) BOLEH MARA.",
+						"EVANGELION:2.22 JE KUNT (GEEN) VOORUITGANG BOEKEN.",
+						"Evangelion: 2.22 (Nie) możesz iść naprzód.",
+						"EVANGELION:2.22 VOCÊ (NÃO) PODE AVANÇAR.",
+						"Евангелион 2.22: ты (не) пройдешь",
+						"EVANGELION:2.22 DU KAN (INTE) GÅ FRAMÅT.",
+						"நற்தூதன்:2.22 நீ முன்னேற(முடியாது).",
+						"ఎవాంజెలియోన్:2.22 నువ్వు ముందుకు సాగలేవు.",
+						"อีวานเกเลียน:2.22 พัฒนาต่อไป (ไม่) ได้.",
+						"EVANGELION:2.22 IKAW AY (HINDI) SUSULONG.",
+						"EVANGELION:2.22 İLERLEYEBİLİRSİN (İLERLEYEMEZSİN).",
+						"福音战士新剧场版：破",
+						"福音戰士新劇場版：破",
+						"eva2",
+						"Evangelion 2.22 You Can (Not) Advance",
+						"Evangelion New Theatrical Version: Break",
+						"Evangelion New Theatrical Version: Destruction",
+						"Evangelion New Theatrical Version: Division",
+						"Evangelion: 2.0",
+						"Rebuild of Evangelion: 2.0",
+						"Evangelion 2.0: Sa pääsed/ei pääse edasi",
+						"Evangelionas 2.22 Tu (Ne) Gali Pažengti",
+						"Evangelion: 2.0 (Nie) możesz iść naprzód.",
+						"Evangelion: 2.0 Você (não) pode prosseguir",
+						"ЕВАНГЕЛИОН:2.22 ТЫ (НЕ) МОЖЕШЬ ДВИГАТЬСЯ ДАЛЬШЕ.",
+						"Evangelion Movie 2: Ha",
+						"EVANGELION:2.22 (NO) PUEDES AVANZAR",
+						"EVANGELION:2.22 VOCÊ (NÃO) PODE AVANÇAR",
+						"Evangelion 2.0: Break",
+						"Evangelion 2.22",
+						"Evangelion 2.22 (Nie) możesz iść naprzód",
+						"Evangelion Shin Gekijōban: Ha",
+						"Evangelion Shin Movie: Ha",
+						"Evangelion: 2.0 - You Can (Not) Advance.",
+						"Evangelion: 2.0 Tu (Não) Podes Avançar.",
+						"Evangelion: 2.0 You Can [Not] Advance",
+						"Evangelion: 2.22 (Nie) możesz iść naprzód",
+						"Evangelion: 2.22 - Sie können (nicht) vorrücken.",
+						"Evangelion: 2.22 - You Can (Not) Advance.",
+						"Evangelion: 2.22 Tu (No) Puedes Avanzar",
+						"Evangelion: 2.22 You Can (Not) Advance",
+						"Evangelion: 2.22 You Can (not) Advance",
+						"Evangelion:2.22 Você (Não) Pode Avançar",
+						"Rebuild of Evangelion 2.0: Division",
+						"Rebuild of Evangelion 2.22",
+						"Rebuild of Evangelion: 2.0 - Division",
+						"Rebuild of Evangelion: 2.0 You Can (Not) Advance",
+						"Shin Evangelion Gekijou-ban: Ha",
+						"ヱヴァンゲリヲン新劇場版：破",
+						"에반게리온 신극장판 파"
+					]
+				},
+				{
+					"anidbId": 7565,
+					"names": [
+						"Evangelion Shin Gekijouban: Q",
+						".إيفانجيليون:3،33 أنت (لا) تستطيع الإعادة",
+						"EVANGELION:3.33 DU KAN (IKKE) GØRE DET OM.",
+						"Evangelion 3.33: You can (not) redo",
+						"Evangelion: 3.0 You Can (Not) Redo",
+						".אוונגליון 3: (אי) אפשר לחזור",
+						"ヱヴァンゲリヲン新劇場版: Q",
+						"에반게리온: Q",
+						"EVANGELION:3.33 ANDA (TAK) BOLEH BUAT SEMULA.",
+						"EVANGELION:3.33 JE KUNT HET (NIET) OVERDOEN.",
+						"Evangelion: 3.33 (Nie) możesz powtórzyć.",
+						"EVANGELION:3.33 VOCÊ (NÃO) PODE REFAZER.",
+						"Евангелион 3.33: ты (не) исправишь",
+						"EVANGELION:3.33 DU KAN (INTE) GÖRA OM.",
+						"நற்தூதன்:3.33 நீ திரும்பச் செய்ய(முடியாது).",
+						"ఎవాంజెలియోన్:3.33 నువ్వు మళ్ళి చేయగలవు (లేదు).",
+						"อีวานเกเลียน:3.33 กลับไปแก้ไข (ไม่) ได้.",
+						"EVANGELION:3.33 IKAW AY (HINDI) MAKAKAULIT.",
+						"EVANGELION:3.33 BAŞTAN YAPABİLİRSİN (YAPAMAZSIN).",
+						"福音战士新剧场版：Q",
+						"福音戰士新劇場版：Q",
+						"Євангеліон 3.0",
+						"eva3 movie",
+						"Evangelion: 3.0 You Can (Not) Redo.",
+						"Evangelion: 3.33 You Can (Not) Redo",
+						"Evangelion: 3.333 You Can (Not) Redo",
+						"Rebuild of Evangelion: 3.0",
+						"Evangelion 3.0",
+						"Evangelion: 3.0 (Nie) możesz powtórzyć.",
+						"ЕВАНГЕЛИОН:3.33 ТЫ (НЕ) МОЖЕШЬ ВСЕ ИСПРАВИТЬ.",
+						"Evangelion Shin Gekijouban: Quickening",
+						"Evangelion Movie 3: Q",
+						"EVANGELION: 3.33 TÚ (NO) LO PUEDES REHACER",
+						"EVANGELION:3.33 VOCÊ (NÃO) PODE REFAZER",
+						"Evangelion 3.33",
+						"Evangelion 3.33 (Nie) możesz powtórzyć",
+						"Evangelion New Theatrical Edition: Q",
+						"Evangelion Shin Gekijouban: Kyuu",
+						"Evangelion Shin Gekijō-ban Q Quickening",
+						"Evangelion Shin Gekijōban: Q",
+						"Evangelion Shin Movie: Kyuu",
+						"Evangelion: 3.0 - You Can (Not) Redo.",
+						"Evangelion: 3.0 Q Quickening",
+						"Evangelion: 3.33 (Nie) możesz powtórzyć",
+						"Evangelion: 3.33 - Du kannst es (nicht) wieder in Ordnung bringen.",
+						"Evangelion: 3.33 - You Can (Not) Redo",
+						"Evangelion: 3.33 - You Can (Not) Redo.",
+						"Evangelion: 3.33 You Can (not) Redo",
+						"Evangelion: 3.333 - You Can (Not) Redo.",
+						"Evangelion:3.33 Tu (Não) Podes Refazer.",
+						"Evangelion:3.33 Você (Não) Pode Refazer",
+						"Rebuild of Evangelion 3.0 Q Quickening",
+						"Rebuild of Evangelion 3.33",
+						"Rebuild of Evangelion: 3.0 - Quickening",
+						"Shin Evangelion Gekijou-ban: Q",
+						"Реконструкция Евангелиона: 3.0",
+						"ヱヴァンゲリヲン新劇場版:Q",
+						"ヱヴァンゲリヲン新劇場版:Q Quickening",
+						"ヱヴァンゲリヲン新劇場版：Q"
+					]
+				},
+				{
+					"anidbId": 8895,
+					"names": [
+						"Shin Evangelion Gekijouban:||",
+						"\"إيفانجيليون: 3،0+1،01 ثلاث مرات متتالية\"",
+						"EVANGELION:3.0+1.01 DER VAR TREGANGE",
+						"Evangelion: 3.0+1.01 Thrice Upon a Time",
+						"אוונגליון 1.01+3.0: היה היו שלוש פעמים",
+						"Evangelion: 3.0+1.0 Thrice Upon a Time",
+						"シン・エヴァンゲリオン劇場版:||",
+						"에반게리온:3.0+1.01",
+						"EVANGELION:3.0+1.01 PADA TIGA KALI MASA DAHULU",
+						"EVANGELION:3.0+1.01 DRIEMAAL IS SCHEEPSRECHT",
+						"EVANGELION:3.0+1.01 OD-NOWA",
+						"EVANGELION:3.0+1.01 A ESPERANÇA",
+						"Evangelion: 3.0+1.0 Trei Ori Ca Niciodată",
+						"ЕВАНГЕЛИОН:3.0+1.01 КАК-ТО РАЗ",
+						"EVANGELION:3.0+1.01 DET VAR TRE GÅNGER",
+						"நற்தூதன்:3.0+1.01 முக்காலத்திலும்",
+						"ఎవాంజెలియోన్:3.0+1.01త్రైస్ ఎ టైం",
+						"อีวานเกเลียน:3.0+1.01 สามครั้งก่อน เมื่อเนิ่นนานมาแล้ว",
+						"EVANGELION:3.0+1.01 TATLONG BESES NOONG UNANG PANAHON",
+						"EVANGELION:3.0+1.01 EVVEL ZAMAN ÜÇÜNDE",
+						"新·福音战士剧场版：终",
+						"福音戰士新劇場版：終",
+						"eva4 movie",
+						"Rebuild of Evangelion: 4.0",
+						"EVANGELION:3.0+1.11 THRICE UPON A TIME",
+						"シン・エヴァンゲリオン劇場版𝄇",
+						"Evangelion 3.0+1.01 Od-Nowa",
+						"Evangelion 4.0",
+						"Evangelion: 3.0+1.11 Thrice Upon a Time",
+						"Evangelion: Final",
+						"Shin Evangelion Movie:||",
+						"EVANGELION:3.0+1.01 THRICE UPON A TIME",
+						"EVANGELION:3.0+1.01 TRIPLE",
+						"Evangelion 3.0+1.01 Od-nowa",
+						"Evangelion 3.0+1.0: Thrice upon a Time",
+						"Evangelion 3.0+1.11",
+						"Evangelion : 3.0+1.01 Thrice Upon A Time",
+						"Evangelion Shin Gekijouban: Final",
+						"Evangelion Shin Gekijō-ban: ?",
+						"Evangelion Shin Gekijōban: ?",
+						"Evangelion: 3.0+1.0",
+						"Evangelion: 3.0+1.01 Od-Nowa",
+						"Evangelion: 3.0+1.01 Thrice Upon A Time",
+						"Evangelion: 3.0+1.01 Thrice upon a Time",
+						"Evangelion: 3.0+1.01: Thrice Upon A Time",
+						"Evangelion: 3.0+1.0: Thrice Upon A Time",
+						"Evangelion: 3.0+1.11 Thrice upon a Time",
+						"Evangelion: 3.0+1.11: Thrice Upon A Time",
+						"Evangelion: 4.0",
+						"Evangelion:3.0+1.0 THRICE UPON A TIME",
+						"Evangelion:3.0+1.01 A Esperança",
+						"Evangelion:3.0+1.01 Três de uma Vez",
+						"Rebuild of Evangelion",
+						"Rebuild of Evangelion 4.0",
+						"Rebuild of Evangelion: Final",
+						"Shin Evangelion Gekijou-ban :||",
+						"Shin Evangelion Gekijouban :||",
+						"Shin Evangelion Gekijouban𝄇",
+						"Shin Evangelion Gekijō-ban :||",
+						"Shin Evangelion Gekijōban:||",
+						"ヱヴァンゲリヲン新劇場版：？"
+					]
+				},
+				{
+					"anidbId": 9200,
+					"names": ["Evangelion 3D", "eva (2012)", "エヴァンゲリオン3D"]
+				}
+			]
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun (RD), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "Neon Genesis Evangelion 1-26 DC+EoE [MULTI][BD 1080p 8bits v2.22][Sephirotic]",
+				"hash": "231290e5a748373f0f266956ec17ac2f8a8fa06e",
+				"imdbId": "tt0781951",
+				"files": [
+					{
+						"path": "[Sephirotic] Evangelion - 01 [MULTI][BD 1080p 8bits 5.1 AAC][6B1607E9].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 02 [MULTI][BD 1080p 8bits 5.1 AAC][C08EC897].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 03 [MULTI][BD 1080p 8bits 5.1 AAC][7C6069A9].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 04 [MULTI][BD 1080p 8bits 5.1 AAC][ECEA0327].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 05 [MULTI][BD 1080p 8bits 5.1 AAC][44CF9DD2].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 06 [MULTI][BD 1080p 8bits 5.1 AAC][B8663473].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 07 [MULTI][BD 1080p 8bits 5.1 AAC][3FAF8818].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 08 [MULTI][BD 1080p 8bits 5.1 AAC][ED1E605A].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 09 [MULTI][BD 1080p 8bits 5.1 AAC][73B322AB].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 10 [MULTI][BD 1080p 8bits 5.1 AAC][B7A0A8A0].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 11 [MULTI][BD 1080p 8bits 5.1 AAC][3A368205].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 12 [MULTI][BD 1080p 8bits 5.1 AAC][D31DD6E2].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 13 [MULTI][BD 1080p 8bits 5.1 AAC][E4AD143C].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 14 [MULTI][BD 1080p 8bits 5.1 AAC][DACAAD89].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 15 [MULTI][BD 1080p 8bits 5.1 AAC][FB7C166E].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 16 [MULTI][BD 1080p 8bits 5.1 AAC][746F7053].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 17 [MULTI][BD 1080p 8bits 5.1 AAC][68C48B9D].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 18 [MULTI][BD 1080p 8bits 5.1 AAC][C07227AA].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 19 [MULTI][BD 1080p 8bits 5.1 AAC][FE27EA55].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 20 [MULTI][BD 1080p 8bits 5.1 AAC][E7D2052F].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 21' [MULTI][BD 1080p 8bits 5.1 AAC][D128B2D3].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 22' [MULTI][BD 1080p 8bits 5.1 AAC][82842B04].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 23' [MULTI][BD 1080p 8bits 5.1 AAC][78ADF63D].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 24' [MULTI][BD 1080p 8bits 5.1 AAC][25378AB4].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 25 [MULTI][BD 1080p 8bits 5.1 AAC][F5AC978E].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 26 [MULTI][BD 1080p 8bits 5.1 AAC][B0C23B03].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[Sephirotic] Evangelion - The End of Evangelion 25'+26' (Conjoined Ordered Chapter)[C6FDE4FB]-other.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0112159",
+				"tmdbId": 890,
+				"files": [
+					{
+						"path": "[Sephirotic] Evangelion - 01 [MULTI][BD 1080p 8bits 5.1 AAC][6B1607E9].mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949381
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 02 [MULTI][BD 1080p 8bits 5.1 AAC][C08EC897].mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949384
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 03 [MULTI][BD 1080p 8bits 5.1 AAC][7C6069A9].mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949385
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 04 [MULTI][BD 1080p 8bits 5.1 AAC][ECEA0327].mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949382
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 05 [MULTI][BD 1080p 8bits 5.1 AAC][44CF9DD2].mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949383
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 06 [MULTI][BD 1080p 8bits 5.1 AAC][B8663473].mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949386
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 07 [MULTI][BD 1080p 8bits 5.1 AAC][3FAF8818].mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949389
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 08 [MULTI][BD 1080p 8bits 5.1 AAC][ED1E605A].mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949388
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 09 [MULTI][BD 1080p 8bits 5.1 AAC][73B322AB].mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949387
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 10 [MULTI][BD 1080p 8bits 5.1 AAC][B7A0A8A0].mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949390
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 11 [MULTI][BD 1080p 8bits 5.1 AAC][3A368205].mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949391
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 12 [MULTI][BD 1080p 8bits 5.1 AAC][D31DD6E2].mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949392
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 13 [MULTI][BD 1080p 8bits 5.1 AAC][E4AD143C].mkv",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949393
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 14 [MULTI][BD 1080p 8bits 5.1 AAC][DACAAD89].mkv",
+						"season": 1,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949397
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 15 [MULTI][BD 1080p 8bits 5.1 AAC][FB7C166E].mkv",
+						"season": 1,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949395
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 16 [MULTI][BD 1080p 8bits 5.1 AAC][746F7053].mkv",
+						"season": 1,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949394
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 17 [MULTI][BD 1080p 8bits 5.1 AAC][68C48B9D].mkv",
+						"season": 1,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949396
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 18 [MULTI][BD 1080p 8bits 5.1 AAC][C07227AA].mkv",
+						"season": 1,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949399
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 19 [MULTI][BD 1080p 8bits 5.1 AAC][FE27EA55].mkv",
+						"season": 1,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949398
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 20 [MULTI][BD 1080p 8bits 5.1 AAC][E7D2052F].mkv",
+						"season": 1,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949400
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 21' [MULTI][BD 1080p 8bits 5.1 AAC][D128B2D3].mkv",
+						"season": 1,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949401
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 22' [MULTI][BD 1080p 8bits 5.1 AAC][82842B04].mkv",
+						"season": 1,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949402
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 23' [MULTI][BD 1080p 8bits 5.1 AAC][78ADF63D].mkv",
+						"season": 1,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949403
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 24' [MULTI][BD 1080p 8bits 5.1 AAC][25378AB4].mkv",
+						"season": 1,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949405
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 25 [MULTI][BD 1080p 8bits 5.1 AAC][F5AC978E].mkv",
+						"season": 1,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949404
+					},
+					{
+						"path": "[Sephirotic] Evangelion - 26 [MULTI][BD 1080p 8bits 5.1 AAC][B0C23B03].mkv",
+						"season": 1,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "anime",
+						"tmdbEpisodeId": 949406
+					},
+					{
+						"path": "[Sephirotic] Evangelion - The End of Evangelion 25'+26' (Conjoined Ordered Chapter)[C6FDE4FB]-other.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		}
+	]
+}

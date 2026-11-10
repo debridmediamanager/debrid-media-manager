@@ -645,7 +645,7 @@ describe('sponsorship benefits follow the selected route', () => {
 		expect(
 			rd.sponsorship.optional.find((benefit) => benefit.id === 'uploader-priority')?.detail
 		).toBe(
-			"Priority and 2 TB of Usenet a day instead of 300 GB on DMM's hosted NZB uploader, and three torrent jobs at once instead of one on the torrent uploader."
+			"Priority and 2 TB of Usenet a day instead of 300 GB on DMM's hosted NZB uploader, plus three torrent jobs at once instead of one."
 		);
 		expect(ids('optional', usenet)).not.toContain('uploader-priority');
 		expect(ids('optional', torbox)).not.toContain('uploader-priority');

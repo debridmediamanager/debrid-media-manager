@@ -1,0 +1,7404 @@
+{
+	"answers": {
+		"find": {
+			"tt17527600": {
+				"movie_results": [],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt3114358": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 66875,
+						"name": "Non Non Biyori",
+						"first_air_date": "2013-10-07"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt21975436": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 207468,
+						"name": "Kaiju No. 8",
+						"first_air_date": "2024-04-13"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt5626028": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 65930,
+						"name": "My Hero Academia",
+						"first_air_date": "2016-04-03"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt7785128": {
+				"movie_results": [
+					{
+						"id": 494471,
+						"title": "Non Non Biyori: Vacation",
+						"release_date": "2018-08-25"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt35636950": {
+				"movie_results": [
+					{
+						"id": 1326106,
+						"title": "Kaiju No. 8: Mission Recon",
+						"release_date": "2025-03-28"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt7745068": {
+				"movie_results": [
+					{
+						"id": 505262,
+						"title": "My Hero Academia: Two Heroes",
+						"release_date": "2018-08-03"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			},
+			"tt10388584": {
+				"movie_results": [
+					{
+						"id": 658436,
+						"title": "Fate/kaleid liner Prisma☆Illya: Prisma☆Phantasm",
+						"release_date": "2019-06-14"
+					}
+				],
+				"tv_results": [],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"63576": {
+				"id": 63576,
+				"name": "Fate/kaleid liner Prisma Illya",
+				"original_name": "Fate/kaleid liner プリズマ☆イリヤ",
+				"first_air_date": "2013-07-06",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 2343,
+							"name": "magic"
+						},
+						{
+							"id": 6152,
+							"name": "supernatural"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 15285,
+							"name": "spin off"
+						},
+						{
+							"id": 195669,
+							"name": "ecchi"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 292887,
+							"name": "magical girl"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt2904426",
+					"tvdb_id": 269319
+				},
+				"networks": [
+					{
+						"id": 173,
+						"name": "AT-X"
+					},
+					{
+						"id": 614,
+						"name": "TOKYO MX"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "命运 魔法少女☆伊莉雅",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "魔法少女伊莉雅",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Fate／kaleid liner 魔法少女☆伊莉雅 3rei!!",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Fate／kaleid liner 魔法少女☆伊莉雅 2wei!",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Fate／kaleid liner 魔法少女☆伊莉雅 2wei Herz!",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "魔法少女☆伊莉雅",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Fate/kaleid liner Prisma Illya 2wei Herz!",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Fate/kaleid liner Prisma Illya 2wei!",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Fate/kaleid liner Prisma Illya 3rei!",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Fate/kaleid liner Prisma Illya",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Fate - Kaleid Liner Prisma Illya",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "Fate/kaleid liner Prisma Illya",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Fate kaleid liner Prisma Illya",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "Fate/kaleid liner プリズマ☆イリヤ ツヴァイ ヘルツ！",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Fate/kaleid liner プリズマ☆イリヤ",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Fate/kaleid liner Prisma Illya 2wei!",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Fate/kaleid liner Prisma Illya 2wei Herz!",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Fate/kaleid liner プリズマ☆イリヤ ドライ!!",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Fate/kaleid liner プリズマ☆イリヤ 2wei!",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Fate/kaleid liner プリズマ☆イリヤ 2wei Herz!",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Fate/kaleid liner Prisma Illya 3rei!",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Fate⁄kaleid Liner プラズマ☆イリヤ",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Fate/kaleid liner Prisma Illya",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Fate kaleid liner 프리즈마☆이리야",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Fatekaleid liner 프리즈마☆이리야",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Fatekaleid liner PRISMA ILLYA Licht Nameless Girl",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Fate/kaleid liner Prisma☆Illya",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 23,
+						"air_date": "2013-09-27",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 10,
+						"air_date": "2013-07-05",
+						"name": "Fate/kaleid liner Prisma Illya"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 10,
+						"air_date": "2014-07-09",
+						"name": "Fate/kaleid liner Prisma Illya 2wei!"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 10,
+						"air_date": "2015-07-24",
+						"name": "Fate/kaleid liner Prisma Illya 2wei Herz!"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 12,
+						"air_date": "2016-07-06",
+						"name": "Fate/kaleid liner Prisma Illya 3rei!"
+					}
+				]
+			},
+			"65930": {
+				"id": 65930,
+				"name": "My Hero Academia",
+				"original_name": "僕のヒーローアカデミア",
+				"first_air_date": "2016-04-03",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 83,
+							"name": "saving the world"
+						},
+						{
+							"id": 271,
+							"name": "competition"
+						},
+						{
+							"id": 1701,
+							"name": "hero"
+						},
+						{
+							"id": 2299,
+							"name": "abusive father"
+						},
+						{
+							"id": 4613,
+							"name": "training"
+						},
+						{
+							"id": 6733,
+							"name": "bullying"
+						},
+						{
+							"id": 9715,
+							"name": "superhero"
+						},
+						{
+							"id": 9748,
+							"name": "revenge"
+						},
+						{
+							"id": 10873,
+							"name": "school"
+						},
+						{
+							"id": 11115,
+							"name": "heroism"
+						},
+						{
+							"id": 12380,
+							"name": "tournament"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 14955,
+							"name": "fighting"
+						},
+						{
+							"id": 33637,
+							"name": "super power"
+						},
+						{
+							"id": 163074,
+							"name": "super villain"
+						},
+						{
+							"id": 189964,
+							"name": "high school rivalry"
+						},
+						{
+							"id": 190116,
+							"name": "school life"
+						},
+						{
+							"id": 207826,
+							"name": "shounen"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 235578,
+							"name": "superhuman abilities"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt5626028",
+					"tvdb_id": 305074
+				},
+				"networks": [
+					{
+						"id": 57,
+						"name": "Nippon TV"
+					},
+					{
+						"id": 94,
+						"name": "MBS"
+					},
+					{
+						"id": 160,
+						"name": "TBS"
+					},
+					{
+						"id": 201,
+						"name": "CBC"
+					},
+					{
+						"id": 569,
+						"name": "YTV"
+					},
+					{
+						"id": 896,
+						"name": "Tulip Television"
+					},
+					{
+						"id": 1559,
+						"name": "SBC"
+					},
+					{
+						"id": 1896,
+						"name": "FBS"
+					},
+					{
+						"id": 2460,
+						"name": "BSN"
+					},
+					{
+						"id": 2461,
+						"name": "tys"
+					},
+					{
+						"id": 2462,
+						"name": "NBC"
+					},
+					{
+						"id": 2727,
+						"name": "Chukyo TV"
+					},
+					{
+						"id": 2728,
+						"name": "RNB"
+					},
+					{
+						"id": 3201,
+						"name": "HTV"
+					},
+					{
+						"id": 3644,
+						"name": "FCT"
+					},
+					{
+						"id": 3658,
+						"name": "HBC"
+					},
+					{
+						"id": 3698,
+						"name": "STV"
+					},
+					{
+						"id": 3705,
+						"name": "RKK"
+					},
+					{
+						"id": 3741,
+						"name": "KNB"
+					},
+					{
+						"id": 3969,
+						"name": "i-Television"
+					},
+					{
+						"id": 3970,
+						"name": "SBS"
+					},
+					{
+						"id": 3971,
+						"name": "IBC"
+					},
+					{
+						"id": 3972,
+						"name": "BSS"
+					},
+					{
+						"id": 3973,
+						"name": "MRO"
+					},
+					{
+						"id": 3974,
+						"name": "OBS"
+					},
+					{
+						"id": 3975,
+						"name": "TUF"
+					},
+					{
+						"id": 3977,
+						"name": "RSK"
+					},
+					{
+						"id": 3978,
+						"name": "TUY"
+					},
+					{
+						"id": 3979,
+						"name": "tbc"
+					},
+					{
+						"id": 4748,
+						"name": "RKB"
+					},
+					{
+						"id": 4790,
+						"name": "YBS"
+					},
+					{
+						"id": 4791,
+						"name": "KTK"
+					},
+					{
+						"id": 4792,
+						"name": "KUTV"
+					},
+					{
+						"id": 4797,
+						"name": "NKT"
+					},
+					{
+						"id": 4815,
+						"name": "RAB"
+					},
+					{
+						"id": 4816,
+						"name": "TVI"
+					},
+					{
+						"id": 4817,
+						"name": "MMT"
+					},
+					{
+						"id": 4818,
+						"name": "ABS"
+					},
+					{
+						"id": 4822,
+						"name": "JRT"
+					},
+					{
+						"id": 4825,
+						"name": "TOS"
+					},
+					{
+						"id": 4859,
+						"name": "RBC"
+					},
+					{
+						"id": 6155,
+						"name": "YBC"
+					},
+					{
+						"id": 6171,
+						"name": "UTY"
+					},
+					{
+						"id": 6172,
+						"name": "RCC"
+					},
+					{
+						"id": 6173,
+						"name": "MRT"
+					},
+					{
+						"id": 6174,
+						"name": "ATV"
+					},
+					{
+						"id": 6175,
+						"name": "MBC"
+					},
+					{
+						"id": 6286,
+						"name": "TSB"
+					},
+					{
+						"id": 6668,
+						"name": "TeNY"
+					},
+					{
+						"id": 6669,
+						"name": "RNC"
+					},
+					{
+						"id": 6670,
+						"name": "NIB"
+					},
+					{
+						"id": 6671,
+						"name": "KKT"
+					},
+					{
+						"id": 7076,
+						"name": "Daiichi-TV"
+					},
+					{
+						"id": 7077,
+						"name": "FBC"
+					},
+					{
+						"id": 7078,
+						"name": "RKC"
+					},
+					{
+						"id": 7079,
+						"name": "KYT"
+					},
+					{
+						"id": 7092,
+						"name": "KRY"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "मेरा नायक एकेडेमिया",
+							"iso_3166_1": "IN"
+						},
+						{
+							"title": "माई हीरो एकेडेमिया",
+							"iso_3166_1": "IN"
+						},
+						{
+							"title": "ヒロアカ",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Boku no Hero Academia",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "BNHA",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "僕のヒーローアカデミア Memories",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "僕のヒーローアカデミア No. 170+1 More",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Boku no Hero Academia: More",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Boku no Hero Academia No. 170+1: More",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Boku no Hero Academia: I am a hero too",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "나의 히어로 아카데미아",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "أكاديمية بطلي",
+							"iso_3166_1": "SA"
+						},
+						{
+							"title": "我的英雄學院 FINAL SEASON",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "Моя геройська академія",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "MHA",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "My Hero Academia: More",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "My Hero Academia: I am a hero too",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Anh Hùng Học Viện",
+							"iso_3166_1": "VN"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 19,
+						"air_date": "2017-04-04",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 13,
+						"air_date": "2016-04-03",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 25,
+						"air_date": "2017-04-01",
+						"name": "Season 2"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 25,
+						"air_date": "2018-04-07",
+						"name": "Season 3"
+					},
+					{
+						"season_number": 4,
+						"episode_count": 25,
+						"air_date": "2019-10-12",
+						"name": "Season 4"
+					},
+					{
+						"season_number": 5,
+						"episode_count": 25,
+						"air_date": "2021-03-27",
+						"name": "Season 5"
+					},
+					{
+						"season_number": 6,
+						"episode_count": 25,
+						"air_date": "2022-10-01",
+						"name": "Season 6"
+					},
+					{
+						"season_number": 7,
+						"episode_count": 21,
+						"air_date": "2024-05-04",
+						"name": "Season 7"
+					},
+					{
+						"season_number": 8,
+						"episode_count": 11,
+						"air_date": "2025-10-04",
+						"name": "FINAL SEASON"
+					}
+				]
+			},
+			"66875": {
+				"id": 66875,
+				"name": "Non Non Biyori",
+				"original_name": "のんのんびより",
+				"first_air_date": "2013-10-07",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 2755,
+							"name": "country life"
+						},
+						{
+							"id": 6054,
+							"name": "friendship"
+						},
+						{
+							"id": 8102,
+							"name": "elementary school"
+						},
+						{
+							"id": 9914,
+							"name": "slice of life"
+						},
+						{
+							"id": 10873,
+							"name": "school"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 190116,
+							"name": "school life"
+						},
+						{
+							"id": 194088,
+							"name": "heart warming"
+						},
+						{
+							"id": 195668,
+							"name": "seinen"
+						},
+						{
+							"id": 201057,
+							"name": "transfer student"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 291483,
+							"name": "iyashikei"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt3114358",
+					"tvdb_id": 272316
+				},
+				"networks": [
+					{
+						"id": 98,
+						"name": "TV Tokyo"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "Non Non Biyori",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Non Non Biyori Repeat",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "のんのんびより　沖縄へ行くことになった",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "のんのんびより りぴーと OAD",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Non Non Biyori Nonstop",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Non Non Biyori Non Stop",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "のんのんびより のんすとっぷ",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "논논비요리 논스톱",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "논논비요리 리피트",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Глухомань",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "Деревня",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "Прекрасные деньки",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "สาวใสหัวใจบ้านทุ่ง",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "Нон нон бійорі",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "Безтурботні часи 2",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "Безтурботні часи: Нонстоп",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "Безтурботні часи 3",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "Безтурботні часи: На біс",
+							"iso_3166_1": "UA"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 3,
+						"air_date": "2014-07-23",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 12,
+						"air_date": "2013-10-07",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 12,
+						"air_date": "2015-07-06",
+						"name": "Repeat"
+					},
+					{
+						"season_number": 3,
+						"episode_count": 12,
+						"air_date": "2021-01-11",
+						"name": "Nonstop"
+					}
+				]
+			},
+			"207468": {
+				"id": 207468,
+				"name": "Kaiju No. 8",
+				"original_name": "怪獣８号",
+				"first_air_date": "2024-04-13",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 10292,
+							"name": "gore"
+						},
+						{
+							"id": 11100,
+							"name": "giant monster"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 161791,
+							"name": "kaiju"
+						},
+						{
+							"id": 162365,
+							"name": "military"
+						},
+						{
+							"id": 207826,
+							"name": "shounen"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 298549,
+							"name": "urban fantasy"
+						},
+						{
+							"id": 325765,
+							"name": "amused"
+						},
+						{
+							"id": 325809,
+							"name": "enthusiastic"
+						},
+						{
+							"id": 325853,
+							"name": "sympathetic"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt21975436",
+					"tvdb_id": 423075
+				},
+				"networks": [
+					{
+						"id": 98,
+						"name": "TV Tokyo"
+					},
+					{
+						"id": 252,
+						"name": "TV Aichi"
+					},
+					{
+						"id": 822,
+						"name": "TVQ"
+					},
+					{
+						"id": 824,
+						"name": "TV Osaka"
+					},
+					{
+						"id": 938,
+						"name": "TVh"
+					},
+					{
+						"id": 2064,
+						"name": "TSC"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "怪兽八号",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "怪兽8号",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "怪獸8號",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "aiju.No.8",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Kaijuu 8-gou",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Kaiju No.Eight",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Kaijū 8-gō",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Kaijuu 8 gou",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "괴수8호",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Кайдзю номер восемь",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "Кайдзю номер 8",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "怪獸 8 號",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "Monster #8",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Kaiju No.8",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Quái Vật Số 8",
+							"iso_3166_1": "VN"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 36,
+						"air_date": "2024-12-06",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 23,
+						"air_date": "2024-04-13",
+						"name": "Season 1"
+					}
+				]
+			},
+			"280110": {
+				"id": 280110,
+				"name": "My Hero Academia: Vigilantes",
+				"original_name": "ヴィジランテ -僕のヒーローアカデミア ILLEGALS-",
+				"first_air_date": "2025-04-07",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 7002,
+							"name": "vigilante"
+						},
+						{
+							"id": 9675,
+							"name": "prequel"
+						},
+						{
+							"id": 9715,
+							"name": "superhero"
+						},
+						{
+							"id": 10616,
+							"name": "urban"
+						},
+						{
+							"id": 10683,
+							"name": "coming of age"
+						},
+						{
+							"id": 13141,
+							"name": "based on manga"
+						},
+						{
+							"id": 15285,
+							"name": "spin off"
+						},
+						{
+							"id": 33637,
+							"name": "super power"
+						},
+						{
+							"id": 182250,
+							"name": "personal growth"
+						},
+						{
+							"id": 207826,
+							"name": "shounen"
+						},
+						{
+							"id": 207844,
+							"name": "college student"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 235578,
+							"name": "superhuman abilities"
+						},
+						{
+							"id": 266013,
+							"name": "vigilante justice"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt35636246",
+					"tvdb_id": 458058
+				},
+				"networks": [
+					{
+						"id": 614,
+						"name": "TOKYO MX"
+					},
+					{
+						"id": 3220,
+						"name": "BS Nippon TV"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "正义使者 -我的英雄学院之非法英雄-",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "My Hero Academia Vigilantes",
+							"iso_3166_1": "FR"
+						},
+						{
+							"title": "אקדמיית הגיבורים שלי: פורעי חוק",
+							"iso_3166_1": "IL"
+						},
+						{
+							"title": "ヴィジランテ 僕のヒーローアカデミア ILLEGALS",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Vigilante: Boku no Hero Academia ILLEGALS",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "ヴィジランテ -僕のヒーローアカデミア ILLEGALS- 第2期",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Моя геройская академия: Вне закона",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "Моя геройська академія: Вігіланти",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "Моя геройська академія: Лінчувальники",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "Vigilante -My Hero Academia ILLEGALS-",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "MHA Vigilantes",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 26,
+						"air_date": "2025-04-07",
+						"name": "Season 1"
+					}
+				]
+			}
+		},
+		"season": {
+			"66875/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "We're Going to Okinawa",
+						"air_date": "2014-07-23",
+						"id": 1495689
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Hotaru Had Fun",
+						"air_date": "2016-09-23",
+						"id": 1495690
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "I Did My Best Doing the Club Activities",
+						"air_date": "2022-03-23",
+						"id": 3617267
+					}
+				]
+			},
+			"207468/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #01: Cleaning Company Ranking Invasion!",
+						"air_date": "2024-12-06",
+						"id": 5518051
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #02: Communication Training!",
+						"air_date": "2024-12-13",
+						"id": 5816339
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #03: Girls Talk Operation!",
+						"air_date": "2024-12-20",
+						"id": 5816340
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #04: Mushroom Dishes Attack!",
+						"air_date": "2024-12-27",
+						"id": 5816341
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #05: Elegant Words Attack!",
+						"air_date": "2025-01-03",
+						"id": 5875343
+					},
+					{
+						"episode_number": 6,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #06: Operation Overheard Conversation!",
+						"air_date": "2025-01-10",
+						"id": 5880541
+					},
+					{
+						"episode_number": 7,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #07",
+						"air_date": "2025-01-17",
+						"id": 5890941
+					},
+					{
+						"episode_number": 8,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #08",
+						"air_date": "2025-01-24",
+						"id": 5914288
+					},
+					{
+						"episode_number": 9,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #09",
+						"air_date": "2025-01-31",
+						"id": 5947458
+					},
+					{
+						"episode_number": 10,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #10",
+						"air_date": "2025-02-07",
+						"id": 5953270
+					},
+					{
+						"episode_number": 11,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #11",
+						"air_date": "2025-02-14",
+						"id": 5982368
+					},
+					{
+						"episode_number": 12,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #12",
+						"air_date": "2025-02-21",
+						"id": 5982369
+					},
+					{
+						"episode_number": 13,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #13",
+						"air_date": "2025-02-28",
+						"id": 6005084
+					},
+					{
+						"episode_number": 14,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #14",
+						"air_date": "2025-03-07",
+						"id": 6012780
+					},
+					{
+						"episode_number": 15,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #15",
+						"air_date": "2025-03-14",
+						"id": 6030795
+					},
+					{
+						"episode_number": 16,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #16",
+						"air_date": "2025-03-21",
+						"id": 6046769
+					},
+					{
+						"episode_number": 17,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #17",
+						"air_date": "2025-03-28",
+						"id": 6065091
+					},
+					{
+						"episode_number": 18,
+						"season_number": 0,
+						"name": "Hoshina's Day Off",
+						"air_date": "2025-03-28",
+						"id": 5879068
+					},
+					{
+						"episode_number": 19,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #18",
+						"air_date": "2025-04-04",
+						"id": 6079171
+					},
+					{
+						"episode_number": 20,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #19",
+						"air_date": "2025-04-11",
+						"id": 6110973
+					},
+					{
+						"episode_number": 21,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #20",
+						"air_date": "2025-04-18",
+						"id": 6126534
+					},
+					{
+						"episode_number": 22,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #21",
+						"air_date": "2025-04-25",
+						"id": 6169380
+					},
+					{
+						"episode_number": 23,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #22",
+						"air_date": "2025-05-02",
+						"id": 6179034
+					},
+					{
+						"episode_number": 24,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #23",
+						"air_date": "2025-05-09",
+						"id": 6219476
+					},
+					{
+						"episode_number": 25,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #24",
+						"air_date": "2025-05-16",
+						"id": 6221092
+					},
+					{
+						"episode_number": 26,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #25",
+						"air_date": "2025-05-23",
+						"id": 6244622
+					},
+					{
+						"episode_number": 27,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #26",
+						"air_date": "2025-05-30",
+						"id": 6263631
+					},
+					{
+						"episode_number": 28,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #27",
+						"air_date": "2025-06-06",
+						"id": 6284764
+					},
+					{
+						"episode_number": 29,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #28",
+						"air_date": "2025-06-13",
+						"id": 6298738
+					},
+					{
+						"episode_number": 30,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #29",
+						"air_date": "2025-06-20",
+						"id": 6331357
+					},
+					{
+						"episode_number": 31,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #30",
+						"air_date": "2025-06-27",
+						"id": 6331359
+					},
+					{
+						"episode_number": 32,
+						"season_number": 0,
+						"name": "Minute! Kaiju No. 8 #31",
+						"air_date": "2025-07-04",
+						"id": 6358710
+					},
+					{
+						"episode_number": 33,
+						"season_number": 0,
+						"name": "Narumi's Week at Work - Day 1: The Platoon Leaders' Real Feelings",
+						"air_date": "2026-09-05",
+						"id": 7648047
+					},
+					{
+						"episode_number": 34,
+						"season_number": 0,
+						"name": "Narumi's Week at Work - Day 2: The Vice-Captain's Troubles",
+						"air_date": "2026-09-12",
+						"id": 7648048
+					},
+					{
+						"episode_number": 35,
+						"season_number": 0,
+						"name": "Narumi's Week at Work - Day 3: That Person From the West",
+						"air_date": "2026-09-19",
+						"id": 7648049
+					},
+					{
+						"episode_number": 36,
+						"season_number": 0,
+						"name": "Narumi's Week at Work - Day 4: The Coworkers' Bonds",
+						"air_date": "2026-09-26",
+						"id": 7648050
+					}
+				]
+			},
+			"63576/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Ruby-chan's Exciting Bloomer-Filled Review",
+						"air_date": "2013-09-27",
+						"id": 1096241
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Quiz Magical Rubyonaire",
+						"air_date": "2013-10-25",
+						"id": 1096243
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "Kilo Battle",
+						"air_date": "2013-11-29",
+						"id": 1096244
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "Her Circumstances",
+						"air_date": "2013-12-27",
+						"id": 1096245
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "Undressing War",
+						"air_date": "2014-01-31",
+						"id": 1096246
+					},
+					{
+						"episode_number": 6,
+						"season_number": 0,
+						"name": "Dance at the Sports Festival!",
+						"air_date": "2014-03-10",
+						"id": 1096247
+					},
+					{
+						"episode_number": 7,
+						"season_number": 0,
+						"name": "First Bra: Illya",
+						"air_date": "2014-09-26",
+						"id": 1096260
+					},
+					{
+						"episode_number": 8,
+						"season_number": 0,
+						"name": "First Bra: Miyu",
+						"air_date": "2014-10-31",
+						"id": 1096261
+					},
+					{
+						"episode_number": 9,
+						"season_number": 0,
+						"name": "Elder Sister's Treatment",
+						"air_date": "2014-11-28",
+						"id": 1096262
+					},
+					{
+						"episode_number": 10,
+						"season_number": 0,
+						"name": "Grade School China Dress",
+						"air_date": "2014-12-26",
+						"id": 1096263
+					},
+					{
+						"episode_number": 11,
+						"season_number": 0,
+						"name": "Magical Girl Prisma XXX",
+						"air_date": "2015-01-30",
+						"id": 1096264
+					},
+					{
+						"episode_number": 12,
+						"season_number": 0,
+						"name": "Magical Girl in Hot Springs Inn",
+						"air_date": "2015-07-25",
+						"id": 1096265
+					},
+					{
+						"episode_number": 13,
+						"season_number": 0,
+						"name": "Beast, Again!",
+						"air_date": "2015-09-25",
+						"id": 2049490
+					},
+					{
+						"episode_number": 14,
+						"season_number": 0,
+						"name": "Unlimited Cloth Works",
+						"air_date": "2015-10-30",
+						"id": 2049497
+					},
+					{
+						"episode_number": 15,
+						"season_number": 0,
+						"name": "Girls, Embrace Your Fighting Spirit!, Part 1",
+						"air_date": "2015-11-27",
+						"id": 2049501
+					},
+					{
+						"episode_number": 16,
+						"season_number": 0,
+						"name": "Girls, Embrace Your Fighting Spirit!, Part 2",
+						"air_date": "2015-12-25",
+						"id": 2049520
+					},
+					{
+						"episode_number": 17,
+						"season_number": 0,
+						"name": "Bazett's First Part-time Job",
+						"air_date": "2016-01-29",
+						"id": 2049526
+					},
+					{
+						"episode_number": 18,
+						"season_number": 0,
+						"name": "Elementary School Students' Training",
+						"air_date": "2016-09-30",
+						"id": 2049531
+					},
+					{
+						"episode_number": 19,
+						"season_number": 0,
+						"name": "Practical Survival Techniques",
+						"air_date": "2016-10-28",
+						"id": 2049532
+					},
+					{
+						"episode_number": 20,
+						"season_number": 0,
+						"name": "Change Clothes, Farewell Memories",
+						"air_date": "2016-11-25",
+						"id": 2049533
+					},
+					{
+						"episode_number": 21,
+						"season_number": 0,
+						"name": "I Absolutely Cannot Lose!",
+						"air_date": "2016-12-23",
+						"id": 2049534
+					},
+					{
+						"episode_number": 22,
+						"season_number": 0,
+						"name": "Erika's Sleepwear Study",
+						"air_date": "2017-01-27",
+						"id": 2049535
+					},
+					{
+						"episode_number": 23,
+						"season_number": 0,
+						"name": "Ruby's Observation Records of Miyu-san's Baths",
+						"air_date": "2017-02-24",
+						"id": 2049536
+					}
+				]
+			},
+			"65930/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Save! Rescue Training!",
+						"air_date": "2017-04-04",
+						"id": 1337935
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Hero Notebook",
+						"air_date": "2017-03-25",
+						"id": 1372558
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "Training of the Dead",
+						"air_date": "2017-06-02",
+						"id": 1323602
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "All Might: Rising",
+						"air_date": "2019-02-13",
+						"id": 5843601
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "End-Roll BBQ Picture Drama",
+						"air_date": "2019-02-13",
+						"id": 5843598
+					},
+					{
+						"episode_number": 6,
+						"season_number": 0,
+						"name": "Make It! Do-or-Die Survival Training (1)",
+						"air_date": "2020-08-16",
+						"id": 2390057
+					},
+					{
+						"episode_number": 7,
+						"season_number": 0,
+						"name": "Make It! Do-or-Die Survival Training (2)",
+						"air_date": "2020-08-16",
+						"id": 2390058
+					},
+					{
+						"episode_number": 8,
+						"season_number": 0,
+						"name": "Heroes Rising - Epilogue Plus",
+						"air_date": "2020-07-15",
+						"id": 5843596
+					},
+					{
+						"episode_number": 9,
+						"season_number": 0,
+						"name": "World Heroes' Mission - Take-off",
+						"air_date": "2022-02-16",
+						"id": 5843595
+					},
+					{
+						"episode_number": 10,
+						"season_number": 0,
+						"name": "HLB",
+						"air_date": "2022-06-16",
+						"id": 3770074
+					},
+					{
+						"episode_number": 11,
+						"season_number": 0,
+						"name": "Laugh! As If You Are in Hell",
+						"air_date": "2022-06-16",
+						"id": 3770076
+					},
+					{
+						"episode_number": 12,
+						"season_number": 0,
+						"name": "U.A. Heroes Battle",
+						"air_date": "2023-10-20",
+						"id": 4741787
+					},
+					{
+						"episode_number": 13,
+						"season_number": 0,
+						"name": "Memories Episode 1 - Izuku Midoriya: Resolve",
+						"air_date": "2024-04-06",
+						"id": 5202832
+					},
+					{
+						"episode_number": 14,
+						"season_number": 0,
+						"name": "Memories Episode 2 - Toshinori Yagi: Embers",
+						"air_date": "2024-04-13",
+						"id": 5202833
+					},
+					{
+						"episode_number": 15,
+						"season_number": 0,
+						"name": "Memories Episode 3 - Heroes: Convictions",
+						"air_date": "2024-04-20",
+						"id": 5202834
+					},
+					{
+						"episode_number": 16,
+						"season_number": 0,
+						"name": "Memories Episode 4 - Tomura Shigaraki: Destruction",
+						"air_date": "2024-04-27",
+						"id": 5202835
+					},
+					{
+						"episode_number": 17,
+						"season_number": 0,
+						"name": "A Piece of Cake",
+						"air_date": "2025-02-19",
+						"id": 6052381
+					},
+					{
+						"episode_number": 18,
+						"season_number": 0,
+						"name": "More",
+						"air_date": "2026-05-02",
+						"id": 6775049
+					},
+					{
+						"episode_number": 19,
+						"season_number": 0,
+						"name": "I am a hero too",
+						"air_date": "2026-08-03",
+						"id": 7228509
+					}
+				]
+			},
+			"65930/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Izuku Midoriya: Origin",
+						"air_date": "2016-04-03",
+						"id": 1176693
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "What It Takes to Be a Hero",
+						"air_date": "2016-04-10",
+						"id": 1183871
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Roaring Muscles",
+						"air_date": "2016-04-17",
+						"id": 1183872
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Start Line",
+						"air_date": "2016-04-24",
+						"id": 1183873
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "What I Can Do for Now",
+						"air_date": "2016-05-01",
+						"id": 1183874
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Rage, You Damn Nerd",
+						"air_date": "2016-05-08",
+						"id": 1183875
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Deku vs. Kacchan",
+						"air_date": "2016-05-15",
+						"id": 1183876
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Bakugo’s Start Line",
+						"air_date": "2016-05-22",
+						"id": 1183877
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Yeah, Just Do Your Best, Iida!",
+						"air_date": "2016-05-29",
+						"id": 1183878
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Encounter with the Unknown",
+						"air_date": "2016-06-05",
+						"id": 1183879
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Game Over",
+						"air_date": "2016-06-12",
+						"id": 1183880
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "All Might",
+						"air_date": "2016-06-19",
+						"id": 1183881
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "In Each of Our Hearts",
+						"air_date": "2016-06-26",
+						"id": 1183882
+					}
+				]
+			},
+			"65930/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "That’s the Idea, Ochaco",
+						"air_date": "2017-04-01",
+						"id": 1297726
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Roaring Sports Festival",
+						"air_date": "2017-04-08",
+						"id": 1301536
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "In Their Own Quirky Ways",
+						"air_date": "2017-04-15",
+						"id": 1303621
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Strategy, Strategy, Strategy",
+						"air_date": "2017-04-22",
+						"id": 1306162
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Cavalry Battle Finale",
+						"air_date": "2017-04-29",
+						"id": 1307042
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "The Boy Born with Everything",
+						"air_date": "2017-05-06",
+						"id": 1309619
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Victory or Defeat",
+						"air_date": "2017-05-13",
+						"id": 1315142
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Battle on, Challengers!",
+						"air_date": "2017-05-20",
+						"id": 1318814
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Bakugo vs. Uraraka",
+						"air_date": "2017-05-27",
+						"id": 1321301
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "Shoto Todoroki: Origin",
+						"air_date": "2017-06-03",
+						"id": 1323767
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "Fight On, Iida",
+						"air_date": "2017-06-10",
+						"id": 1326503
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Todoroki vs. Bakugo",
+						"air_date": "2017-06-17",
+						"id": 1329608
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "Time to Pick Some Names",
+						"air_date": "2017-06-24",
+						"id": 1331337
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "Bizarre! Gran Torino Appears",
+						"air_date": "2017-07-08",
+						"id": 1336080
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "Midoriya and Shigaraki",
+						"air_date": "2017-07-15",
+						"id": 1337708
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "Hero Killer: Stain vs U.A. Students",
+						"air_date": "2017-07-22",
+						"id": 1340051
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "Climax",
+						"air_date": "2017-07-29",
+						"id": 1342138
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "The Aftermath of Hero Killer: Stain",
+						"air_date": "2017-08-05",
+						"id": 1344909
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "Everyone's Internships",
+						"air_date": "2017-08-12",
+						"id": 1347316
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "Listen Up!! A Tale from the Past",
+						"air_date": "2017-08-19",
+						"id": 1347317
+					},
+					{
+						"episode_number": 21,
+						"season_number": 2,
+						"name": "Gear up for Final Exams",
+						"air_date": "2017-09-02",
+						"id": 1347318
+					},
+					{
+						"episode_number": 22,
+						"season_number": 2,
+						"name": "Yaoyorozu: Rising",
+						"air_date": "2017-09-09",
+						"id": 1347319
+					},
+					{
+						"episode_number": 23,
+						"season_number": 2,
+						"name": "Stripping the Varnish",
+						"air_date": "2017-09-16",
+						"id": 1347320
+					},
+					{
+						"episode_number": 24,
+						"season_number": 2,
+						"name": "Katsuki Bakugo: Origin",
+						"air_date": "2017-09-23",
+						"id": 1347321
+					},
+					{
+						"episode_number": 25,
+						"season_number": 2,
+						"name": "Encounter",
+						"air_date": "2017-09-30",
+						"id": 1347322
+					}
+				]
+			},
+			"65930/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "Game Start",
+						"air_date": "2018-04-07",
+						"id": 1448434
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "Wild, Wild Pussycats",
+						"air_date": "2018-04-14",
+						"id": 1448435
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Kota",
+						"air_date": "2018-04-21",
+						"id": 1448436
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "My Hero",
+						"air_date": "2018-04-28",
+						"id": 1448437
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Drive It Home, Iron Fist!!!",
+						"air_date": "2018-05-05",
+						"id": 1448439
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "Roaring Upheaval",
+						"air_date": "2018-05-12",
+						"id": 1448440
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "What a Twist!",
+						"air_date": "2018-05-19",
+						"id": 1448441
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "From Iida to Midoriya",
+						"air_date": "2018-05-26",
+						"id": 1448443
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "All For One",
+						"air_date": "2018-06-02",
+						"id": 1448444
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "Symbol of Peace",
+						"air_date": "2018-06-09",
+						"id": 1448446
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "One For All",
+						"air_date": "2018-06-16",
+						"id": 1448448
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "End of the Beginning, Beginning of the End",
+						"air_date": "2018-06-23",
+						"id": 1448449
+					},
+					{
+						"episode_number": 13,
+						"season_number": 3,
+						"name": "Moving into Dorms",
+						"air_date": "2018-06-30",
+						"id": 1511001
+					},
+					{
+						"episode_number": 14,
+						"season_number": 3,
+						"name": "Create Those Ultimate Moves",
+						"air_date": "2018-07-14",
+						"id": 1514168
+					},
+					{
+						"episode_number": 15,
+						"season_number": 3,
+						"name": "The Test",
+						"air_date": "2018-07-21",
+						"id": 1520178
+					},
+					{
+						"episode_number": 16,
+						"season_number": 3,
+						"name": "Shiketsu High Lurking",
+						"air_date": "2018-07-28",
+						"id": 1527803
+					},
+					{
+						"episode_number": 17,
+						"season_number": 3,
+						"name": "Class 1-A",
+						"air_date": "2018-08-04",
+						"id": 1536330
+					},
+					{
+						"episode_number": 18,
+						"season_number": 3,
+						"name": "RUSH!",
+						"air_date": "2018-08-11",
+						"id": 1536331
+					},
+					{
+						"episode_number": 19,
+						"season_number": 3,
+						"name": "Rescue Exercises",
+						"air_date": "2018-08-18",
+						"id": 1536332
+					},
+					{
+						"episode_number": 20,
+						"season_number": 3,
+						"name": "Special Episode: Save the World with Love!",
+						"air_date": "2018-08-25",
+						"id": 1536333
+					},
+					{
+						"episode_number": 21,
+						"season_number": 3,
+						"name": "What’s the Big Idea?",
+						"air_date": "2018-09-01",
+						"id": 1557754
+					},
+					{
+						"episode_number": 22,
+						"season_number": 3,
+						"name": "A Talk about Your Quirk",
+						"air_date": "2018-09-08",
+						"id": 1561499
+					},
+					{
+						"episode_number": 23,
+						"season_number": 3,
+						"name": "Deku vs. Kacchan, Part 2",
+						"air_date": "2018-09-15",
+						"id": 1567027
+					},
+					{
+						"episode_number": 24,
+						"season_number": 3,
+						"name": "A Season for Encounters",
+						"air_date": "2018-09-22",
+						"id": 1572758
+					},
+					{
+						"episode_number": 25,
+						"season_number": 3,
+						"name": "Unrivaled",
+						"air_date": "2018-09-29",
+						"id": 1576063
+					}
+				]
+			},
+			"65930/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 4,
+						"name": "The Scoop on U.A. Class 1-A",
+						"air_date": "2019-10-12",
+						"id": 1817667
+					},
+					{
+						"episode_number": 2,
+						"season_number": 4,
+						"name": "Overhaul",
+						"air_date": "2019-10-19",
+						"id": 1817668
+					},
+					{
+						"episode_number": 3,
+						"season_number": 4,
+						"name": "Boy Meets…",
+						"air_date": "2019-10-26",
+						"id": 1817669
+					},
+					{
+						"episode_number": 4,
+						"season_number": 4,
+						"name": "Fighting Fate",
+						"air_date": "2019-11-09",
+						"id": 1958018
+					},
+					{
+						"episode_number": 5,
+						"season_number": 4,
+						"name": "Let’s Go, Gutsy Red Riot",
+						"air_date": "2019-11-16",
+						"id": 1958019
+					},
+					{
+						"episode_number": 6,
+						"season_number": 4,
+						"name": "An Unpleasant Talk",
+						"air_date": "2019-11-23",
+						"id": 1958020
+					},
+					{
+						"episode_number": 7,
+						"season_number": 4,
+						"name": "GO!!",
+						"air_date": "2019-11-30",
+						"id": 1958021
+					},
+					{
+						"episode_number": 8,
+						"season_number": 4,
+						"name": "Suneater of the Big Three",
+						"air_date": "2019-12-07",
+						"id": 1958022
+					},
+					{
+						"episode_number": 9,
+						"season_number": 4,
+						"name": "Red Riot",
+						"air_date": "2019-12-14",
+						"id": 1958023
+					},
+					{
+						"episode_number": 10,
+						"season_number": 4,
+						"name": "Temp Squad",
+						"air_date": "2019-12-21",
+						"id": 1958024
+					},
+					{
+						"episode_number": 11,
+						"season_number": 4,
+						"name": "Lemillion",
+						"air_date": "2019-12-28",
+						"id": 1958025
+					},
+					{
+						"episode_number": 12,
+						"season_number": 4,
+						"name": "Unforeseen Hope",
+						"air_date": "2020-01-04",
+						"id": 1958026
+					},
+					{
+						"episode_number": 13,
+						"season_number": 4,
+						"name": "Infinite 100%",
+						"air_date": "2020-01-11",
+						"id": 2038184
+					},
+					{
+						"episode_number": 14,
+						"season_number": 4,
+						"name": "Bright Future",
+						"air_date": "2020-01-18",
+						"id": 2045336
+					},
+					{
+						"episode_number": 15,
+						"season_number": 4,
+						"name": "Smoldering Flames",
+						"air_date": "2020-01-25",
+						"id": 2052607
+					},
+					{
+						"episode_number": 16,
+						"season_number": 4,
+						"name": "Win Those Kids’ Hearts",
+						"air_date": "2020-02-01",
+						"id": 2052608
+					},
+					{
+						"episode_number": 17,
+						"season_number": 4,
+						"name": "Relief for License Trainees",
+						"air_date": "2020-02-08",
+						"id": 2052609
+					},
+					{
+						"episode_number": 18,
+						"season_number": 4,
+						"name": "School Festival",
+						"air_date": "2020-02-15",
+						"id": 2159039
+					},
+					{
+						"episode_number": 19,
+						"season_number": 4,
+						"name": "Prepping for the School Festival Is the Most Fun Part",
+						"air_date": "2020-02-22",
+						"id": 2164854
+					},
+					{
+						"episode_number": 20,
+						"season_number": 4,
+						"name": "Gold Tips Imperial",
+						"air_date": "2020-02-29",
+						"id": 2171348
+					},
+					{
+						"episode_number": 21,
+						"season_number": 4,
+						"name": "Deku vs. Gentle Criminal",
+						"air_date": "2020-03-07",
+						"id": 2177602
+					},
+					{
+						"episode_number": 22,
+						"season_number": 4,
+						"name": "School Festival Start!!",
+						"air_date": "2020-03-14",
+						"id": 2181401
+					},
+					{
+						"episode_number": 23,
+						"season_number": 4,
+						"name": "Let It Flow! School Festival!",
+						"air_date": "2020-03-21",
+						"id": 2189001
+					},
+					{
+						"episode_number": 24,
+						"season_number": 4,
+						"name": "Japanese Hero Billboard Chart",
+						"air_date": "2020-03-28",
+						"id": 2197149
+					},
+					{
+						"episode_number": 25,
+						"season_number": 4,
+						"name": "His Start",
+						"air_date": "2020-04-04",
+						"id": 2203963
+					}
+				]
+			},
+			"65930/5": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 5,
+						"name": "All Hands on Deck! Class 1-A",
+						"air_date": "2021-03-27",
+						"id": 2252141
+					},
+					{
+						"episode_number": 2,
+						"season_number": 5,
+						"name": "Vestiges",
+						"air_date": "2021-04-03",
+						"id": 2817760
+					},
+					{
+						"episode_number": 3,
+						"season_number": 5,
+						"name": "Clash! Class A vs. Class B!",
+						"air_date": "2021-04-10",
+						"id": 2817761
+					},
+					{
+						"episode_number": 4,
+						"season_number": 5,
+						"name": "Make It Happen, Shinso!",
+						"air_date": "2021-04-17",
+						"id": 2817762
+					},
+					{
+						"episode_number": 5,
+						"season_number": 5,
+						"name": "Operation New Improv Moves",
+						"air_date": "2021-04-24",
+						"id": 2817763
+					},
+					{
+						"episode_number": 6,
+						"season_number": 5,
+						"name": "Foresight",
+						"air_date": "2021-05-01",
+						"id": 2817764
+					},
+					{
+						"episode_number": 7,
+						"season_number": 5,
+						"name": "Match 3",
+						"air_date": "2021-05-08",
+						"id": 2817765
+					},
+					{
+						"episode_number": 8,
+						"season_number": 5,
+						"name": "Match 3 Conclusion",
+						"air_date": "2021-05-15",
+						"id": 2817766
+					},
+					{
+						"episode_number": 9,
+						"season_number": 5,
+						"name": "Early Bird!",
+						"air_date": "2021-05-22",
+						"id": 2817767
+					},
+					{
+						"episode_number": 10,
+						"season_number": 5,
+						"name": "That Which Is Inherited",
+						"air_date": "2021-05-29",
+						"id": 2817769
+					},
+					{
+						"episode_number": 11,
+						"season_number": 5,
+						"name": "Our Brawl",
+						"air_date": "2021-06-05",
+						"id": 2817771
+					},
+					{
+						"episode_number": 12,
+						"season_number": 5,
+						"name": "The New Power and All For One",
+						"air_date": "2021-06-12",
+						"id": 2817772
+					},
+					{
+						"episode_number": 13,
+						"season_number": 5,
+						"name": "Have a Merry Christmas!",
+						"air_date": "2021-06-19",
+						"id": 2846955
+					},
+					{
+						"episode_number": 14,
+						"season_number": 5,
+						"name": "Off to Endeavor's Agency!",
+						"air_date": "2021-06-26",
+						"id": 2846956
+					},
+					{
+						"episode_number": 15,
+						"season_number": 5,
+						"name": "One Thing at a Time",
+						"air_date": "2021-07-10",
+						"id": 2846957
+					},
+					{
+						"episode_number": 16,
+						"season_number": 5,
+						"name": "Long Time No See, Selkie",
+						"air_date": "2021-07-17",
+						"id": 2846958
+					},
+					{
+						"episode_number": 17,
+						"season_number": 5,
+						"name": "The Hellish Todoroki Family",
+						"air_date": "2021-07-24",
+						"id": 2846960
+					},
+					{
+						"episode_number": 18,
+						"season_number": 5,
+						"name": "The Unforgiven",
+						"air_date": "2021-07-31",
+						"id": 2846961
+					},
+					{
+						"episode_number": 19,
+						"season_number": 5,
+						"name": "More of a Hero Than Anyone",
+						"air_date": "2021-08-14",
+						"id": 2846962
+					},
+					{
+						"episode_number": 20,
+						"season_number": 5,
+						"name": "My Villain Academia",
+						"air_date": "2021-08-21",
+						"id": 2846963
+					},
+					{
+						"episode_number": 21,
+						"season_number": 5,
+						"name": "Revival Party",
+						"air_date": "2021-08-28",
+						"id": 2846964
+					},
+					{
+						"episode_number": 22,
+						"season_number": 5,
+						"name": "Sad Man's Parade",
+						"air_date": "2021-09-04",
+						"id": 2846965
+					},
+					{
+						"episode_number": 23,
+						"season_number": 5,
+						"name": "Tenko Shimura: Origin",
+						"air_date": "2021-09-11",
+						"id": 2846966
+					},
+					{
+						"episode_number": 24,
+						"season_number": 5,
+						"name": "Tomura Shigaraki: Origin",
+						"air_date": "2021-09-18",
+						"id": 2846967
+					},
+					{
+						"episode_number": 25,
+						"season_number": 5,
+						"name": "The High, Deep Blue Sky",
+						"air_date": "2021-09-25",
+						"id": 2846968
+					}
+				]
+			},
+			"65930/6": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 6,
+						"name": "A Quiet Beginning",
+						"air_date": "2022-10-01",
+						"id": 3849353
+					},
+					{
+						"episode_number": 2,
+						"season_number": 6,
+						"name": "Mirko, the No. 5 Hero",
+						"air_date": "2022-10-08",
+						"id": 3979192
+					},
+					{
+						"episode_number": 3,
+						"season_number": 6,
+						"name": "One's Justice",
+						"air_date": "2022-10-15",
+						"id": 3979194
+					},
+					{
+						"episode_number": 4,
+						"season_number": 6,
+						"name": "Inheritance",
+						"air_date": "2022-10-22",
+						"id": 3979195
+					},
+					{
+						"episode_number": 5,
+						"season_number": 6,
+						"name": "The Thrill of Destruction",
+						"air_date": "2022-10-29",
+						"id": 3979196
+					},
+					{
+						"episode_number": 6,
+						"season_number": 6,
+						"name": "Encounter, Part 2",
+						"air_date": "2022-11-05",
+						"id": 3979197
+					},
+					{
+						"episode_number": 7,
+						"season_number": 6,
+						"name": "Disaster Walker",
+						"air_date": "2022-11-12",
+						"id": 3979198
+					},
+					{
+						"episode_number": 8,
+						"season_number": 6,
+						"name": "League of Villains vs. U.A. Students",
+						"air_date": "2022-11-19",
+						"id": 3979200
+					},
+					{
+						"episode_number": 9,
+						"season_number": 6,
+						"name": "Katsuki Bakugo: Rising",
+						"air_date": "2022-11-26",
+						"id": 3979201
+					},
+					{
+						"episode_number": 10,
+						"season_number": 6,
+						"name": "The Ones Within Us",
+						"air_date": "2022-12-03",
+						"id": 3979202
+					},
+					{
+						"episode_number": 11,
+						"season_number": 6,
+						"name": "Dabi's Dance",
+						"air_date": "2022-12-10",
+						"id": 3979203
+					},
+					{
+						"episode_number": 12,
+						"season_number": 6,
+						"name": "Threads of Hope",
+						"air_date": "2022-12-17",
+						"id": 3979205
+					},
+					{
+						"episode_number": 13,
+						"season_number": 6,
+						"name": "Final Performance",
+						"air_date": "2022-12-24",
+						"id": 4079458
+					},
+					{
+						"episode_number": 14,
+						"season_number": 6,
+						"name": "Hellish Hell",
+						"air_date": "2023-01-07",
+						"id": 4118108
+					},
+					{
+						"episode_number": 15,
+						"season_number": 6,
+						"name": "Tartarus",
+						"air_date": "2023-01-14",
+						"id": 4118281
+					},
+					{
+						"episode_number": 16,
+						"season_number": 6,
+						"name": "The Hellish Todoroki Family, Part 2",
+						"air_date": "2023-01-21",
+						"id": 4118287
+					},
+					{
+						"episode_number": 17,
+						"season_number": 6,
+						"name": "The Wrong Way to Put Out a Fire",
+						"air_date": "2023-01-28",
+						"id": 4118292
+					},
+					{
+						"episode_number": 18,
+						"season_number": 6,
+						"name": "Izuku Midoriya and Tomura Shigaraki",
+						"air_date": "2023-02-04",
+						"id": 4118300
+					},
+					{
+						"episode_number": 19,
+						"season_number": 6,
+						"name": "Full Power!!",
+						"air_date": "2023-02-11",
+						"id": 4118317
+					},
+					{
+						"episode_number": 20,
+						"season_number": 6,
+						"name": "Hired Gun",
+						"air_date": "2023-02-18",
+						"id": 4118322
+					},
+					{
+						"episode_number": 21,
+						"season_number": 6,
+						"name": "The Lovely Lady Nagant",
+						"air_date": "2023-02-25",
+						"id": 4118327
+					},
+					{
+						"episode_number": 22,
+						"season_number": 6,
+						"name": "Friend",
+						"air_date": "2023-03-04",
+						"id": 4118330
+					},
+					{
+						"episode_number": 23,
+						"season_number": 6,
+						"name": "Deku vs. Class A",
+						"air_date": "2023-03-11",
+						"id": 4118334
+					},
+					{
+						"episode_number": 24,
+						"season_number": 6,
+						"name": "A Young Woman's Declaration",
+						"air_date": "2023-03-18",
+						"id": 4118337
+					},
+					{
+						"episode_number": 25,
+						"season_number": 6,
+						"name": "No Man Is an Island",
+						"air_date": "2023-03-25",
+						"id": 4118341
+					}
+				]
+			},
+			"65930/7": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 7,
+						"name": "In the Nick of Time! A Big-Time Maverick from the West",
+						"air_date": "2024-05-04",
+						"id": 4980945
+					},
+					{
+						"episode_number": 2,
+						"season_number": 7,
+						"name": "Specter",
+						"air_date": "2024-05-11",
+						"id": 5001708
+					},
+					{
+						"episode_number": 3,
+						"season_number": 7,
+						"name": "Villain",
+						"air_date": "2024-05-18",
+						"id": 5018704
+					},
+					{
+						"episode_number": 4,
+						"season_number": 7,
+						"name": "The Story of How We All Became Heroes",
+						"air_date": "2024-05-25",
+						"id": 5018705
+					},
+					{
+						"episode_number": 5,
+						"season_number": 7,
+						"name": "Let You Down",
+						"air_date": "2024-06-01",
+						"id": 5018706
+					},
+					{
+						"episode_number": 6,
+						"season_number": 7,
+						"name": "Division",
+						"air_date": "2024-06-08",
+						"id": 5244962
+					},
+					{
+						"episode_number": 7,
+						"season_number": 7,
+						"name": "Inflation",
+						"air_date": "2024-06-15",
+						"id": 5244964
+					},
+					{
+						"episode_number": 8,
+						"season_number": 7,
+						"name": "Two Flashfires",
+						"air_date": "2024-06-22",
+						"id": 5244965
+					},
+					{
+						"episode_number": 9,
+						"season_number": 7,
+						"name": "Extras",
+						"air_date": "2024-06-29",
+						"id": 5244966
+					},
+					{
+						"episode_number": 10,
+						"season_number": 7,
+						"name": "Wounded Hero, Burning Bright and True!!",
+						"air_date": "2024-07-13",
+						"id": 5244968
+					},
+					{
+						"episode_number": 11,
+						"season_number": 7,
+						"name": "Light Fades to Rain",
+						"air_date": "2024-07-20",
+						"id": 5244969
+					},
+					{
+						"episode_number": 12,
+						"season_number": 7,
+						"name": "Those Who Defend, Those Who Violate",
+						"air_date": "2024-08-03",
+						"id": 5244971
+					},
+					{
+						"episode_number": 13,
+						"season_number": 7,
+						"name": "A Chain of Events, Across the Ages",
+						"air_date": "2024-08-17",
+						"id": 5431581
+					},
+					{
+						"episode_number": 14,
+						"season_number": 7,
+						"name": "Together with Shoji",
+						"air_date": "2024-08-24",
+						"id": 5431582
+					},
+					{
+						"episode_number": 15,
+						"season_number": 7,
+						"name": "Butterfly Effect",
+						"air_date": "2024-08-31",
+						"id": 5431583
+					},
+					{
+						"episode_number": 16,
+						"season_number": 7,
+						"name": "The Chain Thus Far",
+						"air_date": "2024-09-07",
+						"id": 5431584
+					},
+					{
+						"episode_number": 17,
+						"season_number": 7,
+						"name": "Hopes",
+						"air_date": "2024-09-14",
+						"id": 5431585
+					},
+					{
+						"episode_number": 18,
+						"season_number": 7,
+						"name": "It's a Small World",
+						"air_date": "2024-09-21",
+						"id": 5431586
+					},
+					{
+						"episode_number": 19,
+						"season_number": 7,
+						"name": "I Am Here",
+						"air_date": "2024-09-28",
+						"id": 5431587
+					},
+					{
+						"episode_number": 20,
+						"season_number": 7,
+						"name": "A Girl's Ego",
+						"air_date": "2024-10-05",
+						"id": 5431588
+					},
+					{
+						"episode_number": 21,
+						"season_number": 7,
+						"name": "Battle Without a Quirk",
+						"air_date": "2024-10-12",
+						"id": 5431589
+					}
+				]
+			},
+			"65930/8": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 8,
+						"name": "Toshinori Yagi: Rising/Origin",
+						"air_date": "2025-10-04",
+						"id": 6384467
+					},
+					{
+						"episode_number": 2,
+						"season_number": 8,
+						"name": "The End of an Era, and the Beginning",
+						"air_date": "2025-10-11",
+						"id": 6576076
+					},
+					{
+						"episode_number": 3,
+						"season_number": 8,
+						"name": "The Final Boss!!",
+						"air_date": "2025-10-18",
+						"id": 6576553
+					},
+					{
+						"episode_number": 4,
+						"season_number": 8,
+						"name": "Quirk: Explosion!!",
+						"air_date": "2025-10-25",
+						"id": 6576554
+					},
+					{
+						"episode_number": 5,
+						"season_number": 8,
+						"name": "History's Greatest Villain",
+						"air_date": "2025-11-01",
+						"id": 6576556
+					},
+					{
+						"episode_number": 6,
+						"season_number": 8,
+						"name": "Wrench It Open, Izuku Midoriya!!",
+						"air_date": "2025-11-08",
+						"id": 6576557
+					},
+					{
+						"episode_number": 7,
+						"season_number": 8,
+						"name": "From Aizawa",
+						"air_date": "2025-11-15",
+						"id": 6666023
+					},
+					{
+						"episode_number": 8,
+						"season_number": 8,
+						"name": "Izuku Midoriya: Rising",
+						"air_date": "2025-11-22",
+						"id": 6673518
+					},
+					{
+						"episode_number": 9,
+						"season_number": 8,
+						"name": "Epilogue, The Hellish Todoroki Family: Final",
+						"air_date": "2025-11-29",
+						"id": 6673519
+					},
+					{
+						"episode_number": 10,
+						"season_number": 8,
+						"name": "The Girl Who Loves Smiles",
+						"air_date": "2025-12-06",
+						"id": 6673520
+					},
+					{
+						"episode_number": 11,
+						"season_number": 8,
+						"name": "My Hero Academia",
+						"air_date": "2025-12-13",
+						"id": 6673521
+					}
+				]
+			}
+		},
+		"episodeShow": {
+			"tt17527600": null,
+			"tt3114358": null,
+			"tt21975436": null,
+			"tt5626028": null
+		},
+		"searchTv": {
+			"My Hero Academia": {
+				"results": [
+					{
+						"id": 65930,
+						"name": "My Hero Academia",
+						"original_name": "僕のヒーローアカデミア",
+						"first_air_date": "2016-04-03"
+					},
+					{
+						"id": 280110,
+						"name": "My Hero Academia: Vigilantes",
+						"original_name": "ヴィジランテ -僕のヒーローアカデミア ILLEGALS-",
+						"first_air_date": "2025-04-07"
+					}
+				]
+			}
+		},
+		"imdbSeries": {
+			"tt17527600": {
+				"titleType": "video",
+				"title": "Fate/kaleid liner Prisma Illya: Prisma Phantasm",
+				"episodes": []
+			}
+		},
+		"identifier": {
+			"Non Non Biyori - Vacation - Movie [1080p][8A0FF4A2]": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt3114358",
+						"score": 2.9401,
+						"title": "Non Non Biyori",
+						"year": 2013
+					},
+					{
+						"imdbId": "tt0112220",
+						"score": -4.9826,
+						"title": "The Wayans Bros.",
+						"year": 1995
+					},
+					{
+						"imdbId": "tt0074036",
+						"score": -5.4833,
+						"title": "Open All Hours",
+						"year": 1976
+					},
+					{
+						"imdbId": "tt0116910",
+						"score": -6.2503,
+						"title": "Long Vacation",
+						"year": 1996
+					},
+					{
+						"imdbId": "tt15658008",
+						"score": -6.2752,
+						"title": "Killer Vacation",
+						"year": 2023
+					}
+				],
+				"parsedTitle": "Non Non Biyori",
+				"parsedYear": null,
+				"probability": 0.8006
+			},
+			"Kaiju No. 8 Kaijuu 8-gou - Mission Recon (1080p) [5148FA52]": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt21975436",
+						"score": 3.6422,
+						"title": "Kaiju No. 8",
+						"year": 2024
+					},
+					{
+						"imdbId": "tt1202625",
+						"score": -5.392,
+						"title": "Kaiji: Ultimate Survivor",
+						"year": 2007
+					},
+					{
+						"imdbId": "tt2339980",
+						"score": -6.5329,
+						"title": "Kaijudo: Rise of the Duel Masters",
+						"year": 2012
+					},
+					{
+						"imdbId": "tt0404597",
+						"score": -6.8383,
+						"title": "Duel Masters",
+						"year": 2003
+					},
+					{
+						"imdbId": "tt39246964",
+						"score": -7.2662,
+						"title": "Kaiju Girl Caramelise",
+						"year": 2026
+					}
+				],
+				"parsedTitle": "Kaiju No 8 Kaijuu 8-gou",
+				"parsedYear": null,
+				"probability": 0.9112
+			},
+			"Fate kaleid liner Prisma☆Illya Prisma☆Phantasm [DDEEEAF1]": {
+				"confident": true,
+				"kind": "movie",
+				"matches": [
+					{
+						"imdbId": "tt17527600",
+						"score": 3.3038,
+						"title": "Fate/kaleid liner Prisma Illya: Prisma Phantasm",
+						"year": 2019
+					},
+					{
+						"imdbId": "tt7283066",
+						"score": -2.2903,
+						"title": "Fate/Kaleid Liner Prisma Illya: The Movie - Oath Under Snow",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt0079714",
+						"score": -3.0976,
+						"title": "Phantasm",
+						"year": 1979
+					},
+					{
+						"imdbId": "tt12367916",
+						"score": -3.4528,
+						"title": "Fate/Kaleid Liner Prisma Illya: Licht Nameless Girl",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt15535882",
+						"score": -5.2442,
+						"title": "Fate/kaleid liner Prisma Illya 2wei!: Mahou Shoujo in Onsen Ryokou",
+						"year": 2015
+					}
+				],
+				"parsedTitle": "Fate kaleid liner Prisma☆Illya Prisma☆Phantasm",
+				"parsedYear": null,
+				"probability": 0.8921
+			},
+			"My Hero Academia - S00E04 - My Hero Academia The Movie The Two Heroes": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt5626028",
+						"score": 4.1955,
+						"title": "My Hero Academia",
+						"year": 2016
+					},
+					{
+						"imdbId": "tt35636246",
+						"score": -1.2041,
+						"title": "My Hero Academia: Vigilantes",
+						"year": 2025
+					},
+					{
+						"imdbId": "tt0338639",
+						"score": -1.2826,
+						"title": "Un paso adelante",
+						"year": 2002
+					},
+					{
+						"imdbId": "tt32174044",
+						"score": -1.6707,
+						"title": "My Hero Academia: Memories",
+						"year": 2017
+					},
+					{
+						"imdbId": "tt7836396",
+						"score": -3.0632,
+						"title": "My Hero Academia Abridged",
+						"year": 2016
+					}
+				],
+				"parsedTitle": "My Hero Academia",
+				"parsedYear": null,
+				"probability": 0.8664
+			}
+		},
+		"tvdbEpisodes": {
+			"305074": {
+				"data": {
+					"episodes": [
+						{
+							"id": 5864088,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "救え！救助訓練！",
+							"aired": "2016-11-27",
+							"runtime": 26
+						},
+						{
+							"id": 6018063,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": "ヒーローノート",
+							"aired": "2017-03-25",
+							"runtime": 24
+						},
+						{
+							"id": 6029200,
+							"seasonNumber": 0,
+							"number": 3,
+							"name": "トレーニング・オブ・ザ・デッド",
+							"aired": "2017-06-02",
+							"runtime": 23
+						},
+						{
+							"id": 6767275,
+							"seasonNumber": 0,
+							"number": 4,
+							"name": "僕のヒーローアカデミア THE MOVIE ～2人の英雄～",
+							"aired": "2018-08-30",
+							"runtime": 95
+						},
+						{
+							"id": 6715141,
+							"seasonNumber": 0,
+							"number": 5,
+							"name": "オールマイト：ライジング",
+							"aired": "2019-02-13",
+							"runtime": 2
+						},
+						{
+							"id": 7121388,
+							"seasonNumber": 0,
+							"number": 6,
+							"name": "エンドロール・BBQシーン ピクチャードラマ",
+							"aired": "2019-02-13",
+							"runtime": 6
+						},
+						{
+							"id": 7265883,
+							"seasonNumber": 0,
+							"number": 7,
+							"name": "僕のヒーローアカデミア THE MOVIE ヒーローズ：ライジング",
+							"aired": "2019-12-20",
+							"runtime": 104
+						},
+						{
+							"id": 7877555,
+							"seasonNumber": 0,
+							"number": 8,
+							"name": "僕のヒーローアカデミア 生き残れ! 決死のサバイバル訓練  前編",
+							"aired": "2020-08-15",
+							"runtime": 23
+						},
+						{
+							"id": 7877556,
+							"seasonNumber": 0,
+							"number": 9,
+							"name": "僕のヒーローアカデミア 生き残れ! 決死のサバイバル訓練 後編",
+							"aired": "2020-08-15",
+							"runtime": 23
+						},
+						{
+							"id": 8769070,
+							"seasonNumber": 0,
+							"number": 10,
+							"name": "僕のヒーローアカデミア THE MOVIE ヒーローズ・ライジング エピローグ・プラス《夢を現実に》",
+							"aired": "2020-07-15",
+							"runtime": 10
+						},
+						{
+							"id": 8833774,
+							"seasonNumber": 0,
+							"number": 11,
+							"name": "僕のヒーローアカデミア THE MOVIE ワールド ヒーローズ ミッション",
+							"aired": "2021-10-29",
+							"runtime": 101
+						},
+						{
+							"id": 9044002,
+							"seasonNumber": 0,
+							"number": 12,
+							"name": "僕のヒーローアカデミア THE MOVIE　ワールド ヒーローズ ミッション　≪旅立ち≫",
+							"aired": "2022-02-16",
+							"runtime": 6
+						},
+						{
+							"id": 9285382,
+							"seasonNumber": 0,
+							"number": 13,
+							"name": "HLB",
+							"aired": "2022-06-16",
+							"runtime": 23
+						},
+						{
+							"id": 9285383,
+							"seasonNumber": 0,
+							"number": 14,
+							"name": "笑え! 地獄のように",
+							"aired": "2022-06-16",
+							"runtime": 23
+						},
+						{
+							"id": 10029613,
+							"seasonNumber": 0,
+							"number": 15,
+							"name": "雄英ヒーローズ・バトル",
+							"aired": "2023-10-20",
+							"runtime": 23
+						},
+						{
+							"id": 10428934,
+							"seasonNumber": 0,
+							"number": 16,
+							"name": "緑谷出久：Mind",
+							"aired": "2024-04-06",
+							"runtime": 24
+						},
+						{
+							"id": 10428935,
+							"seasonNumber": 0,
+							"number": 17,
+							"name": "八木俊典：Embers",
+							"aired": "2024-04-13",
+							"runtime": 24
+						},
+						{
+							"id": 10428936,
+							"seasonNumber": 0,
+							"number": 18,
+							"name": "ヒーローズ：Thoughts",
+							"aired": "2024-04-20",
+							"runtime": 24
+						},
+						{
+							"id": 10428937,
+							"seasonNumber": 0,
+							"number": 19,
+							"name": "死柄木弔：Destruction",
+							"aired": "2024-04-27",
+							"runtime": 24
+						},
+						{
+							"id": 10806483,
+							"seasonNumber": 0,
+							"number": 20,
+							"name": "僕のヒーローアカデミア THE MOVIE ユアネクスト",
+							"aired": "2024-08-02",
+							"runtime": 110
+						},
+						{
+							"id": 11062721,
+							"seasonNumber": 0,
+							"number": 21,
+							"name": "A Piece of Cake",
+							"aired": "2025-02-19",
+							"runtime": 3
+						},
+						{
+							"id": 11407567,
+							"seasonNumber": 0,
+							"number": 22,
+							"name": "「僕のヒーローアカデミア」オリジナル映画マナー講座 ",
+							"aired": "2024-04-12",
+							"runtime": 1
+						},
+						{
+							"id": 11516327,
+							"seasonNumber": 0,
+							"number": 23,
+							"name": "More",
+							"aired": "2026-05-02",
+							"runtime": 23
+						},
+						{
+							"id": 11799743,
+							"seasonNumber": 0,
+							"number": 24,
+							"name": "I am a hero too",
+							"aired": "2026-08-03",
+							"runtime": 6
+						},
+						{
+							"id": 5465180,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "緑谷出久：オリジン",
+							"aired": "2016-04-03",
+							"runtime": 24
+						},
+						{
+							"id": 5569820,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "ヒーローの条件",
+							"aired": "2016-04-10",
+							"runtime": 24
+						},
+						{
+							"id": 5569821,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "うなれ筋肉",
+							"aired": "2016-04-17",
+							"runtime": 24
+						},
+						{
+							"id": 5569822,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "スタートライン",
+							"aired": "2016-04-24",
+							"runtime": 24
+						},
+						{
+							"id": 5570618,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "今 僕に出来ることを",
+							"aired": "2016-05-01",
+							"runtime": 24
+						},
+						{
+							"id": 5570619,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "猛れクソナード",
+							"aired": "2016-05-08",
+							"runtime": 24
+						},
+						{
+							"id": 5570620,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "デクvsかっちゃん",
+							"aired": "2016-05-15",
+							"runtime": 24
+						},
+						{
+							"id": 5570621,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "スタートライン、爆豪の。",
+							"aired": "2016-05-22",
+							"runtime": 24
+						},
+						{
+							"id": 5570622,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "いいぞガンバレ飯田くん",
+							"aired": "2016-05-29",
+							"runtime": 24
+						},
+						{
+							"id": 5570623,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "未知との遭遇",
+							"aired": "2016-06-05",
+							"runtime": 24
+						},
+						{
+							"id": 5570624,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "ゲームオーバー",
+							"aired": "2016-06-12",
+							"runtime": 24
+						},
+						{
+							"id": 5570625,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "オールマイト",
+							"aired": "2016-06-19",
+							"runtime": 24
+						},
+						{
+							"id": 5570626,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "各々の胸に",
+							"aired": "2016-06-26",
+							"runtime": 24
+						},
+						{
+							"id": 5661737,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "そういうことね お茶子さん",
+							"aired": "2017-04-01",
+							"runtime": 23
+						},
+						{
+							"id": 6029064,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "うなれ体育祭",
+							"aired": "2017-04-08",
+							"runtime": 23
+						},
+						{
+							"id": 6029066,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "みんな個性的でいいね",
+							"aired": "2017-04-15",
+							"runtime": 23
+						},
+						{
+							"id": 6029067,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "策策策",
+							"aired": "2017-04-22",
+							"runtime": 23
+						},
+						{
+							"id": 6029068,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "騎馬戦決着",
+							"aired": "2017-04-29",
+							"runtime": 23
+						},
+						{
+							"id": 6029069,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "全てを持って生まれた男の子",
+							"aired": "2017-05-06",
+							"runtime": 23
+						},
+						{
+							"id": 6029971,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "勝ち負け",
+							"aired": "2017-05-13",
+							"runtime": 23
+						},
+						{
+							"id": 6029972,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "奮え！チャレンジャー",
+							"aired": "2017-05-20",
+							"runtime": 23
+						},
+						{
+							"id": 6029973,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "爆豪VS麗日",
+							"aired": "2017-05-27",
+							"runtime": 23
+						},
+						{
+							"id": 6029974,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "轟焦凍：オリジン",
+							"aired": "2017-06-03",
+							"runtime": 23
+						},
+						{
+							"id": 6029975,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "飯田くんファイト",
+							"aired": "2017-06-10",
+							"runtime": 23
+						},
+						{
+							"id": 6029976,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "轟VS爆豪",
+							"aired": "2017-06-17",
+							"runtime": 23
+						},
+						{
+							"id": 6029977,
+							"seasonNumber": 2,
+							"number": 13,
+							"name": "名前をつけてみようの会",
+							"aired": "2017-06-24",
+							"runtime": 23
+						},
+						{
+							"id": 6029978,
+							"seasonNumber": 2,
+							"number": 14,
+							"name": "怪奇！グラントリノ現る",
+							"aired": "2017-07-08",
+							"runtime": 23
+						},
+						{
+							"id": 6029979,
+							"seasonNumber": 2,
+							"number": 15,
+							"name": "緑谷と死柄木",
+							"aired": "2017-07-15",
+							"runtime": 23
+						},
+						{
+							"id": 6029980,
+							"seasonNumber": 2,
+							"number": 16,
+							"name": "ヒーロー殺しステインVS雄英生徒",
+							"aired": "2017-07-22",
+							"runtime": 23
+						},
+						{
+							"id": 6029981,
+							"seasonNumber": 2,
+							"number": 17,
+							"name": "決着",
+							"aired": "2017-07-29",
+							"runtime": 23
+						},
+						{
+							"id": 6029982,
+							"seasonNumber": 2,
+							"number": 18,
+							"name": "「ヒーロー殺しステイン」その余波",
+							"aired": "2017-08-05",
+							"runtime": 23
+						},
+						{
+							"id": 6029983,
+							"seasonNumber": 2,
+							"number": 19,
+							"name": "それぞれの職場体験",
+							"aired": "2017-08-12",
+							"runtime": 23
+						},
+						{
+							"id": 6029984,
+							"seasonNumber": 2,
+							"number": 20,
+							"name": "知れ！昔の話",
+							"aired": "2017-08-19",
+							"runtime": 23
+						},
+						{
+							"id": 6029985,
+							"seasonNumber": 2,
+							"number": 21,
+							"name": "備えろ期末テスト",
+							"aired": "2017-09-02",
+							"runtime": 23
+						},
+						{
+							"id": 6029986,
+							"seasonNumber": 2,
+							"number": 22,
+							"name": "八百万：ライジング",
+							"aired": "2017-09-09",
+							"runtime": 23
+						},
+						{
+							"id": 6029988,
+							"seasonNumber": 2,
+							"number": 23,
+							"name": "むけろ一皮",
+							"aired": "2017-09-16",
+							"runtime": 23
+						},
+						{
+							"id": 6029989,
+							"seasonNumber": 2,
+							"number": 24,
+							"name": "爆豪勝己：オリジン",
+							"aired": "2017-09-23",
+							"runtime": 23
+						},
+						{
+							"id": 6029990,
+							"seasonNumber": 2,
+							"number": 25,
+							"name": "エンカウンター",
+							"aired": "2017-09-30",
+							"runtime": 23
+						},
+						{
+							"id": 6341861,
+							"seasonNumber": 3,
+							"number": 1,
+							"name": "ゲーム・スタート",
+							"aired": "2018-04-07",
+							"runtime": 23
+						},
+						{
+							"id": 6633228,
+							"seasonNumber": 3,
+							"number": 2,
+							"name": "ワイルド・ワイルド・プッシーキャッツ",
+							"aired": "2018-04-14",
+							"runtime": 23
+						},
+						{
+							"id": 6633229,
+							"seasonNumber": 3,
+							"number": 3,
+							"name": "洸汰くん",
+							"aired": "2018-04-21",
+							"runtime": 23
+						},
+						{
+							"id": 6633230,
+							"seasonNumber": 3,
+							"number": 4,
+							"name": "僕のヒーロー",
+							"aired": "2018-04-28",
+							"runtime": 23
+						},
+						{
+							"id": 6633231,
+							"seasonNumber": 3,
+							"number": 5,
+							"name": "ブチ込む鉄拳!!!",
+							"aired": "2018-05-05",
+							"runtime": 23
+						},
+						{
+							"id": 6633232,
+							"seasonNumber": 3,
+							"number": 6,
+							"name": "がなる風雲急",
+							"aired": "2018-05-12",
+							"runtime": 23
+						},
+						{
+							"id": 6633233,
+							"seasonNumber": 3,
+							"number": 7,
+							"name": "転転転!",
+							"aired": "2018-05-19",
+							"runtime": 23
+						},
+						{
+							"id": 6633234,
+							"seasonNumber": 3,
+							"number": 8,
+							"name": "飯田から緑谷へ",
+							"aired": "2018-05-26",
+							"runtime": 23
+						},
+						{
+							"id": 6633235,
+							"seasonNumber": 3,
+							"number": 9,
+							"name": "オール・フォー・ワン",
+							"aired": "2018-06-02",
+							"runtime": 23
+						},
+						{
+							"id": 6633236,
+							"seasonNumber": 3,
+							"number": 10,
+							"name": "平和の象徴",
+							"aired": "2018-06-09",
+							"runtime": 23
+						},
+						{
+							"id": 6633237,
+							"seasonNumber": 3,
+							"number": 11,
+							"name": "ワン・フォー・オール",
+							"aired": "2018-06-16",
+							"runtime": 23
+						},
+						{
+							"id": 6633238,
+							"seasonNumber": 3,
+							"number": 12,
+							"name": "始まりの終わり 終わりの始まり",
+							"aired": "2018-06-23",
+							"runtime": 23
+						},
+						{
+							"id": 6633239,
+							"seasonNumber": 3,
+							"number": 13,
+							"name": "入れ寮",
+							"aired": "2018-06-30",
+							"runtime": 23
+						},
+						{
+							"id": 6633240,
+							"seasonNumber": 3,
+							"number": 14,
+							"name": "編め必殺技",
+							"aired": "2018-07-14",
+							"runtime": 23
+						},
+						{
+							"id": 6633241,
+							"seasonNumber": 3,
+							"number": 15,
+							"name": "THE試験",
+							"aired": "2018-07-21",
+							"runtime": 23
+						},
+						{
+							"id": 6633242,
+							"seasonNumber": 3,
+							"number": 16,
+							"name": "這い寄る士傑高校",
+							"aired": "2018-07-28",
+							"runtime": 23
+						},
+						{
+							"id": 6633243,
+							"seasonNumber": 3,
+							"number": 17,
+							"name": "1年A組",
+							"aired": "2018-08-04",
+							"runtime": 23
+						},
+						{
+							"id": 6633244,
+							"seasonNumber": 3,
+							"number": 18,
+							"name": "RUSH!",
+							"aired": "2018-08-11",
+							"runtime": 23
+						},
+						{
+							"id": 6633245,
+							"seasonNumber": 3,
+							"number": 19,
+							"name": "救助演習",
+							"aired": "2018-08-18",
+							"runtime": 23
+						},
+						{
+							"id": 6633246,
+							"seasonNumber": 3,
+							"number": 20,
+							"name": "特別編・愛で地球を救え！",
+							"aired": "2018-08-25",
+							"runtime": 23
+						},
+						{
+							"id": 6633247,
+							"seasonNumber": 3,
+							"number": 21,
+							"name": "何をしてんだよ",
+							"aired": "2018-09-01",
+							"runtime": 23
+						},
+						{
+							"id": 6633248,
+							"seasonNumber": 3,
+							"number": 22,
+							"name": "てめェの“個性”の話だ",
+							"aired": "2018-09-08",
+							"runtime": 23
+						},
+						{
+							"id": 6633249,
+							"seasonNumber": 3,
+							"number": 23,
+							"name": "デクvsかっちゃん2",
+							"aired": "2018-09-15",
+							"runtime": 23
+						},
+						{
+							"id": 6633250,
+							"seasonNumber": 3,
+							"number": 24,
+							"name": "出会いの季節",
+							"aired": "2018-09-22",
+							"runtime": 23
+						},
+						{
+							"id": 6633251,
+							"seasonNumber": 3,
+							"number": 25,
+							"name": "無敵",
+							"aired": "2018-09-29",
+							"runtime": 23
+						},
+						{
+							"id": 7233329,
+							"seasonNumber": 4,
+							"number": 1,
+							"name": "スクープ雄英1年A組",
+							"aired": "2019-10-12",
+							"runtime": 24
+						},
+						{
+							"id": 7381250,
+							"seasonNumber": 4,
+							"number": 2,
+							"name": "オーバーホール",
+							"aired": "2019-10-19",
+							"runtime": 23
+						},
+						{
+							"id": 7381252,
+							"seasonNumber": 4,
+							"number": 3,
+							"name": "ボーイ・ミーツ…",
+							"aired": "2019-10-26",
+							"runtime": 23
+						},
+						{
+							"id": 7388141,
+							"seasonNumber": 4,
+							"number": 4,
+							"name": "抗う運命",
+							"aired": "2019-11-09",
+							"runtime": 23
+						},
+						{
+							"id": 7441444,
+							"seasonNumber": 4,
+							"number": 5,
+							"name": "ガッツだレッツラレッドライオット",
+							"aired": "2019-11-16",
+							"runtime": 23
+						},
+						{
+							"id": 7467228,
+							"seasonNumber": 4,
+							"number": 6,
+							"name": "嫌な話",
+							"aired": "2019-11-23",
+							"runtime": 23
+						},
+						{
+							"id": 7467230,
+							"seasonNumber": 4,
+							"number": 7,
+							"name": "GO!!",
+							"aired": "2019-11-30",
+							"runtime": 23
+						},
+						{
+							"id": 7453195,
+							"seasonNumber": 4,
+							"number": 8,
+							"name": "ビッグ3のサンイーター",
+							"aired": "2019-12-07",
+							"runtime": 23
+						},
+						{
+							"id": 7459806,
+							"seasonNumber": 4,
+							"number": 9,
+							"name": "烈怒頼雄斗",
+							"aired": "2019-12-14",
+							"runtime": 23
+						},
+						{
+							"id": 7461711,
+							"seasonNumber": 4,
+							"number": 10,
+							"name": "出向",
+							"aired": "2019-12-21",
+							"runtime": 23
+						},
+						{
+							"id": 7461712,
+							"seasonNumber": 4,
+							"number": 11,
+							"name": "ルミリオン",
+							"aired": "2019-12-28",
+							"runtime": 23
+						},
+						{
+							"id": 7461713,
+							"seasonNumber": 4,
+							"number": 12,
+							"name": "見えない希望",
+							"aired": "2020-01-04",
+							"runtime": 23
+						},
+						{
+							"id": 7510624,
+							"seasonNumber": 4,
+							"number": 13,
+							"name": "無限100%",
+							"aired": "2020-01-11",
+							"runtime": 23
+						},
+						{
+							"id": 7513642,
+							"seasonNumber": 4,
+							"number": 14,
+							"name": "明るい未来",
+							"aired": "2020-01-18",
+							"runtime": 23
+						},
+						{
+							"id": 7513644,
+							"seasonNumber": 4,
+							"number": 15,
+							"name": "燻る炎",
+							"aired": "2020-01-25",
+							"runtime": 23
+						},
+						{
+							"id": 7553206,
+							"seasonNumber": 4,
+							"number": 16,
+							"name": "掴めガキ心",
+							"aired": "2020-02-01",
+							"runtime": 23
+						},
+						{
+							"id": 7553207,
+							"seasonNumber": 4,
+							"number": 17,
+							"name": "ホッコれ仮免講習",
+							"aired": "2020-02-08",
+							"runtime": 23
+						},
+						{
+							"id": 7553208,
+							"seasonNumber": 4,
+							"number": 18,
+							"name": "文化祭",
+							"aired": "2020-02-15",
+							"runtime": 23
+						},
+						{
+							"id": 7553209,
+							"seasonNumber": 4,
+							"number": 19,
+							"name": "文化祭って準備してる時が一番楽しいよね",
+							"aired": "2020-02-22",
+							"runtime": 23
+						},
+						{
+							"id": 7553210,
+							"seasonNumber": 4,
+							"number": 20,
+							"name": "ゴールドティップスインペリアル",
+							"aired": "2020-02-29",
+							"runtime": 23
+						},
+						{
+							"id": 7553211,
+							"seasonNumber": 4,
+							"number": 21,
+							"name": "デクVSジェントル・クリミナル",
+							"aired": "2020-03-07",
+							"runtime": 23
+						},
+						{
+							"id": 7553212,
+							"seasonNumber": 4,
+							"number": 22,
+							"name": "開催文化祭！",
+							"aired": "2020-03-14",
+							"runtime": 23
+						},
+						{
+							"id": 7553213,
+							"seasonNumber": 4,
+							"number": 23,
+							"name": "垂れ流せ！文化祭！",
+							"aired": "2020-03-21",
+							"runtime": 23
+						},
+						{
+							"id": 7553214,
+							"seasonNumber": 4,
+							"number": 24,
+							"name": "ヒーロービルボードチャートJP",
+							"aired": "2020-03-28",
+							"runtime": 23
+						},
+						{
+							"id": 7553216,
+							"seasonNumber": 4,
+							"number": 25,
+							"name": "始まりの",
+							"aired": "2020-04-04",
+							"runtime": 23
+						},
+						{
+							"id": 8094037,
+							"seasonNumber": 5,
+							"number": 1,
+							"name": "全員出動！１年Ａ組",
+							"aired": "2021-03-27",
+							"runtime": 23
+						},
+						{
+							"id": 8159505,
+							"seasonNumber": 5,
+							"number": 2,
+							"name": "面影",
+							"aired": "2021-04-03",
+							"runtime": 23
+						},
+						{
+							"id": 8159506,
+							"seasonNumber": 5,
+							"number": 3,
+							"name": "激突！Ａ組ＶＳＢ組",
+							"aired": "2021-04-10",
+							"runtime": 23
+						},
+						{
+							"id": 8159507,
+							"seasonNumber": 5,
+							"number": 4,
+							"name": "それ行け心操くん！",
+							"aired": "2021-04-17",
+							"runtime": 24
+						},
+						{
+							"id": 8159508,
+							"seasonNumber": 5,
+							"number": 5,
+							"name": "新技即興オペレーション",
+							"aired": "2021-04-24",
+							"runtime": 23
+						},
+						{
+							"id": 8159509,
+							"seasonNumber": 5,
+							"number": 6,
+							"name": "先を見据えて",
+							"aired": "2021-05-01",
+							"runtime": 23
+						},
+						{
+							"id": 8159510,
+							"seasonNumber": 5,
+							"number": 7,
+							"name": "第３試合",
+							"aired": "2021-05-08",
+							"runtime": 23
+						},
+						{
+							"id": 8159511,
+							"seasonNumber": 5,
+							"number": 8,
+							"name": "第３試合決着",
+							"aired": "2021-05-15",
+							"runtime": 23
+						},
+						{
+							"id": 8159512,
+							"seasonNumber": 5,
+							"number": 9,
+							"name": "先手必勝！",
+							"aired": "2021-05-22",
+							"runtime": 23
+						},
+						{
+							"id": 8159513,
+							"seasonNumber": 5,
+							"number": 10,
+							"name": "受け継ぐモノ",
+							"aired": "2021-05-29",
+							"runtime": 23
+						},
+						{
+							"id": 8159514,
+							"seasonNumber": 5,
+							"number": 11,
+							"name": "ぼくらの大乱戦",
+							"aired": "2021-06-05",
+							"runtime": 23
+						},
+						{
+							"id": 8159515,
+							"seasonNumber": 5,
+							"number": 12,
+							"name": "新しい力とオール・フォー・ワン",
+							"aired": "2021-06-12",
+							"runtime": 23
+						},
+						{
+							"id": 8327241,
+							"seasonNumber": 5,
+							"number": 13,
+							"name": "メリれ！クリスマス！",
+							"aired": "2021-06-19",
+							"runtime": 23
+						},
+						{
+							"id": 8329802,
+							"seasonNumber": 5,
+							"number": 14,
+							"name": "いざ！エンデヴァー事務所",
+							"aired": "2021-06-26",
+							"runtime": 23
+						},
+						{
+							"id": 8329803,
+							"seasonNumber": 5,
+							"number": 15,
+							"name": "一つ一つ",
+							"aired": "2021-07-10",
+							"runtime": 23
+						},
+						{
+							"id": 8329804,
+							"seasonNumber": 5,
+							"number": 16,
+							"name": "お久しぶりですセルキーさん",
+							"aired": "2021-07-17",
+							"runtime": 23
+						},
+						{
+							"id": 8329805,
+							"seasonNumber": 5,
+							"number": 17,
+							"name": "地獄の轟くん家",
+							"aired": "2021-07-24",
+							"runtime": 23
+						},
+						{
+							"id": 8329806,
+							"seasonNumber": 5,
+							"number": 18,
+							"name": "許されざる者",
+							"aired": "2021-07-31",
+							"runtime": 23
+						},
+						{
+							"id": 8329807,
+							"seasonNumber": 5,
+							"number": 19,
+							"name": "誰よりもおまえはヒーローに",
+							"aired": "2021-08-14",
+							"runtime": 23
+						},
+						{
+							"id": 8329808,
+							"seasonNumber": 5,
+							"number": 20,
+							"name": "僕のヴィランアカデミア",
+							"aired": "2021-08-21",
+							"runtime": 23
+						},
+						{
+							"id": 8329809,
+							"seasonNumber": 5,
+							"number": 21,
+							"name": "再臨祭",
+							"aired": "2021-08-28",
+							"runtime": 23
+						},
+						{
+							"id": 8329810,
+							"seasonNumber": 5,
+							"number": 22,
+							"name": "サッドマンズパレード",
+							"aired": "2021-09-04",
+							"runtime": 23
+						},
+						{
+							"id": 8329811,
+							"seasonNumber": 5,
+							"number": 23,
+							"name": "志村転弧：オリジン",
+							"aired": "2021-09-11",
+							"runtime": 23
+						},
+						{
+							"id": 8329812,
+							"seasonNumber": 5,
+							"number": 24,
+							"name": "死柄木弔：オリジン",
+							"aired": "2021-09-18",
+							"runtime": 23
+						},
+						{
+							"id": 8329813,
+							"seasonNumber": 5,
+							"number": 25,
+							"name": "空、高く群青",
+							"aired": "2021-09-25",
+							"runtime": 23
+						},
+						{
+							"id": 9337197,
+							"seasonNumber": 6,
+							"number": 1,
+							"name": "静かな始まり",
+							"aired": "2022-10-01",
+							"runtime": 24
+						},
+						{
+							"id": 9360955,
+							"seasonNumber": 6,
+							"number": 2,
+							"name": "No.5のミルコさん",
+							"aired": "2022-10-08",
+							"runtime": 24
+						},
+						{
+							"id": 9360956,
+							"seasonNumber": 6,
+							"number": 3,
+							"name": "One's Justice",
+							"aired": "2022-10-15",
+							"runtime": 24
+						},
+						{
+							"id": 9360957,
+							"seasonNumber": 6,
+							"number": 4,
+							"name": "継承",
+							"aired": "2022-10-22",
+							"runtime": 24
+						},
+						{
+							"id": 9360958,
+							"seasonNumber": 6,
+							"number": 5,
+							"name": "破滅のボルテージ",
+							"aired": "2022-10-29",
+							"runtime": 24
+						},
+						{
+							"id": 9360959,
+							"seasonNumber": 6,
+							"number": 6,
+							"name": "エンカウンター2",
+							"aired": "2022-11-05",
+							"runtime": 24
+						},
+						{
+							"id": 9360960,
+							"seasonNumber": 6,
+							"number": 7,
+							"name": "災害歩行",
+							"aired": "2022-11-12",
+							"runtime": 24
+						},
+						{
+							"id": 9360961,
+							"seasonNumber": 6,
+							"number": 8,
+							"name": "敵(ヴィラン)連合vs雄英生",
+							"aired": "2022-11-19",
+							"runtime": 24
+						},
+						{
+							"id": 9360962,
+							"seasonNumber": 6,
+							"number": 9,
+							"name": "爆豪勝己：ライジング",
+							"aired": "2022-11-26",
+							"runtime": 24
+						},
+						{
+							"id": 9360963,
+							"seasonNumber": 6,
+							"number": 10,
+							"name": "僕らの中の人",
+							"aired": "2022-12-03",
+							"runtime": 24
+						},
+						{
+							"id": 9360964,
+							"seasonNumber": 6,
+							"number": 11,
+							"name": "ダビダンス",
+							"aired": "2022-12-10",
+							"runtime": 24
+						},
+						{
+							"id": 9360965,
+							"seasonNumber": 6,
+							"number": 12,
+							"name": "一縷の希望たち",
+							"aired": "2022-12-17",
+							"runtime": 24
+						},
+						{
+							"id": 9360966,
+							"seasonNumber": 6,
+							"number": 13,
+							"name": "ラストステージ",
+							"aired": "2022-12-24",
+							"runtime": 24
+						},
+						{
+							"id": 9518025,
+							"seasonNumber": 6,
+							"number": 14,
+							"name": "極々、地獄",
+							"aired": "2023-01-07",
+							"runtime": 24
+						},
+						{
+							"id": 9518026,
+							"seasonNumber": 6,
+							"number": 15,
+							"name": "タルタロス",
+							"aired": "2023-01-14",
+							"runtime": 24
+						},
+						{
+							"id": 9518027,
+							"seasonNumber": 6,
+							"number": 16,
+							"name": "地獄の轟くん家2",
+							"aired": "2023-01-21",
+							"runtime": 24
+						},
+						{
+							"id": 9518028,
+							"seasonNumber": 6,
+							"number": 17,
+							"name": "火の不始末",
+							"aired": "2023-01-28",
+							"runtime": 24
+						},
+						{
+							"id": 9518029,
+							"seasonNumber": 6,
+							"number": 18,
+							"name": "緑谷出久と死柄木弔",
+							"aired": "2023-02-04",
+							"runtime": 24
+						},
+						{
+							"id": 9518030,
+							"seasonNumber": 6,
+							"number": 19,
+							"name": "全力!!",
+							"aired": "2023-02-11",
+							"runtime": 24
+						},
+						{
+							"id": 9518031,
+							"seasonNumber": 6,
+							"number": 20,
+							"name": "刺客",
+							"aired": "2023-02-18",
+							"runtime": 24
+						},
+						{
+							"id": 9518033,
+							"seasonNumber": 6,
+							"number": 21,
+							"name": "麗しきレディ・ナガン",
+							"aired": "2023-02-25",
+							"runtime": 24
+						},
+						{
+							"id": 9518035,
+							"seasonNumber": 6,
+							"number": 22,
+							"name": "友だち",
+							"aired": "2023-03-04",
+							"runtime": 24
+						},
+						{
+							"id": 9518038,
+							"seasonNumber": 6,
+							"number": 23,
+							"name": "デクvsA組",
+							"aired": "2023-03-11",
+							"runtime": 24
+						},
+						{
+							"id": 9518040,
+							"seasonNumber": 6,
+							"number": 24,
+							"name": "未成年の主張",
+							"aired": "2023-03-18",
+							"runtime": 24
+						},
+						{
+							"id": 9518042,
+							"seasonNumber": 6,
+							"number": 25,
+							"name": "つながるつながる",
+							"aired": "2023-03-25",
+							"runtime": 24
+						},
+						{
+							"id": 10217775,
+							"seasonNumber": 7,
+							"number": 1,
+							"name": "欧米ギリギリ!!ぶっちぎりの凄い奴",
+							"aired": "2024-05-04",
+							"runtime": 24
+						},
+						{
+							"id": 10412498,
+							"seasonNumber": 7,
+							"number": 2,
+							"name": "亡霊",
+							"aired": "2024-05-11",
+							"runtime": 24
+						},
+						{
+							"id": 10412499,
+							"seasonNumber": 7,
+							"number": 3,
+							"name": "敵＜ヴィラン＞",
+							"aired": "2024-05-18",
+							"runtime": 24
+						},
+						{
+							"id": 10412500,
+							"seasonNumber": 7,
+							"number": 4,
+							"name": "皆がヒーローになるまでの物語",
+							"aired": "2024-05-25",
+							"runtime": 24
+						},
+						{
+							"id": 10412501,
+							"seasonNumber": 7,
+							"number": 5,
+							"name": "Let you down",
+							"aired": "2024-06-01",
+							"runtime": 24
+						},
+						{
+							"id": 10412502,
+							"seasonNumber": 7,
+							"number": 6,
+							"name": "DIVISION",
+							"aired": "2024-06-08",
+							"runtime": 24
+						},
+						{
+							"id": 10412503,
+							"seasonNumber": 7,
+							"number": 7,
+							"name": "INFLATION",
+							"aired": "2024-06-15",
+							"runtime": 24
+						},
+						{
+							"id": 10412505,
+							"seasonNumber": 7,
+							"number": 8,
+							"name": "二つの赫灼",
+							"aired": "2024-06-22",
+							"runtime": 24
+						},
+						{
+							"id": 10412506,
+							"seasonNumber": 7,
+							"number": 9,
+							"name": "EXTRAS",
+							"aired": "2024-06-29",
+							"runtime": 24
+						},
+						{
+							"id": 10412507,
+							"seasonNumber": 7,
+							"number": 10,
+							"name": "焼身照命!! 手負いのヒーロー",
+							"aired": "2024-07-13",
+							"runtime": 24
+						},
+						{
+							"id": 10412508,
+							"seasonNumber": 7,
+							"number": 11,
+							"name": "Light Fades To Rain",
+							"aired": "2024-07-20",
+							"runtime": 24
+						},
+						{
+							"id": 10412509,
+							"seasonNumber": 7,
+							"number": 12,
+							"name": "禦ぐ者と侵す者",
+							"aired": "2024-08-03",
+							"runtime": 24
+						},
+						{
+							"id": 10548810,
+							"seasonNumber": 7,
+							"number": 13,
+							"name": "連なる星霜",
+							"aired": "2024-08-17",
+							"runtime": 24
+						},
+						{
+							"id": 10548812,
+							"seasonNumber": 7,
+							"number": 14,
+							"name": "しょーじくんといっしょ。",
+							"aired": "2024-08-24",
+							"runtime": 24
+						},
+						{
+							"id": 10548815,
+							"seasonNumber": 7,
+							"number": 15,
+							"name": "Butterfly Effect",
+							"aired": "2024-08-31",
+							"runtime": 24
+						},
+						{
+							"id": 10548817,
+							"seasonNumber": 7,
+							"number": 16,
+							"name": "ここに至るまでの連なり",
+							"aired": "2024-09-07",
+							"runtime": 24
+						},
+						{
+							"id": 10548820,
+							"seasonNumber": 7,
+							"number": 17,
+							"name": "hopes",
+							"aired": "2024-09-14",
+							"runtime": 24
+						},
+						{
+							"id": 10548821,
+							"seasonNumber": 7,
+							"number": 18,
+							"name": "It's A Small World",
+							"aired": "2024-09-21",
+							"runtime": 24
+						},
+						{
+							"id": 10548822,
+							"seasonNumber": 7,
+							"number": 19,
+							"name": "I AM HERE",
+							"aired": "2024-09-28",
+							"runtime": 24
+						},
+						{
+							"id": 10548823,
+							"seasonNumber": 7,
+							"number": 20,
+							"name": "少女のエゴ",
+							"aired": "2024-10-05",
+							"runtime": 24
+						},
+						{
+							"id": 10548824,
+							"seasonNumber": 7,
+							"number": 21,
+							"name": "\"個性\"無き戦い",
+							"aired": "2024-10-12",
+							"runtime": 23
+						},
+						{
+							"id": 11351113,
+							"seasonNumber": 8,
+							"number": 1,
+							"name": "八木俊典：ライジングオリジン",
+							"aired": "2025-10-04",
+							"runtime": 24
+						},
+						{
+							"id": 11374885,
+							"seasonNumber": 8,
+							"number": 2,
+							"name": "The End of An Era, And The Beginning",
+							"aired": "2025-10-11",
+							"runtime": 24
+						},
+						{
+							"id": 11374887,
+							"seasonNumber": 8,
+							"number": 3,
+							"name": "ラスボス!!",
+							"aired": "2025-10-18",
+							"runtime": 24
+						},
+						{
+							"id": 11374889,
+							"seasonNumber": 8,
+							"number": 4,
+							"name": "“個性”!!爆破!!",
+							"aired": "2025-10-25",
+							"runtime": 24
+						},
+						{
+							"id": 11374892,
+							"seasonNumber": 8,
+							"number": 5,
+							"name": "史上最悪の敵",
+							"aired": "2025-11-01",
+							"runtime": 24
+						},
+						{
+							"id": 11374894,
+							"seasonNumber": 8,
+							"number": 6,
+							"name": "こじ開けろ！緑谷出久!!",
+							"aired": "2025-11-08",
+							"runtime": 24
+						},
+						{
+							"id": 11377542,
+							"seasonNumber": 8,
+							"number": 7,
+							"name": "相澤くんから",
+							"aired": "2025-11-15",
+							"runtime": 24
+						},
+						{
+							"id": 11377546,
+							"seasonNumber": 8,
+							"number": 8,
+							"name": "緑谷出久：ライジング",
+							"aired": "2025-11-22",
+							"runtime": 24
+						},
+						{
+							"id": 11377550,
+							"seasonNumber": 8,
+							"number": 9,
+							"name": "エピローグ/地獄の轟くん家・FINAL",
+							"aired": "2025-11-29",
+							"runtime": 24
+						},
+						{
+							"id": 11377552,
+							"seasonNumber": 8,
+							"number": 10,
+							"name": "笑顔が好きな女の子",
+							"aired": "2025-12-06",
+							"runtime": 24
+						},
+						{
+							"id": 11377555,
+							"seasonNumber": 8,
+							"number": 11,
+							"name": "僕のヒーローアカデミア",
+							"aired": "2025-12-13",
+							"runtime": 23
+						}
+					]
+				}
+			}
+		},
+		"identify": {
+			"[Arid] Fate kaleid liner Prisma☆Illya Prisma☆Phantasm [BD 1080p x264 FLAC]": {
+				"imdbId": "tt17527600",
+				"kind": "movie"
+			}
+		},
+		"searchMovie": {
+			"Kaiju No. 8 mission recon|undefined": {
+				"results": [
+					{
+						"id": 1326106,
+						"title": "Kaiju No. 8: Mission Recon",
+						"original_title": "怪獣８号 第1期総集編／同時上映「保科の休日」",
+						"release_date": "2025-03-28"
+					}
+				]
+			},
+			"Fate/kaleid liner Prisma Illya phantasm|undefined": {
+				"results": [
+					{
+						"id": 658436,
+						"title": "Fate/kaleid liner Prisma☆Illya: Prisma☆Phantasm",
+						"original_title": "Fate/kaleid liner プリズマ☆イリヤ プリズマ☆ファンタズム",
+						"release_date": "2019-06-14"
+					}
+				]
+			},
+			"Non Non Biyori vacation|undefined": {
+				"results": [
+					{
+						"id": 494471,
+						"title": "Non Non Biyori: Vacation",
+						"original_title": "劇場版 のんのんびより ばけーしょん",
+						"release_date": "2018-08-25"
+					}
+				]
+			},
+			"My Hero Academia two heroes|undefined": {
+				"results": [
+					{
+						"id": 505262,
+						"title": "My Hero Academia: Two Heroes",
+						"original_title": "僕のヒーローアカデミア THE MOVIE ～2人の英雄～",
+						"release_date": "2018-08-03"
+					},
+					{
+						"id": 592350,
+						"title": "My Hero Academia: Heroes Rising",
+						"original_title": "僕のヒーローアカデミア THE MOVIE ヒーローズ：ライジング",
+						"release_date": "2019-12-20"
+					}
+				]
+			}
+		},
+		"movieIds": {
+			"494471": {
+				"id": 494471,
+				"imdb_id": "tt7785128"
+			},
+			"505262": {
+				"id": 505262,
+				"imdb_id": "tt7745068"
+			},
+			"658436": {
+				"id": 658436,
+				"imdb_id": "tt10388584"
+			},
+			"1326106": {
+				"id": 1326106,
+				"imdb_id": "tt35636950"
+			}
+		},
+		"anime": {
+			"fribb": [
+				{
+					"type": "TV",
+					"anidb_id": 9042,
+					"anilist_id": 14829,
+					"animecountdown_id": 39391,
+					"animenewsnetwork_id": 15245,
+					"anime-planet_id": "fate-kaleid-liner-prisma-illya",
+					"anisearch_id": 7654,
+					"imdb_id": ["tt2904426"],
+					"kitsu_id": 7173,
+					"livechart_id": 13,
+					"mal_id": 14829,
+					"simkl_id": 39391,
+					"themoviedb_id": {
+						"tv": 63576
+					},
+					"tvdb_id": 269319,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 1
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 9722,
+					"anilist_id": 17549,
+					"animecountdown_id": 44620,
+					"animenewsnetwork_id": 15149,
+					"anime-planet_id": "non-non-biyori",
+					"anisearch_id": 8390,
+					"imdb_id": ["tt3114358"],
+					"kitsu_id": 7711,
+					"livechart_id": 93,
+					"mal_id": 17549,
+					"simkl_id": 44620,
+					"themoviedb_id": {
+						"tv": 66875
+					},
+					"tvdb_id": 272316,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 1
+					}
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 9900,
+					"anilist_id": 18851,
+					"animecountdown_id": 43103,
+					"animenewsnetwork_id": 15635,
+					"anime-planet_id": "fate-kaleid-liner-prisma-illya-undoukai-de-dance",
+					"anisearch_id": 8686,
+					"imdb_id": ["tt2904426"],
+					"kitsu_id": 7861,
+					"livechart_id": 141,
+					"mal_id": 18851,
+					"simkl_id": 43103,
+					"themoviedb_id": {
+						"tv": 63576
+					},
+					"tvdb_id": 269319,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 5,
+						"tmdb": 5
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 10091,
+					"anilist_id": 20467,
+					"animecountdown_id": 46992,
+					"animenewsnetwork_id": 15630,
+					"anime-planet_id": "fate-kaleid-liner-prisma-illya-2wei",
+					"anisearch_id": 9106,
+					"imdb_id": ["tt2904426"],
+					"kitsu_id": 8003,
+					"livechart_id": 226,
+					"mal_id": 20509,
+					"simkl_id": 46992,
+					"themoviedb_id": {
+						"tv": 63576
+					},
+					"tvdb_id": 269319,
+					"season": {
+						"tvdb": 2,
+						"tmdb": 2
+					}
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 10232,
+					"anilist_id": 20497,
+					"animecountdown_id": 45696,
+					"animenewsnetwork_id": 20465,
+					"anime-planet_id": "non-non-biyori-okinawa-e-ikukoto-ni-natta",
+					"anisearch_id": 9397,
+					"imdb_id": ["tt3114358"],
+					"kitsu_id": 8187,
+					"livechart_id": 286,
+					"mal_id": 21667,
+					"simkl_id": 45696,
+					"themoviedb_id": {
+						"tv": 66875
+					},
+					"tvdb_id": 272316,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 10587,
+					"anilist_id": 20694,
+					"animecountdown_id": 49390,
+					"animenewsnetwork_id": 16655,
+					"anime-planet_id": "non-non-biyori-repeat",
+					"anisearch_id": 9592,
+					"imdb_id": ["tt3114358"],
+					"kitsu_id": 8410,
+					"livechart_id": 519,
+					"mal_id": 23623,
+					"simkl_id": 49390,
+					"themoviedb_id": {
+						"tv": 66875
+					},
+					"tvdb_id": 272316,
+					"season": {
+						"tvdb": 2,
+						"tmdb": 2
+					}
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 10804,
+					"anilist_id": 20862,
+					"animecountdown_id": 412478,
+					"animenewsnetwork_id": 23759,
+					"anime-planet_id": "fatekaleid-liner-prisma-illya-2wei-ova",
+					"anisearch_id": 9849,
+					"imdb_id": ["tt2904426"],
+					"kitsu_id": 8831,
+					"livechart_id": 697,
+					"mal_id": 26057,
+					"simkl_id": 412478,
+					"themoviedb_id": {
+						"tv": 63576
+					},
+					"tvdb_id": 269319,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 10833,
+					"anilist_id": 20845,
+					"animecountdown_id": 419350,
+					"animenewsnetwork_id": 16275,
+					"anime-planet_id": "fate-kaleid-liner-prisma-illya-2wei-herz",
+					"anisearch_id": 9844,
+					"imdb_id": ["tt2904426"],
+					"kitsu_id": 9095,
+					"livechart_id": 799,
+					"mal_id": 27525,
+					"simkl_id": 419350,
+					"themoviedb_id": {
+						"tv": 63576
+					},
+					"tvdb_id": 269319,
+					"season": {
+						"tvdb": 3,
+						"tmdb": 3
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 11639,
+					"anilist_id": 21379,
+					"animecountdown_id": 525624,
+					"animenewsnetwork_id": 17690,
+					"anime-planet_id": "fate-kaleid-liner-prisma-illya-3rei",
+					"anisearch_id": 10784,
+					"imdb_id": ["tt2904426"],
+					"kitsu_id": 11438,
+					"livechart_id": 1841,
+					"mal_id": 31706,
+					"simkl_id": 525624,
+					"themoviedb_id": {
+						"tv": 63576
+					},
+					"tvdb_id": 269319,
+					"season": {
+						"tvdb": 4,
+						"tmdb": 4
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 11739,
+					"anilist_id": 21459,
+					"animecountdown_id": 532942,
+					"animenewsnetwork_id": 17786,
+					"anime-planet_id": "my-hero-academia",
+					"anisearch_id": 10978,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 11469,
+					"livechart_id": 1895,
+					"mal_id": 31964,
+					"simkl_id": 532942,
+					"themoviedb_id": {
+						"tv": 65930
+					},
+					"tvdb_id": 305074,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 1
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 12233,
+					"anilist_id": 21856,
+					"animecountdown_id": 595017,
+					"animenewsnetwork_id": 18485,
+					"anime-planet_id": "my-hero-academia-2",
+					"anisearch_id": 11549,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 12268,
+					"livechart_id": 2225,
+					"mal_id": 33486,
+					"simkl_id": 595017,
+					"themoviedb_id": {
+						"tv": 65930
+					},
+					"tvdb_id": 305074,
+					"season": {
+						"tvdb": 2,
+						"tmdb": 2
+					}
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 12344,
+					"animecountdown_id": 610915,
+					"imdb_id": ["tt5626028"],
+					"livechart_id": 2292,
+					"simkl_id": 610915,
+					"themoviedb_id": {
+						"tv": 65930
+					},
+					"tvdb_id": 305074,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					}
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 12420,
+					"anilist_id": 97757,
+					"animecountdown_id": 619033,
+					"animenewsnetwork_id": 19029,
+					"anime-planet_id": "fate-kaleid-liner-prisma-illya-movie-vow-in-the-snow",
+					"anisearch_id": 11791,
+					"imdb_id": ["tt7283066"],
+					"kitsu_id": 12555,
+					"livechart_id": 2337,
+					"mal_id": 34100,
+					"simkl_id": 619033,
+					"themoviedb_id": {
+						"tv": 63576
+					},
+					"tvdb_id": 269319,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 23,
+						"tmdb": 23
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 13485,
+					"anilist_id": 100166,
+					"animecountdown_id": 723427,
+					"animenewsnetwork_id": 20356,
+					"anime-planet_id": "my-hero-academia-3",
+					"anisearch_id": 12846,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 13881,
+					"livechart_id": 2899,
+					"mal_id": 36456,
+					"simkl_id": 723427,
+					"themoviedb_id": {
+						"tv": 65930
+					},
+					"tvdb_id": 305074,
+					"season": {
+						"tvdb": 3,
+						"tmdb": 3
+					}
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 13508,
+					"anilist_id": 100269,
+					"animecountdown_id": 725759,
+					"animenewsnetwork_id": 21867,
+					"anime-planet_id": "fate-kaleid-liner-prisma-illya-prisma-phantasm",
+					"anisearch_id": 12894,
+					"imdb_id": ["tt2904426"],
+					"kitsu_id": 42223,
+					"livechart_id": 8683,
+					"mal_id": 38897,
+					"simkl_id": 725759,
+					"themoviedb_id": {
+						"tv": 63576
+					},
+					"tvdb_id": 269319,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 25,
+						"tmdb": 25
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 14416,
+					"anilist_id": 104276,
+					"animecountdown_id": 920009,
+					"animenewsnetwork_id": 22265,
+					"anime-planet_id": "my-hero-academia-4",
+					"anisearch_id": 13910,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 41971,
+					"livechart_id": 3539,
+					"mal_id": 38408,
+					"simkl_id": 920009,
+					"themoviedb_id": {
+						"tv": 65930
+					},
+					"tvdb_id": 305074,
+					"season": {
+						"tvdb": 4,
+						"tmdb": 4
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 14914,
+					"anilist_id": 109403,
+					"animecountdown_id": 1092771,
+					"animenewsnetwork_id": 22215,
+					"anime-planet_id": "non-non-biyori-nonstop",
+					"anisearch_id": 14403,
+					"imdb_id": ["tt3114358"],
+					"kitsu_id": 42349,
+					"livechart_id": 9437,
+					"mal_id": 39808,
+					"simkl_id": 1092771,
+					"themoviedb_id": {
+						"tv": 66875
+					},
+					"tvdb_id": 272316,
+					"season": {
+						"tvdb": 3,
+						"tmdb": 3
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 15484,
+					"anilist_id": 117193,
+					"animecountdown_id": 1310995,
+					"animenewsnetwork_id": 23862,
+					"anime-planet_id": "my-hero-academia-5",
+					"anisearch_id": 15141,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 43108,
+					"livechart_id": 9877,
+					"mal_id": 41587,
+					"simkl_id": 1310995,
+					"themoviedb_id": {
+						"tv": 65930
+					},
+					"tvdb_id": 305074,
+					"season": {
+						"tvdb": 5,
+						"tmdb": 5
+					}
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 15565,
+					"anilist_id": 118743,
+					"animecountdown_id": 1349953,
+					"animenewsnetwork_id": 23852,
+					"anime-planet_id": "fate-kaleid-liner-prisma-illya-movie-2-licht-nameless-girl",
+					"anisearch_id": 15552,
+					"imdb_id": ["tt12367916"],
+					"kitsu_id": 43209,
+					"livechart_id": 2927,
+					"mal_id": 42030,
+					"simkl_id": 1349953,
+					"themoviedb_id": {
+						"tv": 63576
+					},
+					"tvdb_id": 269319,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 26,
+						"tmdb": 26
+					}
+				},
+				{
+					"type": "ONA",
+					"anidb_id": 15672,
+					"anilist_id": 122349,
+					"animecountdown_id": 1403255,
+					"animenewsnetwork_id": 23572,
+					"anime-planet_id": "my-hero-academia-make-it-do-or-die-survival-training",
+					"anisearch_id": 15480,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 43485,
+					"livechart_id": 10100,
+					"mal_id": 42603,
+					"simkl_id": 1403255,
+					"themoviedb_id": {
+						"tv": 65930
+					},
+					"tvdb_id": 305074,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 7,
+						"tmdb": 7
+					}
+				},
+				{
+					"type": "OVA",
+					"anidb_id": 16507,
+					"anilist_id": 137337,
+					"animecountdown_id": 1699251,
+					"animenewsnetwork_id": 24592,
+					"anime-planet_id": "non-non-biyori-nonstop-ova",
+					"anisearch_id": 16799,
+					"imdb_id": ["tt3114358"],
+					"kitsu_id": 44958,
+					"livechart_id": 10730,
+					"mal_id": 49521,
+					"simkl_id": 1699251,
+					"themoviedb_id": {
+						"tv": 66875
+					},
+					"tvdb_id": 272316,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 3,
+						"tmdb": 3
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 16793,
+					"anilist_id": 139630,
+					"animecountdown_id": 1737071,
+					"animenewsnetwork_id": 24773,
+					"anime-planet_id": "my-hero-academia-6",
+					"anisearch_id": 16609,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 45240,
+					"livechart_id": 10814,
+					"mal_id": 49918,
+					"simkl_id": 1737071,
+					"themoviedb_id": {
+						"tv": 65930
+					},
+					"tvdb_id": 305074,
+					"season": {
+						"tvdb": 6,
+						"tmdb": 6
+					}
+				},
+				{
+					"type": "ONA",
+					"anidb_id": 17356,
+					"anilist_id": 149073,
+					"animecountdown_id": 1907328,
+					"animenewsnetwork_id": 25667,
+					"anime-planet_id": "my-hero-academia-web",
+					"anisearch_id": 17447,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 46117,
+					"livechart_id": 11210,
+					"mal_id": 51781,
+					"simkl_id": 1907328,
+					"themoviedb_id": {
+						"tv": 65930
+					},
+					"tvdb_id": 305074,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 12,
+						"tmdb": 12
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 17550,
+					"anilist_id": 153288,
+					"animecountdown_id": 1967108,
+					"animenewsnetwork_id": 26176,
+					"anime-planet_id": "kaiju-no-8",
+					"anisearch_id": 17576,
+					"imdb_id": ["tt21975436"],
+					"kitsu_id": 46300,
+					"livechart_id": 11352,
+					"mal_id": 52588,
+					"simkl_id": 1967108,
+					"themoviedb_id": {
+						"tv": 207468
+					},
+					"tvdb_id": 423075,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 1
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 17931,
+					"anilist_id": 163139,
+					"animecountdown_id": 2125452,
+					"animenewsnetwork_id": 27621,
+					"anime-planet_id": "my-hero-academia-7",
+					"anisearch_id": 18294,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 47232,
+					"livechart_id": 11909,
+					"mal_id": 54789,
+					"simkl_id": 2125452,
+					"themoviedb_id": {
+						"tv": 65930
+					},
+					"tvdb_id": 305074,
+					"season": {
+						"tvdb": 7,
+						"tmdb": 7
+					}
+				},
+				{
+					"type": "MOVIE",
+					"anidb_id": 18199,
+					"anilist_id": 169402,
+					"animecountdown_id": 2259030,
+					"animenewsnetwork_id": 29929,
+					"anime-planet_id": "my-hero-academia-ua-heroes-battle",
+					"anisearch_id": 18697,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 48276,
+					"livechart_id": 12333,
+					"mal_id": 56685,
+					"simkl_id": 2259030,
+					"themoviedb_id": {
+						"tv": 65930
+					},
+					"tvdb_id": 305074,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 14,
+						"tmdb": 14
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 18722,
+					"anilist_id": 178754,
+					"animecountdown_id": 2532478,
+					"animenewsnetwork_id": 32854,
+					"anime-planet_id": "kaiju-no-8-2nd-season",
+					"anisearch_id": 19444,
+					"imdb_id": ["tt21975436"],
+					"kitsu_id": 48994,
+					"livechart_id": 12730,
+					"mal_id": 59177,
+					"simkl_id": 2532478,
+					"themoviedb_id": {
+						"tv": 207468
+					},
+					"tvdb_id": 423075,
+					"season": {
+						"tvdb": 2,
+						"tmdb": 1
+					},
+					"episode_offset": {
+						"tmdb": 12
+					}
+				},
+				{
+					"type": "TV",
+					"anidb_id": 18921,
+					"anilist_id": 182896,
+					"animecountdown_id": 2607190,
+					"animenewsnetwork_id": 33714,
+					"anime-planet_id": "my-hero-academia-final-season",
+					"anisearch_id": 19698,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 49279,
+					"livechart_id": 12882,
+					"mal_id": 60098,
+					"simkl_id": 2607190,
+					"themoviedb_id": {
+						"tv": 65930
+					},
+					"tvdb_id": 305074,
+					"season": {
+						"tvdb": 8,
+						"tmdb": 8
+					}
+				},
+				{
+					"type": "SPECIAL",
+					"anidb_id": 20039,
+					"anilist_id": 204356,
+					"animecountdown_id": 3105338,
+					"animenewsnetwork_id": 38146,
+					"anime-planet_id": "my-hero-academia-1701-more",
+					"anisearch_id": 21118,
+					"imdb_id": ["tt5626028"],
+					"kitsu_id": 50399,
+					"livechart_id": 13435,
+					"mal_id": 63130,
+					"simkl_id": 3105338,
+					"themoviedb_id": {
+						"tv": 65930
+					},
+					"tvdb_id": 305074,
+					"season": {
+						"tvdb": 0,
+						"tmdb": 0
+					},
+					"episode_offset": {
+						"tvdb": 22,
+						"tmdb": 17
+					}
+				}
+			],
+			"titles": [
+				{
+					"anidbId": 9042,
+					"names": [
+						"Fate/Kaleid Liner Prisma Illya",
+						"Kaleid liner Prisma Illya",
+						"Fate/kaleid liner プリズマ☆イリヤ",
+						"Fate/kaleid liner 魔法少女☆伊莉雅",
+						"F/K",
+						"fk",
+						"Prillya",
+						"Fate/kaleid liner PRISMA☆ILLYA",
+						"Fate/Kaleid Liner 프리즈마☆이리야",
+						"Fate: Fate/Kaleid Liner Prisma Illya",
+						"Fate/kaleid liner Prisma☆Illya",
+						"Fate/Kaleid Liner Prisma☆ Illya",
+						"Fate/Loli",
+						"Fate/kaleid liner Prisma Illya",
+						"Судьба: Девочка-волшебница Иллия"
+					]
+				},
+				{
+					"anidbId": 9722,
+					"names": [
+						"Non Non Biyori",
+						"のんのんびより",
+						"悠哉日常大王",
+						"nnb",
+						"논논비요리",
+						"Прекрасные деньки",
+						"Безтурботні часи",
+						"Non Non Biyori (Saison 1)",
+						"Nyanpasu",
+						"نون نون بيوري"
+					]
+				},
+				{
+					"anidbId": 9900,
+					"names": [
+						"Fate/Kaleid Liner Prisma Illya (2014)",
+						"Fate/Kaleid Liner Prisma Illya: Der Tanz am Sporttag",
+						"Fate/Kaleid Liner Prisma Illya: Sports Day",
+						"Fate/kaleid liner プリズマ☆イリヤ (2014)",
+						"Fate/kaleid liner 魔法少女☆伊莉雅 OAD",
+						"F/K OVA",
+						"Fate Kaleid OVA",
+						"fk OVA",
+						"Fate/Kaleid Liner Prisma Illya: Dance at the Sports Festival!",
+						"Fate/kaleid liner プリズマ☆イリヤ: 運動会 DE ダンス!",
+						"Fate/Kaleid Liner 프리즈마☆이리야: 운동회 DE 댄스 (2014)",
+						"Fate/Kaleid Liner Prisma Illya: Dzień sportu",
+						"Fate/Kaleid Liner Prisma Illya: Taniec w dniu sportu",
+						"Fate: Fate/Kaleid Liner Prisma Illya (2014)",
+						"Fate/Kaleid Liner Prisma Illya: Undoukai de Dance!",
+						"Fate/kaleid liner Prisma☆Illya: Undoukai de Dance!",
+						"Fate/Kaleid Liner Prisma Illya OVA",
+						"Fate/Kaleid Liner Prisma Illya Undoukai de Dance!",
+						"Fate/Kaleid Liner Prisma Illya Undōkai de Dance!",
+						"Fate/Kaleid Liner Prisma Illya: Dance at the Sports Festival",
+						"Fate/kaleid liner Prisma☆Illya OVA",
+						"Fate/kaleid liner Prisma☆Illya: Dance at the Sports Festival!",
+						"Fate/kaleid liner Prisma☆Illya: Undoukai DE Dance!",
+						"Fate/kaleid liner プリズマ☆イリヤ",
+						"Fate/kaleid liner プリズマ☆イリヤ 運動会 DE ダンス!",
+						"Fate/kaleid liner プリズマ☆イリヤ 運動会 DE ダンス！",
+						"Судьба/Девочка-волшебница Иллия OVA"
+					]
+				},
+				{
+					"anidbId": 10091,
+					"names": [
+						"Fate/Kaleid Liner Prisma Illya Zwei!",
+						"Fate/Kaleid Liner Prisma Illya 2wei!",
+						"Fate/kaleid liner プリズマ☆イリヤ 2wei!",
+						"Fate/kaleid liner 魔法少女☆伊莉雅 2wei!",
+						"F/K 2",
+						"f/k2",
+						"fk 2",
+						"Prillya Zwei",
+						"Fate/kaleid liner プリズマ☆イリヤ ツヴァイ!",
+						"Fate/Kaleid Liner 프리즈마☆이리야 2wei!",
+						"Fate: Fate/Kaleid Liner Prisma Illya Zwei!",
+						"Fate/kaleid liner Prisma☆Illya 2wei!",
+						"Fate/Kaleid Liner Prisma Illya 2Wei!",
+						"Fate/kaleid Liner Prisma Illya 2wei!",
+						"Fate/kaleid liner Prisma Illya 2wei!",
+						"Fate/kaleid liner Prisma Illya☆2wei!",
+						"Fate/kaleid liner Prisma☆Illya Zwei!",
+						"Fate/kaleid linerプリズマ☆イリヤ ツヴァイ！",
+						"Prisma Illya 2wei!",
+						"Prisma☆Illya 2nd Season",
+						"Судьба: Девочка-волшебница Иллия 2"
+					]
+				},
+				{
+					"anidbId": 10232,
+					"names": [
+						"Non Non Biyori: Okinawa e Iku Koto ni Natta",
+						"のんのんびより 沖縄へ行くことになった",
+						"nnb ova",
+						"nonnonbiyori ova",
+						"Non Non Biyori: We’re Going to Okinawa",
+						"논논비요리: 오키나와에 갔다",
+						"Безтурботні часи: А потім ми відбули в Окінаву",
+						"悠哉日常",
+						"Non Non Biyori: Okinawa e Ikukoto ni Natta",
+						"Non Non Biyori (2014)",
+						"Non Non Biyori OAD",
+						"Non Non Biyori OVA",
+						"Non Non Biyori: We're Going To Okinawa",
+						"Non Non Biyori: We're Going to Okinawa",
+						"のんのんびより",
+						"のんのんびより　沖縄へ行くことになった"
+					]
+				},
+				{
+					"anidbId": 10587,
+					"names": [
+						"Non Non Biyori Repeat",
+						"のんのんびより りぴーと",
+						"悠哉日常大王 Repeat",
+						"NNBR",
+						"nonnonbiyori s2",
+						"Non Non Biyori Second Season",
+						"논논비요리 리피트",
+						"悠哉日常 第2季",
+						"Non Non Biyori 2",
+						"Non Non Biyori 2nd Season",
+						"Non Non Biyori: Repeat",
+						"نون نون بيوري ريبيت",
+						"のんのんびより 2"
+					]
+				},
+				{
+					"anidbId": 10804,
+					"names": [
+						"Fate/Kaleid Liner Prisma Illya Zwei! (2015)",
+						"Fate/kaleid liner プリズマ☆イリヤ 2wei! (2015)",
+						"Fate/kaleid liner 魔法少女☆伊莉雅 第二季 OAD",
+						"F/K OVA2",
+						"fk OVA2",
+						"Fate/Kaleid Liner Prisma Illya 2wei!: Magical Girl in Hot Springs Inn",
+						"Fate/kaleid liner プリズマ☆イリヤ 2wei! 魔法少女in温泉旅行",
+						"Fate/Kaleid Liner 프리즈마☆이리야 Zwei!: 마법소녀 in 온천여관(2015)",
+						"Fate: Fate/Kaleid Liner Prisma Illya Zwei! (2015)",
+						"Fate/Kaleid Liner Prisma Illya Zwei!: Mahou Shoujo in Onsen Ryokou",
+						"Fate/kaleid liner Prisma☆Illya 2wei!: Mahou Shoujo in Onsen Ryokou",
+						"Fate/Kaleid Liner Prisma Illya 2wei! (2015)",
+						"Fate/Kaleid Liner Prisma Illya 2wei! Die Magical Girls auf Onsen-Reise",
+						"Fate/Kaleid Liner Prisma Illya 2wei! OAD/ OVA",
+						"Fate/Kaleid Liner Prisma Illya 2wei! OVA",
+						"Fate/Kaleid Liner Prisma Illya Zwei! OAD / OVA",
+						"Fate/kaleid liner Prisma Illya 2Wei!: Magical Girl in Hot Springs Inn",
+						"Fate/kaleid liner Prisma☆Illya 2wei! OVA",
+						"Fate/kaleid liner プリズマ☆イリヤ 2wei!",
+						"Fate/kaleid liner プリズマ☆イリヤ ツヴァイ! [2wei!] (2015)",
+						"Fate/kaleid liner プリズマ☆イリヤ ツヴァイ! 魔法少女in温泉旅行",
+						"Fate/kaleid linerプリズマ☆イリヤ ツヴァイ！魔法少女in温泉旅行",
+						"Prisma Illya 2wei! OVA",
+						"Судьба/Девочка-волшебница Иллия 2 OVA"
+					]
+				},
+				{
+					"anidbId": 10833,
+					"names": [
+						"Fate/Kaleid Liner Prisma Illya Zwei Herz!",
+						"Fate/Kaleid Liner Prisma Illya 2wei Herz!",
+						"Fate/kaleid liner プリズマ☆イリヤ 2wei Herz!",
+						"Fate/kaleid liner 魔法少女☆依莉雅 2wei! Herz!",
+						"F/K 2 Herz",
+						"F/K 2.5",
+						"f/kh",
+						"Prillya Zwei Herz",
+						"Fate/Kaleid Liner 프리즈마☆이리야 2wei Herz!",
+						"Fate: Fate/Kaleid Liner Prisma Illya Zwei Herz!",
+						"Fate/kaleid liner Prisma☆Illya 2wei Herz!",
+						"Fate/Kaleid Liner Prisma Illya 2Wei Herz!",
+						"Fate/kaleid Liner PRISMA ILLYA 2wei Herz!",
+						"Fate/kaleid Liner Prisma Illya 2wei Herz!",
+						"Fate/kaleid liner PRISMA ILLYA 2wei Herz!",
+						"Fate/kaleid liner Prisma Illya 2wei Herz!",
+						"Fate/kaleid liner Prisma☆Illya 2wei! Herz!",
+						"Fate/kaleid liner Prisma☆Illya Zwei Herz!",
+						"Fate/kaleid liner プリズマ☆イリヤ ツヴァイ ヘルツ！",
+						"Prisma Illya 2wei! Herz",
+						"Судьба/Девочка-волшебница Иллия 2: Продолжение"
+					]
+				},
+				{
+					"anidbId": 11639,
+					"names": [
+						"Fate/Kaleid Liner Prisma Illya Drei!!",
+						"Fate/Kaleid Liner Prisma Illya 3rei!!",
+						"Fate/kaleid liner プリズマ☆イリヤ 3rei!!",
+						"Fate/kaleid liner 魔法少女☆依莉雅 3rei!!",
+						"F/K 3",
+						"PRIYA3!!",
+						"f/k3",
+						"Fate/kaleid liner プリズマ☆イリヤ プリズマ☆イリヤ ドライ!!",
+						"Fate/Kaleid Liner 프리즈마☆이리야 3rei!!",
+						"Fate: Fate/Kaleid Liner Prisma Illya Drei!!",
+						"Fate/kaleid liner Prisma☆Illya 3rei!!",
+						"Fate/kaleid liner PRISMA ILLYA 3rei!!",
+						"Fate/kaleid liner Prisma Illya 3rei!!",
+						"Fate/kaleid liner Prisma Illya drei!",
+						"Fate/kaleid liner プリズマ☆イリヤ ドライ! !",
+						"Fate/kaleid liner プリズマ☆イリヤ ドライ!!",
+						"Prisma Illya 3rei!!",
+						"Судьба/Девочка-волшебница Иллия 3"
+					]
+				},
+				{
+					"anidbId": 11739,
+					"names": [
+						"Boku no Hero Academia",
+						"أكاديميتي للأبطال",
+						"My Hero Academia",
+						"אקדמיית הגיבורים שלי",
+						"僕のヒーローアカデミア",
+						"Akademia bohaterów",
+						"Моя геройская академия",
+						"我的英雄学院",
+						"heroaca",
+						"MHA",
+						"ヒロアカ",
+						"bnha",
+						"أبطال الغد",
+						"أكاديمية بطلي",
+						"Моята академия на героите",
+						"My Hero Academia S1",
+						"BNHA",
+						"Hősakadémia",
+						"Học Viện Anh Hùng",
+						"My Hero Academia 1. Staffel",
+						"My Hero Academia 1st Season",
+						"Η Δική Μου Ακαδημία Ηρώων",
+						"มายฮีโร่ อคาเดเมีย",
+						"나의 히어로 아카데미아 1기",
+						"나히아 1기"
+					]
+				},
+				{
+					"anidbId": 12233,
+					"names": [
+						"Boku no Hero Academia (2017)",
+						"أكاديميتي للأبطال (2017)",
+						"My Hero Academia Season 2",
+						"My Hero Academia Saison 2",
+						"אקדמיית הגיבורים שלי עונה 2",
+						"僕のヒーローアカデミア (2017)",
+						"나의 히어로 아카데미아 (2017)",
+						"Akademia bohaterów (2017)",
+						"My Hero Academia - Temporada 2",
+						"我的英雄学院 第二季",
+						"بنها",
+						"heroaca2",
+						"bnha s2",
+						"bnha2",
+						"أبطال الغد (2017)",
+						"أكاديمية بطلي (2017)",
+						"My Hero Academia S2",
+						"Моя геройская академия 2",
+						"Boku no Hero Academia 2",
+						"Boku no Hero Academia 2nd Season",
+						"BNHA 2",
+						"Boku no Hero Academia",
+						"Boku no Hero Academia S2",
+						"MHA 2",
+						"My Hero Academia",
+						"My Hero Academia (Segunda Temporada)",
+						"My Hero Academia 2",
+						"My Hero Academia 2. Staffel",
+						"My Hero Academia : Saison 2",
+						"My Hero Academia Temporada 2",
+						"My Hero Academia – 2. Staffel",
+						"My Hero Academia: Season 2",
+						"My Hero Academia: Stagione 2",
+						"mha s2",
+						"mhas2",
+						"أكاديميتي للأبطال2",
+						"มายฮีโร่ อคาเดเมีย ภาค 2",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア 2",
+						"僕のヒーローアカデミア 第二期",
+						"僕のヒーローアカデミア２",
+						"我的英雄学院 2",
+						"我的英雄学院第二季",
+						"나의 히어로 아카데미아 2기",
+						"나히아 2기"
+					]
+				},
+				{
+					"anidbId": 12344,
+					"names": [
+						"Boku no Hero Academia (2016)",
+						"أكاديميتي للأبطال (2016)",
+						"My Hero Academia OVA",
+						"僕のヒーローアカデミア(2016)",
+						"我的英雄学院 OAD",
+						"bnha ova",
+						"أبطال الغد (2016)",
+						"أكاديمية بطلي (2016)",
+						"Boku no Hero Academia OVA (2016)",
+						"Boku no Hero Academia OVA",
+						"My Hero Academia: Rescue! Rescue Training",
+						"mha ova",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア OVA"
+					]
+				},
+				{
+					"anidbId": 12420,
+					"names": [
+						"Gekijouban Fate/Kaleid Liner Prisma Illya: Sekka no Chikai",
+						"Fate/kaleid liner Prisma Illya: Vow In The Snow",
+						"劇場版 Fate/kaleid liner プリズマ☆イリヤ 雪下の誓い",
+						"극장판 Fate/Kaleid Liner 프리즈마☆이리야: 설하의 맹세",
+						"f/k movie",
+						"Fate/kaleid liner Prisma☆Illya: Oath Under Snow",
+						"Fate/kaleid liner Prisma☆Illya: Vow In The Snow",
+						"Fate: Gekijouban Fate/Kaleid Liner Prisma Illya: Sekka no Chikai",
+						"Fate/kaleid liner Prisma☆Illya Movie: Sekka no Chikai",
+						"Fate/Kaleid Liner Prisma Illya Movie",
+						"Fate/Kaleid Liner Prisma Illya Movie : Sekka no Chikai",
+						"Fate/Kaleid Liner Prisma Illya Movie: Vow in the Snow",
+						"Fate/Kaleid Liner Prisma Illya: Vow in the Snow",
+						"Fate/kaleid liner PRISMA ILLYA - The vow in the snow",
+						"Fate/kaleid liner Prisma Illya: Oath Under the Snow",
+						"Fate/kaleid liner Prisma Illya: Sekka no Chikai",
+						"Fate/kaleid liner Prisma Illya: Vow in the Snow",
+						"Fate/kaleid liner Prisma☆Illya Movie: Oath Under Snow",
+						"Fate/kaleid liner Prisma☆Illya: Sekka no Chikai",
+						"Fate/kaleid liner Prisma☆Illya: Vow in the Snow",
+						"Fate/kaleid liner プリズマ☆イリヤ 雪下の誓い",
+						"Gekijō-ban Fate/kaleid liner Purizuma ☆ Iriya Sekka no Chikai",
+						"Gekijōban Fate/Kaleid Liner Prisma Illya: Sekka no Chikai",
+						"Gekijōban Fate/kaleid liner Prisma Illya: Sekka no Chikai",
+						"Судьба/Девочка-волшебница Иллия: Клятва под снегом",
+						"劇場版 Fate／kaleid liner プリズマ☆イリヤ 雪下の誓い",
+						"劇場版 プリズマ☆イリヤ"
+					]
+				},
+				{
+					"anidbId": 13485,
+					"names": [
+						"Boku no Hero Academia (2018)",
+						"أكاديميتي للأبطال (2018)",
+						"My Hero Academia Season 3",
+						"My Hero Academia Saison 3",
+						"僕のヒーローアカデミア (2018)",
+						"나의 히어로 아카데미아 3",
+						"Akademia bohaterów (2018)",
+						"My Hero Academia - Temporada 3",
+						"我的英雄学院 第三季",
+						"heroaca3",
+						"bnha s3",
+						"bnha3",
+						"أبطال الغد (2018)",
+						"أكاديمية بطلي (2018)",
+						"My Hero Academia S3",
+						"אקדמיית הגיבורים שלי עונה 3",
+						"Моя геройская академия 3",
+						"Boku no Hero Academia 3",
+						"Boku no Hero Academia Season 3",
+						"Boku no Hero Academia 3rd Season",
+						"3أكاديميتي للأبطال",
+						"BNHA 3",
+						"Boku no Hero Academia",
+						"Boku no Hero Academia S3",
+						"MHA 3",
+						"My Hero Academia",
+						"My Hero Academia (Tercera Temporada)",
+						"My Hero Academia 3",
+						"My Hero Academia 3. Staffel",
+						"My Hero Academia : Saison 3",
+						"My Hero Academia Temporada 3",
+						"My Hero Academia: Season 3",
+						"My Hero Academia: Stagione 3",
+						"mha s3",
+						"มายฮีโร่ อคาเดเมีย ภาค 3",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア 3",
+						"僕のヒーローアカデミア 第三期",
+						"僕のヒーローアカデミア３",
+						"我的英雄学院 3",
+						"我的英雄学院第三季"
+					]
+				},
+				{
+					"anidbId": 13508,
+					"names": [
+						"Fate/Kaleid Liner Prisma Illya: Prisma Phantasm",
+						"Fate/kaleid liner プリズマ☆イリヤ プリズマ☆ファンタズム",
+						"극장판 Fate/Kaleid Liner 프리즈마☆이리야: 프리즈마 판타즘",
+						"Fate: Fate/Kaleid Liner Prisma Illya: Prisma Phantasm",
+						"Fate/kaleid liner Prisma☆Illya: Prisma☆Phantasm",
+						"Fate/Kaleid Liner Prisma Illya: Prisma★Phantasm",
+						"Fate/kaleid liner Prisma Illya: Prisma Phantasm",
+						"Fate/kaleid liner Prisma☆Illya OVA",
+						"Fate/kaleid liner Prisma☆Illya: Prisma☆Phantasm OVA",
+						"Fate/kaleid liner プリズマ☆イリヤ (新作)",
+						"Fate/kaleid liner プリズマ☆イリヤ~プリズマ☆ファンタズム~",
+						"Судьба/Девочка-волшебница Иллия: Призматический фантазм",
+						"プリズマ☆ファンタズム"
+					]
+				},
+				{
+					"anidbId": 14416,
+					"names": [
+						"Boku no Hero Academia (2019)",
+						"أكاديميتي للأبطال (2019)",
+						"My Hero Academia Season 4",
+						"My Hero Academia Saison 4",
+						"僕のヒーローアカデミア (2019)",
+						"My Hero Academia - Temporada 4",
+						"Моя Геройская Академия 4 сезон",
+						"我的英雄学院 第四季",
+						"我的英雄學院 第四季",
+						"bnha s4",
+						"bnha4",
+						"heroaca4",
+						"أبطال الغد (2019)",
+						"أكاديمية بطلي (2019)",
+						"My Hero Academia S4",
+						"אקדמיית הגיבורים שלי עונה 4",
+						"Моя геройская академия 4",
+						"Boku no Hero Academia 4",
+						"Boku no Hero Academia 4th Season",
+						"BNHA 4",
+						"Boku no Hero Academia",
+						"Boku no Hero Academia S4",
+						"MHA 4",
+						"My Hero Academia",
+						"My Hero Academia 4",
+						"My Hero Academia : Saison 4",
+						"My Hero Academia Staffel 4",
+						"My Hero Academia Temporada 4",
+						"My Hero Academia: Season 4",
+						"My Hero Academia: Staffel 4",
+						"mha s4",
+						"أكاديميتي للأبطال",
+						"มายฮีโร่ อคาเดเมีย ภาค 4",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア 4",
+						"僕のヒーローアカデミア 第4期",
+						"僕のヒーローアカデミア４",
+						"我的英雄学院 4",
+						"我的英雄学院第四季"
+					]
+				},
+				{
+					"anidbId": 14914,
+					"names": [
+						"Non Non Biyori Nonstop",
+						"のんのんびより のんすとっぷ",
+						"논논비요리 논스톱",
+						"悠哉日常大王 第三季",
+						"NNBN",
+						"nonnonbiyori s3",
+						"Non Non Biyori 3rd Season",
+						"Non Non Biyori Season 3",
+						"Non Non Biyori Third Season",
+						"Non Non Biyori: Nonstop",
+						"สาวใสหัวใจบ้านทุ่ง ภาค 3",
+						"のんのんびより3"
+					]
+				},
+				{
+					"anidbId": 15484,
+					"names": [
+						"Boku no Hero Academia (2021)",
+						"أكاديميتي للأبطال (2021)",
+						"My Hero Academia Season 5",
+						"My Hero Academia Saison 5",
+						"僕のヒーローアカデミア (2021)",
+						"My Hero Academia - Temporada 5",
+						"Моя геройская академия 5 сезон",
+						"我的英雄学院 第五季",
+						"bnha s5",
+						"bnha5",
+						"heroaca5",
+						"My Hero Academia S5",
+						"Boku no Hero Academia 5th Season",
+						"BNHA 5",
+						"Boku no Hero Academia",
+						"Boku no Hero Academia 5",
+						"Boku no Hero Academia S5",
+						"MHA 5",
+						"My Hero Academia",
+						"My Hero Academia 5",
+						"My Hero Academia : Saison 5",
+						"My Hero Academia Staffel 5",
+						"My Hero Academia Temporada 5",
+						"My Hero Academia: Season 5",
+						"My Hero Academia: Staffel 5",
+						"My Hero Academia: Stagione 5",
+						"My Hero Academia: Temporada 5",
+						"mha s5",
+						"Моя геройская академия 5",
+						"أكاديميتي للأبطال",
+						"มายฮีโร่ อคาเดเมีย ภาค 5",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア 5",
+						"僕のヒーローアカデミア 第5期",
+						"僕のヒーローアカデミア５",
+						"我的英雄学院 5",
+						"我的英雄学院第五季"
+					]
+				},
+				{
+					"anidbId": 15565,
+					"names": [
+						"Gekijouban Fate/Kaleid Liner Prisma Illya Licht: Namae no Nai Shoujo",
+						"Fate/kaleid liner Prisma Illya: Licht Nameless Girl",
+						"劇場版 Fate/kaleid liner プリズマ☆イリヤ Licht 名前の無い少女",
+						"Fate/kaleid liner 프리즈마 ☆이리야 Licht 이름없는 소녀",
+						"剧场版 Fate/kaleid liner 魔法少女☆伊莉雅 Licht 无名的少女",
+						"Fate: Gekijouban Fate/Kaleid Liner Prisma Illya Licht: Namae no Nai Shoujo",
+						"Fate/kaleid liner Prisma☆Illya Movie: Licht - Namae no Nai Shoujo",
+						"Fate/Kaleid Liner Prisma Illya Licht: Nameless Girl",
+						"Fate/Kaleid Liner Prisma Illya Movie 2: Licht - Namae no Nai Shoujo",
+						"Fate/Kaleid Liner Prisma Illya Movie 2: Licht Nameless Girl",
+						"Fate/Kaleid Liner Prisma Illya the Movie Licht: Nameless Girl",
+						"Fate/Kaleid Liner Prisma Illya: Bezimienne dziecię",
+						"Fate/kaleid Liner Prisma Illya: Licht Nameless Girl",
+						"Fate/kaleid liner PRISMA ILLYA - Licht Nameless Girl",
+						"Fate/kaleid liner Prisma Illya - Licht Nameless Girl",
+						"Fate/kaleid liner Prisma Illya Licht - Namae no Nai Shōjo",
+						"Fate/kaleid liner Prisma Illya the Movie Licht – The Nameless Girl",
+						"Fate/kaleid liner Prisma Illya: หญิงสาวไร้นาม",
+						"Fate/kaleid liner Prisma☆Illya Movie: Licht Namae no Nai Shoujo",
+						"Fate/kaleid liner Prisma☆Illya: Licht - Namae no Nai Shoujo",
+						"Fate/kaleid liner Prisma☆Illya: Licht Nameless Girl",
+						"Fate/kaleid liner プリズマ☆イリヤ Licht 名前の無い少女",
+						"Gekijouban Fate/kaleid liner Prisma Illya Licht – Namae no Nai Shoujo",
+						"Gekijōban Fate/Kaleid Liner Prisma Illya Licht: Namae no Nai Shōjo",
+						"Судьба/Девочка-волшебница Иллия: Свет — Девочка без имени",
+						"劇場版 Fate/kaleid liner プリズマ☆イリヤ",
+						"劇場版 Fate／kaleid liner プリズマ☆イリヤ Licht 名前の無い少女"
+					]
+				},
+				{
+					"anidbId": 15672,
+					"names": [
+						"Boku no Hero Academia: Ikinokore! Kesshi no Survival Kunren",
+						"My Hero Academia: Make It! Do-or-Die Survival Training",
+						"僕のヒーローアカデミア 生き残れ! 決死のサバイバル訓練",
+						"Моя Геройская Академия: Сделай это! Тренировка навыков выживания",
+						"我的英雄学院OVA 活下来！殊死的生存训练",
+						"BNHA: Ikinokore! Kesshi no Survival Kunren",
+						"أكاديميتي للأبطال: انجوا! تدريب النجاة من حافّة الموت",
+						"My Hero Academia : Entraînement à la survie",
+						"My Hero Academia : Restez en Vie ! Entraînement à la survie",
+						"My Hero Academia Temporada 4 Ovas: ¡Sobrevive! Entrenamiento de Supervivencia Mortal",
+						"My Hero Academia: Das todesmutige Überlebenstraining",
+						"My Hero Academia: Make It! ¡Sobrevive! Entrenamiento de supervivencia mortal",
+						"My Hero Academia: Resistete! La prova di sopravvivenza",
+						"My Hero Academia: Season 4 OVAs",
+						"My Hero Academia: Sobreviva! Treinamento de Sobrevivência Mortal",
+						"僕のヒーローアカデミア 生き残れ！ 決死のサバイバル訓練",
+						"僕のヒーローアカデミア 生き残れ！決死のサバイバル訓練"
+					]
+				},
+				{
+					"anidbId": 16507,
+					"names": [
+						"Non Non Biyori Nonstop: Bukatsu o Ganbatta",
+						"のんのんびより のんすとっぷ 部活をがんばった",
+						"논논비요리 논스톱: 동아리 활동을 열심히 했다",
+						"悠哉日常大王 Nonstop OAD",
+						"nnbn ova",
+						"nonnonbiyori ova 3",
+						"Non Non Biyori Nonstop: Bukatsu wo Ganbatta",
+						"Non Non Biyori Nonstop (2022)",
+						"Non Non Biyori Nonstop Episode 13",
+						"Non Non Biyori Nonstop OVA",
+						"Non Non Biyori Nonstop: I Did My Best Doing Club Activities",
+						"Non Non Biyori Nonstop: I Did My Best Doing the Club Activities",
+						"Non Non Biyori Nonstop: Our Club Worked Hard",
+						"Non Non Biyori Remember OAD",
+						"Non Non Biyori: Nonstop - Bukatsu wo Ganbatta",
+						"Non Non Biyori: Nonstop - Episode 13",
+						"Non Non Biyori: Nonstop OVA",
+						"のんのんびより のんすとっぷ",
+						"のんのんびより のんすとっぷ (OAD)",
+						"のんのんびより のんすとっぷ OAD",
+						"のんのんびより のんすとっぷ 第13話"
+					]
+				},
+				{
+					"anidbId": 16793,
+					"names": [
+						"Boku no Hero Academia (2022)",
+						"أكاديميتي للأبطال (2022)",
+						"My Hero Academia Season 6",
+						"My Hero Academia Saison 6",
+						"僕のヒーローアカデミア (2022)",
+						"My Hero Academia - Temporada 6",
+						"Моя геройская академия. 6 сезон",
+						"我的英雄学院 第六季",
+						"bnha6, heroaca6",
+						"bnha s6",
+						"bnha6",
+						"My Hero Academia S6",
+						"Моя геройская академия [ТВ-5]",
+						"我的英雄學院 第六季",
+						"Boku no Hero Academia 6th Season",
+						"BNHA 6",
+						"Boku no Hero Academia",
+						"Boku no Hero Academia 6",
+						"Boku no Hero Academia S6",
+						"MHA 6",
+						"My Hero Academia",
+						"My Hero Academia 6",
+						"My Hero Academia Staffel 6",
+						"My Hero Academia: Stagione 6",
+						"My Hero Academia: Temporada 6",
+						"heroaca6",
+						"mha s6",
+						"Моя геройская академия 6",
+						"أكاديميتي للأبطال",
+						"มายฮีโร่ อคาเดเมีย ภาค 6",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア 6",
+						"僕のヒーローアカデミア Season6",
+						"僕のヒーローアカデミア 第6期",
+						"僕のヒーローアカデミア６",
+						"我的英雄学院 6",
+						"我的英雄学院第六季"
+					]
+				},
+				{
+					"anidbId": 17356,
+					"names": [
+						"Boku no Hero Academia (Web)",
+						"My Hero Academia (Web)",
+						"僕のヒーローアカデミア (Web)",
+						"我的英雄学院 HLB",
+						"bnha(Web)",
+						"bnha (2022)",
+						"我的英雄學院(Web)",
+						"Boku no Hero Academia (ONA)",
+						"Boku no Hero Academia 5 (ONA)",
+						"Boku no Hero Academia 5th Season OVA",
+						"Boku no Hero Academia HLA",
+						"Boku no Hero Academia HLB",
+						"Boku no Hero Academia: HLB",
+						"Boku no Hero Academia: Hero League Baseball",
+						"Boku no Hero Academia: Warae! Jigoku no You ni",
+						"HLB",
+						"HLB: Hero League Baseball",
+						"Hero League Baseball",
+						"Heroes League Baseball",
+						"My Hero Academia ONA",
+						"My Hero Academia Saison 5 OVAs",
+						"My Hero Academia Season 5 OVA",
+						"My Hero Academia Season 5 OVAs",
+						"My Hero Academia Staffel 5 OVAs",
+						"My Hero Academia Stagione 5 OVAs",
+						"My Hero Academia: HLB",
+						"My Hero Academia: HLB (Hero League Baseball)",
+						"My Hero Academia: Hero League Baseball",
+						"My Hero Academia: Laugh! As if you are in hell",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア 5 (ONA)",
+						"僕のヒーローアカデミア HLB",
+						"僕のヒーローアカデミア 笑え!地獄のように",
+						"僕のヒーローアカデミア 第5期 OVA",
+						"僕のヒーローアカデミア （Web）",
+						"僕のヒーローアカデミア: HLB"
+					]
+				},
+				{
+					"anidbId": 17550,
+					"names": [
+						"Kaijuu 8 Gou",
+						"Kaiju No. 8",
+						"怪獣8号",
+						"怪兽8号",
+						"Kaijuu 8-gou",
+						"8Kaijuu",
+						"KAIJU No. EIGHT",
+						"Kaiju #8",
+						"Kaiju No. Eight",
+						"Kaiju No.EIGHT",
+						"Kaiju N°8",
+						"Kaijuu Hachi-gou",
+						"Kaijuu Hachigou",
+						"Kaijuu № 8",
+						"Kaijū 8 Gō",
+						"Kaijū 8-gō",
+						"Monster #8",
+						"怪獣８号",
+						"괴수 8호"
+					]
+				},
+				{
+					"anidbId": 17931,
+					"names": [
+						"Boku no Hero Academia (2024)",
+						"My Hero Academia Staffel 7",
+						"My Hero Academia Season 7",
+						"My Hero Academia Saison 7",
+						"僕のヒーローアカデミア (2024)",
+						"bnha s7",
+						"bnha7",
+						"bnha7, heroaca7",
+						"Boku no Hero Academia Season 7",
+						"Boku no Hero Academia 7th Season",
+						"BNHA 7",
+						"Boku no Hero Academia",
+						"Boku no Hero Academia 7",
+						"Boku no Hero Academia S7",
+						"MHA 7",
+						"My Hero Academia",
+						"My Hero Academia 7",
+						"My Hero Academia : Saison 7",
+						"My Hero Academia: Season 7",
+						"My Hero Academia: Staffel 7",
+						"My Hero Academia: Stagione 7",
+						"My Hero Academia: Temporada 7",
+						"heroaca7",
+						"mha s7",
+						"Моя геройская академия 7",
+						"Моя геройская академия. 7 сезон",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア 7",
+						"僕のヒーローアカデミア Season7",
+						"僕のヒーローアカデミア 第7期",
+						"僕のヒーローアカデミア7",
+						"我的英雄学院 第七季"
+					]
+				},
+				{
+					"anidbId": 18199,
+					"names": [
+						"Boku no Hero Academia: Yuuei Heroes Battle",
+						"My Hero Academia: UA Heroes Battle",
+						"僕のヒーローアカデミア 雄英ヒーローズ・バトル",
+						"我的英雄学院：雄英HEROES BATTLE",
+						"我的英雄學院：雄英HEROES BATTLE",
+						"Boku no Hero Academia: UA Heroes Battle",
+						"Boku no Hero Academia: Yūei Heroes Battle",
+						"My Hero Academia 6 OVA",
+						"My Hero Academia : U.A. Heroes Battle",
+						"My Hero Academia UA BATTLE HEROES",
+						"My Hero Academia: Batalla de Héroes de la U.A.",
+						"My Hero Academia: Season 6 OVA",
+						"My Hero Academia: U.A. Heroes Battle",
+						"My Hero Academia: Yuei Heroes Battle"
+					]
+				},
+				{
+					"anidbId": 18722,
+					"names": [
+						"Kaijuu 8 Gou (2025)",
+						"Kaiju No. 8 (2025)",
+						"怪獣8号 (2025)",
+						"Kaiju No. 8 Staffel 2",
+						"怪兽8号 第二季",
+						"Kaiju No. 8 Season 2",
+						"Kaijuu 8 Gou Season 2",
+						"Kaijuu 8-gou 2nd Season",
+						"8Kaijuu",
+						"KAIJU No. EIGHT 2",
+						"Kaiju #8",
+						"Kaiju No. 8",
+						"Kaiju No. 8 2nd Season",
+						"Kaiju No. 8 : Saison 2",
+						"Kaiju No. 8: Season 2",
+						"Kaiju No. 8: Staffel 2",
+						"Kaiju No. 8: Stagione 2",
+						"Kaiju No. 8: Temporada 2",
+						"Kaiju No. Eight",
+						"Kaiju No.8 SEASON 2",
+						"Kaiju No.8 Season 2",
+						"Kaijuu 8 Gou Dai 2 Ki",
+						"Kaijū 8 Gō Dai 2 Ki",
+						"Kaijū 8-gō",
+						"Monster #8",
+						"怪獣8号",
+						"怪獣8号 第2期",
+						"怪獣８号 第２期"
+					]
+				},
+				{
+					"anidbId": 18921,
+					"names": [
+						"Boku no Hero Academia (2025)",
+						"My Hero Academia Final Season",
+						"僕のヒーローアカデミア (2025)",
+						"My Hero Academia Staffel 8",
+						"Boku no Hero Academia Final Season",
+						"Hero Academia 8",
+						"My Hero Academia (2025)",
+						"My Hero Academia Season 8",
+						"僕のヒーローアカデミア FINAL SEASON",
+						"bnha s8",
+						"bnha8",
+						"heroaca8",
+						"mha s8",
+						"Boku no Hero Academia: Final Season",
+						"BNHA 8",
+						"Boku no Hero Academia 8",
+						"Boku no Hero Academia FINAL SEASON",
+						"Boku no Hero Academia Season 8",
+						"MHA 8",
+						"My Hero Academia",
+						"My Hero Academia 8",
+						"My Hero Academia : Final Season",
+						"My Hero Academia : La saison finale",
+						"My Hero Academia FINAL SEASON",
+						"My Hero Academia: Final Season",
+						"My Hero Academia: Season 8",
+						"My Hero Academia: Staffel 8",
+						"My Hero Academia: Temporada Final",
+						"Моя геройская академия 8",
+						"มายฮีโร่ อคาเดเมีย ไฟนอลซีซัน",
+						"ヒロアカ 8",
+						"僕のヒーローアカデミア",
+						"僕のヒーローアカデミア Final Season"
+					]
+				},
+				{
+					"anidbId": 20039,
+					"names": [
+						"Boku no Hero Academia: More",
+						"My Hero Academia: More",
+						"僕のヒーローアカデミア More",
+						"Boku no Hero Academia More"
+					]
+				}
+			]
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun (RD), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "[Arid] Fate kaleid liner Prisma☆Illya Prisma☆Phantasm [BD 1080p x264 FLAC]",
+				"hash": "d4aae5d607d754ff80aa1839a41599eeabe1838a",
+				"imdbId": "tt17527600",
+				"files": [
+					{
+						"path": "[Arid] Fate kaleid liner Prisma☆Illya Prisma☆Phantasm [DDEEEAF1].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt2904426",
+				"tmdbId": 63576,
+				"files": [
+					{
+						"path": "[Arid] Fate kaleid liner Prisma☆Illya Prisma☆Phantasm [DDEEEAF1].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt10388584",
+						"tmdbId": 658436
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "[Erai-raws] Non Non Biyori - Vacation - Movie [1080p][8A0FF4A2].mkv",
+				"hash": "79fbc678989eae64adc6fafee09691bc328be47e",
+				"imdbId": "tt3114358",
+				"files": [
+					{
+						"path": "[Erai-raws] Non Non Biyori - Vacation - Movie [1080p][8A0FF4A2].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt3114358",
+				"tmdbId": 66875,
+				"files": [
+					{
+						"path": "[Erai-raws] Non Non Biyori - Vacation - Movie [1080p][8A0FF4A2].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt7785128",
+						"tmdbId": 494471
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "[SubsPlease] Kaijuu 8-gou - Mission Recon (1080p) [5148FA52].mkv",
+				"hash": "ea83498a80b7bae674db19168c346d3087c7535b",
+				"imdbId": "tt21975436",
+				"files": [
+					{
+						"path": "[SubsPlease] Kaijuu 8-gou - Mission Recon (1080p) [5148FA52].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt21975436",
+				"tmdbId": 207468,
+				"files": [
+					{
+						"path": "[SubsPlease] Kaijuu 8-gou - Mission Recon (1080p) [5148FA52].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt35636950",
+						"tmdbId": 1326106
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "[Tenrai-Sensei] My Hero Academia [BD][1080p][HEVC 10bit x265][Dual Audio]",
+				"hash": "95caa12de5e8271164b6377f7d27bb56de4c275e",
+				"imdbId": "tt5626028",
+				"files": [
+					{
+						"path": "My Hero Academia - S00E01 - Rescue! Rescue Training!.mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "My Hero Academia - S00E03 - Training Of The Dead.mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "My Hero Academia - S00E04 - My Hero Academia The Movie The Two Heroes.mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "My Hero Academia - S00E05 - All Might Rising.mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "My Hero Academia - S00E06 - End-Roll BBQ Scene - Picture Drama.mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "My Hero Academia - S00E07 - My Hero Academia Heroes Rising.mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "My Hero Academia - S00E08 - Survival Training (Part 1).mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "My Hero Academia - S00E09 - Survival Training (Part 2).mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "My Hero Academia - S01E01 - Izuku Midoriya Origin.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "My Hero Academia - S01E02 - What It Takes To Be A Hero.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "My Hero Academia - S01E03 - Roaring Muscles.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "My Hero Academia - S01E04 - Start Line.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "My Hero Academia - S01E05 - What I Can Do For Now.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "My Hero Academia - S01E06 - Rage, You Damn Nerd.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "My Hero Academia - S01E07 - Deku Vs. Kacchan.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "My Hero Academia - S01E08 - Bakugo's Start Line.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "My Hero Academia - S01E09 - Yeah, Just Do Your Best, Iida!.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "My Hero Academia - S01E10 - Encounter With The Unknown.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "My Hero Academia - S01E11 - Game Over.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "My Hero Academia - S01E12 - All Might.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "My Hero Academia - S01E13 - In Each Of Our Hearts.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "My Hero Academia - S02E01 - That's The Idea, Ochaco.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E02 - Roaring Sports Festival.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E03 - In Their Own Quirky Ways.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E04 - Strategy, Strategy, Strategy.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E05 - Cavalry Battle Finale.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E06 - The Boy Born With Everything.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E07 - Victory Or Defeat.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E08 - Battle On, Challengers!.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E09 - Bakugo Vs. Uraraka.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E10 - Shoto Todoroki Origin.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E11 - Fight On, Iida.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E12 - Todoroki Vs. Bakugo.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E13 - Time To Pick Some Names.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E14 - Bizarre! Gran Torino Appears.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E15 - Midoriya And Shigaraki.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E16 - Hero Killer Stain Vs. U.A. Students.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E17 - Climax.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E18 - The Aftermath Of Hero Killer Stain.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E19 - Everyone's Internships.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E20 - Listen Up!! A Tale From The Past.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E21 - Gear Up For Final Exams.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E22 - Yaoyorozu Rising.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E23 - Stripping The Varnish.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E24 - Katsuki Bakugo Origin.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S02E25 - Encounter.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "My Hero Academia - S03E01 - Game Start.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E02 - Wild, Wild Pussycats.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E03 - Kota.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E04 - My Hero.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E05 - Drive It Home, Iron Fist!!!.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E06 - Roaring Upheaval.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E07 - What A Twist!.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E08 - From Iida To Midoriya.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E09 - All For One.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E10 - Symbol Of Peace.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E11 - One For All.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E12 - End Of The Beginning, Beginning Of The End.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E13 - Moving Into Dorms.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E14 - Create Those Ultimate Moves.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E15 - The Test.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E16 - Shiketsu High Lurking.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E17 - Class 1-A.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E18 - RUSH!.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E19 - Rescue Exercises.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E20 - Special Episode - Save The World With Love!.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E21 - What's The Big Idea.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E22 - A Talk About Your Quirk.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E23 - Deku Vs. Kacchan, Part 2.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E24 - A Season For Encounters.mkv",
+						"folder": "Season 3"
+					},
+					{
+						"path": "My Hero Academia - S03E25 - Unrivaled.mkv",
+						"folder": "Season 3"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt5626028",
+				"tmdbId": 65930,
+				"files": [
+					{
+						"path": "My Hero Academia - S00E01 - Rescue! Rescue Training!.mkv",
+						"season": 0,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1337935
+					},
+					{
+						"path": "My Hero Academia - S00E03 - Training Of The Dead.mkv",
+						"season": 0,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1323602
+					},
+					{
+						"path": "My Hero Academia - S00E04 - My Hero Academia The Movie The Two Heroes.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null,
+						"kind": "movie",
+						"imdbId": "tt7745068",
+						"tmdbId": 505262
+					},
+					{
+						"path": "My Hero Academia - S00E05 - All Might Rising.mkv",
+						"season": 0,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 5843601
+					},
+					{
+						"path": "My Hero Academia - S00E06 - End-Roll BBQ Scene - Picture Drama.mkv",
+						"season": 0,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2390057
+					},
+					{
+						"path": "My Hero Academia - S00E07 - My Hero Academia Heroes Rising.mkv",
+						"season": 0,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 2390058
+					},
+					{
+						"path": "My Hero Academia - S00E08 - Survival Training (Part 1).mkv",
+						"season": 0,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 5843596
+					},
+					{
+						"path": "My Hero Academia - S00E09 - Survival Training (Part 2).mkv",
+						"season": 0,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 5843595
+					},
+					{
+						"path": "My Hero Academia - S01E01 - Izuku Midoriya Origin.mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1176693
+					},
+					{
+						"path": "My Hero Academia - S01E02 - What It Takes To Be A Hero.mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1183871
+					},
+					{
+						"path": "My Hero Academia - S01E03 - Roaring Muscles.mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1183872
+					},
+					{
+						"path": "My Hero Academia - S01E04 - Start Line.mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1183873
+					},
+					{
+						"path": "My Hero Academia - S01E05 - What I Can Do For Now.mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1183874
+					},
+					{
+						"path": "My Hero Academia - S01E06 - Rage, You Damn Nerd.mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1183875
+					},
+					{
+						"path": "My Hero Academia - S01E07 - Deku Vs. Kacchan.mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1183876
+					},
+					{
+						"path": "My Hero Academia - S01E08 - Bakugo's Start Line.mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1183877
+					},
+					{
+						"path": "My Hero Academia - S01E09 - Yeah, Just Do Your Best, Iida!.mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1183878
+					},
+					{
+						"path": "My Hero Academia - S01E10 - Encounter With The Unknown.mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1183879
+					},
+					{
+						"path": "My Hero Academia - S01E11 - Game Over.mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1183880
+					},
+					{
+						"path": "My Hero Academia - S01E12 - All Might.mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1183881
+					},
+					{
+						"path": "My Hero Academia - S01E13 - In Each Of Our Hearts.mkv",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1183882
+					},
+					{
+						"path": "My Hero Academia - S02E01 - That's The Idea, Ochaco.mkv",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1297726
+					},
+					{
+						"path": "My Hero Academia - S02E02 - Roaring Sports Festival.mkv",
+						"season": 2,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1301536
+					},
+					{
+						"path": "My Hero Academia - S02E03 - In Their Own Quirky Ways.mkv",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1303621
+					},
+					{
+						"path": "My Hero Academia - S02E04 - Strategy, Strategy, Strategy.mkv",
+						"season": 2,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1306162
+					},
+					{
+						"path": "My Hero Academia - S02E05 - Cavalry Battle Finale.mkv",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1307042
+					},
+					{
+						"path": "My Hero Academia - S02E06 - The Boy Born With Everything.mkv",
+						"season": 2,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1309619
+					},
+					{
+						"path": "My Hero Academia - S02E07 - Victory Or Defeat.mkv",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1315142
+					},
+					{
+						"path": "My Hero Academia - S02E08 - Battle On, Challengers!.mkv",
+						"season": 2,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1318814
+					},
+					{
+						"path": "My Hero Academia - S02E09 - Bakugo Vs. Uraraka.mkv",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1321301
+					},
+					{
+						"path": "My Hero Academia - S02E10 - Shoto Todoroki Origin.mkv",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1323767
+					},
+					{
+						"path": "My Hero Academia - S02E11 - Fight On, Iida.mkv",
+						"season": 2,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1326503
+					},
+					{
+						"path": "My Hero Academia - S02E12 - Todoroki Vs. Bakugo.mkv",
+						"season": 2,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1329608
+					},
+					{
+						"path": "My Hero Academia - S02E13 - Time To Pick Some Names.mkv",
+						"season": 2,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1331337
+					},
+					{
+						"path": "My Hero Academia - S02E14 - Bizarre! Gran Torino Appears.mkv",
+						"season": 2,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1336080
+					},
+					{
+						"path": "My Hero Academia - S02E15 - Midoriya And Shigaraki.mkv",
+						"season": 2,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1337708
+					},
+					{
+						"path": "My Hero Academia - S02E16 - Hero Killer Stain Vs. U.A. Students.mkv",
+						"season": 2,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1340051
+					},
+					{
+						"path": "My Hero Academia - S02E17 - Climax.mkv",
+						"season": 2,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1342138
+					},
+					{
+						"path": "My Hero Academia - S02E18 - The Aftermath Of Hero Killer Stain.mkv",
+						"season": 2,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1344909
+					},
+					{
+						"path": "My Hero Academia - S02E19 - Everyone's Internships.mkv",
+						"season": 2,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1347316
+					},
+					{
+						"path": "My Hero Academia - S02E20 - Listen Up!! A Tale From The Past.mkv",
+						"season": 2,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1347317
+					},
+					{
+						"path": "My Hero Academia - S02E21 - Gear Up For Final Exams.mkv",
+						"season": 2,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1347318
+					},
+					{
+						"path": "My Hero Academia - S02E22 - Yaoyorozu Rising.mkv",
+						"season": 2,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1347319
+					},
+					{
+						"path": "My Hero Academia - S02E23 - Stripping The Varnish.mkv",
+						"season": 2,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1347320
+					},
+					{
+						"path": "My Hero Academia - S02E24 - Katsuki Bakugo Origin.mkv",
+						"season": 2,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1347321
+					},
+					{
+						"path": "My Hero Academia - S02E25 - Encounter.mkv",
+						"season": 2,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1347322
+					},
+					{
+						"path": "My Hero Academia - S03E01 - Game Start.mkv",
+						"season": 3,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1448434
+					},
+					{
+						"path": "My Hero Academia - S03E02 - Wild, Wild Pussycats.mkv",
+						"season": 3,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1448435
+					},
+					{
+						"path": "My Hero Academia - S03E03 - Kota.mkv",
+						"season": 3,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1448436
+					},
+					{
+						"path": "My Hero Academia - S03E04 - My Hero.mkv",
+						"season": 3,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1448437
+					},
+					{
+						"path": "My Hero Academia - S03E05 - Drive It Home, Iron Fist!!!.mkv",
+						"season": 3,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1448439
+					},
+					{
+						"path": "My Hero Academia - S03E06 - Roaring Upheaval.mkv",
+						"season": 3,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1448440
+					},
+					{
+						"path": "My Hero Academia - S03E07 - What A Twist!.mkv",
+						"season": 3,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1448441
+					},
+					{
+						"path": "My Hero Academia - S03E08 - From Iida To Midoriya.mkv",
+						"season": 3,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1448443
+					},
+					{
+						"path": "My Hero Academia - S03E09 - All For One.mkv",
+						"season": 3,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1448444
+					},
+					{
+						"path": "My Hero Academia - S03E10 - Symbol Of Peace.mkv",
+						"season": 3,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1448446
+					},
+					{
+						"path": "My Hero Academia - S03E11 - One For All.mkv",
+						"season": 3,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1448448
+					},
+					{
+						"path": "My Hero Academia - S03E12 - End Of The Beginning, Beginning Of The End.mkv",
+						"season": 3,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1448449
+					},
+					{
+						"path": "My Hero Academia - S03E13 - Moving Into Dorms.mkv",
+						"season": 3,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1511001
+					},
+					{
+						"path": "My Hero Academia - S03E14 - Create Those Ultimate Moves.mkv",
+						"season": 3,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1514168
+					},
+					{
+						"path": "My Hero Academia - S03E15 - The Test.mkv",
+						"season": 3,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1520178
+					},
+					{
+						"path": "My Hero Academia - S03E16 - Shiketsu High Lurking.mkv",
+						"season": 3,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1527803
+					},
+					{
+						"path": "My Hero Academia - S03E17 - Class 1-A.mkv",
+						"season": 3,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1536330
+					},
+					{
+						"path": "My Hero Academia - S03E18 - RUSH!.mkv",
+						"season": 3,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1536331
+					},
+					{
+						"path": "My Hero Academia - S03E19 - Rescue Exercises.mkv",
+						"season": 3,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1536332
+					},
+					{
+						"path": "My Hero Academia - S03E20 - Special Episode - Save The World With Love!.mkv",
+						"season": 3,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1536333
+					},
+					{
+						"path": "My Hero Academia - S03E21 - What's The Big Idea.mkv",
+						"season": 3,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1557754
+					},
+					{
+						"path": "My Hero Academia - S03E22 - A Talk About Your Quirk.mkv",
+						"season": 3,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1561499
+					},
+					{
+						"path": "My Hero Academia - S03E23 - Deku Vs. Kacchan, Part 2.mkv",
+						"season": 3,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1567027
+					},
+					{
+						"path": "My Hero Academia - S03E24 - A Season For Encounters.mkv",
+						"season": 3,
+						"episode": 24,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1572758
+					},
+					{
+						"path": "My Hero Academia - S03E25 - Unrivaled.mkv",
+						"season": 3,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1576063
+					}
+				]
+			}
+		}
+	]
+}

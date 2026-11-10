@@ -203,8 +203,9 @@ const PAIRED_CODES = /(?:^|\s-\s)(\d{3}),\s*(\d{3})\s-\s/;
 // production code of a season, a half hour and its segment (`- 105 -` alone is Yu-Gi-Oh!'s
 // absolute 105th)
 const SHOW_CODE = /^(.*?\S)\s+-\s+([1-9])(\d{2})([ab])\s+-\s+\S/i;
-// `aaf-wilty.302` in `Would.I.Lie.To.You.S03E01`: the season and episode as one number.
-const SCENE_SHORTHAND = /(?:^|[\s._-])(\d)(\d{2})(?:[\s._-]|$)/;
+// `aaf-wilty.302` in `Would.I.Lie.To.You.S03E01`, `Family.Guy.2301` in a season 23 pack: the
+// season and episode as one number.
+const SCENE_SHORTHAND = /(?:^|[\s._-])(\d{1,2})(\d{2})(?=[\s._-]|$)/g;
 // `[CyC] Natsume Yuujinchou Shi 03`: a season as a Japanese numeral (shi, four), capitalised.
 const JAPANESE_NUMERALS = ['Ni', 'San', 'Shi', 'Go', 'Roku', 'Nana', 'Hachi', 'Kyuu', 'Juu'];
 const JAPANESE_SEASON = new RegExp(
@@ -215,6 +216,10 @@ const JAPANESE_SEASON = new RegExp(
 const DOTTED_EPISODE = /(?<=\p{L})-(\d{2,4}(?:v\d)?)(?=[.[(]|$)/u;
 // `Title - 07`, `Title - 17v2`: a fansub's episode.
 const DASHED_NUMBER = /\s-\s\d{1,4}(?:v\d)?(?=\s|$)/g;
+// A file of two to four of a run's episodes: `Swiss Family Robinson - 07+08 - English dub`,
+// `Detective_Conan_-_701-704_(Special)_-_The_Jet-Black_Mystery_Train`.
+const EPISODE_RANGE =
+	/(?:^|[\s_])-[\s_]+(\d{2,4})[\s_]*[-+][\s_]*(\d{2,4})(?=[\s_]+-[\s_]|[\s_]*[[(]|$)/;
 // `One Piece - 0160 - 10 Survival Rate!`: a run's zero-padded number before a title that has its own.
 const ZERO_PADDED = /\s-\s(0\d{3})(?:v\d)?\s-\s/;
 // `Fairy Tail - 023 - 15 Minutes`: the number before a title that starts with one of its own.
@@ -312,6 +317,9 @@ function sceneNumbers(name: string): FileNumbers | null {
 
 /** Fansub and loose numbering: `Oshi no Ko S2 - 05`, `Kingdom 4th Season - 21`, `- 05`, `[05]`, `10of13`. */
 function looseNumbers(stem: string): FileNumbers | null {
+	// a director's cut's prime after a fansub's number, right after its title: `[Sephirotic]
+	// Evangelion - 21' [MULTI]…`, not `Evangelion - The End of Evangelion - 25'`, the film's chapter
+	stem = stem.replace(/^((?:\[[^\]]*\][\s._-]*)*(?:(?!\s-\s).)+\s-\s\d{1,4})'(?=[\s[(]|$)/, '$1');
 	if (fansubShaped(stem) && !/\s/.test(stem.replace(LEADING_GROUPS, ''))) {
 		stem = stem.replace(DOTTED_EPISODE, ' - $1 ');
 	}
@@ -333,6 +341,12 @@ function looseNumbers(stem: string): FileNumbers | null {
 		const season = JAPANESE_NUMERALS.indexOf(japanese[1]) + 2;
 		if (episode) return { season, episode, end: null };
 	}
+	const range = EPISODE_RANGE.exec(stem);
+	if (range) {
+		const [first, last] = [Number(range[1]), Number(range[2])];
+		if (first > 0 && first < 1900 && last > first && last - first <= 3)
+			return { season: null, episode: first, end: last };
+	}
 	const padded = positive((ZERO_PADDED.exec(stem) ?? NUMBERED_TITLE.exec(stem))?.[1]);
 	if (padded) return { season: null, episode: padded, end: null };
 	const anime = parseAnimeEpisode(stem);
@@ -351,6 +365,12 @@ function looseNumbers(stem: string): FileNumbers | null {
 	}
 	return null;
 }
+
+/**
+ * A zero-padded episode number the name parser leaves at the end of a title, which no title ends
+ * in: `Dragonball.Z.061.1080p.BluRay…` is Dragonball Z's 61st.
+ */
+export const TITLE_EPISODE = /\s(0\d{2})$/;
 
 /**
  * `Lovely Runner 14`, `[Zurako]_Mawaru_Penguindrum_08_…`: the release's own title, then a
@@ -460,11 +480,14 @@ export function fileNumbers(
 			return coded(Number(code[2]), folderSeason);
 		}
 	}
-	const shorthand = SCENE_SHORTHAND.exec(stem);
-	if (season !== null && season <= 9 && shorthand && Number(shorthand[1]) === season) {
-		const episode = positive(shorthand[2]);
-		if (episode) return { season, episode, end: null };
-	}
+	// any number of the name that starts with its season: a year may come first
+	const shorthand =
+		season === null
+			? undefined
+			: [...stem.matchAll(SCENE_SHORTHAND)].find(
+					(found) => Number(found[1]) === season && positive(found[2])
+				);
+	if (shorthand) return { season: season!, episode: Number(shorthand[2]), end: null };
 	const leading = positive(LEADING.exec(stem)?.[1]);
 	if (season !== null && leading) return coded(leading, season);
 	if (season === null && !SEVERAL_SEASONS.test(release)) {
@@ -490,8 +513,13 @@ export function fileNumbers(
 	const titled = titleNumber(release, folder, stem);
 	if (titled) return withSeason({ season: null, episode: titled, end: null });
 	if (single) {
+		const padded = positive(TITLE_EPISODE.exec(parseName(release).title)?.[1]);
 		return withSeason(
-			sceneNumbers(release) ?? (airDates(release).length ? null : looseNumbers(release))
+			sceneNumbers(release) ??
+				(airDates(release).length
+					? null
+					: (looseNumbers(release) ??
+						(padded ? { season: null, episode: padded, end: null } : null)))
 		);
 	}
 	return null;
@@ -853,8 +881,17 @@ async function placeByRules(
 
 	// a file's own title outranks its numbers: Firefly's DVD-ordered `S01E01.Serenity` is TMDB's S1E11
 	const titledAt = byTitle ? await byName(show, numbers, file) : null;
-	const named = titledAt && (await placed(titledAt, 'tmdb'));
-	if (named) return { ...named, titled: true };
+	// a later part only for a caller that reads `part`: one that does not files it as a copy
+	const part = titledAt?.[3];
+	if (part && part > 1 && !show.parts) return null;
+	const named = titledAt && (await placed([titledAt[0], titledAt[1]], 'tmdb'));
+	if (named)
+		return {
+			...named,
+			...(titledAt[2] ? { episodeEnd: titledAt[2] } : {}),
+			...(part && show.parts ? { part } : {}),
+			titled: true,
+		};
 
 	// a dub's own seasons are TMDB's only through its Dub Order: Medabots' English dub season 3
 	// is TMDB's season 2 (Damashii), its season 2 episodes TMDB files out of order in season 1
@@ -922,9 +959,28 @@ async function placeByRules(
 	}
 	if (season !== null) {
 		// a release numbers as TVDB does, which may list the season otherwise than TMDB: Lost's
-		// S04E14 is the second half of TMDB's S4E13. A part the name says is TMDB's numbering.
-		// ponytail: a multi-episode file keeps its numbers; map both ends when one turns up
-		// and a season numbered by its year is `ofYear`'s, whose releases disagree with TVDB's
+		// S04E14 is the second half of TMDB's S4E13. A part the name says is TMDB's numbering,
+		// and a season numbered by its year is `ofYear`'s, whose releases disagree with TVDB's.
+		// A multi-episode file spans TMDB's episodes from its first number's to its last's: HiQVE's
+		// The Office `S04E18E19`, TVDB's two halves of "Goodbye, Toby", is TMDB's one S4E14
+		if (show.aligned && numbers.end !== null && numbers.part === undefined && season < 1900) {
+			const [first, last] = await Promise.all([
+				show.aligned(season, episode),
+				show.aligned(season, numbers.end),
+			]);
+			const end = last ? (last.episodeEnd ?? last.episode) : 0;
+			if (
+				first &&
+				last &&
+				first.season === last.season &&
+				end >= first.episode &&
+				(first.season !== season || first.episode !== episode || end !== numbers.end) &&
+				(await fits(first.season, end))
+			) {
+				const found = await placed([first.season, first.episode], 'aligned');
+				if (found) return { ...found, episodeEnd: end > first.episode ? end : null };
+			}
+		}
 		const aligned =
 			show.aligned && numbers.part === undefined && numbers.end === null && season < 1900
 				? await show.aligned(season, episode)
@@ -939,6 +995,24 @@ async function placeByRules(
 		) {
 			const found = await placed([aligned.season, aligned.episode], 'aligned');
 			if (found) return { ...found, episodeEnd: aligned.episodeEnd };
+		}
+		// a file of TVDB's episodes that are every part of one of TMDB's: Freakazoid's
+		// `S01E14-E15-E16-E17-E18` is TMDB's S1E5, which TVDB lists as five segments
+		if (show.aligned && numbers.part === undefined && numbers.end !== null && season < 1900) {
+			const [first, last, next] = await Promise.all(
+				[episode, numbers.end, numbers.end + 1].map((n) => show.aligned!(season, n))
+			);
+			const same = (x?: AlignedEpisode | null, y?: AlignedEpisode | null) =>
+				Boolean(x && y && x.season === y.season && x.episode === y.episode);
+			if (
+				first?.part === 1 &&
+				same(first, last) &&
+				last!.part === numbers.end - episode + 1 &&
+				!same(last, next)
+			) {
+				const found = await placed([first.season, first.episode], 'aligned');
+				if (found) return { ...found, episodeEnd: null };
+			}
 		}
 		const named = await placed([season, episode], 'tmdb');
 		if (named) return named;
@@ -1011,23 +1085,50 @@ async function ofYear(
 		return row.season === 0 || started === year || started === year - 1;
 	});
 	const lists = await Promise.all(aired.map((row) => show.episodes(row.season)));
-	const title = titleText(file.slice(token.index + token[0].length));
+	// the title without the show's name before it: `2016e11.MythBusters - The Reunion` is "Reunion"
+	const names = show.names.map((name) => words(name).join(' '));
+	const own = (text: string) => {
+		const name = names.find((name) => text === name || text.startsWith(`${name} `));
+		return name ? text.slice(name.length).trim() : text;
+	};
+	const titleAt = (raw: string) => {
+		const title = titleText(raw);
+		const whole = title && own(title.whole);
+		return whole ? { whole, first: own(title!.first) || whole } : null;
+	};
+	const rest = file.slice(token.index + token[0].length);
+	const title = titleAt(rest);
 	if (!title) return null;
-	const found = titled(
-		title,
-		aired.flatMap((row, n) =>
-			(lists[n] ?? [])
-				.filter((item) => item.airDate?.startsWith(String(year)))
-				.map((item) => ({ ...item, season: row.season }))
+	const candidates = aired.flatMap((row, n) =>
+		(lists[n] ?? [])
+			.filter((item) => item.airDate?.startsWith(String(year)))
+			.map((item) => ({ ...item, season: row.season }))
+	);
+	// else by the first of the myths a file is titled by (`S2004E01.Explosive.Decompression,.Frog.
+	// Giggin',.Rear.Axle` is "Explosive Decompression"), else the one episode of the year whose title
+	// holds the file's (`2004x17.Christmas.Special` is "Viewers-Choice/Christmas Special")
+	const first = rest.includes(',') ? titleAt(rest.split(',')[0]) : null;
+	const bare = (text: string) => ` ${text.replace(PART, '')} `;
+	const holding = candidates.filter((item) =>
+		[title.whole, title.first].some(
+			(text) =>
+				text.replace(/ /g, '').length >= 3 &&
+				bare(words(item.name).join(' ')).includes(bare(text))
 		)
 	);
+	const found =
+		titled(title, candidates) ??
+		(first && titled(first, candidates)) ??
+		(holding.length === 1 ? holding[0] : null);
 	return found ? [found.season, found.episode] : null;
 }
 
 /** A title's words: lowercase letters and digits, apostrophes dropped (`Don't` is `dont`). */
-// `Gary & Spot` is `Gary.and.Spot`, `Hulk vs the World` "Hulk Versus the World"
+// `Gary & Spot` is `Gary.and.Spot`, `Hulk vs the World` "Hulk Versus the World", `Pokemon` "Pokémon"
 const words = (text: string) =>
 	text
+		.normalize('NFD')
+		.replace(/\p{M}/gu, '')
 		.toLowerCase()
 		.replace(/['’`]/g, '')
 		.replace(/&/g, ' and ')
@@ -1043,7 +1144,7 @@ const RELEASE_WORDS =
 	/^(?:proper|repack|rerip|real|internal|extended|uncut|uncensored|remastered|dubbed|subbed|multi|dual|end|fin|final)$/;
 const SCENE_WORDS = /^(?:proper|repack|rerip|internal)$/;
 const TAGS =
-	/^(?:\d{3,4}[pi]|[248]k|(?:19|20)\d{2}|uhd|hd|hdr|hdr10|dv|sdr|web|webrip|webdl|amzn|nf|dsnp|hmax|atvp|hulu|uktv|upscaled|bluray|bd|bdrip|brrip|brip|bdremux|remux|hdtv|hdtvrip|pdtv|dvd|dvdrip|dvdr|ws|x264|x265|h|h264|h265|hevc|avc|xvid|divx|aac|aac2|ac3|eac3|dts|ddp|ddp2|ddp5|dd|dd2|dd5|flac|opus|ita|eng|english|german|ger|french|fre|truefrench|vostfr|subfrench|spanish|spa|latino|rus|jap|japanese|kor|korean|chs|cht|hindi|nordic|multisub|\d+bit)$/;
+	/^(?:\d{3,4}[pi]|[248]k|sd|(?:19|20)\d{2}|uhd|hd|hdr|hdr10|dv|sdr|web|webrip|webdl|amzn|nf|dsnp|hmax|atvp|hulu|uktv|upscaled|bluray|bd|bdrip|brrip|brip|bdremux|remux|hdtv|hdtvrip|pdtv|dvd|dvdrip|dvdr|ws|x264|x265|h|h264|h265|hevc|avc|xvid|divx|aac|aac2|ac3|eac3|dts|ddp|ddp2|ddp5|dd|dd2|dd5|flac|opus|ita|eng|english|german|ger|french|fre|truefrench|vostfr|subfrench|spanish|spa|latino|rus|jap|japanese|kor|korean|chs|cht|hindi|nordic|multisub|\d+bit)$/;
 // What separates a pack file's titles, or a title from what follows it: `Stinky Goes Hollywood -
 // Olga Gets Engaged`, `One of Us; Vanishing Act`, `Pup Pup Boogie + Pups in a Fog`, `The Magic
 // Tree Of Nowhere. Robot Randy`, `The Gimme Ghost[59E47EF7]`, `Eugene's.Birthday__Stinky's.Pumpkin`.
@@ -1094,7 +1195,8 @@ export function titleText(raw: string): { whole: string; first: string } | null 
  */
 function titled<T extends { name: string }>(
 	title: { whole: string; first: string },
-	candidates: T[]
+	candidates: T[],
+	forms = [0, 1, 2]
 ): T | null {
 	const keys = candidates.map((item) => {
 		if (!wordsOf.has(item)) wordsOf.set(item, words(item.name).join(' '));
@@ -1107,14 +1209,121 @@ function titled<T extends { name: string }>(
 			? [name.replace(/ /g, ''), name.replace(PART, '').replace(/ /g, ''), plain(name)]
 			: ['', '', ''];
 	});
+	// a first segment cut before the part its whole title numbers names no other part: Freakazoid's
+	// `The Chip (2)` is not TMDB's "The Chip: Part 1"
+	const part = (text: string) => / (?:part |pt )?(\d{1,2})$/.exec(words(text).join(' '))?.[1];
+	const own = part(title.whole);
 	for (const text of new Set([title.whole, title.first])) {
-		for (const form of [0, 1, 2]) {
+		for (const form of forms) {
 			const key = form === 2 ? plain(text) : text.replace(/ /g, '');
 			const found = candidates.filter((_, n) => keys[n][form] === key);
+			const other =
+				own &&
+				text !== title.whole &&
+				![own, undefined].includes(part(found[0]?.name ?? ''));
+			if (found.length === 1 && other) continue;
 			if (found.length) return found.length === 1 ? found[0] : null;
 		}
 	}
 	return null;
+}
+
+const NUMBER_WORDS: Record<string, string> = Object.fromEntries([
+	...[
+		'zero',
+		'one',
+		'two',
+		'three',
+		'four',
+		'five',
+		'six',
+		'seven',
+		'eight',
+		'nine',
+		'ten',
+		'eleven',
+		'twelve',
+		'thirteen',
+		'fourteen',
+		'fifteen',
+		'sixteen',
+		'seventeen',
+		'eighteen',
+		'nineteen',
+		'twenty',
+	].map((word, n) => [word, String(n)]),
+	...['thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'].map((word, n) => [
+		word,
+		String(30 + 10 * n),
+	]),
+]);
+// what a title says as it is spoken: `Girls Just Wanna Have Fun` is "Girls Just Want to Have Fun"
+const SPOKEN: Record<string, string[]> = {
+	wanna: ['want', 'to'],
+	gonna: ['going', 'to'],
+	gotta: ['got', 'to'],
+};
+const ROMAN = /^(?:i{1,3}|iv|vi{0,3}|ix|xi{0,3})$/;
+
+/**
+ * A title's words, its spelling aside: no article, figures for number words (`50 Foot` is
+ * "Fifty-Foot"), spoken forms written out, and American spellings (`Centre` is "Center", `Colour`
+ * "Color").
+ */
+const spelling = (text: string) =>
+	words(text)
+		.flatMap((word) => SPOKEN[word] ?? [word])
+		.filter((word) => !/^(?:the|a|an)$/.test(word))
+		.map(
+			(word) =>
+				NUMBER_WORDS[word] ??
+				word
+					.replace(/(?<=..[^aeiou\d])re(?=s?$)/, 'er')
+					.replace(/(?<=\D{3})our(?=$|s$|ed$|ing$|ite$|ites$)/, 'or')
+		);
+
+/** Letters inserted, dropped, changed or swapped with the next to make one word the other. */
+function slips(a: string, b: string): number {
+	const d = Array.from({ length: a.length + 1 }, (_, i) =>
+		Array.from({ length: b.length + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0))
+	);
+	for (let i = 1; i <= a.length; i++)
+		for (let j = 1; j <= b.length; j++) {
+			d[i][j] = Math.min(
+				d[i - 1][j] + 1,
+				d[i][j - 1] + 1,
+				d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+			);
+			if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1])
+				d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+		}
+	return d[a.length][b.length];
+}
+
+/**
+ * The one candidate titled as a file is but for its spelling: the same words once spelled alike
+ * (`spelling`), else the same words but one, of three words or more, that a slip of at most a
+ * third of its letters makes the other and that is no number (Becker's `Unbearable Wrongness of
+ * Talking` is "The Unbelievable Wrongness of Talking", The Fairly OddParents' `Genie Meanie Minie
+ * Mo` "Genie Meanie Minie Moe"). Null where none is, or where two are alike.
+ */
+export function spelledAlike<T extends { name: string }>(title: string, candidates: T[]): T | null {
+	const own = spelling(title);
+	if (own.join('').length < 6) return null;
+	const near = candidates.flatMap((item) => {
+		const other = spelling(item.name);
+		if (other.length !== own.length) return [];
+		const differ = own.flatMap((word, n) => (word === other[n] ? [] : [n]));
+		if (!differ.length) return [{ item, slips: 0 }];
+		if (differ.length > 1 || own.length < 3) return [];
+		const [a, b] = [own[differ[0]], other[differ[0]]];
+		if (/\d/.test(a + b) || ROMAN.test(a) || ROMAN.test(b)) return [];
+		const count = slips(a, b);
+		return count * 3 <= Math.max(a.length, b.length) ? [{ item, slips: count }] : [];
+	});
+	const least = Math.min(...near.map((row) => row.slips));
+	const found = near.filter((row) => row.slips === least);
+	return found.length === 1 ? found[0].item : null;
 }
 
 const PART = / (?:part |pt )?\d{1,2}$/;
@@ -1165,26 +1374,106 @@ const TITLE_LEAD = /^-?\d+(?:\.\d+)?(?:[a-z](?:-[a-z])?|-\d{1,2})?\.?\s*(?:-\s+)
 const SCENE_TOKEN =
 	/(?:^|[^a-z0-9])(?:s\d{1,2}[\s._-]*e\d{1,3}|\d{1,2}x\d{1,3}|s?(?:19|20)\d{2}[xe]\d{2})(?![0-9])/i;
 const MORE_EPISODES = /^(?:[\s._-]*-?[\s._-]*e\d{1,3}(?![0-9]))*/i;
+// A half-hour's segment letter joined to its number: `SpongeBob SquarePants S01E01B Reef Blower`.
+const SEGMENT_LETTER = /^[a-d](?=[\s._-]|$)/i;
 
 /** The title a file's name carries after its episode token, its code or its number. */
 export function titleOf(
 	file: string,
 	numbers: FileNumbers
 ): { whole: string; first: string } | null {
+	return titleText(titleRest(file, numbers));
+}
+
+/** What follows a file's episode token, its code or its number, where its title is. */
+function titleRest(file: string, numbers: FileNumbers): string {
 	const stem = file.replace(EXTENSION, '');
 	// a group's bracket is no episode token (`[0x539]`); it can be the number (`[Episode 19] …`)
 	const grouped = stem.match(LEADING_GROUPS)?.[0].length ?? 0;
 	const token = SCENE_TOKEN.exec(stem.slice(grouped));
 	const number = new RegExp(`(?<!\\d)0*${numbers.episode}(?!\\d)`).exec(stem);
 	const rest = token
-		? stem.slice(grouped + token.index + token[0].length).replace(MORE_EPISODES, '')
+		? stem
+				.slice(grouped + token.index + token[0].length)
+				.replace(MORE_EPISODES, '')
+				.replace(SEGMENT_LETTER, '')
 		: numbers.coded
 			? stem.replace(SHOW_CODE_LEAD, '').replace(TITLE_LEAD, '')
 			: number
 				? stem.slice(number.index + number[0].length)
 				: '';
-	// a title in parentheses after the number is no group's tag: `Berenstain Bears - E53 (New Neighbors)`
-	return titleText(rest.replace(/^[\s._-]*\(([^()]*\p{L}[^()]*)\)[\s._-]*$/u, ' $1'));
+	// a title in parentheses after the number is no group's tag: `Berenstain Bears - E53 (New Neighbors)`,
+	// nor one of two words or more in brackets: `ODDTAXI - S00E14 [Picture Drama]`
+	const bracketed = /^[\s._-]*\[([^[\]]*\p{L}[^[\]]*)\][\s._-]*$/u.exec(rest);
+	if (bracketed && (titleText(bracketed[1])?.whole.split(' ').length ?? 0) >= 2)
+		return ` ${bracketed[1]}`;
+	return rest.replace(/^[\s._-]*\(([^()]*\p{L}[^()]*)\)[\s._-]*$/u, ' $1');
+}
+
+// What separates the titles of the segments a file holds: `Tutoring Torvald + Gerald Comes Over`,
+// `Saftey First; Crime Sheen Investigation`, `Robin Brain, The Mummy`.
+const SEGMENTS = /\s+[-+]\s+|;|,\s|\.\s|__|--/;
+
+/**
+ * The run of TMDB episodes a file holds, where its title names the segments TMDB lists one by one:
+ * Hey Arnold's `S01E14 - Tutoring Torvald + Gerald Comes Over` is TMDB's S1E26-E27 ("Arnold the
+ * Tutor", "Gerald Comes Over"), Pinky and the Brain's `S2E5 E6 - Robin Brain, The Mummy` its
+ * S2E10-E11. Each segment titled as one episode alone, the rest the episodes their places in the
+ * file say, and every episode of the run aired within a day of the others.
+ */
+async function bySegments(
+	show: PlacementShow,
+	numbers: FileNumbers,
+	file: string,
+	candidates: { season: number; episode: number; name: string; airDate: string | null }[]
+): Promise<[number, number, number] | null> {
+	// what a title says in parentheses is no segment of its own: `Идеально (англ. Perfect)`
+	const rest = titleRest(file, numbers).replace(/\([^()]*\)/g, ' ');
+	const whole = titleText(rest)?.whole;
+	if (!whole) return null;
+	// the segments before the release's tags
+	const parts: string[] = [];
+	for (const raw of rest.split(SEGMENTS)) {
+		if (parts.join(' ') === whole) break;
+		const part = titleText(raw)?.whole;
+		if (part) parts.push(part);
+	}
+	if (parts.length < 2 || parts.join(' ') !== whole) return null;
+	// a title TMDB gives one episode is that one's, commas and all: Johnny Bravo's "Welcome Back, Bravo"
+	if (
+		parts.some((part) => part.replace(/ /g, '').length < 3) ||
+		titled({ whole, first: whole }, candidates)
+	)
+		return null;
+	// each segment titled as it, never as a part TMDB numbers (`Bravo` is no "Bravo 13")
+	const hits = parts.flatMap((part, at) => {
+		const found = titled({ whole: part, first: part }, candidates, [0, 2]);
+		return found ? [{ at, found }] : [];
+	});
+	if (!hits.length || new Set(hits.map((hit) => hit.found.season)).size > 1) return null;
+	const { season } = hits[0].found;
+	const episodes = hits.map((hit) => hit.found.episode);
+	const lowest = Math.min(...episodes);
+	const start =
+		hits.length === parts.length
+			? Math.max(...episodes) - lowest === parts.length - 1 &&
+				new Set(episodes).size === parts.length
+				? lowest
+				: null
+			: new Set(hits.map((hit) => hit.found.episode - hit.at)).size === 1
+				? hits[0].found.episode - hits[0].at
+				: null;
+	if (start === null) return null;
+	const listed = (await show.episodes(season)) ?? [];
+	const run = Array.from({ length: parts.length }, (_, n) =>
+		listed.find((row) => row.episode === start + n)
+	);
+	// a day apart at most: TMDB dates Mickey Mouse Works' "Vending Machine" a day after the rest
+	const days = run.map((row) => dayOf(row?.airDate ?? null));
+	return days.every((day) => day !== null) &&
+		Math.max(...(days as number[])) - Math.min(...(days as number[])) <= 1
+		? [season, start, start + parts.length - 1]
+		: null;
 }
 
 /**
@@ -1228,13 +1517,22 @@ async function byName(
 	show: PlacementShow,
 	numbers: FileNumbers,
 	file: string
-): Promise<[number, number] | null> {
+): Promise<[number, number, number?, number?] | null> {
 	const title = titleOf(file, numbers);
 	if (!title) return null;
 	const { season, episode } = numbers;
 	const listed = season === null ? null : await show.episodes(season);
 	const at = listed?.find((row) => row.episode === episode);
 	if (at && agrees(title, at.name)) return [season!, episode];
+	const run =
+		listed &&
+		(await bySegments(
+			show,
+			numbers,
+			file,
+			listed.map((row) => ({ ...row, season: season! }))
+		));
+	if (run) return run;
 	const inSeason = listed && titled(title, listed);
 	if (inSeason) return [season!, inSeason.episode];
 	const others = await Promise.all(
@@ -1248,7 +1546,37 @@ async function byName(
 			)
 	);
 	const anywhere = titled(title, others.flat());
-	return anywhere ? [anywhere.season, anywhere.episode] : null;
+	if (anywhere) return [anywhere.season, anywhere.episode];
+	// TMDB's title with the show's name before it: Ed, Edd n Eddy's `S00E05 - Big Picture Show` is
+	// "Ed, Edd n Eddy's Big Picture Show", ODDTAXI's `S00E14 [Picture Drama]` "Odd Taxi Picture Drama"
+	const shows = show.names.map((name) => words(name).join('')).filter((name) => name.length >= 3);
+	const unshown = (text: string) => {
+		const list = words(text);
+		for (let k = 1; k < list.length; k++) {
+			const head = list.slice(0, k).join('');
+			if (
+				shows.some(
+					(name) => head === name || (head === `${name}s` && list[k - 1].endsWith('s'))
+				)
+			)
+				return list.slice(k).join('');
+		}
+		return list.join('');
+	};
+	const own = unshown(title.whole);
+	const all = [...(listed ?? []).map((row) => ({ ...row, season: season! })), ...others.flat()];
+	const shown =
+		own.length >= 6 && numbers.end === null
+			? all.filter((row) => unshown(row.name) === own)
+			: [];
+	if (shown.length === 1) return [shown[0].season, shown[0].episode];
+	// a title TMDB gives one episode, and the part of it a file holds: Star Wars Rebels'
+	// `S02E01.The.Siege.of.Lothal.Part2` is the second part of TMDB's S0E6 "The Siege of Lothal"
+	const parted = /^(.*\S) (?:part|pt) ?(\d{1,2})$/.exec(title.whole);
+	const whole = parted && titled({ whole: parted[1], first: parted[1] }, all, [0, 2]);
+	return whole && numbers.end === null && !PART.test(words(whole.name).join(' '))
+		? [whole.season, whole.episode, undefined, Number(parted[2])]
+		: null;
 }
 
 // What names a special as one beside its title: `- OVA - Water Slide`, `DC Comics Special II`.
@@ -1275,18 +1603,65 @@ export async function specialOf(
 	release: string,
 	path: string
 ): Promise<Placement | null> {
-	if (!show.seasons.some((row) => row.season === 0)) return null;
+	// a sample is no special: `rob.and.romesh.vs.s05e00.christmas.on.ice…sample.mkv`
+	if (!show.seasons.some((row) => row.season === 0) || SAMPLE.test(path)) return null;
 	const shows = [...show.names, parseName(release).title]
 		.map((name) => specialKey(name, []))
 		.sort((a, b) => b.length - a.length);
 	const key = specialKey((path.split('/').pop() ?? path).replace(EXTENSION, ''), shows);
 	if (key.length < 6) return null;
-	const found = ((await show.episodes(0)) ?? []).filter(
-		(row) => !GENERIC.test(words(row.name).join(' ')) && specialKey(row.name, shows) === key
+	const specials = ((await show.episodes(0)) ?? []).filter(
+		(row) => !GENERIC.test(words(row.name).join(' '))
 	);
-	return found.length === 1
-		? { season: 0, episode: found[0].episode, episodeEnd: null, how: 'tmdb', titled: true }
-		: null;
+	const found = specials.filter((row) => specialKey(row.name, shows) === key);
+	const at = (row: { episode: number }): Placement => ({
+		season: 0,
+		episode: row.episode,
+		episodeEnd: null,
+		how: 'tmdb',
+		titled: true,
+	});
+	if (found.length) return found.length === 1 ? at(found[0]) : null;
+	const stem = (path.split('/').pop() ?? path).replace(EXTENSION, '');
+	// the title after a season's special number or a season alone, up to the release's tags, its part
+	// as a number: Archer's `S03E00.Heart.of.Archness,Pt.1.1080p.WEB…` is S0E3 "Heart of Archness (1)",
+	// Would I Lie to You's `S10 - Children in Need Special` S0E5 "Children in Need (Series 10)"
+	const token = SCENE_TOKEN.exec(stem) ?? /(?:^|[\s._-])s\d{1,2}(?=[\s._-])/i.exec(stem);
+	// what TMDB puts in parentheses may be a part (`Heart of Archness (1)`) or not (`Children in Need
+	// (Series 10)`); a file's are its tags
+	const titledAs = (text: string, tagged = false) =>
+		plain(
+			words(titleText(tagged ? text.replace(BRACKETS, ' ') : text)?.whole ?? '')
+				.filter((word) => !SPECIAL_WORDS.test(word))
+				.join(' ')
+		);
+	const own = token ? titledAs(stem.slice(token.index + token[0].length), true) : '';
+	const named =
+		own.length >= 6
+			? specials.filter((row) =>
+					[false, true].some((tagged) => titledAs(row.name, tagged) === own)
+				)
+			: [];
+	if (named.length) return named.length === 1 ? at(named[0]) : null;
+	// a special TMDB titles by its segments, the file by the same at its end: To Love-Ru Darkness'
+	// `OVA - 01 - Prologue - Pollen Plan - Body touch` is S0E7 "Prologue ~Commence Project~ / Pollen
+	// Plan ~Dangerous Sister Love~ / Body Touch? ~Nyanderful~"
+	const tail = stem
+		.replace(LEADING_GROUPS, '')
+		.split(/\s+-\s+/)
+		.map((part) => fold(part));
+	const segmented = specials.filter((row) => {
+		const parts = row.name
+			.replace(/~[^~]*~/g, ' ')
+			.split(' / ')
+			.map((part) => fold(part));
+		return (
+			parts.length >= 2 &&
+			parts.every(Boolean) &&
+			parts.join('|') === tail.slice(-parts.length).join('|')
+		);
+	});
+	return segmented.length === 1 ? at(segmented[0]) : null;
 }
 
 /**
@@ -1492,7 +1867,7 @@ const holdsBoth = (whole: number | null, a: number | null, b: number | null) =>
  * dates, which TMDB gives Below Deck Mediterranean's season 6 a week after TVDB. Between two such
  * pairs, as many of each pair in order; otherwise they are read in runs of days a day or less
  * apart, where as many of each pair in order, two of TVDB's on one of TMDB's as long as both
- * (beside a titled pair too) are its two parts, and one of TVDB's as long as two of TMDB's spans
+ * (beside a titled pair too) are its two parts, as are TVDB's on one TMDB titles by as many segments, and one of TVDB's as long as two of TMDB's spans
  * them. An episode left over is a special on the other side when one is titled so within a day.
  * A season TVDB's mostly paired episodes do not cover maps nothing; where it is mapped, an
  * episode TMDB lacks is null if its number is another's on TMDB. Lists that agree map nothing.
@@ -1598,6 +1973,14 @@ export function alignTvdb(tvdb: ListedEpisode[], tmdb: ListedEpisode[]) {
 				holdsBoth(b[m[0]].runtime, a[t[0]].runtime, a[t[1]].runtime)
 			)
 				found.push([t[0], m[0], { part: 1 }], [t[1], m[0], { part: 2 }]);
+			// TMDB's one episode titled by as many segments as TVDB lists that day: Freakazoid's S1E1 "Five
+			// Day Forecast / Dance of Doom / Hand Man" is TVDB's S1E1-E3, one part each
+			else if (
+				m.length === 1 &&
+				t.length > 1 &&
+				b[m[0]].name.split(' / ').length === t.length
+			)
+				t.forEach((i, n) => found.push([i, m[0], { part: n + 1 }]));
 			else if (
 				t.length === 1 &&
 				m.length === 2 &&
@@ -1641,6 +2024,24 @@ export function alignTvdb(tvdb: ListedEpisode[], tmdb: ListedEpisode[]) {
 			break;
 		}
 	}
+	// an episode between two pairs is the one between theirs, aired within days of it: TVDB dates
+	// Bleach's S2E13 two days before TMDB's S1E33, which the pairs before and after them hold between
+	// them (Diners, Drive-Ins and Dives' S11E1 "From Pork to Tofu" is two weeks off TMDB's, another)
+	a.forEach((row, i) => {
+		const [before, after] = [pairs.get(i - 1), pairs.get(i + 1)];
+		if (pairs.has(i) || !before || !after || before.part || after.part) return;
+		if (before.end !== undefined || after.end !== undefined) return;
+		const at = before.at + 1;
+		const [x, y] = [dayOf(row.airDate), dayOf(b[at]?.airDate ?? null)];
+		if (
+			after.at === at + 1 &&
+			!taken.has(at) &&
+			x !== null &&
+			y !== null &&
+			Math.abs(x - y) <= 3
+		)
+			pair(i, at);
+	});
 	const key = (row: { season: number; episode: number }) => `${row.season}|${row.episode}`;
 	const one = (
 		row: ListedEpisode,

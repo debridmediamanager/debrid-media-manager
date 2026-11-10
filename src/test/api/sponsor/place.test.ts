@@ -188,6 +188,18 @@ describe('/api/sponsor/place', () => {
 		expect(mockPlace.mock.calls[0][0][0]).not.toHaveProperty('parts');
 	});
 
+	// an older zurg that does not read a file's own show would file it as the release's episode
+	it('hands `shows` over on every release that asks for it', async () => {
+		const res = createMockResponse();
+		await handler(post({ releases: [CONAN], shows: true }), res);
+		expect(mockPlace.mock.calls[0][0]).toEqual([
+			{ name: CONAN.name, hash: null, imdbId: null, files: CONAN.files, shows: true },
+		]);
+
+		await handler(post({ releases: [CONAN] }), createMockResponse());
+		expect(mockPlace.mock.calls[1][0][0]).not.toHaveProperty('shows');
+	});
+
 	// zurg keeps a placement until it asks again a day or a week on, so a fix to the rules
 	// reached rex-fun's releases only that much later (2026-10-22); a caller holding answers
 	// from older rules asks about them again
@@ -231,6 +243,7 @@ describe('/api/sponsor/place', () => {
 		['a file without a path', { releases: [{ name: 'Pack', files: [{ folder: '' }] }] }],
 		['a numeric imdbId', { releases: [{ ...CONAN, imdbId: 131179 }] }],
 		['parts that is no boolean', { releases: [CONAN], parts: 'yes' }],
+		['shows that is no boolean', { releases: [CONAN], shows: 1 }],
 	])('refuses %s', async (_, body) => {
 		const res = createMockResponse();
 		await handler(post(body), res);

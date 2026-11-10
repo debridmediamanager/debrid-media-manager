@@ -1,0 +1,5239 @@
+{
+	"answers": {
+		"find": {
+			"tt0111970": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 4334,
+						"name": "Freakazoid!",
+						"first_air_date": "1995-09-09"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt13634872": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 116612,
+						"name": "Beyond Evil",
+						"first_air_date": "2021-02-19"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt10689614": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 94167,
+						"name": "The Legend of El Cid",
+						"first_air_date": "2020-12-18"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0214354": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 29540,
+						"name": "Zoids: New Century",
+						"first_air_date": "2001-01-06"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0367443": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 37419,
+						"name": "Zoids: Chaotic Century",
+						"first_air_date": "1999-09-04"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"4334": {
+				"id": 4334,
+				"name": "Freakazoid!",
+				"original_name": "Freakazoid!",
+				"first_air_date": "1995-09-09",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 10762,
+						"name": "Kids"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 9715,
+							"name": "superhero"
+						},
+						{
+							"id": 9755,
+							"name": "parody"
+						},
+						{
+							"id": 168153,
+							"name": "computer nerd"
+						},
+						{
+							"id": 213104,
+							"name": "teen superhero"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0111970",
+					"tvdb_id": 72875
+				},
+				"networks": [
+					{
+						"id": 21,
+						"name": "The WB"
+					}
+				],
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"season_number": 0,
+						"episode_count": 6,
+						"air_date": "2008-07-29",
+						"name": "Specials"
+					},
+					{
+						"season_number": 1,
+						"episode_count": 13,
+						"air_date": "1995-09-09",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 11,
+						"air_date": "1996-09-07",
+						"name": "Season 2"
+					}
+				]
+			},
+			"29540": {
+				"id": 29540,
+				"name": "Zoids: New Century",
+				"original_name": "ゾイド新世紀／ゼロ",
+				"first_air_date": "2001-01-06",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					},
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 6075,
+							"name": "sports"
+						},
+						{
+							"id": 10046,
+							"name": "mecha"
+						},
+						{
+							"id": 10542,
+							"name": "based on toy"
+						},
+						{
+							"id": 207826,
+							"name": "shounen"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 285515,
+							"name": "zoids"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0214354",
+					"tvdb_id": 84040
+				},
+				"networks": [
+					{
+						"id": 160,
+						"name": "TBS"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "ゾイド新世紀スラッシュゼロ",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "Zoids: New Century Slash Zero",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Zoids: New Century Zero",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 26,
+						"air_date": "2001-01-06",
+						"name": "Season 1"
+					}
+				]
+			},
+			"37419": {
+				"id": 37419,
+				"name": "Zoids: Chaotic Century",
+				"original_name": "ゾイド",
+				"first_air_date": "1999-09-04",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 10046,
+							"name": "mecha"
+						},
+						{
+							"id": 10542,
+							"name": "based on toy"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 285515,
+							"name": "zoids"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0367443",
+					"tvdb_id": 73315
+				},
+				"networks": [
+					{
+						"id": 160,
+						"name": "TBS"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "索斯机械兽",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "索斯机械兽",
+							"iso_3166_1": "HK"
+						},
+						{
+							"title": "ゾイド",
+							"iso_3166_1": "JP"
+						},
+						{
+							"title": "기수신세기 조이드",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "機獸新世紀ZOIDS",
+							"iso_3166_1": "TW"
+						},
+						{
+							"title": "Zoids",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 67,
+						"air_date": "1999-09-04",
+						"name": "Season 1"
+					}
+				]
+			},
+			"94167": {
+				"id": 94167,
+				"name": "The Legend of El Cid",
+				"original_name": "El Cid",
+				"first_air_date": "2020-12-18",
+				"original_language": "es",
+				"origin_country": ["ES"],
+				"genres": [
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 10768,
+						"name": "War & Politics"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 324,
+							"name": "portugal"
+						},
+						{
+							"id": 514,
+							"name": "spain"
+						},
+						{
+							"id": 2471,
+							"name": "monarchy"
+						},
+						{
+							"id": 5896,
+							"name": "galicia, spain"
+						},
+						{
+							"id": 15060,
+							"name": "period drama"
+						},
+						{
+							"id": 15126,
+							"name": "historical"
+						},
+						{
+							"id": 217885,
+							"name": "spanish history"
+						},
+						{
+							"id": 228166,
+							"name": "11th century"
+						},
+						{
+							"id": 273764,
+							"name": "iberian peninsula"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt10689614",
+					"tvdb_id": 388066
+				},
+				"networks": [
+					{
+						"id": 1024,
+						"name": "Prime Video"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "熙德传奇",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "Die Legende von El Cid",
+							"iso_3166_1": "DE"
+						},
+						{
+							"title": "El Cid",
+							"iso_3166_1": "ES"
+						},
+						{
+							"title": "The Legend of El Cid",
+							"iso_3166_1": "GB"
+						},
+						{
+							"title": "Ο Θρύλος του  Ελ Σιντ",
+							"iso_3166_1": "GR"
+						},
+						{
+							"title": "엘 시드",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "เอลซิดผู้ยิ่งใหญ่",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "El Cid",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 5,
+						"air_date": "2020-12-18",
+						"name": "Season 1"
+					},
+					{
+						"season_number": 2,
+						"episode_count": 5,
+						"air_date": "2021-07-15",
+						"name": "Season 2"
+					}
+				]
+			},
+			"116612": {
+				"id": 116612,
+				"name": "Beyond Evil",
+				"original_name": "괴물",
+				"first_air_date": "2021-02-19",
+				"original_language": "ko",
+				"origin_country": ["KR"],
+				"genres": [
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 80,
+						"name": "Crime"
+					},
+					{
+						"id": 9648,
+						"name": "Mystery"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 417,
+							"name": "corruption"
+						},
+						{
+							"id": 703,
+							"name": "detective"
+						},
+						{
+							"id": 2754,
+							"name": "trauma"
+						},
+						{
+							"id": 5340,
+							"name": "investigation"
+						},
+						{
+							"id": 6149,
+							"name": "police"
+						},
+						{
+							"id": 6259,
+							"name": "psychopath"
+						},
+						{
+							"id": 9826,
+							"name": "murder"
+						},
+						{
+							"id": 10714,
+							"name": "serial killer"
+						},
+						{
+							"id": 34079,
+							"name": "death"
+						},
+						{
+							"id": 208841,
+							"name": "incident"
+						},
+						{
+							"id": 240237,
+							"name": "mother son relationship"
+						},
+						{
+							"id": 288394,
+							"name": "suspense"
+						},
+						{
+							"id": 301541,
+							"name": "psychological manipulation"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt13634872",
+					"tvdb_id": 393636
+				},
+				"networks": [
+					{
+						"id": 885,
+						"name": "JTBC"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"title": "怪物",
+							"iso_3166_1": "CN"
+						},
+						{
+							"title": "فراتر از شیطان",
+							"iso_3166_1": "IR"
+						},
+						{
+							"title": "Goemul",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Gwimul",
+							"iso_3166_1": "KR"
+						},
+						{
+							"title": "Más Allá Del Mal",
+							"iso_3166_1": "MX"
+						},
+						{
+							"title": "За гранью зла",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "Фрик",
+							"iso_3166_1": "RU"
+						},
+						{
+							"title": "ปมปีศาจ",
+							"iso_3166_1": "TH"
+						},
+						{
+							"title": "За межами зла",
+							"iso_3166_1": "UA"
+						},
+						{
+							"title": "Freak",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Monster",
+							"iso_3166_1": "US"
+						},
+						{
+							"title": "Beyond Evil",
+							"iso_3166_1": "US"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"season_number": 1,
+						"episode_count": 16,
+						"air_date": "2021-02-19",
+						"name": "Season 1"
+					}
+				]
+			}
+		},
+		"season": {
+			"4334/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Five Day Forecast / Dance of Doom / Hand Man",
+						"air_date": "1995-09-09",
+						"id": 299670
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Candle Jack / Toby Danger in Doomsday Bet / The Lobe",
+						"air_date": "1995-09-16",
+						"id": 299668
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Mo-Ron / The Sewer Rescue / The Big Question / The Legends Who Lunch",
+						"air_date": "1995-09-23",
+						"id": 299669
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "And Fan Boy Is His Name / Lawn Gnomes Chapter IV: Fun in the Sun / Freak's French Lesson",
+						"air_date": "1995-09-30",
+						"id": 299667
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Foamy the Freakadog / Office Visit / Ode to Leonard Nimoy / Emergency Broadcast System / Cönversational Nörwegian",
+						"air_date": "1995-10-07",
+						"id": 1027582
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "The Chip: Part 1",
+						"air_date": "1995-11-04",
+						"id": 299678
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "The Chip: Part 2 / Freakazoid is History",
+						"air_date": "1995-11-11",
+						"id": 299679
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Hot Rods from Heck / A Time for Evil",
+						"air_date": "1995-11-18",
+						"id": 299685
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Relax-O-Vision / Fatman and Boy Blubber / Limbo Lock-Up / Terror Palace",
+						"air_date": "1995-11-25",
+						"id": 299689
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "In Arm's Way / The Cloud",
+						"air_date": "1995-12-16",
+						"id": 299690
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Next Time, Phone Ahead / Nerdator",
+						"air_date": "1996-02-03",
+						"id": 299691
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "House of Freakazoid / Sewer or Later",
+						"air_date": "1996-02-10",
+						"id": 299674
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "The Wrath of Guitierrez",
+						"air_date": "1996-02-17",
+						"id": 299676
+					}
+				]
+			},
+			"4334/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Freakazoid: The Original Freak",
+						"air_date": "2008-07-29",
+						"id": 1028527
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Freakazoid-less Freakazoid Promos",
+						"air_date": "2008-07-29",
+						"id": 1028528
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "Liebeslied für Normadeus",
+						"air_date": "2009-04-21",
+						"id": 1028529
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "A Full Season's Worth of Commentaries (in Five Minutes or Less)",
+						"air_date": "2009-04-21",
+						"id": 1028530
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "Alternate Episode: The Cloud / Candle Jack",
+						"air_date": "1995-10-14",
+						"id": 4329392
+					},
+					{
+						"episode_number": 6,
+						"season_number": 0,
+						"name": "Teen Titans Go! s06e33: Huggbees",
+						"air_date": "2020-11-14",
+						"id": 1028531
+					}
+				]
+			},
+			"4334/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Dexter's Date",
+						"air_date": "1996-09-07",
+						"id": 299693
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "The Freakazoid",
+						"air_date": "1996-09-14",
+						"id": 299695
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Mission: Freakazoid",
+						"air_date": "1996-09-28",
+						"id": 299694
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Virtual Freak",
+						"air_date": "1996-11-02",
+						"id": 299696
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Hero Boy",
+						"air_date": "1996-11-09",
+						"id": 299697
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "A Matter of Love",
+						"air_date": "1996-11-16",
+						"id": 299703
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Statuesque",
+						"air_date": "1996-11-29",
+						"id": 299701
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Island of Dr. Mystico",
+						"air_date": "1997-02-07",
+						"id": 299700
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Two Against Freak",
+						"air_date": "1997-02-14",
+						"id": 299698
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "Freak-a-Panel / Tomb of Invisibo",
+						"air_date": "1997-05-31",
+						"id": 299702
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "Normadeus",
+						"air_date": "1997-06-01",
+						"id": 299699
+					}
+				]
+			},
+			"116612/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Appear",
+						"air_date": "2021-02-19",
+						"id": 2639165
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Disappear",
+						"air_date": "2021-02-20",
+						"id": 2693167
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Smiled",
+						"air_date": "2021-02-26",
+						"id": 2693168
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Cried",
+						"air_date": "2021-02-27",
+						"id": 2693170
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "The Deceit",
+						"air_date": "2021-03-05",
+						"id": 2693171
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "To Deceive",
+						"air_date": "2021-03-06",
+						"id": 2693172
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "The Text Messages",
+						"air_date": "2021-03-12",
+						"id": 2693173
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "The Arrest and Interrogation",
+						"air_date": "2021-03-13",
+						"id": 2693174
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Bodies Found",
+						"air_date": "2021-03-19",
+						"id": 2693175
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Interrogating the Chief",
+						"air_date": "2021-03-20",
+						"id": 2693176
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Who Killed Sang-bae?",
+						"air_date": "2021-03-26",
+						"id": 2693178
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Jeong-je and the Deer",
+						"air_date": "2021-03-27",
+						"id": 2693179
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "The Next Commissioner General",
+						"air_date": "2021-04-02",
+						"id": 2693180
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Setting the Trap",
+						"air_date": "2021-04-03",
+						"id": 2693181
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Letting Go",
+						"air_date": "2021-04-09",
+						"id": 2693182
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Catch",
+						"air_date": "2021-04-10",
+						"id": 2693183
+					}
+				]
+			},
+			"94167/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "The Conspiracy",
+						"air_date": "2020-12-18",
+						"id": 1943128
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "The Ordeal",
+						"air_date": "2020-12-18",
+						"id": 2505607
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Baraka",
+						"air_date": "2020-12-18",
+						"id": 2505608
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Champion",
+						"air_date": "2020-12-18",
+						"id": 2505609
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Atonement",
+						"air_date": "2020-12-18",
+						"id": 2505610
+					}
+				]
+			},
+			"94167/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Promises and Temptations",
+						"air_date": "2021-07-15",
+						"id": 3041433
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "The Burden of Duty",
+						"air_date": "2021-07-15",
+						"id": 3041434
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Wind of War",
+						"air_date": "2021-07-15",
+						"id": 3041435
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Ambush",
+						"air_date": "2021-07-15",
+						"id": 3041436
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "The Path of Hate",
+						"air_date": "2021-07-15",
+						"id": 3041437
+					}
+				]
+			},
+			"29540/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Commence Battle: Attack Liger Zero",
+						"air_date": "2001-01-06",
+						"id": 727011
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "New Partners vs Naomi; The Red Comet",
+						"air_date": "2001-01-13",
+						"id": 727012
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "The Prince Arrives: Harry Champ",
+						"air_date": "2001-01-20",
+						"id": 727013
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Unsanctioned Battle: The Mysterious Backdraft Group",
+						"air_date": "2001-01-27",
+						"id": 727014
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "High Speed Battle: Transforming Into Zero Jager",
+						"air_date": "2001-02-03",
+						"id": 727015
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "The Dark Giant: The Invincible Elephander",
+						"air_date": "2001-02-10",
+						"id": 727016
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "The Desert Gang: The Hover Cargo's in Danger",
+						"air_date": "2001-02-17",
+						"id": 727017
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Invasion of the Fierce Tigers: Transform to Zero Schneider",
+						"air_date": "2001-02-24",
+						"id": 727018
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "The Princess Arrives: Mary Champ",
+						"air_date": "2001-03-03",
+						"id": 727019
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Desert Tusk: Assault of the War Sharks",
+						"air_date": "2001-03-10",
+						"id": 727020
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "The Sensational Three: Rematch with Jack Cisco",
+						"air_date": "2001-03-17",
+						"id": 727021
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Zero Is Stolen: The Fiery Battle",
+						"air_date": "2001-03-24",
+						"id": 727022
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "The Brave Wild Eagle: The Raynos vs. the Zabats",
+						"air_date": "2001-03-31",
+						"id": 727023
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Fright Day The 13th",
+						"air_date": "2001-04-07",
+						"id": 727024
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Layon Returns: Anti-Gravity Catastrophe!",
+						"air_date": "2001-04-14",
+						"id": 727025
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Red Rival: Leon Toros Returns!",
+						"air_date": "2001-04-21",
+						"id": 727026
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "Warriors On Vacation: The Storm Sworders",
+						"air_date": "2001-04-28",
+						"id": 727027
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Love on the Battlefield: My Love, the Judge",
+						"air_date": "2001-05-05",
+						"id": 727028
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "The Third Conversion: Zero Panzer's Debut!",
+						"air_date": "2001-05-12",
+						"id": 727029
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "The Shadow Fox: Brad's Betrayal",
+						"air_date": "2001-05-19",
+						"id": 727030
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Harry's Disaster: Dr. Laon Traps Toros!",
+						"air_date": "2001-05-26",
+						"id": 727031
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "The Dragon Under the Sea: In Search of the Ultimate X",
+						"air_date": "2001-06-02",
+						"id": 727032
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "The Dragon Awakens: The Berserk Fury Enters the Fray",
+						"air_date": "2001-06-09",
+						"id": 727033
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "Tournament of Heroes: The Royal Cup",
+						"air_date": "2001-06-16",
+						"id": 727034
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "Survival: The Mystery of the Ultimate X",
+						"air_date": "2001-06-23",
+						"id": 727035
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "The Miracle of Zero - The Wind, the Cloud and Adventure",
+						"air_date": "2001-06-30",
+						"id": 727036
+					}
+				]
+			},
+			"37419/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "The Boy From Planet Zi",
+						"air_date": "1999-09-04",
+						"id": 845438
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "The Mysterious Fiona",
+						"air_date": "1999-09-11",
+						"id": 845439
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Memory",
+						"air_date": "1999-09-18",
+						"id": 845440
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "The Protectors",
+						"air_date": "1999-09-25",
+						"id": 845441
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Sleeper Trap",
+						"air_date": "1999-10-02",
+						"id": 845442
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Jump! Zeke!",
+						"air_date": "1999-10-09",
+						"id": 845443
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "The Battle of Red River",
+						"air_date": "1999-10-16",
+						"id": 845444
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "The Road to the Republic",
+						"air_date": "1999-10-23",
+						"id": 845445
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "The Valley of the Monster",
+						"air_date": "1999-10-30",
+						"id": 845446
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "The Mountain of Dreams",
+						"air_date": "1999-11-06",
+						"id": 845447
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "The Fog at Iselina",
+						"air_date": "1999-11-13",
+						"id": 845448
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "The Black Organoid",
+						"air_date": "1999-11-27",
+						"id": 845449
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "The Battle of Chronos",
+						"air_date": "1999-12-04",
+						"id": 845450
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Wake Up! Zeke!",
+						"air_date": "1999-12-11",
+						"id": 845451
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Deploy the ZG!",
+						"air_date": "1999-12-18",
+						"id": 845452
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "New Helic City",
+						"air_date": "1999-12-25",
+						"id": 845453
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "The Longest Night of the Republic",
+						"air_date": "2000-01-08",
+						"id": 845454
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "The Defense of the City",
+						"air_date": "2000-01-15",
+						"id": 845455
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Prozen's Conspiracy",
+						"air_date": "2000-01-22",
+						"id": 845456
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "The Resurrection Monster",
+						"air_date": "2000-01-29",
+						"id": 845457
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "The Charged Particle Gun",
+						"air_date": "2000-02-05",
+						"id": 845458
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Farewell to a Friend",
+						"air_date": "2000-02-12",
+						"id": 845459
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "The Imperial Ring",
+						"air_date": "2000-02-19",
+						"id": 845460
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "A Voice From Afar",
+						"air_date": "2000-02-26",
+						"id": 845461
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "The New Liger",
+						"air_date": "2000-03-04",
+						"id": 845462
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "Memories of Zi",
+						"air_date": "2000-03-11",
+						"id": 845463
+					},
+					{
+						"episode_number": 27,
+						"season_number": 1,
+						"name": "The Saviour",
+						"air_date": "2000-03-18",
+						"id": 845464
+					},
+					{
+						"episode_number": 28,
+						"season_number": 1,
+						"name": "Run, Wolf!",
+						"air_date": "2000-03-25",
+						"id": 845465
+					},
+					{
+						"episode_number": 29,
+						"season_number": 1,
+						"name": "Heroes of the Sky",
+						"air_date": "2000-04-01",
+						"id": 845466
+					},
+					{
+						"episode_number": 30,
+						"season_number": 1,
+						"name": "Moonbay's Waltz",
+						"air_date": "2000-04-08",
+						"id": 845467
+					},
+					{
+						"episode_number": 31,
+						"season_number": 1,
+						"name": "The Three Guards",
+						"air_date": "2000-04-15",
+						"id": 845468
+					},
+					{
+						"episode_number": 32,
+						"season_number": 1,
+						"name": "The Doom Machine",
+						"air_date": "2000-04-22",
+						"id": 845469
+					},
+					{
+						"episode_number": 33,
+						"season_number": 1,
+						"name": "The Battle for Survival",
+						"air_date": "2000-04-29",
+						"id": 845470
+					},
+					{
+						"episode_number": 34,
+						"season_number": 1,
+						"name": "The Capital Ablaze",
+						"air_date": "2000-05-06",
+						"id": 845471
+					},
+					{
+						"episode_number": 35,
+						"season_number": 1,
+						"name": "The Secret Mission",
+						"air_date": "2000-05-13",
+						"id": 961912
+					},
+					{
+						"episode_number": 36,
+						"season_number": 1,
+						"name": "The Sniper",
+						"air_date": "2000-05-20",
+						"id": 961913
+					},
+					{
+						"episode_number": 37,
+						"season_number": 1,
+						"name": "The Blue Devil",
+						"air_date": "2000-05-27",
+						"id": 961511
+					},
+					{
+						"episode_number": 38,
+						"season_number": 1,
+						"name": "The Steel Bison",
+						"air_date": "2000-06-03",
+						"id": 961914
+					},
+					{
+						"episode_number": 39,
+						"season_number": 1,
+						"name": "The Invisible Enemy",
+						"air_date": "2000-06-10",
+						"id": 1260444
+					},
+					{
+						"episode_number": 40,
+						"season_number": 1,
+						"name": "The Zoid Hunters",
+						"air_date": "2000-06-17",
+						"id": 961512
+					},
+					{
+						"episode_number": 41,
+						"season_number": 1,
+						"name": "The Devil's Maze",
+						"air_date": "2000-06-24",
+						"id": 961915
+					},
+					{
+						"episode_number": 42,
+						"season_number": 1,
+						"name": "Raven",
+						"air_date": "2000-07-01",
+						"id": 961513
+					},
+					{
+						"episode_number": 43,
+						"season_number": 1,
+						"name": "The Emperor's Holiday",
+						"air_date": "2000-07-08",
+						"id": 961089
+					},
+					{
+						"episode_number": 44,
+						"season_number": 1,
+						"name": "Assault of the Mega-Monster",
+						"air_date": "2000-07-15",
+						"id": 961090
+					},
+					{
+						"episode_number": 45,
+						"season_number": 1,
+						"name": "The Wings of Darkness",
+						"air_date": "2000-07-22",
+						"id": 961091
+					},
+					{
+						"episode_number": 46,
+						"season_number": 1,
+						"name": "Devil of the Sea",
+						"air_date": "2000-07-29",
+						"id": 961514
+					},
+					{
+						"episode_number": 47,
+						"season_number": 1,
+						"name": "A Monster Awakens",
+						"air_date": "2000-08-05",
+						"id": 961515
+					},
+					{
+						"episode_number": 48,
+						"season_number": 1,
+						"name": "The Black Lightning",
+						"air_date": "2000-08-12",
+						"id": 961916
+					},
+					{
+						"episode_number": 49,
+						"season_number": 1,
+						"name": "The Distant Stars",
+						"air_date": "2000-08-19",
+						"id": 1260445
+					},
+					{
+						"episode_number": 50,
+						"season_number": 1,
+						"name": "Attack of the Geno Breaker",
+						"air_date": "2000-08-26",
+						"id": 961092
+					},
+					{
+						"episode_number": 51,
+						"season_number": 1,
+						"name": "The Boy from the Ruins",
+						"air_date": "2000-09-02",
+						"id": 961516
+					},
+					{
+						"episode_number": 52,
+						"season_number": 1,
+						"name": "Van's New Power",
+						"air_date": "2000-09-09",
+						"id": 961917
+					},
+					{
+						"episode_number": 53,
+						"season_number": 1,
+						"name": "Phantom",
+						"air_date": "2000-09-16",
+						"id": 961093
+					},
+					{
+						"episode_number": 54,
+						"season_number": 1,
+						"name": "G-File",
+						"air_date": "2000-09-23",
+						"id": 961918
+					},
+					{
+						"episode_number": 55,
+						"season_number": 1,
+						"name": "Supersonic Battle",
+						"air_date": "2000-09-30",
+						"id": 961909
+					},
+					{
+						"episode_number": 56,
+						"season_number": 1,
+						"name": "Cerberus",
+						"air_date": "2000-10-07",
+						"id": 961910
+					},
+					{
+						"episode_number": 57,
+						"season_number": 1,
+						"name": "The Nightmare",
+						"air_date": "2000-10-14",
+						"id": 961086
+					},
+					{
+						"episode_number": 58,
+						"season_number": 1,
+						"name": "Attack of the Winged Dragons",
+						"air_date": "2000-10-21",
+						"id": 961087
+					},
+					{
+						"episode_number": 59,
+						"season_number": 1,
+						"name": "The Capital Collapses",
+						"air_date": "2000-10-28",
+						"id": 961088
+					},
+					{
+						"episode_number": 60,
+						"season_number": 1,
+						"name": "The Giant Fortress",
+						"air_date": "2000-11-04",
+						"id": 961507
+					},
+					{
+						"episode_number": 61,
+						"season_number": 1,
+						"name": "The Great Sea Battle",
+						"air_date": "2000-11-11",
+						"id": 961508
+					},
+					{
+						"episode_number": 62,
+						"season_number": 1,
+						"name": "The Gravity Cannon",
+						"air_date": "2000-11-18",
+						"id": 961509
+					},
+					{
+						"episode_number": 63,
+						"season_number": 1,
+						"name": "The Final Battle",
+						"air_date": "2000-11-25",
+						"id": 961510
+					},
+					{
+						"episode_number": 64,
+						"season_number": 1,
+						"name": "The Ancient Memory",
+						"air_date": "2000-12-02",
+						"id": 961911
+					},
+					{
+						"episode_number": 65,
+						"season_number": 1,
+						"name": "The Zoid Eve",
+						"air_date": "2000-12-09",
+						"id": 1931952
+					},
+					{
+						"episode_number": 66,
+						"season_number": 1,
+						"name": "The Moment of Annihilation",
+						"air_date": "2000-12-16",
+						"id": 1931953
+					},
+					{
+						"episode_number": 67,
+						"season_number": 1,
+						"name": "Return to Another Tomorrow",
+						"air_date": "2000-12-23",
+						"id": 1931954
+					}
+				]
+			}
+		},
+		"episodeGroups": {
+			"4334": {
+				"id": 4334,
+				"results": []
+			},
+			"29540": {
+				"id": 29540,
+				"results": []
+			},
+			"37419": {
+				"id": 37419,
+				"results": [
+					{
+						"id": "5d80946b8e20c5001234ee5c",
+						"name": "Seasons",
+						"type": 7,
+						"network": null,
+						"description": "",
+						"group_count": 2,
+						"episode_count": 67
+					}
+				]
+			},
+			"94167": {
+				"id": 94167,
+				"results": []
+			},
+			"116612": {
+				"id": 116612,
+				"results": []
+			}
+		},
+		"episodeGroup": {
+			"5d80946b8e20c5001234ee5c": {
+				"id": "5d80946b8e20c5001234ee5c",
+				"name": "Seasons",
+				"type": 7,
+				"groups": [
+					{
+						"id": "5d80947c8e20c5001c350348",
+						"name": "Chaotic Century",
+						"order": 1,
+						"locked": true,
+						"episodes": [
+							{
+								"id": 845438,
+								"name": "The Boy From Planet Zi",
+								"order": 0,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-09-04",
+								"overview": "While being chased by desert bandits, a young boy seeks refuge in some old ruins where he finds an Organoid which he names Zeke, and a mysterious girl named Fiona. While trying to escape the ruins, Zeke revives an abandoned Shield Liger and helps Van and Fiona get away.",
+								"still_path": "/uDn3RVO8EaqROqsMi22pyF0idtL.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 1,
+								"production_code": ""
+							},
+							{
+								"id": 845439,
+								"name": "The Mysterious Fiona",
+								"order": 1,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-09-11",
+								"overview": "After escaping the desert bandits, Van returns to his village with Zeke and Fiona. Unfortunately the bandits follow, attacking the village and kidnapping Van's sister. Fiona and Zeke help Van face the bandits, and Fiona displays a mysteriously power.",
+								"still_path": "/6FBEU0cTWzeN47sa5s5bm3wbsPF.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 2,
+								"production_code": ""
+							},
+							{
+								"id": 845440,
+								"name": "Memory",
+								"order": 2,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-09-18",
+								"overview": "Separated from Zeke and the Shield Liger, Van and Fiona are rescued by Irvine, a Command Wolf pilot who offers shelter but secretly aims to capture Zeke. Van and Fiona discover an ancient tablet that triggers Fiona’s memory of something called “Zoid Eve”, prompting them to search for its meaning.",
+								"still_path": "/m8tW58IGr5UR5e0IYi7KH7hoddg.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 3,
+								"production_code": ""
+							},
+							{
+								"id": 845441,
+								"name": "The Protectors",
+								"order": 3,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-09-25",
+								"overview": "Van and Fiona encounter Irvine again, but this time he has been hired to protect a village from bandits. When the bandits turn out to be the Desert Alcabaleno Gang, the same group who gave Van trouble earlier, the group decides to lend their aid.",
+								"still_path": "/gqvDp6k8JWFPu3hLJkF2G4Kw8IZ.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 4,
+								"production_code": ""
+							},
+							{
+								"id": 845442,
+								"name": "Sleeper Trap",
+								"order": 4,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-10-02",
+								"overview": "Van and Fiona meet Moonbay who drives a Gustav carrying cargo across the desert. The group is forced to flee when they are attacked by sleeper Zoids and must reluctantly join forces with Irvine to defeat them.",
+								"still_path": "/yX8uTjz3ze20puGjQRmNaMSTbnr.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 5,
+								"production_code": ""
+							},
+							{
+								"id": 845443,
+								"name": "Jump! Zeke!",
+								"order": 5,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-10-09",
+								"overview": "Van and his friends are mistaken for Imperial soldiers by a Helic Republic patrol and captured, their Zoids impounded. Irvine secretly breaks himself and Van out, and they rush to reclaim their Zoids.",
+								"still_path": "/96IExovmowngHwGeSXhM4L3tTId.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 6,
+								"production_code": ""
+							},
+							{
+								"id": 845444,
+								"name": "The Battle of Red River",
+								"order": 6,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-10-16",
+								"overview": "Fiona and Moonbay are recruited by the Republic army to haul explosive cargo intended for detonation at Fire Bridge. Meanwhile, a standoff occurs at Red River between the Republic and the Empire, which only Van and Irvine can help resolve.",
+								"still_path": "/o7pyj3fPUpAjP01rvF8o3Rh4xCe.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 7,
+								"production_code": ""
+							},
+							{
+								"id": 845445,
+								"name": "The Road to the Republic",
+								"order": 7,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-10-23",
+								"overview": "Captain Herman gives Van and friends a lead on the search for Zoid Eve and they head toward the Republic capital. Meanwhile, the Desert Alcabaleno Gang plans to capture Zeke to regain the favor of the Imperial army.",
+								"still_path": "/cWDJYBiPQ3mXMARgRLVkJEtBq8k.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 8,
+								"production_code": ""
+							},
+							{
+								"id": 845446,
+								"name": "The Valley of the Monster",
+								"order": 8,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-10-30",
+								"overview": "Van and his friends wanter into a mysterious valley where all of their Zoids including Zeke begin to act weirdly. The Zoids have been affected by a rarehertz, a strange pulse that has made Zeke insane!",
+								"still_path": "/nFbZuMwnu3z6ks4AeKAOOvkIDhg.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 9,
+								"production_code": ""
+							},
+							{
+								"id": 845447,
+								"name": "The Mountain of Dreams",
+								"order": 9,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-11-06",
+								"overview": "Van finds an old man in a hut frozen in ice while looking for the legendary Dr.D. It turns out the man in the ice is Dr.D and he knows about the \"Zoids Eve\" but will only tell Van if he helps him build a snow machine.",
+								"still_path": "/tDtF9Y6WCuo8vlgzr82VGzqzu2i.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 10,
+								"production_code": ""
+							},
+							{
+								"id": 845448,
+								"name": "The Fog at Iselina",
+								"order": 10,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-11-13",
+								"overview": "To get to the capital Van and his friends must cross the misty mountains of Iselina. While staying at a village they are attacked by the Desert Alcobolino Gang led by Leola, who used to live in the same village they are attacking.",
+								"still_path": "/aMf0sxoUseGQj7N7yRlui4oboNX.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 11,
+								"production_code": ""
+							},
+							{
+								"id": 845449,
+								"name": "The Black Organoid",
+								"order": 11,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-11-27",
+								"overview": "Van and Zeke are wanted by the Republican Army after an entire battalion owas destroyed by a young boy called Raven and another organoid called Shadow. Van meets Raven and tries to stop him from destroying more Zoids.",
+								"still_path": "/mOsrLtTaB1YYWPq176oygz6FKKn.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 12,
+								"production_code": ""
+							},
+							{
+								"id": 845450,
+								"name": "The Battle of Chronos",
+								"order": 12,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-12-04",
+								"overview": "The Imperial Force attacks Fort Cronos but they are trapped by the Republican Army. The Fort, along with half the Imperial Force, is blown up. During the attack Van challenges Raven to another battle.",
+								"still_path": "/5laMZxKQ9C3DeohmsZVScI01vrD.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 13,
+								"production_code": ""
+							},
+							{
+								"id": 845451,
+								"name": "Wake Up! Zeke!",
+								"order": 13,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-12-11",
+								"overview": "Van and Moonbay travel into a volcano crater in search of Zoids Magnite to help heal Zeke after Van's loss to Raven. Irvine re-equips his Command Wolf and challenges Raven to a battle.",
+								"still_path": "/ntdmpT7yMboA1vBaNkvBE0rdIow.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 14,
+								"production_code": ""
+							},
+							{
+								"id": 845452,
+								"name": "Deploy the ZG!",
+								"order": 14,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-12-18",
+								"overview": "Major Schobaltz attacks the Republican base, Mountossa, only to be forced back by Captain Herman in the unstoppable Gojulas",
+								"still_path": "/dICnu5TRyvQc9C799GRlpyidk5Y.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 15,
+								"production_code": ""
+							},
+							{
+								"id": 845453,
+								"name": "New Helic City",
+								"order": 15,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "1999-12-25",
+								"overview": "Van and his friends arrive in New Helic City, capital of the Republic. During a victory parade Van helps an Imperial soldier escape a mob, only to haev the soldier attack the city in an experimental Command Wolf.",
+								"still_path": "/ixFY5DKP2yJcp2v646saFVInNOj.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 16,
+								"production_code": ""
+							},
+							{
+								"id": 845454,
+								"name": "The Longest Night of the Republic",
+								"order": 16,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-01-08",
+								"overview": "Captain Herman goes missing while inspecting a suspicious iceberg - which is actually a disguised Imperial force attacking from the Sea instead of on land. During the attack Raven appears and challenges Van to a battle.",
+								"still_path": "/mCk5vU9hDxjM18WhMjvCFKUC6oH.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 17,
+								"production_code": ""
+							},
+							{
+								"id": 845455,
+								"name": "The Defense of the City",
+								"order": 17,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-01-15",
+								"overview": "Just as New Helic City is about the be overrun by the Imperial army, the Emperor dies and his nephew Rudolph demands a cease fire. Meanwhile Raven and Van continue the fight to the death!",
+								"still_path": "/rdPCNmEW9FXtRKUozREpZvQLnch.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 18,
+								"production_code": ""
+							},
+							{
+								"id": 845456,
+								"name": "Prozen's Conspiracy",
+								"order": 18,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-01-22",
+								"overview": "Prozen plans to kidnap the new Emperor Rudolph and replace him on the throne but Rosso kindaps him first and escapes. Meanwhile Van and his friends continue to look for \"Zoids Eve\".",
+								"still_path": "/3XUWOPVSUfMyiEu8tm9OHRK1Qx3.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 19,
+								"production_code": ""
+							},
+							{
+								"id": 845457,
+								"name": "The Resurrection Monster",
+								"order": 19,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-01-29",
+								"overview": "Arriving at the Gurill ruins, Van and his friends are attacked by sleeper Rev Raptors placed there by Prozen, who has already removed the secrets from inside the buildings.",
+								"still_path": "/5HXmsnyRj2xWDadhJlfcpijD58b.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 20,
+								"production_code": ""
+							},
+							{
+								"id": 845458,
+								"name": "The Charged Particle Gun",
+								"order": 20,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-02-05",
+								"overview": "Rudolph meets Van and his friends when he wanders away from Rosso and Leola to find food. Unfortunately Prozen has sent Raven and his Geno Saurer to kidnap Rudolph. Rosso and Leola, in their Iron Kong, attack Raven so Rudolph can escape with the others.",
+								"still_path": "/8gce6WWNRVxph4gOAwL5DlUZLpn.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 21,
+								"production_code": ""
+							},
+							{
+								"id": 845459,
+								"name": "Farewell to a Friend",
+								"order": 21,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-02-12",
+								"overview": "Rudolph asks Van to take him to the capital and on the way train him to be a warrior. Raven attacks Van and, during the fierce battle, the Geno Saurer critically hits the Shield Liger with it's charged particle gun.",
+								"still_path": "/1V7Zoq4bxsVmsEoI5a7SwPBOldA.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 22,
+								"production_code": ""
+							},
+							{
+								"id": 845460,
+								"name": "The Imperial Ring",
+								"order": 22,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-02-19",
+								"overview": "With the Shield Liger seemingly destroyed, Van and Irvine must fight together to rescue Rudolph after he was taken by Raven and handed over to Mettlenich.",
+								"still_path": "/tfzIgl66uwmQBDQ5cjAWjQJNZWe.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 23,
+								"production_code": ""
+							},
+							{
+								"id": 845461,
+								"name": "A Voice From Afar",
+								"order": 23,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-02-26",
+								"overview": "Fiona units with Zeke and they enter the Shield Liger causing a cocoon of light to surround the fallen beast. An evil bounty hunter looking for Rudolph appears and drugs Irvine, Moonbay and Rudolph while Van is away.",
+								"still_path": "/hpu1WUzTlM9OZzz4VSTIbbFdBvn.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 24,
+								"production_code": ""
+							},
+							{
+								"id": 845462,
+								"name": "The New Liger",
+								"order": 24,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-03-04",
+								"overview": "Using his paralysis drug, Stinger has captured Moonbay, Irvine and Rudolph and is planning to kill them. Van arrives with a Red Guysack that he captured but is defeated by Stinger is his Zaber Fang. Just then the cocoon around the Shield Liger breaks and the Blade Liger is born!",
+								"still_path": "/xJRTNXUqhP9aOwKVuLyqk75HJv9.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 25,
+								"production_code": ""
+							},
+							{
+								"id": 845463,
+								"name": "Memories of Zi",
+								"order": 25,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-03-11",
+								"overview": "Part of Fiona's memory comes back and realises she is an Ancient Zoidian but cannot tell Van yet. On their way to the capital Van and his friends are attacked by bounty hunters in Hel Digunners who are after Zeke.",
+								"still_path": "/Sr1BFaGglJhVgdZJxeYG0Oc5sz.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 26,
+								"production_code": ""
+							},
+							{
+								"id": 845464,
+								"name": "The Saviour",
+								"order": 26,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-03-18",
+								"overview": "Upon entering a town Van and his friends find out Prozen has given orders to arrest Rudolph, telling everyone he is an imposter. Van, Irvine and Rudolph are captured but a familiar Imperial guard helps them escape.",
+								"still_path": "/qUWG7Tj1wu2RqXzfEfwlP6h3rzj.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 27,
+								"production_code": ""
+							},
+							{
+								"id": 845465,
+								"name": "Run, Wolf!",
+								"order": 27,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-03-25",
+								"overview": "Van and his friends stop at a deserted town and are mistaken for bandits who are stealing medicine from sick children. Irvine mobilises the Command Wolf with Van and the Blade Liger to steal back the medicine.",
+								"still_path": "/igtmLqYTgEsCtFf4dD366PHJ4gk.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 28,
+								"production_code": ""
+							},
+							{
+								"id": 845466,
+								"name": "Heroes of the Sky",
+								"order": 28,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-04-01",
+								"overview": "Van and his friends come upon an Imperial Base which houses the Eisanback Black Redler unit. Believing that the Rudolph that is with Van is an imposter, they attack despite Major Schuboltz recognising him as the real Prince. Outnumbered they are saved by two mysterious Storm Sworders.",
+								"still_path": "/gpKnlNEioj3Va8OjQW9QdguWxvZ.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 29,
+								"production_code": ""
+							},
+							{
+								"id": 845467,
+								"name": "Moonbay's Waltz",
+								"order": 29,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-04-08",
+								"overview": "Van and his friends are saved from the Imperial Army by McMann, Moonbay's former lover. It appears Moonbay still has feelings for him too so Van, Irvine, Fiona and Zeke try to sneak away and leave her there, but she finds out.",
+								"still_path": "/8sz04vdiAfE3mfq7hTgTOb9Bink.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 30,
+								"production_code": ""
+							},
+							{
+								"id": 845468,
+								"name": "The Three Guards",
+								"order": 30,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-04-15",
+								"overview": "Van and his friends are saved from the Imperial Army by McMann, Moonbay's former lover. It appears Moonbay still has feelings for him too so Van, Irvine, Fiona and Zeke try to sneak away and leave her there, but she finds out.",
+								"still_path": "/qH2eJDnAKz2Qer1sq5FbnUc5f7Y.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 31,
+								"production_code": ""
+							},
+							{
+								"id": 845469,
+								"name": "The Doom Machine",
+								"order": 31,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-04-22",
+								"overview": "Van and his friends arrive at Guygalos and are taken to Prime Minister Homalap, one of Rudolph's allies against Prozen who has been doing research on Zoid cores. Van and Fiona investigate and the Death Saurer awakens as if it senses Fiona's presence.",
+								"still_path": "/1to5srvX05PlOv6DP9kdlAixkiD.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 32,
+								"production_code": ""
+							},
+							{
+								"id": 845470,
+								"name": "The Battle for Survival",
+								"order": 32,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-04-29",
+								"overview": "Van and his friends arrive at Guygalos and are taken to Prime Minister Homalap, one of Rudolph's allies against Prozen who has been doing research on Zoid cores. Van and Fiona investigate and the Death Saurer awakens as if it senses Fiona's presence.[",
+								"still_path": "/bZCyLnecZZsWU6aZq2YaqY8echz.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 33,
+								"production_code": ""
+							},
+							{
+								"id": 845471,
+								"name": "The Capital Ablaze",
+								"order": 33,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-05-06",
+								"overview": "Prozen unleashes the Death Saurer, which quickly begins to destroy everything in it's path including the combined force of the Imperial and Republican army. It is up to Van to destroy the Death Saurer and save the world.",
+								"still_path": "/sPE5w48Ep639khEJIsQgL6M8AD0.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 34,
+								"production_code": ""
+							}
+						]
+					},
+					{
+						"id": "5d8094878e20c500243504cc",
+						"name": "Guardian Force",
+						"order": 2,
+						"locked": true,
+						"episodes": [
+							{
+								"id": 961912,
+								"name": "The Secret Mission",
+								"order": 0,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-05-13",
+								"overview": "Prozen unleashes the Death Saurer, which quickly begins to destroy everything in it's path including the combined force of the Imperial and Republican army. It is up to Van to destroy the Death Saurer and save the world.",
+								"still_path": "/2epVXPdenHxwrwFDFfk7XKghPiF.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 35,
+								"production_code": ""
+							},
+							{
+								"id": 961913,
+								"name": "The Sniper",
+								"order": 1,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-05-20",
+								"overview": "While travelling Van comes across a Republic bomb disposal squad disguised as bandits. Van tracks them down with the help of Investigator Dorset, a master pilot of the Gun Sniper, but Dorset isn't as he seems...",
+								"still_path": "/bUrIYoKOYZyK3LfqVNHiob7NNhA.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 36,
+								"production_code": ""
+							},
+							{
+								"id": 961511,
+								"name": "The Blue Devil",
+								"order": 2,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-05-27",
+								"overview": "Van and Fiona investigate newly discovered ruins only to find everyone in the town gone. The townsfolk are being held captive by Rease and her organoid Spekula in their Double Sworder",
+								"still_path": "/6bCVAvWNnm0V9UyKV6xl0whv1cr.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 37,
+								"production_code": ""
+							},
+							{
+								"id": 961914,
+								"name": "The Steel Bison",
+								"order": 3,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-06-03",
+								"overview": "While investigating a mysterious Zoids, Van and Fiona meet Lieutenant Thomas Schobaltz in his Dibison who immediately takes command of the operation but causes more trouble than good.",
+								"still_path": "/bsjPIryK52fEMirPHm5t58qlv2v.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 38,
+								"production_code": ""
+							},
+							{
+								"id": 1260444,
+								"name": "The Invisible Enemy",
+								"order": 4,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-06-10",
+								"overview": "Thomas and Van investigate a group of bandits who are actually excavating ruins for a man called Hillz and his red organoid Ambient. While trying to stop them Van and Thomas are attacked by Stealth Kat's.",
+								"still_path": "/yVxgOBaTVIuG7BjdtiEhvYvm6Um.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 39,
+								"production_code": ""
+							},
+							{
+								"id": 961512,
+								"name": "The Zoid Hunters",
+								"order": 5,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-06-17",
+								"overview": "Sleeper Zoids are being stolen and stripped of their Zoids cores aboard a Whale King. While on the Whale King, Van meets Irvine who quickly swaps sides to help Van capture the thieves.",
+								"still_path": "/zTv7YhBz1Zx6qlLZg0xCFRMtUd.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 40,
+								"production_code": ""
+							},
+							{
+								"id": 961915,
+								"name": "The Devil's Maze",
+								"order": 6,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-06-24",
+								"overview": "Sleeper Zoids are being stolen and stripped of their Zoids cores aboard a Whale King. While on the Whale King, Van meets Irvine who quickly swaps sides to help Van capture the thieves.",
+								"still_path": "/uCM7TaphhiED2X9DOwPi8cZlZr5.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 41,
+								"production_code": ""
+							},
+							{
+								"id": 961513,
+								"name": "Raven",
+								"order": 7,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-07-01",
+								"overview": "News arrives that Republic and Imperial bases have been destroyed by Raven and Shadow whom were thought dead. Van confronts Raven as he is about to attack their base and a fierce battle erupts.",
+								"still_path": "/1IUgptILWVNgSxYwGAgWz4iC8M6.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 42,
+								"production_code": ""
+							},
+							{
+								"id": 961089,
+								"name": "The Emperor's Holiday",
+								"order": 8,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-07-08",
+								"overview": "Rudolph and his fiancé, Mary-Anne, take a short break from their duties to visit Van, Fiona and Thomas but their holiday is interrupted by Stinger who is trying to kidnap Rudolph.",
+								"still_path": "/jEIurqDAdD0cVrrAj5iClvULuaU.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 43,
+								"production_code": ""
+							},
+							{
+								"id": 961090,
+								"name": "Assault of the Mega-Monster",
+								"order": 9,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-07-15",
+								"overview": "Rudolph and his fiancé, Mary-Anne, take a short break from their duties to visit Van, Fiona and Thomas but their holiday is interrupted by Stinger who is trying to kidnap Rudolph.",
+								"still_path": "/4GvAVoABr1PDDRYKtiE0wg9WOYy.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 44,
+								"production_code": ""
+							},
+							{
+								"id": 961091,
+								"name": "The Wings of Darkness",
+								"order": 10,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-07-22",
+								"overview": "Two experimental Storm Sworders are stolen but thieves must return to the base to collect the combat data. Van and his friends are no match for the enemy until Rosso and Leola arrive to help out.",
+								"still_path": "/liT4fRWT1NuFXSAJO8RhCucxlwt.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 45,
+								"production_code": ""
+							},
+							{
+								"id": 961514,
+								"name": "Devil of the Sea",
+								"order": 11,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-07-29",
+								"overview": "Two experimental Storm Sworders are stolen but thieves must return to the base to collect the combat data. Van and his friends are no match for the enemy until Rosso and Leola arrive to help out.",
+								"still_path": "/rnzXjRFqAZj4fK27aDok9dvX3kn.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 46,
+								"production_code": ""
+							},
+							{
+								"id": 961515,
+								"name": "A Monster Awakens",
+								"order": 12,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-08-05",
+								"overview": "Raven is moved away from the Geno Saurer cocoon but it hatches and the Geno Breaker is born! Irvine attacks Raven and his new Geno Breaker but the Command Wolf is critically damaged",
+								"still_path": "/cXCdnDnBE7UZKBS9L0po7FfZQ0p.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 47,
+								"production_code": ""
+							},
+							{
+								"id": 961916,
+								"name": "The Black Lightning",
+								"order": 13,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-08-12",
+								"overview": "Raven is moved away from the Geno Saurer cocoon but it hatches and the Geno Breaker is born! Irvine attacks Raven and his new Geno Breaker but the Command Wolf is critically damaged",
+								"still_path": "/dACQM1TvIImC3crBMBFaZRfp8Fd.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 48,
+								"production_code": ""
+							},
+							{
+								"id": 1260445,
+								"name": "The Distant Stars",
+								"order": 14,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-08-19",
+								"overview": "Van, Irvine and Thomas begin training for this next battle with Raven using a new formation. Before Raven can get to Van he is challenged by Rease in her Geno Saurer.",
+								"still_path": "/j1WKUkI9eG0RdcP6wqKeLKz9X93.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 49,
+								"production_code": ""
+							},
+							{
+								"id": 961092,
+								"name": "Attack of the Geno Breaker",
+								"order": 15,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-08-26",
+								"overview": "Raven attacks the base where Van and his friends are, together they try their new formation out but are quickly beaten. Van must face Raven alone but is pushed off a cliff during the battle.",
+								"still_path": "/4cWLLQteQD0SZMW0FLJ9s71CgxA.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 50,
+								"production_code": ""
+							},
+							{
+								"id": 961516,
+								"name": "The Boy from the Ruins",
+								"order": 16,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-09-02",
+								"overview": "Raven attacks the base where Van and his friends are, together they try their new formation out but are quickly beaten. Van must face Raven alone but is pushed off a cliff during the battle.",
+								"still_path": "/kfLHLOGKQrOFFSAslTAdNkKrzvw.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 51,
+								"production_code": ""
+							},
+							{
+								"id": 961917,
+								"name": "Van's New Power",
+								"order": 17,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-09-09",
+								"overview": "Van's becomes frustrated with Blade Liger's poor performance but realises that it's his skills have improved. To improve the Blade Liger, Van makes some modifictations.",
+								"still_path": "/bxJ1b1egEUKnhbk7KKAf3RgAYGV.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 52,
+								"production_code": ""
+							},
+							{
+								"id": 961093,
+								"name": "Phantom",
+								"order": 18,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-09-16",
+								"overview": "Moonbay enters the Guylos Grand Prix using a modified Sinker. Meanwhile Van and Thomas are hunting The Phantom - an assassin who has been hired to kill Rudolph!",
+								"still_path": "/hhnCybyCIYI1Rwb5gxErNHe6dSs.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 53,
+								"production_code": ""
+							},
+							{
+								"id": 961918,
+								"name": "G-File",
+								"order": 19,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-09-23",
+								"overview": "A meeting is held by the Guardian Force to discuss how to defeat Rease, Hillz and Raven once and for all.",
+								"still_path": "/7QMMkgkcSAnyqaoSg9O2TEWIjwX.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 54,
+								"production_code": ""
+							},
+							{
+								"id": 961909,
+								"name": "Supersonic Battle",
+								"order": 20,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-09-30",
+								"overview": "Irvine is arrested and his Lightning Saix confiscated under suspicion of weapons smuggling. To get his Lightning Saix back and clear his name Irvine must battle the Storm Sworder!",
+								"still_path": "/mNmIBdlCEK2IwkKkX9jyhtWgvww.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 55,
+								"production_code": ""
+							},
+							{
+								"id": 961910,
+								"name": "Cerberus",
+								"order": 21,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-10-07",
+								"overview": "Van and Thomas investigate the destruction of numerous Zoids after they are challenged to a battle by a mysterious group. Thomas is attacked and defeated and Van must battle a giant three headed Atack kat!",
+								"still_path": "/eS45NYPhqQ9Q8urxIwwH3A6kVGV.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 56,
+								"production_code": ""
+							},
+							{
+								"id": 961086,
+								"name": "The Nightmare",
+								"order": 22,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-10-14",
+								"overview": "Fiona begins to notice a feeling she hasn't had since the Death Saurer was awoke, Hillz, overseen by the mysterious Dark Kaiser, have created a new Zoids - The Death Saurer",
+								"still_path": "/xZbWbhAwHkGoBnTEO5AenZVLuZg.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 57,
+								"production_code": ""
+							},
+							{
+								"id": 961087,
+								"name": "Attack of the Winged Dragons",
+								"order": 23,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-10-21",
+								"overview": "With the Death Stinger awakened, Hillz loads it aboard the Hummer Kaiser - a huge hammerhead, and flies high above the Earth. Irvine and Thomas are sent to destroy it in specially modified Storm Sworders!",
+								"still_path": "/2lrJbjiR50EAdinyZz1BH22pqIW.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 58,
+								"production_code": ""
+							},
+							{
+								"id": 961088,
+								"name": "The Capital Collapses",
+								"order": 24,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-10-28",
+								"overview": "While Van battles Rease, the Death Stinger surfaces in New Helic City and quickly destroys it. The Guardian Force retreat to a lake which holds the largest Zoids ever created - Ultrasaurus!",
+								"still_path": "/xG6uwSqcqkUohLCKSKZC5Qpl66m.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 59,
+								"production_code": ""
+							},
+							{
+								"id": 961507,
+								"name": "The Giant Fortress",
+								"order": 25,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-11-04",
+								"overview": "Hillz begins to attack the Ultrasaurus before it is able to be awakened so Van, Irvine, Thomas, Karl and Rob are forced to hold off the Death Stinger.",
+								"still_path": "/cpXPhRRDevFcULCGahRObVGEQEJ.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 60,
+								"production_code": ""
+							},
+							{
+								"id": 961508,
+								"name": "The Great Sea Battle",
+								"order": 26,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-11-11",
+								"overview": "With the Ultrasaurus operationalit must now be equipped with a specially created Gravity Cannon on a secret island base. Hillz sends every Zoids he has to stop it.",
+								"still_path": "/rcPAkuiuVodK4QXGaeZb2Ujrnto.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 61,
+								"production_code": ""
+							},
+							{
+								"id": 961509,
+								"name": "The Gravity Cannon",
+								"order": 27,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-11-18",
+								"overview": "The Gravity Cannon needs one test shot to confirm that it works, but that would reveal it's position. Using a Hammerhead and Ptera Strikers, Van and friends must defend their position.",
+								"still_path": "/aa7I1tcxNWAMZkSISjsZjrKknk5.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 62,
+								"production_code": ""
+							},
+							{
+								"id": 961510,
+								"name": "The Final Battle",
+								"order": 28,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-11-25",
+								"overview": "The Death Stinger continues to destroy everything in ti's path, it is up to Van, Irvine and Thomas to stop it long enough for the gravity cannon to launch it's attack. The Death Stinger destroys the first shot but the second is a direct hit!",
+								"still_path": "/bPhWQWYXiOcF5k5eKQvjASay986.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 63,
+								"production_code": ""
+							},
+							{
+								"id": 961911,
+								"name": "The Ancient Memory",
+								"order": 29,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-12-02",
+								"overview": "The Death Stinger, crushed by the massive force of the gravity cannon comes back to life and escapes underground but with most of it's weapons destroyed. Van and Irvine chase the Death Stinger and have it trapped when it mysteriously disappears.",
+								"still_path": "/GJRXC3KYKxARnvKZFd8AGTDCSf.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 64,
+								"production_code": ""
+							},
+							{
+								"id": 1931952,
+								"name": "The Zoid Eve",
+								"order": 30,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-12-09",
+								"overview": "Fiona reappears in front of the Dark Kaiser who is actually Prozen fused with the Zoids core of the Death Saurer! Prozen takes Fiona to Zoids Eve to reawaken her and begin the end of the world! The Death Stinger confronts the Blade Liger.",
+								"still_path": "/iYJ2QA1Le78smsRhFPYgeYxXobp.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 65,
+								"production_code": ""
+							},
+							{
+								"id": 1931953,
+								"name": "The Moment of Annihilation",
+								"order": 31,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-12-16",
+								"overview": "The Death Stinger is resurrected by Zoids Eve then fuses with the Zoids core that is part of Prozen. With both cores fused, creating the most powerful Zoids core ever, it is implanted into the Death Saurer.",
+								"still_path": "/51KIVtP1UaSO7lPvHJcw9DH7Y6c.jpg",
+								"vote_count": 0,
+								"episode_type": "standard",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 66,
+								"production_code": ""
+							},
+							{
+								"id": 1931954,
+								"name": "Return to Another Tomorrow",
+								"order": 32,
+								"runtime": 25,
+								"show_id": 37419,
+								"air_date": "2000-12-23",
+								"overview": "The Ultimate Death Saurer has been resurrected and the combined armies of the Republic, Empire and Guardian Force fail to even slow it down. Van and Raven try and combined attack but fail instantly.",
+								"still_path": "/hFTPQuduVdyCkVIdNfeO8YBJ6JQ.jpg",
+								"vote_count": 0,
+								"episode_type": "finale",
+								"vote_average": 0,
+								"season_number": 1,
+								"episode_number": 67,
+								"production_code": ""
+							}
+						]
+					}
+				],
+				"network": null,
+				"description": "",
+				"group_count": 2,
+				"episode_count": 67
+			}
+		},
+		"episodeShow": {
+			"tt0111970": null
+		},
+		"seasonEpisodes": {
+			"tt13634872/1": {
+				"1": "tt14091834",
+				"2": "tt14091836",
+				"3": "tt14091844",
+				"4": "tt14091842",
+				"5": "tt14091850",
+				"6": "tt14091852",
+				"7": "tt14091856",
+				"8": "tt14091860",
+				"9": "tt14091864",
+				"10": "tt14091868",
+				"11": "tt14091876",
+				"12": "tt14091878",
+				"13": "tt14091880",
+				"14": "tt14091882",
+				"15": "tt14091886",
+				"16": "tt14091888"
+			},
+			"tt13634872/2": {},
+			"tt10689614/1": {
+				"1": "tt11409058",
+				"2": "tt12073718",
+				"3": "tt11806078",
+				"4": "tt12073732",
+				"5": "tt12073736"
+			},
+			"tt10689614/2": {
+				"1": "tt13830824",
+				"2": "tt14449736",
+				"3": "tt14449738",
+				"4": "tt14449740",
+				"5": "tt14449742"
+			},
+			"tt0214354/1": {
+				"1": "tt0937753",
+				"2": "tt1784957",
+				"3": "tt1868694",
+				"4": "tt1868696",
+				"5": "tt1868690",
+				"6": "tt1868692",
+				"7": "tt1868693",
+				"8": "tt1868691",
+				"9": "tt1868695",
+				"10": "tt3729332",
+				"11": "tt6623636",
+				"12": "tt6623640",
+				"13": "tt6623644",
+				"14": "tt6623654",
+				"15": "tt6623662",
+				"16": "tt6623674",
+				"17": "tt6623678",
+				"18": "tt6623696",
+				"19": "tt6623702",
+				"20": "tt6623704",
+				"21": "tt6623710",
+				"22": "tt6623716",
+				"23": "tt6623720",
+				"24": "tt6623722",
+				"25": "tt6623726",
+				"26": "tt6623728"
+			},
+			"tt0214354/2": {}
+		},
+		"searchTv": {
+			"freakazoid!": {
+				"results": [
+					{
+						"id": 4334,
+						"name": "Freakazoid!",
+						"original_name": "Freakazoid!",
+						"first_air_date": "1995-09-09"
+					}
+				]
+			}
+		},
+		"identifier": {
+			"Freakazoid! (1995) - 1080P AI Upscale - LeWcID": {
+				"confident": true,
+				"kind": "tv",
+				"matches": [
+					{
+						"imdbId": "tt0111970",
+						"score": 5.548,
+						"title": "Freakazoid!",
+						"year": 1995
+					},
+					{
+						"imdbId": "tt13634872",
+						"score": -5.2738,
+						"title": "Beyond Evil",
+						"year": 2021
+					},
+					{
+						"imdbId": "tt10689614",
+						"score": -6.29,
+						"title": "El Cid",
+						"year": 2020
+					},
+					{
+						"imdbId": "tt0214354",
+						"score": -6.5368,
+						"title": "Zoids: New Century",
+						"year": 2001
+					},
+					{
+						"imdbId": "tt0367443",
+						"score": -6.7799,
+						"title": "Zoids",
+						"year": 1999
+					}
+				],
+				"parsedTitle": "Freakazoid!",
+				"parsedYear": 1995,
+				"probability": 0.9966
+			}
+		},
+		"tvdbEpisodes": {
+			"72875": {
+				"data": {
+					"episodes": [
+						{
+							"id": 4797246,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "Freakazoid: The Original Freak",
+							"aired": "2008-07-29",
+							"runtime": 18
+						},
+						{
+							"id": 4797247,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": "Freakazoid-less Freakazoid Promos",
+							"aired": "2008-07-29",
+							"runtime": 4
+						},
+						{
+							"id": 4797255,
+							"seasonNumber": 0,
+							"number": 3,
+							"name": "Liebeslied für Normadeus",
+							"aired": "2009-04-21",
+							"runtime": 20
+						},
+						{
+							"id": 4797256,
+							"seasonNumber": 0,
+							"number": 4,
+							"name": "A Full Season's Worth of Commentaries (in Five Minutes or Less)",
+							"aired": "2009-04-21",
+							"runtime": 5
+						},
+						{
+							"id": 6578352,
+							"seasonNumber": 0,
+							"number": 5,
+							"name": "Alternate Episode: The Cloud / Candle Jack",
+							"aired": "1995-10-14",
+							"runtime": 22
+						},
+						{
+							"id": 9422335,
+							"seasonNumber": 0,
+							"number": 6,
+							"name": "Teen Titans Go! s06e33: Huggbees",
+							"aired": "2020-11-14",
+							"runtime": 11
+						},
+						{
+							"id": 101742,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "Five Day Forecast",
+							"aired": "1995-09-09",
+							"runtime": 20
+						},
+						{
+							"id": 4319765,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "Dance of Doom",
+							"aired": "1995-09-09",
+							"runtime": 13
+						},
+						{
+							"id": 4319766,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "Hand Man",
+							"aired": "1995-09-09",
+							"runtime": 8
+						},
+						{
+							"id": 101743,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "Candle Jack",
+							"aired": "1995-09-16",
+							"runtime": 11
+						},
+						{
+							"id": 4319768,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "Toby Danger in Doomsday Bet",
+							"aired": "1995-09-16",
+							"runtime": 8
+						},
+						{
+							"id": 4319770,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "The Lobe",
+							"aired": "1995-09-16",
+							"runtime": 20
+						},
+						{
+							"id": 101744,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "Mo-Ron",
+							"aired": "1995-09-23",
+							"runtime": 7
+						},
+						{
+							"id": 4319788,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "Sewer Rescue",
+							"aired": "1995-09-23",
+							"runtime": 5
+						},
+						{
+							"id": 4319789,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "The Big Question",
+							"aired": "1995-09-23",
+							"runtime": 20
+						},
+						{
+							"id": 4319790,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "The Legends Who Lunch",
+							"aired": "1995-09-23",
+							"runtime": 6
+						},
+						{
+							"id": 101745,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "And Fanboy is His Name",
+							"aired": "1995-09-30",
+							"runtime": 13
+						},
+						{
+							"id": 4319792,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "Lawn Gnomes, Chapter IV: Fun in the Sun",
+							"aired": "1995-09-30",
+							"runtime": 9
+						},
+						{
+							"id": 4319793,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "Frenching with Freakazoid",
+							"aired": "1995-09-30",
+							"runtime": 20
+						},
+						{
+							"id": 101746,
+							"seasonNumber": 1,
+							"number": 14,
+							"name": "Foamy the Freakadog",
+							"aired": "1995-10-07",
+							"runtime": 10
+						},
+						{
+							"id": 4319794,
+							"seasonNumber": 1,
+							"number": 15,
+							"name": "Office Visit",
+							"aired": "1995-10-07",
+							"runtime": 10
+						},
+						{
+							"id": 4319795,
+							"seasonNumber": 1,
+							"number": 16,
+							"name": "Ode to Leonard Nimoy",
+							"aired": "1995-10-07",
+							"runtime": 20
+						},
+						{
+							"id": 4319796,
+							"seasonNumber": 1,
+							"number": 17,
+							"name": "Emergency Broadcast System",
+							"aired": "1995-10-07",
+							"runtime": 20
+						},
+						{
+							"id": 4319797,
+							"seasonNumber": 1,
+							"number": 18,
+							"name": "Cönversational Nörwegian",
+							"aired": "1995-10-07",
+							"runtime": 20
+						},
+						{
+							"id": 101747,
+							"seasonNumber": 1,
+							"number": 19,
+							"name": "The Chip (1)",
+							"aired": "1995-11-04",
+							"runtime": 22
+						},
+						{
+							"id": 101748,
+							"seasonNumber": 1,
+							"number": 20,
+							"name": "The Chip (2)",
+							"aired": "1995-11-11",
+							"runtime": 11
+						},
+						{
+							"id": 4319800,
+							"seasonNumber": 1,
+							"number": 21,
+							"name": "Freakazoid is History!",
+							"aired": "1995-11-11",
+							"runtime": 11
+						},
+						{
+							"id": 101749,
+							"seasonNumber": 1,
+							"number": 22,
+							"name": "Hot Rods from Heck!",
+							"aired": "1995-11-18",
+							"runtime": 17
+						},
+						{
+							"id": 4319801,
+							"seasonNumber": 1,
+							"number": 23,
+							"name": "A Time for Evil",
+							"aired": "1995-11-18",
+							"runtime": 5
+						},
+						{
+							"id": 101750,
+							"seasonNumber": 1,
+							"number": 24,
+							"name": "Relax-O-Vision",
+							"aired": "1995-11-25",
+							"runtime": 11
+						},
+						{
+							"id": 4319803,
+							"seasonNumber": 1,
+							"number": 25,
+							"name": "Fatman and Boy Blubber",
+							"aired": "1995-11-25",
+							"runtime": 20
+						},
+						{
+							"id": 4319804,
+							"seasonNumber": 1,
+							"number": 26,
+							"name": "Limbo Lock-up",
+							"aired": "1995-11-25",
+							"runtime": 20
+						},
+						{
+							"id": 4319805,
+							"seasonNumber": 1,
+							"number": 27,
+							"name": "Terror Palace",
+							"aired": "1995-11-25",
+							"runtime": 20
+						},
+						{
+							"id": 101751,
+							"seasonNumber": 1,
+							"number": 28,
+							"name": "In Arms Way",
+							"aired": "1995-12-16",
+							"runtime": 10
+						},
+						{
+							"id": 4319808,
+							"seasonNumber": 1,
+							"number": 29,
+							"name": "The Cloud",
+							"aired": "1995-12-16",
+							"runtime": 12
+						},
+						{
+							"id": 101752,
+							"seasonNumber": 1,
+							"number": 30,
+							"name": "Next Time, Phone Ahead!",
+							"aired": "1996-02-03",
+							"runtime": 14
+						},
+						{
+							"id": 4319810,
+							"seasonNumber": 1,
+							"number": 31,
+							"name": "Nerdator",
+							"aired": "1996-02-03",
+							"runtime": 8
+						},
+						{
+							"id": 101753,
+							"seasonNumber": 1,
+							"number": 32,
+							"name": "House of Freakazoid",
+							"aired": "1996-02-10",
+							"runtime": 9
+						},
+						{
+							"id": 4319811,
+							"seasonNumber": 1,
+							"number": 33,
+							"name": "Sewer or Later",
+							"aired": "1996-02-10",
+							"runtime": 13
+						},
+						{
+							"id": 101759,
+							"seasonNumber": 1,
+							"number": 34,
+							"name": "The Wrath of Guitierrez",
+							"aired": "1996-02-17",
+							"runtime": 22
+						},
+						{
+							"id": 101760,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "Dexter's Date",
+							"aired": "1996-09-07",
+							"runtime": 22
+						},
+						{
+							"id": 101761,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "The Freakazoid",
+							"aired": "1996-09-14",
+							"runtime": 22
+						},
+						{
+							"id": 101762,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "Mission: Freakazoid",
+							"aired": "1996-09-28",
+							"runtime": 22
+						},
+						{
+							"id": 101763,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "Virtual Freak",
+							"aired": "1996-11-02",
+							"runtime": 22
+						},
+						{
+							"id": 101764,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "Hero Boy",
+							"aired": "1996-11-09",
+							"runtime": 22
+						},
+						{
+							"id": 101765,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "A Matter of Love",
+							"aired": "1996-11-16",
+							"runtime": 22
+						},
+						{
+							"id": 101766,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "Statuesque",
+							"aired": "1996-11-29",
+							"runtime": 22
+						},
+						{
+							"id": 101767,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "Island of Dr. Mystico",
+							"aired": "1997-02-07",
+							"runtime": 22
+						},
+						{
+							"id": 101768,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "Two Against Freak",
+							"aired": "1997-02-14",
+							"runtime": 22
+						},
+						{
+							"id": 101770,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "Freak-a-Panel",
+							"aired": "1997-05-31",
+							"runtime": 11
+						},
+						{
+							"id": 101769,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "Tomb of Invisibo",
+							"aired": "1997-05-31",
+							"runtime": 11
+						},
+						{
+							"id": 4321353,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "Normadeus",
+							"aired": "1997-06-01",
+							"runtime": 22
+						}
+					]
+				}
+			},
+			"73315": {
+				"data": {
+					"episodes": [
+						{
+							"id": 112029,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "The Boy From Planet Zi",
+							"aired": "2002-02-18",
+							"runtime": 25
+						},
+						{
+							"id": 112030,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "The Mysterious Fiona",
+							"aired": "2002-02-19",
+							"runtime": 25
+						},
+						{
+							"id": 112031,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "Memory",
+							"aired": "2002-02-20",
+							"runtime": 25
+						},
+						{
+							"id": 112032,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "The Protectors",
+							"aired": "2002-02-21",
+							"runtime": 25
+						},
+						{
+							"id": 112033,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "Sleeper Trap",
+							"aired": "2002-02-22",
+							"runtime": 25
+						},
+						{
+							"id": 112034,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "Jump Zeke!",
+							"aired": "2002-02-25",
+							"runtime": 25
+						},
+						{
+							"id": 112035,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "The Battle of Red River",
+							"aired": "2002-02-26",
+							"runtime": 25
+						},
+						{
+							"id": 112036,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "The Road to the Republic",
+							"aired": "2002-02-27",
+							"runtime": 25
+						},
+						{
+							"id": 112037,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "The Valley of the Monster",
+							"aired": "2002-02-28",
+							"runtime": 25
+						},
+						{
+							"id": 112038,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "The Mountain of Dreams",
+							"aired": "2002-03-01",
+							"runtime": 25
+						},
+						{
+							"id": 112039,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "The Fog at Mt. Iselina",
+							"aired": "2002-03-04",
+							"runtime": 25
+						},
+						{
+							"id": 112040,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "The Black Organoid",
+							"aired": "2002-03-05",
+							"runtime": 25
+						},
+						{
+							"id": 112041,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "The Battle of Chronos",
+							"aired": "2002-03-06",
+							"runtime": 25
+						},
+						{
+							"id": 112042,
+							"seasonNumber": 1,
+							"number": 14,
+							"name": "Wake Up! Zeke",
+							"aired": "2002-03-07",
+							"runtime": 25
+						},
+						{
+							"id": 112043,
+							"seasonNumber": 1,
+							"number": 15,
+							"name": "Deploy the ZG!",
+							"aired": "2002-03-08",
+							"runtime": 25
+						},
+						{
+							"id": 112044,
+							"seasonNumber": 1,
+							"number": 16,
+							"name": "New Helic City",
+							"aired": "2002-03-11",
+							"runtime": 25
+						},
+						{
+							"id": 112045,
+							"seasonNumber": 1,
+							"number": 17,
+							"name": "The Longest Night of the Republic",
+							"aired": "2002-03-12",
+							"runtime": 25
+						},
+						{
+							"id": 112046,
+							"seasonNumber": 1,
+							"number": 18,
+							"name": "The Defense of the City",
+							"aired": "2002-03-13",
+							"runtime": 25
+						},
+						{
+							"id": 112047,
+							"seasonNumber": 1,
+							"number": 19,
+							"name": "Prozen's Conspiracy",
+							"aired": "2002-03-14",
+							"runtime": 25
+						},
+						{
+							"id": 112048,
+							"seasonNumber": 1,
+							"number": 20,
+							"name": "The Resurrection Monster",
+							"aired": "2002-03-15",
+							"runtime": 25
+						},
+						{
+							"id": 112049,
+							"seasonNumber": 1,
+							"number": 21,
+							"name": "The Charged Particle Gun",
+							"aired": "2002-03-18",
+							"runtime": 25
+						},
+						{
+							"id": 112050,
+							"seasonNumber": 1,
+							"number": 22,
+							"name": "Farewell to a Friend",
+							"aired": "2002-03-19",
+							"runtime": 25
+						},
+						{
+							"id": 112051,
+							"seasonNumber": 1,
+							"number": 23,
+							"name": "The Imperial Ring",
+							"aired": "2002-03-20",
+							"runtime": 25
+						},
+						{
+							"id": 112052,
+							"seasonNumber": 1,
+							"number": 24,
+							"name": "A Voice From Afar",
+							"aired": "2002-03-21",
+							"runtime": 25
+						},
+						{
+							"id": 112053,
+							"seasonNumber": 1,
+							"number": 25,
+							"name": "The New Liger",
+							"aired": "2002-03-22",
+							"runtime": 25
+						},
+						{
+							"id": 112054,
+							"seasonNumber": 1,
+							"number": 26,
+							"name": "Memories of Zi",
+							"aired": "2002-03-25",
+							"runtime": 25
+						},
+						{
+							"id": 112055,
+							"seasonNumber": 1,
+							"number": 27,
+							"name": "The Saviour",
+							"aired": "2002-03-26",
+							"runtime": 25
+						},
+						{
+							"id": 112056,
+							"seasonNumber": 1,
+							"number": 28,
+							"name": "Run, Wolf!",
+							"aired": "2002-03-27",
+							"runtime": 25
+						},
+						{
+							"id": 112057,
+							"seasonNumber": 1,
+							"number": 29,
+							"name": "Heroes of the Sky",
+							"aired": "2002-03-28",
+							"runtime": 25
+						},
+						{
+							"id": 112058,
+							"seasonNumber": 1,
+							"number": 30,
+							"name": "Moonbay's Waltz",
+							"aired": "2002-03-29",
+							"runtime": 25
+						},
+						{
+							"id": 112059,
+							"seasonNumber": 1,
+							"number": 31,
+							"name": "The Three Guards",
+							"aired": "2002-04-01",
+							"runtime": 25
+						},
+						{
+							"id": 112060,
+							"seasonNumber": 1,
+							"number": 32,
+							"name": "The Doom Machine",
+							"aired": "2002-04-02",
+							"runtime": 25
+						},
+						{
+							"id": 112061,
+							"seasonNumber": 1,
+							"number": 33,
+							"name": "The Battle for Survival",
+							"aired": "2002-04-03",
+							"runtime": 25
+						},
+						{
+							"id": 112062,
+							"seasonNumber": 1,
+							"number": 34,
+							"name": "The Capital Ablaze",
+							"aired": "2002-04-04",
+							"runtime": 25
+						},
+						{
+							"id": 419822,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "The Secret Mission",
+							"aired": "2002-04-05",
+							"runtime": 25
+						},
+						{
+							"id": 419823,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "The Sniper",
+							"aired": "2002-04-08",
+							"runtime": 25
+						},
+						{
+							"id": 419824,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "The Blue Devil",
+							"aired": "2002-04-09",
+							"runtime": 25
+						},
+						{
+							"id": 419825,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "The Steel Bison",
+							"aired": "2002-04-10",
+							"runtime": 25
+						},
+						{
+							"id": 419826,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "The Invisible Enemy",
+							"aired": "2002-04-11",
+							"runtime": 25
+						},
+						{
+							"id": 419827,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "The Zoid Hunters",
+							"aired": "2002-04-12",
+							"runtime": 25
+						},
+						{
+							"id": 419828,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "The Devil's Maze",
+							"aired": "2002-04-15",
+							"runtime": 25
+						},
+						{
+							"id": 419829,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "Raven",
+							"aired": "2002-04-16",
+							"runtime": 25
+						},
+						{
+							"id": 419830,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "The Emperor's Holiday",
+							"aired": "2002-04-17",
+							"runtime": 25
+						},
+						{
+							"id": 419831,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "Assault of the Mega-Monster",
+							"aired": "2002-04-18",
+							"runtime": 25
+						},
+						{
+							"id": 419832,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "The Wings of Darkness",
+							"aired": "2002-04-19",
+							"runtime": 25
+						},
+						{
+							"id": 419834,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "Devil of the Sea",
+							"aired": "2002-04-22",
+							"runtime": 25
+						},
+						{
+							"id": 419835,
+							"seasonNumber": 2,
+							"number": 13,
+							"name": "A Monster Awakens",
+							"aired": "2002-04-23",
+							"runtime": 25
+						},
+						{
+							"id": 419836,
+							"seasonNumber": 2,
+							"number": 14,
+							"name": "The Black Lightning",
+							"aired": "2002-04-24",
+							"runtime": 25
+						},
+						{
+							"id": 419837,
+							"seasonNumber": 2,
+							"number": 15,
+							"name": "The Distant Stars",
+							"aired": "2002-04-25",
+							"runtime": 25
+						},
+						{
+							"id": 419838,
+							"seasonNumber": 2,
+							"number": 16,
+							"name": "Attack of the Geno Breaker",
+							"aired": "2002-04-26",
+							"runtime": 25
+						},
+						{
+							"id": 419839,
+							"seasonNumber": 2,
+							"number": 17,
+							"name": "The Boy from the Ruins",
+							"aired": "2002-04-29",
+							"runtime": 25
+						},
+						{
+							"id": 419840,
+							"seasonNumber": 2,
+							"number": 18,
+							"name": "Van's New Power",
+							"aired": "2002-04-30",
+							"runtime": 25
+						},
+						{
+							"id": 419841,
+							"seasonNumber": 2,
+							"number": 19,
+							"name": "Phantom",
+							"aired": "2002-05-01",
+							"runtime": 25
+						},
+						{
+							"id": 419842,
+							"seasonNumber": 2,
+							"number": 20,
+							"name": "G-File",
+							"aired": "2002-05-02",
+							"runtime": 25
+						},
+						{
+							"id": 419843,
+							"seasonNumber": 2,
+							"number": 21,
+							"name": "Supersonic Battle",
+							"aired": "2002-05-03",
+							"runtime": 25
+						},
+						{
+							"id": 419844,
+							"seasonNumber": 2,
+							"number": 22,
+							"name": "Cerberus",
+							"aired": "2002-05-06",
+							"runtime": 25
+						},
+						{
+							"id": 419845,
+							"seasonNumber": 2,
+							"number": 23,
+							"name": "The Nightmare",
+							"aired": "2002-05-07",
+							"runtime": 25
+						},
+						{
+							"id": 419846,
+							"seasonNumber": 2,
+							"number": 24,
+							"name": "Attack of the Winged Dragons",
+							"aired": "2002-05-08",
+							"runtime": 25
+						},
+						{
+							"id": 419847,
+							"seasonNumber": 2,
+							"number": 25,
+							"name": "The Capital Collapses",
+							"aired": "2002-05-09",
+							"runtime": 25
+						},
+						{
+							"id": 419848,
+							"seasonNumber": 2,
+							"number": 26,
+							"name": "The Giant Fortress",
+							"aired": "2002-05-13",
+							"runtime": 25
+						},
+						{
+							"id": 419849,
+							"seasonNumber": 2,
+							"number": 27,
+							"name": "The Great Sea Battle",
+							"aired": "2002-05-14",
+							"runtime": 25
+						},
+						{
+							"id": 419850,
+							"seasonNumber": 2,
+							"number": 28,
+							"name": "The Gravity Cannon",
+							"aired": "2002-05-15",
+							"runtime": 25
+						},
+						{
+							"id": 419851,
+							"seasonNumber": 2,
+							"number": 29,
+							"name": "The Final Battle",
+							"aired": "2002-05-16",
+							"runtime": 25
+						},
+						{
+							"id": 419852,
+							"seasonNumber": 2,
+							"number": 30,
+							"name": "The Ancient Memory",
+							"aired": "2003-01-04",
+							"runtime": 25
+						},
+						{
+							"id": 419853,
+							"seasonNumber": 2,
+							"number": 31,
+							"name": "The Zoid Eve",
+							"aired": "2003-01-04",
+							"runtime": 25
+						},
+						{
+							"id": 419854,
+							"seasonNumber": 2,
+							"number": 32,
+							"name": "The Moment of Annihilation",
+							"aired": "2003-01-04",
+							"runtime": 25
+						},
+						{
+							"id": 419855,
+							"seasonNumber": 2,
+							"number": 33,
+							"name": "Return to Another Tomorrow",
+							"aired": "2003-01-04",
+							"runtime": 25
+						}
+					]
+				}
+			},
+			"84040": {
+				"data": {
+					"episodes": [
+						{
+							"id": 8796574,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": null,
+							"aired": null,
+							"runtime": null
+						},
+						{
+							"id": 414069,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "戦闘開始! -ライガーゼロ ゴー・ファイト!-",
+							"aired": "2001-01-06",
+							"runtime": 25
+						},
+						{
+							"id": 414070,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "二人の勝利 -紅き閃光 ナオミ-",
+							"aired": "2001-01-13",
+							"runtime": 25
+						},
+						{
+							"id": 414071,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "王者登場 -ハリー・チャンプ-",
+							"aired": "2001-01-20",
+							"runtime": 25
+						},
+						{
+							"id": 414072,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "闇バトル! -謎のバックドラフト団-",
+							"aired": "2001-01-27",
+							"runtime": 25
+						},
+						{
+							"id": 414073,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "高速対決! -ゼロイエーガー-",
+							"aired": "2001-02-03",
+							"runtime": 25
+						},
+						{
+							"id": 414074,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "闇の巨象 -強敵エレファンダー-",
+							"aired": "2001-02-10",
+							"runtime": 25
+						},
+						{
+							"id": 414075,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "激走の荒野 -ホバーカーゴ危機百発!-",
+							"aired": "2001-02-17",
+							"runtime": 25
+						},
+						{
+							"id": 414076,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "猛虎襲来! -換装!! ゼロシュナイダー-",
+							"aired": "2001-02-24",
+							"runtime": 25
+						},
+						{
+							"id": 414077,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "女帝登場 -マリー・チャンプ-",
+							"aired": "2001-03-03",
+							"runtime": 25
+						},
+						{
+							"id": 414078,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "砂漠の牙 -ウオディック強襲!!-\t",
+							"aired": "2001-03-10",
+							"runtime": 25
+						},
+						{
+							"id": 414079,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "三つの旋風 -再戦! ライトニングサイクス-",
+							"aired": "2001-03-17",
+							"runtime": 25
+						},
+						{
+							"id": 414080,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "ゼロ強奪! -ファイヤーデスバトル-",
+							"aired": "2001-03-24",
+							"runtime": 25
+						},
+						{
+							"id": 414081,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "荒鷲の勇者 -レイノスVSザバット-",
+							"aired": "2001-03-31",
+							"runtime": 25
+						},
+						{
+							"id": 414082,
+							"seasonNumber": 1,
+							"number": 14,
+							"name": "リノン絶叫 -13日のノコギリ魔-",
+							"aired": "2001-04-07",
+							"runtime": 25
+						},
+						{
+							"id": 414083,
+							"seasonNumber": 1,
+							"number": 15,
+							"name": "ラオン再び -反重力カタストロフィ-",
+							"aired": "2001-04-14",
+							"runtime": 25
+						},
+						{
+							"id": 414084,
+							"seasonNumber": 1,
+							"number": 16,
+							"name": "赤き好敵手（ライバル） -レオン・トロス帰還-",
+							"aired": "2001-04-21",
+							"runtime": 25
+						},
+						{
+							"id": 414085,
+							"seasonNumber": 1,
+							"number": 17,
+							"name": "戦士の休息 -二つのストームソーダー-",
+							"aired": "2001-04-28",
+							"runtime": 25
+						},
+						{
+							"id": 414086,
+							"seasonNumber": 1,
+							"number": 18,
+							"name": "恋する戦場（バトルフィールド） -愛しのジャッジマンさま-",
+							"aired": "2001-05-05",
+							"runtime": 25
+						},
+						{
+							"id": 414087,
+							"seasonNumber": 1,
+							"number": 19,
+							"name": "第三の換装 -ゼロパンツァー始動!!-",
+							"aired": "2001-05-12",
+							"runtime": 25
+						},
+						{
+							"id": 414088,
+							"seasonNumber": 1,
+							"number": 20,
+							"name": "フォックス -裏切りのバラッド-",
+							"aired": "2001-05-19",
+							"runtime": 25
+						},
+						{
+							"id": 414089,
+							"seasonNumber": 1,
+							"number": 21,
+							"name": "王者（ハリー）の災難 -ラオン博士の華麗なる罠-",
+							"aired": "2001-05-26",
+							"runtime": 25
+						},
+						{
+							"id": 414090,
+							"seasonNumber": 1,
+							"number": 22,
+							"name": "海に潜む竜 -アルティメットXを探せ!-",
+							"aired": "2001-06-02",
+							"runtime": 25
+						},
+						{
+							"id": 414091,
+							"seasonNumber": 1,
+							"number": 23,
+							"name": "目覚める竜 -バーサークフューラー参戦-",
+							"aired": "2001-06-09",
+							"runtime": 25
+						},
+						{
+							"id": 414092,
+							"seasonNumber": 1,
+							"number": 24,
+							"name": "勇者の祭典 -開幕! ロイヤルカップ-",
+							"aired": "2001-06-16",
+							"runtime": 25
+						},
+						{
+							"id": 414093,
+							"seasonNumber": 1,
+							"number": 25,
+							"name": "サバイバル -アルティメットXの謎-",
+							"aired": "2001-06-23",
+							"runtime": 25
+						},
+						{
+							"id": 414094,
+							"seasonNumber": 1,
+							"number": 26,
+							"name": "ゼロの軌跡 -風と雲と冒険と…-",
+							"aired": "2001-06-30",
+							"runtime": 25
+						}
+					]
+				}
+			},
+			"388066": {
+				"data": {
+					"episodes": [
+						{
+							"id": 8042906,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "La conjura",
+							"aired": "2020-12-18",
+							"runtime": 72
+						},
+						{
+							"id": 8058447,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "Ordalía",
+							"aired": "2020-12-18",
+							"runtime": 53
+						},
+						{
+							"id": 8058448,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "Baraka",
+							"aired": "2020-12-18",
+							"runtime": 51
+						},
+						{
+							"id": 8058449,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "Campeador",
+							"aired": "2020-12-18",
+							"runtime": 57
+						},
+						{
+							"id": 8058450,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "Expiación",
+							"aired": "2020-12-18",
+							"runtime": 59
+						},
+						{
+							"id": 8505776,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "Promesas y tentaciones",
+							"aired": "2021-07-15",
+							"runtime": 55
+						},
+						{
+							"id": 8505777,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "La carga del deber",
+							"aired": "2021-07-15",
+							"runtime": 57
+						},
+						{
+							"id": 8505779,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "Viento de guerra",
+							"aired": "2021-07-15",
+							"runtime": 60
+						},
+						{
+							"id": 8505780,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "Emboscada",
+							"aired": "2021-07-15",
+							"runtime": 54
+						},
+						{
+							"id": 8505781,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "El camino del odio",
+							"aired": "2021-07-15",
+							"runtime": 72
+						}
+					]
+				}
+			},
+			"393636": {
+				"data": {
+					"episodes": [
+						{
+							"id": 8095105,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "이동식 경사, 내가 궁금한 게 하나 있는데...",
+							"aired": "2021-02-19",
+							"runtime": 65
+						},
+						{
+							"id": 8095108,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "내 어디가 그렇게 좋습니까? 경찰 이동식은 아닌 것 같고, 용의자 이동식?",
+							"aired": "2021-02-20",
+							"runtime": 68
+						},
+						{
+							"id": 8095114,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "넌 내가 잡는다. 내가 반드시..!",
+							"aired": "2021-02-26",
+							"runtime": 64
+						},
+						{
+							"id": 8095121,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "사람, 안 쏴봤지? 그동안 수고했어요. 한주원 경위",
+							"aired": "2021-02-27",
+							"runtime": 61
+						},
+						{
+							"id": 8095124,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "법과 원칙, 다 던져버릴 수 있습니까?",
+							"aired": "2021-03-05",
+							"runtime": 65
+						},
+						{
+							"id": 8095125,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "의심하면 안 됩니까? 누구든 의심해야죠",
+							"aired": "2021-03-06",
+							"runtime": 63
+						},
+						{
+							"id": 8095126,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "너, 내가 안 무섭니…?",
+							"aired": "2021-03-12",
+							"runtime": 75
+						},
+						{
+							"id": 8095128,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "유연이는 내가 안 그랬어, 유연이는 아니야...",
+							"aired": "2021-03-13",
+							"runtime": 71
+						},
+						{
+							"id": 8095133,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "그래서 나 낚은 거잖아요, 아주 잘 물어올 것 같으니까",
+							"aired": "2021-03-19",
+							"runtime": 61
+						},
+						{
+							"id": 8095138,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "놓치지 않고 쫓겠습니다. 꼭, 잡을 겁니다",
+							"aired": "2021-03-20",
+							"runtime": 63
+						},
+						{
+							"id": 8095139,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "너는 알지.. 누가 죽였는지",
+							"aired": "2021-03-26",
+							"runtime": 63
+						},
+						{
+							"id": 8095140,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "우리 유연이.. 네가 죽였어?",
+							"aired": "2021-03-27",
+							"runtime": 67
+						},
+						{
+							"id": 8095142,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "모든 선이, 당신 아버지를 향해서 가고 있잖아",
+							"aired": "2021-04-02",
+							"runtime": 62
+						},
+						{
+							"id": 8095143,
+							"seasonNumber": 1,
+							"number": 14,
+							"name": "원래 있던 곳으로 돌아갈 필요가 없을 것 같습니다",
+							"aired": "2021-04-03",
+							"runtime": 61
+						},
+						{
+							"id": 8095144,
+							"seasonNumber": 1,
+							"number": 15,
+							"name": "한주원 이게 무슨 짓이야..",
+							"aired": "2021-04-09",
+							"runtime": 61
+						},
+						{
+							"id": 8095145,
+							"seasonNumber": 1,
+							"number": 16,
+							"name": "죗값은 죄지은 놈이 받는 거야.. 주원아",
+							"aired": "2021-04-10",
+							"runtime": 79
+						}
+					]
+				}
+			},
+			"393636/dvd": {
+				"data": {
+					"episodes": []
+				}
+			},
+			"388066/dvd": {
+				"data": {
+					"episodes": []
+				}
+			},
+			"84040/dvd": {
+				"data": {
+					"episodes": []
+				}
+			}
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun (RD, Usenet), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "Freakazoid! (1995) - 1080P AI Upscale - LeWcID",
+				"hash": "39c3686c9e6719a3f1a1d06e55d6a2d6c4271d28",
+				"imdbId": "tt0111970",
+				"files": [
+					{
+						"path": "Freakazoid! - 1x01 - Five Day Forecast.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x02 - Dance of Doom.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x03 - Hand Man.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x04 - Candle Jack.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x05 - Toby Danger in Doomsday Bet.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x06 - The Lobe.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x07 - Mo-Ron.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x08 - Sewer Rescue.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x09 - The Big Question.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x10 - The Legends Who Lunch.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x11 - And Fanboy Is His Name.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x12 - Lawn Gnomes Chapter IV Fun in the Sun.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x13 - Frenching with Freakazoid.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x14 - Foamy the Freakadog.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x15 - Office Visit.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x16 - Ode to Leonard Nimoy.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x17 - Emergency Broadcast System.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x18 - Cönversational Nörwegian.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x19 - The Chip (1).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x20 - The Chip (2).mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x21 - Freakazoid is History!.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x22 - Hot Rods from Heck!.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x23 - A Time for Evil.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x24 - Relax-O-Vision.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x25 - Fatman and Boy Blubber.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x26 - Limbo Lock-up.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x27 - Terror Palace.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x28 - In Arms Way.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x29 - The Cloud.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x30 - Next Time, Phone Ahead!.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x31 - Nerdator.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x32 - House of Freakazoid.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x33 - Sewer or Later.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 1x34 - The Wrath of Guitierrez.mkv",
+						"folder": "Season 1"
+					},
+					{
+						"path": "Freakazoid! - 2x01 - Dexter's Date.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Freakazoid! - 2x02 - The Freakazoid.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Freakazoid! - 2x03 - Mission Freakazoid.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Freakazoid! - 2x04 - Virtual Freak.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Freakazoid! - 2x05 - Hero Boy.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Freakazoid! - 2x06 - A Matter of Love.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Freakazoid! - 2x07 - Statuesque.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Freakazoid! - 2x08 - Island of Dr. Mystico.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Freakazoid! - 2x09 - Two Against Freak.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Freakazoid! - 2x10 - Freak-a-Panel.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Freakazoid! - 2x11 - Tomb of Invisibo.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Freakazoid! - 2x12 - Normadeus.mkv",
+						"folder": "Season 2"
+					},
+					{
+						"path": "Freakazoid! - Special 1 - Freakazoid The Original Freak.mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "Freakazoid! - Special 2 - Freakazoid-less Freakazoid Promos.mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "Freakazoid! - Special 3 - Liebeslied für Normadeus.mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "Freakazoid! - Special 4 - A Full Season's Worth of Commentaries (in Five Minutes or Less).mkv",
+						"folder": "Specials"
+					},
+					{
+						"path": "Freakazoid! - Special 5 - Alternate Episode꞉ The Cloud∕Candle Jack .mkv",
+						"folder": "Specials"
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0111970",
+				"tmdbId": 4334,
+				"files": [
+					{
+						"path": "Freakazoid! - 1x01 - Five Day Forecast.mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 299670,
+						"part": 1
+					},
+					{
+						"path": "Freakazoid! - 1x02 - Dance of Doom.mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299670,
+						"part": 2
+					},
+					{
+						"path": "Freakazoid! - 1x03 - Hand Man.mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299670,
+						"part": 3
+					},
+					{
+						"path": "Freakazoid! - 1x04 - Candle Jack.mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299668,
+						"part": 1
+					},
+					{
+						"path": "Freakazoid! - 1x05 - Toby Danger in Doomsday Bet.mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299668,
+						"part": 2
+					},
+					{
+						"path": "Freakazoid! - 1x06 - The Lobe.mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299668,
+						"part": 3
+					},
+					{
+						"path": "Freakazoid! - 1x07 - Mo-Ron.mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299669,
+						"part": 1
+					},
+					{
+						"path": "Freakazoid! - 1x08 - Sewer Rescue.mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299669,
+						"part": 2
+					},
+					{
+						"path": "Freakazoid! - 1x09 - The Big Question.mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299669,
+						"part": 3
+					},
+					{
+						"path": "Freakazoid! - 1x10 - The Legends Who Lunch.mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299669,
+						"part": 4
+					},
+					{
+						"path": "Freakazoid! - 1x11 - And Fanboy Is His Name.mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299667,
+						"part": 1
+					},
+					{
+						"path": "Freakazoid! - 1x12 - Lawn Gnomes Chapter IV Fun in the Sun.mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299667,
+						"part": 2
+					},
+					{
+						"path": "Freakazoid! - 1x13 - Frenching with Freakazoid.mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299667,
+						"part": 3
+					},
+					{
+						"path": "Freakazoid! - 1x14 - Foamy the Freakadog.mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 1027582,
+						"part": 1
+					},
+					{
+						"path": "Freakazoid! - 1x15 - Office Visit.mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 1027582,
+						"part": 2
+					},
+					{
+						"path": "Freakazoid! - 1x16 - Ode to Leonard Nimoy.mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 1027582,
+						"part": 3
+					},
+					{
+						"path": "Freakazoid! - 1x17 - Emergency Broadcast System.mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 1027582,
+						"part": 4
+					},
+					{
+						"path": "Freakazoid! - 1x18 - Cönversational Nörwegian.mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 1027582,
+						"part": 5
+					},
+					{
+						"path": "Freakazoid! - 1x19 - The Chip (1).mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 299678
+					},
+					{
+						"path": "Freakazoid! - 1x20 - The Chip (2).mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299679,
+						"part": 1
+					},
+					{
+						"path": "Freakazoid! - 1x21 - Freakazoid is History!.mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299679,
+						"part": 2
+					},
+					{
+						"path": "Freakazoid! - 1x22 - Hot Rods from Heck!.mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299685,
+						"part": 1
+					},
+					{
+						"path": "Freakazoid! - 1x23 - A Time for Evil.mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299685,
+						"part": 2
+					},
+					{
+						"path": "Freakazoid! - 1x24 - Relax-O-Vision.mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299689,
+						"part": 1
+					},
+					{
+						"path": "Freakazoid! - 1x25 - Fatman and Boy Blubber.mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299689,
+						"part": 2
+					},
+					{
+						"path": "Freakazoid! - 1x26 - Limbo Lock-up.mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299689,
+						"part": 3
+					},
+					{
+						"path": "Freakazoid! - 1x27 - Terror Palace.mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299689,
+						"part": 4
+					},
+					{
+						"path": "Freakazoid! - 1x28 - In Arms Way.mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299690,
+						"part": 1
+					},
+					{
+						"path": "Freakazoid! - 1x29 - The Cloud.mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299690,
+						"part": 2
+					},
+					{
+						"path": "Freakazoid! - 1x30 - Next Time, Phone Ahead!.mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299691,
+						"part": 1
+					},
+					{
+						"path": "Freakazoid! - 1x31 - Nerdator.mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299691,
+						"part": 2
+					},
+					{
+						"path": "Freakazoid! - 1x32 - House of Freakazoid.mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299674,
+						"part": 1
+					},
+					{
+						"path": "Freakazoid! - 1x33 - Sewer or Later.mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299674,
+						"part": 2
+					},
+					{
+						"path": "Freakazoid! - 1x34 - The Wrath of Guitierrez.mkv",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 299676
+					},
+					{
+						"path": "Freakazoid! - 2x01 - Dexter's Date.mkv",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 299693
+					},
+					{
+						"path": "Freakazoid! - 2x02 - The Freakazoid.mkv",
+						"season": 2,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 299695
+					},
+					{
+						"path": "Freakazoid! - 2x03 - Mission Freakazoid.mkv",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 299694
+					},
+					{
+						"path": "Freakazoid! - 2x04 - Virtual Freak.mkv",
+						"season": 2,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 299696
+					},
+					{
+						"path": "Freakazoid! - 2x05 - Hero Boy.mkv",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 299697
+					},
+					{
+						"path": "Freakazoid! - 2x06 - A Matter of Love.mkv",
+						"season": 2,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 299703
+					},
+					{
+						"path": "Freakazoid! - 2x07 - Statuesque.mkv",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 299701
+					},
+					{
+						"path": "Freakazoid! - 2x08 - Island of Dr. Mystico.mkv",
+						"season": 2,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 299700
+					},
+					{
+						"path": "Freakazoid! - 2x09 - Two Against Freak.mkv",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 299698
+					},
+					{
+						"path": "Freakazoid! - 2x10 - Freak-a-Panel.mkv",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 299702,
+						"part": 1
+					},
+					{
+						"path": "Freakazoid! - 2x11 - Tomb of Invisibo.mkv",
+						"season": 2,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299702,
+						"part": 2
+					},
+					{
+						"path": "Freakazoid! - 2x12 - Normadeus.mkv",
+						"season": 2,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 299699
+					},
+					{
+						"path": "Freakazoid! - Special 1 - Freakazoid The Original Freak.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Freakazoid! - Special 2 - Freakazoid-less Freakazoid Promos.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Freakazoid! - Special 3 - Liebeslied für Normadeus.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Freakazoid! - Special 4 - A Full Season's Worth of Commentaries (in Five Minutes or Less).mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "Freakazoid! - Special 5 - Alternate Episode꞉ The Cloud∕Candle Jack .mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD, Usenet), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "Freakazoid.S01E19.The.Chip.I.960p.HMAX.WEB-DL.DDP2.0.H.264-Dooky",
+				"hash": null,
+				"imdbId": "tt0111970",
+				"files": [
+					{
+						"path": "Freakazoid.S01E19.The.Chip.I.960p.HMAX.WEB-DL.DDP2.0.H.264-Dooky.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0111970",
+				"tmdbId": 4334,
+				"files": [
+					{
+						"path": "Freakazoid.S01E19.The.Chip.I.960p.HMAX.WEB-DL.DDP2.0.H.264-Dooky.mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299678
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD, Usenet), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "Freakazoid.S01E14-E15-E16-E17-E18.Foamy.The.Freakadog.-.Office.Visit.-.Ode.To.Leonard.Nimoy.-.Emergency.Broadcast.System.960p.HMAX.WEB-DL.DDP2.0.H.264-Dooky",
+				"hash": null,
+				"imdbId": "tt0111970",
+				"files": [
+					{
+						"path": "Freakazoid.S01E14-E15-E16-E17-E18.Foamy.The.Freakadog.-.Office.Visit.-.Ode.To.Leonard.Nimoy.-.Emergency.Broadcast.System.960p.HMAX.WEB-DL.DDP2.0.H.264-Dooky.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0111970",
+				"tmdbId": 4334,
+				"files": [
+					{
+						"path": "Freakazoid.S01E14-E15-E16-E17-E18.Foamy.The.Freakadog.-.Office.Visit.-.Ode.To.Leonard.Nimoy.-.Emergency.Broadcast.System.960p.HMAX.WEB-DL.DDP2.0.H.264-Dooky.mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 1027582
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD, Usenet), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "Freakazoid.S01E32-E33.720p.MAX.WEB-DL.DDP2.0.H.264.DUAL-NeX",
+				"hash": null,
+				"imdbId": "tt0111970",
+				"files": [
+					{
+						"path": "Freakazoid.S01E32-E33.720p.MAX.WEB-DL.DDP2.0.H.264.DUAL-NeX.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0111970",
+				"tmdbId": 4334,
+				"files": [
+					{
+						"path": "Freakazoid.S01E32-E33.720p.MAX.WEB-DL.DDP2.0.H.264.DUAL-NeX.mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299674
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD, Usenet), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "Freakazoid_.S01E33.Sewer.or.Later.480p.TUBI.WEB-DL.AAC2.0.x264-AndreMor",
+				"hash": null,
+				"imdbId": "tt0111970",
+				"files": [
+					{
+						"path": "Freakazoid!.S01E33.Sewer.or.Later.480p.TUBI.WEB-DL.AAC2.0.x264-AndreMor.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0111970",
+				"tmdbId": 4334,
+				"files": [
+					{
+						"path": "Freakazoid!.S01E33.Sewer.or.Later.480p.TUBI.WEB-DL.AAC2.0.x264-AndreMor.mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299674,
+						"part": 2
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD, Usenet), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "Freakazoid.S01E34.720p.MAX.WEB-DL.DDP2.0.H.264.DUAL-NeX",
+				"hash": null,
+				"imdbId": "tt0111970",
+				"files": [
+					{
+						"path": "Freakazoid.S01E34.720p.MAX.WEB-DL.DDP2.0.H.264.DUAL-NeX.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0111970",
+				"tmdbId": 4334,
+				"files": [
+					{
+						"path": "Freakazoid.S01E34.720p.MAX.WEB-DL.DDP2.0.H.264.DUAL-NeX.mkv",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299676
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD, Usenet), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "Freakazoid.S01E20-E21.The.Chip.Act.IV.-.Freakazoid.Is.History.960p.HMAX.WEB-DL.DDP2.0.H.264-Dooky",
+				"hash": null,
+				"imdbId": "tt0111970",
+				"files": [
+					{
+						"path": "Freakazoid.S01E20-E21.The.Chip.Act.IV.-.Freakazoid.Is.History.960p.HMAX.WEB-DL.DDP2.0.H.264-Dooky.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0111970",
+				"tmdbId": 4334,
+				"files": [
+					{
+						"path": "Freakazoid.S01E20-E21.The.Chip.Act.IV.-.Freakazoid.Is.History.960p.HMAX.WEB-DL.DDP2.0.H.264-Dooky.mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299679
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD, Usenet), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "Freakazoid.S01E30-E31.720p.MAX.WEB-DL.DDP2.0.H.264.DUAL-NeX",
+				"hash": null,
+				"imdbId": "tt0111970",
+				"files": [
+					{
+						"path": "Freakazoid.S01E30-E31.720p.MAX.WEB-DL.DDP2.0.H.264.DUAL-NeX.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0111970",
+				"tmdbId": 4334,
+				"files": [
+					{
+						"path": "Freakazoid.S01E30-E31.720p.MAX.WEB-DL.DDP2.0.H.264.DUAL-NeX.mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299691
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD, Usenet), 2026-11-09: the .zurgtorrent's name and its files with their folders, as zurg asks",
+			"request": {
+				"name": "Freakazoid.S01E19.720p.MAX.WEB-DL.DDP2.0.H.264.DUAL-NeX",
+				"hash": null,
+				"imdbId": "tt0111970",
+				"files": [
+					{
+						"path": "Freakazoid.S01E19.720p.MAX.WEB-DL.DDP2.0.H.264.DUAL-NeX.mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0111970",
+				"tmdbId": 4334,
+				"files": [
+					{
+						"path": "Freakazoid.S01E19.720p.MAX.WEB-DL.DDP2.0.H.264.DUAL-NeX.mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "aligned",
+						"tmdbEpisodeId": 299678
+					}
+				]
+			}
+		}
+	]
+}

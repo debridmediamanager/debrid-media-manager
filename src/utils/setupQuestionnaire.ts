@@ -575,7 +575,7 @@ const SPONSOR_BENEFITS = {
 	queue: {
 		id: 'uploader-priority',
 		title: 'Skip the uploader queue',
-		detail: "Priority and 2 TB of Usenet a day instead of 300 GB on DMM's hosted NZB uploader, and three torrent jobs at once instead of one on the torrent uploader.",
+		detail: "Priority and 2 TB of Usenet a day instead of 300 GB on DMM's hosted NZB uploader, plus three torrent jobs at once instead of one.",
 		href: '/transfers',
 	},
 	rexStremio: {
