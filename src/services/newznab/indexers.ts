@@ -2,11 +2,15 @@
 //
 // Deliberately separate from `getIndexers()` in @/services/nzb2rd: that list is
 // what the Usenet section of a media page searches, hard-codes two servers and
-// exists to feed nzb2rd. This one is configuration-driven so a sponsor-facing
-// aggregator can carry the whole *arr indexer fleet without a code change, and
-// every field here is a secret — an entry's `url` and `apiKey` name an account
-// the whole site shares, so nothing in this module may reach the browser.
+// exists to feed nzb2rd. This one lives in the `NewznabIndexer` table, edited at
+// `/newznab/admin`, so a sponsor-facing aggregator can carry the whole *arr
+// indexer fleet without a code change or a redeploy. The `NEWZNAB_INDEXERS` env
+// JSON is the fallback while that table is empty. Every field here is a secret —
+// an entry's `url` and `apiKey` name an account the whole site shares, so
+// nothing in this module may reach the browser.
 
+import type { NewznabIndexerRow } from '@/services/database/newznabIndexers';
+import { NewznabIndexerService } from '@/services/database/newznabIndexers';
 import { getIndexers, Indexer } from '@/services/nzb2rd';
 
 /**
@@ -156,10 +160,76 @@ export function getUpstreamIndexers(): UpstreamIndexer[] {
 }
 
 /**
- * Clears the per-process memo. Tests only — production reads the env once and
- * an indexer change is a redeploy.
+ * A table row as an upstream indexer, through the same checks as an env entry,
+ * so a row the admin page let through half-filled is dropped rather than asked.
  */
+export function rowToIndexer(row: NewznabIndexerRow): UpstreamIndexer | null {
+	return toIndexer({
+		prefix: row.prefix,
+		name: row.name,
+		url: row.url,
+		apiKey: row.apiKey,
+		keyless: row.keyless,
+		pacing: { rateLimit: row.pacingRate, windowSeconds: row.pacingWindow },
+		grabLimit: { rateLimit: row.grabRate, windowSeconds: row.grabWindow },
+	});
+}
+
+/** How long one instance trusts its copy of the table; the admin page's own instance clears it on save. */
+export const DB_INDEXERS_TTL_MS = 30_000;
+
+// `indexers` null = the table is empty, so the env list applies.
+let dbIndexers: { at: number; indexers: UpstreamIndexer[] | null } | null = null;
+let dbRead: Promise<UpstreamIndexer[]> | null = null;
+let indexerService: NewznabIndexerService | null = null;
+
+async function readTable(): Promise<UpstreamIndexer[]> {
+	try {
+		indexerService ??= new NewznabIndexerService();
+		const rows = await indexerService.listIndexers();
+		const indexers =
+			Array.isArray(rows) && rows.length > 0
+				? rows
+						.filter((row) => row.enabled)
+						.map(rowToIndexer)
+						.filter((indexer): indexer is UpstreamIndexer => indexer !== null)
+				: null;
+		dbIndexers = { at: Date.now(), indexers };
+	} catch (error) {
+		// Keep serving the last list read; with none, the env list. Retried after
+		// the TTL rather than on every search while the database is down.
+		console.error('Newznab indexers: reading the table failed, keeping the last list:', error);
+		dbIndexers = { at: Date.now(), indexers: dbIndexers?.indexers ?? null };
+	}
+	return dbIndexers.indexers ?? getUpstreamIndexers();
+}
+
+/**
+ * The enabled upstream indexers, in the order the admin page set: the
+ * `NewznabIndexer` table, read at most every 30 s per instance, or the env
+ * list while the table has no rows. A disabled indexer is neither searched nor
+ * grabbed from; its stored NZBs are still served.
+ */
+export async function loadUpstreamIndexers(): Promise<UpstreamIndexer[]> {
+	if (dbIndexers && Date.now() - dbIndexers.at < DB_INDEXERS_TTL_MS) {
+		return dbIndexers.indexers ?? getUpstreamIndexers();
+	}
+	dbRead ??= readTable().finally(() => {
+		dbRead = null;
+	});
+	return dbRead;
+}
+
+/** After an admin save, so this instance reads the table again on its next request. */
+export function invalidateUpstreamIndexers(): void {
+	dbIndexers = null;
+}
+
+/** Clears the per-process memos. Tests only. */
 export function _resetUpstreamIndexersForTest(): void {
 	cachedIndexers = null;
 	warnedAboutMalformedConfig = false;
+	dbIndexers = null;
+	dbRead = null;
+	indexerService = null;
 }

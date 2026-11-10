@@ -116,8 +116,8 @@ every guid and enclosure URL the \*arrs have stored.
 
 1. Cache check (below). Fresh entry → page and return, zero upstream calls, unless the
    entry is missing an upstream (see **Sets missing an upstream** below).
-2. Fan out one URL per configured upstream (`NEWZNAB_INDEXERS` env JSON, parsed by
-   `src/services/newznab/indexers.ts`) through `fanOut` from `services/nzb2rd.ts` —
+2. Fan out one URL per enabled upstream (the `NewznabIndexer` table, or the
+   `NEWZNAB_INDEXERS` env JSON while that table is empty; see **Indexer configuration**) through `fanOut` from `services/nzb2rd.ts` —
    best-effort parallel; one refusal never empties the result. Upstreams are always
    asked for a full page of 100 regardless of the client's `limit`, so a small request
    cannot poison the cache with an unpageable set.
@@ -228,7 +228,7 @@ already answered.
 
 The merge keeps the fan-out's own time (`cachedAt` in the value) because Prisma moves the
 row's `updatedAt` on every write. TTL and the fresh-post watch read `cachedAt`, so a
-merge extends neither. A missing prefix no longer in `NEWZNAB_INDEXERS` is ignored, and
+merge extends neither. A missing prefix no longer configured (or disabled) is ignored, and
 dropped at the next write. Entries written before this was recorded carry no `missing`
 and read as complete. An entry that has gone stale is fanned out to every upstream as
 before, and the stale fallback is unchanged.
@@ -298,16 +298,34 @@ watermark article is.
 | `src/services/newznab/auth.ts`             | `apikey`/header → sponsor lookup, 100 vs 101                           |
 | `src/services/newznab/search.ts`           | Normalization, cache, fan-out, pacing, item rewrite                    |
 | `src/services/newznab/order.ts`            | Clean names before reposts and raw-subject posts on targeted pages     |
-| `src/services/newznab/indexers.ts`         | `NEWZNAB_INDEXERS` env JSON → upstream list                            |
+| `src/services/newznab/indexers.ts`         | `NewznabIndexer` table (env JSON fallback) → upstream list             |
+| `src/pages/api/newznab/admin.ts`           | Admin API: list, add, change indexers (`NEWZNAB_ADMIN_TOKEN`)          |
+| `src/pages/newznab/admin.tsx`              | Admin page for the indexers                                            |
 | `src/services/newznab/opaqueId.ts`         | Deterministic encrypted release ids                                    |
 | `src/services/newznab/xml.ts`              | Hand-rolled caps / RSS / error writers                                 |
 | `src/services/newznab/store.ts`            | B2 read-through store for cleaned NZBs                                 |
 | `src/services/database/newznabApiCache.ts` | Age-scaled search cache                                                |
 | `src/pages/newznab.tsx`                    | Sponsor setup page (client gate is cosmetic; the API is the real gate) |
 
+## Indexer configuration
+
+The upstreams live in the `NewznabIndexer` table and are edited at `/newznab/admin` with
+`NEWZNAB_ADMIN_TOKEN` as a bearer token. Each instance reads the table at most every 30 s
+(`loadUpstreamIndexers`); the instance that saves clears its copy at once. If the database
+cannot be read, the last list read stays in use. While the table has **no rows at all**,
+the `NEWZNAB_INDEXERS` env JSON applies, so the first row saved replaces that whole list.
+
+- A row's `prefix` is part of every opaque release id the indexer produced, so it is set
+  once and never changes, and rows are disabled rather than deleted: a new server must
+  never take an old prefix. A disabled indexer is neither searched nor grabbed from; NZBs
+  already in the store are still served.
+- API keys go in and never come out: the admin API answers with the last three
+  characters only. An empty key field on a change keeps the stored key.
+
 ## Environment
 
-`NEWZNAB_INDEXERS` (JSON array of `{prefix, name, url, apiKey, keyless?, pacing?, grabLimit?}` —
+`NEWZNAB_ADMIN_TOKEN` (the admin page's bearer token; unset ⇒ the admin API answers 401),
+`NEWZNAB_INDEXERS` (fallback while the table is empty: JSON array of `{prefix, name, url, apiKey, keyless?, pacing?, grabLimit?}` —
 `url` is the full API endpoint including any non-standard api path),
 `NEWZNAB_TOKEN_SECRET` (64 hex chars; unset ⇒ the endpoint answers 910),
 `NEWZNAB_PUBLIC_BASE`, `B2_KEY_ID` / `B2_APP_KEY` / `B2_BUCKET` (optional — store

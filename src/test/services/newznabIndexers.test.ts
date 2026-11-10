@@ -13,7 +13,14 @@ vi.mock('@/services/nzb2rd', () => ({
 	]),
 }));
 
-import { _resetUpstreamIndexersForTest, getUpstreamIndexers } from '@/services/newznab/indexers';
+import { type NewznabIndexerRow, NewznabIndexerService } from '@/services/database/newznabIndexers';
+import {
+	_resetUpstreamIndexersForTest,
+	DB_INDEXERS_TTL_MS,
+	getUpstreamIndexers,
+	invalidateUpstreamIndexers,
+	loadUpstreamIndexers,
+} from '@/services/newznab/indexers';
 
 const originalConfig = process.env.NEWZNAB_INDEXERS;
 
@@ -238,5 +245,112 @@ describe('getUpstreamIndexers', () => {
 
 		_resetUpstreamIndexersForTest();
 		expect(getUpstreamIndexers().map((indexer) => indexer.prefix)).toEqual(['b']);
+	});
+});
+
+function row(over: Partial<NewznabIndexerRow>): NewznabIndexerRow {
+	return {
+		prefix: 'tm',
+		name: 'Treasure Maps',
+		url: 'https://treasure-maps.com/api',
+		apiKey: 'db-key',
+		keyless: false,
+		enabled: true,
+		position: 0,
+		pacingRate: null,
+		pacingWindow: null,
+		grabRate: null,
+		grabWindow: null,
+		createdAt: new Date(0),
+		updatedAt: new Date(0),
+		...over,
+	};
+}
+
+describe('loadUpstreamIndexers', () => {
+	const env = [{ prefix: 'env', name: 'Env', url: 'https://env/api', apiKey: 'k' }];
+	let list: ReturnType<typeof vi.spyOn>;
+
+	beforeEach(() => {
+		setConfig(JSON.stringify(env));
+		list = vi.spyOn(NewznabIndexerService.prototype, 'listIndexers');
+	});
+
+	afterEach(() => {
+		list.mockRestore();
+		vi.useRealTimers();
+	});
+
+	it('reads the enabled rows in table order, with their limits', async () => {
+		list.mockResolvedValue([
+			row({ prefix: 'tm', grabRate: 200, grabWindow: 86400 }),
+			row({ prefix: 'off', enabled: false }),
+			row({ prefix: 'at', name: 'NZBAtlas', pacingRate: 200, pacingWindow: 3600 }),
+		]);
+		expect(await loadUpstreamIndexers()).toEqual([
+			{
+				prefix: 'tm',
+				name: 'Treasure Maps',
+				url: 'https://treasure-maps.com/api',
+				apiKey: 'db-key',
+				grabLimit: { rateLimit: 200, windowSeconds: 86400 },
+			},
+			{
+				prefix: 'at',
+				name: 'NZBAtlas',
+				url: 'https://treasure-maps.com/api',
+				apiKey: 'db-key',
+				pacing: { rateLimit: 200, windowSeconds: 3600 },
+			},
+		]);
+	});
+
+	it('uses the env list while the table is empty', async () => {
+		list.mockResolvedValue([]);
+		expect((await loadUpstreamIndexers()).map((i) => i.prefix)).toEqual(['env']);
+	});
+
+	it('searches nothing, not the env list, when every row is disabled', async () => {
+		list.mockResolvedValue([row({ enabled: false })]);
+		expect(await loadUpstreamIndexers()).toEqual([]);
+	});
+
+	it('drops a row with no key unless it is keyless', async () => {
+		list.mockResolvedValue([
+			row({ prefix: 'nokey', apiKey: '' }),
+			row({ prefix: 'free', apiKey: '', keyless: true }),
+		]);
+		expect((await loadUpstreamIndexers()).map((i) => i.prefix)).toEqual(['free']);
+	});
+
+	it('reads the table once per TTL, and again after an invalidation', async () => {
+		vi.useFakeTimers();
+		list.mockResolvedValue([row({ prefix: 'a' })]);
+		await Promise.all([loadUpstreamIndexers(), loadUpstreamIndexers()]);
+		await loadUpstreamIndexers();
+		expect(list).toHaveBeenCalledTimes(1);
+
+		list.mockResolvedValue([row({ prefix: 'b' })]);
+		vi.advanceTimersByTime(DB_INDEXERS_TTL_MS + 1);
+		expect((await loadUpstreamIndexers()).map((i) => i.prefix)).toEqual(['b']);
+		expect(list).toHaveBeenCalledTimes(2);
+
+		list.mockResolvedValue([row({ prefix: 'c' })]);
+		invalidateUpstreamIndexers();
+		expect((await loadUpstreamIndexers()).map((i) => i.prefix)).toEqual(['c']);
+	});
+
+	it('keeps the last list read when the database fails, and the env list before any', async () => {
+		vi.useFakeTimers();
+		list.mockRejectedValue(new Error("Can't reach database server"));
+		expect((await loadUpstreamIndexers()).map((i) => i.prefix)).toEqual(['env']);
+
+		list.mockResolvedValue([row({ prefix: 'a' })]);
+		vi.advanceTimersByTime(DB_INDEXERS_TTL_MS + 1);
+		expect((await loadUpstreamIndexers()).map((i) => i.prefix)).toEqual(['a']);
+
+		list.mockRejectedValue(new Error("Can't reach database server"));
+		vi.advanceTimersByTime(DB_INDEXERS_TTL_MS + 1);
+		expect((await loadUpstreamIndexers()).map((i) => i.prefix)).toEqual(['a']);
 	});
 });

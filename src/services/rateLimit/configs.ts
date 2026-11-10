@@ -93,6 +93,7 @@ export const RATE_LIMIT_CONFIGS = {
 	// The blocklist the uploaders and scrapers poll every ten minutes each.
 	takedownBlocklist: { name: 'takedownBlocklist', rateLimit: 60, windowSeconds: 60 },
 	takedownAdmin: { name: 'takedownAdmin', rateLimit: 60, windowSeconds: 60 },
+	newznabIndexerAdmin: { name: 'newznabIndexerAdmin', rateLimit: 60, windowSeconds: 60 },
 	// The zurg endpoints, sized like the Newznab and Torznab indexers rather
 	// than like a person clicking: a minute's worth in one budget, so a client
 	// that fans out over several titles is not refused on its second call.

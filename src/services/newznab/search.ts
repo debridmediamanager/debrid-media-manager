@@ -27,7 +27,7 @@ import { repository as db } from '@/services/repository';
 import { withoutBlockedReleases } from '@/services/takedown/blocklist';
 import { recordCopies } from '@/services/usenetCopies';
 import type { NextApiRequest } from 'next';
-import { getUpstreamIndexers, UpstreamIndexer } from './indexers';
+import { loadUpstreamIndexers, UpstreamIndexer } from './indexers';
 import { encryptReleaseId } from './opaqueId';
 import { cleanNamesFirst } from './order';
 import { getUpstreamLimiter } from './upstreamLimiter';
@@ -265,7 +265,9 @@ async function completed(
 	if (!missing || Date.now() - missing.askedAt.getTime() < REFILL_AFTER_MS) {
 		return cached.results;
 	}
-	const wanted = getUpstreamIndexers().filter((i) => missing.prefixes.includes(i.prefix));
+	const wanted = (await loadUpstreamIndexers()).filter((i) =>
+		missing.prefixes.includes(i.prefix)
+	);
 	if (wanted.length === 0) return cached.results;
 
 	const asked = await pacedIndexers(wanted);
@@ -358,7 +360,7 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 		return page(await completed(t, params, key, cached));
 	}
 
-	const configured = getUpstreamIndexers();
+	const configured = await loadUpstreamIndexers();
 	const indexers = await pacedIndexers(configured);
 	const { ok, lists, answered } = await askUpstreams(t, params, indexers);
 
@@ -499,7 +501,7 @@ export async function sweepFreshPosts(
 	const last = await db.newznabSweptAt();
 	if (last && now - last.at.getTime() < FRESH_SWEEP_EVERY_MS) return { swept: false, ids: 0 };
 	const since = last ? last.at.getTime() : now - FRESH_WATCH_STALE_MS;
-	const indexers = await pacedIndexers(getUpstreamIndexers());
+	const indexers = await pacedIndexers(await loadUpstreamIndexers());
 	const found: UsenetResult[] = [];
 	let answered = false;
 	for (const [t, cat] of [['movie', '2000']]) {

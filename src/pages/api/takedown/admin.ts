@@ -2,19 +2,13 @@ import { TakedownService, type TakedownStatus } from '@/services/database/takedo
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { invalidateBlocklist } from '@/services/takedown/blocklist';
 import { deleteHashlistPages } from '@/services/takedown/hashlists';
-import { timingSafeEqual } from 'crypto';
+import { hasAdminToken } from '@/utils/adminToken';
 import { NextApiHandler, NextApiRequest } from 'next';
 
 const STATUSES: TakedownStatus[] = ['pending', 'approved', 'rejected'];
 
-export const isTakedownAdmin = (req: NextApiRequest): boolean => {
-	const expected = process.env.TAKEDOWN_ADMIN_TOKEN;
-	const header = req.headers.authorization;
-	if (!expected || typeof header !== 'string' || !header.startsWith('Bearer ')) return false;
-	const given = Buffer.from(header.slice('Bearer '.length));
-	const want = Buffer.from(expected);
-	return given.length === want.length && timingSafeEqual(given, want);
-};
+export const isTakedownAdmin = (req: NextApiRequest): boolean =>
+	hasAdminToken(req, process.env.TAKEDOWN_ADMIN_TOKEN);
 
 let service: TakedownService | null = null;
 

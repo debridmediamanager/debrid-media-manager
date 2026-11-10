@@ -3,7 +3,7 @@ import {
 	newznabApiKey,
 	resolveNewznabSponsor,
 } from '@/services/newznab/auth';
-import { getUpstreamIndexers } from '@/services/newznab/indexers';
+import { loadUpstreamIndexers } from '@/services/newznab/indexers';
 import { decryptReleaseId, hasTokenSecret } from '@/services/newznab/opaqueId';
 import { isSearchType, runSearch } from '@/services/newznab/search';
 import { getStoredNzb, putStoredNzb } from '@/services/newznab/store';
@@ -141,7 +141,7 @@ async function handleGrab(req: NextApiRequest, res: NextApiResponse) {
 	// then applies to the copy as if it had been asked for.
 	const requested = qualifyReleaseId(release.prefix, release.nativeId);
 	const copies = await orderCopies(requested);
-	const upstreams = new Set(getUpstreamIndexers().map((indexer) => indexer.prefix));
+	const upstreams = new Set((await loadUpstreamIndexers()).map((indexer) => indexer.prefix));
 	const served =
 		[copies.id, ...copies.alternates].find(
 			(posting) =>
@@ -206,7 +206,9 @@ async function handleGrab(req: NextApiRequest, res: NextApiResponse) {
 		}
 	}
 
-	const indexer = getUpstreamIndexers().find((candidate) => candidate.prefix === release.prefix);
+	const indexer = (await loadUpstreamIndexers()).find(
+		(candidate) => candidate.prefix === release.prefix
+	);
 	// A token minted before an indexer was removed from the config. Nothing can
 	// serve it any more, which is exactly what 300 means.
 	if (!indexer) return sendError(res, 200, 300, 'No such item');

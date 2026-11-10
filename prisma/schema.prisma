@@ -1658,3 +1658,28 @@ model MusicPlayerState {
   state     Json
   updatedAt DateTime @updatedAt
 }
+
+/// An upstream Newznab server the `/api/newznab` aggregator fans out to, edited at
+/// `/newznab/admin`. `prefix` is baked into every opaque release id this indexer ever
+/// produced, so it never changes and a row is disabled rather than deleted: a reused
+/// prefix would route an *arr's saved grabs to a different server.
+model NewznabIndexer {
+  prefix       String   @id @db.VarChar(16)
+  name         String   @db.VarChar(100)
+  /// The FULL API endpoint, e.g. `https://drunkenslug.com/api`.
+  url          String   @db.VarChar(512)
+  /// Empty only when `keyless`. Never sent to a browser.
+  apiKey       String   @default("") @db.VarChar(255)
+  keyless      Boolean  @default(false)
+  enabled      Boolean  @default(true)
+  /// Fan-out and priority order, lowest first.
+  position     Int      @default(0)
+  /// Searches per window; both or neither.
+  pacingRate   Int?
+  pacingWindow Int?
+  /// NZB downloads per window, across every sponsor; both or neither.
+  grabRate     Int?
+  grabWindow   Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

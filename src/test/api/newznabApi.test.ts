@@ -32,6 +32,16 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 // `checkRateLimitFor` with it. The real limiter is what the 429 path is made of,
 // so only the outer IP wrapper is stubbed here — otherwise every test in this
 // file would share one 5-per-second budget under the identifier `unknown`.
+// An empty indexer table, so the NEWZNAB_INDEXERS each test sets is the list in use,
+// and a DATABASE_URL in the environment can never make these tests read a real one.
+vi.mock('@/services/database/newznabIndexers', () => ({
+	NewznabIndexerService: class {
+		async listIndexers() {
+			return [];
+		}
+	},
+}));
+
 vi.mock('@/services/rateLimit/withRateLimit', async (importOriginal) => {
 	const actual = await importOriginal<typeof import('@/services/rateLimit/withRateLimit')>();
 	return { ...actual, withIpRateLimit: (wrapped: unknown) => wrapped };
