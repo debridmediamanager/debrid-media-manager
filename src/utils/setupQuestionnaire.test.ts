@@ -902,7 +902,8 @@ describe('bounded recommendation compatibility matrix', () => {
 	const structuralCaseCount =
 		sourceSubsets.length * playerModes.length * hostValues.length * preferenceValues.length;
 	const needEvidence: Record<Need, RegExp> = {
-		remote: /secure(ly)? reachable|Hosted Cast\/direct playback/i,
+		// zurg+rex on Android: the Plex apps on the device play anywhere.
+		remote: /secure(ly)? reachable|Hosted Cast\/direct playback|play anywhere/i,
 		family: /provider IP and concurrency/i,
 		offline: /offline copies/i,
 		subtitles: /subtitle/i,
@@ -2807,13 +2808,14 @@ describe('route copy stays on the player and source it is about', () => {
 			'Self-hosted playback needs a securely reachable address; a LAN address works only at home.',
 		],
 		// A phone or a TV box: the Plex apps on the device play anywhere, others reach it at home.
+		// rex there plays only what zurg feeds it, never files from a NAS.
 		[
 			{ player: 'plex', plexRoute: 'rex', host: 'android' },
-			'zurg+rex runs on the Android device itself; the Plex apps on it play anywhere, while other devices reach it over your home network. A NAS or file server at home needs a secure reachable connection too.',
+			'zurg+rex runs on the Android device itself; the Plex apps on it play anywhere, while other devices reach it over your home network.',
 		],
 		[
 			{ player: 'plex', plexRoute: 'either', sources: ['usenet'], host: 'android' },
-			'zurg+rex runs on the Android device itself; the Plex apps on it play anywhere, while other devices reach it over your home network. A NAS or file server at home needs a secure reachable connection too.',
+			'zurg+rex runs on the Android device itself; the Plex apps on it play anywhere, while other devices reach it over your home network.',
 		],
 	] satisfies [Partial<SetupAnswers>, string][])(
 		'says what remote playback needs for %o',

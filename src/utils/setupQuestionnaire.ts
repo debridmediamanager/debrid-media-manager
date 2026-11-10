@@ -1545,7 +1545,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		result.optionalNeeds.push(
 			// A media server or rex is always self-hosted; the arr download client's host does not serve playback.
 			androidRex
-				? 'zurg+rex runs on the Android device itself; the Plex apps on it play anywhere, while other devices reach it over your home network. A NAS or file server at home needs a secure reachable connection too.'
+				? 'zurg+rex runs on the Android device itself; the Plex apps on it play anywhere, while other devices reach it over your home network.'
 				: playerNeedsFullHost(player)
 					? selfHosted
 					: !routes.some(({ route: r }) => r.host !== 'none')
