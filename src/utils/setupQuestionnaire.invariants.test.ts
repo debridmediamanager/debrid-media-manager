@@ -612,6 +612,17 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	// rex runs on 32-bit Android too; only direct Usenet needs a 64-bit device.
+	it('names 64-bit Android only when own Usenet is selected', () => {
+		expect(
+			breaking(
+				(answers, result) =>
+					!answers.sources.includes('usenet') &&
+					texts(result).some((text) => text.includes('64-bit'))
+			)
+		).toEqual([]);
+	});
+
 	it("never brings back the generic no-host 'Cast/direct-player' wording", () => {
 		expect(
 			breaking((_, result) =>

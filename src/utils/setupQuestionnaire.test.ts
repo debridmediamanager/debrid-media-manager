@@ -1635,8 +1635,13 @@ describe('a no-host conflict names a route the player can use', () => {
 			'rex and its source need a machine that stays on. Choose a host.',
 		],
 		// zurg+rex Android feeds rex from a debrid account, but not from TorBox hosted NZBs.
+		// rex runs on 32-bit Android too; only direct Usenet needs 64-bit.
 		[
 			{ player: 'plex', plexRoute: 'rex', sources: ['real-debrid'] },
+			'rex and its source need a machine that stays on. Choose a host or a supported Android device.',
+		],
+		[
+			{ player: 'plex', plexRoute: 'rex', sources: ['real-debrid', 'usenet'] },
 			'rex and its source need a machine that stays on. Choose a host or a supported 64-bit Android device.',
 		],
 		[
@@ -2950,7 +2955,7 @@ describe('zurg+rex Android serves the Plex apps', () => {
 			expect(result.conflicts).toEqual([]);
 			expect(result.primaryRoute.id).toBe('zurg-rex-plex');
 			expect(result.prerequisites).toContain(
-				'zurg+rex Android needs sponsor access, a supported 64-bit device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. It has no TorBox hosted NZB (torbox_nzb) backend.'
+				'zurg+rex Android needs sponsor access, a supported device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. It has no TorBox hosted NZB (torbox_nzb) backend.'
 			);
 			expect(result.setupLinks).toContainEqual({
 				label: 'zurg+rex Android guide',
@@ -2978,6 +2983,13 @@ describe('zurg+rex Android serves the Plex apps', () => {
 			]);
 		}
 	);
+
+	// rex runs on 32-bit Android too; only direct Usenet needs 64-bit.
+	it('asks for 64-bit Android only for own Usenet', () => {
+		expect(onAndroid({ sources: ['real-debrid', 'usenet'] }).prerequisites).toContain(
+			'zurg+rex Android needs sponsor access, a supported device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. Direct Usenet requires 64-bit Android; it has no TorBox hosted NZB (torbox_nzb) backend.'
+		);
+	});
 
 	it('says Plex Media Server itself still needs a normal host when shown both', () => {
 		expect(
@@ -3174,6 +3186,15 @@ describe('zurg+rex Android has no TorBox hosted NZB backend', () => {
 			label: 'zurg+rex Android guide',
 			href: 'https://notes.debridmediamanager.com/zurg/guides/android/',
 		});
+	});
+
+	it('names no 64-bit Android without own Usenet', () => {
+		expect(
+			recommendSetup(answers({ player: 'webdav', sources: ['offcloud'], host: 'android' }))
+				.prerequisites
+		).toContain(
+			'zurg+rex Android needs sponsor access, a supported device and background operation; it has no TorBox hosted NZB (torbox_nzb) backend.'
+		);
 	});
 
 	it('says the SMB bridge needs a normal host, not just the zurg+rex Android app', () => {

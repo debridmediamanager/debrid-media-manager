@@ -1495,6 +1495,8 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			});
 	}
 	const androidRex = androidRunsRex(answers);
+	// Direct Usenet needs 64-bit Android; zurg and rex run on 32-bit too.
+	const android64 = routes.some(({ route: r }) => r.zurgNzb === 'direct') ? '64-bit ' : '';
 	if (
 		result.hostRequirement === 'server' &&
 		(answers.host === 'none' || (answers.host === 'android' && !androidRex))
@@ -1506,24 +1508,26 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 				: answers.host === 'android'
 					? (hostChoiceReason(answers, answers.host) ??
 						`This route needs a normal host for ${rex ? 'rex' : playerLabel(player)}. zurg+rex Android runs zurg and the rex zurg feeds, not that whole server stack.`)
-					: `${rex ? 'rex and its source need' : `${player === 'plex' ? 'Plex Media Server' : playerLabel(player)} needs`} a machine that stays on. Choose a host${androidRunsRex({ ...answers, host: 'android' }) ? ' or a supported 64-bit Android device' : ''}.`
+					: `${rex ? 'rex and its source need' : `${player === 'plex' ? 'Plex Media Server' : playerLabel(player)} needs`} a machine that stays on. Choose a host${androidRunsRex({ ...answers, host: 'android' }) ? ` or a supported ${android64}Android device` : ''}.`
 		);
 	const hostedNzb = routes.some(({ route: r }) => r.zurgNzb === 'hosted');
 	if (answers.host === 'android' && hostedNzb) result.conflicts.push(ANDROID_HOSTED_NZB);
-	// Direct Usenet needs 64-bit Android.
-	const android64 = routes.some(({ route: r }) => r.zurgNzb === 'direct') ? '64-bit ' : '';
 	if (result.hostRequirement === 'zurg' && answers.host === 'none')
 		result.conflicts.push(
 			`zurg needs a host that stays on while you watch. Choose a host${hostedNzb ? '' : ` or a supported ${android64}Android device`}${noHostClause(player, selected, answers.player === 'unsure')}.`
 		);
 	const androidZurg =
 		answers.host === 'android' && (result.hostRequirement === 'zurg' || androidRex);
-	if (androidZurg)
+	if (androidZurg) {
+		const app =
+			'zurg+rex Android needs sponsor access, a supported device and background operation;';
+		const noHostedNzb = 'has no TorBox hosted NZB (torbox_nzb) backend.';
 		result.prerequisites.push(
 			androidRex
-				? 'zurg+rex Android needs sponsor access, a supported 64-bit device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. It has no TorBox hosted NZB (torbox_nzb) backend.'
-				: 'zurg+rex Android needs sponsor access, a supported device and background operation; direct Usenet requires 64-bit Android, and zurg+rex Android has no TorBox hosted NZB (torbox_nzb) backend.'
+				? `${app} it runs zurg and rex on the device, so the Plex apps play from it. ${android64 ? 'Direct Usenet requires 64-bit Android; it' : 'It'} ${noHostedNzb}`
+				: `${app} ${android64 ? 'direct Usenet requires 64-bit Android, and zurg+rex Android' : 'it'} ${noHostedNzb}`
 		);
+	}
 	// The app stands in for the desktop zurg and rex guides, so its own guide leads; with no
 	// source chosen yet it is still where rex on Android starts.
 	if (androidZurg || (answers.host === 'android' && rex && !selected.length))
