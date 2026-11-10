@@ -402,8 +402,13 @@ export function hostChoiceReason(
 			answers.player === 'plex' ? 'Plex Media Server' : playerLabel(answers.player);
 		return `${server} needs a full server host; zurg+rex Android cannot give a server on that device a library.`;
 	}
-	if (rex && answers.sources.some((source) => source === 'url-addon' || source === 'http-local'))
-		return 'zurg+rex Android feeds rex from zurg only; Stremio URL addons and HTTP files need rex on a normal host.';
+	// Name only the picked sources zurg cannot feed rex.
+	const notZurg = [
+		answers.sources.includes('url-addon') && 'Stremio URL addons',
+		answers.sources.includes('http-local') && 'HTTP files',
+	].filter(Boolean);
+	if (rex && notZurg.length)
+		return `zurg+rex Android feeds rex from zurg only; ${notZurg.join(' and ')} need rex on a normal host.`;
 	// Stremio and Kodi play TorBox hosted NZBs without zurg; WebDAV, external players and rex need it.
 	if (
 		answers.sources.includes('torbox-hosted') &&

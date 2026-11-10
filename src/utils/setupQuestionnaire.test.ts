@@ -1433,12 +1433,17 @@ describe('host messages name the server that needs the host', () => {
 		).toBeUndefined();
 	});
 
-	it.each(['url-addon', 'http-local'] as const)(
-		'keeps Android off rex fed by %s, which zurg+rex Android does not run',
-		(source) => {
-			const input = answers({ player: 'plex', plexRoute: 'rex', sources: [source] });
-			const reason =
-				'zurg+rex Android feeds rex from zurg only; Stremio URL addons and HTTP files need rex on a normal host.';
+	// The reason names only the sources that were picked.
+	it.each([
+		[['url-addon'], 'Stremio URL addons need'],
+		[['http-local'], 'HTTP files need'],
+		[['url-addon', 'http-local'], 'Stremio URL addons and HTTP files need'],
+		[['real-debrid', 'http-local'], 'HTTP files need'],
+	] satisfies [SetupSource[], string][])(
+		'keeps Android off rex fed by %o, which zurg+rex Android does not run',
+		(sources, needs) => {
+			const input = answers({ player: 'plex', plexRoute: 'rex', sources });
+			const reason = `zurg+rex Android feeds rex from zurg only; ${needs} rex on a normal host.`;
 
 			expect(hostChoiceReason(input, 'android')).toBe(reason);
 			expect(recommendSetup({ ...input, host: 'android' }).conflicts).toEqual([reason]);
