@@ -1,0 +1,970 @@
+{
+	"answers": {
+		"show": {
+			"78102": {
+				"id": 78102,
+				"name": "Steins;Gate 0",
+				"original_name": "シュタインズ・ゲート ゼロ",
+				"first_air_date": "2018-04-12",
+				"original_language": "ja",
+				"origin_country": ["JP"],
+				"genres": [
+					{
+						"id": 10765,
+						"name": "Sci-Fi & Fantasy"
+					},
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 3271,
+							"name": "secret organization"
+						},
+						{
+							"id": 4379,
+							"name": "time travel"
+						},
+						{
+							"id": 5455,
+							"name": "time machine"
+						},
+						{
+							"id": 10125,
+							"name": "mad scientist"
+						},
+						{
+							"id": 15285,
+							"name": "spin off"
+						},
+						{
+							"id": 186760,
+							"name": "alternate timeline"
+						},
+						{
+							"id": 210024,
+							"name": "anime"
+						},
+						{
+							"id": 222216,
+							"name": "based on visual novel"
+						},
+						{
+							"id": 298549,
+							"name": "urban fantasy"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt5514358",
+					"tvdb_id": 339268
+				},
+				"networks": [
+					{
+						"id": 614,
+						"name": "TOKYO MX"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "FR",
+							"title": "STEINS GATE ZERO",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Steins;Gate 0",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "Shutainzu Gēto Zero",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "JP",
+							"title": "シュタインズ・ゲートゼロ",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "RU",
+							"title": "Врата Штейна: Ноль",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Steins;Gate Zero",
+							"type": "alternative spelling"
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2018-12-21",
+						"episode_count": 1,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "2018-04-12",
+						"episode_count": 23,
+						"name": "Season 1",
+						"season_number": 1
+					}
+				]
+			}
+		},
+		"season": {
+			"78102/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Valentine's of Crystal Polymorphism -Bittersweet Intermedio-",
+						"air_date": "2018-12-21",
+						"runtime": 24,
+						"id": 1649075
+					}
+				]
+			},
+			"78102/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Missing Link of the Annihilator -Absolute Zero-",
+						"air_date": "2018-04-12",
+						"runtime": 24,
+						"id": 1455462
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Epigraph of the Closed Curve -Closed Epigraph-",
+						"air_date": "2018-04-19",
+						"runtime": 24,
+						"id": 1472856
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Protocol of the Two-sided Gospel -X-day Protocol-",
+						"air_date": "2018-04-25",
+						"runtime": 24,
+						"id": 1477754
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Solitude of the Mournful Flow -A Stray Sheep-",
+						"air_date": "2018-05-03",
+						"runtime": 24,
+						"id": 1479502
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Solitude of the Astigmatism -Entangled Sheep-",
+						"air_date": "2018-05-10",
+						"runtime": 24,
+						"id": 1483572
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Eclipse of Orbital Ordering -The Orbital Eclipse-",
+						"air_date": "2018-05-17",
+						"runtime": 24,
+						"id": 1485150
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Eclipse of Vibronic Transition -Vibronic Transition-",
+						"air_date": "2018-05-23",
+						"runtime": 24,
+						"id": 1485151
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Dual of Antinomy -Antinomic Dual-",
+						"air_date": "2018-05-30",
+						"runtime": 24,
+						"id": 1485152
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Pandora of Eternal Return -Pandora's Box-",
+						"air_date": "2018-06-06",
+						"runtime": 24,
+						"id": 1498633
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Pandora of Provable Existence -Forbidden Cubicle-",
+						"air_date": "2018-06-14",
+						"runtime": 24,
+						"id": 1500380
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Pandora of Forgotten Existence -Sealed Reliquary-",
+						"air_date": "2018-06-21",
+						"runtime": 24,
+						"id": 1505700
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Mother Goose of Mutual Recursion -Recursive Mother Goose-",
+						"air_date": "2018-06-28",
+						"runtime": 24,
+						"id": 1505701
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Mother Goose of Diffractive Recitativo -Diffraction Mother Goose-",
+						"air_date": "2018-07-04",
+						"runtime": 24,
+						"id": 1515486
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Recognition of the Elastic Limit -Presage or Recognize-",
+						"air_date": "2018-07-18",
+						"runtime": 24,
+						"id": 1519883
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Recognition of the Asymptotic Line -Recognize Asymptote-",
+						"air_date": "2018-07-25",
+						"runtime": 24,
+						"id": 1529276
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Altair of the Point at Infinity -Vega and Altair-",
+						"air_date": "2018-08-01",
+						"runtime": 24,
+						"id": 1535232
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "Altair of the Hyperbolic Plane -Beltrami Pseudosphere-",
+						"air_date": "2018-08-08",
+						"runtime": 24,
+						"id": 1536996
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Altair of Translational Symmetry -Translational Symmetry-",
+						"air_date": "2018-08-15",
+						"runtime": 24,
+						"id": 1536997
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Altair of the Cyclic Coordinate -Time-leap Machine-",
+						"air_date": "2018-08-23",
+						"runtime": 24,
+						"id": 1536998
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Rinascimento of the Unwavering Promise -Promised Rinascimento-",
+						"air_date": "2018-09-06",
+						"runtime": 24,
+						"id": 1536999
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Rinascimento of Image Formation -Return of Phoenix-",
+						"air_date": "2018-09-12",
+						"runtime": 24,
+						"id": 1537000
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Rinascimento of Projection -Project Amadeus-",
+						"air_date": "2018-09-19",
+						"runtime": 24,
+						"id": 1554235
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Arclight of the Point at Infinity -Arc-light of the Sky-",
+						"air_date": "2018-09-26",
+						"runtime": 24,
+						"id": 1554236
+					}
+				]
+			}
+		},
+		"episodeGroups": {
+			"78102": {
+				"id": 78102,
+				"results": []
+			}
+		},
+		"seasonEpisodes": {
+			"tt5514358/0": {}
+		},
+		"episodeShow": {},
+		"tvdbEpisodes": {
+			"339268": {
+				"data": {
+					"episodes": [
+						{
+							"id": 6605373,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "境界面上のミッシングリンク(STEINS;GATE #23(β))",
+							"aired": "2015-12-03",
+							"runtime": 25
+						},
+						{
+							"id": 6947967,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": "結晶多形のヴァレンティヌス",
+							"aired": "2018-12-21",
+							"runtime": 25
+						},
+						{
+							"id": 6507441,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "零化域のミッシングリンク",
+							"aired": "2018-04-12",
+							"runtime": 25
+						},
+						{
+							"id": 6647537,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "閉時曲線のエピグラフ",
+							"aired": "2018-04-19",
+							"runtime": 25
+						},
+						{
+							"id": 6647538,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "双対福音のプロトコル",
+							"aired": "2018-04-26",
+							"runtime": 25
+						},
+						{
+							"id": 6647539,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "亡失流転のソリチュード",
+							"aired": "2018-05-03",
+							"runtime": 25
+						},
+						{
+							"id": 6647540,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "非点収差のソリチュード",
+							"aired": "2018-05-10",
+							"runtime": 25
+						},
+						{
+							"id": 6647541,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "軌道秩序のエクリプス",
+							"aired": "2018-05-17",
+							"runtime": 25
+						},
+						{
+							"id": 6647542,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "震電遷移のエクリプス",
+							"aired": "2018-05-24",
+							"runtime": 25
+						},
+						{
+							"id": 6647543,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "二律背反のデュアル",
+							"aired": "2018-05-31",
+							"runtime": 25
+						},
+						{
+							"id": 6647544,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "永却回帰のパンドラ",
+							"aired": "2018-06-07",
+							"runtime": 25
+						},
+						{
+							"id": 6647546,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "存在証明のパンドラ",
+							"aired": "2018-06-14",
+							"runtime": 25
+						},
+						{
+							"id": 6647547,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "存在忘却のパンドラ",
+							"aired": "2018-06-21",
+							"runtime": 25
+						},
+						{
+							"id": 6647549,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "相互再帰のマザーグース",
+							"aired": "2018-06-28",
+							"runtime": 25
+						},
+						{
+							"id": 6647550,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "回折叙唱のマザーグース",
+							"aired": "2018-07-05",
+							"runtime": 25
+						},
+						{
+							"id": 6647551,
+							"seasonNumber": 1,
+							"number": 14,
+							"name": "弾性限界のリコグナイズ",
+							"aired": "2018-07-19",
+							"runtime": 25
+						},
+						{
+							"id": 6647552,
+							"seasonNumber": 1,
+							"number": 15,
+							"name": "漸近線のリコグナイズ",
+							"aired": "2018-07-26",
+							"runtime": 25
+						},
+						{
+							"id": 6647553,
+							"seasonNumber": 1,
+							"number": 16,
+							"name": "無限遠点のアルタイル",
+							"aired": "2018-08-02",
+							"runtime": 25
+						},
+						{
+							"id": 6647554,
+							"seasonNumber": 1,
+							"number": 17,
+							"name": "双曲平面のアルタイル",
+							"aired": "2018-08-09",
+							"runtime": 25
+						},
+						{
+							"id": 6647555,
+							"seasonNumber": 1,
+							"number": 18,
+							"name": "並進対称のアルタイル",
+							"aired": "2018-08-16",
+							"runtime": 25
+						},
+						{
+							"id": 6647556,
+							"seasonNumber": 1,
+							"number": 19,
+							"name": "循環座標のアルタイル",
+							"aired": "2018-08-23",
+							"runtime": 25
+						},
+						{
+							"id": 6647557,
+							"seasonNumber": 1,
+							"number": 20,
+							"name": "盟誓のリナシメント",
+							"aired": "2018-09-06",
+							"runtime": 25
+						},
+						{
+							"id": 6647558,
+							"seasonNumber": 1,
+							"number": 21,
+							"name": "結像のリナシメント",
+							"aired": "2018-09-13",
+							"runtime": 25
+						},
+						{
+							"id": 6647559,
+							"seasonNumber": 1,
+							"number": 22,
+							"name": "投企のリナシメント",
+							"aired": "2018-09-20",
+							"runtime": 25
+						},
+						{
+							"id": 6647560,
+							"seasonNumber": 1,
+							"number": 23,
+							"name": "無限遠点のアークライト",
+							"aired": "2018-09-27",
+							"runtime": 25
+						}
+					]
+				}
+			}
+		},
+		"searchTv": {
+			"SteinsGate 0": {
+				"results": [
+					{
+						"id": 78102,
+						"name": "Steins;Gate 0",
+						"original_name": "シュタインズ・ゲート ゼロ",
+						"first_air_date": "2018-04-12"
+					}
+				]
+			}
+		},
+		"identify": {
+			"[MiniMTBB].SteinsGate.0.S1.BD.1080p": null
+		},
+		"anime": {
+			"fribb": [
+				{
+					"type": "TV",
+					"anidb_id": 11167,
+					"anilist_id": 21127,
+					"animecountdown_id": 484356,
+					"animenewsnetwork_id": 20446,
+					"anime-planet_id": "steins-gate-0",
+					"anisearch_id": 10345,
+					"imdb_id": ["tt5514358"],
+					"kitsu_id": 10788,
+					"livechart_id": 1489,
+					"mal_id": 30484,
+					"simkl_id": 484356,
+					"themoviedb_id": {
+						"tv": 78102
+					},
+					"tvdb_id": 339268,
+					"season": {
+						"tvdb": 1,
+						"tmdb": 1
+					}
+				}
+			],
+			"titles": [
+				{
+					"anidbId": 11167,
+					"names": [
+						"Steins;Gate 0",
+						"Steins;Gate 0",
+						"بوابة;شتاينز 0",
+						"슈타인즈;게이트 0",
+						"命运石之门 0",
+						"命運石之門 0",
+						"sg0",
+						"s;g0",
+						"שטיינס;גייט 0",
+						"Steins;Gate Zero",
+						"シュタインズ・ゲート ゼロ",
+						"シュタインズ・ゲート0",
+						"Врата Штейна 0",
+						"Steins Gate 0"
+					]
+				},
+				{
+					"anidbId": 11167,
+					"names": [
+						"Steins;Gate 0",
+						"Steins Gate 0",
+						"Steins;Gate Zero",
+						"Steins;Gate0",
+						"s;g0",
+						"sg0",
+						"Врата Штейна 0",
+						"שטיינס;גייט 0",
+						"بوابة;شتاينز 0",
+						"シュタインズ・ゲート ゼロ",
+						"シュタインズ・ゲート0",
+						"命运石之门 0",
+						"命运石之门0",
+						"命運石之門 0",
+						"슈타인즈;게이트 0"
+					]
+				}
+			]
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg-usenet on fun (NZB), 2026-11-10: the .zurgtorrent's name and every video file with its folder and probed length, an archive member by its path inside the archive, as zurg asks (no hash: a Usenet copy; no IMDb id)",
+			"request": {
+				"name": "[MiniMTBB].SteinsGate.0.S1.BD.1080p",
+				"imdbId": null,
+				"files": [
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 01 (BD 1080p) [BC95C630].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 02 (BD 1080p) [2D9B456B].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 03 (BD 1080p) [3D826883].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 04 (BD 1080p) [404E27A7].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 05 (BD 1080p) [A3596131].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 06 (BD 1080p) [23D01B94].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 07 (BD 1080p) [04B491B4].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 08 (BD 1080p) [A07D787C].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 09 (BD 1080p) [6D2340BC].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 10 (BD 1080p) [1312973F].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 11 (BD 1080p) [7EA33AF7].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 12 (BD 1080p) [02674863].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 13 (BD 1080p) [7D893557].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 14 (BD 1080p) [D1E36E35].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 15 (BD 1080p) [2718B672].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 16 (BD 1080p) [8A02B154].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 17 (BD 1080p) [716E3E66].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 18 (BD 1080p) [5087B0B2].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 19 (BD 1080p) [80FD2F49].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 20 (BD 1080p) [B838EE6E].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 21 (BD 1080p) [016507BF].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 22 (BD 1080p) [798B327D].mkv",
+						"folder": "",
+						"duration": 1436.112
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 23 (BD 1080p) [35C6BD74].mkv",
+						"folder": "",
+						"duration": 1456.132
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - S00E01 - Episode 23β (BD 1080p) [CFC05518].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - S00E02 - Valentine's of Crystal Polymorphism (BD 1080p) [2D632524].mkv",
+						"folder": ""
+					}
+				],
+				"hash": null
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt5514358",
+				"tmdbId": 78102,
+				"files": [
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 01 (BD 1080p) [BC95C630].mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1455462
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 02 (BD 1080p) [2D9B456B].mkv",
+						"season": 1,
+						"episode": 2,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1472856
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 03 (BD 1080p) [3D826883].mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1477754
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 04 (BD 1080p) [404E27A7].mkv",
+						"season": 1,
+						"episode": 4,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1479502
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 05 (BD 1080p) [A3596131].mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1483572
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 06 (BD 1080p) [23D01B94].mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1485150
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 07 (BD 1080p) [04B491B4].mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1485151
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 08 (BD 1080p) [A07D787C].mkv",
+						"season": 1,
+						"episode": 8,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1485152
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 09 (BD 1080p) [6D2340BC].mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1498633
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 10 (BD 1080p) [1312973F].mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1500380
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 11 (BD 1080p) [7EA33AF7].mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1505700
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 12 (BD 1080p) [02674863].mkv",
+						"season": 1,
+						"episode": 12,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1505701
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 13 (BD 1080p) [7D893557].mkv",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1515486
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 14 (BD 1080p) [D1E36E35].mkv",
+						"season": 1,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1519883
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 15 (BD 1080p) [2718B672].mkv",
+						"season": 1,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1529276
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 16 (BD 1080p) [8A02B154].mkv",
+						"season": 1,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1535232
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 17 (BD 1080p) [716E3E66].mkv",
+						"season": 1,
+						"episode": 17,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1536996
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 18 (BD 1080p) [5087B0B2].mkv",
+						"season": 1,
+						"episode": 18,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1536997
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 19 (BD 1080p) [80FD2F49].mkv",
+						"season": 1,
+						"episode": 19,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1536998
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 20 (BD 1080p) [B838EE6E].mkv",
+						"season": 1,
+						"episode": 20,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1536999
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 21 (BD 1080p) [016507BF].mkv",
+						"season": 1,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1537000
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 22 (BD 1080p) [798B327D].mkv",
+						"season": 1,
+						"episode": 22,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1554235
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - 23 (BD 1080p) [35C6BD74].mkv",
+						"season": 1,
+						"episode": 23,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1554236
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - S00E01 - Episode 23β (BD 1080p) [CFC05518].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[MiniMTBB] Steins;Gate 0 - S00E02 - Valentine's of Crystal Polymorphism (BD 1080p) [2D632524].mkv",
+						"season": 0,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1649075
+					}
+				]
+			}
+		}
+	]
+}

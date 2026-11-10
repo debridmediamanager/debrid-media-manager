@@ -58,6 +58,7 @@ import byRuntime from '@/test/fixtures/placement/shows-told-apart-by-runtime.jso
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import specialsByTitle from '@/test/fixtures/placement/specials-by-title.json';
 import spellingVariants from '@/test/fixtures/placement/spelling-variants.json';
+import subtitledSpecials from '@/test/fixtures/placement/subtitled-specials.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import titleEpisodes from '@/test/fixtures/placement/title-episode-numbers.json';
 import titleParts from '@/test/fixtures/placement/title-parts.json';
@@ -2280,6 +2281,38 @@ describe('an OVA named by its show and season alone', () => {
 		expect(ovas('OVA1')).toEqual([0, 1]);
 		expect(ovas('OVA2')).toEqual([0, 2]);
 		expect(ovas('OAD')).toEqual([0, 3]);
+	});
+});
+
+describe('a special titled before the subtitle TMDB gives it', () => {
+	// zurg-usenet on fun (2026-11-10): `[MiniMTBB].SteinsGate.0.S1.BD.1080p` (see the fixtures README)
+	it("places it on TMDB's special of that title, and no file by a number TMDB's list lacks", async () => {
+		const c = subtitledSpecials.cases[0];
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true, shows: true }],
+			Infinity,
+			{
+				...recordedSources(subtitledSpecials.answers),
+				anime: async () =>
+					buildAnimeIndex(
+						buildFranchiseIndex(
+							subtitledSpecials.answers.anime.fribb as FribbAnimeEntry[]
+						),
+						subtitledSpecials.answers.anime.titles
+					),
+			},
+			async (list) =>
+				list.map(({ name }) => (subtitledSpecials.answers.identify as any)[name] ?? null)
+		);
+		expect(releases[0]).toEqual(c.expect);
+		const at = (part: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(part))!;
+			return [f.season, f.episode];
+		};
+		// TMDB's S0E1 "Valentine's of Crystal Polymorphism -Bittersweet Intermedio-", numbered S00E02
+		expect(at("S00E02 - Valentine's of Crystal Polymorphism")).toEqual([0, 1]);
+		// the original series' Episode 23β, which Steins;Gate 0's specials do not list, is not S0E1
+		expect(at('S00E01 - Episode 23β')).toEqual([null, null]);
 	});
 });
 

@@ -1239,10 +1239,20 @@ function titled<T extends { name: string }>(
 		const usable = name.replace(/ /g, '').length >= 3 && !GENERIC.test(name);
 		// spacing aside (`Bulletproof.Water` is "Bullet Proof Water"), a part TMDB numbers
 		// that the file does not (`Pirate.Special` is "Pirate Special (1)"), and a leading
-		// article or a part written out on either side
+		// article or a part written out on either side; and, asked for specials, the title
+		// before a subtitle TMDB sets between dashes or tildes: Steins;Gate 0's `Valentine's of
+		// Crystal Polymorphism` is its S0E1 "Valentine's of Crystal Polymorphism -Bittersweet
+		// Intermedio-"
+		const head = SUBTITLED.exec(item.name)?.[1];
+		const short = head ? words(head) : [];
 		return usable
-			? [name.replace(/ /g, ''), name.replace(PART, '').replace(/ /g, ''), plain(name)]
-			: ['', '', ''];
+			? [
+					name.replace(/ /g, ''),
+					name.replace(PART, '').replace(/ /g, ''),
+					plain(name),
+					short.length >= 3 ? short.join('') : '',
+				]
+			: ['', '', '', ''];
 	});
 	// a first segment cut before the part its whole title numbers names no other part: Freakazoid's
 	// `The Chip (2)` is not TMDB's "The Chip: Part 1"
@@ -1362,6 +1372,7 @@ export function spelledAlike<T extends { name: string }>(title: string, candidat
 }
 
 const PART = / (?:part |pt )?\d{1,2}$/;
+const SUBTITLED = /^(.*?\S)\s+([-~～])[^-~～]+\2\s*$/;
 const SPELLED: Record<string, string> = { one: '1', two: '2', three: '3', four: '4', five: '5' };
 /**
  * A title without its leading article and with its part as a bare number: TMDB's TMNT S4E19
@@ -1568,7 +1579,8 @@ async function byName(
 			listed.map((row) => ({ ...row, season: season! }))
 		));
 	if (run) return run;
-	const inSeason = listed && titled(title, listed);
+	// a special by the title before its subtitle too, within the specials alone
+	const inSeason = listed && titled(title, listed, season === 0 ? [0, 1, 2, 3] : undefined);
 	if (inSeason) return [season!, inSeason.episode];
 	const others = await Promise.all(
 		show.seasons
