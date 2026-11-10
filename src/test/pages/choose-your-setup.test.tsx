@@ -1013,6 +1013,19 @@ describe('choose your setup page', () => {
 		).not.toHaveAccessibleName(/Select all that apply/);
 	});
 
+	it('sizes the needs cards, which have no description, to their label', () => {
+		reachStremioRecommendation();
+		editAnswer('Anything else that matters?');
+
+		const needs = within(
+			screen.getByRole('group', { name: 'Anything else that matters?' })
+		).getAllByRole('button');
+		expect(needs).toHaveLength(5);
+		for (const card of needs) expect(card).not.toHaveClass('min-h-20');
+		fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+		expect(screen.getByRole('radio', { name: /A managed library/ })).toHaveClass('min-h-20');
+	});
+
 	it('toggles cards with Enter and Space and reaches an unavailable card with Tab', async () => {
 		const user = userEvent.setup();
 		render(<ChooseYourSetupPage />);

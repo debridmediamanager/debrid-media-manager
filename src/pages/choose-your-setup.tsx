@@ -108,7 +108,8 @@ function ChoiceCard({
 				if (disabled) return;
 				onClick();
 			}}
-			className={`flex min-h-20 w-full flex-col items-start gap-1 rounded border-2 px-4 py-3 text-left transition-colors focus:ring-2 focus:ring-cyan-300 focus:outline-hidden aria-disabled:cursor-not-allowed aria-disabled:opacity-65 ${selectedClass(selected)}`}
+			// A card without a description is only as tall as its label.
+			className={`flex ${description ? 'min-h-20' : ''} w-full flex-col items-start gap-1 rounded border-2 px-4 py-3 text-left transition-colors focus:ring-2 focus:ring-cyan-300 focus:outline-hidden aria-disabled:cursor-not-allowed aria-disabled:opacity-65 ${selectedClass(selected)}`}
 		>
 			<span className="flex w-full items-start justify-between gap-3 font-medium">
 				<span>{label}</span>
