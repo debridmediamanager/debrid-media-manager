@@ -1,0 +1,6391 @@
+{
+	"answers": {
+		"episodeShow": {
+			"tt0600758": "tt0115200",
+			"tt0198181": null
+		},
+		"find": {
+			"tt0115200": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 537,
+						"name": "Hey Arnold!",
+						"first_air_date": "1996-10-07"
+					}
+				],
+				"tv_episode_results": []
+			},
+			"tt0198181": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 2330,
+						"name": "Mickey Mouse Works",
+						"first_air_date": "1999-05-01"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"537": {
+				"id": 537,
+				"name": "Hey Arnold!",
+				"original_name": "Hey Arnold!",
+				"first_air_date": "1996-10-07",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 18,
+						"name": "Drama"
+					},
+					{
+						"id": 10751,
+						"name": "Family"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"id": 6054,
+							"name": "friendship"
+						},
+						{
+							"id": 8102,
+							"name": "elementary school"
+						},
+						{
+							"id": 164246,
+							"name": "nostalgic"
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0115200",
+					"tvdb_id": 72005
+				},
+				"networks": [
+					{
+						"id": 13,
+						"name": "Nickelodeon"
+					}
+				],
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"air_date": "1994-06-16",
+						"episode_count": 1,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "1996-10-07",
+						"episode_count": 38,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "1997-09-22",
+						"episode_count": 37,
+						"name": "Season 2",
+						"season_number": 2
+					},
+					{
+						"air_date": "1998-08-31",
+						"episode_count": 38,
+						"name": "Season 3",
+						"season_number": 3
+					},
+					{
+						"air_date": "1999-03-10",
+						"episode_count": 31,
+						"name": "Season 4",
+						"season_number": 4
+					},
+					{
+						"air_date": "2001-03-04",
+						"episode_count": 42,
+						"name": "Season 5",
+						"season_number": 5
+					}
+				]
+			},
+			"2330": {
+				"id": 2330,
+				"name": "Mickey Mouse Works",
+				"original_name": "Mickey Mouse Works",
+				"first_air_date": "1999-05-01",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 35,
+						"name": "Comedy"
+					},
+					{
+						"id": 10762,
+						"name": "Kids"
+					}
+				],
+				"keywords": {
+					"results": []
+				},
+				"external_ids": {
+					"imdb_id": "tt0198181",
+					"tvdb_id": 70958
+				},
+				"networks": [
+					{
+						"id": 2,
+						"name": "ABC"
+					}
+				],
+				"alternative_titles": {
+					"results": []
+				},
+				"seasons": [
+					{
+						"air_date": "1999-05-01",
+						"episode_count": 36,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "1999-09-11",
+						"episode_count": 53,
+						"name": "Season 2",
+						"season_number": 2
+					},
+					{
+						"air_date": "2000-09-09",
+						"episode_count": 16,
+						"name": "Season 3",
+						"season_number": 3
+					}
+				]
+			}
+		},
+		"tvdbEpisodes": {
+			"70958": {
+				"data": {
+					"episodes": [
+						{
+							"id": 28881,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "Mickey to the Rescue: Train Tracks",
+							"aired": "1999-05-01",
+							"runtime": 2
+						},
+						{
+							"id": 28883,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "How to Be a Waiter",
+							"aired": "1999-05-01",
+							"runtime": 6
+						},
+						{
+							"id": 28882,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "Maestro Minnie: William Tell Overture",
+							"aired": "1999-05-01",
+							"runtime": 2
+						},
+						{
+							"id": 28884,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "Donald's Failed Fourth",
+							"aired": "1999-05-01",
+							"runtime": 6
+						},
+						{
+							"id": 28885,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "Roller Coaster Painters",
+							"aired": "1999-05-01",
+							"runtime": 6
+						},
+						{
+							"id": 28886,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "Goofy's Extreme Sports: Skating the Half Pipe",
+							"aired": "1999-05-08",
+							"runtime": 2
+						},
+						{
+							"id": 28887,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "Mickey's New Car",
+							"aired": "1999-05-08",
+							"runtime": 7
+						},
+						{
+							"id": 28888,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "Pluto's Penthouse Sweet",
+							"aired": "1999-05-08",
+							"runtime": 6
+						},
+						{
+							"id": 5111488,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "Donald's Shell Shots",
+							"aired": "1999-05-08",
+							"runtime": 6
+						},
+						{
+							"id": 7329792,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "Donald's Dynamite: Bowling Alley",
+							"aired": "1999-05-15",
+							"runtime": 2
+						},
+						{
+							"id": 5111489,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "Mickey's Airplane Kit",
+							"aired": "1999-05-15",
+							"runtime": 6
+						},
+						{
+							"id": 7365217,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "Von Drake's House of Genius: Time Reverser",
+							"aired": "1999-05-15",
+							"runtime": 2
+						},
+						{
+							"id": 7365221,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "Turkey Catchers",
+							"aired": "1999-05-15",
+							"runtime": 6
+						},
+						{
+							"id": 7365222,
+							"seasonNumber": 1,
+							"number": 14,
+							"name": "Dance of the Goofys",
+							"aired": "1999-05-15",
+							"runtime": 6
+						},
+						{
+							"id": 7365223,
+							"seasonNumber": 1,
+							"number": 15,
+							"name": "Pluto Gets the Paper: Spaceship",
+							"aired": "1999-05-22",
+							"runtime": 2
+						},
+						{
+							"id": 7373702,
+							"seasonNumber": 1,
+							"number": 16,
+							"name": "Donald's Rocket Ruckus",
+							"aired": "1999-05-22",
+							"runtime": 6
+						},
+						{
+							"id": 7373707,
+							"seasonNumber": 1,
+							"number": 17,
+							"name": "Goofy's Extreme Sports: Paracycling",
+							"aired": "1999-05-22",
+							"runtime": 2
+						},
+						{
+							"id": 7373711,
+							"seasonNumber": 1,
+							"number": 18,
+							"name": "Organ Donors",
+							"aired": "1999-05-22",
+							"runtime": 6
+						},
+						{
+							"id": 7373716,
+							"seasonNumber": 1,
+							"number": 19,
+							"name": "Mickey's Mistake",
+							"aired": "1999-05-22",
+							"runtime": 6
+						},
+						{
+							"id": 7373722,
+							"seasonNumber": 1,
+							"number": 20,
+							"name": "Maestro Minnie: Hungarian Rhapsody No. 6",
+							"aired": "1999-05-29",
+							"runtime": 2
+						},
+						{
+							"id": 7373726,
+							"seasonNumber": 1,
+							"number": 21,
+							"name": "How to Be a Spy",
+							"aired": "1999-05-29",
+							"runtime": 6
+						},
+						{
+							"id": 7373734,
+							"seasonNumber": 1,
+							"number": 22,
+							"name": "Donald's Valentine Dollar",
+							"aired": "1999-05-29",
+							"runtime": 6
+						},
+						{
+							"id": 7373741,
+							"seasonNumber": 1,
+							"number": 23,
+							"name": "Pluto's Kittens",
+							"aired": "1999-05-29",
+							"runtime": 7
+						},
+						{
+							"id": 7373746,
+							"seasonNumber": 1,
+							"number": 24,
+							"name": "Von Drake's House of Genius: Remote Controlled Laser Lawn Mower",
+							"aired": "1999-06-05",
+							"runtime": 2
+						},
+						{
+							"id": 7373752,
+							"seasonNumber": 1,
+							"number": 25,
+							"name": "Pluto Vs. the Watchdog",
+							"aired": "1999-06-05",
+							"runtime": 6
+						},
+						{
+							"id": 7373756,
+							"seasonNumber": 1,
+							"number": 26,
+							"name": "Donald's Dynamite: Opera Box",
+							"aired": "1999-06-05",
+							"runtime": 2
+						},
+						{
+							"id": 7373759,
+							"seasonNumber": 1,
+							"number": 27,
+							"name": "Around the World In Eighty Days",
+							"aired": "1999-06-05",
+							"runtime": 12
+						},
+						{
+							"id": 7373765,
+							"seasonNumber": 1,
+							"number": 28,
+							"name": "Donald's Dynamite: Fishing",
+							"aired": "1999-06-12",
+							"runtime": 2
+						},
+						{
+							"id": 7373767,
+							"seasonNumber": 1,
+							"number": 29,
+							"name": "Purple Pluto",
+							"aired": "1999-06-12",
+							"runtime": 6
+						},
+						{
+							"id": 7373771,
+							"seasonNumber": 1,
+							"number": 30,
+							"name": "Von Drake's House of Genius: Money Increaser",
+							"aired": "1999-06-12",
+							"runtime": 2
+						},
+						{
+							"id": 7373775,
+							"seasonNumber": 1,
+							"number": 31,
+							"name": "Sandwich Makers",
+							"aired": "1999-06-12",
+							"runtime": 6
+						},
+						{
+							"id": 7373778,
+							"seasonNumber": 1,
+							"number": 32,
+							"name": "Pluto's Arrow Error",
+							"aired": "1999-06-12",
+							"runtime": 6
+						},
+						{
+							"id": 7373782,
+							"seasonNumber": 1,
+							"number": 33,
+							"name": "Mickey to the Rescue: Staircase",
+							"aired": "1999-06-19",
+							"runtime": 2
+						},
+						{
+							"id": 7373787,
+							"seasonNumber": 1,
+							"number": 34,
+							"name": "Pluto Runs Away",
+							"aired": "1999-06-19",
+							"runtime": 6
+						},
+						{
+							"id": 7373790,
+							"seasonNumber": 1,
+							"number": 35,
+							"name": "Daisy Visits Minnie",
+							"aired": "1999-06-19",
+							"runtime": 6
+						},
+						{
+							"id": 7373794,
+							"seasonNumber": 1,
+							"number": 36,
+							"name": "How to Ride a Bicycle",
+							"aired": "1999-06-19",
+							"runtime": 7
+						},
+						{
+							"id": 7373801,
+							"seasonNumber": 1,
+							"number": 37,
+							"name": "Goofy's Extreme Sports: Rock Climbing",
+							"aired": "1999-09-11",
+							"runtime": 2
+						},
+						{
+							"id": 7373804,
+							"seasonNumber": 1,
+							"number": 38,
+							"name": "Hansel and Gretel",
+							"aired": "1999-09-11",
+							"runtime": 6
+						},
+						{
+							"id": 7373806,
+							"seasonNumber": 1,
+							"number": 39,
+							"name": "Donald On Ice",
+							"aired": "1999-09-11",
+							"runtime": 6
+						},
+						{
+							"id": 7373809,
+							"seasonNumber": 1,
+							"number": 40,
+							"name": "Mickey's Mechanical House",
+							"aired": "1999-09-11",
+							"runtime": 7
+						},
+						{
+							"id": 7373815,
+							"seasonNumber": 1,
+							"number": 41,
+							"name": "Pluto Gets the Paper: Street Cleaner",
+							"aired": "1999-09-18",
+							"runtime": 2
+						},
+						{
+							"id": 7373820,
+							"seasonNumber": 1,
+							"number": 42,
+							"name": "Donald's Dinner Date",
+							"aired": "1999-09-18",
+							"runtime": 6
+						},
+						{
+							"id": 7373825,
+							"seasonNumber": 1,
+							"number": 43,
+							"name": "Maestro Minnie: Brahms Lullabye",
+							"aired": "1999-09-18",
+							"runtime": 2
+						},
+						{
+							"id": 7373830,
+							"seasonNumber": 1,
+							"number": 44,
+							"name": "Hydro Squirter",
+							"aired": "1999-09-18",
+							"runtime": 6
+						},
+						{
+							"id": 7373835,
+							"seasonNumber": 1,
+							"number": 45,
+							"name": "Mickey's Piano Lesson",
+							"aired": "1999-09-18",
+							"runtime": 6
+						},
+						{
+							"id": 7373841,
+							"seasonNumber": 1,
+							"number": 46,
+							"name": "Mickey to the Rescue: Cage and Cannons",
+							"aired": "1999-09-25",
+							"runtime": 2
+						},
+						{
+							"id": 7373849,
+							"seasonNumber": 1,
+							"number": 47,
+							"name": "Mickey's Remedy",
+							"aired": "1999-09-25",
+							"runtime": 6
+						},
+						{
+							"id": 7373854,
+							"seasonNumber": 1,
+							"number": 48,
+							"name": "Goofy's Extreme Sports: Wakeboarding",
+							"aired": "1999-09-25",
+							"runtime": 2
+						},
+						{
+							"id": 7373858,
+							"seasonNumber": 1,
+							"number": 49,
+							"name": "A Midsummer Night's Dream",
+							"aired": "1999-09-25",
+							"runtime": 12
+						},
+						{
+							"id": 7373866,
+							"seasonNumber": 1,
+							"number": 50,
+							"name": "Pluto Gets the Paper: Bubble Gum",
+							"aired": "1999-10-02",
+							"runtime": 2
+						},
+						{
+							"id": 7373871,
+							"seasonNumber": 1,
+							"number": 51,
+							"name": "Mickey Tries to Cook",
+							"aired": "1999-10-02",
+							"runtime": 6
+						},
+						{
+							"id": 7373875,
+							"seasonNumber": 1,
+							"number": 52,
+							"name": "Donald and the Big Nut",
+							"aired": "1999-10-02",
+							"runtime": 6
+						},
+						{
+							"id": 7373878,
+							"seasonNumber": 1,
+							"number": 53,
+							"name": "Topsy Turvy Town",
+							"aired": "1999-10-02",
+							"runtime": 7
+						},
+						{
+							"id": 7373882,
+							"seasonNumber": 1,
+							"number": 54,
+							"name": "Von Drake's House of Genius: Teledinger",
+							"aired": "1999-10-30",
+							"runtime": 2
+						},
+						{
+							"id": 7373885,
+							"seasonNumber": 1,
+							"number": 55,
+							"name": "How to Haunt a House",
+							"aired": "1999-10-30",
+							"runtime": 6
+						},
+						{
+							"id": 7373894,
+							"seasonNumber": 1,
+							"number": 56,
+							"name": "Maestro Minnie: Flight of the Bumblebee",
+							"aired": "1999-10-30",
+							"runtime": 2
+						},
+						{
+							"id": 7373898,
+							"seasonNumber": 1,
+							"number": 57,
+							"name": "The Nutcracker",
+							"aired": "1999-10-30",
+							"runtime": 12
+						},
+						{
+							"id": 28889,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "Pluto Gets the Paper: Vending Machine",
+							"aired": "1999-11-06",
+							"runtime": 2
+						},
+						{
+							"id": 28890,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "Donald's Grizzly Guest",
+							"aired": "1999-11-06",
+							"runtime": 6
+						},
+						{
+							"id": 28891,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "Donald's Dynamite: Snowman",
+							"aired": "1999-11-06",
+							"runtime": 2
+						},
+						{
+							"id": 28893,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "Mickey Foils the Phantom Blot",
+							"aired": "1999-11-06",
+							"runtime": 12
+						},
+						{
+							"id": 28894,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "Daisy's Road Trip",
+							"aired": "1999-12-04",
+							"runtime": 7
+						},
+						{
+							"id": 28895,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "Goofy's Big Kitty",
+							"aired": "1999-12-04",
+							"runtime": 6
+						},
+						{
+							"id": 28896,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "Relaxing with Von Drake",
+							"aired": "1999-12-04",
+							"runtime": 7
+						},
+						{
+							"id": 28897,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "How to Be a Baseball Fan",
+							"aired": "2000-01-22",
+							"runtime": 7
+						},
+						{
+							"id": 28898,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "Locksmiths",
+							"aired": "2000-01-22",
+							"runtime": 6
+						},
+						{
+							"id": 28899,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "Minnie Takes Care of Pluto",
+							"aired": "2000-01-22",
+							"runtime": 7
+						},
+						{
+							"id": 28901,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "Donald's Dynamite: Magic Act",
+							"aired": "2000-02-19",
+							"runtime": 2
+						},
+						{
+							"id": 28902,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "Survival of the Woodchucks",
+							"aired": "2000-02-19",
+							"runtime": 6
+						},
+						{
+							"id": 7374037,
+							"seasonNumber": 2,
+							"number": 13,
+							"name": "Mickey's Rival Returns",
+							"aired": "2000-02-19",
+							"runtime": 6
+						},
+						{
+							"id": 7378268,
+							"seasonNumber": 2,
+							"number": 14,
+							"name": "Mickey and the Seagull",
+							"aired": "2000-02-19",
+							"runtime": 7
+						},
+						{
+							"id": 7378269,
+							"seasonNumber": 2,
+							"number": 15,
+							"name": "Goofy's Radio",
+							"aired": "2000-03-11",
+							"runtime": 7
+						},
+						{
+							"id": 7379052,
+							"seasonNumber": 2,
+							"number": 16,
+							"name": "Car Washers",
+							"aired": "2000-03-11",
+							"runtime": 6
+						},
+						{
+							"id": 7379054,
+							"seasonNumber": 2,
+							"number": 17,
+							"name": "Pluto's Seal Deal",
+							"aired": "2000-03-11",
+							"runtime": 7
+						},
+						{
+							"id": 7379057,
+							"seasonNumber": 2,
+							"number": 18,
+							"name": "Mickey's Mixed Nuts",
+							"aired": "2000-04-15",
+							"runtime": 7
+						},
+						{
+							"id": 7379060,
+							"seasonNumber": 2,
+							"number": 19,
+							"name": "Goofy's Extreme Sports: Shark Feeding",
+							"aired": "2000-04-15",
+							"runtime": 2
+						},
+						{
+							"id": 7379062,
+							"seasonNumber": 2,
+							"number": 20,
+							"name": "Mickey's Mountain",
+							"aired": "2000-04-15",
+							"runtime": 6
+						},
+						{
+							"id": 7379066,
+							"seasonNumber": 2,
+							"number": 21,
+							"name": "computer.don",
+							"aired": "2000-04-15",
+							"runtime": 6
+						},
+						{
+							"id": 7379070,
+							"seasonNumber": 2,
+							"number": 22,
+							"name": "Donald's Halloween Scare",
+							"aired": "2000-05-20",
+							"runtime": 7
+						},
+						{
+							"id": 7379073,
+							"seasonNumber": 2,
+							"number": 23,
+							"name": "Donald's Lighthouse",
+							"aired": "2000-05-20",
+							"runtime": 6
+						},
+						{
+							"id": 7379076,
+							"seasonNumber": 2,
+							"number": 24,
+							"name": "How to Take Care of Your Yard",
+							"aired": "2000-05-20",
+							"runtime": 7
+						},
+						{
+							"id": 7379082,
+							"seasonNumber": 2,
+							"number": 25,
+							"name": "Pluto Gets the Paper: Mortimer",
+							"aired": "2000-06-10",
+							"runtime": 2
+						},
+						{
+							"id": 7379087,
+							"seasonNumber": 2,
+							"number": 26,
+							"name": "Minnie Visits Daisy",
+							"aired": "2000-06-10",
+							"runtime": 6
+						},
+						{
+							"id": 7379094,
+							"seasonNumber": 2,
+							"number": 27,
+							"name": "How to Wash Dishes",
+							"aired": "2000-06-10",
+							"runtime": 6
+						},
+						{
+							"id": 7379108,
+							"seasonNumber": 2,
+							"number": 28,
+							"name": "Domesticated Donald",
+							"aired": "2000-06-10",
+							"runtime": 7
+						},
+						{
+							"id": 7379113,
+							"seasonNumber": 2,
+							"number": 29,
+							"name": "Mickey's Mix-Up",
+							"aired": "2000-09-16",
+							"runtime": 6
+						},
+						{
+							"id": 7379114,
+							"seasonNumber": 2,
+							"number": 30,
+							"name": "Whitewater Donald",
+							"aired": "2000-09-16",
+							"runtime": 7
+						},
+						{
+							"id": 7379115,
+							"seasonNumber": 2,
+							"number": 31,
+							"name": "Mickey's Christmas Chaos",
+							"aired": "2000-09-16",
+							"runtime": 7
+						},
+						{
+							"id": 7379119,
+							"seasonNumber": 2,
+							"number": 32,
+							"name": "Donald's Fish Fry",
+							"aired": "2000-10-21",
+							"runtime": 7
+						},
+						{
+							"id": 7379125,
+							"seasonNumber": 2,
+							"number": 33,
+							"name": "Presto Pluto",
+							"aired": "2000-10-21",
+							"runtime": 6
+						},
+						{
+							"id": 7379129,
+							"seasonNumber": 2,
+							"number": 34,
+							"name": "Mickey's Cabin",
+							"aired": "2000-10-21",
+							"runtime": 7
+						},
+						{
+							"id": 7379187,
+							"seasonNumber": 2,
+							"number": 35,
+							"name": "Pluto Gets the Paper: Vending Machine",
+							"aired": "2000-11-18",
+							"runtime": 2
+						},
+						{
+							"id": 7379193,
+							"seasonNumber": 2,
+							"number": 36,
+							"name": "Mickey's Answering Service",
+							"aired": "2000-11-18",
+							"runtime": 6
+						},
+						{
+							"id": 7379197,
+							"seasonNumber": 2,
+							"number": 37,
+							"name": "Pluto's Magic Paws",
+							"aired": "2000-11-18",
+							"runtime": 6
+						},
+						{
+							"id": 7379200,
+							"seasonNumber": 2,
+							"number": 38,
+							"name": "Mickey's Big Break",
+							"aired": "2000-11-18",
+							"runtime": 7
+						},
+						{
+							"id": 7379203,
+							"seasonNumber": 2,
+							"number": 39,
+							"name": "Bird Brained Donald",
+							"aired": "2000-12-16",
+							"runtime": 7
+						},
+						{
+							"id": 7379209,
+							"seasonNumber": 2,
+							"number": 40,
+							"name": "How to Be a Gentleman",
+							"aired": "2000-12-16",
+							"runtime": 6
+						},
+						{
+							"id": 7379211,
+							"seasonNumber": 2,
+							"number": 41,
+							"name": "Donald's Pool",
+							"aired": "2000-12-16",
+							"runtime": 7
+						}
+					]
+				}
+			},
+			"72005": {
+				"data": {
+					"episodes": [
+						{
+							"id": 660031,
+							"seasonNumber": 0,
+							"number": 1,
+							"name": "The Lost Pilot",
+							"aired": "1994-07-16",
+							"runtime": 11
+						},
+						{
+							"id": 5628847,
+							"seasonNumber": 0,
+							"number": 2,
+							"name": "School Play",
+							"aired": "1999-03-08",
+							"runtime": 20
+						},
+						{
+							"id": 5629079,
+							"seasonNumber": 0,
+							"number": 3,
+							"name": "Parents Day",
+							"aired": "2000-05-10",
+							"runtime": 20
+						},
+						{
+							"id": 5629094,
+							"seasonNumber": 0,
+							"number": 4,
+							"name": "April Fool's Day",
+							"aired": "2002-04-01",
+							"runtime": 24
+						},
+						{
+							"id": 369079,
+							"seasonNumber": 0,
+							"number": 5,
+							"name": "Hey Arnold!: The Movie",
+							"aired": "2002-06-28",
+							"runtime": 90
+						},
+						{
+							"id": 6353885,
+							"seasonNumber": 0,
+							"number": 6,
+							"name": "The Jungle Movie",
+							"aired": "2017-11-23",
+							"runtime": 80
+						},
+						{
+							"id": 5628911,
+							"seasonNumber": 1,
+							"number": 1,
+							"name": "Downtown as Fruits",
+							"aired": "1996-10-07",
+							"runtime": 11
+						},
+						{
+							"id": 5628912,
+							"seasonNumber": 1,
+							"number": 2,
+							"name": "Eugene's Bike",
+							"aired": "1996-10-07",
+							"runtime": 11
+						},
+						{
+							"id": 5628914,
+							"seasonNumber": 1,
+							"number": 3,
+							"name": "The Little Pink Book",
+							"aired": "1996-10-09",
+							"runtime": 11
+						},
+						{
+							"id": 5628915,
+							"seasonNumber": 1,
+							"number": 4,
+							"name": "Field Trip",
+							"aired": "1996-10-09",
+							"runtime": 11
+						},
+						{
+							"id": 5628916,
+							"seasonNumber": 1,
+							"number": 5,
+							"name": "Arnold's Hat",
+							"aired": "1996-10-14",
+							"runtime": 11
+						},
+						{
+							"id": 5628917,
+							"seasonNumber": 1,
+							"number": 6,
+							"name": "Stoop Kid",
+							"aired": "1996-10-14",
+							"runtime": 11
+						},
+						{
+							"id": 5628918,
+							"seasonNumber": 1,
+							"number": 7,
+							"name": "Helga's Makeover",
+							"aired": "1996-10-16",
+							"runtime": 11
+						},
+						{
+							"id": 5628920,
+							"seasonNumber": 1,
+							"number": 8,
+							"name": "The Old Building",
+							"aired": "1996-10-16",
+							"runtime": 11
+						},
+						{
+							"id": 5628921,
+							"seasonNumber": 1,
+							"number": 9,
+							"name": "6th Grade Girls",
+							"aired": "1996-10-21",
+							"runtime": 11
+						},
+						{
+							"id": 5628922,
+							"seasonNumber": 1,
+							"number": 10,
+							"name": "The Baseball",
+							"aired": "1996-10-21",
+							"runtime": 11
+						},
+						{
+							"id": 5628923,
+							"seasonNumber": 1,
+							"number": 11,
+							"name": "Heat",
+							"aired": "1996-11-04",
+							"runtime": 11
+						},
+						{
+							"id": 5628924,
+							"seasonNumber": 1,
+							"number": 12,
+							"name": "Snow",
+							"aired": "1996-11-04",
+							"runtime": 11
+						},
+						{
+							"id": 5628925,
+							"seasonNumber": 1,
+							"number": 13,
+							"name": "Operation: Ruthless",
+							"aired": "1996-11-18",
+							"runtime": 11
+						},
+						{
+							"id": 5628926,
+							"seasonNumber": 1,
+							"number": 14,
+							"name": "The Vacant Lot",
+							"aired": "1996-11-18",
+							"runtime": 11
+						},
+						{
+							"id": 5628928,
+							"seasonNumber": 1,
+							"number": 15,
+							"name": "The List",
+							"aired": "1996-11-25",
+							"runtime": 11
+						},
+						{
+							"id": 5628929,
+							"seasonNumber": 1,
+							"number": 16,
+							"name": "Haunted Train",
+							"aired": "1996-11-25",
+							"runtime": 11
+						},
+						{
+							"id": 5628930,
+							"seasonNumber": 1,
+							"number": 17,
+							"name": "Mugged",
+							"aired": "1996-12-02",
+							"runtime": 11
+						},
+						{
+							"id": 5628931,
+							"seasonNumber": 1,
+							"number": 18,
+							"name": "Roughin' It",
+							"aired": "1996-12-02",
+							"runtime": 11
+						},
+						{
+							"id": 5628932,
+							"seasonNumber": 1,
+							"number": 19,
+							"name": "Door #16",
+							"aired": "1996-12-09",
+							"runtime": 11
+						},
+						{
+							"id": 5628933,
+							"seasonNumber": 1,
+							"number": 20,
+							"name": "Arnold as Cupid",
+							"aired": "1996-12-09",
+							"runtime": 11
+						},
+						{
+							"id": 5628934,
+							"seasonNumber": 1,
+							"number": 21,
+							"name": "Arnold's Christmas",
+							"aired": "1996-12-14",
+							"runtime": 24
+						},
+						{
+							"id": 5628935,
+							"seasonNumber": 1,
+							"number": 22,
+							"name": "Benchwarmer",
+							"aired": "1996-12-16",
+							"runtime": 11
+						},
+						{
+							"id": 5628936,
+							"seasonNumber": 1,
+							"number": 23,
+							"name": "Cool Jerk",
+							"aired": "1996-12-16",
+							"runtime": 11
+						},
+						{
+							"id": 5628937,
+							"seasonNumber": 1,
+							"number": 24,
+							"name": "Das Subway",
+							"aired": "1996-12-23",
+							"runtime": 11
+						},
+						{
+							"id": 5628938,
+							"seasonNumber": 1,
+							"number": 25,
+							"name": "Wheezin' Ed",
+							"aired": "1996-12-23",
+							"runtime": 11
+						},
+						{
+							"id": 5628939,
+							"seasonNumber": 1,
+							"number": 26,
+							"name": "Tutoring Torvald",
+							"aired": "1996-12-30",
+							"runtime": 11
+						},
+						{
+							"id": 5628940,
+							"seasonNumber": 1,
+							"number": 27,
+							"name": "Gerald Comes Over",
+							"aired": "1996-12-30",
+							"runtime": 11
+						},
+						{
+							"id": 5628941,
+							"seasonNumber": 1,
+							"number": 28,
+							"name": "Spelling Bee",
+							"aired": "1997-01-06",
+							"runtime": 11
+						},
+						{
+							"id": 5628942,
+							"seasonNumber": 1,
+							"number": 29,
+							"name": "Pigeon Man",
+							"aired": "1997-01-06",
+							"runtime": 11
+						},
+						{
+							"id": 5628943,
+							"seasonNumber": 1,
+							"number": 30,
+							"name": "Olga Comes Home",
+							"aired": "1997-01-13",
+							"runtime": 11
+						},
+						{
+							"id": 5628944,
+							"seasonNumber": 1,
+							"number": 31,
+							"name": "Sally's Comet",
+							"aired": "1997-01-13",
+							"runtime": 11
+						},
+						{
+							"id": 5628945,
+							"seasonNumber": 1,
+							"number": 32,
+							"name": "Abner Come Home",
+							"aired": "1997-01-20",
+							"runtime": 11
+						},
+						{
+							"id": 5628946,
+							"seasonNumber": 1,
+							"number": 33,
+							"name": "The Sewer King",
+							"aired": "1997-01-20",
+							"runtime": 11
+						},
+						{
+							"id": 5628947,
+							"seasonNumber": 1,
+							"number": 34,
+							"name": "False Alarm",
+							"aired": "1997-01-27",
+							"runtime": 11
+						},
+						{
+							"id": 5628948,
+							"seasonNumber": 1,
+							"number": 35,
+							"name": "World Records",
+							"aired": "1997-01-27",
+							"runtime": 11
+						},
+						{
+							"id": 5628949,
+							"seasonNumber": 1,
+							"number": 36,
+							"name": "Magic Show",
+							"aired": "1997-02-03",
+							"runtime": 11
+						},
+						{
+							"id": 5628950,
+							"seasonNumber": 1,
+							"number": 37,
+							"name": "24 Hours to Live",
+							"aired": "1997-02-03",
+							"runtime": 11
+						},
+						{
+							"id": 5628951,
+							"seasonNumber": 1,
+							"number": 38,
+							"name": "Arnold's Valentine",
+							"aired": "1997-02-10",
+							"runtime": 20
+						},
+						{
+							"id": 5628667,
+							"seasonNumber": 2,
+							"number": 1,
+							"name": "Save the Tree",
+							"aired": "1997-09-21",
+							"runtime": 11
+						},
+						{
+							"id": 5628668,
+							"seasonNumber": 2,
+							"number": 2,
+							"name": "New Teacher",
+							"aired": "1997-09-21",
+							"runtime": 11
+						},
+						{
+							"id": 5628669,
+							"seasonNumber": 2,
+							"number": 3,
+							"name": "Helga's Love Potion",
+							"aired": "1997-09-28",
+							"runtime": 11
+						},
+						{
+							"id": 5628670,
+							"seasonNumber": 2,
+							"number": 4,
+							"name": "Gerald's Secret",
+							"aired": "1997-09-28",
+							"runtime": 11
+						},
+						{
+							"id": 5628671,
+							"seasonNumber": 2,
+							"number": 5,
+							"name": "The Big Scoop",
+							"aired": "1997-10-05",
+							"runtime": 11
+						},
+						{
+							"id": 5628672,
+							"seasonNumber": 2,
+							"number": 6,
+							"name": "Harold's Kitty",
+							"aired": "1997-10-05",
+							"runtime": 11
+						},
+						{
+							"id": 5628673,
+							"seasonNumber": 2,
+							"number": 7,
+							"name": "Longest Monday",
+							"aired": "1997-10-12",
+							"runtime": 11
+						},
+						{
+							"id": 5628674,
+							"seasonNumber": 2,
+							"number": 8,
+							"name": "Eugene's Pet",
+							"aired": "1997-10-12",
+							"runtime": 11
+						},
+						{
+							"id": 5628675,
+							"seasonNumber": 2,
+							"number": 9,
+							"name": "Monkey Business",
+							"aired": "1997-10-19",
+							"runtime": 11
+						},
+						{
+							"id": 5628676,
+							"seasonNumber": 2,
+							"number": 10,
+							"name": "Big Caesar",
+							"aired": "1997-10-19",
+							"runtime": 11
+						},
+						{
+							"id": 5628677,
+							"seasonNumber": 2,
+							"number": 11,
+							"name": "Ransom",
+							"aired": "1997-10-26",
+							"runtime": 11
+						},
+						{
+							"id": 5628678,
+							"seasonNumber": 2,
+							"number": 12,
+							"name": "Ms. Perfect",
+							"aired": "1997-10-26",
+							"runtime": 11
+						},
+						{
+							"id": 5628688,
+							"seasonNumber": 2,
+							"number": 13,
+							"name": "Arnold's Halloween",
+							"aired": "1997-10-27",
+							"runtime": 20
+						},
+						{
+							"id": 5628680,
+							"seasonNumber": 2,
+							"number": 14,
+							"name": "Arnold Saves Sid",
+							"aired": "1997-11-02",
+							"runtime": 11
+						},
+						{
+							"id": 5628681,
+							"seasonNumber": 2,
+							"number": 15,
+							"name": "Hookey",
+							"aired": "1997-11-02",
+							"runtime": 11
+						},
+						{
+							"id": 5628682,
+							"seasonNumber": 2,
+							"number": 16,
+							"name": "Freeze Frame",
+							"aired": "1997-11-09",
+							"runtime": 11
+						},
+						{
+							"id": 5628683,
+							"seasonNumber": 2,
+							"number": 17,
+							"name": "Phoebe Cheats",
+							"aired": "1997-11-09",
+							"runtime": 11
+						},
+						{
+							"id": 5628684,
+							"seasonNumber": 2,
+							"number": 18,
+							"name": "Mudbowl",
+							"aired": "1997-11-16",
+							"runtime": 11
+						},
+						{
+							"id": 5628685,
+							"seasonNumber": 2,
+							"number": 19,
+							"name": "Gerald Moves Out",
+							"aired": "1997-11-16",
+							"runtime": 11
+						},
+						{
+							"id": 5628686,
+							"seasonNumber": 2,
+							"number": 20,
+							"name": "The High Life",
+							"aired": "1997-11-23",
+							"runtime": 11
+						},
+						{
+							"id": 5628687,
+							"seasonNumber": 2,
+							"number": 21,
+							"name": "Best Friends",
+							"aired": "1997-11-23",
+							"runtime": 11
+						},
+						{
+							"id": 5628689,
+							"seasonNumber": 2,
+							"number": 22,
+							"name": "Steely Phil",
+							"aired": "1997-11-30",
+							"runtime": 11
+						},
+						{
+							"id": 5628691,
+							"seasonNumber": 2,
+							"number": 23,
+							"name": "Quantity Time",
+							"aired": "1997-11-30",
+							"runtime": 11
+						},
+						{
+							"id": 5628692,
+							"seasonNumber": 2,
+							"number": 24,
+							"name": "Eating Contest",
+							"aired": "1997-12-07",
+							"runtime": 11
+						},
+						{
+							"id": 5628693,
+							"seasonNumber": 2,
+							"number": 25,
+							"name": "Rhonda's Glasses",
+							"aired": "1997-12-07",
+							"runtime": 11
+						},
+						{
+							"id": 5628694,
+							"seasonNumber": 2,
+							"number": 26,
+							"name": "Helga's Boyfriend",
+							"aired": "1997-12-14",
+							"runtime": 11
+						},
+						{
+							"id": 5628695,
+							"seasonNumber": 2,
+							"number": 27,
+							"name": "Crush on Teacher",
+							"aired": "1997-12-14",
+							"runtime": 11
+						},
+						{
+							"id": 5628696,
+							"seasonNumber": 2,
+							"number": 28,
+							"name": "Hall Monitor",
+							"aired": "1997-12-21",
+							"runtime": 11
+						},
+						{
+							"id": 5628697,
+							"seasonNumber": 2,
+							"number": 29,
+							"name": "Harold's Bar Mitzvah",
+							"aired": "1997-12-21",
+							"runtime": 11
+						},
+						{
+							"id": 5628698,
+							"seasonNumber": 2,
+							"number": 30,
+							"name": "Coach Wittenberg",
+							"aired": "1997-12-28",
+							"runtime": 11
+						},
+						{
+							"id": 5628700,
+							"seasonNumber": 2,
+							"number": 31,
+							"name": "Four-Eyed Jack",
+							"aired": "1997-12-28",
+							"runtime": 11
+						},
+						{
+							"id": 5628701,
+							"seasonNumber": 2,
+							"number": 32,
+							"name": "Eugene Goes Bad",
+							"aired": "1998-01-04",
+							"runtime": 11
+						},
+						{
+							"id": 5628702,
+							"seasonNumber": 2,
+							"number": 33,
+							"name": "What's Opera, Arnold?",
+							"aired": "1998-01-04",
+							"runtime": 11
+						},
+						{
+							"id": 5628703,
+							"seasonNumber": 2,
+							"number": 34,
+							"name": "Tour de Pond",
+							"aired": "1998-01-11",
+							"runtime": 11
+						},
+						{
+							"id": 5628704,
+							"seasonNumber": 2,
+							"number": 35,
+							"name": "Teachers' Strike",
+							"aired": "1998-01-11",
+							"runtime": 11
+						},
+						{
+							"id": 5628705,
+							"seasonNumber": 2,
+							"number": 36,
+							"name": "Runaway Float",
+							"aired": "1998-01-18",
+							"runtime": 11
+						},
+						{
+							"id": 5628706,
+							"seasonNumber": 2,
+							"number": 37,
+							"name": "Partners",
+							"aired": "1998-01-18",
+							"runtime": 11
+						},
+						{
+							"id": 5628809,
+							"seasonNumber": 3,
+							"number": 1,
+							"name": "Helga Blabs It All",
+							"aired": "1998-08-31",
+							"runtime": 11
+						},
+						{
+							"id": 5628810,
+							"seasonNumber": 3,
+							"number": 2,
+							"name": "Harold the Butcher",
+							"aired": "1998-08-31",
+							"runtime": 11
+						},
+						{
+							"id": 5628811,
+							"seasonNumber": 3,
+							"number": 3,
+							"name": "Dangerous Lumber",
+							"aired": "1998-09-02",
+							"runtime": 11
+						},
+						{
+							"id": 5628812,
+							"seasonNumber": 3,
+							"number": 4,
+							"name": "Mr. Hyunh Goes Country",
+							"aired": "1998-09-02",
+							"runtime": 11
+						},
+						{
+							"id": 5628813,
+							"seasonNumber": 3,
+							"number": 5,
+							"name": "Casa Paradiso",
+							"aired": "1998-09-07",
+							"runtime": 11
+						},
+						{
+							"id": 5628814,
+							"seasonNumber": 3,
+							"number": 6,
+							"name": "Gerald's Tonsils",
+							"aired": "1998-09-07",
+							"runtime": 11
+						},
+						{
+							"id": 5628815,
+							"seasonNumber": 3,
+							"number": 7,
+							"name": "Arnold's Room",
+							"aired": "1998-09-09",
+							"runtime": 11
+						},
+						{
+							"id": 5628816,
+							"seasonNumber": 3,
+							"number": 8,
+							"name": "Helga vs. Big Patty",
+							"aired": "1998-09-09",
+							"runtime": 11
+						},
+						{
+							"id": 5628817,
+							"seasonNumber": 3,
+							"number": 9,
+							"name": "Stinky Goes Hollywood",
+							"aired": "1998-09-16",
+							"runtime": 11
+						},
+						{
+							"id": 5628818,
+							"seasonNumber": 3,
+							"number": 10,
+							"name": "Olga Gets Engaged",
+							"aired": "1998-09-16",
+							"runtime": 11
+						},
+						{
+							"id": 5628819,
+							"seasonNumber": 3,
+							"number": 11,
+							"name": "Curly Snaps",
+							"aired": "1998-09-23",
+							"runtime": 11
+						},
+						{
+							"id": 5628820,
+							"seasonNumber": 3,
+							"number": 12,
+							"name": "Pre-Teen Scream",
+							"aired": "1998-09-23",
+							"runtime": 11
+						},
+						{
+							"id": 5628821,
+							"seasonNumber": 3,
+							"number": 13,
+							"name": "Grandpa's Birthday",
+							"aired": "1998-09-30",
+							"runtime": 11
+						},
+						{
+							"id": 5628822,
+							"seasonNumber": 3,
+							"number": 14,
+							"name": "Road Trip",
+							"aired": "1998-09-30",
+							"runtime": 11
+						},
+						{
+							"id": 5628823,
+							"seasonNumber": 3,
+							"number": 15,
+							"name": "Sid's Revenge",
+							"aired": "1998-10-07",
+							"runtime": 11
+						},
+						{
+							"id": 5628824,
+							"seasonNumber": 3,
+							"number": 16,
+							"name": "Roller Coaster",
+							"aired": "1998-10-07",
+							"runtime": 11
+						},
+						{
+							"id": 5628825,
+							"seasonNumber": 3,
+							"number": 17,
+							"name": "The Aptitude Test",
+							"aired": "1998-10-14",
+							"runtime": 11
+						},
+						{
+							"id": 5628826,
+							"seasonNumber": 3,
+							"number": 18,
+							"name": "Oskar Gets a Job",
+							"aired": "1998-10-14",
+							"runtime": 11
+						},
+						{
+							"id": 5628827,
+							"seasonNumber": 3,
+							"number": 19,
+							"name": "Arnold Betrays Iggy",
+							"aired": "1998-10-19",
+							"runtime": 11
+						},
+						{
+							"id": 5628828,
+							"seasonNumber": 3,
+							"number": 20,
+							"name": "Helga and the Nanny",
+							"aired": "1998-10-19",
+							"runtime": 11
+						},
+						{
+							"id": 5628829,
+							"seasonNumber": 3,
+							"number": 21,
+							"name": "Career Day",
+							"aired": "1998-10-21",
+							"runtime": 11
+						},
+						{
+							"id": 5628830,
+							"seasonNumber": 3,
+							"number": 22,
+							"name": "Hey Harold!",
+							"aired": "1998-10-21",
+							"runtime": 11
+						},
+						{
+							"id": 5628831,
+							"seasonNumber": 3,
+							"number": 23,
+							"name": "Best Man",
+							"aired": "1998-11-02",
+							"runtime": 11
+						},
+						{
+							"id": 5628832,
+							"seasonNumber": 3,
+							"number": 24,
+							"name": "Cool Party",
+							"aired": "1998-11-02",
+							"runtime": 11
+						},
+						{
+							"id": 5628833,
+							"seasonNumber": 3,
+							"number": 25,
+							"name": "Arnold & Lila",
+							"aired": "1998-11-04",
+							"runtime": 11
+						},
+						{
+							"id": 5628834,
+							"seasonNumber": 3,
+							"number": 26,
+							"name": "Grand Prix",
+							"aired": "1998-11-04",
+							"runtime": 11
+						},
+						{
+							"id": 5628846,
+							"seasonNumber": 3,
+							"number": 27,
+							"name": "Arnold's Thanksgiving",
+							"aired": "1998-11-18",
+							"runtime": 20
+						},
+						{
+							"id": 5628835,
+							"seasonNumber": 3,
+							"number": 28,
+							"name": "Helga's Show",
+							"aired": "1998-11-25",
+							"runtime": 11
+						},
+						{
+							"id": 5628836,
+							"seasonNumber": 3,
+							"number": 29,
+							"name": "The Flood",
+							"aired": "1998-11-25",
+							"runtime": 11
+						},
+						{
+							"id": 5628837,
+							"seasonNumber": 3,
+							"number": 30,
+							"name": "Phoebe Takes the Fall",
+							"aired": "1998-12-07",
+							"runtime": 11
+						},
+						{
+							"id": 5628838,
+							"seasonNumber": 3,
+							"number": 31,
+							"name": "The Pig War",
+							"aired": "1998-12-07",
+							"runtime": 11
+						},
+						{
+							"id": 5628839,
+							"seasonNumber": 3,
+							"number": 32,
+							"name": "Part Time Friends",
+							"aired": "1998-12-07",
+							"runtime": 11
+						},
+						{
+							"id": 5628840,
+							"seasonNumber": 3,
+							"number": 33,
+							"name": "Biosquare",
+							"aired": "1998-12-07",
+							"runtime": 11
+						},
+						{
+							"id": 5628841,
+							"seasonNumber": 3,
+							"number": 34,
+							"name": "Crabby Author",
+							"aired": "1998-12-28",
+							"runtime": 11
+						},
+						{
+							"id": 5628842,
+							"seasonNumber": 3,
+							"number": 35,
+							"name": "Rich Kid",
+							"aired": "1998-12-28",
+							"runtime": 11
+						},
+						{
+							"id": 5628844,
+							"seasonNumber": 3,
+							"number": 36,
+							"name": "Girl Trouble",
+							"aired": "1998-12-14",
+							"runtime": 11
+						},
+						{
+							"id": 5628845,
+							"seasonNumber": 3,
+							"number": 37,
+							"name": "School Dance",
+							"aired": "1998-12-14",
+							"runtime": 11
+						},
+						{
+							"id": 10618391,
+							"seasonNumber": 3,
+							"number": 38,
+							"name": "School Play",
+							"aired": "1998-12-21",
+							"runtime": 20
+						},
+						{
+							"id": 5628879,
+							"seasonNumber": 4,
+							"number": 1,
+							"name": "Full Moon",
+							"aired": "1999-03-10",
+							"runtime": 11
+						},
+						{
+							"id": 5628880,
+							"seasonNumber": 4,
+							"number": 2,
+							"name": "Student Teacher",
+							"aired": "1999-03-10",
+							"runtime": 11
+						},
+						{
+							"id": 5628881,
+							"seasonNumber": 4,
+							"number": 3,
+							"name": "Big Gino",
+							"aired": "1999-03-15",
+							"runtime": 11
+						},
+						{
+							"id": 5628882,
+							"seasonNumber": 4,
+							"number": 4,
+							"name": "Jamie O in Love",
+							"aired": "1999-03-15",
+							"runtime": 11
+						},
+						{
+							"id": 5628883,
+							"seasonNumber": 4,
+							"number": 5,
+							"name": "Eugene's Birthday",
+							"aired": "1999-03-17",
+							"runtime": 11
+						},
+						{
+							"id": 5628884,
+							"seasonNumber": 4,
+							"number": 6,
+							"name": "Stinky's Pumpkin",
+							"aired": "1999-03-15",
+							"runtime": 11
+						},
+						{
+							"id": 5628885,
+							"seasonNumber": 4,
+							"number": 7,
+							"name": "The Beeper Queen",
+							"aired": "1999-03-29",
+							"runtime": 11
+						},
+						{
+							"id": 5628886,
+							"seasonNumber": 4,
+							"number": 8,
+							"name": "Oskar Can't Read?",
+							"aired": "1999-03-29",
+							"runtime": 11
+						},
+						{
+							"id": 5628887,
+							"seasonNumber": 4,
+							"number": 9,
+							"name": "Dinner for Four",
+							"aired": "1999-03-31",
+							"runtime": 11
+						},
+						{
+							"id": 5628888,
+							"seasonNumber": 4,
+							"number": 10,
+							"name": "Phoebe Skips",
+							"aired": "1999-03-31",
+							"runtime": 11
+						},
+						{
+							"id": 5628889,
+							"seasonNumber": 4,
+							"number": 11,
+							"name": "Helga's Parrot",
+							"aired": "1999-04-05",
+							"runtime": 11
+						},
+						{
+							"id": 5628890,
+							"seasonNumber": 4,
+							"number": 12,
+							"name": "Chocolate Turtles",
+							"aired": "1999-04-05",
+							"runtime": 11
+						},
+						{
+							"id": 5628891,
+							"seasonNumber": 4,
+							"number": 13,
+							"name": "Love and Cheese",
+							"aired": "1999-04-07",
+							"runtime": 11
+						},
+						{
+							"id": 5628892,
+							"seasonNumber": 4,
+							"number": 14,
+							"name": "Weighing Harold",
+							"aired": "1999-04-07",
+							"runtime": 11
+						},
+						{
+							"id": 5628893,
+							"seasonNumber": 4,
+							"number": 15,
+							"name": "Back to School",
+							"aired": "1999-09-11",
+							"runtime": 11
+						},
+						{
+							"id": 5628894,
+							"seasonNumber": 4,
+							"number": 16,
+							"name": "Egg Story",
+							"aired": "1999-09-11",
+							"runtime": 11
+						},
+						{
+							"id": 5628895,
+							"seasonNumber": 4,
+							"number": 17,
+							"name": "It Girl",
+							"aired": "1999-09-18",
+							"runtime": 11
+						},
+						{
+							"id": 5628896,
+							"seasonNumber": 4,
+							"number": 18,
+							"name": "Deconstructing Arnold",
+							"aired": "1999-09-18",
+							"runtime": 11
+						},
+						{
+							"id": 5628897,
+							"seasonNumber": 4,
+							"number": 19,
+							"name": "Grudge Match",
+							"aired": "1999-09-25",
+							"runtime": 11
+						},
+						{
+							"id": 5628898,
+							"seasonNumber": 4,
+							"number": 20,
+							"name": "Polishing Rhonda",
+							"aired": "1999-09-25",
+							"runtime": 11
+						},
+						{
+							"id": 5628899,
+							"seasonNumber": 4,
+							"number": 21,
+							"name": "Weird Cousin",
+							"aired": "1999-10-09",
+							"runtime": 11
+						},
+						{
+							"id": 5628900,
+							"seasonNumber": 4,
+							"number": 22,
+							"name": "Baby Oskar",
+							"aired": "1999-10-09",
+							"runtime": 11
+						},
+						{
+							"id": 5628901,
+							"seasonNumber": 4,
+							"number": 23,
+							"name": "Grandpa's Sister",
+							"aired": "1999-10-16",
+							"runtime": 11
+						},
+						{
+							"id": 5628902,
+							"seasonNumber": 4,
+							"number": 24,
+							"name": "Synchronized Swimming",
+							"aired": "1999-10-16",
+							"runtime": 11
+						},
+						{
+							"id": 5628903,
+							"seasonNumber": 4,
+							"number": 25,
+							"name": "Helga Sleepwalks",
+							"aired": "1999-10-23",
+							"runtime": 11
+						},
+						{
+							"id": 5628904,
+							"seasonNumber": 4,
+							"number": 26,
+							"name": "Fighting Families",
+							"aired": "1999-10-23",
+							"runtime": 11
+						},
+						{
+							"id": 5628905,
+							"seasonNumber": 4,
+							"number": 27,
+							"name": "Headless Cabbie",
+							"aired": "1999-10-30",
+							"runtime": 11
+						},
+						{
+							"id": 5628906,
+							"seasonNumber": 4,
+							"number": 28,
+							"name": "Friday the 13th",
+							"aired": "1999-10-30",
+							"runtime": 11
+						},
+						{
+							"id": 5628874,
+							"seasonNumber": 4,
+							"number": 29,
+							"name": "Veterans Day",
+							"aired": "1999-11-06",
+							"runtime": 20
+						},
+						{
+							"id": 5628908,
+							"seasonNumber": 4,
+							"number": 30,
+							"name": "Helga on the Couch",
+							"aired": "1999-12-04",
+							"runtime": 20
+						},
+						{
+							"id": 5628909,
+							"seasonNumber": 4,
+							"number": 31,
+							"name": "Dino Checks Out",
+							"aired": "1999-12-11",
+							"runtime": 20
+						},
+						{
+							"id": 5629069,
+							"seasonNumber": 5,
+							"number": 1,
+							"name": "Monkeyman!",
+							"aired": "2000-03-04",
+							"runtime": 11
+						},
+						{
+							"id": 5629070,
+							"seasonNumber": 5,
+							"number": 2,
+							"name": "Buses, Bikes, and Subways",
+							"aired": "2000-03-04",
+							"runtime": 11
+						},
+						{
+							"id": 5629071,
+							"seasonNumber": 5,
+							"number": 3,
+							"name": "Helga's Masquerade",
+							"aired": "2000-03-11",
+							"runtime": 11
+						},
+						{
+							"id": 5629072,
+							"seasonNumber": 5,
+							"number": 4,
+							"name": "Mr. Green Runs",
+							"aired": "2000-03-11",
+							"runtime": 11
+						},
+						{
+							"id": 5629073,
+							"seasonNumber": 5,
+							"number": 5,
+							"name": "Sid the Vampire Slayer",
+							"aired": "2000-03-18",
+							"runtime": 11
+						},
+						{
+							"id": 5629074,
+							"seasonNumber": 5,
+							"number": 6,
+							"name": "Big Sis",
+							"aired": "2000-03-18",
+							"runtime": 11
+						},
+						{
+							"id": 5629075,
+							"seasonNumber": 5,
+							"number": 7,
+							"name": "Bag of Money",
+							"aired": "2000-04-05",
+							"runtime": 11
+						},
+						{
+							"id": 5629076,
+							"seasonNumber": 5,
+							"number": 8,
+							"name": "Principal Simmons",
+							"aired": "2000-04-05",
+							"runtime": 11
+						},
+						{
+							"id": 5629077,
+							"seasonNumber": 5,
+							"number": 9,
+							"name": "New Bully on the Block",
+							"aired": "2000-04-12",
+							"runtime": 11
+						},
+						{
+							"id": 5629078,
+							"seasonNumber": 5,
+							"number": 10,
+							"name": "Phoebe Breaks a Leg",
+							"aired": "2000-04-12",
+							"runtime": 11
+						},
+						{
+							"id": 5629080,
+							"seasonNumber": 5,
+							"number": 11,
+							"name": "Helga's Locket",
+							"aired": "2000-04-19",
+							"runtime": 11
+						},
+						{
+							"id": 5629081,
+							"seasonNumber": 5,
+							"number": 12,
+							"name": "Sid and Germs",
+							"aired": "2000-04-19",
+							"runtime": 11
+						},
+						{
+							"id": 5629083,
+							"seasonNumber": 5,
+							"number": 13,
+							"name": "Suspended",
+							"aired": "2000-04-26",
+							"runtime": 11
+						},
+						{
+							"id": 5629084,
+							"seasonNumber": 5,
+							"number": 14,
+							"name": "Ernie in Love",
+							"aired": "2000-04-26",
+							"runtime": 11
+						},
+						{
+							"id": 5629085,
+							"seasonNumber": 5,
+							"number": 15,
+							"name": "Summer Love",
+							"aired": "2000-05-25",
+							"runtime": 20
+						},
+						{
+							"id": 5629086,
+							"seasonNumber": 5,
+							"number": 16,
+							"name": "Stuck in a Tree",
+							"aired": "2001-01-05",
+							"runtime": 11
+						},
+						{
+							"id": 5629087,
+							"seasonNumber": 5,
+							"number": 17,
+							"name": "Rhonda Goes Broke",
+							"aired": "2001-01-05",
+							"runtime": 11
+						},
+						{
+							"id": 5629088,
+							"seasonNumber": 5,
+							"number": 18,
+							"name": "Beaned",
+							"aired": "2001-01-12",
+							"runtime": 11
+						},
+						{
+							"id": 5629089,
+							"seasonNumber": 5,
+							"number": 19,
+							"name": "Old Iron Man",
+							"aired": "2001-01-12",
+							"runtime": 11
+						},
+						{
+							"id": 5629090,
+							"seasonNumber": 5,
+							"number": 20,
+							"name": "Arnold Visits Arnie",
+							"aired": "2001-01-26",
+							"runtime": 11
+						},
+						{
+							"id": 5629091,
+							"seasonNumber": 5,
+							"number": 21,
+							"name": "Chocolate Boy",
+							"aired": "2001-01-26",
+							"runtime": 11
+						},
+						{
+							"id": 5629092,
+							"seasonNumber": 5,
+							"number": 22,
+							"name": "Harold vs. Patty",
+							"aired": "2002-02-03",
+							"runtime": 11
+						},
+						{
+							"id": 5629093,
+							"seasonNumber": 5,
+							"number": 23,
+							"name": "Rich Guy",
+							"aired": "2002-02-03",
+							"runtime": 11
+						},
+						{
+							"id": 5629095,
+							"seasonNumber": 5,
+							"number": 24,
+							"name": "Gerald's Game",
+							"aired": "2002-04-27",
+							"runtime": 11
+						},
+						{
+							"id": 5629096,
+							"seasonNumber": 5,
+							"number": 25,
+							"name": "Fishing Trip",
+							"aired": "2002-04-27",
+							"runtime": 11
+						},
+						{
+							"id": 5629097,
+							"seasonNumber": 5,
+							"number": 26,
+							"name": "Married",
+							"aired": "2002-05-11",
+							"runtime": 20
+						},
+						{
+							"id": 5629098,
+							"seasonNumber": 5,
+							"number": 27,
+							"name": "On the Lam",
+							"aired": "2002-06-01",
+							"runtime": 11
+						},
+						{
+							"id": 5629099,
+							"seasonNumber": 5,
+							"number": 28,
+							"name": "Family Man",
+							"aired": "2002-06-01",
+							"runtime": 11
+						},
+						{
+							"id": 5629100,
+							"seasonNumber": 5,
+							"number": 29,
+							"name": "The Racing Mule",
+							"aired": "2002-10-14",
+							"runtime": 11
+						},
+						{
+							"id": 5629101,
+							"seasonNumber": 5,
+							"number": 30,
+							"name": "Curly's Girl",
+							"aired": "2002-10-14",
+							"runtime": 11
+						},
+						{
+							"id": 5629102,
+							"seasonNumber": 5,
+							"number": 31,
+							"name": "The Journal",
+							"aired": "2002-11-11",
+							"runtime": 25
+						},
+						{
+							"id": 5629103,
+							"seasonNumber": 5,
+							"number": 32,
+							"name": "Timberly Loves Arnold",
+							"aired": "2003-01-28",
+							"runtime": 11
+						},
+						{
+							"id": 5629104,
+							"seasonNumber": 5,
+							"number": 33,
+							"name": "Eugene, Eugene!",
+							"aired": "2003-01-28",
+							"runtime": 13
+						},
+						{
+							"id": 5629105,
+							"seasonNumber": 5,
+							"number": 34,
+							"name": "Ghost Bride",
+							"aired": "2003-11-11",
+							"runtime": 11
+						},
+						{
+							"id": 5629106,
+							"seasonNumber": 5,
+							"number": 35,
+							"name": "Gerald vs. Jamie O",
+							"aired": "2003-11-11",
+							"runtime": 11
+						},
+						{
+							"id": 5629107,
+							"seasonNumber": 5,
+							"number": 36,
+							"name": "A Day in the Life of a Classroom",
+							"aired": "2003-11-15",
+							"runtime": 11
+						},
+						{
+							"id": 5629108,
+							"seasonNumber": 5,
+							"number": 37,
+							"name": "Big Bob's Crisis",
+							"aired": "2003-11-15",
+							"runtime": 11
+						},
+						{
+							"id": 5629109,
+							"seasonNumber": 5,
+							"number": 38,
+							"name": "Phoebe's Little Problem",
+							"aired": "2004-06-08",
+							"runtime": 11
+						},
+						{
+							"id": 5629110,
+							"seasonNumber": 5,
+							"number": 39,
+							"name": "Grandpa's Packard",
+							"aired": "2004-06-08",
+							"runtime": 11
+						}
+					]
+				}
+			}
+		},
+		"season": {
+			"2330/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Mickey to the Rescue: Train Tracks",
+						"air_date": "1999-05-01",
+						"runtime": 30,
+						"id": 170811
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "How to Be a Waiter",
+						"air_date": "1999-05-01",
+						"runtime": 30,
+						"id": 3325605
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Maestro Minnie: William Tell Overture",
+						"air_date": "1999-05-01",
+						"runtime": 30,
+						"id": 3325608
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Donald's Failed Fourth",
+						"air_date": "1999-05-01",
+						"runtime": 30,
+						"id": 3325609
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Roller Coaster Painters",
+						"air_date": "1999-05-01",
+						"runtime": 30,
+						"id": 3325612
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Goofy's Extreme Sports: Skating the Half Pipe",
+						"air_date": "1999-05-08",
+						"runtime": 30,
+						"id": 170818
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Mickey's New Car",
+						"air_date": "1999-05-08",
+						"runtime": 30,
+						"id": 3325614
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Pluto's Penthouse Sweet",
+						"air_date": "1999-05-08",
+						"runtime": 30,
+						"id": 3325615
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Donald's Shell Shots",
+						"air_date": "1999-05-08",
+						"runtime": 30,
+						"id": 3325616
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "Donald's Dynamite: Bowling Alley",
+						"air_date": "1999-05-15",
+						"runtime": 30,
+						"id": 170817
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Mickey's Airplane Kit",
+						"air_date": "1999-05-15",
+						"runtime": 30,
+						"id": 3325617
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Von Drake's House of Genius: Time Reverser",
+						"air_date": "1999-05-15",
+						"runtime": 30,
+						"id": 3325619
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Turkey Catchers",
+						"air_date": "1999-05-15",
+						"runtime": 30,
+						"id": 3325620
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Dance of the Goofys",
+						"air_date": "1999-05-15",
+						"runtime": 30,
+						"id": 3325621
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Pluto Gets the Paper: Spaceship",
+						"air_date": "1999-05-22",
+						"runtime": 30,
+						"id": 170812
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Donald's Rocket Ruckus",
+						"air_date": "1999-05-22",
+						"runtime": 30,
+						"id": 3325622
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "Goofy's Extreme Sports: Paracycling",
+						"air_date": "1999-05-22",
+						"runtime": 30,
+						"id": 3325623
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Organ Donors",
+						"air_date": "1999-05-22",
+						"runtime": 30,
+						"id": 3325625
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Mickey's Mistake",
+						"air_date": "1999-05-22",
+						"runtime": 30,
+						"id": 3325626
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Maestro Minnie: Hungarian Rhapsody No. 6",
+						"air_date": "1999-05-29",
+						"runtime": 30,
+						"id": 170814
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "How to Be a Spy",
+						"air_date": "1999-05-29",
+						"runtime": 30,
+						"id": 3325627
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Donald's Valentine Dollar",
+						"air_date": "1999-05-29",
+						"runtime": 30,
+						"id": 3325628
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Pluto's Kittens",
+						"air_date": "1999-05-29",
+						"runtime": 30,
+						"id": 3325629
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "Von Drake's House of Genius: Remote Controlled Laser Lawn Mower",
+						"air_date": "1999-06-05",
+						"runtime": 30,
+						"id": 170813
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "Pluto vs. the Watchdog",
+						"air_date": "1999-06-05",
+						"runtime": 30,
+						"id": 3325630
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "Donald's Dynamite: Opera Box",
+						"air_date": "1999-06-05",
+						"runtime": 30,
+						"id": 3325631
+					},
+					{
+						"episode_number": 27,
+						"season_number": 1,
+						"name": "Around the World in Eighty Days",
+						"air_date": "1999-06-05",
+						"runtime": 30,
+						"id": 3325632
+					},
+					{
+						"episode_number": 28,
+						"season_number": 1,
+						"name": "Donald's Dynamite: Fishing",
+						"air_date": "1999-06-12",
+						"runtime": 30,
+						"id": 170815
+					},
+					{
+						"episode_number": 29,
+						"season_number": 1,
+						"name": "Purple Pluto",
+						"air_date": "1999-06-12",
+						"runtime": 30,
+						"id": 3325633
+					},
+					{
+						"episode_number": 30,
+						"season_number": 1,
+						"name": "Von Drake's House of Genius: Money Increaser",
+						"air_date": "1999-06-12",
+						"runtime": 30,
+						"id": 3325636
+					},
+					{
+						"episode_number": 31,
+						"season_number": 1,
+						"name": "Sandwich Makers",
+						"air_date": "1999-06-12",
+						"runtime": 30,
+						"id": 3325637
+					},
+					{
+						"episode_number": 32,
+						"season_number": 1,
+						"name": "Pluto's Arrow Error",
+						"air_date": "1999-06-12",
+						"runtime": 30,
+						"id": 3325638
+					},
+					{
+						"episode_number": 33,
+						"season_number": 1,
+						"name": "Mickey to the Rescue: Staircase",
+						"air_date": "1999-06-19",
+						"runtime": 30,
+						"id": 170816
+					},
+					{
+						"episode_number": 34,
+						"season_number": 1,
+						"name": "Pluto Runs Away",
+						"air_date": "1999-06-19",
+						"runtime": 30,
+						"id": 3325639
+					},
+					{
+						"episode_number": 35,
+						"season_number": 1,
+						"name": "Daisy Bothers Minnie",
+						"air_date": "1999-06-19",
+						"runtime": 30,
+						"id": 3325640
+					},
+					{
+						"episode_number": 36,
+						"season_number": 1,
+						"name": "How to Ride a Bicycle",
+						"air_date": "1999-06-19",
+						"runtime": 30,
+						"id": 3325641
+					}
+				]
+			},
+			"2330/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Goofy's Extreme Sports: Rock Climbing",
+						"air_date": "1999-09-11",
+						"runtime": 30,
+						"id": 170819
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Hansel and Gretel",
+						"air_date": "1999-09-11",
+						"runtime": 30,
+						"id": 3325654
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Donald on Ice",
+						"air_date": "1999-09-11",
+						"runtime": 30,
+						"id": 3325655
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Mickey's Mechanical House",
+						"air_date": "1999-09-11",
+						"runtime": 30,
+						"id": 3325656
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Pluto Gets the Paper: Street Cleaner",
+						"air_date": "1999-09-18",
+						"runtime": 30,
+						"id": 170828
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Donald's Dinner Date",
+						"air_date": "1999-09-18",
+						"runtime": 30,
+						"id": 3325657
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Maestro Minnie: Brahms Lullabye",
+						"air_date": "1999-09-18",
+						"runtime": 30,
+						"id": 3325658
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Hydro-Squirter",
+						"air_date": "1999-09-18",
+						"runtime": 30,
+						"id": 3325659
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Mickey's Piano Lesson",
+						"air_date": "1999-09-18",
+						"runtime": 30,
+						"id": 3325660
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "Mickey to the Rescue: Cage and Cannons",
+						"air_date": "1999-09-25",
+						"runtime": 30,
+						"id": 170827
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "Mickey's Remedy",
+						"air_date": "1999-09-25",
+						"runtime": 30,
+						"id": 3325662
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Goofy's Extreme Sports: Wakeboarding",
+						"air_date": "1999-09-25",
+						"runtime": 30,
+						"id": 3325663
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "A Midsummer Night's Dream",
+						"air_date": "1999-09-25",
+						"runtime": 30,
+						"id": 3325664
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "Pluto Gets the Paper: Bubble Gum",
+						"air_date": "1999-10-02",
+						"runtime": 30,
+						"id": 170829
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "Mickey Tries to Cook",
+						"air_date": "1999-10-02",
+						"runtime": 30,
+						"id": 3325665
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "Donald and the Big Nut",
+						"air_date": "1999-10-02",
+						"runtime": 30,
+						"id": 3325666
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "Topsy Turvy Town",
+						"air_date": "1999-10-02",
+						"runtime": 30,
+						"id": 3325667
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "Von Drake's House of Genius: Teldinger",
+						"air_date": "1999-10-23",
+						"runtime": 30,
+						"id": 170822
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "Purple Pluto",
+						"air_date": "1999-10-23",
+						"runtime": 30,
+						"id": 3325668
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "Maestro Minnie: Flight of the Bumblebee",
+						"air_date": "1999-10-23",
+						"runtime": 30,
+						"id": 3325670
+					},
+					{
+						"episode_number": 21,
+						"season_number": 2,
+						"name": "The Nutcracker",
+						"air_date": "1999-10-23",
+						"runtime": 30,
+						"id": 3325671
+					},
+					{
+						"episode_number": 22,
+						"season_number": 2,
+						"name": "Mickey to the Rescue: Staircase",
+						"air_date": "1999-10-30",
+						"runtime": 30,
+						"id": 170823
+					},
+					{
+						"episode_number": 23,
+						"season_number": 2,
+						"name": "How to Haunt a House",
+						"air_date": "1999-10-30",
+						"runtime": 30,
+						"id": 3325675
+					},
+					{
+						"episode_number": 24,
+						"season_number": 2,
+						"name": "Mickey's Mechanical House",
+						"air_date": "1999-10-30",
+						"runtime": 30,
+						"id": 3325676
+					},
+					{
+						"episode_number": 25,
+						"season_number": 2,
+						"name": "Hansel and Gretel",
+						"air_date": "1999-10-30",
+						"runtime": 30,
+						"id": 3325677
+					},
+					{
+						"episode_number": 26,
+						"season_number": 2,
+						"name": "Pluto Gets the Paper: Vending Machine",
+						"air_date": "1999-11-07",
+						"runtime": 30,
+						"id": 170826
+					},
+					{
+						"episode_number": 27,
+						"season_number": 2,
+						"name": "Donald's Grizzly Guest",
+						"air_date": "1999-11-06",
+						"runtime": 30,
+						"id": 3325681
+					},
+					{
+						"episode_number": 28,
+						"season_number": 2,
+						"name": "Donald's Dynamite: Snowman",
+						"air_date": "1999-11-06",
+						"runtime": 30,
+						"id": 3325682
+					},
+					{
+						"episode_number": 29,
+						"season_number": 2,
+						"name": "Mickey Foils the Phantom Blot",
+						"air_date": "1999-11-06",
+						"runtime": 30,
+						"id": 3325683
+					},
+					{
+						"episode_number": 30,
+						"season_number": 2,
+						"name": "Daisy's Road Trip",
+						"air_date": "1999-12-04",
+						"runtime": 30,
+						"id": 170820
+					},
+					{
+						"episode_number": 31,
+						"season_number": 2,
+						"name": "Goofy's Big Kitty",
+						"air_date": "1999-12-04",
+						"runtime": 30,
+						"id": 3325684
+					},
+					{
+						"episode_number": 32,
+						"season_number": 2,
+						"name": "Relaxing with Von Drake",
+						"air_date": "1999-12-04",
+						"runtime": 30,
+						"id": 3325685
+					},
+					{
+						"episode_number": 33,
+						"season_number": 2,
+						"name": "How to Be a Baseball Fan",
+						"air_date": "2000-01-22",
+						"runtime": 30,
+						"id": 170825
+					},
+					{
+						"episode_number": 34,
+						"season_number": 2,
+						"name": "Locksmiths",
+						"air_date": "2000-01-22",
+						"runtime": 30,
+						"id": 3325686
+					},
+					{
+						"episode_number": 35,
+						"season_number": 2,
+						"name": "Minnie Takes Care of Pluto",
+						"air_date": "2000-01-22",
+						"runtime": 30,
+						"id": 3325687
+					},
+					{
+						"episode_number": 36,
+						"season_number": 2,
+						"name": "Donald's Dynamite: Magic Act",
+						"air_date": "2000-02-05",
+						"runtime": 30,
+						"id": 170824
+					},
+					{
+						"episode_number": 37,
+						"season_number": 2,
+						"name": "Survival of the Woodchucks",
+						"air_date": "2000-02-05",
+						"runtime": 30,
+						"id": 3325688
+					},
+					{
+						"episode_number": 38,
+						"season_number": 2,
+						"name": "Mickey's Rival Returns",
+						"air_date": "2000-02-05",
+						"runtime": 30,
+						"id": 3325689
+					},
+					{
+						"episode_number": 39,
+						"season_number": 2,
+						"name": "Mickey and the Seagull",
+						"air_date": "2000-02-05",
+						"runtime": 30,
+						"id": 3325690
+					},
+					{
+						"episode_number": 40,
+						"season_number": 2,
+						"name": "Goofy's Radio",
+						"air_date": "2000-02-19",
+						"runtime": 30,
+						"id": 170821
+					},
+					{
+						"episode_number": 41,
+						"season_number": 2,
+						"name": "Car Washers",
+						"air_date": "2000-02-19",
+						"runtime": 30,
+						"id": 3325691
+					},
+					{
+						"episode_number": 42,
+						"season_number": 2,
+						"name": "Pluto's Seal Deal",
+						"air_date": "2000-02-19",
+						"runtime": 30,
+						"id": 3325692
+					},
+					{
+						"episode_number": 43,
+						"season_number": 2,
+						"name": "Mickey's Mixed Nuts",
+						"air_date": "2000-02-26",
+						"runtime": 30,
+						"id": 170830
+					},
+					{
+						"episode_number": 44,
+						"season_number": 2,
+						"name": "Goofy's Extreme Sports: Shark Feeding",
+						"air_date": "2000-02-26",
+						"runtime": 30,
+						"id": 3325693
+					},
+					{
+						"episode_number": 45,
+						"season_number": 2,
+						"name": "Mickey's Mountain",
+						"air_date": "2000-02-26",
+						"runtime": 30,
+						"id": 3325694
+					},
+					{
+						"episode_number": 46,
+						"season_number": 2,
+						"name": "computer.don",
+						"air_date": "2000-02-26",
+						"runtime": 30,
+						"id": 3325695
+					},
+					{
+						"episode_number": 47,
+						"season_number": 2,
+						"name": "Donald's Halloween Scare",
+						"air_date": "2000-03-04",
+						"runtime": 30,
+						"id": 170832
+					},
+					{
+						"episode_number": 48,
+						"season_number": 2,
+						"name": "Donald's Lighthouse",
+						"air_date": "2000-03-04",
+						"runtime": 30,
+						"id": 3325696
+					},
+					{
+						"episode_number": 49,
+						"season_number": 2,
+						"name": "How to Take Care of Your Yard",
+						"air_date": "2000-03-04",
+						"runtime": 30,
+						"id": 3325697
+					},
+					{
+						"episode_number": 50,
+						"season_number": 2,
+						"name": "Pluto Gets the Paper: Mortimer",
+						"air_date": "2000-03-16",
+						"runtime": 30,
+						"id": 170831
+					},
+					{
+						"episode_number": 51,
+						"season_number": 2,
+						"name": "Minnie Visits Daisy",
+						"air_date": "2000-03-16",
+						"runtime": 30,
+						"id": 3325698
+					},
+					{
+						"episode_number": 52,
+						"season_number": 2,
+						"name": "How to Wash Dishes",
+						"air_date": "2000-03-16",
+						"runtime": 30,
+						"id": 3325699
+					},
+					{
+						"episode_number": 53,
+						"season_number": 2,
+						"name": "Domesticated Donald",
+						"air_date": "2000-03-16",
+						"runtime": 30,
+						"id": 3325700
+					}
+				]
+			},
+			"2330/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "Donald's Halloween Scare",
+						"air_date": "2000-09-09",
+						"runtime": 30,
+						"id": 170834
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "How to Be a Gentleman",
+						"air_date": "2000-09-09",
+						"runtime": 30,
+						"id": 3325701
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Mickey and the Seagull",
+						"air_date": "2000-09-09",
+						"runtime": 30,
+						"id": 3325702
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "Mickey's Mix-Up",
+						"air_date": "2000-09-16",
+						"runtime": 30,
+						"id": 170833
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Whitewater Donald",
+						"air_date": "2000-09-16",
+						"runtime": 30,
+						"id": 3325703
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "Mickey's Christmas Chaos",
+						"air_date": "2000-09-16",
+						"runtime": 30,
+						"id": 3325704
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "Donald's Fish Fry",
+						"air_date": "2000-09-23",
+						"runtime": 30,
+						"id": 170835
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "Presto Pluto",
+						"air_date": "2000-09-23",
+						"runtime": 30,
+						"id": 3325705
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "Mickey's Cabin",
+						"air_date": "2000-09-23",
+						"runtime": 30,
+						"id": 3325706
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "Pluto Gets the Paper: Vending Machine",
+						"air_date": "2000-09-30",
+						"runtime": 30,
+						"id": 170836
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "Mickey's Answering Service",
+						"air_date": "2000-09-30",
+						"runtime": 30,
+						"id": 3325707
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "Pluto's Magic Paws",
+						"air_date": "2000-09-30",
+						"runtime": 30,
+						"id": 3325708
+					},
+					{
+						"episode_number": 13,
+						"season_number": 3,
+						"name": "Mickey's Big Break",
+						"air_date": "2000-09-30",
+						"runtime": 30,
+						"id": 3325709
+					},
+					{
+						"episode_number": 14,
+						"season_number": 3,
+						"name": "Bird Brained Donald",
+						"air_date": "2000-10-07",
+						"runtime": 30,
+						"id": 170837
+					},
+					{
+						"episode_number": 15,
+						"season_number": 3,
+						"name": "Donald's Pool",
+						"air_date": "2000-10-07",
+						"runtime": 30,
+						"id": 3325710
+					},
+					{
+						"episode_number": 16,
+						"season_number": 3,
+						"name": "How to Be a Gentleman",
+						"air_date": "2000-10-07",
+						"runtime": 30,
+						"id": 3325711
+					}
+				]
+			},
+			"537/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "The Lost Pilot",
+						"air_date": "1994-06-16",
+						"runtime": 11,
+						"id": 30222
+					}
+				]
+			},
+			"537/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Downtown as Fruits",
+						"air_date": "1996-10-07",
+						"runtime": 12,
+						"id": 30156
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "Eugene's Bike",
+						"air_date": "1996-10-07",
+						"runtime": 12,
+						"id": 1163964
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "The Little Pink Book",
+						"air_date": "1996-10-09",
+						"runtime": 12,
+						"id": 30155
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Field Trip",
+						"air_date": "1996-10-09",
+						"runtime": 12,
+						"id": 1163983
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Arnold's Hat",
+						"air_date": "1996-10-14",
+						"runtime": 12,
+						"id": 30157
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Stoop Kid",
+						"air_date": "1996-10-14",
+						"runtime": 12,
+						"id": 1163982
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "Helga's Makeover",
+						"air_date": "1996-10-16",
+						"runtime": 12,
+						"id": 30161
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "The Old Building",
+						"air_date": "1996-10-16",
+						"runtime": 12,
+						"id": 1163978
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "6th Grade Girls",
+						"air_date": "1996-11-04",
+						"runtime": 12,
+						"id": 30158
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "The Baseball",
+						"air_date": "1996-11-04",
+						"runtime": 12,
+						"id": 1163980
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "Heat",
+						"air_date": "1996-11-11",
+						"runtime": 12,
+						"id": 30159
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "Snow",
+						"air_date": "1996-11-11",
+						"runtime": 12,
+						"id": 1163979
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Operation Ruthless",
+						"air_date": "1996-11-18",
+						"runtime": 12,
+						"id": 30160
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "The Vacant Lot",
+						"air_date": "1996-11-18",
+						"runtime": 12,
+						"id": 1163981
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "The List",
+						"air_date": "1996-11-25",
+						"runtime": 12,
+						"id": 30171
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "Haunted Train",
+						"air_date": "1996-11-25",
+						"runtime": 12,
+						"id": 1163977
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "Mugged",
+						"air_date": "1996-12-02",
+						"runtime": 12,
+						"id": 30167
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "Roughin' It",
+						"air_date": "1996-12-02",
+						"runtime": 12,
+						"id": 1163976
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Door #16",
+						"air_date": "1996-12-09",
+						"runtime": 12,
+						"id": 30168
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "Arnold as Cupid",
+						"air_date": "1996-12-09",
+						"runtime": 12,
+						"id": 1163975
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Arnold's Christmas",
+						"air_date": "1996-12-14",
+						"runtime": 25,
+						"id": 30174
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Benchwarmer",
+						"air_date": "1996-12-16",
+						"runtime": 11,
+						"id": 30162
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Cool Jerk",
+						"air_date": "1996-12-16",
+						"runtime": 11,
+						"id": 1163974
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "Das Subway",
+						"air_date": "1996-12-23",
+						"runtime": 11,
+						"id": 30170
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "Wheezin' Ed",
+						"air_date": "1996-12-23",
+						"runtime": 11,
+						"id": 1163973
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "Arnold the Tutor",
+						"air_date": "1996-12-30",
+						"runtime": 11,
+						"id": 30166
+					},
+					{
+						"episode_number": 27,
+						"season_number": 1,
+						"name": "Gerald Comes Over",
+						"air_date": "1996-12-30",
+						"runtime": 11,
+						"id": 1163972
+					},
+					{
+						"episode_number": 28,
+						"season_number": 1,
+						"name": "Spelling Bee",
+						"air_date": "1997-01-06",
+						"runtime": 11,
+						"id": 30163
+					},
+					{
+						"episode_number": 29,
+						"season_number": 1,
+						"name": "Pigeon Man",
+						"air_date": "1997-01-06",
+						"runtime": 11,
+						"id": 1163971
+					},
+					{
+						"episode_number": 30,
+						"season_number": 1,
+						"name": "Olga Comes Home",
+						"air_date": "1997-01-13",
+						"runtime": 11,
+						"id": 30165
+					},
+					{
+						"episode_number": 31,
+						"season_number": 1,
+						"name": "Sally's Comet",
+						"air_date": "1997-01-13",
+						"runtime": 11,
+						"id": 1163970
+					},
+					{
+						"episode_number": 32,
+						"season_number": 1,
+						"name": "Abner Come Home",
+						"air_date": "1997-01-20",
+						"runtime": 11,
+						"id": 30164
+					},
+					{
+						"episode_number": 33,
+						"season_number": 1,
+						"name": "The Sewer King",
+						"air_date": "1997-01-20",
+						"runtime": 11,
+						"id": 1163969
+					},
+					{
+						"episode_number": 34,
+						"season_number": 1,
+						"name": "False Alarm",
+						"air_date": "1997-01-27",
+						"runtime": 11,
+						"id": 30169
+					},
+					{
+						"episode_number": 35,
+						"season_number": 1,
+						"name": "World Records",
+						"air_date": "1997-01-27",
+						"runtime": 11,
+						"id": 1163968
+					},
+					{
+						"episode_number": 36,
+						"season_number": 1,
+						"name": "Magic Show",
+						"air_date": "1997-02-03",
+						"runtime": 11,
+						"id": 30173
+					},
+					{
+						"episode_number": 37,
+						"season_number": 1,
+						"name": "24 Hours to Live",
+						"air_date": "1997-02-03",
+						"runtime": 11,
+						"id": 1163967
+					},
+					{
+						"episode_number": 38,
+						"season_number": 1,
+						"name": "Arnold's Valentine",
+						"air_date": "1997-02-14",
+						"runtime": 24,
+						"id": 1163966
+					}
+				]
+			},
+			"537/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Save the Tree",
+						"air_date": "1997-09-22",
+						"runtime": 11,
+						"id": 30108
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "New Teacher",
+						"air_date": "1997-09-22",
+						"runtime": 11,
+						"id": 1269253
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Helga's Love Potion",
+						"air_date": "1997-09-24",
+						"runtime": 11,
+						"id": 30106
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Gerald's Secret",
+						"air_date": "1997-09-24",
+						"runtime": 11,
+						"id": 1269254
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "The Big Scoop",
+						"air_date": "1997-09-29",
+						"runtime": 11,
+						"id": 30107
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Harold's Kitty",
+						"air_date": "1997-09-29",
+						"runtime": 11,
+						"id": 1269255
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Longest Monday",
+						"air_date": "1997-10-01",
+						"runtime": 11,
+						"id": 30113
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Eugene's Pet",
+						"air_date": "1997-10-01",
+						"runtime": 11,
+						"id": 1269256
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Monkey Business",
+						"air_date": "1997-10-06",
+						"runtime": 11,
+						"id": 30110
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "Big Caesar",
+						"air_date": "1997-10-06",
+						"runtime": 11,
+						"id": 1269257
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "Ransom",
+						"air_date": "1997-10-08",
+						"runtime": 11,
+						"id": 30111
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "Ms. Perfect",
+						"air_date": "1997-10-08",
+						"runtime": 11,
+						"id": 1269258
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "Arnold's Halloween",
+						"air_date": "1997-10-27",
+						"runtime": 23,
+						"id": 30115
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "Arnold Saves Sid",
+						"air_date": "1997-10-13",
+						"runtime": 11,
+						"id": 30109
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "Hookey",
+						"air_date": "1997-10-13",
+						"runtime": 11,
+						"id": 1269272
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "Freeze Frame",
+						"air_date": "1997-10-15",
+						"runtime": 11,
+						"id": 30112
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "Phoebe Cheats",
+						"air_date": "1997-10-15",
+						"runtime": 11,
+						"id": 1269271
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "Mud Bowl",
+						"air_date": "1997-10-20",
+						"runtime": 11,
+						"id": 30114
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "Gerald Moves Out",
+						"air_date": "1997-10-20",
+						"runtime": 11,
+						"id": 1269270
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "The High Life",
+						"air_date": "1997-10-22",
+						"runtime": 11,
+						"id": 30122
+					},
+					{
+						"episode_number": 21,
+						"season_number": 2,
+						"name": "Best Friends",
+						"air_date": "1997-10-22",
+						"runtime": 11,
+						"id": 1269269
+					},
+					{
+						"episode_number": 22,
+						"season_number": 2,
+						"name": "Steely Phil",
+						"air_date": "1997-10-29",
+						"runtime": 11,
+						"id": 30116
+					},
+					{
+						"episode_number": 23,
+						"season_number": 2,
+						"name": "Quantity Time",
+						"air_date": "1997-10-29",
+						"runtime": 11,
+						"id": 1269268
+					},
+					{
+						"episode_number": 24,
+						"season_number": 2,
+						"name": "Eating Contest",
+						"air_date": "1997-11-03",
+						"runtime": 11,
+						"id": 30117
+					},
+					{
+						"episode_number": 25,
+						"season_number": 2,
+						"name": "Rhonda's Glasses",
+						"air_date": "1997-11-03",
+						"runtime": 11,
+						"id": 1269267
+					},
+					{
+						"episode_number": 26,
+						"season_number": 2,
+						"name": "Helga's Boyfriend",
+						"air_date": "1997-11-05",
+						"runtime": 11,
+						"id": 30123
+					},
+					{
+						"episode_number": 27,
+						"season_number": 2,
+						"name": "Crush on Teacher",
+						"air_date": "1997-11-05",
+						"runtime": 11,
+						"id": 1269266
+					},
+					{
+						"episode_number": 28,
+						"season_number": 2,
+						"name": "Hall Monitor",
+						"air_date": "1997-11-10",
+						"runtime": 11,
+						"id": 30120
+					},
+					{
+						"episode_number": 29,
+						"season_number": 2,
+						"name": "Harold's Bar Mitzvah",
+						"air_date": "1997-11-10",
+						"runtime": 11,
+						"id": 1269264
+					},
+					{
+						"episode_number": 30,
+						"season_number": 2,
+						"name": "Coach Wittenberg",
+						"air_date": "1997-11-12",
+						"runtime": 11,
+						"id": 30118
+					},
+					{
+						"episode_number": 31,
+						"season_number": 2,
+						"name": "Four-Eyed Jack",
+						"air_date": "1997-11-12",
+						"runtime": 11,
+						"id": 1269263
+					},
+					{
+						"episode_number": 32,
+						"season_number": 2,
+						"name": "Eugene Goes Bad",
+						"air_date": "1997-11-17",
+						"runtime": 11,
+						"id": 30119
+					},
+					{
+						"episode_number": 33,
+						"season_number": 2,
+						"name": "What's Opera, Arnold?",
+						"air_date": "1997-11-17",
+						"runtime": 11,
+						"id": 1269262
+					},
+					{
+						"episode_number": 34,
+						"season_number": 2,
+						"name": "Tour de Pond",
+						"air_date": "1997-11-24",
+						"runtime": 11,
+						"id": 30121
+					},
+					{
+						"episode_number": 35,
+						"season_number": 2,
+						"name": "Teachers' Strike",
+						"air_date": "1997-11-24",
+						"runtime": 11,
+						"id": 1269261
+					},
+					{
+						"episode_number": 36,
+						"season_number": 2,
+						"name": "Runaway Float",
+						"air_date": "1997-12-01",
+						"runtime": 11,
+						"id": 30124
+					},
+					{
+						"episode_number": 37,
+						"season_number": 2,
+						"name": "Partners",
+						"air_date": "1997-12-01",
+						"runtime": 11,
+						"id": 1269259
+					}
+				]
+			},
+			"537/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "Helga Blabs It All",
+						"air_date": "1998-08-31",
+						"runtime": 11,
+						"id": 30175
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "Harold the Butcher",
+						"air_date": "1998-08-31",
+						"runtime": 11,
+						"id": 1269273
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Dangerous Lumber",
+						"air_date": "1998-09-02",
+						"runtime": 11,
+						"id": 30185
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "Mr. Hyunh Goes Country",
+						"air_date": "1998-09-02",
+						"runtime": 11,
+						"id": 1269274
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Casa Paradiso",
+						"air_date": "1998-09-07",
+						"runtime": 11,
+						"id": 30176
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "Gerald's Tonsils",
+						"air_date": "1998-09-07",
+						"runtime": 11,
+						"id": 1269275
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "Arnold's Room",
+						"air_date": "1998-09-09",
+						"runtime": 11,
+						"id": 30182
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "Helga vs. Big Patty",
+						"air_date": "1998-09-09",
+						"runtime": 11,
+						"id": 1269276
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "Stinky Goes Hollywood",
+						"air_date": "1998-09-16",
+						"runtime": 11,
+						"id": 30183
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "Olga Gets Engaged",
+						"air_date": "1998-09-16",
+						"runtime": 11,
+						"id": 1269277
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "Curly Snaps",
+						"air_date": "1998-09-23",
+						"runtime": 11,
+						"id": 30181
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "Preteen Scream",
+						"air_date": "1998-09-23",
+						"runtime": 11,
+						"id": 1269278
+					},
+					{
+						"episode_number": 13,
+						"season_number": 3,
+						"name": "Grandpa's Birthday",
+						"air_date": "1998-09-30",
+						"runtime": 11,
+						"id": 30180
+					},
+					{
+						"episode_number": 14,
+						"season_number": 3,
+						"name": "Road Trip",
+						"air_date": "1998-09-30",
+						"runtime": 11,
+						"id": 1269279
+					},
+					{
+						"episode_number": 15,
+						"season_number": 3,
+						"name": "Sid's Revenge",
+						"air_date": "1998-10-07",
+						"runtime": 11,
+						"id": 30177
+					},
+					{
+						"episode_number": 16,
+						"season_number": 3,
+						"name": "Roller Coaster",
+						"air_date": "1998-10-07",
+						"runtime": 11,
+						"id": 1269280
+					},
+					{
+						"episode_number": 17,
+						"season_number": 3,
+						"name": "The Aptitude Test",
+						"air_date": "1998-10-14",
+						"runtime": 11,
+						"id": 30184
+					},
+					{
+						"episode_number": 18,
+						"season_number": 3,
+						"name": "Oskar Gets a Job",
+						"air_date": "1998-10-14",
+						"runtime": 11,
+						"id": 1269281
+					},
+					{
+						"episode_number": 19,
+						"season_number": 3,
+						"name": "Arnold Betrays Iggy",
+						"air_date": "1998-10-19",
+						"runtime": 11,
+						"id": 30179
+					},
+					{
+						"episode_number": 20,
+						"season_number": 3,
+						"name": "Helga and the Nanny",
+						"air_date": "1998-10-19",
+						"runtime": 11,
+						"id": 1269282
+					},
+					{
+						"episode_number": 21,
+						"season_number": 3,
+						"name": "Career Day",
+						"air_date": "1998-10-21",
+						"runtime": 11,
+						"id": 30178
+					},
+					{
+						"episode_number": 22,
+						"season_number": 3,
+						"name": "Hey Harold!",
+						"air_date": "1998-10-21",
+						"runtime": 11,
+						"id": 1269283
+					},
+					{
+						"episode_number": 23,
+						"season_number": 3,
+						"name": "Best Man",
+						"air_date": "1998-11-02",
+						"runtime": 11,
+						"id": 30188
+					},
+					{
+						"episode_number": 24,
+						"season_number": 3,
+						"name": "Cool Party",
+						"air_date": "1998-11-02",
+						"runtime": 11,
+						"id": 1269284
+					},
+					{
+						"episode_number": 25,
+						"season_number": 3,
+						"name": "Arnold & Lila",
+						"air_date": "1998-11-04",
+						"runtime": 11,
+						"id": 30186
+					},
+					{
+						"episode_number": 26,
+						"season_number": 3,
+						"name": "Grand Prix",
+						"air_date": "1998-11-04",
+						"runtime": 11,
+						"id": 1269285
+					},
+					{
+						"episode_number": 27,
+						"season_number": 3,
+						"name": "Arnold's Thanksgiving",
+						"air_date": "1998-11-18",
+						"runtime": 23,
+						"id": 30192
+					},
+					{
+						"episode_number": 28,
+						"season_number": 3,
+						"name": "Helga's Show",
+						"air_date": "1998-11-25",
+						"runtime": 11,
+						"id": 30193
+					},
+					{
+						"episode_number": 29,
+						"season_number": 3,
+						"name": "The Flood",
+						"air_date": "1998-11-25",
+						"runtime": 11,
+						"id": 1269286
+					},
+					{
+						"episode_number": 30,
+						"season_number": 3,
+						"name": "Phoebe Takes the Fall",
+						"air_date": "1998-12-07",
+						"runtime": 11,
+						"id": 30190
+					},
+					{
+						"episode_number": 31,
+						"season_number": 3,
+						"name": "The Pig War",
+						"air_date": "1998-12-07",
+						"runtime": 11,
+						"id": 1269287
+					},
+					{
+						"episode_number": 32,
+						"season_number": 3,
+						"name": "Part Time Friends",
+						"air_date": "1998-12-07",
+						"runtime": 11,
+						"id": 30187
+					},
+					{
+						"episode_number": 33,
+						"season_number": 3,
+						"name": "Biosquare",
+						"air_date": "1998-12-07",
+						"runtime": 11,
+						"id": 1269288
+					},
+					{
+						"episode_number": 34,
+						"season_number": 3,
+						"name": "Crabby Author",
+						"air_date": "1998-12-28",
+						"runtime": 11,
+						"id": 30189
+					},
+					{
+						"episode_number": 35,
+						"season_number": 3,
+						"name": "Rich Kid",
+						"air_date": "1999-01-04",
+						"runtime": 11,
+						"id": 1269289
+					},
+					{
+						"episode_number": 36,
+						"season_number": 3,
+						"name": "Girl Trouble",
+						"air_date": "1999-01-04",
+						"runtime": 11,
+						"id": 30191
+					},
+					{
+						"episode_number": 37,
+						"season_number": 3,
+						"name": "School Dance",
+						"air_date": "1999-01-04",
+						"runtime": 11,
+						"id": 1269290
+					},
+					{
+						"episode_number": 38,
+						"season_number": 3,
+						"name": "School Play",
+						"air_date": "1999-03-08",
+						"runtime": 24,
+						"id": 30194
+					}
+				]
+			},
+			"537/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 4,
+						"name": "Full Moon",
+						"air_date": "1999-03-10",
+						"runtime": 11,
+						"id": 30126
+					},
+					{
+						"episode_number": 2,
+						"season_number": 4,
+						"name": "Student Teacher",
+						"air_date": "1999-03-10",
+						"runtime": 11,
+						"id": 30128
+					},
+					{
+						"episode_number": 3,
+						"season_number": 4,
+						"name": "Big Gino",
+						"air_date": "1999-03-15",
+						"runtime": 11,
+						"id": 30127
+					},
+					{
+						"episode_number": 4,
+						"season_number": 4,
+						"name": "Jamie O in Love",
+						"air_date": "1999-03-15",
+						"runtime": 11,
+						"id": 30125
+					},
+					{
+						"episode_number": 5,
+						"season_number": 4,
+						"name": "Eugene's Birthday",
+						"air_date": "1999-03-17",
+						"runtime": 11,
+						"id": 30131
+					},
+					{
+						"episode_number": 6,
+						"season_number": 4,
+						"name": "Stinky's Pumpkin",
+						"air_date": "1999-03-17",
+						"runtime": 11,
+						"id": 30133
+					},
+					{
+						"episode_number": 7,
+						"season_number": 4,
+						"name": "The Beeper Queen",
+						"air_date": "1999-03-29",
+						"runtime": 11,
+						"id": 30129
+					},
+					{
+						"episode_number": 8,
+						"season_number": 4,
+						"name": "Oskar Can't Read?",
+						"air_date": "1999-03-29",
+						"runtime": 11,
+						"id": 30130
+					},
+					{
+						"episode_number": 9,
+						"season_number": 4,
+						"name": "Dinner for Four",
+						"air_date": "1999-03-31",
+						"runtime": 11,
+						"id": 30132
+					},
+					{
+						"episode_number": 10,
+						"season_number": 4,
+						"name": "Phoebe Skips",
+						"air_date": "1999-03-31",
+						"runtime": 11,
+						"id": 30137
+					},
+					{
+						"episode_number": 11,
+						"season_number": 4,
+						"name": "Helga's Parrot",
+						"air_date": "1999-04-05",
+						"runtime": 11,
+						"id": 30136
+					},
+					{
+						"episode_number": 12,
+						"season_number": 4,
+						"name": "Chocolate Turtles",
+						"air_date": "1999-04-05",
+						"runtime": 11,
+						"id": 30135
+					},
+					{
+						"episode_number": 13,
+						"season_number": 4,
+						"name": "Love and Cheese",
+						"air_date": "1999-04-07",
+						"runtime": 11,
+						"id": 30138
+					},
+					{
+						"episode_number": 14,
+						"season_number": 4,
+						"name": "Weighing Harold",
+						"air_date": "1999-04-07",
+						"runtime": 11,
+						"id": 30140
+					},
+					{
+						"episode_number": 15,
+						"season_number": 4,
+						"name": "Back to School",
+						"air_date": "1999-09-11",
+						"runtime": 11,
+						"id": 30139
+					},
+					{
+						"episode_number": 16,
+						"season_number": 4,
+						"name": "Egg Story",
+						"air_date": "1999-09-11",
+						"runtime": 11,
+						"id": 30141
+					},
+					{
+						"episode_number": 17,
+						"season_number": 4,
+						"name": "It Girl",
+						"air_date": "1999-09-18",
+						"runtime": 11,
+						"id": 30134
+					},
+					{
+						"episode_number": 18,
+						"season_number": 4,
+						"name": "Deconstructing Arnold",
+						"air_date": "1999-09-18",
+						"runtime": 11,
+						"id": 30105
+					},
+					{
+						"episode_number": 19,
+						"season_number": 4,
+						"name": "Grudge Match",
+						"air_date": "1999-09-25",
+						"runtime": 11,
+						"id": 30142
+					},
+					{
+						"episode_number": 20,
+						"season_number": 4,
+						"name": "Polishing Rhonda",
+						"air_date": "1999-09-25",
+						"runtime": 11,
+						"id": 30143
+					},
+					{
+						"episode_number": 21,
+						"season_number": 4,
+						"name": "Weird Cousin",
+						"air_date": "1999-10-09",
+						"runtime": 11,
+						"id": 30144
+					},
+					{
+						"episode_number": 22,
+						"season_number": 4,
+						"name": "Baby Oskar",
+						"air_date": "1999-10-09",
+						"runtime": 11,
+						"id": 30145
+					},
+					{
+						"episode_number": 23,
+						"season_number": 4,
+						"name": "Grandpa's Sister",
+						"air_date": "1999-10-16",
+						"runtime": 11,
+						"id": 30146
+					},
+					{
+						"episode_number": 24,
+						"season_number": 4,
+						"name": "Synchronized Swimming",
+						"air_date": "1999-10-16",
+						"runtime": 11,
+						"id": 30147
+					},
+					{
+						"episode_number": 25,
+						"season_number": 4,
+						"name": "Helga Sleepwalks",
+						"air_date": "1999-10-23",
+						"runtime": 11,
+						"id": 30148
+					},
+					{
+						"episode_number": 26,
+						"season_number": 4,
+						"name": "Fighting Families",
+						"air_date": "1999-10-23",
+						"runtime": 11,
+						"id": 30149
+					},
+					{
+						"episode_number": 27,
+						"season_number": 4,
+						"name": "Headless Cabbie",
+						"air_date": "1999-10-30",
+						"runtime": 11,
+						"id": 30150
+					},
+					{
+						"episode_number": 28,
+						"season_number": 4,
+						"name": "Friday the 13th",
+						"air_date": "1999-10-30",
+						"runtime": 11,
+						"id": 30151
+					},
+					{
+						"episode_number": 29,
+						"season_number": 4,
+						"name": "Veterans Day",
+						"air_date": "1999-11-06",
+						"runtime": 23,
+						"id": 30152
+					},
+					{
+						"episode_number": 30,
+						"season_number": 4,
+						"name": "Helga on the Couch",
+						"air_date": "1999-12-04",
+						"runtime": 23,
+						"id": 30153
+					},
+					{
+						"episode_number": 31,
+						"season_number": 4,
+						"name": "Dino Checks Out",
+						"air_date": "1999-12-11",
+						"runtime": 23,
+						"id": 30154
+					}
+				]
+			},
+			"537/5": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 5,
+						"name": "Monkeyman!",
+						"air_date": "2001-03-04",
+						"runtime": 11,
+						"id": 30197
+					},
+					{
+						"episode_number": 2,
+						"season_number": 5,
+						"name": "Buses, Bikes, and Subways",
+						"air_date": "2001-03-04",
+						"runtime": 11,
+						"id": 30219
+					},
+					{
+						"episode_number": 3,
+						"season_number": 5,
+						"name": "Helga's Masquerade",
+						"air_date": "2001-03-11",
+						"runtime": 11,
+						"id": 30200
+					},
+					{
+						"episode_number": 4,
+						"season_number": 5,
+						"name": "Mr. Green Runs",
+						"air_date": "2001-03-11",
+						"runtime": 11,
+						"id": 30221
+					},
+					{
+						"episode_number": 5,
+						"season_number": 5,
+						"name": "Sid the Vampire Slayer",
+						"air_date": "2001-03-18",
+						"runtime": 11,
+						"id": 30196
+					},
+					{
+						"episode_number": 6,
+						"season_number": 5,
+						"name": "Big Sis",
+						"air_date": "2001-03-18",
+						"runtime": 11,
+						"id": 30220
+					},
+					{
+						"episode_number": 7,
+						"season_number": 5,
+						"name": "Bag of Money",
+						"air_date": "2001-04-05",
+						"runtime": 11,
+						"id": 30201
+					},
+					{
+						"episode_number": 8,
+						"season_number": 5,
+						"name": "Principal Simmons",
+						"air_date": "2001-04-05",
+						"runtime": 11,
+						"id": 1269303
+					},
+					{
+						"episode_number": 9,
+						"season_number": 5,
+						"name": "New Bully on the Block",
+						"air_date": "2001-04-12",
+						"runtime": 11,
+						"id": 30202
+					},
+					{
+						"episode_number": 10,
+						"season_number": 5,
+						"name": "Phoebe Breaks a Leg",
+						"air_date": "2001-04-12",
+						"runtime": 11,
+						"id": 1269304
+					},
+					{
+						"episode_number": 11,
+						"season_number": 5,
+						"name": "Helga's Locket",
+						"air_date": "2000-04-19",
+						"runtime": 11,
+						"id": 30198
+					},
+					{
+						"episode_number": 12,
+						"season_number": 5,
+						"name": "Sid and Germs",
+						"air_date": "2001-04-19",
+						"runtime": 11,
+						"id": 1269305
+					},
+					{
+						"episode_number": 13,
+						"season_number": 5,
+						"name": "Suspended",
+						"air_date": "2000-04-26",
+						"runtime": 11,
+						"id": 30195
+					},
+					{
+						"episode_number": 14,
+						"season_number": 5,
+						"name": "Ernie in Love",
+						"air_date": "2001-04-26",
+						"runtime": 11,
+						"id": 1269306
+					},
+					{
+						"episode_number": 15,
+						"season_number": 5,
+						"name": "Parents Day",
+						"air_date": "2001-05-10",
+						"runtime": 24,
+						"id": 30199
+					},
+					{
+						"episode_number": 16,
+						"season_number": 5,
+						"name": "Summer Love",
+						"air_date": "2001-06-21",
+						"runtime": 24,
+						"id": 30204
+					},
+					{
+						"episode_number": 17,
+						"season_number": 5,
+						"name": "Stuck in a Tree",
+						"air_date": "2002-01-05",
+						"runtime": 11,
+						"id": 30211
+					},
+					{
+						"episode_number": 18,
+						"season_number": 5,
+						"name": "Rhonda Goes Broke",
+						"air_date": "2002-01-05",
+						"runtime": 11,
+						"id": 1269307
+					},
+					{
+						"episode_number": 19,
+						"season_number": 5,
+						"name": "Beaned",
+						"air_date": "2002-01-12",
+						"runtime": 11,
+						"id": 30208
+					},
+					{
+						"episode_number": 20,
+						"season_number": 5,
+						"name": "Old Iron Man",
+						"air_date": "2002-01-12",
+						"runtime": 11,
+						"id": 1269308
+					},
+					{
+						"episode_number": 21,
+						"season_number": 5,
+						"name": "Arnold Visits Arnie",
+						"air_date": "2002-01-26",
+						"runtime": 11,
+						"id": 30210
+					},
+					{
+						"episode_number": 22,
+						"season_number": 5,
+						"name": "Chocolate Boy",
+						"air_date": "2002-01-26",
+						"runtime": 11,
+						"id": 1269309
+					},
+					{
+						"episode_number": 23,
+						"season_number": 5,
+						"name": "Harold vs. Patty",
+						"air_date": "2002-02-03",
+						"runtime": 11,
+						"id": 30206
+					},
+					{
+						"episode_number": 24,
+						"season_number": 5,
+						"name": "Rich Guy",
+						"air_date": "2002-02-03",
+						"runtime": 11,
+						"id": 1269310
+					},
+					{
+						"episode_number": 25,
+						"season_number": 5,
+						"name": "April Fool's Day",
+						"air_date": "2002-04-01",
+						"runtime": 23,
+						"id": 30207
+					},
+					{
+						"episode_number": 26,
+						"season_number": 5,
+						"name": "Gerald's Game",
+						"air_date": "2002-04-27",
+						"runtime": 11,
+						"id": 30203
+					},
+					{
+						"episode_number": 27,
+						"season_number": 5,
+						"name": "Fishing Trip",
+						"air_date": "2002-04-27",
+						"runtime": 11,
+						"id": 1269311
+					},
+					{
+						"episode_number": 28,
+						"season_number": 5,
+						"name": "Married",
+						"air_date": "2002-05-11",
+						"runtime": 22,
+						"id": 30205
+					},
+					{
+						"episode_number": 29,
+						"season_number": 5,
+						"name": "On the Lam",
+						"air_date": "2002-06-01",
+						"runtime": 11,
+						"id": 30209
+					},
+					{
+						"episode_number": 30,
+						"season_number": 5,
+						"name": "Family Man",
+						"air_date": "2002-06-01",
+						"runtime": 11,
+						"id": 1269312
+					},
+					{
+						"episode_number": 31,
+						"season_number": 5,
+						"name": "The Racing Mule",
+						"air_date": "2002-10-14",
+						"runtime": 11,
+						"id": 30215
+					},
+					{
+						"episode_number": 32,
+						"season_number": 5,
+						"name": "Curly's Girl",
+						"air_date": "2002-10-14",
+						"runtime": 11,
+						"id": 1269314
+					},
+					{
+						"episode_number": 33,
+						"season_number": 5,
+						"name": "The Journal (1)",
+						"air_date": "2002-11-11",
+						"runtime": 25,
+						"id": 30218
+					},
+					{
+						"episode_number": 34,
+						"season_number": 5,
+						"name": "The Journal (2)",
+						"air_date": "2002-11-11",
+						"runtime": 23,
+						"id": 30213
+					},
+					{
+						"episode_number": 35,
+						"season_number": 5,
+						"name": "Timberly Loves Arnold",
+						"air_date": "2003-01-28",
+						"runtime": 11,
+						"id": 30214
+					},
+					{
+						"episode_number": 36,
+						"season_number": 5,
+						"name": "Eugene, Eugene!",
+						"air_date": "2003-01-28",
+						"runtime": 11,
+						"id": 1269315
+					},
+					{
+						"episode_number": 37,
+						"season_number": 5,
+						"name": "Ghost Bride",
+						"air_date": "2003-11-11",
+						"runtime": 11,
+						"id": 30212
+					},
+					{
+						"episode_number": 38,
+						"season_number": 5,
+						"name": "Gerald vs. Jamie O",
+						"air_date": "2003-11-11",
+						"runtime": 11,
+						"id": 1269316
+					},
+					{
+						"episode_number": 39,
+						"season_number": 5,
+						"name": "A Day in the Life of a Classroom",
+						"air_date": "2003-11-15",
+						"runtime": 11,
+						"id": 30216
+					},
+					{
+						"episode_number": 40,
+						"season_number": 5,
+						"name": "Big Bob's Crisis",
+						"air_date": "2003-11-15",
+						"runtime": 11,
+						"id": 1269317
+					},
+					{
+						"episode_number": 41,
+						"season_number": 5,
+						"name": "Phoebe's Little Problem",
+						"air_date": "2004-06-08",
+						"runtime": 11,
+						"id": 30217
+					},
+					{
+						"episode_number": 42,
+						"season_number": 5,
+						"name": "Grandpa's Packard",
+						"air_date": "2004-06-08",
+						"runtime": 11,
+						"id": 1269318
+					}
+				]
+			}
+		},
+		"searchTv": {
+			"Mickey Mouse Works DVB,": {
+				"results": []
+			},
+			"Hey Arnold!": {
+				"results": [
+					{
+						"id": 537,
+						"name": "Hey Arnold!",
+						"original_name": "Hey Arnold!",
+						"first_air_date": "1996-10-07"
+					}
+				]
+			}
+		},
+		"identify": {
+			"[M-KV2501] Mickey Mouse Works [DVB, VHSRip]": {
+				"imdbId": "tt0198181",
+				"title": "Mickey Mouse Works",
+				"year": 1999,
+				"kind": "tv"
+			}
+		}
+	},
+	"cases": [
+		{
+			"from": "zurg on fun (RD), 2026-11-10: the .zurgtorrent's name, hash, IMDb id and every video file with its folder, as zurg asks",
+			"request": {
+				"name": "[M-KV2501] Mickey Mouse Works [DVB, VHSRip]",
+				"hash": "98b1e5bf0643167fe7b163211fedd33f80bf050f",
+				"files": [
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x01 (01) Train Tracks; How To Be A Waiter; William Tell Overture; Donald's Failed Fourth; Roller Coaster Painters [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x02 (02) Skating The Half Pipe; Mickey's New Car; Pluto's Penthouse Sweet; Donald's Shell Shots [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x03 (03) Bowling Alley; Mickey's Airplane Kit; Time Reverser; Turkey Catchers; Dance of the Goofys [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x04 (04) Spaceship; Donald's Rocket Ruckus; Paracycling; Organ Donors; Mickey's Mistake [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x05 (05) Hungarian Rhapsody No. 6; How To Be A Spy; Donald's Valentine Dollar; Pluto's Kittens [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x06 (06) Remote Controlled Laser Lawn Mower; Pluto Vs. The Watchdog; Opera Box; Around The World In Eighty Days [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x07 (07) Fishing; Purple Pluto; Money Increaser; Sandwich Makers; Pluto's Arrow Error [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x08 (08) Staircase; Pluto Runs Away; Daisy Visits Minnie; How To Ride A Bicycle [DVB].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x09 (09) Rock Climbing;Hansel And Gretel; Donald On Ice; Mickey's Mechanical House [DVB].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x10 (10) Street Cleaner; Donald's Dinner Date; Brahms Lullabye; Hydro Squirter; Mickey's Piano Lesson [DVB].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x11 (11) Cages And Cannons; Mickey's Remedy; Wakeboarding; A Midsummer Night's Dream [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x12 (12) Bubble Gum; Mickey Tries To Cook; Donald And The Big Nut; Topsy Turvy Town [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x01 (14) Vending Machine; Donald's Grizzly Guest; Snowman; Mickey Foils The Phantom Blot [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x02 (15) Daisy's Road Trip; Goofy's Big Kitty; Relaxing With Von Drake [DVB].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x03 (16) How To Be A Baseball Fan; Locksmiths; Minnie Takes Care of Pluto [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x04 (17) Mickey And The Seagull {cut} [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x05 (18) Goofy's Radio; Car Washers; Pluto's Seal Deal [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x06 (19) Mickey's Mixed Nuts; Shark Feeding; Mickey's Mountain; Computer.don [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x07 (20) Donald's Halloween Scare; Donald's Lighthouse; How to Take Care of Your Yard [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x08 (21) Mortimer; Minnie Visits Daisy; How To Wash Dishes; Domesticated Donald [VHSRip].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x10 (23) Donald's Fish Fry; Presto Pluto; Mickey's Cabin [DVB].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x11 (24) Vending Machine; Mickey's Answering Service; Pluto's Magic Paws; Mickey's Big Break [DVB].mkv",
+						"folder": ""
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x12 (25) Bird Brained Donald; How To Be A Gentleman; Donald's Pool [DVB].mkv",
+						"folder": ""
+					}
+				]
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0198181",
+				"tmdbId": 2330,
+				"files": [
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x01 (01) Train Tracks; How To Be A Waiter; William Tell Overture; Donald's Failed Fourth; Roller Coaster Painters [VHSRip].mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170811
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x02 (02) Skating The Half Pipe; Mickey's New Car; Pluto's Penthouse Sweet; Donald's Shell Shots [VHSRip].mkv",
+						"season": 1,
+						"episode": 6,
+						"episodeEnd": 9,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170818
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x03 (03) Bowling Alley; Mickey's Airplane Kit; Time Reverser; Turkey Catchers; Dance of the Goofys [VHSRip].mkv",
+						"season": 1,
+						"episode": 10,
+						"episodeEnd": 14,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170817
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x04 (04) Spaceship; Donald's Rocket Ruckus; Paracycling; Organ Donors; Mickey's Mistake [VHSRip].mkv",
+						"season": 1,
+						"episode": 15,
+						"episodeEnd": 19,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170812
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x05 (05) Hungarian Rhapsody No. 6; How To Be A Spy; Donald's Valentine Dollar; Pluto's Kittens [VHSRip].mkv",
+						"season": 1,
+						"episode": 20,
+						"episodeEnd": 23,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170814
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x06 (06) Remote Controlled Laser Lawn Mower; Pluto Vs. The Watchdog; Opera Box; Around The World In Eighty Days [VHSRip].mkv",
+						"season": 1,
+						"episode": 24,
+						"episodeEnd": 27,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170813
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x07 (07) Fishing; Purple Pluto; Money Increaser; Sandwich Makers; Pluto's Arrow Error [VHSRip].mkv",
+						"season": 1,
+						"episode": 28,
+						"episodeEnd": 32,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170815
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x08 (08) Staircase; Pluto Runs Away; Daisy Visits Minnie; How To Ride A Bicycle [DVB].mkv",
+						"season": 1,
+						"episode": 33,
+						"episodeEnd": 36,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170816
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x09 (09) Rock Climbing;Hansel And Gretel; Donald On Ice; Mickey's Mechanical House [DVB].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x10 (10) Street Cleaner; Donald's Dinner Date; Brahms Lullabye; Hydro Squirter; Mickey's Piano Lesson [DVB].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x11 (11) Cages And Cannons; Mickey's Remedy; Wakeboarding; A Midsummer Night's Dream [VHSRip].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 1x12 (12) Bubble Gum; Mickey Tries To Cook; Donald And The Big Nut; Topsy Turvy Town [VHSRip].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x01 (14) Vending Machine; Donald's Grizzly Guest; Snowman; Mickey Foils The Phantom Blot [VHSRip].mkv",
+						"season": 2,
+						"episode": 26,
+						"episodeEnd": 29,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170826
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x02 (15) Daisy's Road Trip; Goofy's Big Kitty; Relaxing With Von Drake [DVB].mkv",
+						"season": 2,
+						"episode": 30,
+						"episodeEnd": 32,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170820
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x03 (16) How To Be A Baseball Fan; Locksmiths; Minnie Takes Care of Pluto [VHSRip].mkv",
+						"season": 2,
+						"episode": 33,
+						"episodeEnd": 35,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170825
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x04 (17) Mickey And The Seagull {cut} [VHSRip].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x05 (18) Goofy's Radio; Car Washers; Pluto's Seal Deal [VHSRip].mkv",
+						"season": 2,
+						"episode": 40,
+						"episodeEnd": 42,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170821
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x06 (19) Mickey's Mixed Nuts; Shark Feeding; Mickey's Mountain; Computer.don [VHSRip].mkv",
+						"season": 2,
+						"episode": 43,
+						"episodeEnd": 46,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170830
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x07 (20) Donald's Halloween Scare; Donald's Lighthouse; How to Take Care of Your Yard [VHSRip].mkv",
+						"season": 2,
+						"episode": 47,
+						"episodeEnd": 49,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170832
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x08 (21) Mortimer; Minnie Visits Daisy; How To Wash Dishes; Domesticated Donald [VHSRip].mkv",
+						"season": 2,
+						"episode": 50,
+						"episodeEnd": 53,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170831
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x10 (23) Donald's Fish Fry; Presto Pluto; Mickey's Cabin [DVB].mkv",
+						"season": 3,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170835
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x11 (24) Vending Machine; Mickey's Answering Service; Pluto's Magic Paws; Mickey's Big Break [DVB].mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					},
+					{
+						"path": "[M-KV2501] Mickey Mouse Works 2x12 (25) Bird Brained Donald; How To Be A Gentleman; Donald's Pool [DVB].mkv",
+						"season": 3,
+						"episode": 14,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 170837
+					}
+				]
+			}
+		},
+		{
+			"from": "zurg on fun (RD), 2026-11-10: the .zurgtorrent's name, hash, IMDb id and every video file with its folder, as zurg asks",
+			"request": {
+				"name": "Hey Arnold! 576p",
+				"hash": "4e420d0f34a0052de1c0dbb9ad56adb5888cf038",
+				"files": [
+					{
+						"path": "Hey Arnold!_S01E01_Downtown as Fruits - Eugene's Bike.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E02_The Little Pink Book - Field Trip.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E03_Arnold's Hat - Stoop Kid.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E04_Helga's Makeover - The Old Building.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E05_6th Grade Girls - The Baseball.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E06_Heat - Snow.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E07_Operation Ruthless - The Vacant Lot.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E08_The List - The Haunted Train.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E09_Mugged - Roughin' It.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E10_Door #16 - Arnold as Cupid.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E11_Benchwarmer - Cool Jerk.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E12_Das Subway - Wheezin' Ed.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E13_Tutoring Torvald - Gerald Comes Over.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E14_Spelling Bee - Pigeon Man.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E15_Olga Comes Home - Salley's Comet.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E16_Abner Come Home - The Sewer King.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E17_False Alarm - World Records.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E18_Magic Show - 24 Hours to Live.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E19_Part Time Friends - Bio Square.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E20_Arnold's Christmas.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E21_Helga's Boyfriend - Crush on Teacher.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E22_Hall Monitor - Harold's Bar Mitzvah.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E23_Coach Wittenberg - Four-Eyed Jack.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E24_Tour de Pond - Teacher's Strike.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E25_Arnold's Valentine.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S01E26_Runaway Float - Partners.mkv",
+						"folder": "Hey Arnold! S01 576p"
+					},
+					{
+						"path": "Hey Arnold!_S02E01_The Big Scoop - Harold's Kitty.mkv",
+						"folder": "Hey Arnold! S02 576p"
+					},
+					{
+						"path": "Hey Arnold!_S02E02_Arnold Saves Sid - Hookey.mkv",
+						"folder": "Hey Arnold! S02 576p"
+					},
+					{
+						"path": "Hey Arnold!_S02E03_Save the Tree - New Teacher.mkv",
+						"folder": "Hey Arnold! S02 576p"
+					},
+					{
+						"path": "Hey Arnold!_S02E04_Ransom - Ms. Perfect.mkv",
+						"folder": "Hey Arnold! S02 576p"
+					},
+					{
+						"path": "Hey Arnold!_S02E05_Monkey Business - Big Caesar.mkv",
+						"folder": "Hey Arnold! S02 576p"
+					},
+					{
+						"path": "Hey Arnold!_S02E06_The High Life - Best Friends.mkv",
+						"folder": "Hey Arnold! S02 576p"
+					},
+					{
+						"path": "Hey Arnold!_S02E07_The Longest Monday - Eugene's Pet.mkv",
+						"folder": "Hey Arnold! S02 576p"
+					},
+					{
+						"path": "Hey Arnold!_S02E08_Mudbowl - Gerald Moves Out.mkv",
+						"folder": "Hey Arnold! S02 576p"
+					},
+					{
+						"path": "Hey Arnold!_S02E09_Freeze Frame - Phoebe Cheats.mkv",
+						"folder": "Hey Arnold! S02 576p"
+					},
+					{
+						"path": "Hey Arnold!_S02E10_Helga's Love Potion - Gerald's Secret.mkv",
+						"folder": "Hey Arnold! S02 576p"
+					},
+					{
+						"path": "Hey Arnold!_S02E11_Steely Phil - Quantity Time.mkv",
+						"folder": "Hey Arnold! S02 576p"
+					},
+					{
+						"path": "Hey Arnold!_S02E12_Eating Contest - Rhonda's Glasses.mkv",
+						"folder": "Hey Arnold! S02 576p"
+					},
+					{
+						"path": "Hey Arnold!_S02E13_Eugene Goes Bad - What's Opera, Arnold.mkv",
+						"folder": "Hey Arnold! S02 576p"
+					},
+					{
+						"path": "Hey Arnold!_S02E14_Arnold's Halloween.mkv",
+						"folder": "Hey Arnold! S02 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E01_The Aptitude Test - Oskar Gets a Job.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E02_Curly Snaps - Pre-teen Scream.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E03_Stinky Goes Hollywood - Olga Gets Engaged.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E04_Crabby Author - Rich Kid.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E05_Helga Blabs All - Harold the Butcher.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E06_Arnold Betrays Iggy - Helga and the Nanny.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E07_Dangerous Lumber - Mr. Hyunh Goes Country.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E08_Arnold's Room - Helga vs. Big Patty.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E09_Career Day - Hey Harold!.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E10_Casa Paradiso - Gerald's Tonsils.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E11_Phoebe Takes the Fall - The Pig War.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E12_Best Man - Cool Party.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E13_Sid's Revenge - Roller Coaster.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E14_Grandpa's Birthday - Road Trip.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E15_Arnold & Lila - Grand Prix.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E16_Arnold's Thanksgiving.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E17_Girl Trouble - School Dance.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E18_Helga's Show - Flood.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E19_School Play.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S03E20_Parent's Day.mkv",
+						"folder": "Hey Arnold! S03 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E01_Eugene's Birthday - Stinky's Pumpkin.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E02_Dinner for Four - Phoebe Skips.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E03_Full Moon - Student Teacher.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E04_Big Gino - Jamie O in Luv.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E05_Beeper Queen - Oscar Can't Read.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E06_Headless Cabbie - Friday the 13th.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E07_Helga's Parrot - Chocolate Turtles.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E08_Love and Cheese - Weighing Harold.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E09_It Girl - Deconstructing Arnold.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E10_Grudge Match - Polishing Rhonda.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E11_Veteran's Day.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E12_Back to School - The Egg.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E13_Weird Cousin - Baby Oskar.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E14_Helga Sleepwalks - Fighting Families.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E15_Monkeyman! - Buses, Bikes, Subways.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E16_Grandpa's Sister - Synchronized Swimming.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E17_Helga's Masquerade - Mr. Green Runs.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E18_Helga on the Couch.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E19_Dino Checks Out.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S04E20_Summer Love.mkv",
+						"folder": "Hey Arnold! S04 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E01_Sid the Vampire Slayer - Big Sis.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E02_Gerald's Game - Fishing Trip.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E03_Bag of Money - Principal Simmons.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E04_New Bully on the Block - Phoebe Breaks a Leg.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E05_Stuck in a Tree - Rhonda Goes Broke.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E06_Helga's Locket - Sid and Germs.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E07_Beaned - Old Iron Man.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E08_Ghost Bride - Gerald vs. Jamie O.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E09_Suspended - Ernie in Love.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E10_Arnold Visits Arnie - Chocolate Boy.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E11_Harold vs. Patty - Rich Guy.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E12_The Racing Mule - Curly's Girl.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E13_On the Lam - Family Man.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E14_Phoebe's Little Problem - Grandpa's Packard.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E15_A Day in the Life of a Classroom - Big Bob's Crisis.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E16_Married.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E17_Timberly Loves Arnold - Eugene, Eugene!.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E18_April Fools Day.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					},
+					{
+						"path": "Hey Arnold!_S05E19-20_The Journal.mkv",
+						"folder": "Hey Arnold! S05 576p"
+					}
+				],
+				"imdbId": "tt0600758"
+			},
+			"expect": {
+				"kind": "tv",
+				"imdbId": "tt0115200",
+				"tmdbId": 537,
+				"files": [
+					{
+						"path": "Hey Arnold!_S01E01_Downtown as Fruits - Eugene's Bike.mkv",
+						"season": 1,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30156
+					},
+					{
+						"path": "Hey Arnold!_S01E02_The Little Pink Book - Field Trip.mkv",
+						"season": 1,
+						"episode": 3,
+						"episodeEnd": 4,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30155
+					},
+					{
+						"path": "Hey Arnold!_S01E03_Arnold's Hat - Stoop Kid.mkv",
+						"season": 1,
+						"episode": 5,
+						"episodeEnd": 6,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30157
+					},
+					{
+						"path": "Hey Arnold!_S01E04_Helga's Makeover - The Old Building.mkv",
+						"season": 1,
+						"episode": 7,
+						"episodeEnd": 8,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30161
+					},
+					{
+						"path": "Hey Arnold!_S01E05_6th Grade Girls - The Baseball.mkv",
+						"season": 1,
+						"episode": 9,
+						"episodeEnd": 10,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30158
+					},
+					{
+						"path": "Hey Arnold!_S01E06_Heat - Snow.mkv",
+						"season": 1,
+						"episode": 11,
+						"episodeEnd": 12,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30159
+					},
+					{
+						"path": "Hey Arnold!_S01E07_Operation Ruthless - The Vacant Lot.mkv",
+						"season": 1,
+						"episode": 13,
+						"episodeEnd": 14,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30160
+					},
+					{
+						"path": "Hey Arnold!_S01E08_The List - The Haunted Train.mkv",
+						"season": 1,
+						"episode": 15,
+						"episodeEnd": 16,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30171
+					},
+					{
+						"path": "Hey Arnold!_S01E09_Mugged - Roughin' It.mkv",
+						"season": 1,
+						"episode": 17,
+						"episodeEnd": 18,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30167
+					},
+					{
+						"path": "Hey Arnold!_S01E10_Door #16 - Arnold as Cupid.mkv",
+						"season": 1,
+						"episode": 19,
+						"episodeEnd": 20,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30168
+					},
+					{
+						"path": "Hey Arnold!_S01E11_Benchwarmer - Cool Jerk.mkv",
+						"season": 1,
+						"episode": 22,
+						"episodeEnd": 23,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30162
+					},
+					{
+						"path": "Hey Arnold!_S01E12_Das Subway - Wheezin' Ed.mkv",
+						"season": 1,
+						"episode": 24,
+						"episodeEnd": 25,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30170
+					},
+					{
+						"path": "Hey Arnold!_S01E13_Tutoring Torvald - Gerald Comes Over.mkv",
+						"season": 1,
+						"episode": 26,
+						"episodeEnd": 27,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30166
+					},
+					{
+						"path": "Hey Arnold!_S01E14_Spelling Bee - Pigeon Man.mkv",
+						"season": 1,
+						"episode": 28,
+						"episodeEnd": 29,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30163
+					},
+					{
+						"path": "Hey Arnold!_S01E15_Olga Comes Home - Salley's Comet.mkv",
+						"season": 1,
+						"episode": 30,
+						"episodeEnd": 31,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30165
+					},
+					{
+						"path": "Hey Arnold!_S01E16_Abner Come Home - The Sewer King.mkv",
+						"season": 1,
+						"episode": 32,
+						"episodeEnd": 33,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30164
+					},
+					{
+						"path": "Hey Arnold!_S01E17_False Alarm - World Records.mkv",
+						"season": 1,
+						"episode": 34,
+						"episodeEnd": 35,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30169
+					},
+					{
+						"path": "Hey Arnold!_S01E18_Magic Show - 24 Hours to Live.mkv",
+						"season": 1,
+						"episode": 36,
+						"episodeEnd": 37,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30173
+					},
+					{
+						"path": "Hey Arnold!_S01E19_Part Time Friends - Bio Square.mkv",
+						"season": 3,
+						"episode": 32,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30187
+					},
+					{
+						"path": "Hey Arnold!_S01E20_Arnold's Christmas.mkv",
+						"season": 1,
+						"episode": 21,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30174
+					},
+					{
+						"path": "Hey Arnold!_S01E21_Helga's Boyfriend - Crush on Teacher.mkv",
+						"season": 2,
+						"episode": 26,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30123
+					},
+					{
+						"path": "Hey Arnold!_S01E22_Hall Monitor - Harold's Bar Mitzvah.mkv",
+						"season": 2,
+						"episode": 28,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30120
+					},
+					{
+						"path": "Hey Arnold!_S01E23_Coach Wittenberg - Four-Eyed Jack.mkv",
+						"season": 2,
+						"episode": 30,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30118
+					},
+					{
+						"path": "Hey Arnold!_S01E24_Tour de Pond - Teacher's Strike.mkv",
+						"season": 2,
+						"episode": 34,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30121
+					},
+					{
+						"path": "Hey Arnold!_S01E25_Arnold's Valentine.mkv",
+						"season": 1,
+						"episode": 38,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 1163966
+					},
+					{
+						"path": "Hey Arnold!_S01E26_Runaway Float - Partners.mkv",
+						"season": 2,
+						"episode": 36,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30124
+					},
+					{
+						"path": "Hey Arnold!_S02E01_The Big Scoop - Harold's Kitty.mkv",
+						"season": 2,
+						"episode": 5,
+						"episodeEnd": 6,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30107
+					},
+					{
+						"path": "Hey Arnold!_S02E02_Arnold Saves Sid - Hookey.mkv",
+						"season": 2,
+						"episode": 14,
+						"episodeEnd": 15,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30109
+					},
+					{
+						"path": "Hey Arnold!_S02E03_Save the Tree - New Teacher.mkv",
+						"season": 2,
+						"episode": 1,
+						"episodeEnd": 2,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30108
+					},
+					{
+						"path": "Hey Arnold!_S02E04_Ransom - Ms. Perfect.mkv",
+						"season": 2,
+						"episode": 11,
+						"episodeEnd": 12,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30111
+					},
+					{
+						"path": "Hey Arnold!_S02E05_Monkey Business - Big Caesar.mkv",
+						"season": 2,
+						"episode": 9,
+						"episodeEnd": 10,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30110
+					},
+					{
+						"path": "Hey Arnold!_S02E06_The High Life - Best Friends.mkv",
+						"season": 2,
+						"episode": 20,
+						"episodeEnd": 21,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30122
+					},
+					{
+						"path": "Hey Arnold!_S02E07_The Longest Monday - Eugene's Pet.mkv",
+						"season": 2,
+						"episode": 7,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30113
+					},
+					{
+						"path": "Hey Arnold!_S02E08_Mudbowl - Gerald Moves Out.mkv",
+						"season": 2,
+						"episode": 18,
+						"episodeEnd": 19,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30114
+					},
+					{
+						"path": "Hey Arnold!_S02E09_Freeze Frame - Phoebe Cheats.mkv",
+						"season": 2,
+						"episode": 16,
+						"episodeEnd": 17,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30112
+					},
+					{
+						"path": "Hey Arnold!_S02E10_Helga's Love Potion - Gerald's Secret.mkv",
+						"season": 2,
+						"episode": 3,
+						"episodeEnd": 4,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30106
+					},
+					{
+						"path": "Hey Arnold!_S02E11_Steely Phil - Quantity Time.mkv",
+						"season": 2,
+						"episode": 22,
+						"episodeEnd": 23,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30116
+					},
+					{
+						"path": "Hey Arnold!_S02E12_Eating Contest - Rhonda's Glasses.mkv",
+						"season": 2,
+						"episode": 24,
+						"episodeEnd": 25,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30117
+					},
+					{
+						"path": "Hey Arnold!_S02E13_Eugene Goes Bad - What's Opera, Arnold.mkv",
+						"season": 2,
+						"episode": 32,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30119
+					},
+					{
+						"path": "Hey Arnold!_S02E14_Arnold's Halloween.mkv",
+						"season": 2,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30115
+					},
+					{
+						"path": "Hey Arnold!_S03E01_The Aptitude Test - Oskar Gets a Job.mkv",
+						"season": 3,
+						"episode": 17,
+						"episodeEnd": 18,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30184
+					},
+					{
+						"path": "Hey Arnold!_S03E02_Curly Snaps - Pre-teen Scream.mkv",
+						"season": 3,
+						"episode": 11,
+						"episodeEnd": 12,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30181
+					},
+					{
+						"path": "Hey Arnold!_S03E03_Stinky Goes Hollywood - Olga Gets Engaged.mkv",
+						"season": 3,
+						"episode": 9,
+						"episodeEnd": 10,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30183
+					},
+					{
+						"path": "Hey Arnold!_S03E04_Crabby Author - Rich Kid.mkv",
+						"season": 3,
+						"episode": 34,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30189
+					},
+					{
+						"path": "Hey Arnold!_S03E05_Helga Blabs All - Harold the Butcher.mkv",
+						"season": 3,
+						"episode": 1,
+						"episodeEnd": 2,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30175
+					},
+					{
+						"path": "Hey Arnold!_S03E06_Arnold Betrays Iggy - Helga and the Nanny.mkv",
+						"season": 3,
+						"episode": 19,
+						"episodeEnd": 20,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30179
+					},
+					{
+						"path": "Hey Arnold!_S03E07_Dangerous Lumber - Mr. Hyunh Goes Country.mkv",
+						"season": 3,
+						"episode": 3,
+						"episodeEnd": 4,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30185
+					},
+					{
+						"path": "Hey Arnold!_S03E08_Arnold's Room - Helga vs. Big Patty.mkv",
+						"season": 3,
+						"episode": 7,
+						"episodeEnd": 8,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30182
+					},
+					{
+						"path": "Hey Arnold!_S03E09_Career Day - Hey Harold!.mkv",
+						"season": 3,
+						"episode": 21,
+						"episodeEnd": 22,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30178
+					},
+					{
+						"path": "Hey Arnold!_S03E10_Casa Paradiso - Gerald's Tonsils.mkv",
+						"season": 3,
+						"episode": 5,
+						"episodeEnd": 6,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30176
+					},
+					{
+						"path": "Hey Arnold!_S03E11_Phoebe Takes the Fall - The Pig War.mkv",
+						"season": 3,
+						"episode": 30,
+						"episodeEnd": 31,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30190
+					},
+					{
+						"path": "Hey Arnold!_S03E12_Best Man - Cool Party.mkv",
+						"season": 3,
+						"episode": 23,
+						"episodeEnd": 24,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30188
+					},
+					{
+						"path": "Hey Arnold!_S03E13_Sid's Revenge - Roller Coaster.mkv",
+						"season": 3,
+						"episode": 15,
+						"episodeEnd": 16,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30177
+					},
+					{
+						"path": "Hey Arnold!_S03E14_Grandpa's Birthday - Road Trip.mkv",
+						"season": 3,
+						"episode": 13,
+						"episodeEnd": 14,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30180
+					},
+					{
+						"path": "Hey Arnold!_S03E15_Arnold & Lila - Grand Prix.mkv",
+						"season": 3,
+						"episode": 25,
+						"episodeEnd": 26,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30186
+					},
+					{
+						"path": "Hey Arnold!_S03E16_Arnold's Thanksgiving.mkv",
+						"season": 3,
+						"episode": 27,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30192
+					},
+					{
+						"path": "Hey Arnold!_S03E17_Girl Trouble - School Dance.mkv",
+						"season": 3,
+						"episode": 36,
+						"episodeEnd": 37,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30191
+					},
+					{
+						"path": "Hey Arnold!_S03E18_Helga's Show - Flood.mkv",
+						"season": 3,
+						"episode": 28,
+						"episodeEnd": 29,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30193
+					},
+					{
+						"path": "Hey Arnold!_S03E19_School Play.mkv",
+						"season": 3,
+						"episode": 38,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30194
+					},
+					{
+						"path": "Hey Arnold!_S03E20_Parent's Day.mkv",
+						"season": 5,
+						"episode": 15,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30199
+					},
+					{
+						"path": "Hey Arnold!_S04E01_Eugene's Birthday - Stinky's Pumpkin.mkv",
+						"season": 4,
+						"episode": 5,
+						"episodeEnd": 6,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30131
+					},
+					{
+						"path": "Hey Arnold!_S04E02_Dinner for Four - Phoebe Skips.mkv",
+						"season": 4,
+						"episode": 9,
+						"episodeEnd": 10,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30132
+					},
+					{
+						"path": "Hey Arnold!_S04E03_Full Moon - Student Teacher.mkv",
+						"season": 4,
+						"episode": 1,
+						"episodeEnd": 2,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30126
+					},
+					{
+						"path": "Hey Arnold!_S04E04_Big Gino - Jamie O in Luv.mkv",
+						"season": 4,
+						"episode": 3,
+						"episodeEnd": 4,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30127
+					},
+					{
+						"path": "Hey Arnold!_S04E05_Beeper Queen - Oscar Can't Read.mkv",
+						"season": 4,
+						"episode": 7,
+						"episodeEnd": 8,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30129
+					},
+					{
+						"path": "Hey Arnold!_S04E06_Headless Cabbie - Friday the 13th.mkv",
+						"season": 4,
+						"episode": 27,
+						"episodeEnd": 28,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30150
+					},
+					{
+						"path": "Hey Arnold!_S04E07_Helga's Parrot - Chocolate Turtles.mkv",
+						"season": 4,
+						"episode": 11,
+						"episodeEnd": 12,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30136
+					},
+					{
+						"path": "Hey Arnold!_S04E08_Love and Cheese - Weighing Harold.mkv",
+						"season": 4,
+						"episode": 13,
+						"episodeEnd": 14,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30138
+					},
+					{
+						"path": "Hey Arnold!_S04E09_It Girl - Deconstructing Arnold.mkv",
+						"season": 4,
+						"episode": 17,
+						"episodeEnd": 18,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30134
+					},
+					{
+						"path": "Hey Arnold!_S04E10_Grudge Match - Polishing Rhonda.mkv",
+						"season": 4,
+						"episode": 19,
+						"episodeEnd": 20,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30142
+					},
+					{
+						"path": "Hey Arnold!_S04E11_Veteran's Day.mkv",
+						"season": 4,
+						"episode": 29,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30152
+					},
+					{
+						"path": "Hey Arnold!_S04E12_Back to School - The Egg.mkv",
+						"season": 4,
+						"episode": 15,
+						"episodeEnd": 16,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30139
+					},
+					{
+						"path": "Hey Arnold!_S04E13_Weird Cousin - Baby Oskar.mkv",
+						"season": 4,
+						"episode": 21,
+						"episodeEnd": 22,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30144
+					},
+					{
+						"path": "Hey Arnold!_S04E14_Helga Sleepwalks - Fighting Families.mkv",
+						"season": 4,
+						"episode": 25,
+						"episodeEnd": 26,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30148
+					},
+					{
+						"path": "Hey Arnold!_S04E15_Monkeyman! - Buses, Bikes, Subways.mkv",
+						"season": 5,
+						"episode": 1,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30197
+					},
+					{
+						"path": "Hey Arnold!_S04E16_Grandpa's Sister - Synchronized Swimming.mkv",
+						"season": 4,
+						"episode": 23,
+						"episodeEnd": 24,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30146
+					},
+					{
+						"path": "Hey Arnold!_S04E17_Helga's Masquerade - Mr. Green Runs.mkv",
+						"season": 5,
+						"episode": 3,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30200
+					},
+					{
+						"path": "Hey Arnold!_S04E18_Helga on the Couch.mkv",
+						"season": 4,
+						"episode": 30,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30153
+					},
+					{
+						"path": "Hey Arnold!_S04E19_Dino Checks Out.mkv",
+						"season": 4,
+						"episode": 31,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30154
+					},
+					{
+						"path": "Hey Arnold!_S04E20_Summer Love.mkv",
+						"season": 5,
+						"episode": 16,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30204
+					},
+					{
+						"path": "Hey Arnold!_S05E01_Sid the Vampire Slayer - Big Sis.mkv",
+						"season": 5,
+						"episode": 5,
+						"episodeEnd": 6,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30196
+					},
+					{
+						"path": "Hey Arnold!_S05E02_Gerald's Game - Fishing Trip.mkv",
+						"season": 5,
+						"episode": 26,
+						"episodeEnd": 27,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30203
+					},
+					{
+						"path": "Hey Arnold!_S05E03_Bag of Money - Principal Simmons.mkv",
+						"season": 5,
+						"episode": 7,
+						"episodeEnd": 8,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30201
+					},
+					{
+						"path": "Hey Arnold!_S05E04_New Bully on the Block - Phoebe Breaks a Leg.mkv",
+						"season": 5,
+						"episode": 9,
+						"episodeEnd": 10,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30202
+					},
+					{
+						"path": "Hey Arnold!_S05E05_Stuck in a Tree - Rhonda Goes Broke.mkv",
+						"season": 5,
+						"episode": 17,
+						"episodeEnd": 18,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30211
+					},
+					{
+						"path": "Hey Arnold!_S05E06_Helga's Locket - Sid and Germs.mkv",
+						"season": 5,
+						"episode": 11,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30198
+					},
+					{
+						"path": "Hey Arnold!_S05E07_Beaned - Old Iron Man.mkv",
+						"season": 5,
+						"episode": 19,
+						"episodeEnd": 20,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30208
+					},
+					{
+						"path": "Hey Arnold!_S05E08_Ghost Bride - Gerald vs. Jamie O.mkv",
+						"season": 5,
+						"episode": 37,
+						"episodeEnd": 38,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30212
+					},
+					{
+						"path": "Hey Arnold!_S05E09_Suspended - Ernie in Love.mkv",
+						"season": 5,
+						"episode": 13,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30195
+					},
+					{
+						"path": "Hey Arnold!_S05E10_Arnold Visits Arnie - Chocolate Boy.mkv",
+						"season": 5,
+						"episode": 21,
+						"episodeEnd": 22,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30210
+					},
+					{
+						"path": "Hey Arnold!_S05E11_Harold vs. Patty - Rich Guy.mkv",
+						"season": 5,
+						"episode": 23,
+						"episodeEnd": 24,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30206
+					},
+					{
+						"path": "Hey Arnold!_S05E12_The Racing Mule - Curly's Girl.mkv",
+						"season": 5,
+						"episode": 31,
+						"episodeEnd": 32,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30215
+					},
+					{
+						"path": "Hey Arnold!_S05E13_On the Lam - Family Man.mkv",
+						"season": 5,
+						"episode": 29,
+						"episodeEnd": 30,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30209
+					},
+					{
+						"path": "Hey Arnold!_S05E14_Phoebe's Little Problem - Grandpa's Packard.mkv",
+						"season": 5,
+						"episode": 41,
+						"episodeEnd": 42,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30217
+					},
+					{
+						"path": "Hey Arnold!_S05E15_A Day in the Life of a Classroom - Big Bob's Crisis.mkv",
+						"season": 5,
+						"episode": 39,
+						"episodeEnd": 40,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30216
+					},
+					{
+						"path": "Hey Arnold!_S05E16_Married.mkv",
+						"season": 5,
+						"episode": 28,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30205
+					},
+					{
+						"path": "Hey Arnold!_S05E17_Timberly Loves Arnold - Eugene, Eugene!.mkv",
+						"season": 5,
+						"episode": 35,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30214
+					},
+					{
+						"path": "Hey Arnold!_S05E18_April Fools Day.mkv",
+						"season": 5,
+						"episode": 25,
+						"episodeEnd": null,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30207
+					},
+					{
+						"path": "Hey Arnold!_S05E19-20_The Journal.mkv",
+						"season": null,
+						"episode": null,
+						"episodeEnd": null,
+						"how": null,
+						"tmdbEpisodeId": null
+					}
+				]
+			}
+		}
+	]
+}

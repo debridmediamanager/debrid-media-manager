@@ -50,6 +50,7 @@ import saga from '@/test/fixtures/placement/saga-titles.json';
 import seasonOvas from '@/test/fixtures/placement/season-ovas.json';
 import seasonSubtitles from '@/test/fixtures/placement/season-subtitles.json';
 import secondChanceTvdb from '@/test/fixtures/placement/second-chance-tvdb-name.json';
+import segmentAbbreviations from '@/test/fixtures/placement/segment-abbreviations.json';
 import segmentLetters from '@/test/fixtures/placement/segment-letters.json';
 import segmentTitles from '@/test/fixtures/placement/segment-titles.json';
 import showNamedTitles from '@/test/fixtures/placement/show-named-titles.json';
@@ -2109,6 +2110,55 @@ describe('a file holding segments TMDB lists one by one', () => {
 		const bluey = await placed('Bluey season 3');
 		expect(at(bluey.release, 'S3E01 - Идеально')).toEqual([3, 1, null]);
 		expect(bluey.release).toEqual(bluey.expect);
+	});
+});
+
+describe("a segment title with an abbreviation's period", () => {
+	// zurg on fun (2026-11-10): a period after `vs`, `Mr`, `Dr` or `No` ended a segment, so
+	// `Harold vs. Patty - Rich Guy` read as three titles and `Hungarian Rhapsody No. 6` left a
+	// segment `6`, and their files were placed on one segment or none
+	const placed = async (name: string) => {
+		const c = segmentAbbreviations.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true, shows: true }],
+			Infinity,
+			recordedSources(segmentAbbreviations.answers),
+			async (list) =>
+				list.map(({ name }) => (segmentAbbreviations.answers.identify as any)[name] ?? null)
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return (part: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(part))!;
+			return [f.season, f.episode, f.episodeEnd];
+		};
+	};
+
+	it('reads the title on past the period', async () => {
+		const arnold = await placed('Hey Arnold! 576p');
+		// TMDB's S5E23 "Harold vs. Patty" and S5E24 "Rich Guy"
+		expect(arnold('S05E11_Harold vs. Patty - Rich Guy')).toEqual([5, 23, 24]);
+		// placed on "Ghost Bride" alone before
+		expect(arnold('S05E08_Ghost Bride - Gerald vs. Jamie O')).toEqual([5, 37, 38]);
+		const mickey = await placed('[M-KV2501] Mickey Mouse Works');
+		// TMDB's S1E20 "Maestro Minnie: Hungarian Rhapsody No. 6" to S1E23 "Pluto's Kittens"
+		expect(mickey('1x05 (05) Hungarian Rhapsody No. 6')).toEqual([1, 20, 23]);
+		expect(mickey('1x06 (06) Remote Controlled Laser Lawn Mower; Pluto Vs.')).toEqual([
+			1, 24, 27,
+		]);
+	});
+
+	it('places a pack already in the corpus the same way', async () => {
+		const c = fun1024.cases.find((c) => c.request.name.startsWith('[TV] Hey Arnold!'))!;
+		const { releases } = await place([c.request as PlaceRequest], Infinity, {
+			...recordedSources(fun1024.answers),
+			anime: async () =>
+				buildAnimeIndex(
+					buildFranchiseIndex(fun1024.answers.anime.fribb as FribbAnimeEntry[]),
+					fun1024.answers.anime.titles
+				),
+		});
+		const f = releases[0].files.find((f) => f.path.includes('Harold vs. Patty + Rich Guy'))!;
+		expect([f.season, f.episode, f.episodeEnd]).toEqual([5, 23, 24]);
 	});
 });
 

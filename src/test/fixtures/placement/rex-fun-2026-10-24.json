@@ -92131,7 +92131,7 @@
 						"path": "Hey Arnold! - S02E06 - Ransom + Ms. Perfect.mkv",
 						"season": 2,
 						"episode": 11,
-						"episodeEnd": null,
+						"episodeEnd": 12,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30111
 					},
@@ -92251,7 +92251,7 @@
 						"path": "Hey Arnold! - S03E02 - Dangerous Lumber + Mr. Hyunh Goes Country.mkv",
 						"season": 3,
 						"episode": 3,
-						"episodeEnd": null,
+						"episodeEnd": 4,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30185
 					},
@@ -92267,7 +92267,7 @@
 						"path": "Hey Arnold! - S03E04 - Arnold's Room + Helga vs. Big Patty.mkv",
 						"season": 3,
 						"episode": 7,
-						"episodeEnd": null,
+						"episodeEnd": 8,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30182
 					},
@@ -92547,7 +92547,7 @@
 						"path": "Hey Arnold! - S05E02 - Helga's Masquerade + Mr. Green Runs.mkv",
 						"season": 5,
 						"episode": 3,
-						"episodeEnd": null,
+						"episodeEnd": 4,
 						"how": "tmdb",
 						"tmdbEpisodeId": 30200
 					},
@@ -92633,11 +92633,11 @@
 					},
 					{
 						"path": "Hey Arnold! - S05E13 - Harold vs. Patty + Rich Guy.mkv",
-						"season": null,
-						"episode": null,
-						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"season": 5,
+						"episode": 23,
+						"episodeEnd": 24,
+						"how": "tmdb",
+						"tmdbEpisodeId": 30206
 					},
 					{
 						"path": "Hey Arnold! - S05E14 - April Fool's Day.mkv",

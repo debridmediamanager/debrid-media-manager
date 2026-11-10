@@ -1183,8 +1183,9 @@ const TAGS =
 	/^(?:\d{3,4}[pi]|[248]k|sd|(?:19|20)\d{2}|uhd|hd|hdr|hdr10|dv|sdr|web|webrip|webdl|amzn|nf|dsnp|hmax|atvp|hulu|uktv|upscaled|bluray|bd|bdrip|brrip|brip|bdremux|remux|hdtv|hdtvrip|pdtv|dvd|dvdrip|dvdr|ws|x264|x265|h|h264|h265|hevc|avc|xvid|divx|aac|aac2|ac3|eac3|dts|ddp|ddp2|ddp5|dd|dd2|dd5|flac|opus|ita|eng|english|german|ger|french|fre|truefrench|vostfr|subfrench|spanish|spa|latino|rus|jap|japanese|kor|korean|chs|cht|hindi|nordic|multisub|\d+bit)$/;
 // What separates a pack file's titles, or a title from what follows it: `Stinky Goes Hollywood -
 // Olga Gets Engaged`, `One of Us; Vanishing Act`, `Pup Pup Boogie + Pups in a Fog`, `The Magic
-// Tree Of Nowhere. Robot Randy`, `The Gimme Ghost[59E47EF7]`, `Eugene's.Birthday__Stinky's.Pumpkin`.
-const SEGMENT = /\s+[-+]\s+|;|\.\s|__|--|[[(]/;
+// Tree Of Nowhere. Robot Randy`, `The Gimme Ghost[59E47EF7]`, `Eugene's.Birthday__Stinky's.Pumpkin`;
+// never an abbreviation's period: Hey Arnold's `Harold vs. Patty + Rich Guy` is two titles, not three.
+const SEGMENT = /\s+[-+]\s+|;|(?<!\b(?:vs|mrs?|ms|dr|no))\.\s|__|--|[[(]/i;
 const LEADING_MARKS = /^[\s._\-)\]]*(?:[[(][^\])]*[\])][\s._-]*)*/;
 const STRICT_UTF8 = new TextDecoder('utf-8', { fatal: true });
 
@@ -1459,7 +1460,7 @@ function titleRest(file: string, numbers: FileNumbers): string {
 
 // What separates the titles of the segments a file holds: `Tutoring Torvald + Gerald Comes Over`,
 // `Saftey First; Crime Sheen Investigation`, `Robin Brain, The Mummy`.
-const SEGMENTS = /\s+[-+]\s+|;|,\s|\.\s|__|--/;
+const SEGMENTS = /\s+[-+]\s+|;|,\s|(?<!\b(?:vs|mrs?|ms|dr|no))\.\s|__|--/i;
 
 /**
  * The run of TMDB episodes a file holds, where its title names the segments TMDB lists one by one:
