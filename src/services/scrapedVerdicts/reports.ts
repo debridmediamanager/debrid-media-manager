@@ -72,8 +72,10 @@ export async function reviewReports(
 			);
 			await db.addTokensSpent(utcDay(), result.tokens);
 			forModel.forEach(([hash, title], i) => {
-				const { media, titleMatch } = result.answers[i];
-				if (decide(movie, title, media, titleMatch) === 'trash') confirmed.push(hash);
+				const answer = result.answers[i];
+				if (answer && decide(movie, title, answer.media, answer.titleMatch) === 'trash') {
+					confirmed.push(hash);
+				}
 			});
 		}
 	} else {
@@ -86,8 +88,9 @@ export async function reviewReports(
 		);
 		await db.addTokensSpent(utcDay(), result.tokens);
 		reported.forEach(([hash], i) => {
-			const { media, titleMatch } = result.answers[i];
-			if (type === 'porn' ? media === 'ADULT' : titleMatch === 'NO_TITLE') {
+			const answer = result.answers[i];
+			if (!answer) return;
+			if (type === 'porn' ? answer.media === 'ADULT' : answer.titleMatch === 'NO_TITLE') {
 				confirmed.push(hash);
 			}
 		});

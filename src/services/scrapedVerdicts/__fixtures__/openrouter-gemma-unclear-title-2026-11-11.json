@@ -1,0 +1,157 @@
+{
+	"description": "Production failure 2026-11-11 on movie:tt0057569 (The Terror, 1963): Gemma answered filename 19, a mojibake Cyrillic name, with title UNCLEAR, which is not a title choice, and the client then dropped all 40 answers of the batch. Recorded read-only from the page's unjudged names through classifyFilenames. The first request of three.",
+	"filenames": [
+		"The Terror 1080p AMZN WEB-DL DDP5 1 H 264-EniaHD",
+		"The Terror",
+		"Страх / Strach (Петер Шульхофф / Petr Schulhoff) [1963 · Чехословакия · триллер · криминал · DVD5 (Custom)] VO (ФЕНИКСЛУБ) + Original Ces",
+		"Террор.1963.BDRip-AVC msltel.mkv",
+		"The Terror (1963).mpeg",
+		"Террор / The Terror / 1963 / ПМ, ПД / BDRip",
+		"Страх / Strach (Петер Шульхофф / Petr Schulhoff) [1963 · Чехословакия · Шпионский детектив · VHSRip] VO + Original Ces",
+		"The Terror (1963)-zombiRG",
+		"The Terror - DVD RIP - AVI - MM3",
+		"Террор / Наваждение / Страх / Замок ужаса / Леди Теней / Привидение / The Terror / Castle of Terror / Lady of the Shadows / The Haunting [1963 BDRip] MVO + DVO",
+		"[BDMV]-Terror in Resonance-Zankyou no Terror-残響のテロル",
+		"The Terror - 1. serie (CZ/EN)[WebRip][1080p] = CSFD 73%",
+		"The Haunting of Hill House - 1. serie (CZ/EN)[1080p][WEBRip] = CSFD 85%",
+		"World-War-Z -Aftermath--Deluxe-Edition-(v20230810-Build-11846391-Holy-Terror-Upd..",
+		"The Haunting - Zahadne sidlo Bly - 2. serie (CZ/EN)[720p][WEBRip] = CSFD 83%",
+		"[VCB-Studio] Zankyou no Terror / 残響のテロル 10-bit 1080p HEVC BDRip [Reseed v2 Fin]",
+		"Террор / The Terror / Castle of Terror / Lady of the Shadows / The Haunting [1963, США, ужасы, BDRemux 1080p] MVO + DVO + Original Eng",
+		"The Haunting of Hill House - 1. serie (CZ/EN)[1080p][WEBRip][HEVC] = CSFD 83%",
+		"Ð”Ð¾Ð¼-ÑƒÐ¶Ð°ÑÐ¾Ð²-Ð´Ð¾ÐºÑ‚Ð¾Ñ€Ð°-Ð¢ÐµÑ..",
+		"FRENCHCORE / SPEEDCORE / TERROR  Collection (FLAC)",
+		"Grindhouse Planet Terror &amp;amp; Death Proof 1080p Unrated [mkvonl ...",
+		"The Haunting Eyes-TENOKE",
+		"Ulice strachu: Trilogie / Fear Street: Trilogy (CZ)[WebRip][1080p][HEVC] = CSFD 58%",
+		"The Haunting of Joni Evers (v1 0 4) [FitGirl Repack]",
+		"Террор  Хроника необъявленной войны",
+		"[Cleo] Zankyou no Terror | Terror in Resonance [Dual Audio 10bit BD1080p][HEVC-x265]",
+		"[Leopard Raws] Zankyou no Terror (CX 1280x720 x264 AAC)",
+		"VA - Terrordrome - CD Collection (mp3 320)",
+		"InfoWars Collection Volume 4 DVD ISO, Terror Tyranny, Alex Jones ...",
+		"Ð­Ñ…Ð¾ Ð¢ÐµÑ€Ñ€Ð¾Ñ€Ð°   Zankyou no Terror   Terror in Re..",
+		"Morgana Una Leyenda De terror DVDR NTSC R4 Latx iso",
+		"Ataque Terrorista",
+		"Amenaza Terrorista.",
+		"The Terror - 1. serie (CZ)[TvRip] = CSFD 74%",
+		"The Flaming Lips The Terror SPEC DTS MA 5 1 by DKA SBU",
+		"The Terror / Castle of Terror / Lady of the Shadows / The Haunting [1963, BDRip 720p] MVO + DVO + Original",
+		"Zionist Jewish Terrorists Conspiracy Pack",
+		"The Stranger - 04 - The Terror Game [DVD (PAL) TRBLE]",
+		"Террор любовью",
+		"Terrors to Unveil - Day Off"
+	],
+	"movie": {
+		"titles": [
+			"A terror",
+			"Die Dame aus dem Meer",
+			"El terror",
+			"Esrarengiz Şato",
+			"Frankestayn Ölüm Saçıyor",
+			"Genfærdets terror",
+			"I ekdikisis mias nekris",
+			"I terrorens våld",
+			"Kauhujen linna",
+			"Kauhun vallassa",
+			"Kojô no bôrei",
+			"L'Halluciné",
+			"La vergine di cera",
+			"Lady of the Shadows",
+			"Le Château de la terreur",
+			"O Terror",
+			"Pahin kaikista",
+			"Proganjanje",
+			"Roger Corman's The Terror",
+			"Roger Corman's The Terror: Original Uncut Version",
+			"Sombras do Terror",
+			"Strach",
+			"Teror",
+			"Terror",
+			"Terror House - Das Haus des Todes",
+			"Terror House - Haus des Todes",
+			"Terror no Castelo",
+			"Terror no Castelo Von Leppe",
+			"Terrorin vallassa",
+			"The Castle of Terror",
+			"The Haunting",
+			"The Haunting - Vision des Grauens",
+			"The Night of Terror",
+			"The Terror",
+			"The Terror - Schloß des Schreckens",
+			"Η εκδίκηση μιας νεκρής",
+			"Η εκδίκησις μιας νεκρής",
+			"Τρόμος",
+			"Жах",
+			"Отмъщението",
+			"Террор",
+			"古城の亡霊",
+			"恐怖古堡",
+			"羅傑科曼之古堡驚魂"
+		],
+		"year": 1963
+	},
+	"request": {
+		"model": "google/gemma-4-26b-a4b-it",
+		"temperature": 0,
+		"response_format": {
+			"type": "json_object"
+		},
+		"messages": [
+			{
+				"role": "system",
+				"content": "You label torrent filenames found on a movie's page. For every numbered filename answer two questions.\nmedia: What kind of content is this torrent? One of:\n- FILM: A film or movie release (video file, rip, remux, disc image).\n- TV: A TV series, season, episode, show, broadcast or miniseries.\n- GAME_SOFTWARE: A video game, repack, mod, app or software.\n- AUDIO: Music, soundtrack, album, radio broadcast or audiobook.\n- BOOK_IMAGES: Ebook, comic, magazine or image set.\n- ADULT: Pornographic content.\n- UNCLEAR: Cannot tell from the filename.\n\ntitle: How does the title in this filename relate to the movie's listed titles? One of:\n- SAME_TITLE: The work's title in the filename is exactly one of the movie's listed titles (ignoring case, punctuation, a leading article, and release tags like year, quality, language, group). Two of the movie's titles joined together (a local title plus the original title), or the title followed by 1 / I / Part 1, also count.\n- DIFFERENT_TITLE: The filename names a different title that contains or resembles one of the movie's titles: extra title words, a subtitle, a number, a plural, or a changed word.\n- NO_TITLE: None of the movie's listed titles appears in the filename.\n\nReply with JSON only: {\"1\": {\"media\": \"<KEY>\", \"title\": \"<KEY>\"}, \"2\": ...}, one entry per filename, keys exactly as listed."
+			},
+			{
+				"role": "user",
+				"content": "Movie titles:\n- A terror\n- Die Dame aus dem Meer\n- El terror\n- Esrarengiz Şato\n- Frankestayn Ölüm Saçıyor\n- Genfærdets terror\n- I ekdikisis mias nekris\n- I terrorens våld\n- Kauhujen linna\n- Kauhun vallassa\n- Kojô no bôrei\n- L'Halluciné\n- La vergine di cera\n- Lady of the Shadows\n- Le Château de la terreur\n- O Terror\n- Pahin kaikista\n- Proganjanje\n- Roger Corman's The Terror\n- Roger Corman's The Terror: Original Uncut Version\n- Sombras do Terror\n- Strach\n- Teror\n- Terror\n- Terror House - Das Haus des Todes\n- Terror House - Haus des Todes\n- Terror no Castelo\n- Terror no Castelo Von Leppe\n- Terrorin vallassa\n- The Castle of Terror\n- The Haunting\n- The Haunting - Vision des Grauens\n- The Night of Terror\n- The Terror\n- The Terror - Schloß des Schreckens\n- Η εκδίκηση μιας νεκρής\n- Η εκδίκησις μιας νεκρής\n- Τρόμος\n- Жах\n- Отмъщението\n- Террор\n- 古城の亡霊\n- 恐怖古堡\n- 羅傑科曼之古堡驚魂\nMovie year: 1963\n\nFilenames:\n1. The Terror 1080p AMZN WEB-DL DDP5 1 H 264-EniaHD\n2. The Terror\n3. Страх / Strach (Петер Шульхофф / Petr Schulhoff) [1963 · Чехословакия · триллер · криминал · DVD5 (Custom)] VO (ФЕНИКСЛУБ) + Original Ces\n4. Террор.1963.BDRip-AVC msltel.mkv\n5. The Terror (1963).mpeg\n6. Террор / The Terror / 1963 / ПМ, ПД / BDRip\n7. Страх / Strach (Петер Шульхофф / Petr Schulhoff) [1963 · Чехословакия · Шпионский детектив · VHSRip] VO + Original Ces\n8. The Terror (1963)-zombiRG\n9. The Terror - DVD RIP - AVI - MM3\n10. Террор / Наваждение / Страх / Замок ужаса / Леди Теней / Привидение / The Terror / Castle of Terror / Lady of the Shadows / The Haunting [1963 BDRip] MVO + DVO\n11. [BDMV]-Terror in Resonance-Zankyou no Terror-残響のテロル\n12. The Terror - 1. serie (CZ/EN)[WebRip][1080p] = CSFD 73%\n13. The Haunting of Hill House - 1. serie (CZ/EN)[1080p][WEBRip] = CSFD 85%\n14. World-War-Z -Aftermath--Deluxe-Edition-(v20230810-Build-11846391-Holy-Terror-Upd..\n15. The Haunting - Zahadne sidlo Bly - 2. serie (CZ/EN)[720p][WEBRip] = CSFD 83%\n16. [VCB-Studio] Zankyou no Terror / 残響のテロル 10-bit 1080p HEVC BDRip [Reseed v2 Fin]\n17. Террор / The Terror / Castle of Terror / Lady of the Shadows / The Haunting [1963, США, ужасы, BDRemux 1080p] MVO + DVO + Original Eng\n18. The Haunting of Hill House - 1. serie (CZ/EN)[1080p][WEBRip][HEVC] = CSFD 83%\n19. Ð”Ð¾Ð¼-ÑƒÐ¶Ð°ÑÐ¾Ð²-Ð´Ð¾ÐºÑ‚Ð¾Ñ€Ð°-Ð¢ÐµÑ..\n20. FRENCHCORE / SPEEDCORE / TERROR  Collection (FLAC)\n21. Grindhouse Planet Terror &amp;amp; Death Proof 1080p Unrated [mkvonl ...\n22. The Haunting Eyes-TENOKE\n23. Ulice strachu: Trilogie / Fear Street: Trilogy (CZ)[WebRip][1080p][HEVC] = CSFD 58%\n24. The Haunting of Joni Evers (v1 0 4) [FitGirl Repack]\n25. Террор  Хроника необъявленной войны\n26. [Cleo] Zankyou no Terror | Terror in Resonance [Dual Audio 10bit BD1080p][HEVC-x265]\n27. [Leopard Raws] Zankyou no Terror (CX 1280x720 x264 AAC)\n28. VA - Terrordrome - CD Collection (mp3 320)\n29. InfoWars Collection Volume 4 DVD ISO, Terror Tyranny, Alex Jones ...\n30. Ð­Ñ…Ð¾ Ð¢ÐµÑ€Ñ€Ð¾Ñ€Ð°   Zankyou no Terror   Terror in Re..\n31. Morgana Una Leyenda De terror DVDR NTSC R4 Latx iso\n32. Ataque Terrorista\n33. Amenaza Terrorista.\n34. The Terror - 1. serie (CZ)[TvRip] = CSFD 74%\n35. The Flaming Lips The Terror SPEC DTS MA 5 1 by DKA SBU\n36. The Terror / Castle of Terror / Lady of the Shadows / The Haunting [1963, BDRip 720p] MVO + DVO + Original\n37. Zionist Jewish Terrorists Conspiracy Pack\n38. The Stranger - 04 - The Terror Game [DVD (PAL) TRBLE]\n39. Террор любовью\n40. Terrors to Unveil - Day Off"
+			}
+		]
+	},
+	"response": {
+		"id": "gen-1794352308-QHVRAxglEPqgJH0zy202",
+		"object": "chat.completion",
+		"created": 1794352308,
+		"model": "google/gemma-4-26b-a4b-it",
+		"provider": "Makora",
+		"system_fingerprint": null,
+		"service_tier": null,
+		"choices": [
+			{
+				"index": 0,
+				"logprobs": null,
+				"finish_reason": "stop",
+				"native_finish_reason": "stop",
+				"message": {
+					"role": "assistant",
+					"content": "{\"1\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"2\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"3\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"4\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"5\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"6\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"7\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"8\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"9\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"10\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"11\": {\"media\": \"FILM\", \"title\": \"DIFFERENT_TITLE\"}, \"12\": {\"media\": \"TV\", \"title\": \"SAME_TITLE\"}, \"13\": {\"media\": \"TV\", \"title\": \"DIFFERENT_TITLE\"}, \"14\": {\"media\": \"FILM\", \"title\": \"NO_TITLE\"}, \"15\": {\"media\": \"TV\", \"title\": \"DIFFERENT_TITLE\"}, \"16\": {\"media\": \"FILM\", \"title\": \"DIFFERENT_TITLE\"}, \"17\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"18\": {\"media\": \"TV\", \"title\": \"DIFFERENT_TITLE\"}, \"19\": {\"media\": \"UNCLEAR\", \"title\": \"UNCLEAR\"}, \"20\": {\"media\": \"AUDIO\", \"title\": \"SAME_TITLE\"}, \"21\": {\"media\": \"FILM\", \"title\": \"DIFFERENT_TITLE\"}, \"22\": {\"media\": \"GAME_SOFTWARE\", \"title\": \"DIFFERENT_TITLE\"}, \"23\": {\"media\": \"FILM\", \"title\": \"DIFFERENT_TITLE\"}, \"24\": {\"media\": \"GAME_SOFTWARE\", \"title\": \"DIFFERENT_TITLE\"}, \"25\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"26\": {\"media\": \"FILM\", \"title\": \"DIFFERENT_TITLE\"}, \"27\": {\"media\": \"FILM\", \"title\": \"DIFFERENT_TITLE\"}, \"28\": {\"media\": \"AUDIO\", \"title\": \"SAME_TITLE\"}, \"29\": {\"media\": \"UNCLEAR\", \"title\": \"DIFFERENT_TITLE\"}, \"30\": {\"media\": \"FILM\", \"title\": \"DIFFERENT_TITLE\"}, \"31\": {\"media\": \"FILM\", \"title\": \"DIFFERENT_TITLE\"}, \"32\": {\"media\": \"FILM\", \"title\": \"DIFFERENT_TITLE\"}, \"33\": {\"media\": \"FILM\", \"title\": \"DIFFERENT_TITLE\"}, \"34\": {\"media\": \"TV\", \"title\": \"SAME_TITLE\"}, \"35\": {\"media\": \"AUDIO\", \"title\": \"SAME_TITLE\"}, \"36\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"37\": {\"media\": \"UNCLEAR\", \"title\": \"DIFFERENT_TITLE\"}, \"38\": {\"media\": \"FILM\", \"title\": \"DIFFERENT_TITLE\"}, \"39\": {\"media\": \"FILM\", \"title\": \"DIFFERENT_TITLE\"}, \"40\": {\"media\": \"FILM\", \"title\": \"DIFFERENT_TITLE\"}}",
+					"refusal": null,
+					"reasoning": null
+				}
+			}
+		],
+		"usage": {
+			"prompt_tokens": 1785,
+			"completion_tokens": 785,
+			"total_tokens": 2570,
+			"cost": 0.000212596,
+			"is_byok": false,
+			"prompt_tokens_details": {
+				"cached_tokens": 256,
+				"cache_write_tokens": 0,
+				"audio_tokens": 0,
+				"video_tokens": 0
+			},
+			"cost_details": {
+				"upstream_inference_cost": 0.000212596,
+				"upstream_inference_prompt_cost": 0.000134096,
+				"upstream_inference_completions_cost": 7.85e-5
+			},
+			"completion_tokens_details": {
+				"reasoning_tokens": 0,
+				"image_tokens": 0,
+				"audio_tokens": 0
+			}
+		}
+	}
+}

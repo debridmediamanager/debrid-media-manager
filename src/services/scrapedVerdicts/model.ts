@@ -32,7 +32,12 @@ export function modelKey(): string | undefined {
 
 export type ModelAnswer = { media: Media; titleMatch: TitleMatch };
 /** `tokens` counts input and output: unlike Jev, OpenRouter bills both. */
-export type ModelResult = { answers: ModelAnswer[]; model: string; tokens: number };
+/**
+ * `null` where the model gave no valid answer for a filename: Gemma once answered
+ * a mojibake name's title question with UNCLEAR. That filename stays unjudged;
+ * the rest of its batch is used.
+ */
+export type ModelResult = { answers: (ModelAnswer | null)[]; model: string; tokens: number };
 
 export class ModelError extends Error {}
 
@@ -42,12 +47,8 @@ type ChatResponse = {
 	usage?: { prompt_tokens?: number; completion_tokens?: number };
 };
 
-function choiceOf<T extends string>(value: unknown, allowed: object): T {
-	if (typeof value !== 'string' || !Object.hasOwn(allowed, value)) {
-		throw new ModelError('the model returned an answer outside the offered choices');
-	}
-	return value as T;
-}
+const offered = (value: unknown, allowed: object) =>
+	typeof value === 'string' && Object.hasOwn(allowed, value);
 
 async function ask(
 	apiKey: string,
@@ -90,10 +91,10 @@ async function ask(
 	}
 	const answers = filenames.map((_, i) => {
 		const answer = parsed[String(i + 1)];
-		return {
-			media: choiceOf<Media>(answer?.media, MEDIA_CHOICES),
-			titleMatch: choiceOf<TitleMatch>(answer?.title, TITLE_CHOICES),
-		};
+		if (!offered(answer?.media, MEDIA_CHOICES) || !offered(answer?.title, TITLE_CHOICES)) {
+			return null;
+		}
+		return { media: answer.media as Media, titleMatch: answer.title as TitleMatch };
 	});
 	return {
 		answers,
@@ -105,14 +106,14 @@ async function ask(
 /**
  * Classifies filenames in batches. A batch that fails throws; the caller records
  * nothing for it, so those filenames are retried on a later visit rather than
- * receiving a guessed verdict.
+ * receiving a guessed verdict. A single invalid answer only nulls its filename.
  */
 export async function classifyFilenames(
 	apiKey: string,
 	movie: { titles: string[]; year: number },
 	filenames: string[]
 ): Promise<ModelResult> {
-	const answers: ModelAnswer[] = [];
+	const answers: (ModelAnswer | null)[] = [];
 	let model = MODEL;
 	let tokens = 0;
 	for (let start = 0; start < filenames.length; start += FILENAMES_PER_REQUEST) {

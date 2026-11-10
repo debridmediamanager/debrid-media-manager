@@ -144,7 +144,10 @@ export async function judgeMoviePage(
 				await db.addTokensSpent(utcDay(), tokens);
 				model = result.model;
 				forModel.forEach((title, i) => {
-					const { media, titleMatch } = result.answers[i];
+					// no valid answer: the name stays unjudged, and on the page, until the page changes
+					const answer = result.answers[i];
+					if (!answer) return;
+					const { media, titleMatch } = answer;
 					judged.set(title, {
 						verdict: decide(movie, title, media, titleMatch),
 						rule: 'jev',

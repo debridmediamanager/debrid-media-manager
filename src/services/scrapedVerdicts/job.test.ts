@@ -185,6 +185,29 @@ describe('judgeMoviePage', () => {
 		expect(db.releaseLock).toHaveBeenCalled();
 	});
 
+	it('saves the answered names of a batch, leaves an unanswered one on the page, and checkpoints', async () => {
+		// production 2026-11-11, tt0057569: one invalid answer used to drop the whole batch
+		// on every visit; now only that name waits, until the page changes
+		mockClassify.mockResolvedValue({
+			answers: [null, { media: 'GAME_SOFTWARE', titleMatch: 'DIFFERENT_TITLE' }],
+			model: 'google/gemma-4-26b-a4b-it',
+			tokens: 900,
+		});
+		const db = fakeDb();
+		const outcome = await judgeMoviePage('tt5177120', db);
+
+		const saved = (db.saveVerdicts as any).mock.calls[0][0];
+		expect(saved.map((v: any) => [v.hash, v.verdict, v.rule])).toEqual([
+			['h2', 'trash', 'rules'],
+			['h4', 'trash', 'reused'],
+			['h5', 'trash', 'jev'],
+		]);
+		expect(saved.some((v: any) => v.title === MOVIE)).toBe(false);
+		expect(db.addTokensSpent).toHaveBeenCalledWith(expect.any(String), 900);
+		expect(outcome).toMatchObject({ status: 'done', judged: 3, tokens: 900 });
+		expect(db.setCheckpoint).toHaveBeenCalledWith('movie:tt5177120', ENGINE, expect.any(Date));
+	});
+
 	it('keeps a release content-identifier names as the movie without asking Jev', async () => {
 		// content-identifier's answers for both filenames, read 2026-10-18
 		const answers = {

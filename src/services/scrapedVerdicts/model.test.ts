@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import labelled from './__fixtures__/labelled-filenames.json';
 import recorded from './__fixtures__/openrouter-gemma-2026-11-10.json';
+import unclear from './__fixtures__/openrouter-gemma-unclear-title-2026-11-11.json';
 import { classifyFilenames, MODEL, modelKey } from './model';
 import { decide, type Media, type TitleMatch } from './rules';
 
@@ -93,19 +94,34 @@ describe('classifyFilenames', () => {
 		expect(result.answers).toEqual([{ media: 'FILM', titleMatch: 'SAME_TITLE' }]);
 	});
 
-	it('refuses an answer outside the offered choices rather than guessing', async () => {
-		vi.stubGlobal('fetch', replying(all('MAYBE', 'SAME_TITLE')));
-		await expect(classifyFilenames('key', movie, ['x'])).rejects.toThrow('outside the offered');
+	it('leaves a filename whose answer is outside the choices unanswered and keeps the rest', async () => {
+		// production 2026-11-11: title UNCLEAR for a mojibake name dropped all 40 answers
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async () => new Response(JSON.stringify(unclear.response)))
+		);
+
+		const result = await classifyFilenames('key', unclear.movie, unclear.filenames);
+
+		expect(result.answers).toHaveLength(40);
+		expect(result.answers[18]).toBeNull();
+		expect(result.answers.filter((a) => a === null)).toHaveLength(1);
+		expect(result.answers[0]).toEqual({
+			media: expect.any(String),
+			titleMatch: expect.any(String),
+		});
+		expect(result.tokens).toBe(
+			unclear.response.usage.prompt_tokens + unclear.response.usage.completion_tokens
+		);
 	});
 
-	it('refuses a reply that skips a filename', async () => {
+	it('leaves a filename the reply skips unanswered', async () => {
 		vi.stubGlobal(
 			'fetch',
 			replying(() => all('FILM', 'SAME_TITLE')(1))
 		);
-		await expect(classifyFilenames('key', movie, ['x', 'y'])).rejects.toThrow(
-			'outside the offered'
-		);
+		const result = await classifyFilenames('key', movie, ['x', 'y']);
+		expect(result.answers).toEqual([{ media: 'FILM', titleMatch: 'SAME_TITLE' }, null]);
 	});
 
 	it('refuses a reply that is not JSON', async () => {
