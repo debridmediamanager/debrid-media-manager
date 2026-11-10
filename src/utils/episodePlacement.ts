@@ -1636,17 +1636,21 @@ async function byName(
 	// TMDB's title with the show's name before it: Ed, Edd n Eddy's `S00E05 - Big Picture Show` is
 	// "Ed, Edd n Eddy's Big Picture Show", ODDTAXI's `S00E14 [Picture Drama]` "Odd Taxi Picture Drama"
 	const shows = show.names.map((name) => words(name).join('')).filter((name) => name.length >= 3);
+	// and the show's name after an article: Robot Chicken's `S07E16 Bitch Pudding Special` is "The
+	// Robot Chicken Bitch Pudding Special"
 	const unshown = (text: string) => {
 		const list = words(text);
-		for (let k = 1; k < list.length; k++) {
-			const head = list.slice(0, k).join('');
-			if (
-				shows.some(
-					(name) => head === name || (head === `${name}s` && list[k - 1].endsWith('s'))
+		for (const from of list[0] === 'the' ? [0, 1] : [0])
+			for (let k = from + 1; k < list.length; k++) {
+				const head = list.slice(from, k).join('');
+				if (
+					shows.some(
+						(name) =>
+							head === name || (head === `${name}s` && list[k - 1].endsWith('s'))
+					)
 				)
-			)
-				return list.slice(k).join('');
-		}
+					return list.slice(k).join('');
+			}
 		return list.join('');
 	};
 	const own = unshown(title.whole);

@@ -16,6 +16,7 @@ import onePaceFun from '@/test/fixtures/onepace/fun-releases-2026-11-09.json';
 import accented from '@/test/fixtures/placement/accented-titles.json';
 import pastCour from '@/test/fixtures/placement/anime-past-cour.json';
 import answers from '@/test/fixtures/placement/answers.json';
+import articleShows from '@/test/fixtures/placement/article-shows.json';
 import betweenTitled from '@/test/fixtures/placement/between-titled-files.json';
 import bracketed from '@/test/fixtures/placement/bracketed-titles.json';
 import cjkSeasons from '@/test/fixtures/placement/cjk-season-titles.json';
@@ -2252,6 +2253,29 @@ describe('a file its name dates before the show began', () => {
 		const buck = await placed('Buck Rogers in the 25th Century');
 		expect(buck(' Buck Rogers 1939 E02 Tragedy on Saturn')).toEqual([null, null, null]);
 		expect(buck(' Buck Rogers 1939 E04 The Sky Patrol')).toEqual([null, null, null]);
+	});
+});
+
+describe("a special TMDB titles with an article before the show's name", () => {
+	// zurg on fun (2026-11-10): Robot Chicken's `S07E16 Bitch Pudding Special` is TMDB's S0E14 "The
+	// Robot Chicken Bitch Pudding Special"; the show's name was looked for at the title's start only
+	const placed = async (name: string) => {
+		const c = articleShows.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true, shows: true }],
+			Infinity,
+			recordedSources(articleShows.answers),
+			async () => [null]
+		);
+		expect(releases[0]).toEqual(c.expect);
+		return (part: string) => {
+			const f = releases[0].files.find((f) => f.path.includes(part))!;
+			return [f.season, f.episode, f.episodeEnd];
+		};
+	};
+	it('places the file on it', async () => {
+		const chicken = await placed('Robot Chicken (2005-2020)');
+		expect(chicken('S07E16 Bitch Pudding Special')).toEqual([0, 14, null]);
 	});
 });
 
