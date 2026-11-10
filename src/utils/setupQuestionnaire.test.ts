@@ -3052,7 +3052,7 @@ describe('zurg+rex Android serves the Plex apps', () => {
 			expect(result.conflicts).toEqual([]);
 			expect(result.primaryRoute.id).toBe('zurg-rex-plex');
 			expect(result.prerequisites).toContain(
-				'zurg+rex Android needs sponsor access, a supported device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. It has no TorBox hosted NZB (torbox_nzb) backend.'
+				'zurg+rex Android needs sponsor access, a supported device and background operation; it runs zurg and rex on the device, your own Plex server on your phone or TV box, so the Plex apps play from it. It has no TorBox hosted NZB (torbox_nzb) backend.'
 			);
 			expect(result.setupLinks).toContainEqual({
 				label: 'zurg+rex Android guide',
@@ -3084,7 +3084,7 @@ describe('zurg+rex Android serves the Plex apps', () => {
 	// rex runs on 32-bit Android too; only direct Usenet needs 64-bit.
 	it('asks for 64-bit Android only for own Usenet', () => {
 		expect(onAndroid({ sources: ['real-debrid', 'usenet'] }).prerequisites).toContain(
-			'zurg+rex Android needs sponsor access, a supported device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. Direct Usenet requires 64-bit Android, and the app has no TorBox hosted NZB (torbox_nzb) backend.'
+			'zurg+rex Android needs sponsor access, a supported device and background operation; it runs zurg and rex on the device, your own Plex server on your phone or TV box, so the Plex apps play from it. Direct Usenet requires 64-bit Android, and the app has no TorBox hosted NZB (torbox_nzb) backend.'
 		);
 	});
 

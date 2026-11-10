@@ -72,7 +72,7 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	{
 		href: 'https://zurg.debridmediamanager.com/',
 		name: 'zurg nightly',
-		what: 'every provider, the source code, Docker and the Android app',
+		what: 'every provider, the source code, Docker and the Android app, a Plex server on your phone',
 	},
 	{
 		name: 'zurg with your key',

@@ -1543,7 +1543,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		const noHostedNzb = 'has no TorBox hosted NZB (torbox_nzb) backend.';
 		result.prerequisites.push(
 			androidRex
-				? `${app} it runs zurg and rex on the device, so the Plex apps play from it. ${android64 ? 'Direct Usenet requires 64-bit Android, and the app' : 'It'} ${noHostedNzb}`
+				? `${app} it runs zurg and rex on the device, your own Plex server on your phone or TV box, so the Plex apps play from it. ${android64 ? 'Direct Usenet requires 64-bit Android, and the app' : 'It'} ${noHostedNzb}`
 				: `${app} ${android64 ? 'direct Usenet requires 64-bit Android, and zurg+rex Android' : 'it'} ${noHostedNzb}`
 		);
 	}
