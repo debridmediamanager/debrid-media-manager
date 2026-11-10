@@ -1536,14 +1536,16 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			'Self-hosted playback needs a securely reachable address; a LAN address works only at home.';
 		result.optionalNeeds.push(
 			// A media server or rex is always self-hosted; the arr download client's host does not serve playback.
-			playerNeedsFullHost(player)
-				? selfHosted
-				: !routes.some(({ route: r }) => r.host !== 'none')
-					? 'Hosted Cast/direct playback avoids exposing a home server; any NAS or file server still needs a secure reachable connection for remote use.'
-					: answers.host === 'android' &&
-						  !routes.some(({ route: r }) => r.host === 'server')
-						? `zurg runs on the Android device itself: a phone or tablet takes it with you, while a TV box at home needs a secure reachable connection like any home server.${selected.includes('http-local') ? ' A NAS or file server at home needs one too.' : ''}`
-						: selfHosted
+			androidRex
+				? 'zurg+rex runs on the Android device itself; the Plex apps on it play anywhere, while other devices reach it over your home network. A NAS or file server at home needs a secure reachable connection too.'
+				: playerNeedsFullHost(player)
+					? selfHosted
+					: !routes.some(({ route: r }) => r.host !== 'none')
+						? 'Hosted Cast/direct playback avoids exposing a home server; any NAS or file server still needs a secure reachable connection for remote use.'
+						: answers.host === 'android' &&
+							  !routes.some(({ route: r }) => r.host === 'server')
+							? `zurg runs on the Android device itself: a phone or tablet takes it with you, while a TV box at home needs a secure reachable connection like any home server.${selected.includes('http-local') ? ' A NAS or file server at home needs one too.' : ''}`
+							: selfHosted
 		);
 	}
 	const provider = selected.some(

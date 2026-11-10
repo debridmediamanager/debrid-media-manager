@@ -2771,6 +2771,15 @@ describe('route copy stays on the player and source it is about', () => {
 			{ player: 'plex', plexRoute: 'rex', sources: ['none'], host: 'willing' },
 			'Self-hosted playback needs a securely reachable address; a LAN address works only at home.',
 		],
+		// A phone or a TV box: the Plex apps on the device play anywhere, others reach it at home.
+		[
+			{ player: 'plex', plexRoute: 'rex', host: 'android' },
+			'zurg+rex runs on the Android device itself; the Plex apps on it play anywhere, while other devices reach it over your home network. A NAS or file server at home needs a secure reachable connection too.',
+		],
+		[
+			{ player: 'plex', plexRoute: 'either', sources: ['usenet'], host: 'android' },
+			'zurg+rex runs on the Android device itself; the Plex apps on it play anywhere, while other devices reach it over your home network. A NAS or file server at home needs a secure reachable connection too.',
+		],
 	] satisfies [Partial<SetupAnswers>, string][])(
 		'says what remote playback needs for %o',
 		(overrides, text) => {
