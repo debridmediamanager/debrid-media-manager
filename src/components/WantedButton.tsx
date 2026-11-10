@@ -13,6 +13,10 @@ interface WantedButtonProps {
 	season?: number;
 }
 
+/** A button's change, told to the other buttons of the same title on the page. */
+const CHANGED = 'dmm:wanted-changed';
+type Changed = { imdbId: string; item: WantedItemResponse | null };
+
 const BUTTON =
 	'mb-1 mr-2 mt-0 inline-block rounded border-2 border-rose-500 bg-rose-900/30 p-1 text-xs text-rose-100 transition-colors hover:bg-rose-800/50 disabled:cursor-not-allowed disabled:opacity-50';
 
@@ -30,14 +34,21 @@ export default function WantedButton({ imdbId, kind, title, season }: WantedButt
 	useEffect(() => {
 		if (!isSponsor) return;
 		let cancelled = false;
-		fetch('/api/wanted', { headers: sponsorHeaders() })
+		fetch(`/api/wanted?imdbId=${encodeURIComponent(imdbId)}`, { headers: sponsorHeaders() })
 			.then((res) => (res.ok ? res.json() : { items: [] }))
 			.then((data: { items: WantedItemResponse[] }) => {
 				if (!cancelled) setItem(data.items.find((i) => i.imdbId === imdbId) ?? null);
 			})
 			.catch(() => {});
+		// A season page has a season button and a whole-show button: each follows the other's changes.
+		const onChanged = (e: Event) => {
+			const { detail } = e as CustomEvent<Changed>;
+			if (detail.imdbId === imdbId) setItem(detail.item);
+		};
+		window.addEventListener(CHANGED, onChanged);
 		return () => {
 			cancelled = true;
+			window.removeEventListener(CHANGED, onChanged);
 		};
 	}, [isSponsor, imdbId]);
 
@@ -77,6 +88,9 @@ export default function WantedButton({ imdbId, kind, title, season }: WantedButt
 				toast.error(error || 'Could not update your wanted list');
 				return;
 			}
+			window.dispatchEvent(
+				new CustomEvent<Changed>(CHANGED, { detail: { imdbId, item: next } })
+			);
 			setItem(next);
 			toast.success(next ? 'Your wanted list is updated' : 'Removed from your wanted list');
 		} catch {

@@ -96,6 +96,35 @@ describe('WantedButton', () => {
 		expect(posted(calls)[0].seasons).toBeNull();
 	});
 
+	// Live on 2026-11-10: after Want S2 then Want all seasons, the season button still
+	// held [2], so clicking "Wanted: S2" deleted the whole show, and after the whole show
+	// was removed the season button still read "Wanted: S2".
+	it("follows the page's other button for the same show", async () => {
+		const calls = mockFetch([stored([2])]);
+		render(
+			<>
+				<WantedButton imdbId={SHOW} kind="show" title="3rd Rock" season={2} />
+				<WantedButton imdbId={SHOW} kind="show" title="3rd Rock" />
+			</>
+		);
+		fireEvent.click(await screen.findByRole('button', { name: /Want all seasons/ }));
+		await screen.findByRole('button', { name: /Wanted: all seasons/ });
+		expect(screen.getByRole('button', { name: /Wanted: S2/ })).toBeDisabled();
+
+		fireEvent.click(screen.getByRole('button', { name: /Wanted: all seasons/ }));
+		await screen.findByRole('button', { name: /Want all seasons/ });
+		expect(screen.getByRole('button', { name: /Want S2/ })).toBeEnabled();
+		expect(calls.filter((c) => c.init?.method === 'DELETE')).toHaveLength(1);
+	});
+
+	// The button needs its own title, not the whole list of up to 20,000.
+	it('asks for its own title only', async () => {
+		const calls = mockFetch([stored([1])]);
+		render(<WantedButton imdbId={SHOW} kind="show" title="3rd Rock" season={1} />);
+		await screen.findByRole('button', { name: /Wanted: S1/ });
+		expect(calls[0].url).toBe(`/api/wanted?imdbId=${SHOW}`);
+	});
+
 	it('sends a non-sponsor to the page that explains the list', () => {
 		sponsorMock.mockReturnValue({ isSponsor: false });
 		global.fetch = vi.fn() as any;
