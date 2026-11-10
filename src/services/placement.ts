@@ -38,6 +38,7 @@ import {
 	stackedParts,
 	TITLE_EPISODE,
 	titleOf,
+	titleText,
 	yieldToTitles,
 	type AlignedEpisode,
 	type AnimeIndex,
@@ -185,7 +186,7 @@ export interface PlacementSources {
 	/** TMDB's TV search for a title (`search/tv`). */
 	searchTv(query: string): Promise<any | null>;
 	/** TMDB's movie search for a title in a year (`search/movie`); absent or null where it cannot be asked. */
-	searchMovie?(query: string, year: number): Promise<any | null>;
+	searchMovie?(query: string, year?: number): Promise<any | null>;
 	/** TMDB's external ids of a movie (`movie/{id}/external_ids`); absent or null where it cannot be asked. */
 	movieIds?(tmdbId: number): Promise<any | null>;
 	/** A series and its episodes as IMDb lists them (dmmdb's imdb_title_*); null when IMDb has no such title. */
@@ -787,7 +788,61 @@ async function filmLook(
 		if (typeof movie !== 'number') continue;
 		files[at] = { ...files[at], kind: 'movie', imdbId: top.imdbId, tmdbId: movie };
 	}
+	// else TMDB's one film titled as the show and the words the file names beyond it, in the year the
+	// name gives if it does: `[Anime Time] Fairy Tail - Movie 01 - Dragon Cry` is "Fairy Tail: Dragon
+	// Cry", `[SubsPlease] Kaijuu 8-gou - Mission Recon` "Kaiju No. 8: Mission Recon" (a fansub's title
+	// before its first ` - ` is the show's, however it spells it)
+	for (const { at } of asked) {
+		if (files[at].kind || !sources.searchMovie || !sources.movieIds) continue;
+		const stem = (release.files[at].path.split('/').pop() ?? release.files[at].path)
+			.replace(/\.[a-z0-9]{2,4}$/i, '')
+			.replace(/^\s*(?:\[[^\]]*\][\s._-]*)+/, '');
+		const dashed = fansubShaped(release.files[at].path) ? stem.split(' - ') : [];
+		const own = filmWords(dashed.length > 1 ? dashed.slice(1).join(' - ') : stem, show);
+		if (letters(own).length < 4) continue;
+		const { year } = parseName(stem);
+		const yearOf = (row: any) => Number(String(row?.release_date ?? '').slice(0, 4));
+		// a name with no year that says no film names only one titled with the show's name too:
+		// `Rivales [HDTV] 1080p][Cap.208]`, sent with Rivals' id, is no part of the 2008 film Rivales
+		const withShow = (title: string) => {
+			const all = new Set(titleText(title)?.whole.split(' ') ?? []);
+			return (titleText(show)?.whole.split(' ') ?? []).every((word) => all.has(word));
+		};
+		const found = (
+			(await sources.searchMovie(`${show} ${own}`, year ?? undefined))?.results ?? []
+		).filter(
+			(row: any) =>
+				typeof row?.title === 'string' &&
+				filmWords(row.title, show) === own &&
+				(year
+					? Math.abs(yearOf(row) - year) <= 1
+					: FILM_WORD.test(stem) || withShow(row.title))
+		);
+		const imdbId = found.length === 1 ? (await sources.movieIds(found[0].id))?.imdb_id : null;
+		if (typeof imdbId === 'string' && /^tt\d{7,}$/.test(imdbId))
+			files[at] = { ...files[at], kind: 'movie', imdbId, tmdbId: found[0].id };
+	}
 	return { ...placed, files };
+}
+
+/**
+ * A film's title as words, the show's, a film's words and its number in the series, an episode token
+ * and the release's tags left out: `Movie 01 - Dragon Cry` and "Fairy Tail: Dragon Cry" are both
+ * `dragon cry` beside Fairy Tail.
+ */
+function filmWords(text: string, show: string): string {
+	const shown = new Set(titleText(show)?.whole.split(' ') ?? []);
+	const list = (titleText(text.replace(/[[(][^\])]*[\])]/g, ' '))?.whole ?? '').split(' ');
+	return list
+		.filter(
+			(word, n) =>
+				word &&
+				!shown.has(word) &&
+				!/^(?:movies?|films?|the|an?)$/.test(word) &&
+				!/^s\d{1,2}e\d{1,3}$/.test(word) &&
+				!(/^\d+$/.test(word) && /^(?:movies?|films?)$/.test(list[n - 1] ?? ''))
+		)
+		.join(' ');
 }
 
 async function secondLook(

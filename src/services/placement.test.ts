@@ -23,6 +23,7 @@ import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
 import filmsInShows from '@/test/fixtures/placement/films-in-show-releases.json';
 import filmsOfEpisodes from '@/test/fixtures/placement/films-of-imdb-episodes.json';
 import filmsBeforeColons from '@/test/fixtures/placement/films-titled-before-a-colon.json';
+import filmsTitledByShow from '@/test/fixtures/placement/films-titled-by-show.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
 import spelled from '@/test/fixtures/placement/identifier-titles-spelled.json';
 import imdbSeries from '@/test/fixtures/placement/imdb-series.json';
@@ -2076,5 +2077,54 @@ describe("a film in a show's release, by the identifier's answer", () => {
 
 	it("names a release's one file the identifier is sure is a film", async () => {
 		expect(await films('Deadpool')).toEqual([['tt6263850', 533535]]);
+	});
+});
+
+describe("a film titled as the show and the file's own words", () => {
+	// zurg on fun (2026-11-09): films in releases placed on a show, no identifier answer naming them,
+	// which TMDB titles as the show and the words the file names beyond it (see the fixtures README)
+	const film = async (name: string, part?: string) => {
+		const c = filmsTitledByShow.cases.find((c) => c.request.name.startsWith(name))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			{
+				...recordedSources(filmsTitledByShow.answers),
+				anime: async () =>
+					buildAnimeIndex(
+						buildFranchiseIndex(
+							filmsTitledByShow.answers.anime.fribb as FribbAnimeEntry[]
+						),
+						filmsTitledByShow.answers.anime.titles
+					),
+			},
+			async (list) =>
+				list.map(({ name }) => (filmsTitledByShow.answers.identify as any)?.[name] ?? null)
+		);
+		expect(releases[0]).toEqual(c.expect);
+		const f = releases[0].files.find((f) => !part || f.path.includes(part))!;
+		return [f.kind ?? null, f.tmdbId ?? null];
+	};
+
+	it("names a fansub's film by the words after its title", async () => {
+		// "Kaiju No. 8: Mission Recon" (2025), the release sent with the show's id
+		expect(await film('[SubsPlease] Kaijuu 8-gou - Mission Recon')).toEqual(['movie', 1326106]);
+		// "Non Non Biyori Vacation" (2018)
+		expect(await film('[Erai-raws] Non Non Biyori - Vacation - Movie')).toEqual([
+			'movie',
+			494471,
+		]);
+		// "Fate/kaleid liner Prisma☆Illya: Prisma☆Phantasm" (2019)
+		expect(await film('[Arid] Fate kaleid liner')).toEqual(['movie', 658436]);
+	});
+
+	it("names a pack's film numbered as a special by the words after the show's", async () => {
+		// "My Hero Academia: Two Heroes" (2018), not TMDB's S0E4 "All Might: Rising"
+		expect(
+			await film(
+				'[Tenrai-Sensei] My Hero Academia',
+				'S00E04 - My Hero Academia The Movie The Two Heroes'
+			)
+		).toEqual(['movie', 505262]);
 	});
 });
