@@ -32,6 +32,9 @@ const YEAR_MS = 365 * DAY_MS;
  */
 export const NEWZNAB_API_EMPTY_TTL_MS = HOUR_MS;
 
+/** zurg's new-episode searches run every 2 to 10 minutes in the 48 h after an airing. */
+export const NEWZNAB_API_EPISODE_EMPTY_TTL_MS = 10 * 60 * 1000;
+
 /** No pubDate anywhere in the set — age is unknown, so neither tier applies. */
 export const NEWZNAB_API_UNDATED_TTL_MS = 24 * HOUR_MS;
 
@@ -96,9 +99,16 @@ export function newestPubDate(results: CachedUsenetResult[]): Date | null {
 	return newest === null ? null : new Date(newest);
 }
 
-/** The TTL an entry holding these results is entitled to, right now. */
-export function ttlForResults(results: CachedUsenetResult[], now: number = Date.now()): number {
-	if (results.length === 0) return NEWZNAB_API_EMPTY_TTL_MS;
+/** The TTL an entry holding these results is entitled to, right now; `key` is its search. */
+export function ttlForResults(
+	results: CachedUsenetResult[],
+	now: number = Date.now(),
+	key = ''
+): number {
+	if (results.length === 0) {
+		const episode = key.startsWith('tvsearch:') && new URLSearchParams(key.slice(9)).has('ep');
+		return episode ? NEWZNAB_API_EPISODE_EMPTY_TTL_MS : NEWZNAB_API_EMPTY_TTL_MS;
+	}
 	return searchTtlMs(newestPubDate(results), now);
 }
 
@@ -208,7 +218,7 @@ export class NewznabApiCacheService extends DatabaseClient {
 			if (!Array.isArray(value?.results)) return null;
 
 			const results = value.results as CachedUsenetResult[];
-			const ttlMs = Math.min(ttlForResults(results, now), maxTtlMs ?? Infinity);
+			const ttlMs = Math.min(ttlForResults(results, now, key), maxTtlMs ?? Infinity);
 			const cachedAt = value.cachedAt ? new Date(value.cachedAt) : row.updatedAt;
 			return {
 				results,

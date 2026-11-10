@@ -171,20 +171,24 @@ TTL is computed **at read time** from the newest `pubDate` in the cached set (so
 tuning takes effect on deploy for existing entries), on the theory that the newest
 pubDate measures how recently releases for this content are still being posted:
 
-| Newest release posted | TTL  |
-| --------------------- | ---- |
-| < 30 days             | 12 h |
-| 30–90 days            | 3 d  |
-| 90 days – 1 year      | 7 d  |
-| 1–3 years             | 21 d |
-| > 3 years             | 45 d |
-| no parseable pubDates | 24 h |
-| empty result set      | 1 h  |
+| Newest release posted | TTL    |
+| --------------------- | ------ |
+| < 30 days             | 12 h   |
+| 30–90 days            | 3 d    |
+| 90 days – 1 year      | 7 d    |
+| 1–3 years             | 21 d   |
+| > 3 years             | 45 d   |
+| no parseable pubDates | 24 h   |
+| empty result set      | 1 h    |
+| empty episode search  | 10 min |
 
 One cap on top: a query naming no title and no id (no `q`/`imdbid`/`tvdbid`) is an \*arr
 RSS sync — "what's new" — whose results are always freshly posted, so the age tiers
 alone would hold it for 12h and every sponsor would see new releases half a day late.
 Those reads are capped at 15 minutes (`RSS_TTL_MS`).
+
+An episode search is a `t=tvsearch` naming an `ep`. zurg asks one every 2 to 10 minutes
+in the 48 hours after the episode airs, so nothing found keeps 10 minutes there, not an hour.
 
 A film search by IMDb id is kept longer than its TTL: for up to 7 days
 (`FRESH_ID_TTL_MS`), nothing found included, as long as no post naming that film has

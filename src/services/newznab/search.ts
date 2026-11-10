@@ -374,7 +374,8 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	// An *arr's RSS sync is a look at what is new: the ids in it are the same
 	// news the sweep collects, at no extra cost upstream.
 	if (!targeted) await db.recordNewznabFreshPosts(postsById(merged));
-	// Written even when empty: an hour of "nothing found" is the whole point of
+	// Written even when empty: an hour of "nothing found" (ten minutes for an
+	// episode, see NEWZNAB_API_EPISODE_EMPTY_TTL_MS) is the whole point of
 	// the empty TTL, and it is what caps upstream calls for a query nobody can
 	// satisfy. `set` swallows its own failures. What it lacks is recorded, so
 	// a later read can ask just those upstreams (see completed).

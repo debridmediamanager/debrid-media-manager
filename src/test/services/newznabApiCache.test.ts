@@ -155,6 +155,24 @@ describe('NewznabApiCacheService', () => {
 		expect(stale?.results).toEqual([]);
 	});
 
+	// zurg searches for a new episode every 2 to 10 minutes in the 48 h after it
+	// airs; an hour of "nothing found" held each of those searches back.
+	it('ages an empty episode search out within ten minutes', async () => {
+		const episode = 'tvsearch:ep=6&season=38&tvdbid=71663';
+		prisma.cache.findUnique.mockResolvedValue(row([], 9 * 60_000));
+		expect((await service.get(episode, NOW))?.isFresh).toBe(true);
+
+		prisma.cache.findUnique.mockResolvedValue(row([], 11 * 60_000));
+		expect((await service.get(episode, NOW))?.isFresh).toBe(false);
+		for (const key of [
+			'tvsearch:season=38&tvdbid=71663',
+			'movie:imdbid=14209916',
+			'search:q=the simpsons s38e06',
+		]) {
+			expect((await service.get(key, NOW))?.isFresh).toBe(true);
+		}
+	});
+
 	// Stale is still served: the fallback is a live indexer call, and an outage
 	// there must not turn into an error for the client.
 	it('returns a stale entry rather than nothing', async () => {
