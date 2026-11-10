@@ -612,13 +612,16 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
-	// rex runs on 32-bit Android too; only direct Usenet needs a 64-bit device.
+	// rex runs on 32-bit Android too; only direct Usenet needs a 64-bit device. The accounts
+	// summary may say so whatever was picked: it lists what the device takes, own Usenet included.
 	it('names 64-bit Android only when own Usenet is selected', () => {
 		expect(
 			breaking(
 				(answers, result) =>
 					!answers.sources.includes('usenet') &&
-					texts(result).some((text) => text.includes('64-bit'))
+					texts(result).some(
+						(text) => text !== result.primaryRoute.summary && text.includes('64-bit')
+					)
 			)
 		).toEqual([]);
 	});

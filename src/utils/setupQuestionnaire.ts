@@ -321,7 +321,7 @@ const ACCOUNTS_FOR_PLAYER: Record<Exclude<Player, 'unsure'>, string> = {
 const REX_ACCOUNTS =
 	'Any debrid or Usenet account works through zurg → rex on a host; Stremio URL addons through rex-stremio; local files need a feed producer. TorBox Pro hosted NZBs work through zurg on a host too.';
 const REX_ANDROID_ACCOUNTS =
-	'Any debrid account or your own Usenet account works through zurg → rex on the device; Stremio URL addons, local files and TorBox Pro hosted NZBs need rex or zurg on a normal host.';
+	'Any debrid account, or your own Usenet account on a 64-bit device, works through zurg → rex on the device; Stremio URL addons, local files and TorBox Pro hosted NZBs need rex or zurg on a normal host.';
 
 /** "A", "A or B", "A, B or C". */
 const orList = (names: string[]) =>
@@ -408,7 +408,7 @@ export function hostChoiceReason(
 		answers.sources.includes('http-local') && 'HTTP files',
 	].filter(Boolean);
 	if (rex && notZurg.length)
-		return `zurg+rex Android feeds rex from zurg only; ${notZurg.join(' and ')} need rex on a normal host.`;
+		return `zurg+rex Android feeds rex from zurg only; ${notZurg.join(' and ')} need rex on a normal host${answers.sources.includes('torbox-hosted') ? ', and it has no TorBox hosted NZB (torbox_nzb) backend' : ''}.`;
 	// Stremio and Kodi play TorBox hosted NZBs without zurg; WebDAV, external players and rex need it.
 	if (
 		answers.sources.includes('torbox-hosted') &&
@@ -1524,7 +1524,13 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 					: `${rex ? 'rex and its source need' : `${player === 'plex' ? 'Plex Media Server' : playerLabel(player)} needs`} a machine that stays on. Choose a host${androidRunsRex({ ...answers, host: 'android' }) ? ` or a supported ${android64}Android device` : ''}.`
 		);
 	const hostedNzb = routes.some(({ route: r }) => r.zurgNzb === 'hosted');
-	if (answers.host === 'android' && hostedNzb) result.conflicts.push(ANDROID_HOSTED_NZB);
+	// The host reason may already name it beside URL addons or HTTP files.
+	if (
+		answers.host === 'android' &&
+		hostedNzb &&
+		!result.conflicts.some((conflict) => conflict.includes('TorBox hosted NZB'))
+	)
+		result.conflicts.push(ANDROID_HOSTED_NZB);
 	if (result.hostRequirement === 'zurg' && answers.host === 'none')
 		result.conflicts.push(
 			`zurg needs a host that stays on while you watch. Choose a host${hostedNzb ? '' : ` or a supported ${android64}Android device`}${noHostClause(player, selected, answers.player === 'unsure')}.`
@@ -1537,7 +1543,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		const noHostedNzb = 'has no TorBox hosted NZB (torbox_nzb) backend.';
 		result.prerequisites.push(
 			androidRex
-				? `${app} it runs zurg and rex on the device, so the Plex apps play from it. ${android64 ? 'Direct Usenet requires 64-bit Android; it' : 'It'} ${noHostedNzb}`
+				? `${app} it runs zurg and rex on the device, so the Plex apps play from it. ${android64 ? 'Direct Usenet requires 64-bit Android, and the app' : 'It'} ${noHostedNzb}`
 				: `${app} ${android64 ? 'direct Usenet requires 64-bit Android, and zurg+rex Android' : 'it'} ${noHostedNzb}`
 		);
 	}

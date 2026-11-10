@@ -1450,6 +1450,21 @@ describe('host messages name the server that needs the host', () => {
 		}
 	);
 
+	// TorBox hosted NZBs picked beside them are named too: the app has no torbox_nzb backend.
+	it.each([
+		[['url-addon', 'torbox-hosted'], 'rex', 'Stremio URL addons'],
+		[['real-debrid', 'http-local', 'torbox-hosted'], 'either', 'HTTP files'],
+	] satisfies [SetupSource[], PlexRoute, string][])(
+		'names TorBox hosted NZBs beside %o in the rex on Android reason (%s)',
+		(sources, plexRoute, needs) => {
+			const input = answers({ player: 'plex', plexRoute, sources });
+			const reason = `zurg+rex Android feeds rex from zurg only; ${needs} need rex on a normal host, and it has no TorBox hosted NZB (torbox_nzb) backend.`;
+
+			expect(hostChoiceReason(input, 'android')).toBe(reason);
+			expect(recommendSetup({ ...input, host: 'android' }).conflicts).toEqual([reason]);
+		}
+	);
+
 	it('gives the Android conflict the same reason', () => {
 		expect(recommendSetup(answers({ player: 'emby', host: 'android' })).conflicts).toContain(
 			'Emby needs a full server host; zurg+rex Android cannot give a server on that device a library.'
@@ -3052,7 +3067,7 @@ describe('zurg+rex Android serves the Plex apps', () => {
 	// rex runs on 32-bit Android too; only direct Usenet needs 64-bit.
 	it('asks for 64-bit Android only for own Usenet', () => {
 		expect(onAndroid({ sources: ['real-debrid', 'usenet'] }).prerequisites).toContain(
-			'zurg+rex Android needs sponsor access, a supported device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. Direct Usenet requires 64-bit Android; it has no TorBox hosted NZB (torbox_nzb) backend.'
+			'zurg+rex Android needs sponsor access, a supported device and background operation; it runs zurg and rex on the device, so the Plex apps play from it. Direct Usenet requires 64-bit Android, and the app has no TorBox hosted NZB (torbox_nzb) backend.'
 		);
 	});
 
@@ -3172,7 +3187,7 @@ describe('zurg+rex Android serves the Plex apps', () => {
 			const result = onAndroid({ plexRoute, sources: [] });
 
 			expect(result.primaryRoute.summary).toBe(
-				'Any debrid account or your own Usenet account works through zurg → rex on the device; Stremio URL addons, local files and TorBox Pro hosted NZBs need rex or zurg on a normal host. DMM does not supply video bytes by itself.'
+				'Any debrid account, or your own Usenet account on a 64-bit device, works through zurg → rex on the device; Stremio URL addons, local files and TorBox Pro hosted NZBs need rex or zurg on a normal host. DMM does not supply video bytes by itself.'
 			);
 			expect(result.sponsorship.optional.map(({ id }) => id)).not.toContain(
 				'rex-stremio-key'
