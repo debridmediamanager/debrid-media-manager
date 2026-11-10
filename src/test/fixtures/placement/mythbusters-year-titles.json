@@ -14695,11 +14695,11 @@
 					},
 					{
 						"path": "MythBusters.2009e23.Mini-Myths mayhem.mkv",
-						"season": null,
-						"episode": null,
+						"season": 7,
+						"episode": 23,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 65367
 					},
 					{
 						"path": "MythBusters.2010e01.Boomerang bullet.mkv",
@@ -15447,11 +15447,11 @@
 					},
 					{
 						"path": "MythBusters.2015e01.The Simpsons Special.mkv",
-						"season": null,
-						"episode": null,
+						"season": 13,
+						"episode": 1,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1158606
 					},
 					{
 						"path": "MythBusters.2015e02.Indiana Jones Special.mkv",
@@ -16900,11 +16900,11 @@
 					},
 					{
 						"path": "Smyth S2004E10 Scuba Diver, Car Capers.mp4",
-						"season": null,
-						"episode": null,
+						"season": 2,
+						"episode": 7,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 65250
 					},
 					{
 						"path": "Smyth S2004E11 Ancient Death Ray.mp4",
@@ -17596,11 +17596,11 @@
 					},
 					{
 						"path": "Smyth S2008E01 James Bond Special Part 1.mp4",
-						"season": null,
-						"episode": null,
+						"season": 6,
+						"episode": 1,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 65337
 					},
 					{
 						"path": "Smyth S2008E02 Lead Balloon.mp4",
@@ -17748,19 +17748,19 @@
 					},
 					{
 						"path": "Smyth S2008E20 Viewer Special Threequel.mp4",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 11,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1158556
 					},
 					{
 						"path": "Smyth S2009E01 Demolition Derby Special.mp4",
-						"season": null,
-						"episode": null,
+						"season": 7,
+						"episode": 1,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 65369
 					},
 					{
 						"path": "Smyth S2009E02 Alaska Special 2.mp4",
@@ -18124,11 +18124,11 @@
 					},
 					{
 						"path": "Smyth S2011E01 Mission Impossible Face Off.mp4",
-						"season": null,
-						"episode": null,
+						"season": 9,
+						"episode": 1,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 65410
 					},
 					{
 						"path": "Smyth S2011E02 Blue Ice.mp4",
@@ -18644,11 +18644,11 @@
 					},
 					{
 						"path": "Smyth S2015E01 The Simpsons Special.mp4",
-						"season": null,
-						"episode": null,
+						"season": 13,
+						"episode": 1,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 1158606
 					},
 					{
 						"path": "Smyth S2015E02 The Busters of the Lost Myths.mp4",

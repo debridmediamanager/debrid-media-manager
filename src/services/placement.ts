@@ -1701,6 +1701,7 @@ async function placeOnShow(
 	};
 	placement.tvdbOrder = tvdbOrderLookup(showId, sources, TVDB_ORDER);
 	placement.aligned = alignedLookup(showId, details, sources, release);
+	placement.tvdbListed = tvdbListedLookup(details, sources);
 	if (release.parts) placement.parts = true;
 	if (DUBBED.test(release.name)) placement.dubOrder = tvdbOrderLookup(showId, sources, DUB_ORDER);
 	placement.packOrder = await packOrderLookup(release, placement.seasons, showId, sources);
@@ -2394,6 +2395,17 @@ function showAlignment(
 		void alignment.then((found) => found || shows.delete(at));
 	}
 	return cached.alignment;
+}
+
+/** TVDB's aired episodes of a show whose TVDB id TMDB records, read once a file asks. */
+function tvdbListedLookup(details: any, sources: PlacementSources): PlacementShow['tvdbListed'] {
+	const tvdbId = Number(details.external_ids?.tvdb_id);
+	if (!sources.tvdbEpisodes || !(tvdbId > 0)) return undefined;
+	let listed: Promise<ReturnType<typeof listedEpisodes> | null> | undefined;
+	return () =>
+		(listed ??= sources.tvdbEpisodes!(tvdbId)
+			.then((rows) => (rows ? listedEpisodes(rows, 'seasonNumber', 'number', 'aired') : null))
+			.catch(() => null));
 }
 
 /**

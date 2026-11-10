@@ -98,6 +98,10 @@ export interface PlacementShow {
 	aligned?: (season: number, episode: number) => Promise<AlignedEpisode | null | undefined>;
 	/** The caller reads `part`, so a file may be placed as a part of TMDB's episode. */
 	parts?: true;
+	/** TVDB's episodes in its aired order, read once a year-numbered file asks (`ofYear`). */
+	tvdbListed?: () => Promise<
+		{ season: number; episode: number; name: string; airDate: string | null }[] | null
+	>;
 }
 
 export interface Placement {
@@ -1155,8 +1159,44 @@ async function ofYear(
 	const found =
 		titled(title, candidates) ??
 		(first && titled(first, candidates)) ??
-		(holding.length === 1 ? holding[0] : null);
+		(holding.length === 1 ? holding[0] : null) ??
+		(await airedAsTvdbTitles(show, year, title, first, own, candidates));
 	return found ? [found.season, found.episode] : null;
+}
+
+/**
+ * The one episode TMDB aired the day TVDB aired the episode of that year, or the special, titled
+ * as the file is: the packs title TVDB's year seasons as TVDB does, TMDB otherwise (`2011x01 -
+ * Mission Impossible Face Off` is TVDB's, aired 2011-04-06, TMDB's S9E1 "Mission Impossible Mask";
+ * `2015x01 - The Simpsons Special` its S13E1 "The Simpsons: D'oh!"), and a plural as one
+ * (`2005x02 - Ultimate Mythbuster` is TVDB's "Ultimate MythBusters").
+ */
+async function airedAsTvdbTitles<T extends { airDate: string | null }>(
+	show: PlacementShow,
+	year: number,
+	title: { whole: string; first: string },
+	first: { whole: string; first: string } | null,
+	own: (text: string) => string,
+	candidates: T[]
+): Promise<T | null> {
+	const tvdb = ((await show.tvdbListed?.()) ?? [])
+		.filter((row) => row.season === year || row.season === 0)
+		.map((row) => ({ ...row, name: own(words(row.name).join(' ')) }));
+	const one = (text: string) => text.replace(/(?<=\p{L}{3})s(?= |$)/gu, '');
+	// by whole titles, never a part TVDB numbers that the file does not: `2007e23 Pirates Special
+	// (2)` is no "Pirate Special" (2007x02)
+	const whole = (text: string) => ({ whole: text, first: text });
+	const forms = [0, 2];
+	const twin =
+		titled(whole(title.whole), tvdb, forms) ??
+		(first && titled(whole(first.whole), tvdb, forms)) ??
+		titled(
+			whole(one(title.whole)),
+			tvdb.map((row) => ({ ...row, name: one(row.name) })),
+			forms
+		);
+	const day = twin?.airDate ? candidates.filter((item) => item.airDate === twin.airDate) : [];
+	return day.length === 1 ? day[0] : null;
 }
 
 /** A title's words: lowercase letters and digits, apostrophes dropped (`Don't` is `dont`). */

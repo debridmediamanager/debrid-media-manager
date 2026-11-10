@@ -1876,7 +1876,7 @@ describe('a year-numbered episode titled as TMDB titles one of another year', ()
 	it.each([
 		['Smyth S2007E18 Myth Evolution.mp4', [5, 18]],
 		['Smyth S2009E18 Myth Evolution 2.mp4', [7, 18]],
-		['Smyth S2008E20 Viewer Special Threequel.mp4', [null, null]],
+		['Smyth S2008E20 Viewer Special Threequel.mp4', [0, 11]],
 	])('places %s on an episode of its year', async (path, [season, episode]) => {
 		const c = mythbusters.cases.find((c) => c.request.files.some((f) => f.path === path))!;
 		const { releases } = await place(
@@ -1887,6 +1887,32 @@ describe('a year-numbered episode titled as TMDB titles one of another year', ()
 		);
 		const file = releases[0].files.find((f) => f.path === path)!;
 		expect([file.season, file.episode]).toEqual([season, episode]);
+	});
+});
+
+describe('a year-numbered episode titled as TVDB titles it', () => {
+	// zurg on fun (2026-11-10): the MythBusters packs title TVDB's year seasons as TVDB does, and
+	// TMDB titles those episodes otherwise; TMDB aired one that day (see the fixtures README)
+	it.each([
+		['Smyth S2011E01 Mission Impossible Face Off.mp4', [9, 1]], // "Mission Impossible Mask"
+		['Smyth S2015E01 The Simpsons Special.mp4', [13, 1]], // "The Simpsons: D'oh!"
+		['Smyth S2008E01 James Bond Special Part 1.mp4', [6, 1]], // "James Bond (1)"
+		['Smyth S2004E10 Scuba Diver, Car Capers.mp4', [2, 7]], // "Scuba Diver and Car Capers"
+		['Smyth S2008E20 Viewer Special Threequel.mp4', [0, 11]], // "Viewers' Special Threequel"
+		['MythBusters.2009e23.Mini-Myths mayhem.mkv', [7, 23]], // TVDB's "Mini Myth Mayhem"
+		// TVDB's "Pirate Special" is the other part
+		['MythBusters.2007e23.Pirates Special (2).mkv', [5, 23]],
+	])('places %s on the episode TMDB aired that day', async (path, [season, episode]) => {
+		const c = mythbusters.cases.find((c) => c.request.files.some((f) => f.path === path))!;
+		const { releases } = await place(
+			[{ ...(c.request as PlaceRequest), parts: true }],
+			Infinity,
+			recordedSources(mythbusters.answers),
+			async () => [null]
+		);
+		const file = releases[0].files.find((f) => f.path === path)!;
+		expect([file.season, file.episode]).toEqual([season, episode]);
+		expect(releases[0]).toEqual(c.expect);
 	});
 });
 
