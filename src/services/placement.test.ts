@@ -40,6 +40,7 @@ import namesakes from '@/test/fixtures/placement/miniseries-namesake-films.json'
 import mythbusters from '@/test/fixtures/placement/mythbusters-year-titles.json';
 import office from '@/test/fixtures/placement/office-tvdb-order.json';
 import otherShows from '@/test/fixtures/placement/other-show-files.json';
+import partTitlesSpoken from '@/test/fixtures/placement/part-titles-spoken.json';
 import releaseTags from '@/test/fixtures/placement/release-tags.json';
 import cases from '@/test/fixtures/placement/releases.json';
 import revival from '@/test/fixtures/placement/revival-seasons.json';
@@ -2831,6 +2832,30 @@ describe('a title whose last word is as short as an extension', () => {
 			(f) => f.season === 7 && releases[0].tmdbId === 34549
 		);
 		expect(placed).toEqual([]);
+		expect(releases[0]).toEqual(c.expect);
+	});
+});
+
+describe("a part titled as its other part's number", () => {
+	// zurg on fun (2026-11-10): Married... with Children's pack numbers each two-part episode one
+	// later than TMDB, and the title reader took `Poppy's By the Tree (1)` at S02E02 for TMDB's S2E2
+	// "Poppy's by the Tree (2)", part numbers aside, which left the pack's `(2)` beside it; `Girls
+	// Just Wanna Have Fun (1)` and `(2)` are TMDB's "Girls Just Want to Have Fun (1)" and "(2)"
+	it.each([
+		["S02E02 - Poppy's By the Tree (1)", [2, 1]],
+		["S02E03 - Poppy's By the Tree (2)", [2, 2]],
+		['S02E06 - Girls Just Wanna Have Fun (1)', [2, 5]],
+		['S02E07 - Girls Just Wanna Have Fun (2)', [2, 6]],
+	])('places %s on its own part', async (part, [season, episode]) => {
+		const [c] = partTitlesSpoken.cases;
+		const { releases } = await place(
+			[c.request as PlaceRequest],
+			Infinity,
+			recordedSources(partTitlesSpoken.answers),
+			async () => [null]
+		);
+		const file = releases[0].files.find((f) => f.path.includes(part))!;
+		expect([file.season, file.episode]).toEqual([season, episode]);
 		expect(releases[0]).toEqual(c.expect);
 	});
 });

@@ -1448,6 +1448,11 @@ function agrees(title: { whole: string; first: string }, name: string): boolean 
 	// part numbers aside: `Chuck.Versus.the.Ring.2` is "Chuck Versus the Ring: Part 2"
 	const bare = (text: string) => ` ${text.replace(PART, '')} `;
 	const named = bare(words(name).join(' '));
+	// but never another part of it: Married... with Children's `S02E02 - Poppy's By the Tree (1)` is
+	// not TMDB's S2E2 "Poppy's by the Tree (2)"
+	const part = (text: string) => / (?:part |pt )?(\d{1,2})$/.exec(text)?.[1];
+	const [mine, theirs] = [part(title.whole), part(words(name).join(' '))];
+	if (mine && theirs && mine !== theirs) return false;
 	const usable = (text: string) => text.replace(/ /g, '').length >= 3;
 	// the file's title inside TMDB's, or TMDB's inside the file's first segment: a pack file's
 	// second segment (`102a-b - The Fast and the Phineas; Lawn Gnome Beach Party of Terror`) is
@@ -1672,6 +1677,11 @@ async function byName(
 	// a special by the title before its subtitle too, within the specials alone
 	const inSeason = listed && titled(title, listed, season === 0 ? [0, 1, 2, 3] : undefined);
 	if (inSeason) return [season!, inSeason.episode];
+	// or spelled alike in it: Married... with Children's `S02E07 - Girls Just Wanna Have Fun (2)` is
+	// TMDB's S2E6 "Girls Just Want to Have Fun (2)"
+	const spoken = (text: string) => spelling(text).join(' ');
+	const alike = (listed ?? []).filter((row) => spoken(row.name) === spoken(title.whole));
+	if (alike.length === 1) return [season!, alike[0].episode];
 	// a year-numbered file's title among the episodes TMDB aired that year: MythBusters' `S2007E18
 	// Myth Evolution` (TVDB's "Myth Evolution!" of 2007) is not TMDB's S7E18 "Myth Evolution" of
 	// 2009, TVDB's "Myth Evolution 2", nor `S2008E20 Viewer Special Threequel` its S0E17, the 2010
