@@ -1730,6 +1730,10 @@ async function byName(
 				)
 					return list.slice(k).join('');
 			}
+		// or after it: The World at War's `S00E01 - The Making of the Series` is S0E9 "The Making of
+		// the Series: The World at War"
+		for (let k = list.length - 1; k > 0; k--)
+			if (shows.includes(list.slice(k).join(''))) return list.slice(0, k).join('');
 		return list.join('');
 	};
 	const own = unshown(title.whole);

@@ -1158,6 +1158,12 @@ describe('what rex-fun still could not match on 2026-10-24', () => {
 		expect(releases[0]).toEqual(c.expect);
 	});
 
+	it("places a special by TMDB's title with the show's name after it", async () => {
+		// "The Making of the Series: The World at War" (2026-11-10)
+		const placed = await placedHere('The World at War (1973)');
+		expect(at(placed, 'S00E01 - The Making of the Series')).toEqual([0, 9]);
+	});
+
 	it('reads `&` as `and`, `vs` as `versus` and an article anywhere as none', async () => {
 		// TMDB's S12E11 "Gary & Spot"
 		expect(at(await placedHere('SpongeBob.SquarePants.S12'), 'S12E11.Gary.and.Spot')).toEqual([

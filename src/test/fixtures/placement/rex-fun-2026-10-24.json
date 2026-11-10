@@ -98568,11 +98568,11 @@
 				"files": [
 					{
 						"path": "S00E01 - The Making of the Series.mkv",
-						"season": null,
-						"episode": null,
+						"season": 0,
+						"episode": 9,
 						"episodeEnd": null,
-						"how": null,
-						"tmdbEpisodeId": null
+						"how": "tmdb",
+						"tmdbEpisodeId": 7093526
 					},
 					{
 						"path": "S00E02 - Hitler's Germany - The People's Community.mkv",
