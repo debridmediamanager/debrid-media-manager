@@ -2,8 +2,8 @@ import { ScrapedVerdictService, titleKeyOf } from '@/services/database/scrapedVe
 import { JEV_REPORTER, type ReportType } from '@/services/reporterId';
 import { repository } from '@/services/repository';
 import { identifiedAnswers } from './identified';
-import { classifyFilenames } from './jev';
 import { ENGINE, underBudget, utcDay } from './job';
+import { classifyFilenames, modelKey } from './model';
 import { decide, decideWithoutModel } from './rules';
 
 /**
@@ -34,7 +34,7 @@ export async function reviewReports(
 	file: (hash: string) => Promise<void> = (hash) =>
 		repository.reportContent(hash, imdbId, JEV_REPORTER, type)
 ): Promise<string[]> {
-	const key = process.env.TYPESAFE_API_KEY;
+	const key = modelKey();
 	if (!key || type === 'wrong_season' || type === 'malware' || hashes.length === 0) return [];
 	db ??= verdicts();
 
@@ -70,7 +70,7 @@ export async function reviewReports(
 				movie,
 				forModel.map(([, title]) => title)
 			);
-			await db.addTokensSpent(utcDay(), result.inputTokens);
+			await db.addTokensSpent(utcDay(), result.tokens);
 			forModel.forEach(([hash, title], i) => {
 				const { media, titleMatch } = result.answers[i];
 				if (decide(movie, title, media, titleMatch) === 'trash') confirmed.push(hash);
@@ -84,7 +84,7 @@ export async function reviewReports(
 			show,
 			reported.map(([, title]) => title)
 		);
-		await db.addTokensSpent(utcDay(), result.inputTokens);
+		await db.addTokensSpent(utcDay(), result.tokens);
 		reported.forEach(([hash], i) => {
 			const { media, titleMatch } = result.answers[i];
 			if (type === 'porn' ? media === 'ADULT' : titleMatch === 'NO_TITLE') {

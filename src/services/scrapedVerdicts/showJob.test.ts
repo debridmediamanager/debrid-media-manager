@@ -5,7 +5,10 @@ import fixture from './__fixtures__/show-pages-2026-10-18.json';
 import { IDENTIFY_PER_PASS } from './identified';
 import { judgeShowPage, namesOnlyOtherSeasons, SHOW_ENGINE } from './job';
 
-vi.mock('./jev', () => ({ classifyFilenames: vi.fn() }));
+vi.mock('./model', async (importOriginal) => ({
+	...(await importOriginal<typeof import('./model')>()),
+	classifyFilenames: vi.fn(),
+}));
 vi.mock('@/services/database/client', () => ({ DatabaseClient: class {} }));
 
 type Page = (typeof fixture.pages)[number];

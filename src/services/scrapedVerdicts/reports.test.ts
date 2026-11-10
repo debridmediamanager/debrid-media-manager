@@ -27,18 +27,26 @@ function fakeDb(overrides: Partial<Record<keyof ScrapedVerdictService, unknown>>
 	} as unknown as ScrapedVerdictService;
 }
 
-/** Jev answering every media question with `media` and every title question with `title`. */
+/** The model answering every media question with `media` and every title question with `title`. */
 function jevAnswers(media: string, title: string) {
-	const fetchMock = vi.fn(async (_url: string, init: RequestInit) => {
+	const fetchMock = vi.fn(async (url: string, init: RequestInit) => {
+		if (!String(url).includes('openrouter.ai')) {
+			// anything else (the identifier) gets no usable answer
+			return new Response(JSON.stringify({}));
+		}
 		const body = JSON.parse(init.body as string);
-		const answers = Object.fromEntries(
-			Object.keys(body.questions).map((id) => [
-				id,
-				{ choice: id.startsWith('m') ? media : title },
-			])
+		const count = (body.messages[1].content.match(/^\d+\. /gm) ?? []).length;
+		const content = JSON.stringify(
+			Object.fromEntries(
+				Array.from({ length: count }, (_, i) => [String(i + 1), { media, title }])
+			)
 		);
 		return new Response(
-			JSON.stringify({ model: 'jev-test', answers, usage: { input_tokens: 7 } })
+			JSON.stringify({
+				model: 'gemma-test',
+				choices: [{ message: { content } }],
+				usage: { prompt_tokens: 5, completion_tokens: 2 },
+			})
 		);
 	});
 	vi.stubGlobal('fetch', fetchMock);
@@ -48,7 +56,7 @@ function jevAnswers(media: string, title: string) {
 describe('reviewReports', () => {
 	beforeEach(() => {
 		forgetIdentifications();
-		vi.stubEnv('TYPESAFE_API_KEY', 'test-key');
+		vi.stubEnv('OPENROUTER_VERDICTS_KEY', 'test-key');
 	});
 	afterEach(() => {
 		vi.unstubAllEnvs();
@@ -181,7 +189,7 @@ describe('reviewReports', () => {
 		const fetchMock = jevAnswers('ADULT', 'NO_TITLE');
 		const db = fakeDb({});
 		expect(await reviewReports('tt1', ['ee'], 'wrong_season', db, vi.fn())).toEqual([]);
-		vi.stubEnv('TYPESAFE_API_KEY', '');
+		vi.stubEnv('OPENROUTER_VERDICTS_KEY', '');
 		expect(await reviewReports('tt1', ['ee'], 'porn', db, vi.fn())).toEqual([]);
 		expect(db.getFilenames).not.toHaveBeenCalled();
 		expect(fetchMock).not.toHaveBeenCalled();

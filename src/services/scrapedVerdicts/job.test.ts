@@ -11,7 +11,10 @@ import {
 } from './job';
 
 const { mockClassify } = vi.hoisted(() => ({ mockClassify: vi.fn() }));
-vi.mock('./jev', () => ({ classifyFilenames: mockClassify }));
+vi.mock('./model', async (importOriginal) => ({
+	...(await importOriginal<typeof import('./model')>()),
+	classifyFilenames: mockClassify,
+}));
 vi.mock('@/services/database/client', () => ({ DatabaseClient: class {} }));
 
 const ministry = { imdbId: 'tt5177120', ...fixture.movies.tt5177120 };
@@ -53,7 +56,7 @@ function fakeDb(overrides: Partial<Record<keyof ScrapedVerdictService, any>> = {
 describe('judgeMoviePage', () => {
 	beforeEach(() => {
 		forgetIdentifications();
-		vi.stubEnv('TYPESAFE_API_KEY', 'test-key');
+		vi.stubEnv('OPENROUTER_VERDICTS_KEY', 'test-key');
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		mockClassify.mockReset();
 		mockClassify.mockResolvedValue({
@@ -62,13 +65,13 @@ describe('judgeMoviePage', () => {
 				{ media: 'GAME_SOFTWARE', titleMatch: 'DIFFERENT_TITLE' },
 			],
 			model: 'jev-1.13.0',
-			inputTokens: 1234,
+			tokens: 1234,
 		});
 	});
 	afterEach(() => vi.unstubAllEnvs());
 
 	it('does nothing without an API key', async () => {
-		vi.stubEnv('TYPESAFE_API_KEY', '');
+		vi.stubEnv('OPENROUTER_VERDICTS_KEY', '');
 		const db = fakeDb();
 		await expect(judgeMoviePage('tt5177120', db)).resolves.toEqual({
 			status: 'skipped',
@@ -153,7 +156,7 @@ describe('judgeMoviePage', () => {
 			judged: 4,
 			modelTitles: 2,
 			trashed: 4,
-			inputTokens: 1234,
+			tokens: 1234,
 		});
 		expect(db.addTokensSpent).toHaveBeenCalledWith(new Date().toISOString().slice(0, 10), 1234);
 		expect(db.setCheckpoint).toHaveBeenCalledWith('movie:tt5177120', ENGINE, expect.any(Date));
@@ -221,7 +224,7 @@ describe('judgeMoviePage', () => {
 		mockClassify.mockResolvedValue({
 			answers: [{ media: 'GAME_SOFTWARE', titleMatch: 'DIFFERENT_TITLE' }],
 			model: 'jev-1.13.0',
-			inputTokens: 600,
+			tokens: 600,
 		});
 		const db = fakeDb();
 
@@ -236,7 +239,7 @@ describe('judgeMoviePage', () => {
 			['h4', 'trash', 'reused'],
 			['h5', 'trash', 'jev'],
 		]);
-		expect(outcome).toMatchObject({ status: 'done', modelTitles: 1, inputTokens: 600 });
+		expect(outcome).toMatchObject({ status: 'done', modelTitles: 1, tokens: 600 });
 	});
 
 	it('asks the identifier about no more names per pass than its budget, and keeps the page due', async () => {
@@ -257,7 +260,7 @@ describe('judgeMoviePage', () => {
 		mockClassify.mockImplementation(async (_key, _movie, titles: string[]) => ({
 			answers: titles.map(() => ({ media: 'FILM', titleMatch: 'SAME_TITLE' })),
 			model: 'jev-1.13.0',
-			inputTokens: titles.length,
+			tokens: titles.length,
 		}));
 		const db = fakeDb({
 			getStoredPairs: vi.fn().mockResolvedValue({
@@ -297,7 +300,7 @@ describe('judgeMoviePage', () => {
 
 describe('cleanMovieResultsInBackground', () => {
 	it('never throws into the route', async () => {
-		vi.stubEnv('TYPESAFE_API_KEY', 'test-key');
+		vi.stubEnv('OPENROUTER_VERDICTS_KEY', 'test-key');
 		vi.spyOn(console, 'warn').mockImplementation(() => {});
 		// The real service is built lazily; its missing prisma makes the pass fail.
 		await expect(cleanMovieResultsInBackground('tt5177120')).resolves.toBeUndefined();
@@ -308,7 +311,7 @@ describe('cleanMovieResultsInBackground', () => {
 describe('withoutTrashedResults', () => {
 	beforeEach(() => {
 		forgetIdentifications();
-		vi.stubEnv('TYPESAFE_API_KEY', 'test-key');
+		vi.stubEnv('OPENROUTER_VERDICTS_KEY', 'test-key');
 	});
 	afterEach(() => vi.unstubAllEnvs());
 

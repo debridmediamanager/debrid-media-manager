@@ -104,7 +104,7 @@ describe.skipIf(!dockerAvailable)('Written-back trash sweep on MySQL 8.0.36 (Int
 	});
 
 	beforeEach(async () => {
-		vi.stubEnv('TYPESAFE_API_KEY', 'test-key');
+		vi.stubEnv('OPENROUTER_VERDICTS_KEY', 'test-key');
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		for (const table of ['ScrapedTrue', 'Scraped', 'ScrapedVerdict', 'ScrapedTrash', 'Cache']) {
 			await monitor.$executeRawUnsafe(`TRUNCATE TABLE \`${table}\``);

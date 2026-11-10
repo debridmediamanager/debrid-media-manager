@@ -11,7 +11,10 @@ import { ENGINE } from './job';
 import { SWEEP_SETTLE_MS, SWEEP_START, sweepWrittenBackTrash } from './sweep';
 
 const { mockClassify } = vi.hoisted(() => ({ mockClassify: vi.fn() }));
-vi.mock('./jev', () => ({ classifyFilenames: mockClassify }));
+vi.mock('./model', async (importOriginal) => ({
+	...(await importOriginal<typeof import('./model')>()),
+	classifyFilenames: mockClassify,
+}));
 vi.mock('@/services/database/client', () => ({ DatabaseClient: class {} }));
 
 type Entry = { hash: string; title: string; fileSize: number | null; verdict: string | null };
@@ -159,7 +162,7 @@ const NOW = new Date('2026-10-04T12:00:00Z');
 describe('sweepWrittenBackTrash', () => {
 	beforeEach(() => {
 		vi.useFakeTimers({ now: NOW, toFake: ['Date'] });
-		vi.stubEnv('TYPESAFE_API_KEY', 'test-key');
+		vi.stubEnv('OPENROUTER_VERDICTS_KEY', 'test-key');
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		vi.spyOn(console, 'warn').mockImplementation(() => {});
 	});
@@ -282,14 +285,14 @@ describe('sweepWrittenBackTrash', () => {
 
 	it('does nothing when the verdicts are switched off or another instance is sweeping', async () => {
 		const off = world();
-		vi.stubEnv('TYPESAFE_API_KEY', '');
+		vi.stubEnv('OPENROUTER_VERDICTS_KEY', '');
 		expect(await sweepWrittenBackTrash(off.db)).toEqual({
 			status: 'skipped',
 			reason: 'no api key',
 		});
 		expect(off.db.getChangedMoviePages).not.toHaveBeenCalled();
 
-		vi.stubEnv('TYPESAFE_API_KEY', 'test-key');
+		vi.stubEnv('OPENROUTER_VERDICTS_KEY', 'test-key');
 		const busy = world();
 		busy.lock();
 		expect(await sweepWrittenBackTrash(busy.db)).toEqual({

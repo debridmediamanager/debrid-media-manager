@@ -26,6 +26,7 @@ import {
 	type ScrapedSource,
 } from '@/services/database/scrapedVerdict';
 import { ENGINE } from './job';
+import { modelKey } from './model';
 
 /** Pages read from each table per tick. The cron fires every five minutes. */
 export const SWEEP_BATCH = 200;
@@ -84,7 +85,7 @@ export async function sweepWrittenBackTrash(
 	db: ScrapedVerdictService = new ScrapedVerdictService()
 ): Promise<SweepResult> {
 	// The same switch that turns the verdicts off everywhere else.
-	if (!process.env.TYPESAFE_API_KEY) return { status: 'skipped', reason: 'no api key' };
+	if (!modelKey()) return { status: 'skipped', reason: 'no api key' };
 	if (!(await db.acquireLock(SWEEP_LOCK, LOCK_STALE_MS))) {
 		return { status: 'skipped', reason: 'another instance is on it' };
 	}

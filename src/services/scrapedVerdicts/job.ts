@@ -7,7 +7,7 @@ import {
 } from '@/services/database/scrapedVerdict';
 import { namedSeasons } from '@/utils/seasonNaming';
 import { identifiedAnswers, identifiedShowVerdicts } from './identified';
-import { classifyFilenames } from './jev';
+import { classifyFilenames, modelKey } from './model';
 import { decide, decideWithoutModel, type Verdict } from './rules';
 
 /**
@@ -19,14 +19,17 @@ import { decide, decideWithoutModel, type Verdict } from './rules';
  * matches and each page is revisited, though existing verdicts are kept and only
  * unjudged results are sent to the model.
  */
-export const ENGINE = 'rules-v6.10+jev';
+export const ENGINE = 'rules-v6.10+gemma4-26b';
 
 /** Jobs a single instance runs at once; the rest wait for a later visit. */
 const MAX_CONCURRENT_JOBS = 2;
 /** A lock this old belonged to a job that died. */
 const LOCK_STALE_MS = 15 * 60 * 1000;
-/** About $8.40 a day at $0.042 per million input tokens. */
-const DEFAULT_DAILY_TOKENS = 200_000_000;
+/**
+ * About 150,000 filenames, $1.10, a day: Gemma 4 26B spends about 70 tokens
+ * (50 in, 19 out) and $0.0000074 per filename. Days of a backlog stop here.
+ */
+const DEFAULT_DAILY_TOKENS = 11_000_000;
 
 /**
  * The show-page pass: content-identifier and the season reader, no model. Bump
@@ -38,10 +41,6 @@ const inFlight = new Set<string>();
 let service: ScrapedVerdictService | undefined;
 
 const verdicts = () => (service ??= new ScrapedVerdictService());
-
-function apiKey(): string | undefined {
-	return process.env.TYPESAFE_API_KEY || undefined;
-}
 
 export const utcDay = () => new Date().toISOString().slice(0, 10);
 
@@ -64,7 +63,7 @@ type Judged = {
 
 export type JobOutcome =
 	| { status: 'skipped'; reason: string }
-	| { status: 'done'; judged: number; modelTitles: number; trashed: number; inputTokens: number };
+	| { status: 'done'; judged: number; modelTitles: number; trashed: number; tokens: number };
 
 /**
  * One pass over a movie page. Exported for tests and for a manual backfill;
@@ -74,7 +73,7 @@ export async function judgeMoviePage(
 	imdbId: string,
 	db: ScrapedVerdictService = verdicts()
 ): Promise<JobOutcome> {
-	const key = apiKey();
+	const key = modelKey();
 	if (!key) return { status: 'skipped', reason: 'no api key' };
 
 	const pageKey = `movie:${imdbId}`;
@@ -135,14 +134,14 @@ export async function judgeMoviePage(
 		// a name the identifier has not been asked about yet waits for the next view
 		forModel = forModel.filter((title) => !identified.has(title) && !deferred.has(title));
 
-		let inputTokens = 0;
+		let tokens = 0;
 		let model = 'none';
 		let modelFailed = false;
 		if (forModel.length > 0) {
 			try {
 				const result = await classifyFilenames(key, movie, forModel);
-				inputTokens = result.inputTokens;
-				await db.addTokensSpent(utcDay(), inputTokens);
+				tokens = result.tokens;
+				await db.addTokensSpent(utcDay(), tokens);
 				model = result.model;
 				forModel.forEach((title, i) => {
 					const { media, titleMatch } = result.answers[i];
@@ -193,14 +192,14 @@ export async function judgeMoviePage(
 
 		if (deferred.size === 0 && !modelFailed) await db.setCheckpoint(pageKey, ENGINE, startedAt);
 		console.log(
-			`[verdicts] ${imdbId}: judged ${newVerdicts.length} (${identified.size} identified, ${forModel.length} by model), trashed ${trashed}, ${inputTokens} tokens`
+			`[verdicts] ${imdbId}: judged ${newVerdicts.length} (${identified.size} identified, ${forModel.length} by model), trashed ${trashed}, ${tokens} tokens`
 		);
 		return {
 			status: 'done',
 			judged: newVerdicts.length,
 			modelTitles: forModel.length,
 			trashed,
-			inputTokens,
+			tokens,
 		};
 	} finally {
 		await db.releaseLock(pageKey).catch(() => {});
@@ -213,7 +212,7 @@ export async function judgeMoviePage(
  * checkpoint only advances when a pass completes.
  */
 export async function cleanMovieResultsInBackground(imdbId: string): Promise<void> {
-	if (!apiKey() || inFlight.has(imdbId) || inFlight.size >= MAX_CONCURRENT_JOBS) return;
+	if (!modelKey() || inFlight.has(imdbId) || inFlight.size >= MAX_CONCURRENT_JOBS) return;
 	inFlight.add(imdbId);
 	try {
 		await judgeMoviePage(imdbId);
@@ -366,7 +365,7 @@ export async function withoutTrashedResults<T extends { hash?: string; title?: s
 	results: T[],
 	db: ScrapedVerdictService = verdicts()
 ): Promise<T[]> {
-	if (!apiKey() || results.length === 0) return results;
+	if (!modelKey() || results.length === 0) return results;
 	try {
 		const hashes = results.flatMap((r) => (r.hash ? [r.hash] : []));
 		const trashed = await db.getTrashedPairKeys(imdbId, hashes);

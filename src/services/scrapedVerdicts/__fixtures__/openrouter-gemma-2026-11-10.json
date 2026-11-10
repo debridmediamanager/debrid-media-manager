@@ -1,0 +1,180 @@
+{
+	"description": "One real OpenRouter exchange for eight Shawshank-page filenames (four real releases, four not), recorded 2026-11-10 through classifyFilenames with model google/gemma-4-26b-a4b-it. The response id is kept; nothing secret is in it.",
+	"exchanges": [
+		{
+			"request": {
+				"model": "google/gemma-4-26b-a4b-it",
+				"temperature": 0,
+				"response_format": {
+					"type": "json_object"
+				},
+				"messages": [
+					{
+						"role": "system",
+						"content": "You label torrent filenames found on a movie's page. For every numbered filename answer two questions.\nmedia: What kind of content is this torrent? One of:\n- FILM: A film or movie release (video file, rip, remux, disc image).\n- TV: A TV series, season, episode, show, broadcast or miniseries.\n- GAME_SOFTWARE: A video game, repack, mod, app or software.\n- AUDIO: Music, soundtrack, album, radio broadcast or audiobook.\n- BOOK_IMAGES: Ebook, comic, magazine or image set.\n- ADULT: Pornographic content.\n- UNCLEAR: Cannot tell from the filename.\n\ntitle: How does the title in this filename relate to the movie's listed titles? One of:\n- SAME_TITLE: The work's title in the filename is exactly one of the movie's listed titles (ignoring case, punctuation, a leading article, and release tags like year, quality, language, group). Two of the movie's titles joined together (a local title plus the original title), or the title followed by 1 / I / Part 1, also count.\n- DIFFERENT_TITLE: The filename names a different title that contains or resembles one of the movie's titles: extra title words, a subtitle, a number, a plural, or a changed word.\n- NO_TITLE: None of the movie's listed titles appears in the filename.\n\nReply with JSON only: {\"1\": {\"media\": \"<KEY>\", \"title\": \"<KEY>\"}, \"2\": ...}, one entry per filename, keys exactly as listed."
+					},
+					{
+						"role": "user",
+						"content": "Movie titles:\n- A remény rabjai\n- Avain pakoon\n- Bēgšana no Šoušenkas\n- Cadena perpetua\n- De ontsnapping\n- Die Verurteilten\n- En verden udenfor\n- Esaretin Bedeli\n- Frihetens regn\n- Gaqceva shoushenkidan\n- Homot Shel Tikva\n- Iskupljenje u Shawshanku\n- Kaznilnica odrešitve\n- Le ali della libertà\n- Les Évadés\n- Nhà tù Shawshank\n- Nyckeln till frihet\n- Os Condenados de Shawshank\n- Pabėgimas iš Šoušenko\n- Rastegari dar Shawshank\n- Rita Hayworth - Avain pakoon\n- Rita Hayworth - nyckel till flykten\n- Rita Hayworth -Avain pakoon\n- Rita Hayworth and Shawshank Redemption\n- Shawshank Mittraphap Khwamwang Khwamrunraeng\n- Shawshank Redemption - Avain pakoon\n- Shawshanki lunastus\n- Shoushenkdan qochish\n- Shoushenkden Qacish\n- Shôshanku no sora ni\n- Skazani na Shawshank\n- Sueño de fuga\n- Sueño de libertad\n- Sueños de fuga\n- Sueños de libertad\n- The Prisoner\n- The Shawshank Redemption\n- Um Sonho de Liberdade\n- Vykoupení z věznice Shawshank\n- Vykúpenie z väznice Shawshank\n- À l'ombre de Shawshank\n- Închisoarea îngerilor\n- Τελευταία έξοδος: Rita Hayworth\n- Τελευταία έξοδος: Ρίτα Χέιγουορθ\n- Бекство из Шошенка\n- Втеча з Шоушенка\n- Выкупленьне з Шаўшэнку\n- Изкуплението Шоушенк\n- Побег из Шоушенка\n- Шоушенктен қашу\n- द शौशैंक रिडेम्प्शन\n- ショーシャンクの空に\n- 刺激1995\n- 月黑高飛\n- 肖申克的救赎\n- 쇼생크 탈출\nMovie year: 1994\n\nFilenames:\n1. The Shawshank Redemption[x264][AC3(5.1)]Nordic_Sub.mkv\n2. Побег из Шоушенка 1994 720p.mp4\n3. Le Ali della Liberta - The Shawshank Redemption. ITA-ENG\n4. Shawshank.Redemption.1994.BD.Remux.mkv\n5. Soldier Boyz (1995) BDRemux 1080p\n6. Rednex - Collection (7 CD) (1995-2019) FLAC\n7. Indecent Behavior 3 (1995) DVDRip\n8. The Prisoner - Miniserie"
+					}
+				]
+			},
+			"status": 200,
+			"response": {
+				"id": "gen-1794351303-ashCMyoOokeMzX80DU6J",
+				"object": "chat.completion",
+				"created": 1794351303,
+				"model": "google/gemma-4-26b-a4b-it",
+				"provider": "Parasail",
+				"system_fingerprint": null,
+				"service_tier": null,
+				"choices": [
+					{
+						"index": 0,
+						"logprobs": null,
+						"finish_reason": "stop",
+						"native_finish_reason": "stop",
+						"message": {
+							"role": "assistant",
+							"content": "{\"1\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"2\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"3\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"4\": {\"media\": \"FILM\", \"title\": \"SAME_TITLE\"}, \"5\": {\"media\": \"FILM\", \"title\": \"NO_TITLE\"}, \"6\": {\"media\": \"AUDIO\", \"title\": \"NO_TITLE\"}, \"7\": {\"media\": \"FILM\", \"title\": \"NO_TITLE\"}, \"8\": {\"media\": \"TV\", \"title\": \"SAME_TITLE\"}}",
+							"refusal": null,
+							"reasoning": null
+						}
+					}
+				],
+				"usage": {
+					"prompt_tokens": 1029,
+					"completion_tokens": 143,
+					"total_tokens": 1172,
+					"cost": 0.00019097,
+					"is_byok": false,
+					"prompt_tokens_details": {
+						"cached_tokens": 0,
+						"cache_write_tokens": 0,
+						"audio_tokens": 0,
+						"video_tokens": 0
+					},
+					"cost_details": {
+						"upstream_inference_cost": 0.00019097,
+						"upstream_inference_prompt_cost": 0.00013377,
+						"upstream_inference_completions_cost": 0.0000572
+					},
+					"completion_tokens_details": {
+						"reasoning_tokens": 0,
+						"image_tokens": 0,
+						"audio_tokens": 0
+					}
+				}
+			}
+		}
+	],
+	"filenames": [
+		"The Shawshank Redemption[x264][AC3(5.1)]Nordic_Sub.mkv",
+		"Побег из Шоушенка 1994 720p.mp4",
+		"Le Ali della Liberta - The Shawshank Redemption. ITA-ENG",
+		"Shawshank.Redemption.1994.BD.Remux.mkv",
+		"Soldier Boyz (1995) BDRemux 1080p",
+		"Rednex - Collection (7 CD) (1995-2019) FLAC",
+		"Indecent Behavior 3 (1995) DVDRip",
+		"The Prisoner - Miniserie"
+	],
+	"movie": {
+		"titles": [
+			"A remény rabjai",
+			"Avain pakoon",
+			"Bēgšana no Šoušenkas",
+			"Cadena perpetua",
+			"De ontsnapping",
+			"Die Verurteilten",
+			"En verden udenfor",
+			"Esaretin Bedeli",
+			"Frihetens regn",
+			"Gaqceva shoushenkidan",
+			"Homot Shel Tikva",
+			"Iskupljenje u Shawshanku",
+			"Kaznilnica odrešitve",
+			"Le ali della libertà",
+			"Les Évadés",
+			"Nhà tù Shawshank",
+			"Nyckeln till frihet",
+			"Os Condenados de Shawshank",
+			"Pabėgimas iš Šoušenko",
+			"Rastegari dar Shawshank",
+			"Rita Hayworth - Avain pakoon",
+			"Rita Hayworth - nyckel till flykten",
+			"Rita Hayworth -Avain pakoon",
+			"Rita Hayworth and Shawshank Redemption",
+			"Shawshank Mittraphap Khwamwang Khwamrunraeng",
+			"Shawshank Redemption - Avain pakoon",
+			"Shawshanki lunastus",
+			"Shoushenkdan qochish",
+			"Shoushenkden Qacish",
+			"Shôshanku no sora ni",
+			"Skazani na Shawshank",
+			"Sueño de fuga",
+			"Sueño de libertad",
+			"Sueños de fuga",
+			"Sueños de libertad",
+			"The Prisoner",
+			"The Shawshank Redemption",
+			"Um Sonho de Liberdade",
+			"Vykoupení z věznice Shawshank",
+			"Vykúpenie z väznice Shawshank",
+			"À l'ombre de Shawshank",
+			"Închisoarea îngerilor",
+			"Τελευταία έξοδος: Rita Hayworth",
+			"Τελευταία έξοδος: Ρίτα Χέιγουορθ",
+			"Бекство из Шошенка",
+			"Втеча з Шоушенка",
+			"Выкупленьне з Шаўшэнку",
+			"Изкуплението Шоушенк",
+			"Побег из Шоушенка",
+			"Шоушенктен қашу",
+			"द शौशैंक रिडेम्प्शन",
+			"ショーシャンクの空に",
+			"刺激1995",
+			"月黑高飛",
+			"肖申克的救赎",
+			"쇼생크 탈출"
+		],
+		"year": 1994
+	},
+	"result": {
+		"answers": [
+			{
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE"
+			},
+			{
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE"
+			},
+			{
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE"
+			},
+			{
+				"media": "FILM",
+				"titleMatch": "SAME_TITLE"
+			},
+			{
+				"media": "FILM",
+				"titleMatch": "NO_TITLE"
+			},
+			{
+				"media": "AUDIO",
+				"titleMatch": "NO_TITLE"
+			},
+			{
+				"media": "FILM",
+				"titleMatch": "NO_TITLE"
+			},
+			{
+				"media": "TV",
+				"titleMatch": "SAME_TITLE"
+			}
+		],
+		"model": "google/gemma-4-26b-a4b-it",
+		"tokens": 1172
+	}
+}

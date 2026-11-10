@@ -557,7 +557,7 @@ describe('releases the verdicts judged not to be the movie', () => {
 		attrValue(body(res ?? (await search())), 'infohash').sort();
 
 	beforeEach(() => {
-		vi.stubEnv('TYPESAFE_API_KEY', 'test-key');
+		vi.stubEnv('OPENROUTER_VERDICTS_KEY', 'test-key');
 		library.set(page.key, {
 			results: entries.map(({ hash, title, fileSize }) => ({ hash, title, fileSize })),
 			updatedAt: new Date(page.ScrapedTrue!.updatedAt),
@@ -593,10 +593,10 @@ describe('releases the verdicts judged not to be the movie', () => {
 	});
 
 	it('serves the page whole when the verdicts are switched off or cannot be read', async () => {
-		vi.stubEnv('TYPESAFE_API_KEY', '');
+		vi.stubEnv('OPENROUTER_VERDICTS_KEY', '');
 		expect(await served()).toEqual(entries.map((e) => e.hash).sort());
 
-		vi.stubEnv('TYPESAFE_API_KEY', 'test-key');
+		vi.stubEnv('OPENROUTER_VERDICTS_KEY', 'test-key');
 		trashedPairKeys.mockRejectedValue(new Error('table is gone'));
 		vi.spyOn(console, 'warn').mockImplementation(() => {});
 		expect(await served()).toEqual(entries.map((e) => e.hash).sort());
@@ -1524,7 +1524,7 @@ describe('the RSS sync on the Real-Debrid and AllDebrid feeds', () => {
 		it('leaves out what is reported, judged not the movie or Cyrillic-led', async () => {
 			const trashedPage = writtenBack.pages.find((p) => p.imdbId === 'tt0313990')!;
 			const entries = trashedPage.ScrapedTrue!.entries;
-			vi.stubEnv('TYPESAFE_API_KEY', 'test-key');
+			vi.stubEnv('OPENROUTER_VERDICTS_KEY', 'test-key');
 			trashedPairKeys
 				.mockReset()
 				.mockImplementation(
