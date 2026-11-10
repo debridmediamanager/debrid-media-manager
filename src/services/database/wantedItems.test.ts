@@ -69,15 +69,24 @@ describe('WantedItemsService', () => {
 		expect(prismaMock.wantedItem.upsert).not.toHaveBeenCalled();
 	});
 
+	// A 9,146-title list polled in 1.3 to 2.2 s (4.8 MB) on 2026-11-10.
+	it('takes a new title on a list of 9,146 open titles', async () => {
+		prismaMock.wantedItem.findUnique.mockResolvedValue(null);
+		prismaMock.wantedItem.findMany.mockResolvedValue(listed(9146));
+		prismaMock.wantedItem.count.mockResolvedValue(9146);
+		prismaMock.wantedItem.upsert.mockResolvedValue(ROW);
+		await expect(service.want('ZP1M', film)).resolves.not.toBeNull();
+	});
+
 	// kittystabz in #sponsors, 2026-11-09: a full list had to be emptied of fetched films
-	// by hand. Five sponsors sat at 5,000 on 2026-11-10, JLK9 with 3,369 films done.
+	// by hand. Five sponsors sat at the then 5,000 cap on 2026-11-10, JLK9 with 3,369 films done.
 	it('does not count films zurg is done with toward the cap', async () => {
 		prismaMock.wantedItem.findUnique.mockResolvedValue(null);
 		prismaMock.wantedItem.findMany.mockResolvedValue([
 			...listed(3369, DONE),
 			...listed(MAX_WANTED_ITEMS - 3369, {}, 8000000),
 		]);
-		// The table holds 5,000 rows for this sponsor, whatever reads it.
+		// The table holds a full list of rows for this sponsor, whatever reads it.
 		prismaMock.wantedItem.count.mockResolvedValue(MAX_WANTED_ITEMS);
 		prismaMock.wantedItem.upsert.mockResolvedValue(ROW);
 		await expect(service.want('ZP1M', film)).resolves.not.toBeNull();

@@ -303,7 +303,7 @@ describe('syncDueWantedLists', () => {
 	});
 
 	// Nothing reads a lapsed sponsor's wanted list, so a list they follow would
-	// only fill it, up to the 5,000 cap, with titles no zurg fetches. Their list
+	// only fill it, up to the 10,000 cap, with titles no zurg fetches. Their list
 	// waits its six hours unread instead, so it takes no tick from the lists of
 	// sponsors still active, and is read again once the sponsorship is back.
 	it("leaves a lapsed sponsor's list unread until the sponsorship is back", async () => {

@@ -61,7 +61,7 @@ export interface WantedItemRow {
  * each film still open (see `isOpen`). A film zurg is done with costs no poll, so it
  * does not count.
  */
-export const MAX_WANTED_ITEMS = 5000;
+export const MAX_WANTED_ITEMS = 10000;
 /** Every row on the list, finished films included, so it cannot grow without end. */
 export const MAX_WANTED_ROWS = 20000;
 
