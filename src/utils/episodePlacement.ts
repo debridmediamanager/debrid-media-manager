@@ -1207,16 +1207,26 @@ async function airedAsTvdbTitles<T extends { airDate: string | null }>(
 
 /** A title's words: lowercase letters and digits, apostrophes dropped (`Don't` is `dont`). */
 // `Gary & Spot` is `Gary.and.Spot`, `Hulk vs the World` "Hulk Versus the World", `Pokemon` "Pokémon"
-const words = (text: string) =>
-	text
-		.normalize('NFD')
-		.replace(/\p{M}/gu, '')
-		.toLowerCase()
-		.replace(/['’`]/g, '')
-		.replace(/&/g, ' and ')
-		.split(/[^\p{L}\p{N}]+/u)
-		.filter(Boolean)
-		.map((word) => (word === 'vs' ? 'versus' : word));
+// Remembered by text: placement asks the same episode names again for every file of a pack,
+// ~45% of a 12 s stall on 2026-11-11. Callers get a copy, since some shift and pop it.
+const wordCache = new Map<string, readonly string[]>();
+const words = (text: string): string[] => {
+	let cached = wordCache.get(text);
+	if (!cached) {
+		if (wordCache.size >= 100_000) wordCache.clear();
+		cached = text
+			.normalize('NFD')
+			.replace(/\p{M}/gu, '')
+			.toLowerCase()
+			.replace(/['’`]/g, '')
+			.replace(/&/g, ' and ')
+			.split(/[^\p{L}\p{N}]+/u)
+			.filter(Boolean)
+			.map((word) => (word === 'vs' ? 'versus' : word));
+		wordCache.set(text, cached);
+	}
+	return [...cached];
+};
 // TMDB's placeholders name no episode: `Episode 5` is in every season of some shows
 const GENERIC = /^(?:episode|ep|part|chapter|folge|episodio|capitulo) \d+$/;
 const wordsOf = new WeakMap<object, string>();

@@ -52,6 +52,7 @@ import {
 	type PlacementShow,
 	type TmdbSeason,
 } from '@/utils/episodePlacement';
+import { eventLoopSlicer } from '@/utils/eventLoopSlice';
 import { getTmdbAuth } from '@/utils/tmdbAuth';
 
 /**
@@ -1738,6 +1739,9 @@ async function placeOnShow(
 	return placeFiles(release, placement, anime, imdb, (files) => answer(files));
 }
 
+// One for the module: a batch of releases is one stretch of work, however it splits into calls.
+const slice = eventLoopSlicer();
+
 /**
  * A release's files on one show, by the rules in `@/utils/episodePlacement`, as `answer` reports
  * them; `how` rewrites each file's rule.
@@ -1782,6 +1786,7 @@ async function placeFiles(
 		placement = { ...placement, aligned: undefined };
 	const placed: (Placement | null)[] = [];
 	for (const [at, file] of release.files.entries()) {
+		await slice();
 		placed.push(
 			numbers[at]
 				? await placeFile(
@@ -1812,22 +1817,28 @@ async function placeFiles(
 	// most of them: QI's pack numbers as TMDB does, its one titled stray aside. Moved from where its
 	// numbers place it by the rules, not from the numbers as written: Shangri-La Frontier's
 	// `S02E01` is TMDB's S1E26 by its title and by its number alike, TMDB numbering on through S1
-	const movedBy = await Promise.all(
-		yielded.map(async (found, at) => {
-			if (!found?.titled || !numbers[at]) return false;
-			const path = titledAs(release.files[at].path);
-			const own = await placeFile(
-				placement,
-				anime,
-				release.name,
-				path,
-				numbers[at]!,
-				imdb,
-				false
-			);
-			return own?.season !== found.season || own?.episode !== found.episode;
-		})
-	);
+	// one at a time: started together, their awaits on cached answers ran back to back as
+	// microtasks, and a hand-back in one let the rest run on
+	const movedBy: boolean[] = [];
+	for (const [at, found] of yielded.entries()) {
+		if (!found?.titled || !numbers[at]) {
+			movedBy.push(false);
+			continue;
+		}
+		await slice();
+		const path = titledAs(release.files[at].path);
+		const own = await placeFile(
+			placement,
+			anime,
+			release.name,
+			path,
+			numbers[at]!,
+			imdb,
+			false
+		);
+		movedBy.push(own?.season !== found.season || own?.episode !== found.episode);
+	}
+	await slice();
 	const moved = movedBy.filter(Boolean).length * 2 > titles.filter(Boolean).length;
 	// scene notation is the list's own numbering; a count or a folder's season is not
 	const counted = (at: number) =>
@@ -1895,6 +1906,7 @@ async function placeFiles(
 			: { ...between, episodeEnd: null, how: before.found.how };
 	});
 	// an OVA named by its show and season alone is the special after that season's episodes it holds
+	await slice();
 	const held = kept.filter((found): found is Placement => Boolean(found && found.season > 0));
 	const specials = await Promise.all(
 		kept.map((found, at) =>

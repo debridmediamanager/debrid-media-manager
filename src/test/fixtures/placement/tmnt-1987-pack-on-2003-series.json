@@ -1,0 +1,2472 @@
+{
+	"_comment": "TMNT (1987) 'Complete Classic Series Collection' (hash e37b9068…, 205 files as dmmdb's AvailableFile lists them on 2026-11-11) placed on the 2003 series (TMDB 2284, IMDb tt0318913), with TMDB's own answers for that show and its seasons 0-7 recorded the same day. Before the 12 s event-loop stall of 2026-11-11 08:11 the replica asked TMDB for 2284 season 8 and got 404; the request bodies are not logged, so this pairing reproduces that lookup rather than replaying a captured request.",
+	"answers": {
+		"find": {
+			"tt0318913": {
+				"movie_results": [],
+				"tv_results": [
+					{
+						"id": 2284,
+						"name": "Teenage Mutant Ninja Turtles",
+						"first_air_date": "2003-02-08"
+					}
+				],
+				"tv_episode_results": []
+			}
+		},
+		"show": {
+			"2284": {
+				"id": "2284",
+				"name": "Teenage Mutant Ninja Turtles",
+				"original_name": "Teenage Mutant Ninja Turtles",
+				"first_air_date": "2003-02-08",
+				"original_language": "en",
+				"origin_country": ["US"],
+				"genres": [
+					{
+						"id": 10759,
+						"name": "Action & Adventure"
+					},
+					{
+						"id": 16,
+						"name": "Animation"
+					},
+					{
+						"id": 10762,
+						"name": "Kids"
+					}
+				],
+				"keywords": {
+					"results": [
+						{
+							"name": "martial arts",
+							"id": 779
+						},
+						{
+							"name": "mutant",
+							"id": 1852
+						},
+						{
+							"name": "time travel",
+							"id": 4379
+						},
+						{
+							"name": "turtle",
+							"id": 6362
+						},
+						{
+							"name": "cartoon",
+							"id": 6513
+						},
+						{
+							"name": "superhero",
+							"id": 9715
+						},
+						{
+							"name": "based on comic",
+							"id": 9717
+						},
+						{
+							"name": "ninja",
+							"id": 10278
+						},
+						{
+							"name": "mutant animal",
+							"id": 158253
+						},
+						{
+							"name": "reboot",
+							"id": 161184
+						},
+						{
+							"name": "enthusiastic",
+							"id": 325809
+						}
+					]
+				},
+				"external_ids": {
+					"imdb_id": "tt0318913",
+					"freebase_mid": "/m/053x52",
+					"freebase_id": null,
+					"tvdb_id": 71032,
+					"tvrage_id": null,
+					"wikidata_id": "Q158869",
+					"facebook_id": null,
+					"instagram_id": null,
+					"twitter_id": null
+				},
+				"networks": [
+					{
+						"id": 19,
+						"logo_path": "/1DSpHrWyOORkL9N2QHX7Adt31mQ.png",
+						"name": "FOX",
+						"origin_country": "US"
+					},
+					{
+						"id": 71,
+						"logo_path": "/hEpcdJ4O6eitG9ADSnDXNUrlovS.png",
+						"name": "The CW",
+						"origin_country": "US"
+					}
+				],
+				"alternative_titles": {
+					"results": [
+						{
+							"iso_3166_1": "CN",
+							"title": "忍者龟再作战",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "IR",
+							"title": "لاک‌پشت‌های نینجای جهش‌یافته نوجوان",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "TR",
+							"title": "Genç Mutant Ninja Kaplumbağalar",
+							"type": ""
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "TMNT (2003)",
+							"type": "Anime"
+						},
+						{
+							"iso_3166_1": "US",
+							"title": "Teenage Mutant Ninja Turtles 2003 series",
+							"type": ""
+						}
+					]
+				},
+				"seasons": [
+					{
+						"air_date": "2006-10-14",
+						"episode_count": 23,
+						"name": "Specials",
+						"season_number": 0
+					},
+					{
+						"air_date": "2003-02-08",
+						"episode_count": 26,
+						"name": "Season 1",
+						"season_number": 1
+					},
+					{
+						"air_date": "2003-11-08",
+						"episode_count": 26,
+						"name": "Season 2",
+						"season_number": 2
+					},
+					{
+						"air_date": "2004-10-09",
+						"episode_count": 26,
+						"name": "Season 3",
+						"season_number": 3
+					},
+					{
+						"air_date": "2005-09-10",
+						"episode_count": 25,
+						"name": "Season 4",
+						"season_number": 4
+					},
+					{
+						"air_date": "2008-02-16",
+						"episode_count": 12,
+						"name": "Ninja Tribunal",
+						"season_number": 5
+					},
+					{
+						"air_date": "2006-07-29",
+						"episode_count": 26,
+						"name": "Fast Forward",
+						"season_number": 6
+					},
+					{
+						"air_date": "2008-09-13",
+						"episode_count": 13,
+						"name": "Back to the Sewer",
+						"season_number": 7
+					}
+				]
+			}
+		},
+		"season": {
+			"2284/0": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 0,
+						"name": "Insane in the Membrane",
+						"air_date": "2006-10-14",
+						"runtime": 21,
+						"id": 2899190
+					},
+					{
+						"episode_number": 2,
+						"season_number": 0,
+						"name": "Turtles Forever",
+						"air_date": "2009-11-21",
+						"runtime": 70,
+						"id": 167797
+					},
+					{
+						"episode_number": 3,
+						"season_number": 0,
+						"name": "Mayhem from Mutant Island",
+						"air_date": "2010-03-27",
+						"runtime": 22,
+						"id": 167796
+					},
+					{
+						"episode_number": 4,
+						"season_number": 0,
+						"name": "Punching Bag",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167798
+					},
+					{
+						"episode_number": 5,
+						"season_number": 0,
+						"name": "Free Comics Day",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167799
+					},
+					{
+						"episode_number": 6,
+						"season_number": 0,
+						"name": "Mech War",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167800
+					},
+					{
+						"episode_number": 7,
+						"season_number": 0,
+						"name": "Tanking It",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167801
+					},
+					{
+						"episode_number": 8,
+						"season_number": 0,
+						"name": "Taken for a Spin",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167802
+					},
+					{
+						"episode_number": 9,
+						"season_number": 0,
+						"name": "Midnight Snack",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167803
+					},
+					{
+						"episode_number": 10,
+						"season_number": 0,
+						"name": "Faster",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167804
+					},
+					{
+						"episode_number": 11,
+						"season_number": 0,
+						"name": "Turtle Power",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167805
+					},
+					{
+						"episode_number": 12,
+						"season_number": 0,
+						"name": "Sidekick",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167806
+					},
+					{
+						"episode_number": 13,
+						"season_number": 0,
+						"name": "Stupid Dino Tricks",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167807
+					},
+					{
+						"episode_number": 14,
+						"season_number": 0,
+						"name": "Piping Up",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167808
+					},
+					{
+						"episode_number": 15,
+						"season_number": 0,
+						"name": "Where's Fifi",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167809
+					},
+					{
+						"episode_number": 16,
+						"season_number": 0,
+						"name": "Skateboard Blues",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167810
+					},
+					{
+						"episode_number": 17,
+						"season_number": 0,
+						"name": "Blind Faith",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167811
+					},
+					{
+						"episode_number": 18,
+						"season_number": 0,
+						"name": "Knit Fit",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167812
+					},
+					{
+						"episode_number": 19,
+						"season_number": 0,
+						"name": "Wachamacallit",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167813
+					},
+					{
+						"episode_number": 20,
+						"season_number": 0,
+						"name": "Shelled Up",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167814
+					},
+					{
+						"episode_number": 21,
+						"season_number": 0,
+						"name": "Packing It In",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167815
+					},
+					{
+						"episode_number": 22,
+						"season_number": 0,
+						"name": "For The Birds",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167816
+					},
+					{
+						"episode_number": 23,
+						"season_number": 0,
+						"name": "Zippy Chilli",
+						"air_date": null,
+						"runtime": 30,
+						"id": 167817
+					}
+				]
+			},
+			"2284/1": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 1,
+						"name": "Things Change",
+						"air_date": "2003-02-08",
+						"runtime": 21,
+						"id": 167632
+					},
+					{
+						"episode_number": 2,
+						"season_number": 1,
+						"name": "A Better Mousetrap",
+						"air_date": "2003-02-15",
+						"runtime": 21,
+						"id": 167635
+					},
+					{
+						"episode_number": 3,
+						"season_number": 1,
+						"name": "Attack of the Mousers",
+						"air_date": "2003-02-22",
+						"runtime": 21,
+						"id": 167633
+					},
+					{
+						"episode_number": 4,
+						"season_number": 1,
+						"name": "Meet Casey Jones",
+						"air_date": "2003-03-01",
+						"runtime": 21,
+						"id": 167634
+					},
+					{
+						"episode_number": 5,
+						"season_number": 1,
+						"name": "Nano",
+						"air_date": "2003-03-08",
+						"runtime": 21,
+						"id": 167637
+					},
+					{
+						"episode_number": 6,
+						"season_number": 1,
+						"name": "Darkness on the Edge of Town",
+						"air_date": "2003-03-15",
+						"runtime": 21,
+						"id": 167638
+					},
+					{
+						"episode_number": 7,
+						"season_number": 1,
+						"name": "The Way of Invisibility",
+						"air_date": "2003-03-22",
+						"runtime": 21,
+						"id": 167642
+					},
+					{
+						"episode_number": 8,
+						"season_number": 1,
+						"name": "Fallen Angel",
+						"air_date": "2003-03-29",
+						"runtime": 21,
+						"id": 167640
+					},
+					{
+						"episode_number": 9,
+						"season_number": 1,
+						"name": "Garbageman",
+						"air_date": "2003-04-05",
+						"runtime": 21,
+						"id": 167641
+					},
+					{
+						"episode_number": 10,
+						"season_number": 1,
+						"name": "The Shredder Strikes (1)",
+						"air_date": "2003-04-12",
+						"runtime": 21,
+						"id": 167639
+					},
+					{
+						"episode_number": 11,
+						"season_number": 1,
+						"name": "The Shredder Strikes (2)",
+						"air_date": "2003-04-19",
+						"runtime": 21,
+						"id": 167645
+					},
+					{
+						"episode_number": 12,
+						"season_number": 1,
+						"name": "The Unconvincing Turtle Titan",
+						"air_date": "2003-05-03",
+						"runtime": 21,
+						"id": 167643
+					},
+					{
+						"episode_number": 13,
+						"season_number": 1,
+						"name": "Notes from the Underground (1)",
+						"air_date": "2003-05-10",
+						"runtime": 21,
+						"id": 167646
+					},
+					{
+						"episode_number": 14,
+						"season_number": 1,
+						"name": "Notes from the Underground (2)",
+						"air_date": "2003-05-17",
+						"runtime": 21,
+						"id": 167647
+					},
+					{
+						"episode_number": 15,
+						"season_number": 1,
+						"name": "Notes from the Underground (3)",
+						"air_date": "2003-05-24",
+						"runtime": 21,
+						"id": 167650
+					},
+					{
+						"episode_number": 16,
+						"season_number": 1,
+						"name": "The King",
+						"air_date": "2003-05-31",
+						"runtime": 22,
+						"id": 167648
+					},
+					{
+						"episode_number": 17,
+						"season_number": 1,
+						"name": "The Shredder Strikes Back (1)",
+						"air_date": "2003-06-07",
+						"runtime": 21,
+						"id": 167653
+					},
+					{
+						"episode_number": 18,
+						"season_number": 1,
+						"name": "The Shredder Strikes Back (2)",
+						"air_date": "2003-06-14",
+						"runtime": 21,
+						"id": 167652
+					},
+					{
+						"episode_number": 19,
+						"season_number": 1,
+						"name": "Tales of Leo",
+						"air_date": "2003-09-13",
+						"runtime": 21,
+						"id": 167651
+					},
+					{
+						"episode_number": 20,
+						"season_number": 1,
+						"name": "The Monster Hunter",
+						"air_date": "2003-09-20",
+						"runtime": 21,
+						"id": 167656
+					},
+					{
+						"episode_number": 21,
+						"season_number": 1,
+						"name": "Return to New York (1)",
+						"air_date": "2003-09-27",
+						"runtime": 21,
+						"id": 167657
+					},
+					{
+						"episode_number": 22,
+						"season_number": 1,
+						"name": "Return to New York (2)",
+						"air_date": "2003-10-04",
+						"runtime": 21,
+						"id": 167654
+					},
+					{
+						"episode_number": 23,
+						"season_number": 1,
+						"name": "Return to New York (3)",
+						"air_date": "2003-10-11",
+						"runtime": 21,
+						"id": 167658
+					},
+					{
+						"episode_number": 24,
+						"season_number": 1,
+						"name": "Lone Raph and Cub",
+						"air_date": "2003-10-18",
+						"runtime": 21,
+						"id": 167660
+					},
+					{
+						"episode_number": 25,
+						"season_number": 1,
+						"name": "Search for Splinter (1)",
+						"air_date": "2003-10-25",
+						"runtime": 21,
+						"id": 167661
+					},
+					{
+						"episode_number": 26,
+						"season_number": 1,
+						"name": "Search for Splinter (2)",
+						"air_date": "2003-11-01",
+						"runtime": 21,
+						"id": 167659
+					}
+				]
+			},
+			"2284/2": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 2,
+						"name": "Turtles in Space (1): The Fugitoid",
+						"air_date": "2003-11-08",
+						"runtime": 21,
+						"id": 167665
+					},
+					{
+						"episode_number": 2,
+						"season_number": 2,
+						"name": "Turtles in Space (2): The Trouble with Triceratons",
+						"air_date": "2003-11-15",
+						"runtime": 21,
+						"id": 167663
+					},
+					{
+						"episode_number": 3,
+						"season_number": 2,
+						"name": "Turtles in Space (3): The Big House",
+						"air_date": "2003-11-22",
+						"runtime": 21,
+						"id": 167664
+					},
+					{
+						"episode_number": 4,
+						"season_number": 2,
+						"name": "Turtles in Space (4): The Arena",
+						"air_date": "2003-11-29",
+						"runtime": 21,
+						"id": 167662
+					},
+					{
+						"episode_number": 5,
+						"season_number": 2,
+						"name": "Turtles in Space (5): Triceraton Wars",
+						"air_date": "2003-12-06",
+						"runtime": 21,
+						"id": 167668
+					},
+					{
+						"episode_number": 6,
+						"season_number": 2,
+						"name": "Secret Origins (1)",
+						"air_date": "2004-01-17",
+						"runtime": 21,
+						"id": 167669
+					},
+					{
+						"episode_number": 7,
+						"season_number": 2,
+						"name": "Secret Origins (2)",
+						"air_date": "2004-01-24",
+						"runtime": 21,
+						"id": 167667
+					},
+					{
+						"episode_number": 8,
+						"season_number": 2,
+						"name": "Secret Origins (3)",
+						"air_date": "2004-01-31",
+						"runtime": 21,
+						"id": 167670
+					},
+					{
+						"episode_number": 9,
+						"season_number": 2,
+						"name": "Reflections",
+						"air_date": "2004-02-07",
+						"runtime": 21,
+						"id": 167666
+					},
+					{
+						"episode_number": 10,
+						"season_number": 2,
+						"name": "The Ultimate Ninja",
+						"air_date": "2004-02-14",
+						"runtime": 21,
+						"id": 167674
+					},
+					{
+						"episode_number": 11,
+						"season_number": 2,
+						"name": "The Return of Nano",
+						"air_date": "2004-02-21",
+						"runtime": 21,
+						"id": 167673
+					},
+					{
+						"episode_number": 12,
+						"season_number": 2,
+						"name": "What a Croc",
+						"air_date": "2004-02-28",
+						"runtime": 21,
+						"id": 167671
+					},
+					{
+						"episode_number": 13,
+						"season_number": 2,
+						"name": "Return to the Underground",
+						"air_date": "2004-03-06",
+						"runtime": 21,
+						"id": 167672
+					},
+					{
+						"episode_number": 14,
+						"season_number": 2,
+						"name": "City at War (1)",
+						"air_date": "2004-03-13",
+						"runtime": 21,
+						"id": 167679
+					},
+					{
+						"episode_number": 15,
+						"season_number": 2,
+						"name": "City at War (2)",
+						"air_date": "2004-03-20",
+						"runtime": 21,
+						"id": 167675
+					},
+					{
+						"episode_number": 16,
+						"season_number": 2,
+						"name": "City at War (3)",
+						"air_date": "2004-03-27",
+						"runtime": 21,
+						"id": 167677
+					},
+					{
+						"episode_number": 17,
+						"season_number": 2,
+						"name": "Junklantis",
+						"air_date": "2004-04-03",
+						"runtime": 21,
+						"id": 167676
+					},
+					{
+						"episode_number": 18,
+						"season_number": 2,
+						"name": "The Golden Puck",
+						"air_date": "2004-04-10",
+						"runtime": 21,
+						"id": 167678
+					},
+					{
+						"episode_number": 19,
+						"season_number": 2,
+						"name": "Rogue in the House (1)",
+						"air_date": "2004-04-17",
+						"runtime": 21,
+						"id": 167680
+					},
+					{
+						"episode_number": 20,
+						"season_number": 2,
+						"name": "Rogue in the House (2)",
+						"air_date": "2004-04-24",
+						"runtime": 21,
+						"id": 167682
+					},
+					{
+						"episode_number": 21,
+						"season_number": 2,
+						"name": "April's Artifact",
+						"air_date": "2004-05-01",
+						"runtime": 21,
+						"id": 167683
+					},
+					{
+						"episode_number": 22,
+						"season_number": 2,
+						"name": "Return of the Justice Force",
+						"air_date": "2004-05-08",
+						"runtime": 21,
+						"id": 167684
+					},
+					{
+						"episode_number": 23,
+						"season_number": 2,
+						"name": "The Big Brawl (1)",
+						"air_date": "2004-05-15",
+						"runtime": 21,
+						"id": 167681
+					},
+					{
+						"episode_number": 24,
+						"season_number": 2,
+						"name": "The Big Brawl (2)",
+						"air_date": "2004-09-18",
+						"runtime": 21,
+						"id": 167686
+					},
+					{
+						"episode_number": 25,
+						"season_number": 2,
+						"name": "The Big Brawl (3)",
+						"air_date": "2004-09-25",
+						"runtime": 21,
+						"id": 167685
+					},
+					{
+						"episode_number": 26,
+						"season_number": 2,
+						"name": "The Big Brawl (4)",
+						"air_date": "2004-10-02",
+						"runtime": 21,
+						"id": 167687
+					}
+				]
+			},
+			"2284/3": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 3,
+						"name": "Space Invaders (1)",
+						"air_date": "2004-10-09",
+						"runtime": 21,
+						"id": 167690
+					},
+					{
+						"episode_number": 2,
+						"season_number": 3,
+						"name": "Space Invaders (2)",
+						"air_date": "2004-10-16",
+						"runtime": 21,
+						"id": 167689
+					},
+					{
+						"episode_number": 3,
+						"season_number": 3,
+						"name": "Space Invaders (3)",
+						"air_date": "2004-10-23",
+						"runtime": 21,
+						"id": 167695
+					},
+					{
+						"episode_number": 4,
+						"season_number": 3,
+						"name": "Worlds Collide (1)",
+						"air_date": "2004-10-30",
+						"runtime": 21,
+						"id": 167694
+					},
+					{
+						"episode_number": 5,
+						"season_number": 3,
+						"name": "Worlds Collide (2)",
+						"air_date": "2004-11-06",
+						"runtime": 21,
+						"id": 167693
+					},
+					{
+						"episode_number": 6,
+						"season_number": 3,
+						"name": "Worlds Collide (3)",
+						"air_date": "2004-11-13",
+						"runtime": 21,
+						"id": 167692
+					},
+					{
+						"episode_number": 7,
+						"season_number": 3,
+						"name": "Touch and Go",
+						"air_date": "2004-11-20",
+						"runtime": 21,
+						"id": 167691
+					},
+					{
+						"episode_number": 8,
+						"season_number": 3,
+						"name": "Hunted",
+						"air_date": "2004-11-27",
+						"runtime": 21,
+						"id": 167699
+					},
+					{
+						"episode_number": 9,
+						"season_number": 3,
+						"name": "H.A.T.E",
+						"air_date": "2004-12-04",
+						"runtime": 21,
+						"id": 167698
+					},
+					{
+						"episode_number": 10,
+						"season_number": 3,
+						"name": "Nobody's Fool",
+						"air_date": "2004-12-11",
+						"runtime": 21,
+						"id": 167696
+					},
+					{
+						"episode_number": 11,
+						"season_number": 3,
+						"name": "The Lesson",
+						"air_date": "2004-12-18",
+						"runtime": 21,
+						"id": 167700
+					},
+					{
+						"episode_number": 12,
+						"season_number": 3,
+						"name": "The Christmas Aliens",
+						"air_date": "2004-12-25",
+						"runtime": 21,
+						"id": 167688
+					},
+					{
+						"episode_number": 13,
+						"season_number": 3,
+						"name": "New Blood",
+						"air_date": "2005-01-22",
+						"runtime": 21,
+						"id": 167697
+					},
+					{
+						"episode_number": 14,
+						"season_number": 3,
+						"name": "The Darkness Within",
+						"air_date": "2005-01-29",
+						"runtime": 21,
+						"id": 167702
+					},
+					{
+						"episode_number": 15,
+						"season_number": 3,
+						"name": "Mission of Gravity",
+						"air_date": "2005-02-05",
+						"runtime": 21,
+						"id": 167705
+					},
+					{
+						"episode_number": 16,
+						"season_number": 3,
+						"name": "The Entity Below",
+						"air_date": "2005-02-06",
+						"runtime": 21,
+						"id": 167704
+					},
+					{
+						"episode_number": 17,
+						"season_number": 3,
+						"name": "Time Travails",
+						"air_date": "2005-02-07",
+						"runtime": 21,
+						"id": 167703
+					},
+					{
+						"episode_number": 18,
+						"season_number": 3,
+						"name": "Hun on the Run",
+						"air_date": "2005-02-08",
+						"runtime": 21,
+						"id": 167701
+					},
+					{
+						"episode_number": 19,
+						"season_number": 3,
+						"name": "Reality Check",
+						"air_date": "2005-03-05",
+						"runtime": 21,
+						"id": 167710
+					},
+					{
+						"episode_number": 20,
+						"season_number": 3,
+						"name": "Across the Universe",
+						"air_date": "2005-03-12",
+						"runtime": 21,
+						"id": 167708
+					},
+					{
+						"episode_number": 21,
+						"season_number": 3,
+						"name": "Same as It Never Was",
+						"air_date": "2005-03-17",
+						"runtime": 21,
+						"id": 167707
+					},
+					{
+						"episode_number": 22,
+						"season_number": 3,
+						"name": "The Real World (1)",
+						"air_date": "2005-03-26",
+						"runtime": 21,
+						"id": 167706
+					},
+					{
+						"episode_number": 23,
+						"season_number": 3,
+						"name": "The Real World (2)",
+						"air_date": "2005-04-02",
+						"runtime": 21,
+						"id": 167709
+					},
+					{
+						"episode_number": 24,
+						"season_number": 3,
+						"name": "Bishop's Gambit",
+						"air_date": "2005-04-09",
+						"runtime": 21,
+						"id": 167711
+					},
+					{
+						"episode_number": 25,
+						"season_number": 3,
+						"name": "Exodus (1)",
+						"air_date": "2005-04-16",
+						"runtime": 21,
+						"id": 167713
+					},
+					{
+						"episode_number": 26,
+						"season_number": 3,
+						"name": "Exodus (2)",
+						"air_date": "2005-04-23",
+						"runtime": 21,
+						"id": 167712
+					}
+				]
+			},
+			"2284/4": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 4,
+						"name": "Cousin Sid",
+						"air_date": "2005-09-10",
+						"runtime": 21,
+						"id": 167716
+					},
+					{
+						"episode_number": 2,
+						"season_number": 4,
+						"name": "The Peoples' Choice",
+						"air_date": "2005-09-17",
+						"runtime": 21,
+						"id": 167715
+					},
+					{
+						"episode_number": 3,
+						"season_number": 4,
+						"name": "A Wing and a Prayer",
+						"air_date": "2005-09-25",
+						"runtime": 21,
+						"id": 167714
+					},
+					{
+						"episode_number": 4,
+						"season_number": 4,
+						"name": "Sons of the Silent Age",
+						"air_date": "2005-10-01",
+						"runtime": 21,
+						"id": 167718
+					},
+					{
+						"episode_number": 5,
+						"season_number": 4,
+						"name": "Dragons' Brew",
+						"air_date": "2005-10-08",
+						"runtime": 21,
+						"id": 167722
+					},
+					{
+						"episode_number": 6,
+						"season_number": 4,
+						"name": "I, Monster",
+						"air_date": "2005-10-15",
+						"runtime": 21,
+						"id": 167720
+					},
+					{
+						"episode_number": 7,
+						"season_number": 4,
+						"name": "Grudge Match",
+						"air_date": "2005-10-22",
+						"runtime": 21,
+						"id": 167717
+					},
+					{
+						"episode_number": 8,
+						"season_number": 4,
+						"name": "All Hallows Thieves",
+						"air_date": "2005-10-29",
+						"runtime": 21,
+						"id": 167721
+					},
+					{
+						"episode_number": 9,
+						"season_number": 4,
+						"name": "Bad Day",
+						"air_date": "2005-11-05",
+						"runtime": 21,
+						"id": 167723
+					},
+					{
+						"episode_number": 10,
+						"season_number": 4,
+						"name": "Aliens Among Us",
+						"air_date": "2005-11-12",
+						"runtime": 21,
+						"id": 167724
+					},
+					{
+						"episode_number": 11,
+						"season_number": 4,
+						"name": "Dragons Rising",
+						"air_date": "2005-11-19",
+						"runtime": 21,
+						"id": 167725
+					},
+					{
+						"episode_number": 12,
+						"season_number": 4,
+						"name": "Still Nobody",
+						"air_date": "2005-11-26",
+						"runtime": 21,
+						"id": 167726
+					},
+					{
+						"episode_number": 13,
+						"season_number": 4,
+						"name": "Samurai Tourist",
+						"air_date": "2005-12-03",
+						"runtime": 21,
+						"id": 167727
+					},
+					{
+						"episode_number": 14,
+						"season_number": 4,
+						"name": "The Ancient One",
+						"air_date": "2005-12-10",
+						"runtime": 21,
+						"id": 167728
+					},
+					{
+						"episode_number": 15,
+						"season_number": 4,
+						"name": "Scion of the Shredder",
+						"air_date": "2006-02-04",
+						"runtime": 21,
+						"id": 167731
+					},
+					{
+						"episode_number": 16,
+						"season_number": 4,
+						"name": "Prodigal Son",
+						"air_date": "2006-02-11",
+						"runtime": 21,
+						"id": 167729
+					},
+					{
+						"episode_number": 17,
+						"season_number": 4,
+						"name": "Outbreak",
+						"air_date": "2006-02-18",
+						"runtime": 21,
+						"id": 167730
+					},
+					{
+						"episode_number": 18,
+						"season_number": 4,
+						"name": "The Trouble with Augie",
+						"air_date": "2006-02-25",
+						"runtime": 21,
+						"id": 167732
+					},
+					{
+						"episode_number": 19,
+						"season_number": 4,
+						"name": "A Tale of Master Yoshi",
+						"air_date": "2006-03-04",
+						"runtime": 21,
+						"id": 167733
+					},
+					{
+						"episode_number": 20,
+						"season_number": 4,
+						"name": "The Return of Savanti (1)",
+						"air_date": "2006-03-11",
+						"runtime": 21,
+						"id": 167736
+					},
+					{
+						"episode_number": 21,
+						"season_number": 4,
+						"name": "The Return of Savanti (2)",
+						"air_date": "2006-03-18",
+						"runtime": 21,
+						"id": 167735
+					},
+					{
+						"episode_number": 22,
+						"season_number": 4,
+						"name": "Adventures in Turtlesitting",
+						"air_date": "2006-03-25",
+						"runtime": 21,
+						"id": 167738
+					},
+					{
+						"episode_number": 23,
+						"season_number": 4,
+						"name": "Good Genes (1)",
+						"air_date": "2006-04-01",
+						"runtime": 21,
+						"id": 167737
+					},
+					{
+						"episode_number": 24,
+						"season_number": 4,
+						"name": "Good Genes (2)",
+						"air_date": "2006-04-08",
+						"runtime": 21,
+						"id": 167740
+					},
+					{
+						"episode_number": 25,
+						"season_number": 4,
+						"name": "The Ninja Tribunal",
+						"air_date": "2006-04-15",
+						"runtime": 21,
+						"id": 167741
+					}
+				]
+			},
+			"2284/5": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 5,
+						"name": "Lap of the Gods",
+						"air_date": "2008-02-16",
+						"runtime": 21,
+						"id": 167743
+					},
+					{
+						"episode_number": 2,
+						"season_number": 5,
+						"name": "Demons and Dragons",
+						"air_date": "2008-02-23",
+						"runtime": 21,
+						"id": 167744
+					},
+					{
+						"episode_number": 3,
+						"season_number": 5,
+						"name": "Legend of the 5 Dragons",
+						"air_date": "2008-03-01",
+						"runtime": 21,
+						"id": 167742
+					},
+					{
+						"episode_number": 4,
+						"season_number": 5,
+						"name": "More Worlds Than One",
+						"air_date": "2008-03-08",
+						"runtime": 21,
+						"id": 167745
+					},
+					{
+						"episode_number": 5,
+						"season_number": 5,
+						"name": "Beginning of the End",
+						"air_date": "2008-03-15",
+						"runtime": 21,
+						"id": 167748
+					},
+					{
+						"episode_number": 6,
+						"season_number": 5,
+						"name": "Membership Drive",
+						"air_date": "2007-03-24",
+						"runtime": 21,
+						"id": 167746
+					},
+					{
+						"episode_number": 7,
+						"season_number": 5,
+						"name": "New World Order (1)",
+						"air_date": "2008-03-29",
+						"runtime": 21,
+						"id": 167747
+					},
+					{
+						"episode_number": 8,
+						"season_number": 5,
+						"name": "New World Order (2)",
+						"air_date": "2008-04-05",
+						"runtime": 21,
+						"id": 167750
+					},
+					{
+						"episode_number": 9,
+						"season_number": 5,
+						"name": "Fathers and Sons",
+						"air_date": "2008-04-13",
+						"runtime": 21,
+						"id": 167752
+					},
+					{
+						"episode_number": 10,
+						"season_number": 5,
+						"name": "Past and Present",
+						"air_date": "2008-04-20",
+						"runtime": 21,
+						"id": 167753
+					},
+					{
+						"episode_number": 11,
+						"season_number": 5,
+						"name": "Enter the Dragons (1)",
+						"air_date": "2008-04-27",
+						"runtime": 21,
+						"id": 167754
+					},
+					{
+						"episode_number": 12,
+						"season_number": 5,
+						"name": "Enter the Dragons (2)",
+						"air_date": "2008-05-04",
+						"runtime": 21,
+						"id": 167751
+					}
+				]
+			},
+			"2284/6": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 6,
+						"name": "Future Shellshock",
+						"air_date": "2006-07-29",
+						"runtime": 21,
+						"id": 167756
+					},
+					{
+						"episode_number": 2,
+						"season_number": 6,
+						"name": "Obsolete",
+						"air_date": "2006-08-05",
+						"runtime": 21,
+						"id": 167759
+					},
+					{
+						"episode_number": 3,
+						"season_number": 6,
+						"name": "Home Invasion",
+						"air_date": "2006-08-12",
+						"runtime": 21,
+						"id": 167757
+					},
+					{
+						"episode_number": 4,
+						"season_number": 6,
+						"name": "Headlock Prime",
+						"air_date": "2006-09-30",
+						"runtime": 21,
+						"id": 167762
+					},
+					{
+						"episode_number": 5,
+						"season_number": 6,
+						"name": "Playtime's Over",
+						"air_date": "2006-10-07",
+						"runtime": 21,
+						"id": 167760
+					},
+					{
+						"episode_number": 6,
+						"season_number": 6,
+						"name": "Bishop to Knight",
+						"air_date": "2006-10-14",
+						"runtime": 21,
+						"id": 167761
+					},
+					{
+						"episode_number": 7,
+						"season_number": 6,
+						"name": "Night of Sh'okanabo!",
+						"air_date": "2006-10-21",
+						"runtime": 21,
+						"id": 167763
+					},
+					{
+						"episode_number": 8,
+						"season_number": 6,
+						"name": "Clash of the Turtle Titans",
+						"air_date": "2006-10-28",
+						"runtime": 21,
+						"id": 167768
+					},
+					{
+						"episode_number": 9,
+						"season_number": 6,
+						"name": "Fly Me to the Moon",
+						"air_date": "2006-11-04",
+						"runtime": 21,
+						"id": 167765
+					},
+					{
+						"episode_number": 10,
+						"season_number": 6,
+						"name": "Invasion of the Body Snatcher!",
+						"air_date": "2006-11-11",
+						"runtime": 21,
+						"id": 167764
+					},
+					{
+						"episode_number": 11,
+						"season_number": 6,
+						"name": "The Freaks Come Out at Night",
+						"air_date": "2006-11-25",
+						"runtime": 21,
+						"id": 167766
+					},
+					{
+						"episode_number": 12,
+						"season_number": 6,
+						"name": "Bad Blood",
+						"air_date": "2006-12-02",
+						"runtime": 21,
+						"id": 167767
+					},
+					{
+						"episode_number": 13,
+						"season_number": 6,
+						"name": "The Journal",
+						"air_date": "2006-12-09",
+						"runtime": 21,
+						"id": 167772
+					},
+					{
+						"episode_number": 14,
+						"season_number": 6,
+						"name": "The Gaminator",
+						"air_date": "2006-12-16",
+						"runtime": 21,
+						"id": 167770
+					},
+					{
+						"episode_number": 15,
+						"season_number": 6,
+						"name": "Graduation Day: Class of 2105",
+						"air_date": "2007-03-24",
+						"runtime": 21,
+						"id": 167771
+					},
+					{
+						"episode_number": 16,
+						"season_number": 6,
+						"name": "Timing Is Everything",
+						"air_date": "2007-03-31",
+						"runtime": 21,
+						"id": 167769
+					},
+					{
+						"episode_number": 17,
+						"season_number": 6,
+						"name": "Enter the Jammerhead",
+						"air_date": "2007-04-07",
+						"runtime": 21,
+						"id": 167773
+					},
+					{
+						"episode_number": 18,
+						"season_number": 6,
+						"name": "Milk Run",
+						"air_date": "2007-04-14",
+						"runtime": 21,
+						"id": 167775
+					},
+					{
+						"episode_number": 19,
+						"season_number": 6,
+						"name": "The Fall of Darius Dunn",
+						"air_date": "2007-04-21",
+						"runtime": 21,
+						"id": 167776
+					},
+					{
+						"episode_number": 20,
+						"season_number": 6,
+						"name": "Turtle X-Tinction",
+						"air_date": "2007-04-28",
+						"runtime": 21,
+						"id": 167778
+					},
+					{
+						"episode_number": 21,
+						"season_number": 6,
+						"name": "Race for Glory",
+						"air_date": "2007-09-08",
+						"runtime": 21,
+						"id": 167774
+					},
+					{
+						"episode_number": 22,
+						"season_number": 6,
+						"name": "Head of State",
+						"air_date": "2007-09-15",
+						"runtime": 21,
+						"id": 167777
+					},
+					{
+						"episode_number": 23,
+						"season_number": 6,
+						"name": "DNA Is Thicker Than Water",
+						"air_date": "2007-10-06",
+						"runtime": 21,
+						"id": 167779
+					},
+					{
+						"episode_number": 24,
+						"season_number": 6,
+						"name": "The Cosmic Completist",
+						"air_date": "2007-10-13",
+						"runtime": 21,
+						"id": 167781
+					},
+					{
+						"episode_number": 25,
+						"season_number": 6,
+						"name": "The Day of Awakening",
+						"air_date": "2007-10-20",
+						"runtime": 21,
+						"id": 167782
+					},
+					{
+						"episode_number": 26,
+						"season_number": 6,
+						"name": "Zixxth Sense",
+						"air_date": "2007-10-27",
+						"runtime": 21,
+						"id": 167780
+					}
+				]
+			},
+			"2284/7": {
+				"episodes": [
+					{
+						"episode_number": 1,
+						"season_number": 7,
+						"name": "Tempus Fugit",
+						"air_date": "2008-09-13",
+						"runtime": 22,
+						"id": 167784
+					},
+					{
+						"episode_number": 2,
+						"season_number": 7,
+						"name": "Karate Schooled",
+						"air_date": "2008-09-20",
+						"runtime": 22,
+						"id": 167783
+					},
+					{
+						"episode_number": 3,
+						"season_number": 7,
+						"name": "Something Wicked",
+						"air_date": "2008-09-27",
+						"runtime": 22,
+						"id": 167786
+					},
+					{
+						"episode_number": 4,
+						"season_number": 7,
+						"name": "The Engagement Ring",
+						"air_date": "2008-10-04",
+						"runtime": 22,
+						"id": 167787
+					},
+					{
+						"episode_number": 5,
+						"season_number": 7,
+						"name": "Hacking Stockman",
+						"air_date": "2008-10-18",
+						"runtime": 21,
+						"id": 167785
+					},
+					{
+						"episode_number": 6,
+						"season_number": 7,
+						"name": "The Incredible Shrinking Serling",
+						"air_date": "2008-10-25",
+						"runtime": 22,
+						"id": 167789
+					},
+					{
+						"episode_number": 7,
+						"season_number": 7,
+						"name": "Identity Crisis",
+						"air_date": "2008-11-01",
+						"runtime": 21,
+						"id": 167788
+					},
+					{
+						"episode_number": 8,
+						"season_number": 7,
+						"name": "Web Wranglers",
+						"air_date": "2008-11-08",
+						"runtime": 22,
+						"id": 167792
+					},
+					{
+						"episode_number": 9,
+						"season_number": 7,
+						"name": "Superquest",
+						"air_date": "2008-11-15",
+						"runtime": 21,
+						"id": 167791
+					},
+					{
+						"episode_number": 10,
+						"season_number": 7,
+						"name": "Virtual Reality Check",
+						"air_date": "2008-11-22",
+						"runtime": 21,
+						"id": 167790
+					},
+					{
+						"episode_number": 11,
+						"season_number": 7,
+						"name": "City Under Siege",
+						"air_date": "2008-11-29",
+						"runtime": 21,
+						"id": 167793
+					},
+					{
+						"episode_number": 12,
+						"season_number": 7,
+						"name": "Super Power Struggle",
+						"air_date": "2009-02-21",
+						"runtime": 21,
+						"id": 167795
+					},
+					{
+						"episode_number": 13,
+						"season_number": 7,
+						"name": "Wedding Bells and Bytes",
+						"air_date": "2009-02-28",
+						"runtime": 21,
+						"id": 167794
+					}
+				]
+			}
+		},
+		"episodeShow": {}
+	},
+	"request": {
+		"name": "Teenage Mutant Ninja Turtles (1987-1996 The Complete Classic Series Collection) (x264 Hi10P AAC)",
+		"hash": "e37b9068894e6f8a0fe2ed6fefac6018480e9b3c",
+		"imdbId": "tt0318913",
+		"files": [
+			{
+				"path": "A Shellabration Of A Fan Nomenon Sensation.mp4",
+				"folder": "Bonus"
+			},
+			{
+				"path": "A Shellabration Of The Turtles Creation.mp4",
+				"folder": "Bonus"
+			},
+			{
+				"path": "A Shellabration Of The TV Sensation.mp4",
+				"folder": "Bonus"
+			},
+			{
+				"path": "A Shellabration With Points Of Articulation.mp4",
+				"folder": "Bonus"
+			},
+			{
+				"path": "Exclusive Artists Interviews - Curt Walstead.mp4",
+				"folder": "Bonus"
+			},
+			{
+				"path": "Exclusive Artists Interviews - Paul Scarzo.mp4",
+				"folder": "Bonus"
+			},
+			{
+				"path": "Exclusive Artists Interviews - Scott Heming.mp4",
+				"folder": "Bonus"
+			},
+			{
+				"path": "Special Feature - Under the Shell with Krang & Slash.mp4",
+				"folder": "Bonus"
+			},
+			{
+				"path": "Special Feature - Under the Shell with The Shredder.mp4",
+				"folder": "Bonus"
+			},
+			{
+				"path": "The Turtles：A Ninjatastic Look Back.mp4",
+				"folder": "Bonus"
+			},
+			{
+				"path": "Trailers.mp4",
+				"folder": "Bonus"
+			},
+			{
+				"path": "Under The Shell - Yosagi Yojimbo.mp4",
+				"folder": "Bonus"
+			},
+			{
+				"path": "Under The Shell-Baxter Stockman.mp4",
+				"folder": "Bonus"
+			},
+			{
+				"path": "TMNT - S01E01 - Turtle Tracks.mkv",
+				"folder": "Season 1 (1987–1988)"
+			},
+			{
+				"path": "TMNT - S01E02 - Enter The Shredder.mkv",
+				"folder": "Season 1 (1987–1988)"
+			},
+			{
+				"path": "TMNT - S01E03 - A Thing About Rats.mkv",
+				"folder": "Season 1 (1987–1988)"
+			},
+			{
+				"path": "TMNT - S01E04 - Hot Rodding Teenagers from Dimension X.mkv",
+				"folder": "Season 1 (1987–1988)"
+			},
+			{
+				"path": "TMNT - S01E05 - Shredder & Splintered.mkv",
+				"folder": "Season 1 (1987–1988)"
+			},
+			{
+				"path": "TMNT - S10E01 - The Return of Dregg.mkv",
+				"folder": "Season 10 (1996)"
+			},
+			{
+				"path": "TMNT - S10E02 - The Beginning of the End.mkv",
+				"folder": "Season 10 (1996)"
+			},
+			{
+				"path": "TMNT - S10E03 - The Power of Three.mkv",
+				"folder": "Season 10 (1996)"
+			},
+			{
+				"path": "TMNT - S10E04 - A Turtle in Time.mkv",
+				"folder": "Season 10 (1996)"
+			},
+			{
+				"path": "TMNT - S10E05 - Turtles to the Second Power.mkv",
+				"folder": "Season 10 (1996)"
+			},
+			{
+				"path": "TMNT - S10E06 - Mobster from Dimension X.mkv",
+				"folder": "Season 10 (1996)"
+			},
+			{
+				"path": "TMNT - S10E07 - The Day the Earth Disappeared.mkv",
+				"folder": "Season 10 (1996)"
+			},
+			{
+				"path": "TMNT - S10E08 - Divide and Conquer.mkv",
+				"folder": "Season 10 (1996)"
+			},
+			{
+				"path": "TMNT - S02E01 - Return of the Shredder.mkv",
+				"folder": "Season 2 (1988)"
+			},
+			{
+				"path": "TMNT - S02E02 - The Incredible Shrinking Turtles.mkv",
+				"folder": "Season 2 (1988)"
+			},
+			{
+				"path": "TMNT - S02E03 - It Came from Beneath the Sewers.mkv",
+				"folder": "Season 2 (1988)"
+			},
+			{
+				"path": "TMNT - S02E04 - The Mean Machines.mkv",
+				"folder": "Season 2 (1988)"
+			},
+			{
+				"path": "TMNT - S02E05 - Curse of the Evil Eye.mkv",
+				"folder": "Season 2 (1988)"
+			},
+			{
+				"path": "TMNT - S02E06 - The Case of the Killer Pizzas.mkv",
+				"folder": "Season 2 (1988)"
+			},
+			{
+				"path": "TMNT - S02E07 - Enter：The Fly.mkv",
+				"folder": "Season 2 (1988)"
+			},
+			{
+				"path": "TMNT - S02E08 - Invasion of the Punk Frogs.mkv",
+				"folder": "Season 2 (1988)"
+			},
+			{
+				"path": "TMNT - S02E09 - Splinter No More.mkv",
+				"folder": "Season 2 (1988)"
+			},
+			{
+				"path": "TMNT - S02E10 - New York's Shiniest.mkv",
+				"folder": "Season 2 (1988)"
+			},
+			{
+				"path": "TMNT - S02E11 - Teenagers from Dimension X.mkv",
+				"folder": "Season 2 (1988)"
+			},
+			{
+				"path": "TMNT - S02E12 - The Catwoman from Channel Six.mkv",
+				"folder": "Season 2 (1988)"
+			},
+			{
+				"path": "TMNT - S02E13 - Return of the Technodrome.mkv",
+				"folder": "Season 2 (1988)"
+			},
+			{
+				"path": "TMNT - S03E01 - Beneath These Streets.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E02 - Turtles on Trial.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E03 - Attack of the 50-Foot Irma.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E04 - The Maltese Hamster.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E05 - Sky Turtles.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E06 - The Old Switcheroo.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E07 - Burne's Blues.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E08 - The Fifth Turtle.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E09 - Enter the Rat King.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E10 - Turtles at the Earth's Core.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E11 - April Fool.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E12 - Attack of Big MACC.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E13 - The Ninja Sword of Nowhere.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E14 - 20,000 Leaks Under the City.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E15 - Take Me to Your Leader.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E16 - Four Musketurtles.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E17 - Turtles, Turtles, Everywhere.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E18 - Cowabunga Shredhead.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E19 - Invasion of the Turtle Snatchers.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E20 - Camera Bugged.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E21 - Green with Jealousy.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E22 - Return of the Fly.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E23 - Casey Jones - Outlaw Hero.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E24 - Mutagen Monster.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E25 - Corporate Raiders from Dimension X.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E26 - Pizza by the Shred.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E27 - Super Bebop & Mighty Rocksteady.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E28 - Beware the Lotus.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E29 - Blast From the Past.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E30 - Leatherhead Terror of the Swamp.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E31 - Michaelangelo's Birthday.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E32 - Usagi Yojimbo.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E33 - Case of the Hot Kimono.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E34 - Usagi Come Home.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E35 - The Making of Metalhead.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E36 - Leatherhead Meets the Rat King.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E37 - The Turtle Terminator.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E38 - The Great Boldini.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E39 - The Missing Map.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E40 - The Gang's All Here.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E41 - The Grybyx.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E42 - Mister Ogg Goes to Town.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E43 - Shredderville.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E44 - Bye, Bye, Fly.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E45 - The Big Rip Off.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E46 - The Big Break In.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S03E47 - The Big Blow Out.mkv",
+				"folder": "Season 3 (1989–90)"
+			},
+			{
+				"path": "TMNT - S04E01 - Plan Six from Outer Space.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E02 - Turtles of the Jungle.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E03 - Michelangelo Toys Around.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E04 - Peking Turtle.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E05 - Shredder's Mom.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E06 - Four Turtles and a Baby.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E07 - Turtlemaniac.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E08 - Rondo in New York.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E09 - Planet of the Turtles.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E10 - Name That Toon.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E11 - Menace Maestro, Please.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E12 - Super Hero for a Day.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E13 - Back to the Egg.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E14 - Son of Return of the Fly II.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E15 - Raphael Knocks 'em Dead.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E16 - Bebop and Rocksteady Conquer the Universe.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E17 - S04E17 - Raphael Meets His Match.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E18 - Slash – The Evil Turtle from Dimension X.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E19 - Leonardo Lightens Up.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E20 - Were-Rats from Channel 6.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E21 - Funny, They Shrunk Michelangelo.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E22 - The Big Zipp Attack.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E23 - Donatello Makes Time.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E24 - Farewell, Lotus Blossom!.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E25 - Rebel Without a Fin.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E26 - Rhino-Man.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E27 - Michelangelo Meets Bugman.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E28 - Poor Little Rich Turtle.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E29 - What's Michelangelo Good For.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E30 - The Dimension X Story.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E31 - Donatello's Degree.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E32 - The Big Cufflink Caper!.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E33 - Leonardo vs. Tempestra.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E34 - Splinter Vanishes.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E35 - Raphael Drives 'em Wild.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E36 - Beyond the Donatello Nebula.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E37 - Big Bug Blunder.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E38 - The Foot Soldiers Are Revolting.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S04E39 - Unidentified Flying Leonardo.mkv",
+				"folder": "Season 4 (1990-1991)"
+			},
+			{
+				"path": "TMNT - S05E01 - The Turtles and The Hare.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E02 - Once Upon a Time Machine.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E03 - My Brother, the Bad Guy.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E04 - Michelangelo Meets Mondo Gecko.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E05 - Enter Mutagen Man.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E06 - Donatello's Badd Time.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E07 - Michaelangelo Meets Bugman Again.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E08 - Muckman Messes Up.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E09 - Napoleon Bonafrog  Colossus of the Swamps.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E10 - Raphael Versus The Volcano.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E11 - Landlord of the Flies.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E12 - Donatello's Duplicate.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E13 - The Ice Creature Cometh.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E14 - Leonardo Cuts Loose.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E15 - Pirate Radio.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E16 - Raphael, Turtle Of A Thousand Faces.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E17 - Leonardo, The Renaissance Turtle.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E18 - Zach and the Alien Invaders.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E19 - Welcome Back Polarisoids.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E20 - Michalangelo, the Sacred Turtle.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S05E21-S05E22 - Planet of the Turtleoids.mkv",
+				"folder": "Season 5 (1991)"
+			},
+			{
+				"path": "TMNT - S06E01 - Rock Around the Block.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S06E02 - Krangenstein Lives.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S06E03 - Super Irma.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S06E04 - Adventures in Turtle-Sitting.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S06E05 - Sword of Yurikawa.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S06E06 - Return of the Turtleoid.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S06E07 - Shreeka's Revenge.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S06E08 - Too Hot to Handle.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S06E09 - Nightmare in the Lair.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S06E10 - Phantom of the Sewers.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S06E11 - Donatello Trashes Slash.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S06E12 - Leonardo is Missing.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S06E13 - Snakes Alive!.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S06E14 - Polly Wanna Pizza.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S06E15 - Mr. Nice Guy.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S06E16 - Sleuth on the Loose.mkv",
+				"folder": "Season 6 (1992)"
+			},
+			{
+				"path": "TMNT - S07E01 - Tower of Power.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E02 - Rust Never Sleeps.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E03 - A Real Snow Job.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E04 - Venice on the Half-Shell.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E05 - Artless.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E06 - Ring of Fire.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E07 - The Irish Jig Is Up.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E08 - Shredder's New Sword.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E09 - The Lost Queen of Atlantis.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E10 - Turtles on the Orient Express.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E11 - April Gets in Dutch.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E12 - Northern Lights Out.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E13 - Elementary, My Dear Turtle.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E14 - Night of the Dark Turtle.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E15 - The Starchild.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E16 - The Legend of Koji.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E17 - Convicts from Dimension X.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E18 - White Belt, Black Heart.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E19 - Night of the Rogues.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E20 - Attack of the Neutrinos.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E21 - Escape from the Planet of the Turtleoids.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E22 - Revenge of the Fly.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E23 - Atlantis Awakes.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E24 - Dirk Savage, Mutant Hunter!.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E25 - Invasion of the Krangazoids.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E26 - Combat Land.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S07E27 - Shredder Triumphant!.mkv",
+				"folder": "Season 7 (1993)"
+			},
+			{
+				"path": "TMNT - S08E01 - Get Shredder!.mkv",
+				"folder": "Season 8 (1994)"
+			},
+			{
+				"path": "TMNT - S08E02 - Wrath of the Rat King.mkv",
+				"folder": "Season 8 (1994)"
+			},
+			{
+				"path": "TMNT - S08E03 - State of Shock.mkv",
+				"folder": "Season 8 (1994)"
+			},
+			{
+				"path": "TMNT - S08E04 - Cry H.A.V.O.C.!.mkv",
+				"folder": "Season 8 (1994)"
+			},
+			{
+				"path": "TMNT - S08E05 - H.A.V.O.C. in the Streets!.mkv",
+				"folder": "Season 8 (1994)"
+			},
+			{
+				"path": "TMNT - S08E06 - Enter - Krakus.mkv",
+				"folder": "Season 8 (1994)"
+			},
+			{
+				"path": "TMNT - S08E07 - Cyber-Turtles.mkv",
+				"folder": "Season 8 (1994)"
+			},
+			{
+				"path": "TMNT - S08E08 - Turtle Trek.mkv",
+				"folder": "Season 8 (1994)"
+			},
+			{
+				"path": "TMNT - S09E01 - The Unknown Ninja.mkv",
+				"folder": "Season 9 (1995)"
+			},
+			{
+				"path": "TMNT - S09E02 - Dregg of the Earth.mkv",
+				"folder": "Season 9 (1995)"
+			},
+			{
+				"path": "TMNT - S09E03 - The Wrath of Medusa.mkv",
+				"folder": "Season 9 (1995)"
+			},
+			{
+				"path": "TMNT - S09E04 - The New Mutation.mkv",
+				"folder": "Season 9 (1995)"
+			},
+			{
+				"path": "TMNT - S09E05 - The Showdown.mkv",
+				"folder": "Season 9 (1995)"
+			},
+			{
+				"path": "TMNT - S09E06 - Split-Second.mkv",
+				"folder": "Season 9 (1995)"
+			},
+			{
+				"path": "TMNT - S09E07 - Carter, the Enforcer.mkv",
+				"folder": "Season 9 (1995)"
+			},
+			{
+				"path": "TMNT - S09E08 - Doomquest.mkv",
+				"folder": "Season 9 (1995)"
+			}
+		]
+	}
+}
