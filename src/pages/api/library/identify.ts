@@ -8,9 +8,11 @@ import type { FilenameIdentification } from '@/services/database/hashImdb';
 import { cachedSources } from '@/services/placement';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
+import { verifyIdentity } from '@/utils/browserStateIdentity';
+import type { SyncIdentity } from '@/utils/browserStateKeys';
 import { parseName, releaseSeasons } from '@/utils/episodePlacement';
 import type { LibraryIdentification } from '@/utils/libraryIdentify';
-import { validateOwnPageRequest } from '@/utils/ownPageRequest';
+import { isNativeAppRequest, validateOwnPageRequest } from '@/utils/ownPageRequest';
 import { createHash } from 'crypto';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -257,9 +259,24 @@ function dedupe(rows: FilenameIdentification[]): FilenameIdentification[] {
 	return [...new Map(rows.map((r) => [`${r.hash}|${r.titleKey}`, r])).values()];
 }
 
-/** The library page's own route; tools call /api/sponsor/identify with their key. */
+/**
+ * A DMM page, or the DMM Mobile app naming its user's own library: a native client
+ * (no Sec-Fetch-Site, no Origin) that proves a provider login in `identity`, the one
+ * it syncs /api/browser-state with. Asked after the per-IP limit, so a caller spends at
+ * most one provider check per allowed call. Tools call /api/sponsor/identify with their key.
+ */
+export async function validateLibraryCaller(
+	req: NextApiRequest,
+	res: NextApiResponse
+): Promise<boolean> {
+	const identity = (req.body as { identity?: SyncIdentity } | undefined)?.identity;
+	if (isNativeAppRequest(req) && identity && (await verifyIdentity(identity))) return true;
+	return validateOwnPageRequest(req, res);
+}
+
+/** The library page's own route, and the app's. */
 async function pageHandler(req: NextApiRequest, res: NextApiResponse) {
-	if (!validateOwnPageRequest(req, res)) return;
+	if (!(await validateLibraryCaller(req, res))) return;
 	return identifyHandler(req, res);
 }
 

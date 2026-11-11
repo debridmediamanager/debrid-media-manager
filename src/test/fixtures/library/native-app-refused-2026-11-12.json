@@ -1,0 +1,29 @@
+{
+	"captured": "2026-11-12, production debridmediamanager.com, before native app calls were let in",
+	"request": {
+		"method": "POST",
+		"headers": { "content-type": "application/json", "user-agent": "okhttp/4.12.0" },
+		"body": {
+			"items": [
+				{
+					"filename": "Tears.of.Steel.2012.1080p.BluRay.x264.mkv",
+					"hash": "209c8226b299b308beaf2b9cd3fb49212dbd13ec"
+				}
+			]
+		}
+	},
+	"responses": {
+		"/api/library/identify": {
+			"status": 403,
+			"body": {
+				"error": "This endpoint serves DMM pages only. Tools use the sponsor API: https://debridmediamanager.com/api-docs"
+			}
+		},
+		"/api/library/identified": {
+			"status": 403,
+			"body": {
+				"error": "This endpoint serves DMM pages only. Tools use the sponsor API: https://debridmediamanager.com/api-docs"
+			}
+		}
+	}
+}

@@ -1,7 +1,10 @@
-import { parseItems, storedIdentification } from '@/pages/api/library/identify';
+import {
+	parseItems,
+	storedIdentification,
+	validateLibraryCaller,
+} from '@/pages/api/library/identify';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
-import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 /** A shared list of 23,434 rows in five calls. */
@@ -21,7 +24,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		res.setHeader('Allow', 'POST');
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
-	if (!validateOwnPageRequest(req, res)) return;
+	if (!(await validateLibraryCaller(req, res))) return;
 	const items = parseItems(req.body, MAX_CACHED_ITEMS);
 	if (!items) {
 		return res.status(400).json({
