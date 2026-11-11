@@ -1,4 +1,5 @@
 import { getAllDebridUser } from '@/services/allDebrid';
+import { castSalt } from '@/utils/castSalt';
 import crypto from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { allDebridApiError, isInvalidAllDebridCredential } from './allDebridApiError';
@@ -28,10 +29,7 @@ export const validateApiKey = (req: NextApiRequest, res: NextApiResponse): strin
 };
 
 const deriveUserId = (username: string): string => {
-	const salt = process.env.DMMCAST_SALT;
-	if (!salt) {
-		throw new Error('DMMCAST_SALT environment variable is not set');
-	}
+	const salt = castSalt();
 
 	// Prefixed with 'alldebrid:' to ensure different IDs from RD/TB
 	const hmac = crypto

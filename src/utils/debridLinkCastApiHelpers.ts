@@ -8,16 +8,14 @@ import {
 	isDlFinished,
 } from '@/services/debridLink';
 import { providerCacheMemo } from '@/services/torznab/providerCache';
+import { castSalt } from '@/utils/castSalt';
 import type { DebridLinkVideoFile } from '@/utils/debridLinkCastFiles';
 import { debridLinkVideoFiles } from '@/utils/debridLinkCastFiles';
 import { toMagnetUri } from '@/utils/extractHashes';
 import crypto from 'crypto';
 
 const deriveUserId = (accountIdentity: string): string => {
-	const salt = process.env.DMMCAST_SALT;
-	if (!salt) {
-		throw new Error('DMMCAST_SALT environment variable is not set');
-	}
+	const salt = castSalt();
 
 	// Prefixed with 'debridlink:' to ensure different IDs from RD/AD/TB/PM/OC
 	const hmac = crypto

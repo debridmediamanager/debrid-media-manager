@@ -5,6 +5,7 @@ import { getPremiumizeAccountInfo } from '@/services/premiumize';
 import { getCurrentUser } from '@/services/realDebrid';
 import { TAGGED } from '@/services/reporterId';
 import { AllDebridApiError, isInvalidAllDebridCredential } from '@/utils/allDebridApiError';
+import { castSalt } from '@/utils/castSalt';
 import { torboxUserId } from '@/utils/torboxIdentity';
 import { createHmac } from 'crypto';
 
@@ -22,8 +23,7 @@ import { createHmac } from 'crypto';
  * characters and every TorBox key a UUID).
  */
 export async function verifiedReporterId(credential: string): Promise<string | null> {
-	const salt = process.env.DMMCAST_SALT;
-	if (!salt) throw new Error('DMMCAST_SALT environment variable is not set');
+	const salt = castSalt();
 	const id = (service: string, account: unknown) =>
 		typeof account === 'number' || (typeof account === 'string' && account !== '')
 			? `${service}:${createHmac('sha256', salt).update(`${service}:${account}`).digest('base64url').slice(0, 16)}`

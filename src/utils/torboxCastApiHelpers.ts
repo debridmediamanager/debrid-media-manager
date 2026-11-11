@@ -1,4 +1,5 @@
 import { getUserData } from '@/services/torbox';
+import { castSalt } from '@/utils/castSalt';
 import crypto from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { readBearerKey, refuseQueryKey } from './providerKeyHeader';
@@ -34,10 +35,7 @@ export const validateApiKey = (req: NextApiRequest, res: NextApiResponse): strin
 };
 
 const deriveUserId = (email: string): string => {
-	const salt = process.env.DMMCAST_SALT;
-	if (!salt) {
-		throw new Error('DMMCAST_SALT environment variable is not set');
-	}
+	const salt = castSalt();
 
 	// Prefixed with 'torbox:' to ensure different IDs from RD
 	const hmac = crypto.createHmac('sha256', salt).update(`torbox:${email}`).digest('base64url'); // base64url is URL-safe (no +, /, or =)

@@ -71,6 +71,21 @@ describe('POST /api/zurg/register-api-key', () => {
 		expect(res.json).toHaveBeenCalledWith({ error: 'Invalid authorization' });
 	});
 
+	it('refuses the .env.example placeholder salt as a credential', async () => {
+		process.env = { ...originalEnv, DMMCAST_SALT: 'your-random-salt-here' };
+		const req = createMockRequest({
+			method: 'POST',
+			body: buildBody(),
+			headers: { authorization: 'your-random-salt-here' },
+		});
+		const res = createMockResponse();
+
+		await handler(req, res);
+
+		expect(res.status).toHaveBeenCalledWith(500);
+		expect(mockRepository.createZurgApiKey).not.toHaveBeenCalled();
+	});
+
 	it('rejects validForDays above maximum', async () => {
 		const req = buildRequest({ validForDays: 366 });
 		const res = createMockResponse();

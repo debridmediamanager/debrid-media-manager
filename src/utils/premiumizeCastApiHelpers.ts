@@ -1,11 +1,9 @@
 import { getPremiumizeAccountInfo } from '@/services/premiumize';
+import { castSalt } from '@/utils/castSalt';
 import crypto from 'crypto';
 
 const deriveUserId = (customerId: string): string => {
-	const salt = process.env.DMMCAST_SALT;
-	if (!salt) {
-		throw new Error('DMMCAST_SALT environment variable is not set');
-	}
+	const salt = castSalt();
 
 	// Prefixed with 'premiumize:' to ensure different IDs from RD/AD/TB
 	const hmac = crypto

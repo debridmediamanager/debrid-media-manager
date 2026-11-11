@@ -1,5 +1,6 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { castSalt } from '@/utils/castSalt';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -17,9 +18,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		}
 
 		// Validate the salt matches environment variable
-		const expectedSalt = process.env.DMMCAST_SALT;
-		if (!expectedSalt) {
-			console.error('DMMCAST_SALT environment variable is not set');
+		let expectedSalt: string;
+		try {
+			expectedSalt = castSalt();
+		} catch (error) {
+			console.error((error as Error).message);
 			return res.status(500).json({ error: 'Server configuration error' });
 		}
 

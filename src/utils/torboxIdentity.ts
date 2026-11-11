@@ -1,3 +1,4 @@
+import { castSalt } from '@/utils/castSalt';
 import crypto from 'crypto';
 
 const USER_ME_URL = 'https://api.torbox.app/v1/api/user/me';
@@ -18,8 +19,7 @@ const TIMEOUT_MS = 5000;
  * decides who is acting, and an unverified key must not act at all.
  */
 export async function torboxUserId(apiKey: string): Promise<string | null> {
-	const salt = process.env.DMMCAST_SALT;
-	if (!salt) throw new Error('DMMCAST_SALT environment variable is not set');
+	const salt = castSalt();
 	try {
 		const res = await fetch(USER_ME_URL, {
 			headers: { Authorization: `Bearer ${apiKey}`, Accept: 'application/json' },

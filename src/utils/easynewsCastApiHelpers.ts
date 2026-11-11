@@ -3,6 +3,7 @@ import {
 	EasynewsAuthError,
 	type EasynewsCredentials,
 } from '@/services/easynews';
+import { castSalt } from '@/utils/castSalt';
 import crypto from 'crypto';
 import { easynewsCredentialsOf } from './easynewsCastKey';
 
@@ -13,10 +14,7 @@ import { easynewsCredentialsOf } from './easynewsCastKey';
  * spellings can be two accounts.
  */
 export function easynewsCastUserId(username: string): string {
-	const salt = process.env.DMMCAST_SALT;
-	if (!salt) {
-		throw new Error('DMMCAST_SALT environment variable is not set');
-	}
+	const salt = castSalt();
 	// Prefixed so the id can never equal another provider's.
 	return crypto
 		.createHmac('sha256', salt)

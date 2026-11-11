@@ -1,12 +1,10 @@
 import { getOffcloudAccountInfo, getOffcloudCacheInfo } from '@/services/offcloud';
+import { castSalt } from '@/utils/castSalt';
 import { offcloudVideoFiles, type OffcloudVideoFile } from '@/utils/offcloudCastFiles';
 import crypto from 'crypto';
 
 const deriveUserId = (accountUserId: string): string => {
-	const salt = process.env.DMMCAST_SALT;
-	if (!salt) {
-		throw new Error('DMMCAST_SALT environment variable is not set');
-	}
+	const salt = castSalt();
 
 	// Prefixed with 'offcloud:' to ensure different IDs from RD/AD/TB/PM
 	const hmac = crypto

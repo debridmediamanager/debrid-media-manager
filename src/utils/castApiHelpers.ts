@@ -1,4 +1,5 @@
 import { getCurrentUser } from '@/services/realDebrid';
+import { castSalt } from '@/utils/castSalt';
 import crypto from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -53,10 +54,7 @@ export const generateUserId = async (token: string): Promise<string> => {
 			throw new Error('Invalid username');
 		}
 
-		const salt = process.env.DMMCAST_SALT;
-		if (!salt) {
-			throw new Error('DMMCAST_SALT environment variable is not set');
-		}
+		const salt = castSalt();
 
 		const hmac = crypto.createHmac('sha256', salt).update(username).digest('base64url');
 
@@ -79,10 +77,7 @@ export const generateLegacyUserId = async (token: string): Promise<string> => {
 			throw new Error('Invalid username');
 		}
 
-		const salt = process.env.DMMCAST_SALT;
-		if (!salt) {
-			throw new Error('DMMCAST_SALT environment variable is not set');
-		}
+		const salt = castSalt();
 
 		const hash = crypto
 			.createHash('sha256')
