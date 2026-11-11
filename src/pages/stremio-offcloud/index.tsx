@@ -1,5 +1,6 @@
 import { CastPage, CastPageConfig } from '@/components/CastPage';
 import { useOffcloudCastToken } from '@/hooks/offcloudCastToken';
+import { CAST_LOGOS } from '@/utils/castLogos';
 import { withAuth } from '@/utils/withAuth';
 import dynamic from 'next/dynamic';
 
@@ -10,7 +11,7 @@ const config: CastPageConfig = {
 	apiPrefix: 'stremio-oc',
 	castPath: '/stremio-offcloud',
 	loginPath: '/offcloud/login',
-	logo: 'https://static.debridmediamanager.com/yellowlogo.jpeg',
+	logo: CAST_LOGOS.oc,
 	hasCredentials: () =>
 		// Offcloud has one credential and no OAuth: the account-page API key.
 		!!localStorage.getItem('oc:apiKey'),

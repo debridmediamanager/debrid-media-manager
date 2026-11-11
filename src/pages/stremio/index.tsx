@@ -1,5 +1,6 @@
 import { CastPage, CastPageConfig } from '@/components/CastPage';
 import { useCastToken } from '@/hooks/castToken';
+import { CAST_LOGOS } from '@/utils/castLogos';
 import { withAuth } from '@/utils/withAuth';
 import dynamic from 'next/dynamic';
 
@@ -10,7 +11,7 @@ const config: CastPageConfig = {
 	apiPrefix: 'stremio',
 	castPath: '/stremio',
 	loginPath: '/realdebrid/login',
-	logo: 'https://static.debridmediamanager.com/greenlogo.jpeg',
+	logo: CAST_LOGOS.rd,
 	hasCredentials: () =>
 		// The access token alone, matching every other provider's cast page
 		// and `withAuth`. Demanding the whole OAuth quad locked out anyone

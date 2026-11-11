@@ -1,5 +1,6 @@
 import { CastPage, CastPageConfig } from '@/components/CastPage';
 import { useEasynewsCastToken } from '@/hooks/easynewsCastToken';
+import { CAST_LOGOS } from '@/utils/castLogos';
 import { withAuth } from '@/utils/withAuth';
 import dynamic from 'next/dynamic';
 
@@ -20,7 +21,7 @@ const config: CastPageConfig = {
 	castPath: '/stremio-easynews',
 	// The Easynews login lives in Settings' Easynews panel, which returns here.
 	loginPath: '/settings',
-	logo: 'https://static.debridmediamanager.com/yellowlogo.jpeg',
+	logo: CAST_LOGOS.en,
 	hasCredentials: hasEasynewsLogin,
 	theme: {
 		heading: 'text-blue-400',

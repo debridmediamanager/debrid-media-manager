@@ -1,5 +1,6 @@
 import { CastPage, CastPageConfig } from '@/components/CastPage';
 import { useDebridLinkCastToken } from '@/hooks/debridLinkCastToken';
+import { CAST_LOGOS } from '@/utils/castLogos';
 import { withAuth } from '@/utils/withAuth';
 import dynamic from 'next/dynamic';
 
@@ -10,7 +11,7 @@ const config: CastPageConfig = {
 	apiPrefix: 'stremio-dl',
 	castPath: '/stremio-debridlink',
 	loginPath: '/debridlink/login',
-	logo: 'https://static.debridmediamanager.com/yellowlogo.jpeg',
+	logo: CAST_LOGOS.dl,
 	hasCredentials: () =>
 		// Either credential works: an OAuth access token from the device-code
 		// login, or a token pasted from the account page. Both go in the same

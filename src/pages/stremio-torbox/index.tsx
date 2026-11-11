@@ -1,5 +1,6 @@
 import { CastPage, CastPageConfig } from '@/components/CastPage';
 import { useTorBoxCastToken } from '@/hooks/torboxCastToken';
+import { CAST_LOGOS } from '@/utils/castLogos';
 import { withAuth } from '@/utils/withAuth';
 import dynamic from 'next/dynamic';
 
@@ -10,7 +11,7 @@ const config: CastPageConfig = {
 	apiPrefix: 'stremio-tb',
 	castPath: '/stremio-torbox',
 	loginPath: '/torbox/login',
-	logo: 'https://static.debridmediamanager.com/dmmcast.png',
+	logo: CAST_LOGOS.tb,
 	hasCredentials: () => !!localStorage.getItem('tb:apiKey'),
 	theme: {
 		heading: 'text-purple-400',

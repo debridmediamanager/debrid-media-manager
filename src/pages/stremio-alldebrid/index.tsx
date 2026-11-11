@@ -1,5 +1,6 @@
 import { CastPage, CastPageConfig } from '@/components/CastPage';
 import { useAllDebridCastToken } from '@/hooks/allDebridCastToken';
+import { CAST_LOGOS } from '@/utils/castLogos';
 import { withAuth } from '@/utils/withAuth';
 import dynamic from 'next/dynamic';
 
@@ -10,7 +11,7 @@ const config: CastPageConfig = {
 	apiPrefix: 'stremio-ad',
 	castPath: '/stremio-alldebrid',
 	loginPath: '/alldebrid/login',
-	logo: 'https://static.debridmediamanager.com/yellowlogo.jpeg',
+	logo: CAST_LOGOS.ad,
 	hasCredentials: () => !!localStorage.getItem('ad:apiKey'),
 	theme: {
 		heading: 'text-yellow-400',

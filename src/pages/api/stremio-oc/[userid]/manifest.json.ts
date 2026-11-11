@@ -1,5 +1,6 @@
 import { CAST_STREAM_RESOURCE } from '@/services/anime/stremioAnimeIds';
 import { CAST_ADDON_VERSIONS } from '@/utils/castAddonVersions';
+import { CAST_LOGOS } from '@/utils/castLogos';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export const offcloudCastManifest = (withCatalogs: boolean) => ({
@@ -9,7 +10,7 @@ export const offcloudCastManifest = (withCatalogs: boolean) => ({
 	name: withCatalogs ? 'DMM Cast for Offcloud' : 'DMM Cast for Offcloud (no catalog)',
 	description:
 		'Cast your preferred Debrid Media Manager streams to your Stremio device using Offcloud; supports Anime, TV shows and Movies!',
-	logo: 'https://static.debridmediamanager.com/yellowlogo.jpeg',
+	logo: CAST_LOGOS.oc,
 	background: 'https://static.debridmediamanager.com/background.png',
 	version: CAST_ADDON_VERSIONS.offcloud,
 	resources: withCatalogs

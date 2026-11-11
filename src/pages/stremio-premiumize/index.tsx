@@ -1,5 +1,6 @@
 import { CastPage, CastPageConfig } from '@/components/CastPage';
 import { usePremiumizeCastToken } from '@/hooks/premiumizeCastToken';
+import { CAST_LOGOS } from '@/utils/castLogos';
 import { withAuth } from '@/utils/withAuth';
 import dynamic from 'next/dynamic';
 
@@ -10,7 +11,7 @@ const config: CastPageConfig = {
 	apiPrefix: 'stremio-pm',
 	castPath: '/stremio-premiumize',
 	loginPath: '/premiumize/login',
-	logo: 'https://static.debridmediamanager.com/yellowlogo.jpeg',
+	logo: CAST_LOGOS.pm,
 	hasCredentials: () =>
 		// Either credential works: the OAuth device-code token or the API key
 		!!(localStorage.getItem('pm:accessToken') || localStorage.getItem('pm:apiKey')),

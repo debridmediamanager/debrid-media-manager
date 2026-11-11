@@ -1,5 +1,6 @@
 import { CAST_STREAM_RESOURCE } from '@/services/anime/stremioAnimeIds';
 import { CAST_ADDON_VERSIONS } from '@/utils/castAddonVersions';
+import { CAST_LOGOS } from '@/utils/castLogos';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -9,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		name: 'DMM Cast for AllDebrid',
 		description:
 			'Cast your preferred Debrid Media Manager streams to your Stremio device using AllDebrid; supports Anime, TV shows and Movies!',
-		logo: 'https://static.debridmediamanager.com/yellowlogo.jpeg',
+		logo: CAST_LOGOS.ad,
 		background: 'https://static.debridmediamanager.com/background.png',
 		version: CAST_ADDON_VERSIONS.alldebrid,
 		resources: [
