@@ -1,6 +1,7 @@
 import { NEWZNAB_AUTH_MESSAGES, resolveNewznabSponsor } from '@/services/newznab/auth';
 import { getClientIp } from '@/services/rateLimit/middlewareRateLimiter';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
+import { getSiteSetting } from '@/services/siteSettings';
 import { MissingProviderKeyError, ProviderProbeError } from '@/services/torznab/providerCache';
 import { isSearchType } from '@/services/torznab/resolve';
 import { parseFeedOptions, runSearch } from '@/services/torznab/search';
@@ -44,14 +45,14 @@ function sendError(res: NextApiResponse, status: number, code: number, descripti
 }
 
 /**
- * A smaller per-minute budget for named sponsors, from `TORZNAB_SPONSOR_LIMITS`
- * (`SHORTID=5,SHORTID2=2`). An operator's lever for one key that sweeps the
- * library around the clock, kept out of the public code because it names
- * sponsors. Only ever lowers the budget.
+ * A smaller per-minute budget for named sponsors, from the `torznabSponsorLimits`
+ * site setting (`SHORTID=5,SHORTID2=2`, else `TORZNAB_SPONSOR_LIMITS`). An
+ * operator's lever for one key that sweeps the library around the clock, kept out
+ * of the public code because it names sponsors. Only ever lowers the budget.
  */
-function torznabSearchBudget(shortId: string) {
+async function torznabSearchBudget(shortId: string) {
 	const config = RATE_LIMIT_CONFIGS.torznabSearch;
-	for (const entry of (process.env.TORZNAB_SPONSOR_LIMITS ?? '').split(',')) {
+	for (const entry of (await getSiteSetting('torznabSponsorLimits')).split(',')) {
 		const [id, perMinute] = entry.split('=').map((part) => part.trim());
 		const limit = Number(perMinute);
 		if (id === shortId && Number.isInteger(limit) && limit > 0 && limit < config.rateLimit) {
@@ -130,7 +131,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		// to spend here — a grab never comes back to DMM.
 		const identifier = `sponsor:${auth.sponsor.shortId}`;
 		if (
-			!(await checkRateLimitFor(identifier, torznabSearchBudget(auth.sponsor.shortId), res))
+			!(await checkRateLimitFor(
+				identifier,
+				await torznabSearchBudget(auth.sponsor.shortId),
+				res
+			))
 		) {
 			return sendError(res, 429, 500, 'Request limit reached');
 		}

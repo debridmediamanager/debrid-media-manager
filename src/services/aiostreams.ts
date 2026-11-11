@@ -8,15 +8,15 @@ import { ScrapeSearchResult, isUsableHash } from './mediasearch';
  * torrent they know - measured 2026-11-07 on The Odyssey (2026), 1,277 streams
  * in 6.8 s, among them four 80+ GB remuxes nothing else DMM reads had.
  *
- * `AIOSTREAMS_URL` is the configuration's addon base,
+ * The `aiostreamsUrl` site setting (else `AIOSTREAMS_URL`) is the configuration's addon base,
  * `http(s)://<instance>/stremio/<uuid>/<encrypted password>`. The configuration
  * names each stream after its preset (`name` = `{addon.presetId}`) and puts
  * the torrent's folder name, then the file name, in `description`; that is the
  * wire format read here. Its debrid key is a TorBox trial account's and is only
  * used there for cache checks, which is why no availability is taken from it.
  */
-export function aioStreamsBase(): string | null {
-	const raw = process.env.AIOSTREAMS_URL?.trim();
+export function aioStreamsBase(configured = process.env.AIOSTREAMS_URL): string | null {
+	const raw = configured?.trim();
 	if (!raw) return null;
 	const base = raw.replace(/\/manifest\.json\/?$/i, '').replace(/\/+$/, '');
 	// http is for an instance on the tailnet, which is where DMM's own runs.

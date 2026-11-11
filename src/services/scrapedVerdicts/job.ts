@@ -5,6 +5,7 @@ import {
 	type NewVerdict,
 	type StoredPair,
 } from '@/services/database/scrapedVerdict';
+import { getSiteSetting } from '@/services/siteSettings';
 import { namedSeasons } from '@/utils/seasonNaming';
 import { identifiedAnswers, identifiedShowVerdicts } from './identified';
 import { classifyFilenames, modelKey } from './model';
@@ -50,7 +51,7 @@ export const utcDay = () => new Date().toISOString().slice(0, 10);
  * spend past the ceiling.
  */
 export async function underBudget(db: ScrapedVerdictService): Promise<boolean> {
-	const limit = Number(process.env.SCRAPED_VERDICTS_DAILY_TOKENS) || DEFAULT_DAILY_TOKENS;
+	const limit = Number(await getSiteSetting('verdictsDailyTokens')) || DEFAULT_DAILY_TOKENS;
 	return (await db.getTokensSpent(utcDay())) < limit;
 }
 

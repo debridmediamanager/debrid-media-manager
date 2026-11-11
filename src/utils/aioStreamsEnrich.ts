@@ -5,6 +5,7 @@ import {
 } from '@/services/aiostreams';
 import type { ScrapeSearchResult } from '@/services/mediasearch';
 import { repository as db } from '@/services/repository';
+import { getSiteSetting } from '@/services/siteSettings';
 import { filterByMovieConditions, hasNoBannedTerms, meetsTitleConditions } from '@/utils/checks';
 import { DebridioTarget, idIsKind } from '@/utils/debridioBackfill';
 
@@ -68,7 +69,7 @@ export async function releaseCheck(
  * releases it handed over.
  */
 export async function enrichFromAioStreams(target: AioStreamsTarget): Promise<number> {
-	const base = aioStreamsBase();
+	const base = aioStreamsBase(await getSiteSetting('aiostreamsUrl'));
 	if (!base) return 0;
 	if (within(await db.getRefreshedAt(COOLDOWN_KEY), AIOSTREAMS_COOLDOWN_MS)) return 0;
 	const stampKey = stampKeyOf(target);

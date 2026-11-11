@@ -9,6 +9,7 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 export const ADMIN_PAGES = [
 	{ href: '/admin/newznab', label: 'Newznab indexers' },
+	{ href: '/admin/settings', label: 'Site settings' },
 	{ href: '/admin/copyright', label: 'Copyright notices' },
 ];
 
