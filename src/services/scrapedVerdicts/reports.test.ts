@@ -3,9 +3,13 @@ import type { ScrapedVerdictService } from '@/services/database/scrapedVerdict';
 import { titleKeyOf } from '@/services/database/scrapedVerdict';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import identified from './__fixtures__/identified-filenames.json';
-import { reviewReports } from './reports';
+import { AUTO_APPROVE_NOTE, reviewReports } from './reports';
 
-vi.mock('@/services/repository', () => ({ repository: {} }));
+const repositoryMock = vi.hoisted(() => ({
+	reportContent: vi.fn(async () => {}),
+	approveUndecidedReports: vi.fn(async () => 1),
+}));
+vi.mock('@/services/repository', () => ({ repository: repositoryMock }));
 
 const movie = {
 	imdbId: 'tt15791034',
@@ -237,5 +241,54 @@ describe('reviewReports with another model', () => {
 		expect(body.model).toBe(model);
 		expect(body.reasoning).toEqual({ enabled: false });
 		expect(file).toHaveBeenCalledWith('gg', 'disputed');
+	});
+});
+
+describe('reviewReports filing', () => {
+	beforeEach(() => {
+		forgetIdentifications();
+		vi.stubEnv('OPENROUTER_VERDICTS_KEY', 'test-key');
+		repositoryMock.reportContent.mockClear();
+		repositoryMock.approveUndecidedReports.mockClear();
+	});
+	afterEach(() => {
+		vi.unstubAllEnvs();
+		vi.unstubAllGlobals();
+	});
+
+	// The model decides what it can; only disputed and unjudged reports reach the admin.
+	it('hides a confirmed release on its own and leaves a disputed one for the admin', async () => {
+		jevAnswers('ADULT', 'SAME_TITLE');
+		const db = fakeDb({
+			getFilenames: vi.fn(async (_imdbId: string, hashes: string[]) => {
+				const names = new Map([
+					['hh', 'Some.Show.S01E01.XXX.1080p.mkv'],
+					['ii', 'Some.Show.S01E02.1080p.mkv'],
+				]);
+				return new Map([...names].filter(([hash]) => hashes.includes(hash)));
+			}),
+			getShowTitles: vi.fn(async () => ({ titles: ['Some Show'], year: 2020 })),
+		});
+		expect(await reviewReports('tt3', ['hh'], 'porn', db)).toEqual(['hh']);
+		expect(repositoryMock.reportContent).toHaveBeenCalledWith(
+			'hh',
+			'tt3',
+			'jev:confirmed',
+			'porn'
+		);
+		expect(repositoryMock.approveUndecidedReports).toHaveBeenCalledWith(
+			[{ imdbId: 'tt3', hash: 'hh' }],
+			AUTO_APPROVE_NOTE
+		);
+
+		jevAnswers('TV', 'SAME_TITLE');
+		expect(await reviewReports('tt3', ['ii'], 'porn', db)).toEqual([]);
+		expect(repositoryMock.reportContent).toHaveBeenLastCalledWith(
+			'ii',
+			'tt3',
+			'jev:disputed',
+			'porn'
+		);
+		expect(repositoryMock.approveUndecidedReports).toHaveBeenCalledTimes(1);
 	});
 });

@@ -12,6 +12,7 @@ const prismaMock = vi.hoisted(() => ({
 	},
 	reportDecision: {
 		findMany: vi.fn(),
+		createMany: vi.fn(),
 	},
 }));
 
@@ -106,5 +107,17 @@ describe('ReportService', () => {
 		await expect(service.getReportedHashes('tt1')).rejects.toThrow(
 			'Failed to get reported hashes: db down'
 		);
+	});
+
+	it('hides automatically only what nobody decided yet', async () => {
+		prismaMock.reportDecision.createMany.mockResolvedValue({ count: 1 });
+		expect(
+			await service.approveUndecided([{ imdbId: 'tt1', hash: 'aa' }], 'model confirmed')
+		).toBe(1);
+		expect(prismaMock.reportDecision.createMany).toHaveBeenCalledWith({
+			data: [{ imdbId: 'tt1', hash: 'aa', decision: 'approved', note: 'model confirmed' }],
+			// an admin's earlier "keep" stays
+			skipDuplicates: true,
+		});
 	});
 });

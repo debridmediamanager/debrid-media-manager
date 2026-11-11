@@ -1,7 +1,7 @@
 /**
  * Asks the verdict model about every waiting report it never judged, so the queue at
- * /admin/reports can be sorted by "model agrees" / "model disagrees". It only files
- * the model's verdict (`jev:confirmed` / `jev:disputed`); nothing is hidden or kept.
+ * /admin/reports holds only what the model could not decide. A confirmed report hides
+ * the release (unless an admin already decided it); a disputed one waits for review.
  * Only wrong-title and adult reports are judged, as for new reports.
  *
  * Runs DeepSeek v4.1 Flash with reasoning off (98.8% on the 600 labelled names, the
@@ -18,7 +18,11 @@ import { PrismaClient } from '@prisma/client';
 import { ScrapedVerdictService } from '../src/services/database/scrapedVerdict';
 import { JEV_DISPUTED, JEV_REPORTER, type ReportType } from '../src/services/reporterId';
 import { underBudget } from '../src/services/scrapedVerdicts/job';
-import { reviewReports, type ModelVerdict } from '../src/services/scrapedVerdicts/reports';
+import {
+	AUTO_APPROVE_NOTE,
+	reviewReports,
+	type ModelVerdict,
+} from '../src/services/scrapedVerdicts/reports';
 
 const MODEL = 'deepseek/deepseek-v4.1-flash-1017';
 
@@ -123,6 +127,19 @@ async function main() {
 							type: group.type,
 						},
 					});
+					if (verdict === 'confirmed') {
+						await prisma.reportDecision.createMany({
+							data: [
+								{
+									imdbId: group.imdbId,
+									hash,
+									decision: 'approved',
+									note: AUTO_APPROVE_NOTE,
+								},
+							],
+							skipDuplicates: true,
+						});
+					}
 				} else {
 					console.log(
 						`  ${group.imdbId} ${group.type} ${hash.slice(0, 12)} ${verdict.padEnd(9)} ${names?.get(hash) ?? '(no name)'}`

@@ -65,6 +65,7 @@ const buildRepository = () => {
 	const report = createService([
 		'disconnect',
 		'reportContent',
+		'approveUndecided',
 		'getEmptyMedia',
 		'getReportedHashes',
 	]);
@@ -378,6 +379,13 @@ describe('Repository', () => {
 				serviceMethod: 'reportContent',
 				args: ['hash', 'tt', 'user', 'porn'],
 				value: undefined,
+			},
+			{
+				method: 'approveUndecidedReports',
+				service: 'report',
+				serviceMethod: 'approveUndecided',
+				args: [[{ imdbId: 'tt', hash: 'hash' }], 'note'],
+				value: 1,
 			},
 			{
 				method: 'getEmptyMedia',

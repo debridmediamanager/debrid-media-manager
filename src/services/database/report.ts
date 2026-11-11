@@ -211,6 +211,19 @@ export class ReportService extends DatabaseClient {
 		});
 	}
 
+	/**
+	 * Hides each pair unless it already has a decision: an automatic approval never
+	 * overrides an admin's. Returns how many were newly hidden.
+	 */
+	public async approveUndecided(pairs: ReportPair[], note: string): Promise<number> {
+		if (pairs.length === 0) return 0;
+		const { count } = await this.prisma.reportDecision.createMany({
+			data: pairs.map(({ imdbId, hash }) => ({ imdbId, hash, decision: 'approved', note })),
+			skipDuplicates: true,
+		});
+		return count;
+	}
+
 	/** Back into the queue. */
 	public async undecide(imdbId: string, hash: string): Promise<void> {
 		await this.prisma.reportDecision.deleteMany({ where: { imdbId, hash } });

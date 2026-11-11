@@ -2,7 +2,7 @@ import { AdminFetch, AdminLayout } from '@/components/admin/AdminLayout';
 import type { AdminReport } from '@/pages/api/admin/reports';
 import { useCallback, useEffect, useState } from 'react';
 
-// Reported releases wait here; only an approval hides one, and only on that title.
+// Reported releases the model could not settle wait here; hiding one hides it on that title only.
 
 const STATUSES = [
 	['pending', 'Waiting'],
@@ -10,9 +10,10 @@ const STATUSES = [
 	['dismissed', 'Kept'],
 ] as const;
 type Status = (typeof STATUSES)[number][0];
+// A report the model confirms is hidden on its own, so what waits is what it disputed
+// or could not judge: this queue is the only human check.
 const MODEL_FILTERS = [
 	['all', 'All'],
-	['agrees', 'Model agrees'],
 	['disagrees', 'Model disagrees'],
 	['unjudged', 'Not judged'],
 ] as const;

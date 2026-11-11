@@ -1734,6 +1734,10 @@ export class Repository {
 		return this.reportService.reportContent(hash, imdbId, userId, type);
 	}
 
+	public approveUndecidedReports(pairs: { imdbId: string; hash: string }[], note: string) {
+		return this.reportService.approveUndecided(pairs, note);
+	}
+
 	public getEmptyMedia(quantity?: number) {
 		return this.reportService.getEmptyMedia(quantity);
 	}

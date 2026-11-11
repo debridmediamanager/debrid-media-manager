@@ -7,10 +7,10 @@ import { classifyFilenames, modelKey, type ModelOptions } from './model';
 import { decide, decideWithoutModel } from './rules';
 
 /**
- * Jev's second opinion on a report, filed under `JEV_REPORTER` and shown on
- * /admin/reports as "model agrees". Since 2026-11-11 nothing is hidden until an
- * admin approves the report there; before that, Jev's agreement (or a second
- * reporter) hid the result on its own.
+ * The model's verdict on a report. When it (or a stored verdict, or the identifier)
+ * confirms the report, the release is hidden on that title at once; when it disputes
+ * it, or nothing can judge it, the report waits at /admin/reports for an admin, the
+ * only human check. A second reporter alone no longer hides anything.
  *
  * A movie report counts as confirmed when the movie-page verdict trashes the
  * release, reusing a stored verdict where there is one. A series has no tuned
@@ -28,6 +28,25 @@ const verdicts = () => (service ??= new ScrapedVerdictService());
 
 export type ModelVerdict = 'confirmed' | 'disputed';
 
+/** The note on a release hidden because the model (or a stored verdict) confirmed its report. */
+export const AUTO_APPROVE_NOTE = 'Hidden automatically: the model confirmed the report';
+
+/**
+ * Files a verdict on a report. A confirmed one also hides the release on that title
+ * unless an admin already decided it; a disputed one waits at /admin/reports.
+ */
+async function fileVerdict(imdbId: string, type: ReportType, hash: string, verdict: ModelVerdict) {
+	await repository.reportContent(
+		hash,
+		imdbId,
+		verdict === 'confirmed' ? JEV_REPORTER : JEV_DISPUTED,
+		type
+	);
+	if (verdict === 'confirmed') {
+		await repository.approveUndecidedReports([{ imdbId, hash }], AUTO_APPROVE_NOTE);
+	}
+}
+
 /**
  * Returns the hashes the identifier or Jev confirmed. Each judged hash is filed:
  * `confirmed` under `JEV_REPORTER`, `disputed` (the release looks right for the
@@ -39,12 +58,7 @@ export async function reviewReports(
 	type: ReportType,
 	db?: ScrapedVerdictService,
 	file: (hash: string, verdict: ModelVerdict) => Promise<void> = (hash, verdict) =>
-		repository.reportContent(
-			hash,
-			imdbId,
-			verdict === 'confirmed' ? JEV_REPORTER : JEV_DISPUTED,
-			type
-		),
+		fileVerdict(imdbId, type, hash, verdict),
 	options: ModelOptions = {}
 ): Promise<string[]> {
 	const key = modelKey();
