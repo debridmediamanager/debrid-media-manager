@@ -35,20 +35,29 @@ describe('only the home page is indexed', () => {
 		expect(readFileSync(join(pagesDir, '_document.tsx'), 'utf8')).not.toMatch(/name="robots"/);
 	});
 
-	it('gives the page shown at / its canonical and keeps /start itself noindex', () => {
-		const start = readFileSync(join(pagesDir, 'start.tsx'), 'utf8');
-		expect(start).toMatch(/router\.pathname === '\/' \?/);
-		expect(start).toContain('<link rel="canonical" href="https://debridmediamanager.com/" />');
-		expect(start).toContain('<meta name="robots" content="noindex, nofollow" />');
-		expect(readFileSync(join(pagesDir, 'index.tsx'), 'utf8')).toMatch(
-			/loggedOutView: StartPage/
+	it('gives / its title and canonical outside withAuth, so they are in the server HTML', () => {
+		const index = readFileSync(join(pagesDir, 'index.tsx'), 'utf8');
+		expect(index).toMatch(/loggedOutView: StartPage/);
+		const home = index.slice(index.indexOf('function Home('));
+		expect(home).toContain('<title>Debrid Media Manager - Home</title>');
+		expect(home).toContain(
+			'<link key="canonical" rel="canonical" href="https://debridmediamanager.com/" />'
 		);
+		expect(home.indexOf('<Head>')).toBeLessThan(home.indexOf('<AuthedHome'));
+	});
+
+	it('keeps /start itself noindex but not the same page shown at /', () => {
+		const start = readFileSync(join(pagesDir, 'start.tsx'), 'utf8');
+		expect(start).toContain(
+			`{router.pathname !== '/' && <meta name="robots" content="noindex, nofollow" />}`
+		);
+		expect(start).not.toMatch(/rel="canonical"/);
 	});
 
 	it.each(
 		pageFiles(pagesDir)
 			.map((p) => [p.slice(pagesDir.length)])
-			.filter(([p]) => p !== '/start.tsx')
+			.filter(([p]) => p !== '/index.tsx')
 	)('%s declares no index, canonical or og:url', (page) => {
 		const source = readFileSync(join(pagesDir, page), 'utf8');
 		expect(source).not.toMatch(/name="robots" content="index/);

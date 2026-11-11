@@ -479,6 +479,19 @@ function IndexPage() {
 // Nothing here reads the library, and the provider holds the whole cached library in
 // memory: a 20,000-row TorBox cache held 355 MB of heap on this page (2026-11-10).
 // Signed out, the home page is the start page at / (no redirect), the one page search engines index.
-export default Object.assign(withAuth(IndexPage, { loggedOutView: StartPage }), {
-	disableLibraryProvider: true,
-});
+const AuthedHome = withAuth(IndexPage, { loggedOutView: StartPage });
+
+// Title and canonical go out with the server-rendered HTML, before withAuth knows who is looking.
+function Home(props: React.ComponentProps<typeof AuthedHome>) {
+	return (
+		<>
+			<Head>
+				<title>Debrid Media Manager - Home</title>
+				<link key="canonical" rel="canonical" href="https://debridmediamanager.com/" />
+			</Head>
+			<AuthedHome {...props} />
+		</>
+	);
+}
+
+export default Object.assign(Home, { disableLibraryProvider: true });
