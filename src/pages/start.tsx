@@ -234,7 +234,7 @@ export default function StartPage() {
 				<div className="mt-6 flex max-w-lg flex-col items-center border-t border-slate-700 pt-6">
 					<p className="text-center text-sm">Only have Easynews?</p>
 					<Link
-						href="/easynews/login?redirect=/"
+						href="/easynews/login"
 						className="m-2 rounded bg-slate-600 px-4 py-2 text-white hover:bg-slate-500"
 					>
 						Login with Easynews

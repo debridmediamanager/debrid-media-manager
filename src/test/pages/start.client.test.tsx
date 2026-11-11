@@ -249,7 +249,7 @@ describe('StartPage', () => {
 			expect(screen.queryByText('Enter as Guest')).not.toBeInTheDocument();
 			expect(screen.getByRole('link', { name: 'Login with Easynews' })).toHaveAttribute(
 				'href',
-				'/easynews/login?redirect=/'
+				'/easynews/login'
 			);
 			expect(screen.getByRole('link', { name: 'Login with DMM key' })).toHaveAttribute(
 				'href',
