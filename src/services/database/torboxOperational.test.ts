@@ -1,8 +1,14 @@
 import dailyRows from '@/test/fixtures/observability/torbox-operational-daily-2026-09-08-to-12.json';
+import { Prisma } from '@prisma/client';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import { TorBoxOperationalService, resolveTorBoxOperation } from './torboxOperational';
+import {
+	flushTorBoxOperations,
+	resolveTorBoxOperation,
+	TorBoxOperationalService,
+} from './torboxOperational';
 
 const prismaMock = vi.hoisted(() => ({
+	$executeRaw: vi.fn(),
 	torBoxOperationalHourly: {
 		upsert: vi.fn(),
 		findMany: vi.fn(),
@@ -113,69 +119,54 @@ describe('TorBoxOperationalService', () => {
 	});
 
 	describe('recordOperation', () => {
-		it('counts a 2xx as a success', async () => {
-			(prismaMock.torBoxOperationalHourly.upsert as Mock).mockResolvedValue({});
+		const written = () => {
+			const query = prismaMock.$executeRaw.mock.calls[0][0] as Prisma.Sql;
+			return { sql: query.sql, values: query.values };
+		};
 
-			await service.recordOperation('GET /torrents/mylist', 200);
-
-			const call = (prismaMock.torBoxOperationalHourly.upsert as Mock).mock.calls[0][0];
-			expect(call.create).toMatchObject({
-				operation: 'GET /torrents/mylist',
-				totalCount: 1,
-				successCount: 1,
-				failureCount: 0,
-				otherCount: 0,
-			});
+		beforeEach(async () => {
+			await flushTorBoxOperations();
+			prismaMock.$executeRaw.mockReset();
 		});
 
-		it('counts a 5xx as a failure', async () => {
-			(prismaMock.torBoxOperationalHourly.upsert as Mock).mockResolvedValue({});
+		it('counts 2xx as success, 5xx as failure and the rest as other', async () => {
+			for (const status of [200, 204, 500, 404])
+				await service.recordOperation('GET /user/me', status);
+			await flushTorBoxOperations();
 
-			await service.recordOperation('GET /torrents/mylist', 503);
-
-			const call = (prismaMock.torBoxOperationalHourly.upsert as Mock).mock.calls[0][0];
-			expect(call.create).toMatchObject({
-				totalCount: 1,
-				successCount: 0,
-				failureCount: 1,
-				otherCount: 0,
-			});
+			const { sql, values } = written();
+			expect(sql).toContain('ON DUPLICATE KEY UPDATE');
+			// hour, operation, total, success, failure, other
+			expect(values.slice(1)).toEqual(['GET /user/me', 4, 2, 1, 1]);
 		});
 
-		// A rejected key or a malformed request is the caller's problem, not an
-		// outage - it must not drag the success rate down.
-		it('counts a 4xx as neither success nor failure', async () => {
-			(prismaMock.torBoxOperationalHourly.upsert as Mock).mockResolvedValue({});
+		// One upsert per API call held the hour's row locked through each commit: 1,427 such
+		// updates on RdOperationalHourly waited 5 to 51 s behind each other on 2026-11-10.
+		it('writes many calls as one statement, not one each', async () => {
+			for (let i = 0; i < 50; i++) await service.recordOperation('GET /user/me', 200);
+			await flushTorBoxOperations();
 
-			await service.recordOperation('GET /torrents/mylist', 401);
-
-			const call = (prismaMock.torBoxOperationalHourly.upsert as Mock).mock.calls[0][0];
-			expect(call.create).toMatchObject({
-				totalCount: 1,
-				successCount: 0,
-				failureCount: 0,
-				otherCount: 1,
-			});
+			expect(prismaMock.$executeRaw).toHaveBeenCalledTimes(1);
+			expect(prismaMock.torBoxOperationalHourly.upsert).not.toHaveBeenCalled();
+			expect(written().values.slice(1, 4)).toEqual(['GET /user/me', 50, 50]);
 		});
 
-		it('buckets writes into the current hour', async () => {
-			(prismaMock.torBoxOperationalHourly.upsert as Mock).mockResolvedValue({});
-
+		it('silently handles P2021 table-not-exist errors', async () => {
+			prismaMock.$executeRaw.mockRejectedValue({ code: 'P2021' });
 			await service.recordOperation('GET /user/me', 200);
-
-			const call = (prismaMock.torBoxOperationalHourly.upsert as Mock).mock.calls[0][0];
-			const hour: Date = call.where.hour_operation.hour;
-			expect(hour.getMinutes()).toBe(0);
-			expect(hour.getSeconds()).toBe(0);
-			expect(hour.getMilliseconds()).toBe(0);
+			await expect(flushTorBoxOperations()).resolves.toBeUndefined();
 		});
 
-		it('swallows a missing-table error', async () => {
-			(prismaMock.torBoxOperationalHourly.upsert as Mock).mockRejectedValue({
-				code: 'P2021',
-			});
-
-			await expect(service.recordOperation('GET /user/me', 200)).resolves.toBeUndefined();
+		it('logs other errors without throwing', async () => {
+			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+			prismaMock.$executeRaw.mockRejectedValue(new Error('connection lost'));
+			await service.recordOperation('GET /user/me', 200);
+			await expect(flushTorBoxOperations()).resolves.toBeUndefined();
+			expect(consoleSpy).toHaveBeenCalledWith(
+				'Failed to record TorBox operations:',
+				expect.any(Error)
+			);
+			consoleSpy.mockRestore();
 		});
 	});
 

@@ -1,4 +1,10 @@
 import { DatabaseClient } from './client';
+import { HourlyCounters } from './hourlyCounters';
+
+const counters = new HourlyCounters('TorBoxOperationalHourly', 'TorBox');
+
+/** Writes the counts still in memory; for tests and shutdown. */
+export const flushTorBoxOperations = () => counters.flush();
 
 export type TorBoxOperation =
 	| 'GET /user/me'
@@ -151,36 +157,13 @@ export class TorBoxOperationalService extends DatabaseClient {
 		// success:false anyway, so neither belongs in the outage verdict.
 		const isSuccess = status >= 200 && status < 300;
 		const isFailure = status >= 500 && status < 600;
-		const isOther = !isSuccess && !isFailure;
 
-		try {
-			// Atomic upsert avoids the race where two concurrent writers both see
-			// no existing row and both try to create, hitting the unique constraint.
-			// successRate is always recomputed from counts on read, so it's unused here.
-			await this.prisma.torBoxOperationalHourly.upsert({
-				where: { hour_operation: { hour, operation } },
-				create: {
-					hour,
-					operation,
-					totalCount: 1,
-					successCount: isSuccess ? 1 : 0,
-					failureCount: isFailure ? 1 : 0,
-					otherCount: isOther ? 1 : 0,
-					successRate: isSuccess ? 1 : 0,
-				},
-				update: {
-					totalCount: { increment: 1 },
-					...(isSuccess && { successCount: { increment: 1 } }),
-					...(isFailure && { failureCount: { increment: 1 } }),
-					...(isOther && { otherCount: { increment: 1 } }),
-				},
-			});
-		} catch (error: any) {
-			if (error?.code === 'P2021' || error?.message?.includes('does not exist')) {
-				return;
-			}
-			console.error('Failed to record TorBox operation:', error);
-		}
+		counters.add(
+			this.prisma,
+			hour,
+			operation,
+			isSuccess ? 'success' : isFailure ? 'failure' : 'other'
+		);
 	}
 
 	/**

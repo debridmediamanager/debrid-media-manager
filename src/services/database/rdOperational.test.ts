@@ -1,7 +1,13 @@
+import { Prisma } from '@prisma/client';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import { RdOperationalService, resolveRealDebridOperation } from './rdOperational';
+import {
+	flushRdOperations,
+	RdOperationalService,
+	resolveRealDebridOperation,
+} from './rdOperational';
 
 const prismaMock = vi.hoisted(() => ({
+	$executeRaw: vi.fn(),
 	rdOperationalHourly: {
 		upsert: vi.fn(),
 		findMany: vi.fn(),
@@ -82,72 +88,51 @@ describe('RdOperationalService', () => {
 	});
 
 	describe('recordOperation', () => {
-		it('upserts with success increment for 2xx status', async () => {
-			prismaMock.rdOperationalHourly.upsert.mockResolvedValue({});
+		const written = () => {
+			const query = prismaMock.$executeRaw.mock.calls[0][0] as Prisma.Sql;
+			return { sql: query.sql, values: query.values };
+		};
 
-			await service.recordOperation('GET /user', 200);
-
-			expect(prismaMock.rdOperationalHourly.upsert).toHaveBeenCalledWith(
-				expect.objectContaining({
-					create: expect.objectContaining({
-						successCount: 1,
-						failureCount: 0,
-						otherCount: 0,
-					}),
-					update: expect.objectContaining({
-						totalCount: { increment: 1 },
-						successCount: { increment: 1 },
-					}),
-				})
-			);
+		beforeEach(async () => {
+			await flushRdOperations();
+			prismaMock.$executeRaw.mockReset();
 		});
 
-		it('upserts with failure increment for 5xx status', async () => {
-			prismaMock.rdOperationalHourly.upsert.mockResolvedValue({});
+		it('counts 2xx as success, 5xx as failure and the rest as other', async () => {
+			for (const status of [200, 204, 500, 404])
+				await service.recordOperation('GET /user', status);
+			await flushRdOperations();
 
-			await service.recordOperation('GET /user', 500);
-
-			expect(prismaMock.rdOperationalHourly.upsert).toHaveBeenCalledWith(
-				expect.objectContaining({
-					create: expect.objectContaining({
-						successCount: 0,
-						failureCount: 1,
-						otherCount: 0,
-					}),
-				})
-			);
+			const { sql, values } = written();
+			expect(sql).toContain('ON DUPLICATE KEY UPDATE');
+			// hour, operation, total, success, failure, other
+			expect(values.slice(1)).toEqual(['GET /user', 4, 2, 1, 1]);
 		});
 
-		it('upserts with other increment for 4xx status', async () => {
-			prismaMock.rdOperationalHourly.upsert.mockResolvedValue({});
+		// One upsert per API call held the hour's row locked through each commit: 1,427 such
+		// updates on RdOperationalHourly waited 5 to 51 s behind each other on 2026-11-10.
+		it('writes many calls as one statement, not one each', async () => {
+			for (let i = 0; i < 50; i++) await service.recordOperation('GET /user', 200);
+			await flushRdOperations();
 
-			await service.recordOperation('GET /user', 404);
-
-			expect(prismaMock.rdOperationalHourly.upsert).toHaveBeenCalledWith(
-				expect.objectContaining({
-					create: expect.objectContaining({
-						successCount: 0,
-						failureCount: 0,
-						otherCount: 1,
-					}),
-				})
-			);
+			expect(prismaMock.$executeRaw).toHaveBeenCalledTimes(1);
+			expect(prismaMock.rdOperationalHourly.upsert).not.toHaveBeenCalled();
+			expect(written().values.slice(1, 4)).toEqual(['GET /user', 50, 50]);
 		});
 
 		it('silently handles P2021 table-not-exist errors', async () => {
-			prismaMock.rdOperationalHourly.upsert.mockRejectedValue({ code: 'P2021' });
-
-			await expect(service.recordOperation('GET /user', 200)).resolves.toBeUndefined();
+			prismaMock.$executeRaw.mockRejectedValue({ code: 'P2021' });
+			await service.recordOperation('GET /user', 200);
+			await expect(flushRdOperations()).resolves.toBeUndefined();
 		});
 
 		it('logs other errors without throwing', async () => {
 			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-			prismaMock.rdOperationalHourly.upsert.mockRejectedValue(new Error('connection lost'));
-
-			await expect(service.recordOperation('GET /user', 200)).resolves.toBeUndefined();
-
+			prismaMock.$executeRaw.mockRejectedValue(new Error('connection lost'));
+			await service.recordOperation('GET /user', 200);
+			await expect(flushRdOperations()).resolves.toBeUndefined();
 			expect(consoleSpy).toHaveBeenCalledWith(
-				'Failed to record RD operation:',
+				'Failed to record RD operations:',
 				expect.any(Error)
 			);
 			consoleSpy.mockRestore();
