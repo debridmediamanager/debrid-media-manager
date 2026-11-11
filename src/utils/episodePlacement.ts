@@ -199,6 +199,19 @@ export function parseName(name: string): {
 	};
 }
 
+/**
+ * The season pages a show's release belongs on, ascending; empty when its name names no
+ * season. DMM's one answer for every writer of `tv:<imdb>:<season>` (scraps' hashlist ingest
+ * reads it from `/api/metadata/identify`). A fansub's `S2 - 15` is season 2 alone; anything
+ * else is every season `namedSeasons` reads (`South Park Season 1 - 26` is 26 of them). Always
+ * within `namedSeasons`, so the verdict job never moves a release off a page this filed it on.
+ */
+export function releaseSeasons(name: string): number[] {
+	const fansub = fansubShaped(name) ? FANSUB_SEASON.exec(name) : null;
+	const seasons = fansub ? [Number(fansub[1] ?? fansub[2])] : [...namedSeasons(name)];
+	return seasons.sort((a, b) => a - b);
+}
+
 // `Season 6`, `Stagione 6`, `S2 (2009-11)`, `Saturday Night Live -  Season 05`; `Season 2006` names none.
 const FOLDER_SEASON =
 	/(?:^|[\s._-])(?:season|stagione|staffel|saison|temporada|s)[\s._-]*(\d{1,2})(?:$|[^\d\-–+&,e])/i;

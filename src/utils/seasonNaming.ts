@@ -37,10 +37,13 @@ const SEP = '[ ._\\-_()\\[\\]]*';
  * Words that introduce a season number. English plus the ones real release
  * groups ship - measured in the corpus: `Temporada` (Spanish/Portuguese),
  * `saison` (French), `Sezon`/`sezona` (Slavic), `Сезон` (Russian), and
- * `Staffel`/`stagione` for good measure.
+ * `Staffel`/`stagione` for good measure. DMM's shared hashlists add British
+ * `Series 1`, Czech `Série 1`, `4. serie`, Dutch `Seizoen` and Hungarian `1. Évad`
+ * (`hashlist-names-2026-11-11.json`). `series` leads `s[ée]rie`, so `Series 1` is not
+ * read as `serie` and an `s`.
  */
 const SEASON_WORDS =
-	'seasons?|temporadas?|saisons?|stagioni|stagione|staffel|sezona?|sezon|сезон[а-я]*';
+	'seasons?|temporadas?|saisons?|stagioni|stagione|staffel|series|s[ée]rie|seizoen|[ée]vad|sez[óo]na?|sezon|сезон[а-я]*';
 
 const S_TOKEN = new RegExp(`(?:^|[^A-Za-z0-9])s(\\d{1,2})(?![0-9])`, 'gi');
 const S_RANGE = new RegExp(
@@ -50,19 +53,30 @@ const S_RANGE = new RegExp(
 /** `[S1S2S3]`: tokens written back to back, where only the first follows a separator. */
 const S_CHAIN = /(?:^|[^A-Za-z0-9])((?:s\d{1,2}){2,})(?![0-9])/gi;
 const SEASON_WORD = new RegExp(SEASON_WORDS, 'gi');
-/** `3ª Temporada`, `2nd Season` - the number leads the word instead of following it. */
-const LEADING_NUMBER = new RegExp(`(\\d{1,2})(?:st|nd|rd|th|ª|°)?${SEP}(?:${SEASON_WORDS})`, 'gi');
+/**
+ * `3ª Temporada`, `2nd Season` - the number leads the word instead of following it. Never
+ * a year's last digits: `Grimm 2011 Season 1` and `(2016) Season 1-6` name no season 11 or 16.
+ */
+const LEADING_NUMBER = new RegExp(
+	`(?:^|[^0-9])(\\d{1,2})(?:st|nd|rd|th|ª|°)?${SEP}(?:${SEASON_WORDS})`,
+	'gi'
+);
 
-// `Season #23`: a number sign may lead the number
-const NUMBER_RUN = new RegExp(`^${SEP}#?(\\d{1,2})(?:st|nd|rd|th|ª|°)?(?![0-9])`, 'i');
+// `Season #23`: a number sign may lead the number; `Series.1.2of5` is its second of five
+// episodes and `Complete Series [ 4K ]` its resolution
+const NUMBER_RUN = new RegExp(
+	`^${SEP}#?(\\d{1,2})(?:st|nd|rd|th|ª|°)?(?![0-9]|of\\d|k(?![a-z]))`,
+	'i'
+);
 /**
  * What may join two numbers in a list. A bare space or dot counts, because
  * `Seasons 1.2.3.4.5` and `Season 1 2 3 4 5 6 7 8 9 10` are both real - and a
  * resolution cannot be mistaken for a season here, since `1080p` fails the
  * two-digit-then-non-digit test above.
  */
+// a word links only as a word: `Season 19 E19-48` is season 19's episodes, not seasons 19 `e` 19-48
 const NUMBER_LINK = new RegExp(
-	`^(?:${SEP}(?:,|&|\\+|and|y|e|·|-|–|—|~|to|thru|through)${SEP}|[ .]+)`,
+	`^(?:${SEP}(?:,|&|\\+|(?:and|y|e|to|thru|through)(?![a-z0-9])|·|-|–|—|~)${SEP}|[ .]+)`,
 	'i'
 );
 const RANGE_LINK = new RegExp(`^${SEP}(?:-|–|—|~|to|thru|through)${SEP}$`, 'i');
@@ -96,6 +110,10 @@ export function namedSeasons(title: string): Set<number> {
 	}
 	for (const match of title.matchAll(LEADING_NUMBER)) {
 		found.add(Number(match[1]));
+	}
+	// `6x23`, `2X21`, `[01x01-04 из 08]`; `7.1x265` is the audio and the codec
+	for (const match of title.matchAll(NXM)) {
+		if (!/^26[45]$/.test(match[2])) found.add(Number(match[1]));
 	}
 
 	// The word form, followed by a run of numbers that may be a list, a range,

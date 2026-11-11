@@ -109,9 +109,12 @@ const FOREIGN_SEASON_WORD =
 const FOREIGN_SEASON_WORD_AFTER =
 	/(\d{1,2})(?:st|nd|rd|th|ª|°)?[\s._]*(?:temporadas?|saisons?|stagion[ei]|staffel|sezon[ae]?)/gi;
 const CJK_SEASON = /第\s?(\d{1,2})\s?季/g;
+// `The Bear (2022) Season - 3 Complete`: the season, which namedSeasons reads, not episode 3
+const DASHED_SEASON = /\bseason[\s._]*-[\s._]*(\d{1,2})(?![0-9])/gi;
 
 const asEnglishSeasons = (name: string) =>
 	name
+		.replace(DASHED_SEASON, ' Season $1 ')
 		.replace(FOREIGN_SEASON_WORD, ' Season $1 ')
 		.replace(FOREIGN_SEASON_WORD_AFTER, ' Season $1 ')
 		.replace(CJK_SEASON, ' Season $1 ');

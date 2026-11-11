@@ -7,16 +7,19 @@ import releases from '@/test/fixtures/placement/releases.json';
 import saga from '@/test/fixtures/placement/saga-titles.json';
 import hard from '@/test/fixtures/placement/unplaced-episodes.json';
 import frierenAddons from '@/test/fixtures/seasonEpisodes/addons-tt22248376-s1.json';
+import hashlistNames from '@/test/fixtures/seasonNaming/hashlist-names-2026-11-11.json';
 import {
 	airDates,
 	alignTvdb,
 	fileNumbers,
 	normalizeTitle,
 	parseName,
+	releaseSeasons,
 	stackedParts,
 	titleText,
 	type ListedEpisode,
 } from '@/utils/episodePlacement';
+import { namedSeasons } from '@/utils/seasonNaming';
 import { describe, expect, it } from 'vitest';
 
 const release = (name: string) => releases.find((c) => c.request.name.startsWith(name))!.request;
@@ -372,5 +375,30 @@ describe('a part a file names after its episode', () => {
 		const name =
 			'Friends.S06E24.The.One.with.the.Proposal.Part.1.1080p.BluRay.REMUX.AVC.DD.5.1-NOGRP.mkv';
 		expect(fileNumbers('', '', name, false)).toEqual({ season: 6, episode: 24, end: null });
+	});
+});
+
+describe('releaseSeasons', () => {
+	it.each(hashlistNames.cases)('$name holds seasons $seasons', ({ name, seasons }) => {
+		expect(releaseSeasons(name)).toEqual(seasons);
+	});
+
+	it('reads a fansub season alone, where namedSeasons reads a range', () => {
+		const name = '[SubsPlease] Tower of God S2 - 01 (1080p) [D0A6D666].mkv';
+		expect(releaseSeasons(name)).toEqual([2]);
+		expect(releaseSeasons('[SubsPlease] Honzuki no Gekokujou S3 - 23 (1080p).mkv')).toEqual([
+			3,
+		]);
+	});
+
+	// the verdict job moves a release off a page namedSeasons says it does not name
+	it('only files a release on a page namedSeasons agrees it names', () => {
+		for (const { name } of [
+			...hashlistNames.cases,
+			{ name: '[SubsPlease] Honzuki no Gekokujou S3 - 23 (1080p).mkv' },
+		]) {
+			const named = namedSeasons(name);
+			expect(releaseSeasons(name).filter((s) => !named.has(s))).toEqual([]);
+		}
 	});
 });

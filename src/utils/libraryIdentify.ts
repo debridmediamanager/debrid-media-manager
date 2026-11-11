@@ -7,6 +7,8 @@ export interface LibraryIdentification {
 	year: number | null;
 	/** What the identifier found the release to be, whatever the library guessed. */
 	kind: 'movie' | 'tv';
+	/** A show's season pages by its name (`releaseSeasons`); absent on a movie. */
+	seasons?: number[];
 }
 
 /** Items per request; the route's own ceiling. */

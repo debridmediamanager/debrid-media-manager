@@ -8,7 +8,7 @@ import type { FilenameIdentification } from '@/services/database/hashImdb';
 import { cachedSources } from '@/services/placement';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
-import { parseName } from '@/utils/episodePlacement';
+import { parseName, releaseSeasons } from '@/utils/episodePlacement';
 import type { LibraryIdentification } from '@/utils/libraryIdentify';
 import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import { createHash } from 'crypto';
@@ -185,7 +185,13 @@ export async function identifyItems(
 			.catch((error) => console.error('Failed to confirm library identifications', error));
 	}
 
-	return { results, complete: missing.length === 0 || answers !== null };
+	return {
+		// a show's seasons are read from the name it was asked under, cached answer or not
+		results: results.map((r, n) =>
+			r?.kind === 'tv' ? { ...r, seasons: releaseSeasons(items[n].filename) } : r
+		),
+		complete: missing.length === 0 || answers !== null,
+	};
 }
 
 /** A stored answer as the page reads it: null unless it was confident. */

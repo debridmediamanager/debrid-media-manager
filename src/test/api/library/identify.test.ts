@@ -112,6 +112,37 @@ describe('/api/library/identify', () => {
 		});
 	});
 
+	it("reads a stored show's seasons from the name it was asked under", async () => {
+		const name =
+			'This Is Us (2016) Season 1-6 S01-S06 (1080p AMZN WEB-DL x265 HEVC 10bit EAC3 5.1 Silence)';
+		mockRepository.getFilenameIdentifications = vi.fn().mockResolvedValue([
+			{
+				...storedMadMax,
+				titleKey: key(name),
+				filename: name,
+				kind: 'tv',
+				imdbId: 'tt5555260',
+				title: 'This Is Us',
+				year: 2016,
+			},
+		]);
+		const res = await call({ items: [{ hash: H1, filename: name }] });
+
+		expect(mockIdentify).not.toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith({
+			results: [
+				{
+					imdbId: 'tt5555260',
+					title: 'This Is Us',
+					year: 2016,
+					kind: 'tv',
+					seasons: [1, 2, 3, 4, 5, 6],
+				},
+			],
+			complete: true,
+		});
+	});
+
 	it('asks once for movies and shows alike and returns the kind the service found', async () => {
 		mockIdentify.mockResolvedValue([
 			confident('tt10954600', 'Ant-Man and the Wasp: Quantumania', 2023),
@@ -143,7 +174,14 @@ describe('/api/library/identify', () => {
 		expect(res.json).toHaveBeenCalledWith({
 			results: [
 				quantumania,
-				{ imdbId: 'tt12057106', title: 'Tower of God', year: 2020, kind: 'tv' },
+				// a fansub's `S2 - 01` is season 2 alone, not seasons 1 to 2
+				{
+					imdbId: 'tt12057106',
+					title: 'Tower of God',
+					year: 2020,
+					kind: 'tv',
+					seasons: [2],
+				},
 				null,
 				quantumania,
 			],
@@ -288,6 +326,8 @@ describe('/api/library/identify', () => {
 					title: 'One Piece Log: Fish-Man Island Saga',
 					year: 2024,
 					kind: 'tv',
+					// an arc and an episode name no season page
+					seasons: [],
 				},
 				null,
 			],
@@ -423,7 +463,13 @@ describe('/api/library/identify', () => {
 		});
 
 		const dbz = { imdbId: 'tt0121220', title: 'Dragon Ball Z', year: 1989, kind: 'tv' };
-		expect(res.json).toHaveBeenCalledWith({ results: [dbz, dbz], complete: true });
+		expect(res.json).toHaveBeenCalledWith({
+			results: [
+				{ ...dbz, seasons: [1] },
+				{ ...dbz, seasons: [4] },
+			],
+			complete: true,
+		});
 		expect(mockRepository.saveFilenameIdentifications).toHaveBeenCalledWith([
 			expect.objectContaining({
 				hash: H2.toLowerCase(),
@@ -444,7 +490,9 @@ describe('/api/library/identify', () => {
 		const res = await call({ items: [{ filename: onePiece.case.filename }] });
 
 		expect(res.json).toHaveBeenCalledWith({
-			results: [{ imdbId: 'tt0388629', title: 'One Piece', year: 1999, kind: 'tv' }],
+			results: [
+				{ imdbId: 'tt0388629', title: 'One Piece', year: 1999, kind: 'tv', seasons: [22] },
+			],
 			complete: true,
 		});
 	});
