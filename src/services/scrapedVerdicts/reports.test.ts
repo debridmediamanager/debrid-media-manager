@@ -90,12 +90,12 @@ describe('reviewReports', () => {
 		const confirmed = await reviewReports('tt15791034', ['aa'], 'porn', db, file);
 
 		expect(confirmed).toEqual(['aa']);
-		expect(file).toHaveBeenCalledWith('aa');
+		expect(file).toHaveBeenCalledWith('aa', 'confirmed');
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 		expect(db.addTokensSpent).toHaveBeenCalledWith(expect.any(String), 7);
 	});
 
-	it('does not file a movie report on a release content-identifier names as the movie', async () => {
+	it('marks a movie report disputed when content-identifier names the release as the movie', async () => {
 		vi.stubEnv('CONTENT_IDENTIFIER_URL', 'http://identifier.test');
 		// content-identifier's answer for this filename, read 2026-10-18
 		const identified = {
@@ -117,7 +117,8 @@ describe('reviewReports', () => {
 		const file = vi.fn(async () => {});
 
 		await expect(reviewReports('tt15791034', ['aa'], 'porn', db, file)).resolves.toEqual([]);
-		expect(file).not.toHaveBeenCalled();
+		expect(file).toHaveBeenCalledWith('aa', 'disputed');
+		expect(file).toHaveBeenCalledTimes(1);
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 		expect(String((fetchMock.mock.calls[0] as unknown[])[0])).toContain('identifier.test');
 	});
@@ -140,12 +141,14 @@ describe('reviewReports', () => {
 		await expect(reviewReports(row.imdbId, ['aa'], 'wrong_imdb', db, file)).resolves.toEqual([
 			'aa',
 		]);
-		expect(file).toHaveBeenCalledWith('aa');
+		expect(file).toHaveBeenCalledWith('aa', 'confirmed');
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 		expect(db.addTokensSpent).not.toHaveBeenCalled();
 	});
 
-	it('does not file a movie report Jev disagrees with', async () => {
+	// Since the review queue (2026-11-11) a disagreement is recorded, so the queue can
+	// tell "the model looked and disagrees" from "never judged".
+	it('marks a movie report disputed when Jev disagrees with it', async () => {
 		jevAnswers('FILM', 'SAME_TITLE');
 		const db = fakeDb({
 			getFilenames: vi.fn(async () => new Map([['bb', 'Barbarian.2022.1080p.WEB-DL.mkv']])),
@@ -154,7 +157,8 @@ describe('reviewReports', () => {
 		const file = vi.fn(async () => {});
 
 		expect(await reviewReports('tt15791034', ['bb'], 'wrong_imdb', db, file)).toEqual([]);
-		expect(file).not.toHaveBeenCalled();
+		expect(file).toHaveBeenCalledWith('bb', 'disputed');
+		expect(file).toHaveBeenCalledTimes(1);
 	});
 
 	it('reuses a stored verdict without asking Jev', async () => {
@@ -204,5 +208,34 @@ describe('reviewReports', () => {
 		});
 		expect(await reviewReports('tt1', ['ff'], 'porn', db, vi.fn())).toEqual([]);
 		expect(fetchMock).not.toHaveBeenCalled();
+	});
+});
+
+describe('reviewReports with another model', () => {
+	beforeEach(() => {
+		forgetIdentifications();
+		vi.stubEnv('OPENROUTER_VERDICTS_KEY', 'test-key');
+	});
+	afterEach(() => {
+		vi.unstubAllEnvs();
+		vi.unstubAllGlobals();
+	});
+
+	it('asks that model with reasoning off, and files a show report it disputes', async () => {
+		const fetchMock = jevAnswers('TV', 'SAME_TITLE');
+		const db = fakeDb({
+			getFilenames: vi.fn(async () => new Map([['gg', 'Some.Show.S01E01.1080p.mkv']])),
+			getShowTitles: vi.fn(async () => ({ titles: ['Some Show'], year: 2020 })),
+		});
+		const file = vi.fn(async () => {});
+		const model = 'deepseek/deepseek-v4.1-flash-1017';
+
+		expect(await reviewReports('tt2', ['gg'], 'wrong_imdb', db, file, { model })).toEqual([]);
+		const body = JSON.parse(
+			(fetchMock.mock.calls[0] as unknown as [string, RequestInit])[1].body as string
+		);
+		expect(body.model).toBe(model);
+		expect(body.reasoning).toEqual({ enabled: false });
+		expect(file).toHaveBeenCalledWith('gg', 'disputed');
 	});
 });

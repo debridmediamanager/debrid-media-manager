@@ -1,4 +1,5 @@
-import type { ReportType } from '@/services/reporterId';
+import { JEV_DISPUTED, JEV_REPORTER, type ReportType } from '@/services/reporterId';
+import { Prisma } from '@prisma/client';
 import { DatabaseClient } from './client';
 
 export class ReportService extends DatabaseClient {
@@ -86,11 +87,27 @@ export class ReportService extends DatabaseClient {
 		}
 	}
 
+	/** The undecided pairs the model's verdict selects; built per query, never at module load. */
+	private modelHaving(filter: ModelFilter): Prisma.Sql {
+		switch (filter) {
+			case 'agrees':
+				return Prisma.sql`HAVING SUM(r.userId = ${JEV_REPORTER}) > 0`;
+			case 'disagrees':
+				return Prisma.sql`HAVING SUM(r.userId = ${JEV_DISPUTED}) > 0 AND SUM(r.userId = ${JEV_REPORTER}) = 0`;
+			case 'unjudged':
+				return Prisma.sql`HAVING SUM(r.userId IN (${JEV_REPORTER}, ${JEV_DISPUTED})) = 0`;
+			default:
+				return Prisma.empty;
+		}
+	}
+
 	/** One page of the review queue, newest report first, and how many wait in all. */
 	public async listUndecidedReports(
 		take: number,
-		skip: number
+		skip: number,
+		filter: ModelFilter = 'all'
 	): Promise<{ total: number; pairs: ReportPair[] }> {
+		const having = this.modelHaving(filter);
 		const [pairs, counted] = await Promise.all([
 			this.prisma.$queryRaw<ReportPair[]>`
 				SELECT r.imdbId, r.hash
@@ -98,6 +115,7 @@ export class ReportService extends DatabaseClient {
 				LEFT JOIN ReportDecision d ON d.imdbId = r.imdbId AND d.hash = r.hash
 				WHERE d.hash IS NULL
 				GROUP BY r.imdbId, r.hash
+				${having}
 				ORDER BY MAX(r.createdAt) DESC
 				LIMIT ${take} OFFSET ${skip}`,
 			this.prisma.$queryRaw<{ total: bigint }[]>`
@@ -106,9 +124,44 @@ export class ReportService extends DatabaseClient {
 					LEFT JOIN ReportDecision d ON d.imdbId = r.imdbId AND d.hash = r.hash
 					WHERE d.hash IS NULL
 					GROUP BY r.imdbId, r.hash
+					${having}
 				) pending`,
 		]);
 		return { total: Number(counted[0]?.total ?? 0), pairs };
+	}
+
+	/** How many undecided pairs each model filter holds. */
+	public async countUndecidedByModel(): Promise<Record<ModelFilter, number>> {
+		const [row] = await this.prisma.$queryRaw<Record<ModelFilter, bigint | null>[]>`
+			SELECT COUNT(*) AS \`all\`,
+				SUM(agrees > 0) AS agrees,
+				SUM(disputed > 0 AND agrees = 0) AS disagrees,
+				SUM(agrees = 0 AND disputed = 0) AS unjudged
+			FROM (
+				SELECT SUM(r.userId = ${JEV_REPORTER}) AS agrees, SUM(r.userId = ${JEV_DISPUTED}) AS disputed
+				FROM Report r
+				LEFT JOIN ReportDecision d ON d.imdbId = r.imdbId AND d.hash = r.hash
+				WHERE d.hash IS NULL
+				GROUP BY r.imdbId, r.hash
+			) pending`;
+		return {
+			all: Number(row?.all ?? 0),
+			agrees: Number(row?.agrees ?? 0),
+			disagrees: Number(row?.disagrees ?? 0),
+			unjudged: Number(row?.unjudged ?? 0),
+		};
+	}
+
+	/** Keeps every undecided pair the model disputed and never confirmed. Returns how many. */
+	public async keepModelDisputed(note: string): Promise<number> {
+		return this.prisma.$executeRaw`
+			INSERT INTO ReportDecision (imdbId, hash, decision, note, decidedAt)
+			SELECT r.imdbId, r.hash, 'dismissed', ${note}, NOW(3)
+			FROM Report r
+			LEFT JOIN ReportDecision d ON d.imdbId = r.imdbId AND d.hash = r.hash
+			WHERE d.hash IS NULL
+			GROUP BY r.imdbId, r.hash
+			${this.modelHaving('disagrees')}`;
 	}
 
 	/** One page of decided pairs, latest decision first. */
@@ -166,6 +219,7 @@ export class ReportService extends DatabaseClient {
 
 export type ReportPair = { imdbId: string; hash: string };
 export type ReportDecisionKind = 'approved' | 'dismissed';
+export type ModelFilter = 'all' | 'agrees' | 'disagrees' | 'unjudged';
 export type ReportDecisionRow = ReportPair & {
 	decision: ReportDecisionKind;
 	note: string | null;

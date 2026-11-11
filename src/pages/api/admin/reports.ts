@@ -1,11 +1,12 @@
 import {
+	type ModelFilter,
 	type ReportDecisionKind,
 	type ReportPair,
 	ReportService,
 } from '@/services/database/report';
 import { ScrapedVerdictService } from '@/services/database/scrapedVerdict';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
-import { JEV_REPORTER } from '@/services/reporterId';
+import { isModelReporter, JEV_DISPUTED, JEV_REPORTER } from '@/services/reporterId';
 import { isAdmin } from '@/utils/adminToken';
 import { NextApiHandler } from 'next';
 
@@ -17,6 +18,7 @@ export const REPORTS_PAGE_SIZE = 25;
 const STATUSES = ['pending', 'approved', 'dismissed'] as const;
 type Status = (typeof STATUSES)[number];
 const ACTIONS = { approve: 'approved', dismiss: 'dismissed' } as const;
+const MODEL_FILTERS: ModelFilter[] = ['all', 'agrees', 'disagrees', 'unjudged'];
 
 export type AdminReport = ReportPair & {
 	/** The release name DMM has for this hash on this title, if it still has one. */
@@ -24,8 +26,8 @@ export type AdminReport = ReportPair & {
 	types: string[];
 	/** Distinct people who reported it. */
 	reporters: number;
-	/** The verdict model judged the report right. A hint, never a decision. */
-	modelAgrees: boolean;
+	/** The verdict model's view of the report. A hint, never a decision; null = not judged. */
+	model: 'agrees' | 'disagrees' | null;
 	lastReportedAt: string;
 	decision: ReportDecisionKind | null;
 	note: string | null;
@@ -54,7 +56,7 @@ async function describe(
 	);
 	return pairs.map((pair) => {
 		const mine = filed.filter((r) => r.imdbId === pair.imdbId && r.hash === pair.hash);
-		const people = mine.filter((r) => r.userId !== JEV_REPORTER);
+		const people = mine.filter((r) => !isModelReporter(r.userId));
 		const last = Math.max(0, ...mine.map((r) => r.createdAt.getTime()));
 		return {
 			imdbId: pair.imdbId,
@@ -62,7 +64,11 @@ async function describe(
 			filename: names.get(`${pair.imdbId}:${pair.hash}`) ?? null,
 			types: [...new Set(mine.map((r) => r.type))].sort(),
 			reporters: new Set(people.map((r) => r.userId)).size,
-			modelAgrees: mine.some((r) => r.userId === JEV_REPORTER),
+			model: mine.some((r) => r.userId === JEV_REPORTER)
+				? 'agrees'
+				: mine.some((r) => r.userId === JEV_DISPUTED)
+					? 'disagrees'
+					: null,
 			lastReportedAt: new Date(last).toISOString(),
 			decision: pair.decision ?? null,
 			note: pair.note ?? null,
@@ -82,8 +88,12 @@ const handler: NextApiHandler = async (req, res) => {
 		const page = Math.max(0, Math.min(10_000, Number(req.query.page) || 0));
 		const skip = page * REPORTS_PAGE_SIZE;
 		if (status === 'pending') {
-			const { total, pairs } = await reports.listUndecidedReports(REPORTS_PAGE_SIZE, skip);
-			return res.status(200).json({ total, items: await describe(pairs) });
+			const model = MODEL_FILTERS.find((f) => f === req.query.model) ?? 'all';
+			const [{ total, pairs }, counts] = await Promise.all([
+				reports.listUndecidedReports(REPORTS_PAGE_SIZE, skip, model),
+				reports.countUndecidedByModel(),
+			]);
+			return res.status(200).json({ total, counts, items: await describe(pairs) });
 		}
 		const { total, decisions } = await reports.listDecidedReports(
 			status,
@@ -98,6 +108,12 @@ const handler: NextApiHandler = async (req, res) => {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 	const { imdbId, hash, action, note } = req.body ?? {};
+	if (action === 'keepModelDisputed') {
+		const kept = await reports.keepModelDisputed(
+			'Kept in bulk: the model disagreed with every report'
+		);
+		return res.status(200).json({ kept });
+	}
 	if (typeof imdbId !== 'string' || !IMDB_ID.test(imdbId)) {
 		return res.status(400).json({ error: 'imdbId is tt followed by digits' });
 	}

@@ -50,10 +50,17 @@ type ChatResponse = {
 const offered = (value: unknown, allowed: object) =>
 	typeof value === 'string' && Object.hasOwn(allowed, value);
 
+/**
+ * `model` runs another OpenRouter model on the same prompt, with reasoning off: the
+ * report backlog uses DeepSeek v4.1 Flash, which scored 98.8% on the same 600 names.
+ */
+export type ModelOptions = { model?: string };
+
 async function ask(
 	apiKey: string,
 	movie: { titles: string[]; year: number },
-	filenames: string[]
+	filenames: string[],
+	{ model = MODEL }: ModelOptions = {}
 ): Promise<ModelResult> {
 	const user = [
 		'Movie titles:',
@@ -68,9 +75,11 @@ async function ask(
 		method: 'POST',
 		headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
 		body: JSON.stringify({
-			model: MODEL,
+			model,
 			temperature: 0,
 			response_format: { type: 'json_object' },
+			// thinking multiplies the output tokens and changes nothing on two labels
+			...(model === MODEL ? {} : { reasoning: { enabled: false } }),
 			messages: [
 				{ role: 'system', content: SYSTEM },
 				{ role: 'user', content: user },
@@ -98,7 +107,7 @@ async function ask(
 	});
 	return {
 		answers,
-		model: body.model ?? MODEL,
+		model: body.model ?? model,
 		tokens: (body.usage?.prompt_tokens ?? 0) + (body.usage?.completion_tokens ?? 0),
 	};
 }
@@ -111,16 +120,18 @@ async function ask(
 export async function classifyFilenames(
 	apiKey: string,
 	movie: { titles: string[]; year: number },
-	filenames: string[]
+	filenames: string[],
+	options: ModelOptions = {}
 ): Promise<ModelResult> {
 	const answers: (ModelAnswer | null)[] = [];
-	let model = MODEL;
+	let model = options.model ?? MODEL;
 	let tokens = 0;
 	for (let start = 0; start < filenames.length; start += FILENAMES_PER_REQUEST) {
 		const batch = await ask(
 			apiKey,
 			movie,
-			filenames.slice(start, start + FILENAMES_PER_REQUEST)
+			filenames.slice(start, start + FILENAMES_PER_REQUEST),
+			options
 		);
 		answers.push(...batch.answers);
 		model = batch.model;

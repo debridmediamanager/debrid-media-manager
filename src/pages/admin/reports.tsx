@@ -10,6 +10,18 @@ const STATUSES = [
 	['dismissed', 'Kept'],
 ] as const;
 type Status = (typeof STATUSES)[number][0];
+const MODEL_FILTERS = [
+	['all', 'All'],
+	['agrees', 'Model agrees'],
+	['disagrees', 'Model disagrees'],
+	['unjudged', 'Not judged'],
+] as const;
+type ModelFilter = (typeof MODEL_FILTERS)[number][0];
+type ReportsPage = {
+	total: number;
+	items: AdminReport[];
+	counts?: Record<ModelFilter, number>;
+};
 type Action = 'approve' | 'dismiss' | 'reopen';
 
 const PAGE_SIZE = 25;
@@ -68,9 +80,13 @@ function ReportCard({
 				<span className="rounded bg-gray-700 px-2 py-0.5 text-gray-200">
 					{report.reporters} {report.reporters === 1 ? 'reporter' : 'reporters'}
 				</span>
-				{report.modelAgrees ? (
+				{report.model === 'agrees' ? (
 					<span className="rounded bg-yellow-900/60 px-2 py-0.5 text-yellow-200">
 						model agrees
+					</span>
+				) : report.model === 'disagrees' ? (
+					<span className="rounded bg-cyan-900/60 px-2 py-0.5 text-cyan-200">
+						model disagrees
 					</span>
 				) : null}
 			</p>
@@ -114,19 +130,22 @@ function ReportCard({
 
 function Reports({ adminFetch }: { adminFetch: AdminFetch }) {
 	const [status, setStatus] = useState<Status>('pending');
+	const [model, setModel] = useState<ModelFilter>('all');
 	const [page, setPage] = useState(0);
-	const [data, setData] = useState<{ total: number; items: AdminReport[] } | null>(null);
+	const [data, setData] = useState<ReportsPage | null>(null);
 	const [message, setMessage] = useState<string | null>(null);
 
 	const load = useCallback(async () => {
-		const res = await adminFetch(`/api/admin/reports?status=${status}&page=${page}`);
+		const res = await adminFetch(
+			`/api/admin/reports?status=${status}&model=${model}&page=${page}`
+		);
 		if (!res.ok) {
 			setData(null);
 			if (res.status !== 401) setMessage(`Loading failed (${res.status}).`);
 			return;
 		}
 		setData(await res.json());
-	}, [adminFetch, status, page]);
+	}, [adminFetch, status, model, page]);
 
 	useEffect(() => {
 		void load();
@@ -153,6 +172,30 @@ function Reports({ adminFetch }: { adminFetch: AdminFetch }) {
 		await load();
 	};
 
+	const keepDisputed = async () => {
+		const count = data?.counts?.disagrees ?? 0;
+		if (
+			!window.confirm(
+				`Keep all ${count} releases the model disagreed with? They stay visible.`
+			)
+		) {
+			return;
+		}
+		const res = await adminFetch('/api/admin/reports', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ action: 'keepModelDisputed' }),
+		});
+		const reply = await res.json().catch(() => ({}));
+		setMessage(
+			res.ok
+				? `Kept ${reply.kept} releases.`
+				: (reply.error ?? `That failed (${res.status}).`)
+		);
+		setPage(0);
+		await load();
+	};
+
 	const pages = data ? Math.max(1, Math.ceil(data.total / PAGE_SIZE)) : 1;
 
 	return (
@@ -164,6 +207,7 @@ function Reports({ adminFetch }: { adminFetch: AdminFetch }) {
 						onClick={() => {
 							setMessage(null);
 							setPage(0);
+							setModel('all');
 							setStatus(key);
 						}}
 						className={`rounded px-3 py-1 text-sm ${
@@ -177,6 +221,35 @@ function Reports({ adminFetch }: { adminFetch: AdminFetch }) {
 					</button>
 				))}
 			</div>
+			{status === 'pending' && data?.counts ? (
+				<div className="flex flex-wrap items-center gap-2 text-xs">
+					{MODEL_FILTERS.map(([key, label]) => (
+						<button
+							key={key}
+							onClick={() => {
+								setMessage(null);
+								setPage(0);
+								setModel(key);
+							}}
+							className={`rounded-full px-3 py-1 ${
+								key === model
+									? 'bg-cyan-800 text-white'
+									: 'border border-gray-600 text-gray-300 hover:bg-gray-800'
+							}`}
+						>
+							{label} ({data.counts![key]})
+						</button>
+					))}
+					{model === 'disagrees' && data.counts.disagrees > 0 ? (
+						<button
+							onClick={() => void keepDisputed()}
+							className="rounded border border-gray-500 px-3 py-1 text-gray-100 hover:bg-gray-800"
+						>
+							Keep all {data.counts.disagrees}
+						</button>
+					) : null}
+				</div>
+			) : null}
 			{message ? <p className="text-sm text-yellow-300">{message}</p> : null}
 			{data?.items.length === 0 ? (
 				<p className="text-sm text-gray-400">Nothing here.</p>

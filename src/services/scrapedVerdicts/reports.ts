@@ -1,9 +1,9 @@
 import { ScrapedVerdictService, titleKeyOf } from '@/services/database/scrapedVerdict';
-import { JEV_REPORTER, type ReportType } from '@/services/reporterId';
+import { JEV_DISPUTED, JEV_REPORTER, type ReportType } from '@/services/reporterId';
 import { repository } from '@/services/repository';
 import { identifiedAnswers } from './identified';
 import { ENGINE, underBudget, utcDay } from './job';
-import { classifyFilenames, modelKey } from './model';
+import { classifyFilenames, modelKey, type ModelOptions } from './model';
 import { decide, decideWithoutModel } from './rules';
 
 /**
@@ -26,14 +26,26 @@ export type { ReportType };
 let service: ScrapedVerdictService | undefined;
 const verdicts = () => (service ??= new ScrapedVerdictService());
 
-/** Returns the hashes the identifier or Jev confirmed, after filing each under `JEV_REPORTER`. */
+export type ModelVerdict = 'confirmed' | 'disputed';
+
+/**
+ * Returns the hashes the identifier or Jev confirmed. Each judged hash is filed:
+ * `confirmed` under `JEV_REPORTER`, `disputed` (the release looks right for the
+ * title) under `JEV_DISPUTED`. A hash nothing could judge is filed under neither.
+ */
 export async function reviewReports(
 	imdbId: string,
 	hashes: string[],
 	type: ReportType,
 	db?: ScrapedVerdictService,
-	file: (hash: string) => Promise<void> = (hash) =>
-		repository.reportContent(hash, imdbId, JEV_REPORTER, type)
+	file: (hash: string, verdict: ModelVerdict) => Promise<void> = (hash, verdict) =>
+		repository.reportContent(
+			hash,
+			imdbId,
+			verdict === 'confirmed' ? JEV_REPORTER : JEV_DISPUTED,
+			type
+		),
+	options: ModelOptions = {}
 ): Promise<string[]> {
 	const key = modelKey();
 	if (!key || type === 'wrong_season' || type === 'malware' || hashes.length === 0) return [];
@@ -44,14 +56,16 @@ export async function reviewReports(
 	const reported = [...filenames];
 
 	const confirmed: string[] = [];
+	const disputed: string[] = [];
+	const judged = (hash: string, trash: boolean) => (trash ? confirmed : disputed).push(hash);
 	const movie = await db.getMovieContext(imdbId);
 	if (movie) {
 		const stored = new Map((await db.getVerdicts(imdbId)).map((v) => [v.titleKey, v.verdict]));
 		let forModel: [string, string][] = [];
 		for (const [hash, title] of reported) {
 			const settled = stored.get(titleKeyOf(title)) ?? decideWithoutModel(movie, title);
-			if (settled === 'trash') confirmed.push(hash);
-			else if (!settled) forModel.push([hash, title]);
+			if (settled) judged(hash, settled === 'trash');
+			else forModel.push([hash, title]);
 		}
 		// a report's few names fit one pass, so none is deferred in practice
 		const { answers: identified } = await identifiedAnswers(
@@ -60,23 +74,22 @@ export async function reviewReports(
 		);
 		for (const [hash, title] of forModel) {
 			const answer = identified.get(title);
-			if (answer && decide(movie, title, answer.media, answer.titleMatch) === 'trash') {
-				confirmed.push(hash);
-			}
+			if (answer)
+				judged(hash, decide(movie, title, answer.media, answer.titleMatch) === 'trash');
 		}
 		forModel = forModel.filter(([, title]) => !identified.has(title));
 		if (forModel.length > 0 && (await underBudget(db))) {
 			const result = await classifyFilenames(
 				key,
 				movie,
-				forModel.map(([, title]) => title)
+				forModel.map(([, title]) => title),
+				options
 			);
 			await db.addTokensSpent(utcDay(), result.tokens);
 			forModel.forEach(([hash, title], i) => {
 				const answer = result.answers[i];
-				if (answer && decide(movie, title, answer.media, answer.titleMatch) === 'trash') {
-					confirmed.push(hash);
-				}
+				if (answer)
+					judged(hash, decide(movie, title, answer.media, answer.titleMatch) === 'trash');
 			});
 		}
 	} else {
@@ -85,21 +98,26 @@ export async function reviewReports(
 		const result = await classifyFilenames(
 			key,
 			show,
-			reported.map(([, title]) => title)
+			reported.map(([, title]) => title),
+			options
 		);
 		await db.addTokensSpent(utcDay(), result.tokens);
 		reported.forEach(([hash], i) => {
 			const answer = result.answers[i];
 			if (!answer) return;
-			if (type === 'porn' ? answer.media === 'ADULT' : answer.titleMatch === 'NO_TITLE') {
-				confirmed.push(hash);
-			}
+			judged(
+				hash,
+				type === 'porn' ? answer.media === 'ADULT' : answer.titleMatch === 'NO_TITLE'
+			);
 		});
 	}
 
-	for (const hash of confirmed) await file(hash);
-	if (confirmed.length > 0) {
-		console.log(`[reports] ${imdbId}: Jev confirmed ${confirmed.length} ${type} (${ENGINE})`);
+	for (const hash of confirmed) await file(hash, 'confirmed');
+	for (const hash of disputed) await file(hash, 'disputed');
+	if (confirmed.length + disputed.length > 0) {
+		console.log(
+			`[reports] ${imdbId}: model confirmed ${confirmed.length}, disputed ${disputed.length} ${type} (${options.model ?? ENGINE})`
+		);
 	}
 	return confirmed;
 }
