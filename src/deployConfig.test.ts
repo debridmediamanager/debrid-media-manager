@@ -228,7 +228,12 @@ describe('production rollout', () => {
 		);
 		expect(web).toMatch(/failure_action: rollback/);
 		expect(seconds(web.match(/^\s+monitor: (\S+)$/m)?.[1] ?? '0s')).toBeGreaterThanOrEqual(30);
-		expect(web).toMatch(/rollback_config:\n\s+order: start-first\n/);
+		expect(web).toMatch(/rollback_config:\n(?:\s+\w+: \S+\n)*\s+order: start-first\n/);
+	});
+
+	// One replica at a time took the rollout from 154 s to 244 s on 2026-11-11.
+	it('replaces two replicas at a time', () => {
+		expect(webServiceBlock()).toMatch(/update_config:\n\s+parallelism: 2\n/);
 	});
 
 	it('bounds each replica, native memory included', () => {

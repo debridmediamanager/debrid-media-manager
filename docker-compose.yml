@@ -59,11 +59,15 @@ services:
         condition: any
       # Start each new replica before stopping an old one; a replica that fails
       # within 30 s rolls the whole service back to the previous image.
+      # Two at a time: each replica takes ~60 s (health interval plus monitor),
+      # and four in series made the rollout 244 s.
       update_config:
+        parallelism: 2
         order: start-first
         failure_action: rollback
         monitor: 30s
       rollback_config:
+        parallelism: 2
         order: start-first
       # Native memory is outside V8's heap limit; this kills one runaway replica
       # rather than letting the host's OOM killer pick a process.
