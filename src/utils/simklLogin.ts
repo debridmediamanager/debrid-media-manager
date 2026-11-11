@@ -19,6 +19,18 @@ import {
 
 export const SIMKL_VERIFIER_KEY = 'simkl:pkceVerifier';
 export const SIMKL_STATE_KEY = 'simkl:oauthState';
+/** Where the user started signing in, so the callback can send them back there. */
+export const SIMKL_RETURN_KEY = 'simkl:returnTo';
+
+// Only a same-origin path: `//host` and `/\host` are other origins to a browser.
+const safeReturnPath = (path: string | null): string =>
+	path &&
+	path.startsWith('/') &&
+	!path.startsWith('//') &&
+	!path.startsWith('/\\') &&
+	!path.startsWith(SIMKL_REDIRECT_PATH)
+		? path
+		: '/';
 
 export const simklRedirectUri = (origin: string): string => `${origin}${SIMKL_REDIRECT_PATH}`;
 
@@ -85,6 +97,7 @@ export async function beginSimklLogin(origin: string): Promise<string> {
 	const codeChallenge = await deriveCodeChallenge(codeVerifier);
 	sessionStorage.setItem(SIMKL_VERIFIER_KEY, codeVerifier);
 	sessionStorage.setItem(SIMKL_STATE_KEY, state);
+	sessionStorage.setItem(SIMKL_RETURN_KEY, window.location.pathname + window.location.search);
 
 	return buildSimklAuthorizeUrl({
 		clientId,
@@ -95,11 +108,17 @@ export async function beginSimklLogin(origin: string): Promise<string> {
 }
 
 /** Reads the parked handshake and clears it, whether or not the state matches. */
-export function takeSimklLoginContext(): { codeVerifier: string; state: string } | null {
+export function takeSimklLoginContext(): {
+	codeVerifier: string;
+	state: string;
+	returnTo: string;
+} | null {
 	const codeVerifier = sessionStorage.getItem(SIMKL_VERIFIER_KEY);
 	const state = sessionStorage.getItem(SIMKL_STATE_KEY);
+	const returnTo = safeReturnPath(sessionStorage.getItem(SIMKL_RETURN_KEY));
 	sessionStorage.removeItem(SIMKL_VERIFIER_KEY);
 	sessionStorage.removeItem(SIMKL_STATE_KEY);
+	sessionStorage.removeItem(SIMKL_RETURN_KEY);
 	if (!codeVerifier || !state) return null;
-	return { codeVerifier, state };
+	return { codeVerifier, state, returnTo };
 }

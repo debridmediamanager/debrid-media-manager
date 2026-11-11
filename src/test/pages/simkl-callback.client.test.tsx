@@ -20,7 +20,7 @@ vi.mock('@/services/simkl', async () => {
 	return { ...actual, exchangeSimklCode: (...args: unknown[]) => exchangeSimklCode(...args) };
 });
 
-import { SIMKL_STATE_KEY, SIMKL_VERIFIER_KEY } from '@/utils/simklLogin';
+import { SIMKL_RETURN_KEY, SIMKL_STATE_KEY, SIMKL_VERIFIER_KEY } from '@/utils/simklLogin';
 
 const push = vi.fn();
 
@@ -70,6 +70,33 @@ describe('Simkl OAuth callback', () => {
 		);
 		expect(exchangeSimklCode).toHaveBeenCalledTimes(1);
 	});
+
+	// A Simkl-only visitor signs in from /simkl/mylists. Sending them to / after
+	// the exchange bounced them to /start, the debrid login, with no sign that
+	// Simkl had connected.
+	it('returns to the page the sign-in started from', async () => {
+		park();
+		sessionStorage.setItem(SIMKL_RETURN_KEY, '/simkl/mylists');
+		exchangeSimklCode.mockResolvedValue(undefined);
+
+		renderAt(approval);
+
+		await waitFor(() => expect(push).toHaveBeenCalledWith('/simkl/mylists'));
+		expect(sessionStorage.getItem(SIMKL_RETURN_KEY)).toBeNull();
+	});
+
+	it.each(['//evil.example/x', 'https://evil.example/', '/\\evil.example', '/auth/simkl?code=x'])(
+		'goes home instead of following the parked path %s',
+		async (returnTo) => {
+			park();
+			sessionStorage.setItem(SIMKL_RETURN_KEY, returnTo);
+			exchangeSimklCode.mockResolvedValue(undefined);
+
+			renderAt(approval);
+
+			await waitFor(() => expect(push).toHaveBeenCalledWith('/'));
+		}
+	);
 
 	it('refuses a code whose state does not match the parked one', async () => {
 		park();

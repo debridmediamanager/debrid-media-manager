@@ -11,6 +11,7 @@ import {
 	beginSimklLogin,
 	getSimklSessionGeneration,
 	notifySimklSessionChange,
+	SIMKL_RETURN_KEY,
 	SIMKL_SESSION_SENTINEL,
 	SIMKL_STATE_KEY,
 	SIMKL_VERIFIER_KEY,
@@ -40,6 +41,13 @@ describe('beginSimklLogin', () => {
 		expect(url.searchParams.get('client_id')).toBe(CLIENT_ID);
 	});
 
+	it('parks the page the sign-in started from', async () => {
+		window.history.replaceState(null, '', '/simkl/list/42?x=1');
+		await beginSimklLogin('https://debridmediamanager.com');
+		expect(sessionStorage.getItem(SIMKL_RETURN_KEY)).toBe('/simkl/list/42?x=1');
+		window.history.replaceState(null, '', '/');
+	});
+
 	it('mints a fresh verifier per attempt', async () => {
 		sessionStorage.clear();
 		await beginSimklLogin('https://debridmediamanager.com');
@@ -67,7 +75,11 @@ describe('takeSimklLoginContext', () => {
 		sessionStorage.setItem(SIMKL_VERIFIER_KEY, 'verifier');
 		sessionStorage.setItem(SIMKL_STATE_KEY, 'state');
 
-		expect(takeSimklLoginContext()).toEqual({ codeVerifier: 'verifier', state: 'state' });
+		expect(takeSimklLoginContext()).toEqual({
+			codeVerifier: 'verifier',
+			state: 'state',
+			returnTo: '/',
+		});
 		// A second read has nothing left, so a replayed `?code=` cannot ride a
 		// verifier that was already spent.
 		expect(takeSimklLoginContext()).toBeNull();

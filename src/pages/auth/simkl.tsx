@@ -68,7 +68,7 @@ export default function SimklCallbackPage() {
 		})
 			.then(() => {
 				notifySimklSessionChange();
-				router.push('/');
+				router.push(context.returnTo);
 			})
 			.catch((e) => setErrorMessage(String(e instanceof Error ? e.message : e)));
 	}, [router, router.isReady, router.query]);
