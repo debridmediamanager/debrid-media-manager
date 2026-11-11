@@ -315,13 +315,26 @@ describe('withAuth', () => {
 		expect(mockPush).not.toHaveBeenCalledWith('/realdebrid/login');
 	});
 
-	// Guest mode: the way in for someone who has no debrid account and only
-	// wants DMM's indexer endpoints, which authenticate on a DMM API key.
+	// Guest mode: a sponsor with a linked DMM key and no debrid account.
 	describe('guest mode', () => {
 		beforeEach(() => {
 			mockUseRealDebridAccessToken.mockReturnValue([null, false, false]);
 			mockUseAllDebridApiKey.mockReturnValue(null);
 			localStorage.setItem(GUEST_MODE_KEY, 'true');
+			localStorage.setItem('dmm:sponsorToken', '"token"');
+		});
+
+		// The old "Enter as Guest" button set the flag with nothing behind it.
+		it('sends a flag with no DMM key or Easynews login to /start', async () => {
+			localStorage.removeItem('dmm:sponsorToken');
+			mockRouter.pathname = '/settings';
+
+			const WrappedComponent = withAuth(() => <div data-testid="test-component" />);
+			render(<WrappedComponent />);
+
+			await waitFor(() => {
+				expect(mockPush).toHaveBeenCalledWith('/start');
+			});
 		});
 
 		it('lets a guest open a page without bouncing to /start', async () => {

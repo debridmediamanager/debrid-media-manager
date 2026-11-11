@@ -1,4 +1,5 @@
 import { notifyLocalStorageChange } from '@/hooks/localStorage';
+import { SPONSOR_TOKEN_KEY } from '@/hooks/useSponsor';
 import { useEffect, useState } from 'react';
 
 /**
@@ -11,6 +12,10 @@ import { useEffect, useState } from 'react';
  * provider token appeared, and Settings - the one place a DMM API key is
  * linked - was behind that same gate.
  *
+ * The flag alone opens nothing: a guest is a browser with a linked DMM key or
+ * an Easynews login and no debrid account. The anonymous "Enter as Guest"
+ * button is gone, and a flag it left behind no longer counts.
+ *
  * It is not a credential and it opens no data. Everything a guest can reach is
  * either public (search, browse) or keyed on something the server checks for
  * itself (the sponsor key). The library is the one page it deliberately does
@@ -18,11 +23,36 @@ import { useEffect, useState } from 'react';
  */
 export const GUEST_MODE_KEY = 'dmm:guest';
 
+const DEBRID_KEYS = [
+	'rd:accessToken',
+	'rd:refreshToken',
+	'ad:apiKey',
+	'tb:apiKey',
+	'pm:accessToken',
+	'pm:apiKey',
+	'oc:apiKey',
+	'dl:accessToken',
+	'dl:apiKey',
+];
+
+export function hasDebridAccount(): boolean {
+	if (typeof window === 'undefined') return false;
+	try {
+		return DEBRID_KEYS.some((key) => window.localStorage.getItem(key));
+	} catch {
+		return false;
+	}
+}
+
 /** Read outside React, for the guard in `withAuth` and for tests. */
 export function isGuestMode(): boolean {
 	if (typeof window === 'undefined') return false;
 	try {
-		return window.localStorage.getItem(GUEST_MODE_KEY) === 'true';
+		const ls = window.localStorage;
+		return (
+			ls.getItem(GUEST_MODE_KEY) === 'true' &&
+			!!(ls.getItem(SPONSOR_TOKEN_KEY) || ls.getItem('en:account'))
+		);
 	} catch {
 		// A browser with site data blocked cannot hold guest mode either
 		return false;

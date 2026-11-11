@@ -12,12 +12,27 @@ describe('guestMode', () => {
 	});
 
 	it('turns on and off again', () => {
+		localStorage.setItem('dmm:sponsorToken', '"token"');
 		enableGuestMode();
 		expect(isGuestMode()).toBe(true);
 
 		disableGuestMode();
 		expect(isGuestMode()).toBe(false);
 		expect(localStorage.getItem(GUEST_MODE_KEY)).toBeNull();
+	});
+
+	// Anonymous guests are gone: the flag counts only beside a DMM key or an
+	// Easynews login, so one the old "Enter as Guest" button left reads as off.
+	it('needs a linked DMM key or an Easynews login', () => {
+		enableGuestMode();
+		expect(isGuestMode()).toBe(false);
+
+		localStorage.setItem('en:account', '{"username":"u","password":"p"}');
+		expect(isGuestMode()).toBe(true);
+
+		localStorage.removeItem('en:account');
+		localStorage.setItem('dmm:sponsorToken', '"token"');
+		expect(isGuestMode()).toBe(true);
 	});
 
 	// The flag is a plain 'true', not JSON-quoted, so a stray value left behind

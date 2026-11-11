@@ -69,6 +69,7 @@ describe('SettingsSection', () => {
 
 		it('leaves out settings that only act through a debrid account', () => {
 			localStorage.setItem('dmm:guest', 'true');
+			localStorage.setItem('dmm:sponsorToken', '"token"');
 			render(<SettingsSection />);
 
 			for (const id of debridOnly) expect(document.getElementById(id), id).toBeNull();

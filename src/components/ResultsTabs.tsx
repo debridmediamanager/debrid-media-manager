@@ -1,3 +1,4 @@
+import { hasDebridAccount } from '@/utils/guestMode';
 import { Magnet, Newspaper } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
@@ -46,14 +47,17 @@ export default function ResultsTabs({ basePath, active, query, extra }: ResultsT
 	};
 	return (
 		<nav className="mt-3 flex gap-1 border-b-2 border-gray-700" aria-label="Results">
-			<Link
-				href={href(basePath, { tab: 'torrents' })}
-				aria-current={active === 'torrents' ? 'page' : undefined}
-				className={`${TAB} ${active === 'torrents' ? 'border-gray-600 bg-gray-800 text-white' : 'border-transparent text-gray-400 hover:text-gray-200'}`}
-			>
-				<Magnet className="mr-1 h-4 w-4" />
-				Torrents
-			</Link>
+			{/* No debrid account, nothing to do with a torrent: the page opens on Usenet. */}
+			{hasDebridAccount() && (
+				<Link
+					href={href(basePath, { tab: 'torrents' })}
+					aria-current={active === 'torrents' ? 'page' : undefined}
+					className={`${TAB} ${active === 'torrents' ? 'border-gray-600 bg-gray-800 text-white' : 'border-transparent text-gray-400 hover:text-gray-200'}`}
+				>
+					<Magnet className="mr-1 h-4 w-4" />
+					Torrents
+				</Link>
+			)}
 			<Link
 				href={href(`${basePath}/usenet`)}
 				aria-current={active === 'usenet' ? 'page' : undefined}

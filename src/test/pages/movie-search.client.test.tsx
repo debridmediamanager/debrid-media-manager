@@ -113,6 +113,12 @@ vi.mock('@/contexts/LibraryCacheContext', () => ({
 	useLibraryCache: () => ({ isFetching: false }),
 }));
 
+// Mirrors the auth hooks below: the Torrents tab is only for a debrid account.
+vi.mock('@/utils/guestMode', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/utils/guestMode')>()),
+	hasDebridAccount: () => Object.values(authKeys).some(Boolean),
+}));
+
 vi.mock('@/hooks/auth', () => ({
 	useRealDebridAccessToken: () => [authKeys.rd],
 	useAllDebridApiKey: () => authKeys.ad,

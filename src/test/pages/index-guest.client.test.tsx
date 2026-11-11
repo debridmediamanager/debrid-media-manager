@@ -177,6 +177,7 @@ describe('IndexPage in guest mode', () => {
 
 	it('says which parts of DMM a guest can use', () => {
 		localStorage.setItem(GUEST_MODE_KEY, 'true');
+		localStorage.setItem('dmm:sponsorToken', '"token"');
 
 		render(<IndexPage />);
 
@@ -188,6 +189,7 @@ describe('IndexPage in guest mode', () => {
 	// click away, so the cards are folded rather than dropped.
 	it('folds the debrid cards away without removing them', () => {
 		localStorage.setItem(GUEST_MODE_KEY, 'true');
+		localStorage.setItem('dmm:sponsorToken', '"token"');
 
 		render(<IndexPage />);
 
@@ -208,6 +210,7 @@ describe('IndexPage in guest mode', () => {
 	// whether a linked DMM API key survived - was invisible from the labels.
 	it('offers one way out, the same one everybody else gets', () => {
 		localStorage.setItem(GUEST_MODE_KEY, 'true');
+		localStorage.setItem('dmm:sponsorToken', '"token"');
 
 		render(<IndexPage />);
 
@@ -224,6 +227,7 @@ describe('IndexPage in guest mode', () => {
 	// key that the Torznab and Newznab endpoints authenticate on.
 	it('keeps the settings shortcut', () => {
 		localStorage.setItem(GUEST_MODE_KEY, 'true');
+		localStorage.setItem('dmm:sponsorToken', '"token"');
 
 		render(<IndexPage />);
 
@@ -237,6 +241,7 @@ describe('IndexPage in guest mode', () => {
 	// library cache to clear. The indexers and the wanted list work without one.
 	it('leaves out the sponsor features and footer action that need a debrid account', () => {
 		localStorage.setItem(GUEST_MODE_KEY, 'true');
+		localStorage.setItem('dmm:sponsorToken', '"token"');
 
 		const { container } = render(<IndexPage />);
 

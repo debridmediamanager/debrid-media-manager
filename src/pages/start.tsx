@@ -11,7 +11,6 @@ import {
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
-import { enableGuestMode } from '@/utils/guestMode';
 import {
 	ALLDEBRID_REFERRAL_URL,
 	DEBRID_LINK_REFERRAL_URL,
@@ -48,14 +47,6 @@ export default function StartPage() {
 			router.push('/');
 		}
 	}, [rdToken, adKey, tbKey, pmKey, ocKey, dlKey, router]);
-
-	// Guest mode is not a login, so this page stays reachable afterwards: the
-	// home page's "Connect a debrid service" section and this page are both
-	// still there when a guest decides they want an account after all.
-	const enterAsGuest = () => {
-		enableGuestMode();
-		router.push('/');
-	};
 
 	return (
 		<div className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -238,28 +229,19 @@ export default function StartPage() {
 					</a>
 				</div>
 
-				{/* Guest entry. DMM's Torznab and Newznab endpoints answer to a
-				    DMM API key rather than a debrid credential, so a sponsor
-				    pointing Prowlarr at DMM needs no account here - and the page
-				    that links that key is behind the same gate as everything
-				    else. This is the way past it. */}
+				{/* Easynews is no debrid account, so it gets its own way in: search
+				    and cast with it, no library or transfers. */}
 				<div className="mt-6 flex max-w-lg flex-col items-center border-t border-slate-700 pt-6">
-					<p className="text-center text-sm">
-						No debrid account and no DMM key? You can still look around. DMM also
-						answers as a Torznab and Newznab indexer for Prowlarr, Sonarr and Radarr,
-						and that only needs a DMM API key.
-					</p>
-					<button
+					<p className="text-center text-sm">Only have Easynews?</p>
+					<Link
+						href="/easynews/login?redirect=/"
 						className="m-2 rounded bg-slate-600 px-4 py-2 text-white hover:bg-slate-500"
-						onClick={enterAsGuest}
 					>
-						Enter as Guest
-					</button>
+						Login with Easynews
+					</Link>
 					<p className="text-center text-xs text-slate-400">
-						Search, settings and the indexer setup pages stay open. Only have Easynews?
-						Enter as Guest and sign in to it under Settings to search it and cast it to
-						Stremio. Your library and transfers need a debrid account, and you can
-						connect one at any time.
+						Search Easynews and cast it to Stremio. Your library and transfers need a
+						debrid account, and you can connect one at any time.
 					</p>
 				</div>
 

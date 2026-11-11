@@ -8,7 +8,7 @@ import {
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
 import StartPage from '@/pages/start';
-import { GUEST_MODE_KEY, isGuestMode } from '@/utils/guestMode';
+import { GUEST_MODE_KEY } from '@/utils/guestMode';
 import { REAL_DEBRID_REFERRAL_IDS } from '@/utils/referrals';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { useRouter } from 'next/router';
@@ -236,34 +236,28 @@ describe('StartPage', () => {
 		expect(mockPush).not.toHaveBeenCalled();
 	});
 
-	// Guest entry. DMM's Torznab and Newznab endpoints authenticate on a DMM API
-	// key, so a sponsor pointing Prowlarr at DMM needs no debrid account - but
-	// the page that links that key sits behind the same gate as everything else,
-	// and before this button there was no way past it.
-	describe('Enter as Guest', () => {
+	// No anonymous way in any more: a DMM key or an Easynews login is the
+	// least a browser needs, and the guest flag alone opens nothing.
+	describe('without a debrid account', () => {
 		beforeEach(() => {
 			localStorage.clear();
 		});
 
-		it('offers the way in for someone with no debrid account', () => {
+		it('offers Easynews and the DMM key instead of entering as a guest', () => {
 			render(<StartPage />);
 
-			expect(screen.getByText('Enter as Guest')).toBeInTheDocument();
-			expect(screen.getByText(/only needs a DMM API key/i)).toBeInTheDocument();
+			expect(screen.queryByText('Enter as Guest')).not.toBeInTheDocument();
+			expect(screen.getByRole('link', { name: 'Login with Easynews' })).toHaveAttribute(
+				'href',
+				'/easynews/login?redirect=/'
+			);
+			expect(screen.getByRole('link', { name: 'Login with DMM key' })).toHaveAttribute(
+				'href',
+				'/sponsor/login'
+			);
 		});
 
-		it('marks the browser as a guest and opens the dashboard', () => {
-			render(<StartPage />);
-
-			fireEvent.click(screen.getByText('Enter as Guest'));
-
-			expect(isGuestMode()).toBe(true);
-			expect(mockPush).toHaveBeenCalledWith('/');
-		});
-
-		// Guest mode is not a login, so this page has to stay reachable: it is
-		// where a guest goes when they decide they want an account after all.
-		it('does not redirect a guest away from the login page', () => {
+		it('does not redirect a browser with a guest flag away from the login page', () => {
 			localStorage.setItem(GUEST_MODE_KEY, 'true');
 
 			render(<StartPage />);

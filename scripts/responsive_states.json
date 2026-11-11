@@ -259,7 +259,7 @@
 	"/start": {
 		"status": "verified",
 		"observedStates": ["rendered"],
-		"expectText": ["Enter as Guest"],
+		"expectText": ["Login with Easynews"],
 		"expectPath": "/start"
 	},
 	"/stremio": {

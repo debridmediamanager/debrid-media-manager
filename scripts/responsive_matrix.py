@@ -851,7 +851,7 @@ def main():
     parser.add_argument("--rd-token-env",
                         help="Environment variable holding an RD API token to sign the page in with.")
     parser.add_argument("--guest", action="store_true",
-                        help="Enter as a guest (the start page's 'Enter as Guest'), with no provider account.")
+                        help="Browse as a guest: a linked DMM key (a dummy token) and no provider account.")
     parser.add_argument("--keep-storage", action="store_true",
                         help="Leave the sign-in in place (parallel shards share the origin's storage).")
     parser.add_argument("--settle-timeout", type=float, default=14.0)
@@ -880,7 +880,9 @@ def main():
                 page.call("Storage.clearDataForOrigin", clear)
             page.call("Page.navigate", {"url": args.base_url.rstrip("/") + "/_offline"})
             page.pump(2)
+            # The guest flag counts only beside a DMM key or an Easynews login.
             page.evaluate("(() => { localStorage.setItem('dmm:guest', 'true');"
+                          " localStorage.setItem('dmm:sponsorToken', '\"layout-guest\"');"
                           " for (const k of ['Torrentio','MediaFusion','Peerflix'])"
                           " localStorage.setItem('settings:enable' + k, 'false'); return true; })()")
         if args.rd_token_env:
