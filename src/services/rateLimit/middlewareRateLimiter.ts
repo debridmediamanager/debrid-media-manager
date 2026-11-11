@@ -297,18 +297,24 @@ export class HybridRateLimiter {
 
 /**
  * Get client IP from request headers.
- * Priority: cf-connecting-ip (Cloudflare) > x-real-ip (nginx) > x-forwarded-for > unknown
+ * Priority: x-real-ip (nginx) > cf-connecting-ip (Cloudflare) > x-forwarded-for > unknown
+ *
+ * x-real-ip comes first because the proxy in front of DMM overwrites it with the
+ * connecting address. It does not touch cf-connecting-ip, so a client could send
+ * any value there and get a fresh rate-limit budget per request (or claim a
+ * whitelisted IP). cf-connecting-ip still serves a self-hosted DMM behind a
+ * Cloudflare tunnel, which sets no x-real-ip.
  */
 export function getClientIp(
 	cfConnectingIp: string | null,
 	xRealIp: string | null,
 	xForwardedFor: string | null
 ): string {
-	if (cfConnectingIp?.trim()) {
-		return cfConnectingIp.trim();
-	}
 	if (xRealIp?.trim()) {
 		return xRealIp.trim();
+	}
+	if (cfConnectingIp?.trim()) {
+		return cfConnectingIp.trim();
 	}
 	if (xForwardedFor?.trim()) {
 		return xForwardedFor.split(',')[0]?.trim() || 'unknown';

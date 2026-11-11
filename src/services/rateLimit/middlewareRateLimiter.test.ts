@@ -97,8 +97,9 @@ describe('middlewareRateLimiter', () => {
 	});
 
 	describe('getClientIp', () => {
-		it('should prefer cf-connecting-ip over x-real-ip and x-forwarded-for', () => {
-			expect(getClientIp('1.1.1.1', '2.2.2.2', '3.3.3.3')).toBe('1.1.1.1');
+		// A spoofed cf-connecting-ip gave every request a fresh budget (2026-11-11).
+		it('should prefer x-real-ip over a client-sent cf-connecting-ip', () => {
+			expect(getClientIp('1.1.1.1', '2.2.2.2', '3.3.3.3')).toBe('2.2.2.2');
 		});
 
 		it('should prefer x-real-ip over x-forwarded-for', () => {

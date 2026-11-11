@@ -67,8 +67,13 @@ describe('getRateLimitConfig', () => {
 });
 
 describe('getClientIp', () => {
-	it('prefers cf-connecting-ip', () => {
-		expect(getClientIp('1.2.3.4', '5.6.7.8', '9.10.11.12')).toBe('1.2.3.4');
+	// The proxy overwrites x-real-ip; cf-connecting-ip is whatever the client sent.
+	it('prefers x-real-ip over a client-sent cf-connecting-ip', () => {
+		expect(getClientIp('1.2.3.4', '5.6.7.8', '9.10.11.12')).toBe('5.6.7.8');
+	});
+
+	it('uses cf-connecting-ip behind a Cloudflare tunnel, which sets no x-real-ip', () => {
+		expect(getClientIp('1.2.3.4', null, '9.10.11.12')).toBe('1.2.3.4');
 	});
 
 	it('falls back to x-real-ip', () => {

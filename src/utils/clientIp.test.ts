@@ -57,14 +57,14 @@ describe('getClientIpFromRequest', () => {
 		expect(getClientIpFromRequest(req)).toBe('10.0.0.1');
 	});
 
-	it('prioritizes cf-connecting-ip over x-real-ip', () => {
+	it('prioritizes x-real-ip over a client-sent cf-connecting-ip', () => {
 		const req = createMockRequest({
 			headers: {
 				'cf-connecting-ip': '1.1.1.1',
 				'x-real-ip': '2.2.2.2',
 			},
 		});
-		expect(getClientIpFromRequest(req)).toBe('1.1.1.1');
+		expect(getClientIpFromRequest(req)).toBe('2.2.2.2');
 	});
 
 	it('prioritizes x-real-ip over x-forwarded-for', () => {
@@ -77,7 +77,7 @@ describe('getClientIpFromRequest', () => {
 		expect(getClientIpFromRequest(req)).toBe('2.2.2.2');
 	});
 
-	it('prioritizes cf-connecting-ip over all others', () => {
+	it('prioritizes x-real-ip over all others', () => {
 		const req = createMockRequest({
 			headers: {
 				'cf-connecting-ip': '1.1.1.1',
@@ -86,7 +86,7 @@ describe('getClientIpFromRequest', () => {
 			},
 		});
 		(req as any).socket = { remoteAddress: '4.4.4.4' };
-		expect(getClientIpFromRequest(req)).toBe('1.1.1.1');
+		expect(getClientIpFromRequest(req)).toBe('2.2.2.2');
 	});
 
 	it('skips empty cf-connecting-ip and falls through', () => {
