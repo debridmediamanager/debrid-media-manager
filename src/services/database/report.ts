@@ -1,4 +1,4 @@
-import { JEV_REPORTER, type ReportType } from '@/services/reporterId';
+import type { ReportType } from '@/services/reporterId';
 import { DatabaseClient } from './client';
 
 export class ReportService extends DatabaseClient {
@@ -70,58 +70,104 @@ export class ReportService extends DatabaseClient {
 	}
 
 	/**
-	 * Gets hashes that should be filtered out based on reports.
-	 * A hash is filtered if:
-	 * - It has 2 or more reports from different userIds
-	 * - Jev agreed with one of its reports (see `reviewReports`)
-	 * @param imdbId - The IMDB ID to get reported hashes for
-	 * @returns Array of hash strings that should be filtered out
+	 * The hashes hidden on this title: the releases an admin approved a report on at
+	 * /admin/reports. Reports alone hide nothing, however many there are or whether
+	 * Jev agreed; they wait in the queue for a decision.
 	 */
 	public async getReportedHashes(imdbId: string): Promise<string[]> {
 		try {
-			// Get all reports for this imdbId
-			const reports = await this.prisma.report.findMany({
-				where: { imdbId },
-				select: {
-					hash: true,
-					userId: true,
-				},
+			const rows = await this.prisma.reportDecision.findMany({
+				where: { imdbId, decision: 'approved' },
+				select: { hash: true },
 			});
-
-			// Group reports by hash
-			const reportsByHash = new Map<string, Set<string>>();
-			const confirmedHashes = new Set<string>();
-
-			for (const report of reports) {
-				if (report.userId === JEV_REPORTER) {
-					confirmedHashes.add(report.hash);
-				}
-
-				// Track unique userIds per hash
-				if (!reportsByHash.has(report.hash)) {
-					reportsByHash.set(report.hash, new Set());
-				}
-				reportsByHash.get(report.hash)!.add(report.userId);
-			}
-
-			// Filter hashes based on criteria
-			const filteredHashes: string[] = [];
-
-			// Add every hash Jev confirmed a report on
-			for (const hash of confirmedHashes) {
-				filteredHashes.push(hash);
-			}
-
-			// Add hashes with 2+ reports from different users
-			for (const [hash, userIds] of reportsByHash) {
-				if (userIds.size >= 2 && !confirmedHashes.has(hash)) {
-					filteredHashes.push(hash);
-				}
-			}
-
-			return filteredHashes;
+			return rows.map((row) => row.hash);
 		} catch (error: any) {
 			throw new Error(`Failed to get reported hashes: ${error.message}`);
 		}
 	}
+
+	/** One page of the review queue, newest report first, and how many wait in all. */
+	public async listUndecidedReports(
+		take: number,
+		skip: number
+	): Promise<{ total: number; pairs: ReportPair[] }> {
+		const [pairs, counted] = await Promise.all([
+			this.prisma.$queryRaw<ReportPair[]>`
+				SELECT r.imdbId, r.hash
+				FROM Report r
+				LEFT JOIN ReportDecision d ON d.imdbId = r.imdbId AND d.hash = r.hash
+				WHERE d.hash IS NULL
+				GROUP BY r.imdbId, r.hash
+				ORDER BY MAX(r.createdAt) DESC
+				LIMIT ${take} OFFSET ${skip}`,
+			this.prisma.$queryRaw<{ total: bigint }[]>`
+				SELECT COUNT(*) AS total FROM (
+					SELECT 1 FROM Report r
+					LEFT JOIN ReportDecision d ON d.imdbId = r.imdbId AND d.hash = r.hash
+					WHERE d.hash IS NULL
+					GROUP BY r.imdbId, r.hash
+				) pending`,
+		]);
+		return { total: Number(counted[0]?.total ?? 0), pairs };
+	}
+
+	/** One page of decided pairs, latest decision first. */
+	public async listDecidedReports(
+		decision: ReportDecisionKind,
+		take: number,
+		skip: number
+	): Promise<{ total: number; decisions: ReportDecisionRow[] }> {
+		const [decisions, total] = await Promise.all([
+			this.prisma.reportDecision.findMany({
+				where: { decision },
+				orderBy: { decidedAt: 'desc' },
+				take,
+				skip,
+			}),
+			this.prisma.reportDecision.count({ where: { decision } }),
+		]);
+		return { total, decisions: decisions as ReportDecisionRow[] };
+	}
+
+	/** Every report filed on these pairs. */
+	public async getReportsFor(pairs: ReportPair[]) {
+		if (pairs.length === 0) return [];
+		return this.prisma.report.findMany({
+			where: { OR: pairs.map(({ imdbId, hash }) => ({ imdbId, hash })) },
+			select: { imdbId: true, hash: true, userId: true, type: true, createdAt: true },
+		});
+	}
+
+	public async getDecision(imdbId: string, hash: string): Promise<ReportDecisionRow | null> {
+		const row = await this.prisma.reportDecision.findUnique({
+			where: { imdbId_hash: { imdbId, hash } },
+		});
+		return row as ReportDecisionRow | null;
+	}
+
+	public async decide(
+		imdbId: string,
+		hash: string,
+		decision: ReportDecisionKind,
+		note: string | null
+	): Promise<void> {
+		await this.prisma.reportDecision.upsert({
+			where: { imdbId_hash: { imdbId, hash } },
+			create: { imdbId, hash, decision, note },
+			update: { decision, note, decidedAt: new Date() },
+		});
+	}
+
+	/** Back into the queue. */
+	public async undecide(imdbId: string, hash: string): Promise<void> {
+		await this.prisma.reportDecision.deleteMany({ where: { imdbId, hash } });
+	}
 }
+
+export type ReportPair = { imdbId: string; hash: string };
+export type ReportDecisionKind = 'approved' | 'dismissed';
+export type ReportDecisionRow = ReportPair & {
+	decision: ReportDecisionKind;
+	note: string | null;
+	decidedAt: Date;
+};

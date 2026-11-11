@@ -8,6 +8,7 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 // all of them. Each admin API checks it on every call; this page holds no secret.
 
 export const ADMIN_PAGES = [
+	{ href: '/admin/reports', label: 'Reported releases' },
 	{ href: '/admin/newznab', label: 'Newznab indexers' },
 	{ href: '/admin/settings', label: 'Site settings' },
 	{ href: '/admin/copyright', label: 'Copyright notices' },

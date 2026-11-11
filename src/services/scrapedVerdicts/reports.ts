@@ -7,9 +7,10 @@ import { classifyFilenames, modelKey } from './model';
 import { decide, decideWithoutModel } from './rules';
 
 /**
- * A single report hides a result for everyone only once Jev agrees with it;
- * otherwise it takes two reporters. This replaced a moderator whose reporter id
- * was compared in the public source, so anyone could send it.
+ * Jev's second opinion on a report, filed under `JEV_REPORTER` and shown on
+ * /admin/reports as "model agrees". Since 2026-11-11 nothing is hidden until an
+ * admin approves the report there; before that, Jev's agreement (or a second
+ * reporter) hid the result on its own.
  *
  * A movie report counts as confirmed when the movie-page verdict trashes the
  * release, reusing a stored verdict where there is one. A series has no tuned

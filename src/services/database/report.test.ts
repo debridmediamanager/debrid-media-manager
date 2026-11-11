@@ -10,6 +10,9 @@ const prismaMock = vi.hoisted(() => ({
 	scraped: {
 		findMany: vi.fn(),
 	},
+	reportDecision: {
+		findMany: vi.fn(),
+	},
 }));
 
 vi.mock('./client', () => ({
@@ -26,6 +29,7 @@ describe('ReportService', () => {
 		(prismaMock.report.upsert as Mock).mockReset();
 		(prismaMock.report.findMany as Mock).mockReset();
 		(prismaMock.scraped.findMany as Mock).mockReset();
+		(prismaMock.reportDecision.findMany as Mock).mockReset();
 	});
 
 	it('creates or updates reports', async () => {
@@ -70,32 +74,35 @@ describe('ReportService', () => {
 		expect(await service.getEmptyMedia(1)).toBeNull();
 	});
 
-	it('aggregates reported hashes using the filtering rules', async () => {
+	// Reports used to hide a release on their own (two reporters, or Jev agreeing);
+	// since 2026-11-11 only an admin's approval at /admin/reports does.
+	it('hides only the releases an admin approved for that title', async () => {
+		prismaMock.reportDecision.findMany.mockResolvedValue([{ hash: 'approved-hash' }]);
 		prismaMock.report.findMany.mockResolvedValue([
-			{ hash: 'admin-hash', userId: JEV_REPORTER },
+			{ hash: 'jev-hash', userId: JEV_REPORTER },
 			{ hash: 'multi', userId: 'user-1' },
 			{ hash: 'multi', userId: 'user-2' },
-			{ hash: 'single', userId: 'user-1' },
 		]);
 
-		const hashes = await service.getReportedHashes('tt1');
-		expect(hashes).toEqual(expect.arrayContaining(['admin-hash', 'multi']));
-		expect(hashes).not.toContain('single');
+		expect(await service.getReportedHashes('tt1')).toEqual(['approved-hash']);
+		expect(prismaMock.reportDecision.findMany).toHaveBeenCalledWith({
+			where: { imdbId: 'tt1', decision: 'approved' },
+			select: { hash: true },
+		});
 	});
 
-	it('never lets a client-sent reporter id hide a result on its own', async () => {
-		// The old moderator id was compared in the public source, so anyone could
-		// send it. A client's id is what verifiedReporterId files, never JEV_REPORTER.
-		const sent = ['jev', 'admin', 'pm:x', 'rd:account', 'A'.repeat(52)];
-		prismaMock.report.findMany.mockResolvedValue(
-			sent.map((id, i) => ({ hash: `h${i}`, userId: id }))
-		);
-
+	it('hides nothing for a title with reports but no approval', async () => {
+		prismaMock.reportDecision.findMany.mockResolvedValue([]);
+		prismaMock.report.findMany.mockResolvedValue([
+			{ hash: 'multi', userId: 'user-1' },
+			{ hash: 'multi', userId: 'user-2' },
+			{ hash: 'jev-hash', userId: JEV_REPORTER },
+		]);
 		expect(await service.getReportedHashes('tt1')).toEqual([]);
 	});
 
 	it('throws when report lookups fail', async () => {
-		prismaMock.report.findMany.mockRejectedValue(new Error('db down'));
+		prismaMock.reportDecision.findMany.mockRejectedValue(new Error('db down'));
 		await expect(service.getReportedHashes('tt1')).rejects.toThrow(
 			'Failed to get reported hashes: db down'
 		);
