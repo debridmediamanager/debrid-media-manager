@@ -149,7 +149,7 @@ describe.skipIf(!dockerAvailable)(
 						// The search words' fulltext index, then joins on the primary key; the LIKE scan read b by none of them
 						expect({ table, key }).toEqual({
 							table,
-							key: expect.stringMatching(/^(ft_primary_title|ft_title|PRIMARY)$/),
+							key: expect.stringMatching(/^(ft_work_title|ft_title|PRIMARY)$/),
 						});
 					}
 				}

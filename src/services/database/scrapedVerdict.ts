@@ -153,7 +153,9 @@ export class ScrapedVerdictService extends DatabaseClient {
 			const search = (against: string) =>
 				this.prisma.$queryRaw<{ primary_title: string; start_year: number }[]>(Prisma.sql`
 				SELECT primary_title, start_year FROM imdb_title_basics
-				WHERE MATCH(primary_title) AGAINST(${against} IN BOOLEAN MODE)
+				-- primary_title without episodes, which this never wants: "A One and a Two..." took 6 s
+				-- and 253 MB on the episodes' share of "and", "one" and "two" (2026-11-11)
+				WHERE MATCH(work_title) AGAINST(${against} IN BOOLEAN MODE)
 				  AND tconst <> ${imdbId}
 				  AND title_type NOT IN ('tvEpisode', 'videoGame')
 				  AND start_year IS NOT NULL

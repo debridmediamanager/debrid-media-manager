@@ -54,11 +54,13 @@ CREATE TABLE `imdb_title_basics` (
   `start_year` smallint unsigned DEFAULT NULL,
   `end_year` smallint unsigned DEFAULT NULL,
   `runtime_minutes` int unsigned DEFAULT NULL,
+  `work_title` varchar(500) GENERATED ALWAYS AS (if((`title_type` = _utf8mb4'tvEpisode'),NULL,`primary_title`)) STORED,
   PRIMARY KEY (`tconst`),
   KEY `idx_title_type` (`title_type`),
   KEY `idx_start_year` (`start_year`),
   KEY `idx_is_adult` (`is_adult`),
   KEY `idx_primary_title` (`primary_title`(100)),
   FULLTEXT KEY `ft_primary_title` (`primary_title`),
-  FULLTEXT KEY `ft_ngram_primary_title` (`primary_title`) /*!50100 WITH PARSER `ngram` */
+  FULLTEXT KEY `ft_ngram_primary_title` (`primary_title`) /*!50100 WITH PARSER `ngram` */ ,
+  FULLTEXT KEY `ft_work_title` (`work_title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci

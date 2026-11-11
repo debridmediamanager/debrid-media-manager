@@ -187,6 +187,11 @@ export class ImdbSearchService extends DatabaseClient {
 		return words.map((w) => (required(w) ? `+${term(w)}` : term(w))).join(' ');
 	}
 
+	/**
+	 * `work_title` is `primary_title` for every title but an episode (a stored generated column
+	 * with its own FULLTEXT index, 2026-11-11): 10.0M of imdb_title_basics' 13.0M rows are
+	 * episodes, which search never offers, and a common word's match set was mostly theirs.
+	 */
 	private async searchBasicsFulltext(
 		keyword: string,
 		typeFilter: Prisma.Sql,
@@ -212,10 +217,10 @@ export class ImdbSearchService extends DatabaseClient {
 				r.average_rating as rating,
 				r.num_votes as votes,
 				1 as isOriginalMatch,
-				MATCH(b.primary_title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE) as relevance
+				MATCH(b.work_title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE) as relevance
 			FROM imdb_title_basics b
 			LEFT JOIN imdb_title_ratings r ON b.tconst = r.tconst
-			WHERE MATCH(b.primary_title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE)
+			WHERE MATCH(b.work_title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE)
 				${typeFilter}
 				${yearFilter}
 				AND b.is_adult = 0

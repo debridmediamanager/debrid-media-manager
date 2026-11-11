@@ -145,6 +145,17 @@ describe('ImdbSearchService', () => {
 			);
 		});
 
+		// imdb_title_basics is 10.0M episodes of 13.0M rows, and search offers none: on work_title
+		// (primary_title without them) "+mar*" took 0.47 s and 7 MB instead of 3.4 s and 47 MB
+		// on dmmdb (2026-11-11), the same 32,876 rows.
+		it('searches the titles that are not episodes', async () => {
+			prismaMock.$queryRaw.mockResolvedValue([]);
+			await service.searchTitles('mar');
+			const sql = prismaMock.$queryRaw.mock.calls[0][0].sql as string;
+			expect(sql).toContain('MATCH(b.work_title)');
+			expect(sql).not.toContain('MATCH(b.primary_title)');
+		});
+
 		// Production searches on 2026-10-29: \w is ASCII only, so these reached
 		// the database as "" (nothing searched) and "Am lie".
 		it('searches the letters of every script, accents kept', async () => {

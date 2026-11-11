@@ -177,7 +177,7 @@ describe('ScrapedVerdictService', () => {
 				ambiguous: { 'your lucky day': [2010, 2023] },
 			});
 			const query = prismaMock.$queryRaw.mock.calls[0][0] as Prisma.Sql;
-			expect(sqlText(query)).toContain('MATCH(primary_title) AGAINST(? IN BOOLEAN MODE)');
+			expect(sqlText(query)).toContain('MATCH(work_title) AGAINST(? IN BOOLEAN MODE)');
 			expect(query.values[0]).toBe(
 				'"Guerra Sin Reglas" "The Ministry of Ungentlemanly Warfare" "Your Lucky Day"'
 			);
