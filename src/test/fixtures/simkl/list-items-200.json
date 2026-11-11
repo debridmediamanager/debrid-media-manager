@@ -1,0 +1,95 @@
+{
+	"counts": {
+		"items": 3,
+		"likes": 0,
+		"followers": 0,
+		"comments": 0,
+		"collaborators": 0
+	},
+	"created_at": "2026-09-16T05:43:39Z",
+	"description": {
+		"short": null,
+		"full": null
+	},
+	"display_number": true,
+	"id": 216324,
+	"items": [
+		{
+			"note": {},
+			"title": "Stranger Things",
+			"year": 2016,
+			"type": "tv",
+			"poster": "18/1886552367968d91bc",
+			"fanart": "48/48131003734eec969",
+			"runtime": 2725,
+			"ids": {
+				"simkl_id": 548312,
+				"slug": "stranger-things",
+				"imdb": "tt4574334",
+				"tmdb": "66732",
+				"tvdb": "305288",
+				"tvdbslug": "stranger-things",
+				"traktslug": "stranger-things"
+			},
+			"rank": 293,
+			"position": 1,
+			"ratings": {
+				"simkl": {
+					"rating": 8.21,
+					"votes": 12117,
+					"drop_rate": "3.5%"
+				},
+				"imdb": {
+					"rating": 8.6,
+					"votes": 1738548
+				}
+			},
+			"watched": 98416,
+			"plan_to_watch": 13779,
+			"watching": 57484,
+			"completed": 40981,
+			"hold": 1431,
+			"dropped": 3611,
+			"status": "ended",
+			"release_date": "2016-07-16T00:00:00Z",
+			"genres": [
+				"Adventure",
+				"Drama",
+				"Fantasy",
+				"Horror",
+				"Mystery",
+				"Science-Fiction",
+				"Suspense",
+				"Thriller"
+			],
+			"origin_countries": ["us"],
+			"original_language": "en",
+			"metadata": "2016 - 2026 \u2022 Netflix \u2022 42 episodes",
+			"year_start_end": "2016 - 2026",
+			"total_episodes": 42,
+			"runtime_episode": 78,
+			"network": "Netflix",
+			"next_episode_date": null,
+			"total_seasons": 5
+		}
+	],
+	"media_type": "tv",
+	"name": "Unlisted TV list",
+	"pagination": {
+		"page": 1,
+		"limit": 50,
+		"total_items": 3,
+		"total_pages": 1
+	},
+	"privacy": "unlisted",
+	"slug": "unlisted-tv-list",
+	"sort": ["position", "asc"],
+	"top_items": [],
+	"type": "regular",
+	"updated_at": "2026-09-16T05:47:25Z",
+	"user": {
+		"id": 8199460,
+		"name": "testweek",
+		"avatar": "https://us.simkl.in/img_tv/ico_profile_guest.png"
+	}
+}

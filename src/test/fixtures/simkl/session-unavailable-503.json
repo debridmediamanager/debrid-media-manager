@@ -1,0 +1,5 @@
+{
+	"error": "session_unavailable",
+	"message": "Simkl sessions are temporarily unavailable",
+	"status": 503
+}

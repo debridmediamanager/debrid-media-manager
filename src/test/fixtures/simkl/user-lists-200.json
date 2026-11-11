@@ -1,0 +1,117 @@
+{
+	"lists": [
+		{
+			"id": 216282,
+			"name": "Regular TV list",
+			"slug": "regular-tv-list",
+			"description": {
+				"short": "Regular TV list short des",
+				"full": "Regular TV list full desc"
+			},
+			"media_type": "tv",
+			"type": "regular",
+			"privacy": "public",
+			"display_number": false,
+			"user": {
+				"id": 8199460,
+				"name": "testweek",
+				"avatar": "https://us.simkl.in/img_tv/ico_profile_guest.png"
+			},
+			"counts": {
+				"items": 2,
+				"likes": 0,
+				"followers": 0,
+				"comments": 0,
+				"collaborators": 0
+			},
+			"top_items": [
+				{
+					"id": 1482762,
+					"type": "tv",
+					"poster": "18/1878863979e76dbabf"
+				},
+				{
+					"id": 3074490,
+					"type": "tv",
+					"poster": "20/20551481e9a270354e"
+				}
+			],
+			"sort": ["position", "asc"],
+			"updated_at": "2026-09-16T02:24:09Z",
+			"created_at": "2026-09-16T02:24:09Z",
+			"pinned": false
+		},
+		{
+			"id": 76609,
+			"name": "Best Mindfucks (Anime)",
+			"slug": "best-mindfucks-anime",
+			"description": {
+				"short": "Some anime entertain. These ones break your brain, reconstruct it, then break it again.",
+				"full": "Ever watched an anime that left you staring at the screen in shock, scrambling to piece together what just happened?"
+			},
+			"media_type": "anime",
+			"type": "regular",
+			"privacy": "public",
+			"display_number": false,
+			"user": {
+				"id": 5,
+				"name": "SIMKL",
+				"avatar": "https://simkl.in/avatars/5/5_100.jpg?1682980938"
+			},
+			"counts": {
+				"items": 222,
+				"likes": 95,
+				"followers": 104,
+				"comments": 0,
+				"collaborators": 1
+			},
+			"top_items": [
+				{
+					"id": 50250,
+					"type": "anime",
+					"poster": "83/83063509ab6ef28d2"
+				},
+				{
+					"id": 37513,
+					"type": "anime",
+					"poster": "40/403690524472ac8"
+				},
+				{
+					"id": 38960,
+					"type": "anime",
+					"poster": "10/10231814c8fe114faf"
+				},
+				{
+					"id": 39687,
+					"type": "anime",
+					"poster": "23/23563e7856a42e5"
+				},
+				{
+					"id": 39608,
+					"type": "anime",
+					"poster": "85/8568962a88c7c35"
+				},
+				{
+					"id": 1536163,
+					"type": "anime",
+					"poster": "12/1278631554e130eb92"
+				},
+				{
+					"id": 503490,
+					"type": "anime",
+					"poster": "31/3150974789b5b8ac2"
+				}
+			],
+			"sort": ["position", "asc"],
+			"updated_at": "2026-08-27T23:49:29Z",
+			"created_at": "2025-02-03T14:41:56Z",
+			"pinned": false
+		}
+	],
+	"pagination": {
+		"page": 1,
+		"limit": 50,
+		"total_items": 2,
+		"total_pages": 1
+	}
+}

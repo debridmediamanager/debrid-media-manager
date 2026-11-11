@@ -7,6 +7,14 @@
  *
  * Every Simkl endpoint requires a client id; without `SIMKL_CLIENT_ID` the
  * whole module no-ops rather than issuing calls that come back 412.
+ *
+ * `SIMKL_CLIENT_ID` has to be an **AUTH V1** key. This lookup runs server-side
+ * with no user in sight, and V2 withdrew anonymous access to everything but the
+ * cached catalog files: a V2 key answers `/search/id` with
+ * `401 user_token_required` rather than serving it (verified 2026-09-21). V1
+ * retires around April 2027, so this path needs a different source by then.
+ * `services/simkl.ts` holds the V2 client, which is user-scoped and cannot
+ * stand in for this one.
  */
 
 export const SIMKL_API_BASE = 'https://api.simkl.com';

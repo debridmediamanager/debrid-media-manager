@@ -138,6 +138,7 @@ describe('StartPage', () => {
 		const policy = screen.getByText(/No data or logs are stored on our servers/i);
 		expect(policy).toHaveTextContent(/you can inspect every request/i);
 		expect(policy).toHaveTextContent(/your browser's local storage/i);
+		expect(policy).toHaveTextContent(/exception is a Simkl sign-in/i);
 	});
 
 	it('links to zurg, rex, the docs and the community', () => {

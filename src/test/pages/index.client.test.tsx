@@ -407,6 +407,7 @@ describe('IndexPage', () => {
 		['ocError', 'Offcloud'],
 		['dlError', 'Debrid-Link'],
 		['traktError', 'Trakt'],
+		['simklError', 'Simkl'],
 	])('points a failed %s at its own card', (errorKey, label) => {
 		currentUserMock.mockReturnValue({
 			...settledFixture,

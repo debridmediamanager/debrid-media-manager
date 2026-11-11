@@ -247,7 +247,9 @@ export default function StartPage() {
 
 				<p className="mt-2 max-w-lg text-center text-sm text-slate-400">
 					No data or logs are stored on our servers: everything stays in your
-					browser&apos;s local storage, and you can inspect every request.
+					browser&apos;s local storage, and you can inspect every request. The one
+					exception is a Simkl sign-in, which our server keeps so your browser never holds
+					the key.
 				</p>
 				<div className="mt-4">
 					<SiteLinks>
