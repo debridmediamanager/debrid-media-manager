@@ -179,6 +179,21 @@ describe('ImdbSearchService', () => {
 			expect(result.matchedTitle).toBe('千と千尋の神隠し');
 		});
 
+		// "star wars episode" built its whole 11M-row match set for "episode" in MySQL's
+		// full-text cache: 0.9-2 GB and 7-14 s for 781 rows (dmmdb, 2026-11-11). Without
+		// the word it took 15-23 MB and 0.2 s.
+		it('leaves out the words in millions of episode titles', () => {
+			expect(ImdbSearchService.fulltextKeyword('star wars episode')).toBe('+star* +wars*');
+			expect(ImdbSearchService.fulltextKeyword('Episode dated')).toBeNull();
+			expect(ImdbSearchService.fulltextKeyword('star wars épisode')).toBe('+star* +wars*');
+		});
+
+		// "+epi*" overflowed the 2 GB cache on imdb_title_akas after 19.6 s.
+		it('does not widen the start of such a word into it', () => {
+			expect(ImdbSearchService.fulltextKeyword('star wars epi')).toBe('+star* +wars* +epi');
+			expect(ImdbSearchService.fulltextKeyword('dat')).toBe('+dat');
+		});
+
 		it('keeps short words required when nothing else is', () => {
 			expect(ImdbSearchService.fulltextKeyword('up')).toBe('+up*');
 			expect(ImdbSearchService.fulltextKeyword('24')).toBe('+24*');

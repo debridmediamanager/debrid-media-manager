@@ -8,6 +8,7 @@ import { tmdbTranslatedTitles } from '@/utils/tmdbTranslations';
 import { Prisma } from '@prisma/client';
 import { createHash } from 'crypto';
 import { DatabaseClient } from './client';
+import { isHotWord, requiredIndexedWords } from './fulltextWords';
 
 export type ScrapedSource = 'ScrapedTrue' | 'Scraped';
 
@@ -63,6 +64,18 @@ const overflowsFullText = (error: unknown) =>
 
 /** Boolean-mode fulltext treats these as operators, so they cannot appear in a phrase. */
 const phraseOf = (title: string) => title.replace(/[+\-<>()~*@"]/g, ' ').trim();
+
+/**
+ * The phrase as a boolean-mode term. A phrase holding a hot word ("Star Wars:
+ * Episode IV") gathers every title with that word, millions, so it asks for its
+ * other words instead; matches are checked against the aliases afterwards anyway.
+ */
+function termOf(phrase: string): string | null {
+	const hot = phrase.split(/[^\p{L}\p{N}]+/u).some(isHotWord);
+	if (!hot) return `"${phrase}"`;
+	const words = requiredIndexedWords(phrase);
+	return words ? `(${words})` : null;
+}
 
 /**
  * The title's TMDB translations in the languages DMM accepts (see
@@ -126,7 +139,15 @@ export class ScrapedVerdictService extends DatabaseClient {
 
 		const primary = fold(basics.primaryTitle).trim();
 		const aliases = new Set(titles.map((t) => fold(t).trim()).filter((t) => t !== primary));
-		const phrases = [...new Set(titles.map(phraseOf))].filter((p) => p.length >= 3);
+		const phrases = [
+			...new Set(
+				titles
+					.map(phraseOf)
+					.filter((p) => p.length >= 3)
+					.map(termOf)
+					.filter((t): t is string => t !== null)
+			),
+		];
 		const ambiguous: Record<string, number[]> = {};
 		if (phrases.length > 0 && aliases.size > 0) {
 			const search = (against: string) =>
@@ -139,7 +160,7 @@ export class ScrapedVerdictService extends DatabaseClient {
 				LIMIT 5000`);
 			let others: { primary_title: string; start_year: number }[];
 			try {
-				others = await search(phrases.map((p) => `"${p}"`).join(' '));
+				others = await search(phrases.join(' '));
 			} catch (error) {
 				// Star Wars' 109 titles overflow MySQL's full-text result cache, and
 				// so do some of its phrases alone ("Star Wars: Episode IV A New Hope"
@@ -149,7 +170,7 @@ export class ScrapedVerdictService extends DatabaseClient {
 				others = [];
 				for (const phrase of phrases) {
 					try {
-						others.push(...(await search(`"${phrase}"`)));
+						others.push(...(await search(phrase)));
 					} catch (inner) {
 						if (!overflowsFullText(inner)) throw inner;
 					}

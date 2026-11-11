@@ -1,3 +1,4 @@
+import starWarsImdb from '@/test/fixtures/metadata/imdb-tt0076759-star-wars.json';
 import qosImdb from '@/test/fixtures/metadata/imdb-tt0830515-quantum-of-solace.json';
 import qosFind from '@/test/fixtures/metadata/tmdb-find-tt0830515-quantum-of-solace.json';
 import puffinFind from '@/test/fixtures/metadata/tmdb-find-tt3590338-puffin-rock.json';
@@ -238,6 +239,32 @@ describe('ScrapedVerdictService', () => {
 
 			expect(context?.ambiguous).toEqual({ 'star wars': [2016] });
 			expect(prismaMock.$queryRaw).toHaveBeenCalledTimes(5);
+		});
+
+		// Star Wars' 147 IMDb titles include 20 naming "Episode", a word in 10.9M akas
+		// rows: as phrases they made MySQL gather every one of them, 1-2 GB a search,
+		// and such caches ran mysqld out of memory (OOM kill 2026-11-10 04:30:57).
+		it('never sends a word that millions of episode titles hold', async () => {
+			prismaMock.imdbTitleBasics.findUnique.mockResolvedValue({
+				primaryTitle: starWarsImdb.primaryTitle,
+				originalTitle: starWarsImdb.originalTitle,
+				startYear: starWarsImdb.startYear,
+				titleType: starWarsImdb.titleType,
+			});
+			prismaMock.imdbTitleAkas.findMany.mockResolvedValue(
+				starWarsImdb.akas.map((title: string) => ({ title }))
+			);
+			prismaMock.$queryRaw.mockResolvedValue([]);
+
+			await service.getMovieContext('tt0076759');
+
+			const against = String((prismaMock.$queryRaw.mock.calls[0][0] as Prisma.Sql).values[0]);
+			// "Épisode" too: the tables' collation ignores accents, so the two French
+			// titles alone still overflowed MySQL's 2 GB cache.
+			expect(against).not.toMatch(/[eé]pisode|dated/i);
+			// A title naming "Episode" is still asked for, by its other words.
+			expect(against).toContain('(+Star +Wars +New +Hope)');
+			expect(against).toContain('"Star Wars"');
 		});
 
 		it('still fails on any other database error', async () => {

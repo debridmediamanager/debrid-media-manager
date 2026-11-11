@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { DatabaseClient } from './client';
+import { FULLTEXT_STOPWORDS, isHotWord, startsHotWord } from './fulltextWords';
 import { movieTypesSql, searchableTitleSql } from './searchableTitles';
 
 export type ImdbSearchResult = {
@@ -105,9 +106,7 @@ export class ImdbSearchService extends DatabaseClient {
 	static fulltextCannotFind(keyword: string): boolean {
 		return !keyword
 			.split(' ')
-			.some(
-				(w) => w.length >= 3 && !ImdbSearchService.FULLTEXT_STOPWORDS.has(w.toLowerCase())
-			);
+			.some((w) => w.length >= 3 && !FULLTEXT_STOPWORDS.has(w.toLowerCase()));
 	}
 
 	/**
@@ -163,45 +162,6 @@ export class ImdbSearchService extends DatabaseClient {
 		}));
 	}
 
-	// MySQL InnoDB default stopwords - these break search when using + (required) prefix
-	private static readonly FULLTEXT_STOPWORDS = new Set([
-		'a',
-		'about',
-		'an',
-		'are',
-		'as',
-		'at',
-		'be',
-		'by',
-		'com',
-		'de',
-		'en',
-		'for',
-		'from',
-		'how',
-		'i',
-		'in',
-		'is',
-		'it',
-		'la',
-		'of',
-		'on',
-		'or',
-		'that',
-		'the',
-		'this',
-		'to',
-		'was',
-		'what',
-		'when',
-		'where',
-		'who',
-		'will',
-		'with',
-		'und',
-		'www',
-	]);
-
 	/**
 	 * The keyword in fulltext boolean mode, null when it has no word to require.
 	 * Stopwords are optional (no +), other words required (+). So is a word
@@ -214,16 +174,17 @@ export class ImdbSearchService extends DatabaseClient {
 		const words = keyword
 			.split(' ')
 			.map((w) => w.replace(/[+\-<>()~*'"@]/g, ''))
-			.filter((w) => w.length >= 2);
-		const indexed = (w: string) =>
-			w.length >= 3 && !ImdbSearchService.FULLTEXT_STOPWORDS.has(w.toLowerCase());
+			.filter((w) => w.length >= 2 && !isHotWord(w));
+		const indexed = (w: string) => w.length >= 3 && !FULLTEXT_STOPWORDS.has(w.toLowerCase());
 		const anyIndexed = words.some(indexed);
 		const required = (w: string) =>
-			anyIndexed ? indexed(w) : !ImdbSearchService.FULLTEXT_STOPWORDS.has(w.toLowerCase());
+			anyIndexed ? indexed(w) : !FULLTEXT_STOPWORDS.has(w.toLowerCase());
 		if (!words.some(required)) {
 			return null;
 		}
-		return words.map((w) => (required(w) ? `+${w}*` : `${w}*`)).join(' ');
+		// No prefix on the start of a hot word: "epi*" expands to "episode".
+		const term = (w: string) => (startsHotWord(w) ? w : `${w}*`);
+		return words.map((w) => (required(w) ? `+${term(w)}` : term(w))).join(' ');
 	}
 
 	private async searchBasicsFulltext(
