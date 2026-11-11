@@ -104,18 +104,18 @@ describe('problemToken', () => {
 			expect(validateProblemToken(token, hash, now)).toBe(false);
 		});
 
-		it('rejects a token past its 5-minute window', () => {
+		it('rejects a token past its 30-minute window', () => {
 			const [token, hash] = mintProblemToken(SECRET, now);
-			expect(validateProblemToken(token, hash, now + 301_000)).toBe(false);
+			expect(validateProblemToken(token, hash, now + 1_801_000)).toBe(false);
 		});
 
-		it('accepts a token inside its 5-minute window', () => {
+		it('accepts a token inside its 30-minute window', () => {
 			const [token, hash] = mintProblemToken(SECRET, now);
-			expect(validateProblemToken(token, hash, now + 299_000)).toBe(true);
+			expect(validateProblemToken(token, hash, now + 1_799_000)).toBe(true);
 		});
 
 		it('rejects a token from the future beyond the window', () => {
-			const [token, hash] = mintProblemToken(SECRET, now + 400_000);
+			const [token, hash] = mintProblemToken(SECRET, now + 1_900_000);
 			expect(validateProblemToken(token, hash, now)).toBe(false);
 		});
 

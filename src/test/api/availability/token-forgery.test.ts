@@ -4,7 +4,7 @@ import { getTorrentInfo } from '@/services/realDebrid';
 import { repository } from '@/services/repository';
 import rdMovie from '@/test/fixtures/libraryAvailability/rdinfo_movie.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
-import { mintProblemToken } from '@/utils/problemToken';
+import { mintProblemToken, TOKEN_TTL_SECONDS } from '@/utils/problemToken';
 import { NextApiHandler } from 'next';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -163,7 +163,10 @@ describe.each(routes)('$name refuses forged availability tokens', ({ handler, db
 	});
 
 	it('refuses a token older than its window', async () => {
-		const [token, hash] = mintProblemToken(SECRET, Date.now() - 6 * 60 * 1000);
+		const [token, hash] = mintProblemToken(
+			SECRET,
+			Date.now() - (TOKEN_TTL_SECONDS + 60) * 1000
+		);
 
 		const res = await post(token, hash);
 

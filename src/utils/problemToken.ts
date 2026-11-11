@@ -1,10 +1,9 @@
 import crypto from 'crypto';
 
-// A minted token is presentable for this long. Matches the window the old
-// client-side scheme allowed, so a slow availability sweep behaves exactly as
-// it did before — a season page that takes four minutes to walk its rows still
-// finishes on the token it started with.
-const TOKEN_TTL_SECONDS = 300;
+// A minted token is presentable for this long. Each mint now costs the browser a
+// Turnstile check (services/turnstile), so a token lasts half an hour rather than
+// the five minutes it did when minting was free.
+export const TOKEN_TTL_SECONDS = 1800;
 
 let warnedAboutMissingSecret = false;
 

@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { generateTokenAndHash, resetTokenCache } from './token';
+import { TOKEN_TTL_SECONDS } from './problemToken';
+import { TOKEN_REUSE_MS, generateTokenAndHash, resetTokenCache } from './token';
 
 const PAIR = { token: 'abc123-1800000000', hash: 'signature-one' };
 
@@ -74,16 +75,16 @@ describe('generateTokenAndHash', () => {
 		const fetchMock = mockChallenge(PAIR);
 
 		await generateTokenAndHash();
-		vi.setSystemTime(new Date(1_800_000_000_000 + 2 * 60_000 + 1));
+		vi.setSystemTime(new Date(1_800_000_000_000 + TOKEN_REUSE_MS + 1));
 		await generateTokenAndHash();
 
 		expect(fetchMock).toHaveBeenCalledTimes(2);
 	});
 
-	// The server refuses a token older than 5 minutes. Whatever this cache hands
+	// The server refuses a token older than TOKEN_TTL_SECONDS. Whatever this cache hands
 	// out has to still be comfortably inside that when the request lands, so the
 	// reuse window is checked directly rather than left implicit.
-	it('never hands out a token with less than three minutes of server validity', async () => {
+	it('never hands out a token with less than five minutes of server validity', async () => {
 		vi.useFakeTimers();
 		vi.setSystemTime(new Date(1_800_000_000_000));
 		mockChallenge(PAIR);
@@ -92,12 +93,12 @@ describe('generateTokenAndHash', () => {
 
 		// One millisecond before the cache would refresh: the oldest a reused
 		// token can be.
-		vi.setSystemTime(new Date(1_800_000_000_000 + 2 * 60_000 - 1));
+		vi.setSystemTime(new Date(1_800_000_000_000 + TOKEN_REUSE_MS - 1));
 		const [token] = await generateTokenAndHash();
 
 		expect(token).toBe(PAIR.token);
-		const remainingMs = 5 * 60_000 - (2 * 60_000 - 1);
-		expect(remainingMs).toBeGreaterThanOrEqual(3 * 60_000);
+		const remainingMs = TOKEN_TTL_SECONDS * 1000 - (TOKEN_REUSE_MS - 1);
+		expect(remainingMs).toBeGreaterThanOrEqual(5 * 60_000);
 	});
 
 	it('does not cache a failed mint', async () => {

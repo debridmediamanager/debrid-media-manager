@@ -11,25 +11,44 @@
 // old version fetched a Real-Debrid timestamp (`getTimeISO`) on every single
 // call, once per row per service during a sweep.
 
+import { solveTurnstile } from './turnstileClient';
+
 interface CachedToken {
 	token: string;
 	hash: string;
 	expiresAt: number;
 }
 
-// Held for well under the server's 5-minute TTL so that a token handed out here
+// Held for well under the server's 30-minute TTL so that a token handed out here
 // always has a wide margin left when the request carrying it actually lands. The
 // margin is what matters: reusing for the near-full TTL would hand a caller a
 // token with seconds to live, and a slow sweep on a large library would start
 // silently collecting 403s. It also bounds how long a stale token can linger if
 // the signing secret is ever rotated under a running tab.
-const TOKEN_REUSE_MS = 2 * 60 * 1000;
+export const TOKEN_REUSE_MS = 25 * 60 * 1000; // server TTL is 30 min (utils/problemToken)
 
 let cached: CachedToken | null = null;
 let inFlight: Promise<[string, string]> | null = null;
 
-async function fetchToken(): Promise<[string, string]> {
+/** The site key /api/challenge last asked for, so later mints skip the 401 round trip. */
+let turnstileSiteKey: string | null = null;
+
+async function challenge(): Promise<Response> {
+	if (turnstileSiteKey) {
+		const answer = await solveTurnstile(turnstileSiteKey);
+		return fetch('/api/challenge', { headers: { 'x-turnstile-token': answer } });
+	}
 	const response = await fetch('/api/challenge');
+	if (response.status !== 401) return response;
+	// The server wants the browser check (services/turnstile): run it once and ask again.
+	const body = await response.json().catch(() => null);
+	if (typeof body?.turnstile !== 'string') return response;
+	turnstileSiteKey = body.turnstile;
+	return challenge();
+}
+
+async function fetchToken(): Promise<[string, string]> {
+	const response = await challenge();
 	if (!response.ok) {
 		throw new Error(`Failed to obtain an availability token: ${response.status}`);
 	}
@@ -72,4 +91,5 @@ export async function generateTokenAndHash(): Promise<[string, string]> {
 export function resetTokenCache(): void {
 	cached = null;
 	inFlight = null;
+	turnstileSiteKey = null;
 }

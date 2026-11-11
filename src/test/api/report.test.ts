@@ -1,7 +1,7 @@
 import handler from '@/pages/api/report';
 import { repository } from '@/services/repository';
 import { createMockRequest } from '@/test/utils/api';
-import { mintProblemToken } from '@/utils/problemToken';
+import { mintProblemToken, TOKEN_TTL_SECONDS } from '@/utils/problemToken';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
@@ -106,7 +106,10 @@ describe('/api/report', () => {
 
 	it('should return 403 and write nothing when the token has expired', async () => {
 		mockRepository.reportContent = vi.fn().mockResolvedValue(undefined);
-		const [dmmProblemKey, solution] = mintProblemToken(SECRET, Date.now() - 10 * 60 * 1000);
+		const [dmmProblemKey, solution] = mintProblemToken(
+			SECRET,
+			Date.now() - (TOKEN_TTL_SECONDS + 60) * 1000
+		);
 		mockReq.method = 'POST';
 		mockReq.body = {
 			hash: 'abc123',
