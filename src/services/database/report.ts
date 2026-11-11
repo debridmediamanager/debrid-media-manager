@@ -1,4 +1,5 @@
 import { JEV_DISPUTED, JEV_REPORTER, type ReportType } from '@/services/reporterId';
+import { isMovieTitleType } from '@/utils/imdbTitleTypes';
 import { Prisma } from '@prisma/client';
 import { DatabaseClient } from './client';
 
@@ -180,6 +181,27 @@ export class ReportService extends DatabaseClient {
 			this.prisma.reportDecision.count({ where: { decision } }),
 		]);
 		return { total, decisions: decisions as ReportDecisionRow[] };
+	}
+
+	/** IMDb's name, year and kind for each title, for the review cards. */
+	public async getTitles(
+		imdbIds: string[]
+	): Promise<Map<string, { title: string; year: number | null; kind: 'movie' | 'show' }>> {
+		if (imdbIds.length === 0) return new Map();
+		const rows = await this.prisma.imdbTitleBasics.findMany({
+			where: { tconst: { in: [...new Set(imdbIds)] } },
+			select: { tconst: true, primaryTitle: true, startYear: true, titleType: true },
+		});
+		return new Map(
+			rows.map((row) => [
+				row.tconst,
+				{
+					title: row.primaryTitle ?? row.tconst,
+					year: row.startYear ?? null,
+					kind: isMovieTitleType(row.titleType) ? 'movie' : 'show',
+				},
+			])
+		);
 	}
 
 	/** Every report filed on these pairs. */

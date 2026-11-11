@@ -21,6 +21,10 @@ const ACTIONS = { approve: 'approved', dismiss: 'dismissed' } as const;
 const MODEL_FILTERS: ModelFilter[] = ['all', 'agrees', 'disagrees', 'unjudged'];
 
 export type AdminReport = ReportPair & {
+	/** IMDb's primary title, year and kind; null when IMDb has no row for the id. */
+	title: string | null;
+	year: number | null;
+	kind: 'movie' | 'show' | null;
 	/** The release name DMM has for this hash on this title, if it still has one. */
 	filename: string | null;
 	types: string[];
@@ -43,7 +47,10 @@ let scraped: ScrapedVerdictService | null = null;
 async function describe(
 	pairs: (ReportPair & Partial<Pick<AdminReport, 'decision' | 'note'>> & { decidedAt?: Date })[]
 ): Promise<AdminReport[]> {
-	const filed = await reports!.getReportsFor(pairs);
+	const [filed, titles] = await Promise.all([
+		reports!.getReportsFor(pairs),
+		reports!.getTitles(pairs.map((pair) => pair.imdbId)),
+	]);
 	const byTitle = new Map<string, string[]>();
 	for (const { imdbId, hash } of pairs)
 		byTitle.set(imdbId, [...(byTitle.get(imdbId) ?? []), hash]);
@@ -61,6 +68,9 @@ async function describe(
 		return {
 			imdbId: pair.imdbId,
 			hash: pair.hash,
+			title: titles.get(pair.imdbId)?.title ?? null,
+			year: titles.get(pair.imdbId)?.year ?? null,
+			kind: titles.get(pair.imdbId)?.kind ?? null,
 			filename: names.get(`${pair.imdbId}:${pair.hash}`) ?? null,
 			types: [...new Set(mine.map((r) => r.type))].sort(),
 			reporters: new Set(people.map((r) => r.userId)).size,

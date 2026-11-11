@@ -65,6 +65,11 @@ describe('/api/admin/reports', () => {
 			filed('rd:bob', 'porn', '2026-11-11T09:00:00Z'),
 			filed(JEV_REPORTER),
 		]);
+		vi.spyOn(ReportService.prototype, 'getTitles').mockResolvedValue(
+			new Map([
+				['tt1254207', { title: 'Big Buck Bunny', year: 2008, kind: 'movie' as const }],
+			])
+		);
 		const res = await call({ method: 'GET', query: { status: 'pending', model: 'agrees' } });
 		expect(list).toHaveBeenCalledWith(25, 0, 'agrees');
 		expect(res._getData()).toEqual({
@@ -74,6 +79,9 @@ describe('/api/admin/reports', () => {
 				{
 					imdbId: 'tt1254207',
 					hash: HASH,
+					title: 'Big Buck Bunny',
+					year: 2008,
+					kind: 'movie',
 					filename: 'Big.Buck.Bunny.2008.1080p.mkv',
 					types: ['porn', 'wrong_imdb'],
 					reporters: 2,
@@ -102,6 +110,7 @@ describe('/api/admin/reports', () => {
 			filed('rd:alice'),
 			filed(JEV_DISPUTED),
 		]);
+		vi.spyOn(ReportService.prototype, 'getTitles').mockResolvedValue(new Map());
 		const res = await call({ method: 'GET', query: { model: 'nonsense' } });
 		const item = (res._getData() as { items: any[] }).items[0];
 		expect(item).toMatchObject({ reporters: 1, model: 'disagrees' });

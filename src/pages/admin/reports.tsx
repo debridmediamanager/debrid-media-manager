@@ -1,4 +1,5 @@
 import { AdminFetch, AdminLayout } from '@/components/admin/AdminLayout';
+import Poster from '@/components/poster';
 import type { AdminReport } from '@/pages/api/admin/reports';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -54,76 +55,92 @@ function ReportCard({
 	const button = 'rounded px-3 py-1 text-sm font-semibold disabled:opacity-50';
 
 	return (
-		<section className="rounded border-2 border-gray-600 bg-gray-800/30 p-4 text-sm text-gray-200">
-			<h2 className="font-mono text-sm break-all text-gray-100">
-				{report.filename ?? <span className="text-gray-400">name not on file</span>}
-			</h2>
-			<p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-400">
-				<a
-					href={`https://www.imdb.com/title/${report.imdbId}/`}
-					target="_blank"
-					rel="noreferrer noopener"
-					className="text-cyan-300 underline"
-				>
-					{report.imdbId}
-				</a>
-				<span className="font-mono break-all" title={report.hash}>
-					{report.hash.slice(0, 12)}
-				</span>
-				<span>{new Date(report.lastReportedAt).toLocaleString()}</span>
-			</p>
-			<p className="mt-2 flex flex-wrap gap-2 text-xs">
-				{report.types.map((type) => (
-					<span key={type} className="rounded bg-gray-700 px-2 py-0.5 text-gray-200">
-						{TYPE_LABEL[type] ?? type}
-					</span>
-				))}
-				<span className="rounded bg-gray-700 px-2 py-0.5 text-gray-200">
-					{report.reporters} {report.reporters === 1 ? 'reporter' : 'reporters'}
-				</span>
-				{report.model === 'agrees' ? (
-					<span className="rounded bg-yellow-900/60 px-2 py-0.5 text-yellow-200">
-						model agrees
-					</span>
-				) : report.model === 'disagrees' ? (
-					<span className="rounded bg-cyan-900/60 px-2 py-0.5 text-cyan-200">
-						model disagrees
-					</span>
+		<section className="flex gap-3 rounded border-2 border-gray-600 bg-gray-800/30 p-4 text-sm text-gray-200 sm:gap-4">
+			<span className="block w-14 shrink-0 sm:w-20">
+				<Poster imdbId={report.imdbId} title={report.title ?? report.imdbId} />
+			</span>
+			<div className="min-w-0 flex-1">
+				{report.title ? (
+					<a
+						href={`/${report.kind === 'show' ? 'show' : 'movie'}/${report.imdbId}`}
+						target="_blank"
+						rel="noreferrer noopener"
+						className="text-base font-semibold text-gray-100 hover:underline"
+					>
+						{report.title}
+						{report.year ? ` (${report.year})` : ''}
+					</a>
 				) : null}
-			</p>
-			<input
-				value={note}
-				onChange={(event) => setNote(event.target.value)}
-				placeholder="Note (optional)"
-				className="mt-3 w-full rounded border border-gray-600 bg-gray-900/60 px-2 py-1 text-sm text-gray-100"
-			/>
-			<div className="mt-2 flex flex-wrap gap-2">
-				{report.decision !== 'approved' ? (
-					<button
-						disabled={busy}
-						onClick={() => act('approve')}
-						className={`${button} bg-red-800 text-white hover:bg-red-700`}
+				<h2 className="mt-1 font-mono text-sm break-all text-gray-300">
+					{report.filename ?? <span className="text-gray-400">name not on file</span>}
+				</h2>
+				<p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-400">
+					<a
+						href={`https://www.imdb.com/title/${report.imdbId}/`}
+						target="_blank"
+						rel="noreferrer noopener"
+						className="text-cyan-300 underline"
 					>
-						Hide on this title
-					</button>
-				) : null}
-				{report.decision === null ? (
-					<button
-						disabled={busy}
-						onClick={() => act('dismiss')}
-						className={`${button} border border-gray-600 text-gray-200 hover:bg-gray-800`}
-					>
-						Keep it
-					</button>
-				) : (
-					<button
-						disabled={busy}
-						onClick={() => act('reopen')}
-						className={`${button} border border-gray-600 text-gray-200 hover:bg-gray-800`}
-					>
-						{report.decision === 'approved' ? 'Show it again' : 'Back to waiting'}
-					</button>
-				)}
+						{report.imdbId}
+					</a>
+					<span className="font-mono break-all" title={report.hash}>
+						{report.hash.slice(0, 12)}
+					</span>
+					<span>{new Date(report.lastReportedAt).toLocaleString()}</span>
+				</p>
+				<p className="mt-2 flex flex-wrap gap-2 text-xs">
+					{report.types.map((type) => (
+						<span key={type} className="rounded bg-gray-700 px-2 py-0.5 text-gray-200">
+							{TYPE_LABEL[type] ?? type}
+						</span>
+					))}
+					<span className="rounded bg-gray-700 px-2 py-0.5 text-gray-200">
+						{report.reporters} {report.reporters === 1 ? 'reporter' : 'reporters'}
+					</span>
+					{report.model === 'agrees' ? (
+						<span className="rounded bg-yellow-900/60 px-2 py-0.5 text-yellow-200">
+							model agrees
+						</span>
+					) : report.model === 'disagrees' ? (
+						<span className="rounded bg-cyan-900/60 px-2 py-0.5 text-cyan-200">
+							model disagrees
+						</span>
+					) : null}
+				</p>
+				<input
+					value={note}
+					onChange={(event) => setNote(event.target.value)}
+					placeholder="Note (optional)"
+					className="mt-3 w-full rounded border border-gray-600 bg-gray-900/60 px-2 py-1 text-sm text-gray-100"
+				/>
+				<div className="mt-2 flex flex-wrap gap-2">
+					{report.decision !== 'approved' ? (
+						<button
+							disabled={busy}
+							onClick={() => act('approve')}
+							className={`${button} bg-red-800 text-white hover:bg-red-700`}
+						>
+							Hide on this title
+						</button>
+					) : null}
+					{report.decision === null ? (
+						<button
+							disabled={busy}
+							onClick={() => act('dismiss')}
+							className={`${button} border border-gray-600 text-gray-200 hover:bg-gray-800`}
+						>
+							Keep it
+						</button>
+					) : (
+						<button
+							disabled={busy}
+							onClick={() => act('reopen')}
+							className={`${button} border border-gray-600 text-gray-200 hover:bg-gray-800`}
+						>
+							{report.decision === 'approved' ? 'Show it again' : 'Back to waiting'}
+						</button>
+					)}
+				</div>
 			</div>
 		</section>
 	);
