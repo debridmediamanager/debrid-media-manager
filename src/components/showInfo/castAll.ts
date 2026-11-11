@@ -1,3 +1,4 @@
+import { escapeHtml } from '@/utils/escapeHtml';
 import { magnetToastOptions } from '@/utils/toastOptions';
 import toast from 'react-hot-toast';
 import Modal from '../modals/modal';
@@ -25,7 +26,7 @@ async function promptForImdbId(releaseName: string): Promise<string | null> {
 	const result = await Modal.fire({
 		title: 'IMDB ID Required',
 		html: `<p class="text-gray-300 mb-4">Could not determine the IMDB ID for this torrent. Please enter it manually.</p>
-			<p class="text-gray-400 text-sm mb-2">Torrent: ${releaseName}</p>
+			<p class="text-gray-400 text-sm mb-2">Torrent: ${escapeHtml(releaseName)}</p>
 			<input type="text" id="imdb-input" class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white" placeholder="tt1234567" />
 			<p class="text-gray-500 text-xs mt-2">Find the IMDB ID on <a href="https://www.imdb.com" target="_blank" class="text-blue-400 underline">imdb.com</a></p>`,
 		showCancelButton: true,
