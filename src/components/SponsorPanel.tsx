@@ -76,7 +76,12 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	},
 	{
 		name: 'zurg with your key',
-		what: "with dmm_api_key, DMM names releases for rex and Plex, sorts __magic__ folders when enabled, and when you have no indexer zurg searches DMM's indexers for your Wanted list if it has Usenet or a debrid account that can add torrents",
+		what: "with dmm_api_key, DMM names releases for rex and Plex, sorts __magic__ folders when enabled, and when you have no indexer zurg searches DMM's indexers for your Wanted list if it has Usenet or a debrid account that can add torrents. It can also pick releases in each title's original language and stream a wanted film no indexer carries from its official YouTube upload",
+	},
+	{
+		href: '/kodi',
+		name: 'Wanted in Kodi',
+		what: 'add any film or show to your Wanted list from the Kodi addon, and browse it in a Wanted folder there',
 	},
 	{
 		href: 'https://notes.debridmediamanager.com/rex/stremio/',

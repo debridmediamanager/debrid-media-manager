@@ -138,6 +138,13 @@ describe('SponsorPanel', () => {
 			'/sabnzbd'
 		);
 		expect(screen.getByText(/searches DMM's indexers/)).toBeInTheDocument();
+		// Verified 2026-11-11: sponsor-gated in the Kodi addon and in zurg, missing here.
+		expect(screen.getByRole('link', { name: 'Wanted in Kodi' })).toHaveAttribute(
+			'href',
+			'/kodi'
+		);
+		expect(screen.getByText(/each title's original language/)).toBeInTheDocument();
+		expect(screen.getByText(/official YouTube upload/)).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: 'rex-stremio with your key' })).toBeInTheDocument();
 		expect(
 			screen.getByText(/debrid streams of torrents DMM already holds a probe of reach rex/)

@@ -64,12 +64,12 @@ Share your whole collection or selected items. Browse other public lists in
 DMM is free and stays free. Sponsorship through [gatekeeper](https://gatekeeper.debridmediamanager.com/) pays for
 hosting and unlocks:
 
-- A wanted list for zurg and one-click Easynews handoff.
+- A wanted list for zurg, Seerr and Kodi, and one-click Easynews handoff.
 - Newznab and Torznab feeds for Prowlarr Sonarr and Radarr. Torznab feeds are cached-only. Linked keys unlock TorBox Premiumize and Offcloud.
 - Seven Jellyfin plugins for debrid and Usenet libraries. Six Emby plugins for debrid libraries.
 - Ten other streams per title in Stremio Cast and Kodi instead of five.
 - Priority NZB uploads with 2 TB a day instead of 300 GB and three torrent jobs instead of one.
-- DMM naming and sorting in zurg. Known titles reach rex faster with rex-stremio. The DMM API for your tools.
+- DMM naming, media details and sorting in zurg. zurg searches DMM's indexers when you have none, picks original-language releases and streams wanted films no indexer carries from YouTube. Known titles reach rex faster with rex-stremio. The DMM API for your tools.
 
 Every 10 filled requests earns 7 days of DMM perks. One fill per person per day counts. Earned time does not include zurg nightlies source remote help or the Discord role. Paid sponsorship includes them. [See every perk and setup step](https://notes.debridmediamanager.com/guides/sponsorship/).
 
