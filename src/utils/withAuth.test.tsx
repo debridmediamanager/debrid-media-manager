@@ -161,6 +161,41 @@ describe('withAuth', () => {
 		});
 	});
 
+	// Search engines are never signed in. Redirecting / to /start left the one page meant for search
+	// results pointing at a noindex page (Google: "chose different canonical", 2026-10-26).
+	it('shows the logged-out view in place, with no redirect, when it has one', async () => {
+		mockUseRealDebridAccessToken.mockReturnValue([null, false, false]);
+		mockUseAllDebridApiKey.mockReturnValue(null);
+		mockRouter.pathname = '/';
+		mockRouter.asPath = '/';
+
+		const Home = () => <div data-testid="home">Library</div>;
+		const Start = () => <div data-testid="start">Login with Real Debrid</div>;
+		const WrappedComponent = withAuth(Home, { loggedOutView: Start });
+
+		render(<WrappedComponent />);
+
+		await waitFor(() => expect(screen.getByTestId('start')).toBeInTheDocument());
+		expect(screen.queryByTestId('home')).not.toBeInTheDocument();
+		expect(mockPush).not.toHaveBeenCalled();
+		expect(localStorage.getItem('dmm_return_url')).toBeNull();
+	});
+
+	it('shows the page itself, not the logged-out view, once signed in', async () => {
+		mockUseRealDebridAccessToken.mockReturnValue(['rd-token', false, false]);
+		mockUseAllDebridApiKey.mockReturnValue(null);
+		mockRouter.pathname = '/';
+
+		const Home = () => <div data-testid="home">Library</div>;
+		const Start = () => <div data-testid="start">Login</div>;
+		const WrappedComponent = withAuth(Home, { loggedOutView: Start });
+
+		render(<WrappedComponent />);
+
+		await waitFor(() => expect(screen.getByTestId('home')).toBeInTheDocument());
+		expect(screen.queryByTestId('start')).not.toBeInTheDocument();
+	});
+
 	it('stores return URL before redirecting to start', async () => {
 		mockUseRealDebridAccessToken.mockReturnValue([null, false, false]);
 		mockUseAllDebridApiKey.mockReturnValue(null);

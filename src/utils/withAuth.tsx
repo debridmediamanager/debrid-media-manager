@@ -34,15 +34,22 @@ export interface WithAuthOptions {
 	 * because there is no account whose torrents it could list.
 	 */
 	allowGuest?: boolean;
+	/**
+	 * Shown in place, at this page's own URL, to a visitor who is not signed in, instead of
+	 * sending them to /start. The home page uses it so search engines (which are never signed
+	 * in) index what DMM is at debridmediamanager.com/ rather than following a redirect.
+	 */
+	loggedOutView?: ComponentType;
 }
 
 export const withAuth = <P extends object>(
 	Component: ComponentType<P>,
-	{ allowGuest = true }: WithAuthOptions = {}
+	{ allowGuest = true, loggedOutView: LoggedOutView }: WithAuthOptions = {}
 ) => {
 	return function WithAuth(props: P) {
 		const router = useRouter();
 		const [isLoading, setIsLoading] = useState(true);
+		const [loggedOut, setLoggedOut] = useState(false);
 		const [rdKey, rdLoading, rdIsRefreshing] = useRealDebridAccessToken();
 		const adKey = useAllDebridApiKey();
 		const [tbKey] = useState(() => {
@@ -135,10 +142,16 @@ export const withAuth = <P extends object>(
 				!rdLoading &&
 				!hasRefreshCredentials
 			) {
+				if (LoggedOutView) {
+					setLoggedOut(true);
+					setIsLoading(false);
+					return;
+				}
 				// Store full URL including query parameters
 				localStorage.setItem(RETURN_URL_KEY, router.asPath);
 				router.push(START_ROUTE);
 			} else {
+				setLoggedOut(false);
 				const returnUrl = localStorage.getItem(RETURN_URL_KEY);
 				if (returnUrl && returnUrl !== START_ROUTE && !returnUrl.endsWith(LOGIN_ROUTE)) {
 					localStorage.removeItem(RETURN_URL_KEY);
@@ -173,10 +186,16 @@ export const withAuth = <P extends object>(
 				<div className="flex min-h-screen flex-col items-center justify-center">
 					<Logo />
 					<h1 className="text-2xl">Debrid Media Manager is loading...</h1>
+					{LoggedOutView && (
+						<p className="mt-2 text-gray-400">
+							Build your movie and TV show library with truly unlimited storage
+						</p>
+					)}
 				</div>
 			);
 		}
 
+		if (loggedOut && LoggedOutView) return <LoggedOutView />;
 		return <Component {...props} />;
 	};
 };

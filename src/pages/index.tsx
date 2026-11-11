@@ -26,6 +26,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
+import StartPage from './start';
 
 const PROFILE_WAIT_MS = 5000;
 
@@ -477,4 +478,7 @@ function IndexPage() {
 
 // Nothing here reads the library, and the provider holds the whole cached library in
 // memory: a 20,000-row TorBox cache held 355 MB of heap on this page (2026-11-10).
-export default Object.assign(withAuth(IndexPage), { disableLibraryProvider: true });
+// Signed out, the home page is the start page at / (no redirect), the one page search engines index.
+export default Object.assign(withAuth(IndexPage, { loggedOutView: StartPage }), {
+	disableLibraryProvider: true,
+});

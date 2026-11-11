@@ -60,10 +60,11 @@ const nextConfig = {
 		};
 	},
 	async headers() {
-		// DMM stays out of search engines; this also covers API responses and static files.
+		// Only the home page goes into search engines. Everything under it - title pages, search,
+		// the library, API responses and static files - stays out.
 		return [
 			{
-				source: '/:path*',
+				source: '/:path+',
 				headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
 			},
 			{

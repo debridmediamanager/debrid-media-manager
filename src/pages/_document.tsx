@@ -31,7 +31,6 @@ export default function Document() {
 				/>
 				<meta property="og:type" content="website" />
 				<meta name="author" content="yowmamasita" />
-				<meta name="robots" content="noindex, nofollow" />
 				<meta name="apple-mobile-web-app-title" content="DMM" />
 				<meta name="theme-color" content="#1f1f1f" />
 				<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />

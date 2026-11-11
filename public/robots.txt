@@ -1,0 +1,5 @@
+# Only the home page belongs in search results; every other page sends X-Robots-Tag: noindex.
+User-agent: *
+Allow: /
+Disallow: /api/
+Sitemap: https://debridmediamanager.com/sitemap.xml
