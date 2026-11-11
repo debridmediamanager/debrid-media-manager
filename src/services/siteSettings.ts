@@ -60,6 +60,30 @@ export const SITE_SETTINGS = {
 				: { error: 'A Premiumize API key is 8 to 64 letters and digits' };
 		},
 	},
+	inspectRealDebridKey: {
+		label: 'Real-Debrid key for looking inside reported releases',
+		help: "Lists the files when Premiumize lacks the release: adds the magnet, reads the list, deletes it, makes no links. Unset, it is dmm-01's own REALDEBRID_KEY, whose account lives on that IP; an RD account must never be used from a second IP.",
+		env: 'REALDEBRID_KEY',
+		secret: true,
+		parse(raw) {
+			const value = raw.trim();
+			return /^[A-Z0-9]{40,64}$/.test(value)
+				? { value }
+				: { error: 'A Real-Debrid API token is 40 to 64 capital letters and digits' };
+		},
+	},
+	inspectTorBoxKey: {
+		label: 'TorBox key for looking inside reported releases',
+		help: "Last resort for the file list: TorBox's cache check, which uses no slot. A free account works.",
+		env: 'INSPECT_TORBOX_KEY',
+		secret: true,
+		parse(raw) {
+			const value = raw.trim();
+			return /^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(value)
+				? { value }
+				: { error: 'A TorBox API key looks like 8-4-4-4-12 hex digits' };
+		},
+	},
 	aiostreamsUrl: {
 		label: 'AIOStreams addon URL',
 		help: 'The configuration URL (…/stremio/<uuid>/<password>, a manifest.json paste works). http only for an instance on the tailnet.',

@@ -1,6 +1,6 @@
 import { AdminFetch, AdminLayout } from '@/components/admin/AdminLayout';
 import Poster from '@/components/poster';
-import type { AdminReport, InspectedFile } from '@/pages/api/admin/reports';
+import type { AdminReport, Inspection } from '@/pages/api/admin/reports';
 import { useCallback, useEffect, useState } from 'react';
 
 // Reported releases the model could not settle wait here; hiding one hides it on that title only.
@@ -42,9 +42,15 @@ const gb = (bytes: number) =>
 			? `${Math.round(bytes / 1e6)} MB`
 			: '<1 MB';
 
+const PROVIDER_NAME = {
+	premiumize: 'Premiumize',
+	realdebrid: 'Real-Debrid',
+	torbox: 'TorBox',
+} as const;
+
 const PLAYABLE = /\.(mkv|mp4|m4v|avi|ts|m2ts|webm|mov|wmv|mpg)$/i;
 
-type Inspected = { cached: boolean; files: InspectedFile[] } | { error: string } | 'loading';
+type Inspected = Inspection | { error: string } | 'loading';
 
 function ReportCard({
 	report,
@@ -151,35 +157,48 @@ function ReportCard({
 					<p className="mt-3 text-xs text-yellow-300">{inside.error}</p>
 				) : !inside.cached ? (
 					<p className="mt-3 text-xs text-gray-400">
-						Not cached on Premiumize. Use the magnet link with your own debrid.
+						No provider has it. Try the magnet link with your own debrid.
 					</p>
 				) : (
-					<ul className="mt-3 max-h-64 space-y-1 overflow-auto rounded bg-gray-900/60 p-2 text-xs">
-						{inside.files.map((file) => (
-							<li key={file.path} className="flex flex-wrap items-baseline gap-x-2">
-								<span
-									title={file.path}
-									className="min-w-0 flex-1 font-mono break-all text-gray-200"
+					<>
+						<p className="mt-3 text-xs text-gray-400">
+							From {PROVIDER_NAME[inside.provider ?? 'premiumize']}
+							{inside.provider === 'premiumize'
+								? ''
+								: ': the file list only, nothing to play here. Use the magnet with your own debrid to play it.'}
+						</p>
+						<ul className="mt-1 max-h-64 space-y-1 overflow-auto rounded bg-gray-900/60 p-2 text-xs">
+							{inside.files.map((file) => (
+								<li
+									key={file.path}
+									className="flex flex-wrap items-baseline gap-x-2"
 								>
-									{file.path.split('/').pop()}
-								</span>
-								<span className="text-gray-400">{gb(file.size)}</span>
-								{PLAYABLE.test(file.path) ? (
-									<a
-										href={file.streamLink ?? file.link}
-										target="_blank"
-										rel="noreferrer noopener"
-										className="text-cyan-300 underline"
+									<span
+										title={file.path}
+										className="min-w-0 flex-1 font-mono break-all text-gray-200"
 									>
-										play
-									</a>
-								) : null}
-								<a href={file.link} className="text-cyan-300 underline">
-									download
-								</a>
-							</li>
-						))}
-					</ul>
+										{file.path.split('/').pop()}
+									</span>
+									<span className="text-gray-400">{gb(file.size)}</span>
+									{file.link && PLAYABLE.test(file.path) ? (
+										<a
+											href={file.streamLink ?? file.link}
+											target="_blank"
+											rel="noreferrer noopener"
+											className="text-cyan-300 underline"
+										>
+											play
+										</a>
+									) : null}
+									{file.link ? (
+										<a href={file.link} className="text-cyan-300 underline">
+											download
+										</a>
+									) : null}
+								</li>
+							))}
+						</ul>
+					</>
 				)}
 				<input
 					value={note}
@@ -258,7 +277,7 @@ function Reports({ adminFetch }: { adminFetch: AdminFetch }) {
 		});
 		const reply = await res.json().catch(() => ({}));
 		return res.ok
-			? (reply as { cached: boolean; files: InspectedFile[] })
+			? (reply as Inspection)
 			: { error: reply.error ?? `Looking inside failed (${res.status}).` };
 	};
 

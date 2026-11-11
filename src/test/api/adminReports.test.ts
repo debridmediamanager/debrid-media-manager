@@ -191,32 +191,52 @@ describe('/api/admin/reports', () => {
 	});
 
 	describe('looking inside a release', () => {
-		const pm = (body: unknown) => vi.fn(async () => new Response(JSON.stringify(body)));
-
-		it('lists the files with links to play them, through the Premiumize setting', async () => {
-			vi.stubEnv('INSPECT_PREMIUMIZE_KEY', 'pm-key');
-			const fetchMock = pm({
-				status: 'success',
-				content: [
-					{
-						path: 'Show/poster.jpg',
-						size: 10,
-						link: 'https://cdn/poster.jpg',
-						stream_link: null,
-					},
-					{
-						path: 'Show/Show.S04E10.mkv',
-						size: 2520000000,
-						link: 'https://cdn/e10.mkv',
-						stream_link: 'https://cdn/e10.mp4',
-					},
-				],
+		/** Answers each provider's URL with its scripted body; records every call. */
+		const providers = (routes: Record<string, unknown>) => {
+			const fetchMock = vi.fn(async (url: string | URL, _init?: RequestInit) => {
+				const key = Object.keys(routes).find((k) => String(url).includes(k));
+				if (!key) throw new Error(`unexpected ${url}`);
+				const body = routes[key];
+				return body === 204
+					? new Response(null, { status: 204 })
+					: new Response(JSON.stringify(body));
 			});
 			vi.stubGlobal('fetch', fetchMock);
-			const res = await call({ method: 'POST', body: { action: 'inspect', hash: HASH } });
+			return fetchMock;
+		};
+		const inspect = () => call({ method: 'POST', body: { action: 'inspect', hash: HASH } });
+		const keys = () => {
+			vi.stubEnv('INSPECT_PREMIUMIZE_KEY', 'pm-key');
+			vi.stubEnv('REALDEBRID_KEY', 'RDKEY');
+			vi.stubEnv('INSPECT_TORBOX_KEY', 'tb-key');
+		};
+
+		it('plays what Premiumize has cached, first', async () => {
+			keys();
+			const fetchMock = providers({
+				'premiumize.me/api/transfer/directdl': {
+					status: 'success',
+					content: [
+						{
+							path: 'Show/poster.jpg',
+							size: 10,
+							link: 'https://cdn/poster.jpg',
+							stream_link: null,
+						},
+						{
+							path: 'Show/Show.S04E10.mkv',
+							size: 2520000000,
+							link: 'https://cdn/e10.mkv',
+							stream_link: 'https://cdn/e10.mp4',
+						},
+					],
+				},
+			});
+			const res = await inspect();
 			expect(res._getStatusCode()).toBe(200);
 			expect(res._getData()).toEqual({
 				cached: true,
+				provider: 'premiumize',
 				files: [
 					{
 						path: 'Show/Show.S04E10.mkv',
@@ -232,24 +252,115 @@ describe('/api/admin/reports', () => {
 					},
 				],
 			});
+			expect(fetchMock).toHaveBeenCalledTimes(1);
 			const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
 			expect(url).toBe('https://www.premiumize.me/api/transfer/directdl');
 			expect((init.headers as Record<string, string>).Authorization).toBe('Bearer pm-key');
 			expect(String(init.body)).toContain(`src=magnet%3A%3Fxt%3Durn%3Abtih%3A${HASH}`);
 		});
 
-		it('says so when Premiumize does not have it cached', async () => {
-			vi.stubEnv('INSPECT_PREMIUMIZE_KEY', 'pm-key');
-			vi.stubGlobal('fetch', pm({ status: 'error', message: 'content not in cache' }));
-			const res = await call({ method: 'POST', body: { action: 'inspect', hash: HASH } });
-			expect(res._getData()).toEqual({ cached: false, files: [] });
+		// Real-Debrid records which IP downloads each link, and its account lives on one
+		// IP: the server reads the file list and makes no links for a browser elsewhere.
+		it('lists the files Real-Debrid knows without making any link, and removes the torrent', async () => {
+			keys();
+			const fetchMock = providers({
+				'premiumize.me': { status: 'error', message: 'not cached' },
+				'torrents/addMagnet': {
+					id: 'ABC123',
+					uri: 'https://api.real-debrid.com/rest/1.0/torrents/info/ABC123',
+				},
+				'torrents/info/ABC123': {
+					status: 'waiting_files_selection',
+					files: [
+						{ id: 1, path: '/Show/sample.mkv', bytes: 5000000, selected: 0 },
+						{ id: 2, path: '/Show/Show.S04E10.mkv', bytes: 2520000000, selected: 0 },
+					],
+				},
+				'torrents/delete/ABC123': 204,
+			});
+			const res = await inspect();
+			expect(res._getData()).toEqual({
+				cached: true,
+				provider: 'realdebrid',
+				files: [
+					{
+						path: 'Show/Show.S04E10.mkv',
+						size: 2520000000,
+						link: null,
+						streamLink: null,
+					},
+					{ path: 'Show/sample.mkv', size: 5000000, link: null, streamLink: null },
+				],
+			});
+			const urls = fetchMock.mock.calls.map(([u]) => String(u));
+			expect(urls.some((u) => u.includes('selectFiles') || u.includes('unrestrict'))).toBe(
+				false
+			);
+			const del = fetchMock.mock.calls.find(([u]) =>
+				String(u).includes('torrents/delete/ABC123')
+			);
+			expect((del![1] as RequestInit).method).toBe('DELETE');
+			const add = fetchMock.mock.calls.find(([u]) => String(u).includes('addMagnet'));
+			expect(((add![1] as RequestInit).headers as Record<string, string>).Authorization).toBe(
+				'Bearer RDKEY'
+			);
 		});
 
-		it('needs the Premiumize setting', async () => {
+		it('falls back to the TorBox file list, and still removes the Real-Debrid torrent', async () => {
+			keys();
+			const fetchMock = providers({
+				'premiumize.me': { status: 'error', message: 'not cached' },
+				'torrents/addMagnet': { id: 'DEF456' },
+				'torrents/info/DEF456': { status: 'magnet_error', files: [] },
+				'torrents/delete/DEF456': 204,
+				'torbox.app/v1/api/torrents/checkcached': {
+					success: true,
+					data: [
+						{
+							name: 'Show',
+							size: 300,
+							files: [{ name: 'Show/Show.S04E10.mkv', size: 300 }],
+						},
+					],
+				},
+			});
+			const res = await inspect();
+			expect(res._getData()).toEqual({
+				cached: true,
+				provider: 'torbox',
+				files: [{ path: 'Show/Show.S04E10.mkv', size: 300, link: null, streamLink: null }],
+			});
+			expect(
+				fetchMock.mock.calls.some(([u]) => String(u).includes('torrents/delete/DEF456'))
+			).toBe(true);
+			const tb = fetchMock.mock.calls.find(([u]) => String(u).includes('checkcached'))!;
+			expect(String(tb[0])).toContain(`hash=${HASH}`);
+			expect(String(tb[0])).toContain('list_files=true');
+		});
+
+		it('says so when no provider has it', async () => {
+			keys();
+			providers({
+				'premiumize.me': { status: 'error', message: 'not cached' },
+				'torrents/addMagnet': { id: 'GHI789' },
+				'torrents/info/GHI789': { status: 'magnet_error', files: [] },
+				'torrents/delete/GHI789': 204,
+				checkcached: { success: true, data: [] },
+			});
+			expect((await inspect())._getData()).toEqual({
+				cached: false,
+				provider: null,
+				files: [],
+			});
+		});
+
+		it('needs at least one provider key', async () => {
 			vi.stubEnv('INSPECT_PREMIUMIZE_KEY', '');
+			vi.stubEnv('REALDEBRID_KEY', '');
+			vi.stubEnv('INSPECT_TORBOX_KEY', '');
 			const fetchMock = vi.fn();
 			vi.stubGlobal('fetch', fetchMock);
-			const res = await call({ method: 'POST', body: { action: 'inspect', hash: HASH } });
+			const res = await inspect();
 			expect(res._getStatusCode()).toBe(503);
 			expect(fetchMock).not.toHaveBeenCalled();
 		});

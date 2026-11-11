@@ -81,6 +81,7 @@ describe('/admin/reports', () => {
 				? new Response(
 						JSON.stringify({
 							cached: true,
+							provider: 'premiumize',
 							files: [
 								{
 									path: 'The Traitors S04E10/About this torrent.txt',
@@ -133,5 +134,42 @@ describe('/admin/reports', () => {
 		);
 		const [, init] = fetchMock.mock.calls.find(([, i]) => i?.method === 'POST')!;
 		expect(JSON.parse(String(init!.body))).toEqual({ action: 'inspect', hash });
+	});
+
+	it('says when only Real-Debrid had the file list, and offers nothing to play', async () => {
+		localStorage.setItem('dmm:adminToken', 'token');
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async (_url: string, init?: RequestInit) =>
+				init?.method === 'POST'
+					? new Response(
+							JSON.stringify({
+								cached: true,
+								provider: 'realdebrid',
+								files: [
+									{
+										path: 'Show/Show.S04E10.mkv',
+										size: 2520000000,
+										link: null,
+										streamLink: null,
+									},
+								],
+							})
+						)
+					: new Response(
+							JSON.stringify({
+								total: 1,
+								counts: { all: 1, agrees: 0, disagrees: 0, unjudged: 1 },
+								items: [report()],
+							})
+						)
+			)
+		);
+		render(<ReportsAdminPage />);
+		fireEvent.click(await screen.findByRole('button', { name: 'Look inside' }));
+		expect(await screen.findByText('Show.S04E10.mkv')).toBeInTheDocument();
+		expect(screen.getByText(/From Real-Debrid: the file list only/)).toBeInTheDocument();
+		expect(screen.queryByRole('link', { name: 'play' })).toBeNull();
+		expect(screen.queryByRole('link', { name: 'download' })).toBeNull();
 	});
 });

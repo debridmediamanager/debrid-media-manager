@@ -5,15 +5,17 @@ import {
 	ReportService,
 } from '@/services/database/report';
 import { ScrapedVerdictService } from '@/services/database/scrapedVerdict';
+import { inspectRelease } from '@/services/inspectRelease';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { isModelReporter, JEV_DISPUTED, JEV_REPORTER } from '@/services/reporterId';
-import { getSiteSetting } from '@/services/siteSettings';
 import { isAdmin } from '@/utils/adminToken';
 import { NextApiHandler } from 'next';
 
 // The report review queue for /admin/reports. A release is hidden on a title only once
 // it is approved here. GET lists a page of one status; POST approves, dismisses or puts
 // a pair back in the queue.
+
+export type { InspectedFile, Inspection } from '@/services/inspectRelease';
 
 export const REPORTS_PAGE_SIZE = 25;
 const STATUSES = ['pending', 'approved', 'dismissed'] as const;
@@ -43,51 +45,6 @@ export type AdminReport = ReportPair & {
 
 const IMDB_ID = /^tt\d{1,12}$/;
 const HASH = /^[0-9a-z]{32,64}$/;
-
-export type InspectedFile = { path: string; size: number; link: string; streamLink: string | null };
-
-/**
- * A reported torrent's files and playable links, from Premiumize's directdl: it
- * answers for cached torrents only and adds nothing to the account. The links are
- * short-lived CDN URLs for the admin who asked.
- */
-async function inspect(hash: string): Promise<[number, unknown]> {
-	const key = await getSiteSetting('inspectPremiumizeKey');
-	if (!key) {
-		return [
-			503,
-			{ error: 'Set the Premiumize key under Site settings to look inside releases' },
-		];
-	}
-	let answer: {
-		status?: string;
-		content?: { path: string; size?: number; link: string; stream_link?: string | null }[];
-	};
-	try {
-		const response = await fetch('https://www.premiumize.me/api/transfer/directdl', {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${key}`,
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: new URLSearchParams({ src: `magnet:?xt=urn:btih:${hash}` }),
-			signal: AbortSignal.timeout(30_000),
-		});
-		answer = await response.json();
-	} catch {
-		return [502, { error: 'Premiumize did not answer' }];
-	}
-	if (answer.status !== 'success') return [200, { cached: false, files: [] }];
-	const files: InspectedFile[] = (answer.content ?? [])
-		.map((file) => ({
-			path: file.path,
-			size: file.size ?? 0,
-			link: file.link,
-			streamLink: file.stream_link ?? null,
-		}))
-		.sort((a, b) => b.size - a.size);
-	return [200, { cached: true, files }];
-}
 
 let reports: ReportService | null = null;
 let scraped: ScrapedVerdictService | null = null;
@@ -171,8 +128,12 @@ const handler: NextApiHandler = async (req, res) => {
 		if (typeof hash !== 'string' || !HASH.test(hash)) {
 			return res.status(400).json({ error: 'hash is a lower-case infohash' });
 		}
-		const [code, body] = await inspect(hash);
-		return res.status(code).json(body);
+		const inspection = await inspectRelease(hash);
+		return inspection
+			? res.status(200).json(inspection)
+			: res.status(503).json({
+					error: 'Set a provider key under Site settings to look inside releases',
+				});
 	}
 	if (action === 'keepModelDisputed') {
 		const kept = await reports.keepModelDisputed(
