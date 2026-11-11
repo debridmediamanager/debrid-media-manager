@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -21,6 +21,7 @@ const report = (over: Record<string, unknown> = {}) => ({
 	year: 2008,
 	kind: 'movie',
 	filename: 'Big.Buck.Bunny.2008.1080p.mkv',
+	seasons: [],
 	types: ['wrong_imdb'],
 	reporters: 1,
 	model: null,
@@ -70,5 +71,67 @@ describe('/admin/reports', () => {
 		expect(screen.getByRole('link', { name: 'Breaking Bad (2008)' }).getAttribute('href')).toBe(
 			'/show/tt0903747'
 		);
+	});
+
+	it('says which season a show release is listed on, links its magnet, and looks inside it', async () => {
+		localStorage.setItem('dmm:adminToken', 'token');
+		const hash = '02b883174411aaaabbbbccccddddeeeeffff0000';
+		const fetchMock = vi.fn(async (_url: string, init?: RequestInit) =>
+			init?.method === 'POST'
+				? new Response(
+						JSON.stringify({
+							cached: true,
+							files: [
+								{
+									path: 'The Traitors S04E10/About this torrent.txt',
+									size: 900,
+									link: 'https://cdn/about.txt',
+									streamLink: null,
+								},
+								{
+									path: 'The Traitors S04E10/The Traitors S04E10.mp4',
+									size: 2520000000,
+									link: 'https://cdn/dl.mp4',
+									streamLink: 'https://cdn/stream.mp4',
+								},
+							],
+						})
+					)
+				: new Response(
+						JSON.stringify({
+							total: 1,
+							counts: { all: 1, agrees: 0, disagrees: 1, unjudged: 0 },
+							items: [
+								report({
+									imdbId: 'tt15557874',
+									hash,
+									title: 'The Traitors',
+									year: 2023,
+									kind: 'show',
+									filename: 'The Traitors S04E10',
+									seasons: [4],
+									types: ['wrong_season'],
+								}),
+							],
+						})
+					)
+		);
+		vi.stubGlobal('fetch', fetchMock);
+		render(<ReportsAdminPage />);
+
+		const season = await screen.findByRole('link', { name: 'season 4' });
+		expect(season.getAttribute('href')).toBe('/show/tt15557874/4');
+		expect(screen.getByRole('link', { name: 'magnet' }).getAttribute('href')).toBe(
+			`magnet:?xt=urn:btih:${hash}&dn=The%20Traitors%20S04E10`
+		);
+
+		fireEvent.click(screen.getByRole('button', { name: 'Look inside' }));
+		expect(await screen.findByText('The Traitors S04E10.mp4')).toBeInTheDocument();
+		expect(screen.getByText('2.52 GB')).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: 'play' }).getAttribute('href')).toBe(
+			'https://cdn/stream.mp4'
+		);
+		const [, init] = fetchMock.mock.calls.find(([, i]) => i?.method === 'POST')!;
+		expect(JSON.parse(String(init!.body))).toEqual({ action: 'inspect', hash });
 	});
 });

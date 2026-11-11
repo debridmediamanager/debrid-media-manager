@@ -38,8 +38,8 @@ const filed = (userId: string, type = 'wrong_imdb', at = '2026-11-10T10:00:00Z')
 
 beforeEach(() => {
 	vi.stubEnv('ADMIN_TOKEN', TOKEN);
-	vi.spyOn(ScrapedVerdictService.prototype, 'getFilenames').mockResolvedValue(
-		new Map([[HASH, 'Big.Buck.Bunny.2008.1080p.mkv']])
+	vi.spyOn(ScrapedVerdictService.prototype, 'getListings').mockResolvedValue(
+		new Map([[HASH, { title: 'Big.Buck.Bunny.2008.1080p.mkv', seasons: [] }]])
 	);
 });
 
@@ -83,6 +83,7 @@ describe('/api/admin/reports', () => {
 					year: 2008,
 					kind: 'movie',
 					filename: 'Big.Buck.Bunny.2008.1080p.mkv',
+					seasons: [],
 					types: ['porn', 'wrong_imdb'],
 					reporters: 2,
 					model: 'agrees',
@@ -164,5 +165,93 @@ describe('/api/admin/reports', () => {
 		});
 		expect(res._getStatusCode()).toBe(200);
 		expect(undecide).toHaveBeenCalledWith('tt1254207', HASH);
+	});
+
+	it('says which season pages list a show release', async () => {
+		vi.spyOn(ReportService.prototype, 'listUndecidedReports').mockResolvedValue({
+			total: 1,
+			pairs: [{ imdbId: 'tt15557874', hash: HASH }],
+		});
+		vi.spyOn(ReportService.prototype, 'countUndecidedByModel').mockResolvedValue({
+			all: 1,
+			agrees: 0,
+			disagrees: 0,
+			unjudged: 1,
+		});
+		vi.spyOn(ReportService.prototype, 'getReportsFor').mockResolvedValue([filed('rd:alice')]);
+		vi.spyOn(ReportService.prototype, 'getTitles').mockResolvedValue(new Map());
+		vi.spyOn(ScrapedVerdictService.prototype, 'getListings').mockResolvedValue(
+			new Map([[HASH, { title: 'The Traitors S04E10', seasons: [4] }]])
+		);
+		const res = await call({ method: 'GET' });
+		expect((res._getData() as { items: any[] }).items[0]).toMatchObject({
+			filename: 'The Traitors S04E10',
+			seasons: [4],
+		});
+	});
+
+	describe('looking inside a release', () => {
+		const pm = (body: unknown) => vi.fn(async () => new Response(JSON.stringify(body)));
+
+		it('lists the files with links to play them, through the Premiumize setting', async () => {
+			vi.stubEnv('INSPECT_PREMIUMIZE_KEY', 'pm-key');
+			const fetchMock = pm({
+				status: 'success',
+				content: [
+					{
+						path: 'Show/poster.jpg',
+						size: 10,
+						link: 'https://cdn/poster.jpg',
+						stream_link: null,
+					},
+					{
+						path: 'Show/Show.S04E10.mkv',
+						size: 2520000000,
+						link: 'https://cdn/e10.mkv',
+						stream_link: 'https://cdn/e10.mp4',
+					},
+				],
+			});
+			vi.stubGlobal('fetch', fetchMock);
+			const res = await call({ method: 'POST', body: { action: 'inspect', hash: HASH } });
+			expect(res._getStatusCode()).toBe(200);
+			expect(res._getData()).toEqual({
+				cached: true,
+				files: [
+					{
+						path: 'Show/Show.S04E10.mkv',
+						size: 2520000000,
+						link: 'https://cdn/e10.mkv',
+						streamLink: 'https://cdn/e10.mp4',
+					},
+					{
+						path: 'Show/poster.jpg',
+						size: 10,
+						link: 'https://cdn/poster.jpg',
+						streamLink: null,
+					},
+				],
+			});
+			const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
+			expect(url).toBe('https://www.premiumize.me/api/transfer/directdl');
+			expect((init.headers as Record<string, string>).Authorization).toBe('Bearer pm-key');
+			expect(String(init.body)).toContain(`src=magnet%3A%3Fxt%3Durn%3Abtih%3A${HASH}`);
+		});
+
+		it('says so when Premiumize does not have it cached', async () => {
+			vi.stubEnv('INSPECT_PREMIUMIZE_KEY', 'pm-key');
+			vi.stubGlobal('fetch', pm({ status: 'error', message: 'content not in cache' }));
+			const res = await call({ method: 'POST', body: { action: 'inspect', hash: HASH } });
+			expect(res._getData()).toEqual({ cached: false, files: [] });
+		});
+
+		it('needs the Premiumize setting', async () => {
+			vi.stubEnv('INSPECT_PREMIUMIZE_KEY', '');
+			const fetchMock = vi.fn();
+			vi.stubGlobal('fetch', fetchMock);
+			const res = await call({ method: 'POST', body: { action: 'inspect', hash: HASH } });
+			expect(res._getStatusCode()).toBe(503);
+			expect(fetchMock).not.toHaveBeenCalled();
+		});
 	});
 });

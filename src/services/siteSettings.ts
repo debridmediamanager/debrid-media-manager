@@ -48,6 +48,18 @@ export const SITE_SETTINGS = {
 			return { value: out.join(',') };
 		},
 	},
+	inspectPremiumizeKey: {
+		label: 'Premiumize key for looking inside reported releases',
+		help: "Lists a reported torrent's files and plays them at /admin/reports (directdl: nothing is added to the account). Use a test account.",
+		env: 'INSPECT_PREMIUMIZE_KEY',
+		secret: true,
+		parse(raw) {
+			const value = raw.trim();
+			return /^[A-Za-z0-9]{8,64}$/.test(value)
+				? { value }
+				: { error: 'A Premiumize API key is 8 to 64 letters and digits' };
+		},
+	},
 	aiostreamsUrl: {
 		label: 'AIOStreams addon URL',
 		help: 'The configuration URL (…/stremio/<uuid>/<password>, a manifest.json paste works). http only for an instance on the tailnet.',

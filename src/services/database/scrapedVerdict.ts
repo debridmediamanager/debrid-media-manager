@@ -242,25 +242,49 @@ export class ScrapedVerdictService extends DatabaseClient {
 
 	/** The filename each hash carries on the title's movie page or any of its season pages. */
 	public async getFilenames(imdbId: string, hashes: string[]): Promise<Map<string, string>> {
+		const listings = await this.getListings(imdbId, hashes);
+		return new Map([...listings].map(([hash, listing]) => [hash, listing.title]));
+	}
+
+	/**
+	 * Each wanted hash's stored name and the season pages (`tv:<id>:<n>`) listing it,
+	 * across both tables; a film's listing has no seasons.
+	 */
+	public async getListings(
+		imdbId: string,
+		hashes: string[]
+	): Promise<Map<string, { title: string; seasons: number[] }>> {
 		const wanted = new Set(hashes.map((h) => h.toLowerCase()));
 		const where = {
 			OR: [{ key: `movie:${imdbId}` }, { key: { startsWith: `tv:${imdbId}:` } }],
 		};
 		const rows = (
 			await Promise.all([
-				this.prisma.scrapedTrue.findMany({ where, select: { value: true } }),
-				this.prisma.scraped.findMany({ where, select: { value: true } }),
+				this.prisma.scrapedTrue.findMany({ where, select: { key: true, value: true } }),
+				this.prisma.scraped.findMany({ where, select: { key: true, value: true } }),
 			])
 		).flat();
-		const filenames = new Map<string, string>();
+		const listings = new Map<string, { title: string; seasons: Set<number> }>();
 		for (const row of rows) {
+			const season = row.key.startsWith('tv:') ? Number(row.key.split(':')[2]) : NaN;
 			for (const entry of entriesOf(row.value)) {
 				if (typeof entry.hash !== 'string' || typeof entry.title !== 'string') continue;
 				const hash = entry.hash.toLowerCase();
-				if (wanted.has(hash) && !filenames.has(hash)) filenames.set(hash, entry.title);
+				if (!wanted.has(hash)) continue;
+				const listing = listings.get(hash) ?? {
+					title: entry.title,
+					seasons: new Set<number>(),
+				};
+				if (Number.isInteger(season)) listing.seasons.add(season);
+				listings.set(hash, listing);
 			}
 		}
-		return filenames;
+		return new Map(
+			[...listings].map(([hash, l]) => [
+				hash,
+				{ title: l.title, seasons: [...l.seasons].sort((a, b) => a - b) },
+			])
+		);
 	}
 
 	/** Every stored result for a page key across both tables, whole, plus when either last changed. */

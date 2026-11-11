@@ -18,8 +18,8 @@ const tx = vi.hoisted(() => ({
 const prismaMock = vi.hoisted(() => ({
 	imdbTitleBasics: { findUnique: vi.fn() },
 	imdbTitleAkas: { findMany: vi.fn() },
-	scrapedTrue: { findUnique: vi.fn() },
-	scraped: { findUnique: vi.fn() },
+	scrapedTrue: { findUnique: vi.fn(), findMany: vi.fn() },
+	scraped: { findUnique: vi.fn(), findMany: vi.fn() },
 	scrapedVerdict: { findMany: vi.fn(), createMany: vi.fn() },
 	scrapedTrash: { findMany: vi.fn() },
 	cache: {
@@ -286,6 +286,34 @@ describe('ScrapedVerdictService', () => {
 				startYear: null,
 			});
 			await expect(service.getMovieContext('tt1')).resolves.toBeNull();
+		});
+	});
+
+	describe('getListings', () => {
+		// The review queue says which season page a reported show release sits on.
+		it('gives each wanted hash its name and every season page listing it', async () => {
+			prismaMock.scrapedTrue.findMany.mockResolvedValue([
+				{ key: 'tv:tt15557874:4', value: [{ hash: 'AA11', title: 'The Traitors S04E10' }] },
+			]);
+			prismaMock.scraped.findMany.mockResolvedValue([
+				{ key: 'tv:tt15557874:1', value: [{ hash: 'aa11', title: 'other name' }] },
+				{ key: 'tv:tt15557874:4', value: [{ hash: 'bb22', title: 'unwanted' }] },
+			]);
+			const listings = await service.getListings('tt15557874', ['aa11']);
+			expect([...listings]).toEqual([
+				['aa11', { title: 'The Traitors S04E10', seasons: [1, 4] }],
+			]);
+		});
+
+		it('lists a film with no seasons', async () => {
+			prismaMock.scrapedTrue.findMany.mockResolvedValue([
+				{ key: 'movie:tt1254207', value: [{ hash: 'cc33', title: 'Big.Buck.Bunny' }] },
+			]);
+			prismaMock.scraped.findMany.mockResolvedValue([]);
+			expect((await service.getListings('tt1254207', ['cc33'])).get('cc33')).toEqual({
+				title: 'Big.Buck.Bunny',
+				seasons: [],
+			});
 		});
 	});
 

@@ -7,6 +7,7 @@ import {
 import { ScrapedVerdictService } from '@/services/database/scrapedVerdict';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { isModelReporter, JEV_DISPUTED, JEV_REPORTER } from '@/services/reporterId';
+import { getSiteSetting } from '@/services/siteSettings';
 import { isAdmin } from '@/utils/adminToken';
 import { NextApiHandler } from 'next';
 
@@ -27,6 +28,8 @@ export type AdminReport = ReportPair & {
 	kind: 'movie' | 'show' | null;
 	/** The release name DMM has for this hash on this title, if it still has one. */
 	filename: string | null;
+	/** For a show, the season pages listing the release. */
+	seasons: number[];
 	types: string[];
 	/** Distinct people who reported it. */
 	reporters: number;
@@ -41,6 +44,51 @@ export type AdminReport = ReportPair & {
 const IMDB_ID = /^tt\d{1,12}$/;
 const HASH = /^[0-9a-z]{32,64}$/;
 
+export type InspectedFile = { path: string; size: number; link: string; streamLink: string | null };
+
+/**
+ * A reported torrent's files and playable links, from Premiumize's directdl: it
+ * answers for cached torrents only and adds nothing to the account. The links are
+ * short-lived CDN URLs for the admin who asked.
+ */
+async function inspect(hash: string): Promise<[number, unknown]> {
+	const key = await getSiteSetting('inspectPremiumizeKey');
+	if (!key) {
+		return [
+			503,
+			{ error: 'Set the Premiumize key under Site settings to look inside releases' },
+		];
+	}
+	let answer: {
+		status?: string;
+		content?: { path: string; size?: number; link: string; stream_link?: string | null }[];
+	};
+	try {
+		const response = await fetch('https://www.premiumize.me/api/transfer/directdl', {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${key}`,
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams({ src: `magnet:?xt=urn:btih:${hash}` }),
+			signal: AbortSignal.timeout(30_000),
+		});
+		answer = await response.json();
+	} catch {
+		return [502, { error: 'Premiumize did not answer' }];
+	}
+	if (answer.status !== 'success') return [200, { cached: false, files: [] }];
+	const files: InspectedFile[] = (answer.content ?? [])
+		.map((file) => ({
+			path: file.path,
+			size: file.size ?? 0,
+			link: file.link,
+			streamLink: file.stream_link ?? null,
+		}))
+		.sort((a, b) => b.size - a.size);
+	return [200, { cached: true, files }];
+}
+
 let reports: ReportService | null = null;
 let scraped: ScrapedVerdictService | null = null;
 
@@ -54,11 +102,11 @@ async function describe(
 	const byTitle = new Map<string, string[]>();
 	for (const { imdbId, hash } of pairs)
 		byTitle.set(imdbId, [...(byTitle.get(imdbId) ?? []), hash]);
-	const names = new Map<string, string>();
+	const listings = new Map<string, { title: string; seasons: number[] }>();
 	await Promise.all(
 		[...byTitle].map(async ([imdbId, hashes]) => {
-			const found = await scraped!.getFilenames(imdbId, hashes).catch(() => new Map());
-			for (const [hash, name] of found) names.set(`${imdbId}:${hash}`, name);
+			const found = await scraped!.getListings(imdbId, hashes).catch(() => new Map());
+			for (const [hash, listing] of found) listings.set(`${imdbId}:${hash}`, listing);
 		})
 	);
 	return pairs.map((pair) => {
@@ -71,7 +119,8 @@ async function describe(
 			title: titles.get(pair.imdbId)?.title ?? null,
 			year: titles.get(pair.imdbId)?.year ?? null,
 			kind: titles.get(pair.imdbId)?.kind ?? null,
-			filename: names.get(`${pair.imdbId}:${pair.hash}`) ?? null,
+			filename: listings.get(`${pair.imdbId}:${pair.hash}`)?.title ?? null,
+			seasons: listings.get(`${pair.imdbId}:${pair.hash}`)?.seasons ?? [],
 			types: [...new Set(mine.map((r) => r.type))].sort(),
 			reporters: new Set(people.map((r) => r.userId)).size,
 			model: mine.some((r) => r.userId === JEV_REPORTER)
@@ -118,6 +167,13 @@ const handler: NextApiHandler = async (req, res) => {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 	const { imdbId, hash, action, note } = req.body ?? {};
+	if (action === 'inspect') {
+		if (typeof hash !== 'string' || !HASH.test(hash)) {
+			return res.status(400).json({ error: 'hash is a lower-case infohash' });
+		}
+		const [code, body] = await inspect(hash);
+		return res.status(code).json(body);
+	}
 	if (action === 'keepModelDisputed') {
 		const kept = await reports.keepModelDisputed(
 			'Kept in bulk: the model disagreed with every report'

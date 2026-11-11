@@ -1,6 +1,6 @@
 import { AdminFetch, AdminLayout } from '@/components/admin/AdminLayout';
 import Poster from '@/components/poster';
-import type { AdminReport } from '@/pages/api/admin/reports';
+import type { AdminReport, InspectedFile } from '@/pages/api/admin/reports';
 import { useCallback, useEffect, useState } from 'react';
 
 // Reported releases the model could not settle wait here; hiding one hides it on that title only.
@@ -35,15 +35,34 @@ const TYPE_LABEL: Record<string, string> = {
 	malware: 'malware',
 };
 
+const gb = (bytes: number) =>
+	bytes >= 1e9
+		? `${(bytes / 1e9).toFixed(2)} GB`
+		: bytes >= 1e6
+			? `${Math.round(bytes / 1e6)} MB`
+			: '<1 MB';
+
+const PLAYABLE = /\.(mkv|mp4|m4v|avi|ts|m2ts|webm|mov|wmv|mpg)$/i;
+
+type Inspected = { cached: boolean; files: InspectedFile[] } | { error: string } | 'loading';
+
 function ReportCard({
 	report,
 	onAction,
+	onInspect,
 }: {
 	report: AdminReport;
 	onAction: (report: AdminReport, action: Action, note: string) => Promise<void>;
+	onInspect: (hash: string) => Promise<Exclude<Inspected, 'loading'>>;
 }) {
 	const [note, setNote] = useState(report.note ?? '');
 	const [busy, setBusy] = useState(false);
+	const [inside, setInside] = useState<Inspected | null>(null);
+	const lookInside = async () => {
+		setInside('loading');
+		setInside(await onInspect(report.hash));
+	};
+	const magnet = `magnet:?xt=urn:btih:${report.hash}${report.filename ? `&dn=${encodeURIComponent(report.filename)}` : ''}`;
 	const act = async (action: Action) => {
 		setBusy(true);
 		try {
@@ -87,7 +106,26 @@ function ReportCard({
 						{report.hash.slice(0, 12)}
 					</span>
 					<span>{new Date(report.lastReportedAt).toLocaleString()}</span>
+					<a href={magnet} className="text-cyan-300 underline">
+						magnet
+					</a>
 				</p>
+				{report.seasons.length > 0 ? (
+					<p className="mt-2 flex flex-wrap items-center gap-2 text-xs text-gray-400">
+						Listed on
+						{report.seasons.map((season) => (
+							<a
+								key={season}
+								href={`/show/${report.imdbId}/${season}`}
+								target="_blank"
+								rel="noreferrer noopener"
+								className="rounded bg-indigo-900/60 px-2 py-0.5 text-indigo-200 hover:bg-indigo-800"
+							>
+								{season === 0 ? 'specials' : `season ${season}`}
+							</a>
+						))}
+					</p>
+				) : null}
 				<p className="mt-2 flex flex-wrap gap-2 text-xs">
 					{report.types.map((type) => (
 						<span key={type} className="rounded bg-gray-700 px-2 py-0.5 text-gray-200">
@@ -107,6 +145,42 @@ function ReportCard({
 						</span>
 					) : null}
 				</p>
+				{inside === null ? null : inside === 'loading' ? (
+					<p className="mt-3 text-xs text-gray-400">Looking inside…</p>
+				) : 'error' in inside ? (
+					<p className="mt-3 text-xs text-yellow-300">{inside.error}</p>
+				) : !inside.cached ? (
+					<p className="mt-3 text-xs text-gray-400">
+						Not cached on Premiumize. Use the magnet link with your own debrid.
+					</p>
+				) : (
+					<ul className="mt-3 max-h-64 space-y-1 overflow-auto rounded bg-gray-900/60 p-2 text-xs">
+						{inside.files.map((file) => (
+							<li key={file.path} className="flex flex-wrap items-baseline gap-x-2">
+								<span
+									title={file.path}
+									className="min-w-0 flex-1 font-mono break-all text-gray-200"
+								>
+									{file.path.split('/').pop()}
+								</span>
+								<span className="text-gray-400">{gb(file.size)}</span>
+								{PLAYABLE.test(file.path) ? (
+									<a
+										href={file.streamLink ?? file.link}
+										target="_blank"
+										rel="noreferrer noopener"
+										className="text-cyan-300 underline"
+									>
+										play
+									</a>
+								) : null}
+								<a href={file.link} className="text-cyan-300 underline">
+									download
+								</a>
+							</li>
+						))}
+					</ul>
+				)}
 				<input
 					value={note}
 					onChange={(event) => setNote(event.target.value)}
@@ -114,6 +188,13 @@ function ReportCard({
 					className="mt-3 w-full rounded border border-gray-600 bg-gray-900/60 px-2 py-1 text-sm text-gray-100"
 				/>
 				<div className="mt-2 flex flex-wrap gap-2">
+					<button
+						disabled={inside === 'loading'}
+						onClick={() => void lookInside()}
+						className={`${button} border border-gray-600 text-gray-200 hover:bg-gray-800`}
+					>
+						Look inside
+					</button>
 					{report.decision !== 'approved' ? (
 						<button
 							disabled={busy}
@@ -168,6 +249,18 @@ function Reports({ adminFetch }: { adminFetch: AdminFetch }) {
 	useEffect(() => {
 		void load();
 	}, [load]);
+
+	const onInspect = async (hash: string) => {
+		const res = await adminFetch('/api/admin/reports', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ action: 'inspect', hash }),
+		});
+		const reply = await res.json().catch(() => ({}));
+		return res.ok
+			? (reply as { cached: boolean; files: InspectedFile[] })
+			: { error: reply.error ?? `Looking inside failed (${res.status}).` };
+	};
 
 	const onAction = async (report: AdminReport, action: Action, note: string) => {
 		const res = await adminFetch('/api/admin/reports', {
@@ -277,6 +370,7 @@ function Reports({ adminFetch }: { adminFetch: AdminFetch }) {
 					key={`${report.imdbId}:${report.hash}:${report.decision}`}
 					report={report}
 					onAction={onAction}
+					onInspect={onInspect}
 				/>
 			))}
 			{data && pages > 1 ? (

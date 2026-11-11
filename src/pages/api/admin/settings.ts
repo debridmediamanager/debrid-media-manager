@@ -23,7 +23,7 @@ const hint = (value: string) => {
 	try {
 		return `${new URL(value).origin}/…${value.slice(-3)}`;
 	} catch {
-		return '…';
+		return value.length >= 12 ? `…${value.slice(-3)}` : '…';
 	}
 };
 
