@@ -1,6 +1,8 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+// @ts-expect-error: Next ships its path-to-regexp build without types
+import { pathToRegexp } from 'next/dist/compiled/path-to-regexp';
 import loadConfig from '../../../next.config.js';
 
 /**
@@ -20,15 +22,39 @@ const pageFiles = (dir: string): string[] =>
 	});
 
 describe('only the home page is indexed', () => {
-	it('sends X-Robots-Tag noindex on every path except /', async () => {
+	it('sends X-Robots-Tag noindex on every path except / and images or icons', async () => {
 		const config = await loadConfig();
 		const headers = (await config.headers?.()) ?? [];
-		expect(headers).toContainEqual({
-			source: '/:path+',
-			headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
+		const rule = headers.find((h: { headers: { key: string }[] }) =>
+			h.headers.some((x) => x.key === 'X-Robots-Tag')
+		)!;
+		expect(rule.headers).toEqual([{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }]);
+		// Next matches header sources with this path-to-regexp build and these options.
+		const re = pathToRegexp(rule.source, [], {
+			delimiter: '/',
+			sensitive: false,
+			strict: true,
 		});
-		// `/:path*` would also match / itself
-		expect(headers.some((h: { source: string }) => h.source === '/:path*')).toBe(false);
+		for (const p of ['/start', '/search', '/movie/tt0111161', '/api/torznab', '/robots.txt'])
+			expect(re.test(p), p).toBe(true);
+		// Google will not use a noindexed favicon or preview image (2026-11-11: search showed a globe).
+		for (const p of [
+			'/',
+			'/social-card.png',
+			'/favicon.ico',
+			'/android-chrome-192x192.png',
+			'/site.webmanifest',
+		])
+			expect(re.test(p), p).toBe(false);
+	});
+
+	it('shares a 1200x630 card and names the site for link previews', () => {
+		const doc = readFileSync(join(pagesDir, '_document.tsx'), 'utf8');
+		for (const tag of ['og:image', 'og:site_name', 'twitter:card', 'twitter:image'])
+			expect(doc).toContain(`"${tag}"`);
+		expect(doc).toContain('sizes="192x192"');
+		const png = readFileSync(join(publicDir, 'social-card.png'));
+		expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1200, 630]);
 	});
 
 	it('has no site-wide robots meta that would also cover /', () => {
@@ -39,10 +65,9 @@ describe('only the home page is indexed', () => {
 		const index = readFileSync(join(pagesDir, 'index.tsx'), 'utf8');
 		expect(index).toMatch(/loggedOutView: StartPage/);
 		const home = index.slice(index.indexOf('function Home('));
-		expect(home).toContain('<title>Debrid Media Manager - Home</title>');
-		expect(home).toContain(
-			'<link key="canonical" rel="canonical" href="https://debridmediamanager.com/" />'
-		);
+		expect(home).toContain('<title>{HOME_TITLE}</title>');
+		expect(home).toContain('<link key="canonical" rel="canonical" href={SITE_URL} />');
+		expect(home).toContain('application/ld+json');
 		expect(home.indexOf('<Head>')).toBeLessThan(home.indexOf('<AuthedHome'));
 	});
 

@@ -18,6 +18,7 @@ import {
 	realDebridReferralUrl,
 	TORBOX_REFERRAL_URL,
 } from '@/utils/referrals';
+import { HOME_TITLE } from '@/utils/siteMeta';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -59,7 +60,7 @@ export default function StartPage() {
 	return (
 		<div className="flex min-h-screen flex-col items-center justify-center p-4">
 			<Head>
-				<title>Debrid Media Manager - Home</title>
+				<title>{HOME_TITLE}</title>
 				{/* Shown at / to signed-out visitors (and search engines), where index.tsx sets the
 				    canonical: the one indexed page. /start itself stays out. */}
 				{router.pathname !== '/' && <meta name="robots" content="noindex, nofollow" />}

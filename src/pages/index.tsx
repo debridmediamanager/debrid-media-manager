@@ -18,6 +18,7 @@ import { getTerms } from '@/utils/browseTerms';
 import { useGuestMode } from '@/utils/guestMode';
 import { handleLogout } from '@/utils/logout';
 import { checkPremiumStatus } from '@/utils/premiumCheck';
+import { HOME_STRUCTURED_DATA, HOME_TITLE, SITE_URL } from '@/utils/siteMeta';
 import { genericToastOptions, toasterPosition } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { FileCode, Settings } from 'lucide-react';
@@ -297,7 +298,7 @@ function IndexPage() {
 	return (
 		<div className="flex min-h-screen flex-col items-center justify-center bg-gray-900 p-4">
 			<Head>
-				<title>Debrid Media Manager - Home</title>
+				<title>{HOME_TITLE}</title>
 				<meta name="robots" content="noindex, nofollow" />
 			</Head>
 			<Toaster position={toasterPosition()} />
@@ -486,8 +487,13 @@ function Home(props: React.ComponentProps<typeof AuthedHome>) {
 	return (
 		<>
 			<Head>
-				<title>Debrid Media Manager - Home</title>
-				<link key="canonical" rel="canonical" href="https://debridmediamanager.com/" />
+				<title>{HOME_TITLE}</title>
+				<link key="canonical" rel="canonical" href={SITE_URL} />
+				<meta property="og:url" content={SITE_URL} />
+				<script
+					type="application/ld+json"
+					dangerouslySetInnerHTML={{ __html: JSON.stringify(HOME_STRUCTURED_DATA) }}
+				/>
 			</Head>
 			<AuthedHome {...props} />
 		</>

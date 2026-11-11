@@ -323,7 +323,9 @@ describe('StartPage', () => {
 		render(<StartPage />);
 
 		const titleElement = document.querySelector<HTMLTitleElement>('title');
-		expect(titleElement).toHaveTextContent('Debrid Media Manager - Home');
+		expect(titleElement).toHaveTextContent(
+			'Debrid Media Manager · Curate an infinite media library'
+		);
 
 		const metaRobots = document.querySelector('meta[name="robots"]');
 		expect(metaRobots).toHaveAttribute('content', 'noindex, nofollow');

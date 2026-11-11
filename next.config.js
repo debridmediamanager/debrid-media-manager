@@ -2,6 +2,9 @@
 const pwaConfig = require('./pwa.config.js');
 const { LookbehindFallbackPlugin } = require('./lookbehind-fallback.js');
 
+// Every path except / and image, icon and manifest files (see headers() below).
+const NOINDEX_SOURCE = '/:path((?!.*\\.(?:png|ico|svg|webmanifest|jpg|jpeg|webp)$).+)';
+
 const nextConfig = {
 	output: 'standalone',
 	// npm's required prebuild runs full ESLint + Oxlint before Next's type/build workers.
@@ -61,10 +64,11 @@ const nextConfig = {
 	},
 	async headers() {
 		// Only the home page goes into search engines. Everything under it - title pages, search,
-		// the library, API responses and static files - stays out.
+		// the library and API responses - stays out. Images and icons are left alone: Google will
+		// not use a noindexed file as the favicon or the link preview image.
 		return [
 			{
-				source: '/:path+',
+				source: NOINDEX_SOURCE,
 				headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
 			},
 			{
