@@ -1,5 +1,5 @@
 import type { UsenetResult } from '@/services/nzb2rd';
-import { getIndexers, isValidImdbId, searchUsenet } from '@/services/nzb2rd';
+import { isValidImdbId, loadIndexers, searchUsenet } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { withoutBlockedReleases } from '@/services/takedown/blocklist';
@@ -50,7 +50,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		season = parsed;
 	}
 
-	if (getIndexers().length === 0) {
+	if ((await loadIndexers()).length === 0) {
 		return res.status(503).json({ error: 'Usenet indexer is not configured' });
 	}
 

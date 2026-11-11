@@ -256,6 +256,7 @@ function row(over: Partial<NewznabIndexerRow>): NewznabIndexerRow {
 		apiKey: 'db-key',
 		keyless: false,
 		enabled: true,
+		mediaPage: false,
 		position: 0,
 		pacingRate: null,
 		pacingWindow: null,

@@ -1672,6 +1672,8 @@ model NewznabIndexer {
   apiKey       String   @default("") @db.VarChar(255)
   keyless      Boolean  @default(false)
   enabled      Boolean  @default(true)
+  /// Also searched by the Usenet section of a title page (`getIndexers()` in nzb2rd).
+  mediaPage    Boolean  @default(false)
   /// Fan-out and priority order, lowest first.
   position     Int      @default(0)
   /// Searches per window; both or neither.
@@ -1682,4 +1684,26 @@ model NewznabIndexer {
   grabWindow   Int?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+/// A site setting changed at `/admin/settings`. A missing row means the setting's
+/// environment variable applies (see `src/services/siteSettings.ts`).
+model SiteSetting {
+  key       String   @id @db.VarChar(64)
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+}
+
+/// The admin's decision on the reports filed against one release of one title. Only
+/// `approved` hides the release there; reports alone no longer hide anything.
+model ReportDecision {
+  imdbId    String
+  hash      String
+  /// `approved` (hidden) or `dismissed`.
+  decision  String   @db.VarChar(16)
+  note      String?  @db.Text
+  decidedAt DateTime @default(now())
+
+  @@id([imdbId, hash])
+  @@index([decision, decidedAt])
 }

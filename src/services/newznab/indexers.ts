@@ -10,8 +10,13 @@
 // nothing in this module may reach the browser.
 
 import type { NewznabIndexerRow } from '@/services/database/newznabIndexers';
-import { NewznabIndexerService } from '@/services/database/newznabIndexers';
 import { getIndexers, Indexer } from '@/services/nzb2rd';
+import {
+	_resetIndexerTableForTest,
+	INDEXER_TABLE_TTL_MS,
+	invalidateIndexerTable,
+	loadIndexerRows,
+} from './indexerTable';
 
 /**
  * One upstream Newznab server. `url` is the FULL API endpoint
@@ -176,33 +181,7 @@ export function rowToIndexer(row: NewznabIndexerRow): UpstreamIndexer | null {
 }
 
 /** How long one instance trusts its copy of the table; the admin page's own instance clears it on save. */
-export const DB_INDEXERS_TTL_MS = 30_000;
-
-// `indexers` null = the table is empty, so the env list applies.
-let dbIndexers: { at: number; indexers: UpstreamIndexer[] | null } | null = null;
-let dbRead: Promise<UpstreamIndexer[]> | null = null;
-let indexerService: NewznabIndexerService | null = null;
-
-async function readTable(): Promise<UpstreamIndexer[]> {
-	try {
-		indexerService ??= new NewznabIndexerService();
-		const rows = await indexerService.listIndexers();
-		const indexers =
-			Array.isArray(rows) && rows.length > 0
-				? rows
-						.filter((row) => row.enabled)
-						.map(rowToIndexer)
-						.filter((indexer): indexer is UpstreamIndexer => indexer !== null)
-				: null;
-		dbIndexers = { at: Date.now(), indexers };
-	} catch (error) {
-		// Keep serving the last list read; with none, the env list. Retried after
-		// the TTL rather than on every search while the database is down.
-		console.error('Newznab indexers: reading the table failed, keeping the last list:', error);
-		dbIndexers = { at: Date.now(), indexers: dbIndexers?.indexers ?? null };
-	}
-	return dbIndexers.indexers ?? getUpstreamIndexers();
-}
+export const DB_INDEXERS_TTL_MS = INDEXER_TABLE_TTL_MS;
 
 /**
  * The enabled upstream indexers, in the order the admin page set: the
@@ -211,25 +190,22 @@ async function readTable(): Promise<UpstreamIndexer[]> {
  * grabbed from; its stored NZBs are still served.
  */
 export async function loadUpstreamIndexers(): Promise<UpstreamIndexer[]> {
-	if (dbIndexers && Date.now() - dbIndexers.at < DB_INDEXERS_TTL_MS) {
-		return dbIndexers.indexers ?? getUpstreamIndexers();
-	}
-	dbRead ??= readTable().finally(() => {
-		dbRead = null;
-	});
-	return dbRead;
+	const rows = await loadIndexerRows();
+	if (rows.length === 0) return getUpstreamIndexers();
+	return rows
+		.filter((row) => row.enabled)
+		.map(rowToIndexer)
+		.filter((indexer): indexer is UpstreamIndexer => indexer !== null);
 }
 
 /** After an admin save, so this instance reads the table again on its next request. */
 export function invalidateUpstreamIndexers(): void {
-	dbIndexers = null;
+	invalidateIndexerTable();
 }
 
 /** Clears the per-process memos. Tests only. */
 export function _resetUpstreamIndexersForTest(): void {
 	cachedIndexers = null;
 	warnedAboutMalformedConfig = false;
-	dbIndexers = null;
-	dbRead = null;
-	indexerService = null;
+	_resetIndexerTableForTest();
 }

@@ -321,6 +321,9 @@ the `NEWZNAB_INDEXERS` env JSON applies, so the first row saved replaces that wh
   already in the store are still served.
 - API keys go in and never come out: the admin API answers with the last three
   characters only. An empty key field on a change keeps the stored key.
+- **In title-page Usenet search** (`mediaPage`) also makes a row one of the indexers the
+  Usenet section of a title page searches (`loadIndexers()` in `services/nzb2rd.ts`),
+  independent of the feed's own **In the Newznab feed** (`enabled`).
 - A stored key only goes to the server it was saved for: moving an indexer to another
   origin needs the key typed again (a keyless indexer drops its stored key instead), and
   URLs must be `https`, since the key rides in every request's query string.

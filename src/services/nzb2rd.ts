@@ -14,6 +14,7 @@
 //     the Tailscale address alone — same arrangement as the debrid uploader.
 
 import { EASYNEWS_NZB_PREFIX } from '@/services/easynews';
+import { loadIndexerRows } from '@/services/newznab/indexerTable';
 import { getStoredNzb } from '@/services/newznab/store';
 import { isVideo } from '@/utils/selectable';
 import { addHashAsMagnet, getTorrentInfo, selectFiles } from './realDebrid';
@@ -58,6 +59,30 @@ export const DRUNKENSLUG_PREFIX = 'ds';
  * DrunkenSlug ids, and `parseReleaseId` reads those as DrunkenSlug).
  */
 export function getIndexers(): Indexer[] {
+	return fromTable ?? envIndexers();
+}
+
+// The title-page indexers last read from the NewznabIndexer table (`mediaPage` rows);
+// null while the table is empty, when the environment's pair applies.
+let fromTable: Indexer[] | null = null;
+
+/**
+ * The title-page indexers, re-read from the table at most every 30 s. Every async
+ * path that searches or fetches calls this first, so the synchronous `getIndexers()`
+ * and `parseReleaseId` behind it see the current list.
+ */
+export async function loadIndexers(): Promise<Indexer[]> {
+	const rows = await loadIndexerRows();
+	fromTable =
+		rows.length === 0
+			? null
+			: rows
+					.filter((row) => row.mediaPage && row.apiKey)
+					.map(({ prefix, name, url, apiKey }) => ({ prefix, name, url, apiKey }));
+	return getIndexers();
+}
+
+function envIndexers(): Indexer[] {
 	return [
 		{
 			prefix: DRUNKENSLUG_PREFIX,
@@ -558,8 +583,9 @@ export function dedupeResults(lists: UsenetResult[][]): UsenetResult[] {
 export async function fanOut(
 	toUrl: (indexer: Indexer) => string,
 	label: string,
-	indexers: Indexer[] = getIndexers()
+	indexers?: Indexer[]
 ): Promise<{ ok: boolean; lists: UsenetResult[][]; answered: boolean[] }> {
+	indexers ??= await loadIndexers();
 	const settled = await Promise.all(
 		indexers.map((indexer) =>
 			fetchResults(toUrl(indexer), indexer)
@@ -664,6 +690,7 @@ export async function fetchNzb(id: string): Promise<string> {
 		if (!xml) throw new Error(`stored Easynews NZB ${id} is missing`);
 		return xml;
 	}
+	await loadIndexers();
 	const target = parseReleaseId(id);
 	if (!target) throw new Error(`unknown indexer for release id ${id}`);
 	return fetchNzbFrom(target.indexer, target.nativeId);

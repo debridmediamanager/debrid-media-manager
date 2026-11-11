@@ -15,7 +15,7 @@ vi.mock('@/services/nzb2rd', async (importOriginal) => {
 	return {
 		...actual,
 		searchUsenet: vi.fn(),
-		getIndexers: () => [
+		loadIndexers: async () => [
 			{
 				prefix: 'ds',
 				name: 'DrunkenSlug',

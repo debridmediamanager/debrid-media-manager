@@ -8,6 +8,7 @@ export interface NewznabIndexerRow {
 	apiKey: string;
 	keyless: boolean;
 	enabled: boolean;
+	mediaPage: boolean;
 	position: number;
 	pacingRate: number | null;
 	pacingWindow: number | null;

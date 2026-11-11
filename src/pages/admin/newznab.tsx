@@ -65,6 +65,7 @@ function bodyFrom(form: HTMLFormElement) {
 		apiKey: text('apiKey'),
 		keyless: data.get('keyless') === 'on',
 		enabled: data.get('enabled') === 'on',
+		mediaPage: data.get('mediaPage') === 'on',
 		position: Number(text('position')) || 0,
 		pacing: limit('pacing'),
 		grabLimit: limit('grabLimit'),
@@ -96,7 +97,7 @@ function IndexerForm({
 		<form
 			onSubmit={submit}
 			className={`rounded border-2 p-4 text-sm text-gray-200 ${
-				indexer && !indexer.enabled
+				indexer && !indexer.enabled && !indexer.mediaPage
 					? 'border-gray-700 bg-gray-800/10 opacity-70'
 					: 'border-gray-600 bg-gray-800/30'
 			}`}
@@ -183,7 +184,11 @@ function IndexerForm({
 						type="checkbox"
 						defaultChecked={indexer?.enabled ?? true}
 					/>
-					Enabled
+					In the Newznab feed
+				</label>
+				<label className="flex items-center gap-2">
+					<input name="mediaPage" type="checkbox" defaultChecked={indexer?.mediaPage} />
+					In title-page Usenet search
 				</label>
 				<label className="flex items-center gap-2">
 					<input name="keyless" type="checkbox" defaultChecked={indexer?.keyless} />

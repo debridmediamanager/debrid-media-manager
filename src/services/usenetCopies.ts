@@ -8,7 +8,13 @@
 // Usenet tab's send, nzb2rd's own fetch of a copy, a Newznab grab.
 
 import { encryptReleaseId } from '@/services/newznab/opaqueId';
-import { EASYNEWS_ID, parseReleaseId, releaseDedupKey, type UsenetResult } from '@/services/nzb2rd';
+import {
+	EASYNEWS_ID,
+	loadIndexers,
+	parseReleaseId,
+	releaseDedupKey,
+	type UsenetResult,
+} from '@/services/nzb2rd';
 import { repository as db } from '@/services/repository';
 
 /** How many other postings of one release nzb2rd accepts. */
@@ -45,6 +51,7 @@ export async function recordCopies(
 	rows: Pick<UsenetResult, 'id' | 'title' | 'alternates'>[]
 ): Promise<void> {
 	try {
+		await loadIndexers(); // groupCopies keeps only ids parseReleaseId can route
 		await db.recordUsenetCopies(groupCopies(rows));
 	} catch (error) {
 		console.error('Recording the other postings of Usenet releases failed:', error);

@@ -4,6 +4,7 @@ import {
 	type NewznabIndexerRow,
 } from '@/services/database/newznabIndexers';
 import { getUpstreamIndexers, invalidateUpstreamIndexers } from '@/services/newznab/indexers';
+import { getIndexers } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { isAdmin } from '@/utils/adminToken';
 import { NextApiHandler } from 'next';
@@ -22,6 +23,8 @@ export type AdminIndexer = {
 	keyHint: string;
 	keyless: boolean;
 	enabled: boolean;
+	/** Also searched by the Usenet section of a title page. */
+	mediaPage: boolean;
 	position: number;
 	pacing: Limit;
 	grabLimit: Limit;
@@ -42,6 +45,7 @@ const view = (row: NewznabIndexerInput): AdminIndexer => ({
 	keyHint: keyHint(row.apiKey),
 	keyless: row.keyless,
 	enabled: row.enabled,
+	mediaPage: row.mediaPage,
 	position: row.position,
 	pacing: limitOf(row.pacingRate, row.pacingWindow),
 	grabLimit: limitOf(row.grabRate, row.grabWindow),
@@ -81,6 +85,7 @@ export function mergeIndexerInput(
 				apiKey: '',
 				keyless: false,
 				enabled: true,
+				mediaPage: false,
 				position: 0,
 				pacingRate: null,
 				pacingWindow: null,
@@ -120,7 +125,7 @@ export function mergeIndexerInput(
 		if (typedKey.length > 255) return 'The API key is at most 255 characters';
 		if (typedKey) next.apiKey = typedKey;
 	}
-	for (const flag of ['keyless', 'enabled'] as const) {
+	for (const flag of ['keyless', 'enabled', 'mediaPage'] as const) {
 		if (body[flag] === undefined) continue;
 		if (typeof body[flag] !== 'boolean') return `${flag} must be true or false`;
 		next[flag] = body[flag] as boolean;
@@ -180,6 +185,7 @@ const handler: NextApiHandler = async (req, res) => {
 				apiKey: indexer.apiKey,
 				keyless: indexer.keyless === true,
 				enabled: true,
+				mediaPage: getIndexers().some((media) => media.prefix === indexer.prefix),
 				position,
 				pacingRate: indexer.pacing?.rateLimit ?? null,
 				pacingWindow: indexer.pacing?.windowSeconds ?? null,
@@ -217,4 +223,4 @@ const handler: NextApiHandler = async (req, res) => {
 	return res.status(req.method === 'POST' ? 201 : 200).json({ indexer: view(stored(row)) });
 };
 
-export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.newznabIndexerAdmin);
+export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.admin);
