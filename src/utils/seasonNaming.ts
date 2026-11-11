@@ -31,34 +31,45 @@
  * `The Wire_S02` is a real shape and a plain word boundary does not see the
  * gap between `e` and `_`; brackets are here for `All Seasons (1-8)`.
  */
-const SEP = '[ ._\\-_()\\[\\]]*';
+// with the no-break space of `Saison\u00a05`
+const SEP = '[ \\u00a0._\\-_()\\[\\]]*';
 
 /**
  * Words that introduce a season number. English plus the ones real release
  * groups ship - measured in the corpus: `Temporada` (Spanish/Portuguese),
  * `saison` (French), `Sezon`/`sezona` (Slavic), `Сезон` (Russian), and
  * `Staffel`/`stagione` for good measure. DMM's shared hashlists add British
- * `Series 1`, Czech `Série 1`, `4. serie`, Dutch `Seizoen` and Hungarian `1. Évad`
+ * `Series 1`, Czech `Série 1`, `4. serie`, Dutch `Seizoen`, Hungarian `1. Évad` and Polish `Sezony 1-3`
  * (`hashlist-names-2026-11-11.json`). `series` leads `s[ée]rie`, so `Series 1` is not
  * read as `serie` and an `s`.
  */
 const SEASON_WORDS =
-	'seasons?|temporadas?|saisons?|stagioni|stagione|staffel|series|s[ée]rie|seizoen|[ée]vad|sez[óo]na?|sezon|сезон[а-я]*';
+	'seasons?|temporadas?|saisons?|stagioni|stagione|staffel|series|s[ée]rie|seizoen|[ée]vad|sez[óo]n[ay]?|sezon|сезон[а-я]*';
 
-const S_TOKEN = new RegExp(`(?:^|[^A-Za-z0-9])s(\\d{1,2})(?![0-9])`, 'gi');
+/**
+ * `S03`, `S03E04`, `S01v2`, `S02SP2`; never a group's tag (`-S4LVE`, `-S0NiC`) or Joy's
+ * `10bit S99 Joy`, 199 of 3,141 season changes over the first 596k hashlist hashes re-read.
+ */
+const S_TOKEN = new RegExp(
+	`(?:^|[^A-Za-z0-9])s(\\d{1,2})(?![0-9]|(?![epsv])[a-z]|\\s+joy\\b)`,
+	'gi'
+);
 const S_RANGE = new RegExp(
 	`(?:^|[^A-Za-z0-9])s(\\d{1,2})${SEP}(?:-|–|—|~|to|thru|through)${SEP}s?(\\d{1,2})(?![0-9])`,
 	'gi'
 );
 /** `[S1S2S3]`: tokens written back to back, where only the first follows a separator. */
 const S_CHAIN = /(?:^|[^A-Za-z0-9])((?:s\d{1,2}){2,})(?![0-9])/gi;
-const SEASON_WORD = new RegExp(SEASON_WORDS, 'gi');
+// a word of its own: `ZZSeries.25.12.09` is a site and a date
+const SEASON_WORD = new RegExp(`(?:^|[^a-z])(?:${SEASON_WORDS})`, 'gi');
 /**
  * `3ª Temporada`, `2nd Season` - the number leads the word instead of following it. Never
  * a year's last digits: `Grimm 2011 Season 1` and `(2016) Season 1-6` name no season 11 or 16.
  */
+// a number standing alone, the word right after it: never `Sense8.Season`, `S02E01 Season of`,
+// `[MP4].[Season.1]`, `1977-81 Season 4` or `(Kaiju No. 8) (Season 2)`
 const LEADING_NUMBER = new RegExp(
-	`(?:^|[^0-9])(\\d{1,2})(?:st|nd|rd|th|ª|°)?${SEP}(?:${SEASON_WORDS})`,
+	`(?:^|[\\s._(\\[])(\\d{1,2})(?:st|nd|rd|th|ª|°)?[ \\u00a0._-]*(?:${SEASON_WORDS})`,
 	'gi'
 );
 

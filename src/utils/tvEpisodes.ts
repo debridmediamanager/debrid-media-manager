@@ -59,10 +59,10 @@ const MAX_RANGE = 200;
  * as fansub numbering always does, which keeps `Season 1 - 2` a range; a
  * batch carries a second number (`S3 - 01 ~ 13`), which must not run into a
  * resolution (`- 05 - 1080p`), and a resolution is not an episode
- * (`Attack on Titan - S03 - 1080p`).
+ * (`Attack on Titan - S03 - 1080p`). The season may close a bracket (`(Season 2) - 06`).
  */
 export const FANSUB_SEASON =
-	/(?:^|[^a-z0-9])(?:(?:s|season[\s._]?)(\d{1,2})|(\d{1,2})(?:st|nd|rd|th)[\s._]season)[\s._]+[-–][\s._]+(\d{2,4})(?![0-9]|[pi]\b)(?:[\s._]*[-~][\s._]*(\d{2,4})(?![0-9a-z]))?/i;
+	/(?:^|[^a-z0-9])(?:(?:s|season[\s._]?)(\d{1,2})|(\d{1,2})(?:st|nd|rd|th)[\s._]season)\)?[\s._]+[-–][\s._]+(\d{2,4})(?![0-9]|[pi]\b)(?:[\s._]*[-~][\s._]*(\d{2,4})(?![0-9a-z]))?/i;
 
 /**
  * Words that name a whole run without numbering it: `Complete Series`,
