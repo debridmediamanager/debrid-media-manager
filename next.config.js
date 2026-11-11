@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const pwaConfig = require('./pwa.config.js');
+const { LookbehindFallbackPlugin } = require('./lookbehind-fallback.js');
 
 const nextConfig = {
 	output: 'standalone',
@@ -7,13 +8,14 @@ const nextConfig = {
 	// Avoid running a second, incomplete ESLint pass concurrently with type checking.
 	eslint: { ignoreDuringBuilds: true },
 	transpilePackages: ['recharts', '@reduxjs/toolkit'],
-	webpack: (config) => {
+	webpack: (config, { isServer, dev }) => {
 		config.cache = {
 			type: 'filesystem',
 			buildDependencies: {
-				config: [__filename],
+				config: [__filename, require.resolve('./lookbehind-fallback.js')],
 			},
 		};
+		if (!isServer && !dev) config.plugins.push(new LookbehindFallbackPlugin());
 		return config;
 	},
 	async rewrites() {

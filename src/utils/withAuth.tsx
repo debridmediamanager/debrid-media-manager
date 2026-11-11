@@ -18,7 +18,6 @@ import { useRouter } from 'next/router';
 import { ComponentType, useEffect, useState } from 'react';
 import { hasBrowserHandoff } from './browserHandoff';
 import { disableGuestMode, useGuestMode } from './guestMode';
-import { supportsLookbehind } from './lookbehind';
 import { hasSponsorHandoff } from './sponsorHandoff';
 
 const START_ROUTE = '/start';
@@ -174,14 +173,6 @@ export const withAuth = <P extends object>(
 				<div className="flex min-h-screen flex-col items-center justify-center">
 					<Logo />
 					<h1 className="text-2xl">Debrid Media Manager is loading...</h1>
-					{!supportsLookbehind() && (
-						<div className="bg-red-900">
-							<a href="https://caniuse.com/js-regexp-lookbehind">
-								You are using an unsupported browser.
-							</a>{' '}
-							Update your browser/OS for DMM to work.
-						</div>
-					)}
 				</div>
 			);
 		}

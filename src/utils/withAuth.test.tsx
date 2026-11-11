@@ -12,7 +12,6 @@ const mockRouter = {
 
 const mockUseRealDebridAccessToken = vi.fn();
 const mockUseAllDebridApiKey = vi.fn();
-const mockSupportsLookbehind = vi.fn();
 
 vi.mock('next/router', () => ({
 	useRouter: () => mockRouter,
@@ -21,10 +20,6 @@ vi.mock('next/router', () => ({
 vi.mock('@/hooks/auth', () => ({
 	useRealDebridAccessToken: () => mockUseRealDebridAccessToken(),
 	useAllDebridApiKey: () => mockUseAllDebridApiKey(),
-}));
-
-vi.mock('./lookbehind', () => ({
-	supportsLookbehind: () => mockSupportsLookbehind(),
 }));
 
 vi.mock('@/components/Logo', () => ({
@@ -37,7 +32,6 @@ describe('withAuth', () => {
 		vi.clearAllMocks();
 		mockRouter.pathname = '/test';
 		mockRouter.asPath = '/test?param=value';
-		mockSupportsLookbehind.mockReturnValue(true);
 	});
 
 	it('renders wrapped component when authenticated with RD', async () => {

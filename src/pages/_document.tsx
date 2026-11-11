@@ -1,4 +1,5 @@
 import { BOOT_GUARD_SCRIPT } from '@/utils/bootGuard';
+import { LOOKBEHIND_SHIM_SCRIPT } from '@/utils/lookbehindShim';
 import { Head, Html, Main, NextScript } from 'next/document';
 
 export default function Document() {
@@ -6,6 +7,10 @@ export default function Document() {
 		<Html lang="en">
 			<Head>
 				<meta charSet="UTF-8" />
+				<script
+					id="dmm-lookbehind-shim"
+					dangerouslySetInnerHTML={{ __html: LOOKBEHIND_SHIM_SCRIPT }}
+				/>
 				<script
 					id="dmm-boot-guard"
 					dangerouslySetInnerHTML={{ __html: BOOT_GUARD_SCRIPT }}

@@ -1,0 +1,578 @@
+[
+	{
+		"pattern": "(?:^|\\s|(?<!\\d)\\.)(\\d{1,4})(?:v\\d{1,2})?(?=\\s*(?:[[(]|$))",
+		"flags": "",
+		"form": "constructor",
+		"chunk": "1732"
+	},
+	{
+		"pattern": "(?<!^)[[【]\\s?(\\d{1,4})(?:v\\d{1,2})?\\s?[\\]】]",
+		"flags": "",
+		"form": "constructor",
+		"chunk": "1732"
+	},
+	{
+		"pattern": "(?<!全\\s?)第?\\s?(\\d{1,4})\\s?[話话集]",
+		"flags": "",
+		"form": "constructor",
+		"chunk": "1732"
+	},
+	{
+		"pattern": "(?<!\\$)foo",
+		"flags": "g",
+		"form": "constructor",
+		"chunk": "1914"
+	},
+	{
+		"pattern": "(?<=\\$)foo",
+		"flags": "g",
+		"form": "constructor",
+		"chunk": "1914"
+	},
+	{
+		"pattern": "\\([^)]*[\\u0400-\\u04ff][^)]*\\)$|(?<=\\/.*)\\(.*\\)$",
+		"flags": "u",
+		"form": "constructor",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "\\b(?:malay|may(?=[\\]_)]?\\.\\w{2,4}$)|(?<=subs?\\([a-z,]+)may)\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "\\b(?:(?<!w{3}\\.\\w+\\.)SE|swe|swesubs?|sv(?:ensk)?|nordic)\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "\\b(?:(?<!w{3}\\.\\w+\\.)FI|finsk|finsub|nordic)\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "\\b(?:(?<!w{3}\\.\\w+\\.)NL|dut|holand[eê]s)\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "\\b(?:(?<!w{3}\\.\\w+\\.)PL|pol)\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "\\b(?<!YTS\\.)LT\\b",
+		"flags": "",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "\\b(?:(?<!w{3}\\.\\w+\\.)tel(?!\\W*aviv)|telugu)\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "\\b(?<=[ .,/-]+[A-Z]{2}[ .,/-]+)de(?=[ .,/-]+[A-Z]{2}[ .,/-]+)\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "\\b(?<=[ .,/-]+(?:[A-Z]{2}[ .,/-]+){2,})de\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "\\b(?<!w{3}\\.\\w+\\.)IT(?=[ .,/-]+(?:[a-zA-Z]{2}[ .,/-]+){2,})\\b",
+		"flags": "",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "\\b(?<=[ .,/-]+[A-Z]{2}[ .,/-]+)es(?=[ .,/-]+[A-Z]{2}[ .,/-]+)\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "\\b(?<=[ .,/-]+(?:[A-Z]{2}[ .,/-]+){2,})es\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<!movie\\W*|film\\W*|^)(?:[ .]+-[ .]+|[([][ .]*)(\\d{1,4})(?:a|b|v\\d|\\.\\d)?(?:\\W|$)(?!movie|film|\\d+)",
+		"flags": "gi",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<!^)\\[(\\d{2,3})](?!(?:\\.\\w{2,4})?$)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<=\\D|^)(\\d{1,3})[. ]?(?:of|из|iz)[. ]?\\d{1,3}(?=\\D|$)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<=S\\d{2}E)\\d+",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<!(?:seasons?|[Сс]езони?)\\W*)(?:[ .([-]|^)(\\d{1,3}(?:-\\d{1,3})+)(?:[ .)(\\]]|-\\D|$)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<!(?:seasons?|[Сс]езони?)\\W*)(?:[ .([-]|^)(\\d{1,3}(?:[ .]?[,&+~][ .]?\\d{1,3})+)(?:[ .)\\]-]|$)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<!\\d-)\\b\\d{1,2}-(\\d{2})(?=\\.\\w{2,4}$)",
+		"flags": "",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<!\\bEp?(?:isode)? ?\\d+\\b.*)\\b(\\d{2})[ ._]\\d{2}(?:.F)?\\.\\w{2,4}$",
+		"flags": "",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<=S)\\d{2}(?=E\\d+)",
+		"flags": "",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<=remux.*)\\bBlu[ .-]*Ray\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "[([]?(?!^)(?<!\\d|Cap[. ]?)((?:19\\d|20[012])\\d)(?!\\d|kbps)[)\\]]?",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<=\\W|^)([([]?20[012][0-9](?:0[1-9]|1[012])(?:0[1-9]|[12][0-9]|3[01])[)\\]]?)(?=\\W|$)",
+		"flags": "",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<=\\W|^)([([]?(?:0?[1-9]|[12][0-9]|3[01])[. ]?(?:st|nd|rd|th)?([. \\-/\\\\])(?:feb(?:ruary)?|jan(?:uary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sept?(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\\2(?:0[1-9]|[0126789][0-9])[)\\]]?)(?=\\W|$)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<=\\W|^)([([]?(?:0?[1-9]|[12][0-9]|3[01])[. ]?(?:st|nd|rd|th)?([. \\-/\\\\])(?:feb(?:ruary)?|jan(?:uary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sept?(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\\2(?:19[7-9]|20[012])[0-9][)\\]]?)(?=\\W|$)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<=\\W)([([]?(?:0[1-9]|[12][0-9]|3[01])([. \\-/\\\\])(?:0[1-9]|1[012])\\2(?:[0][1-9]|[0126789][0-9])[)\\]]?)(?=\\W|$)",
+		"flags": "",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<=\\W)([([]?(?:0[1-9]|1[012])([. \\-/\\\\])(?:0[1-9]|[12][0-9]|3[01])\\2(?:[0][1-9]|[0126789][0-9])[)\\]]?)(?=\\W|$)",
+		"flags": "",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<=\\W)([([]?(?:0[1-9]|1[012])([. \\-/\\\\])(?:0[1-9]|[12][0-9]|3[01])\\2(?:19[6-9]|20[012])[0-9][)\\]]?)(?=\\W|$)",
+		"flags": "",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<=\\W|^)([([]?(?:0[1-9]|[12][0-9]|3[01])([. \\-/\\\\])(?:0[1-9]|1[012])\\2(?:19[6-9]|20[012])[0-9][)\\]]?)(?=\\W|$)",
+		"flags": "",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "(?<=\\W|^)([([]?(?:19[6-9]|20[012])[0-9]([. \\-/\\\\])(?:0[1-9]|1[012])\\2(?:0[1-9]|[12][0-9]|3[01])[)\\]]?)(?=\\W|$)",
+		"flags": "",
+		"form": "literal",
+		"chunk": "8152"
+	},
+	{
+		"pattern": "^(?:\\[(?<subgroup>[^\\]\\r\\n]+)\\][-_. ]?)?(?<title>[^\\r\\n]+?)(?:(?:[-_\\W](?<![()[!]))+(?<absoluteepisode>(?<!\\d+)\\d{2,3}(\\.\\d{1,2})?(?!\\d+)))+[-_. ]*(?<hash>\\[\\w{8}\\])?(?:$|\\.)?",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?:\\[(?<subgroup>[^\\]\\r\\n]+)\\][-_. ]?)?(?<title>[^\\r\\n]+?)(?:[-_. ]+(?<absoluteepisode>(?<!\\d+)\\d{2,3}(\\.\\d{1,2})?(?!\\d+)))+[-_. ]*(?<hash>\\[\\w{8}\\])?(?:$|\\.)?",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)[-_. ](?:Episode)(?:[-_. ]+(?<absoluteepisode>(?<!\\d+)\\d{2,3}(\\.\\d{1,2})?(?!\\d+)))+[-_. ]*(?<hash>\\[\\w{8}\\])?(?:$|\\.)?",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?:(?<season>(?<!\\d+)(?:\\d{1,2})(?!\\d+))(?:-(?<episode>\\d{2,3}(?!\\d+))))",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?:Season(?:_|-|\\s|\\.)(?<season>(?<!\\d+)\\d{1,2}(?!\\d+)))(?:_|-|\\s|\\.)(?<episode>(?<!\\d+)\\d{1,2}(?!\\d+))",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]*?)(?:(?:[-_\\W](?<![()[!]))+S?(?<season>(?<!\\d+)\\d{1,2}(?!\\d+))(?:(?:-|[ex]){1,2}(?<episode>\\d{1}))+)+(\\W+|_|$)(?!\\\\)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)?(?:(?:[-_\\W](?<![()[!]))*(?<season>(?<!\\d+|\\(|\\[|e|x)\\d{2})(?<episode>(?<!e|x)\\d{2}(?!p|i|\\d+|\\)|\\]|\\W\\d+|\\W(?:e|ep|x)\\d+)))+(\\W+|_|$)(?!\\\\)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)(?:(?:[-_\\W](?<![()[!]))+S?(?<season>(?<!\\d+)\\d{1,2}(?!\\d+))(?:(?:-|[ex]|\\W[ex]|_){1,2}(?<episode>\\d{4}(?!\\d+|i|p)))+)\\W?(?!\\\\)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?:S?(?<season>(?<!\\d+)\\d{1,2}(?!\\d+))(?:(?:-|[ex]|\\W[ex]|_){1,2}(?<episode>\\d{4}(?!\\d+|i|p)))+)(\\W+|_|$)(?!\\\\)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)?(?:(?:[_.](?<![()[!]))+(?<season>(?<!\\d+)[1-9])(?<episode>[1-9][0-9]|[0][1-9])(?![a-z]|\\d+))+(?:[_.]|$)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)(?:(?:[-_\\W](?<![()[!]))+\\[S?(?<season>(?<!\\d+)\\d{1,2}(?!\\d+))(?:(?:-|[ex]|\\W[ex]|_){1,2}(?<episode>(?<!\\d+)\\d{2}(?!\\d+|i|p)))+\\])\\W?(?!\\\\)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)(?:_|-|\\s|\\.)+S(?<season>\\d{2}(?!\\d+))(\\W-\\W)E(?<episode>(?<!\\d+)\\d{2}(?!\\d+))(?!\\\\)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?:(?<title>[^\\r\\n]+?)(?:_|-|\\s|\\.)+)(?:S?(?<season>(?<!\\d+)\\d{1,2}(?!\\d+)))(?:(?:[-_. ]{1,3}ep){1,2}(?<episode>(?<!\\d+)\\d{5}(?!\\d+)))+",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?:(?<title>[^\\r\\n]+?)(?:_|-|\\s|\\.)+)(?:S?(?<season>(?<!\\d+)\\d{1,2}(?!\\d+)))(?:(?:-|[ex]|\\W[ex]|_){1,2}(?<episode>(?<!\\d+)\\d{5}(?!\\d+)))",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]*?)(?:\\W?|_)S(?<season>(?<!\\d+)\\d{3}(?!\\d+))(?:\\W|_)?E(?<episode>(?<!\\d+)\\d{1,2}(?!\\d+))",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]*?)(?:\\W?|_)S(?<season>(?<!\\d+)\\d{1,2}(?!\\d+))(?:\\W|_)?Ep?[ ._]?(?<episode>(?<!\\d+)\\d{1,2}(?!\\d+))",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]*?)S(?<season>(?<!\\d+)\\d{2}(?!\\d+))(?:E(?<episode>(?<!\\d+)\\d{2}(?!\\d+)))+",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]*?)[-._ ]+\\[S(?<season>(?<!\\d+)\\d{2}(?!\\d+))(?:[E-]{1,2}(?<episode>(?<!\\d+)\\d{2}(?!\\d+)))+\\]",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]*?)(?:[-_\\W](?<![()[]))+(?:\\W?Season\\W?)(?<season>(?<!\\d+)\\d{1,2}(?!\\d+))(?:\\W|_)+(?:Episode\\W)(?:[-_. ]?(?<episode>(?<!\\d+)\\d{1,2}(?!\\d+)))+",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)(?:\\W+(?:(?<episode>(?<!\\d+)\\d{1,2}(?!\\d+))of\\d+)+)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)(?:\\W+(?:(?:Part\\W?|(?<!\\d+\\W+)e)(?<episode>\\d{1,2}(?!\\d+)))+)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)(?:\\W+S(?<season>(?<!\\d+)(?:\\d{1,2})(?!\\d+))\\W+(?:(?:Part\\W?|(?<!\\d+\\W+)e)(?<seasonpart>\\d{1,2}(?!\\d+)))+)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)[-_. ]+S(?<season>(?<!\\d+)(?:\\d{1,2})(?!\\d+))\\W?-\\W?S?(?<season1>(?<!\\d+)(?:\\d{1,2})(?!\\d+))",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)(?:(?:[-_\\W](?<![()[!]))+(?<season>(?<!\\d+)(?:\\d{4})(?!\\d+))(?:x|\\Wx){1,2}(?<episode>\\d{2,3}(?!\\d+))(?:(?:-|x|\\Wx|_){1,2}(?<episode1>\\d{2,3}(?!\\d+)))*)\\W?(?!\\\\)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)(?:(?:[-_\\W](?<![()[!]))+S(?<season>(?<!\\d+)(?:\\d{4})(?!\\d+))(?:e|\\We|_){1,2}(?<episode>\\d{2,3}(?!\\d+))(?:(?:-|e|\\We|_){1,2}(?<episode1>\\d{2,3}(?!\\d+)))*)\\W?(?!\\\\)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)?\\W*(?<airyear>\\d{4})\\W+(?<airmonth>[0-1][0-9])\\W+(?<airday>[0-3][0-9])(?!\\W+[0-3][0-9])[^\\r\\n]*?(?:s?(?<season>(?<!\\d+)(?:\\d{1,2})(?!\\d+)))(?:[ex](?<episode>(?<!\\d+)(?:\\d{1,3})(?!\\d+)))",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)?\\W*(?<airdate>\\d{4}\\W+[0-1][0-9]\\W+[0-3][0-9])(?!\\W+[0-3][0-9])[-_. ](?:s?(?<season>(?<!\\d+)(?:\\d{1,2})(?!\\d+)))(?:[ex](?<episode>(?<!\\d+)(?:\\d{1,3})(?!\\d+)))",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?:\\[(?<subgroup>[^\\]\\r\\n]+)\\][-_. ]?)?(?<title>[^\\r\\n]+?)[_. ]+(?<absoluteepisode>(?<!\\d+)\\d{1,2}(\\.\\d{1,2})?(?!\\d+))-(?<absoluteepisode1>(?<!\\d+)\\d{1,2}(\\.\\d{1,2})?(?!\\d+|-))[-_. ]*(?<hash>\\[\\w{8}\\])?(?:$|\\.)?",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?:\\[(?<subgroup>[^\\]\\r\\n]+)\\][-_. ]?)?(?<title>[^\\r\\n]+?)(?:_|\\s|\\.)+(?:e|ep)(?<absoluteepisode>\\d{2,3}(\\.\\d{1,2})?)-(?<absoluteepisode1>(?<!\\d+)\\d{1,2}(\\.\\d{1,2})?(?!\\d+|-))[^\\r\\n]*(?:$|\\.)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)(?:[-_\\W](?<![()[!]))+(?:S?(?<season>(?<!\\d+)\\d{1,2}(?!\\d+))(?:(?:[ex]|\\W[ex]){1,2}(?<episode>(?<!\\d+)\\d{2}(?!\\d+))))(?:[-_. ]+(?<absoluteepisode>(?<!\\d+)\\d{3}(\\.\\d{1,2})?(?!\\d+)))+[^[\\]\\r\\n]*\\[(?<subgroup>[^\\]\\r\\n]+)\\](?:$|\\.mkv)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)(?:(?:[-_\\W](?<![()[!]))+S?(?<season>(?<!\\d+)(?:\\d{1,2})(?!\\d+))(?:[ex]|\\W[ex]|_){1,2}(?<episode>(?!265|264)\\d{2,3}(?!\\d+|(?:[ex]|\\W[ex]|_|-){1,2})))",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)(?:(?:[-_\\W](?<![()[!]))+S?(?<season>(?<!\\d+)(?:\\d{1,2}|\\d{4})(?!\\d+))(?:(?:[ex]|[-_. ]e){1,2}(?<episode>\\d{1,3}(?!\\d+)))+){2,}",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?:\\[(?<subgroup>[^\\]\\r\\n]+)\\](?:_|-|\\s|\\.)?)(?<title>[^\\r\\n]+?)(?:[-_\\W](?<![()[!]))+(?:S?(?<season>(?<!\\d+)\\d{1,2}(?!\\d+))(?:(?:[ex]|\\W[ex]){1,2}(?<episode>\\d{2}(?!\\d+)))+)(?:\\s|\\.)[^\\r\\n]*(?:$|\\.)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?:\\[(?<subgroup>[^\\]\\r\\n]+)\\](?:_|-|\\s|\\.)?)(?<title>[^\\r\\n]+?)(?:[-_\\W](?<![()[!]))+(?:S?(?<season>(?<!\\d+)\\d{1,2}(?!\\d+))(?:(?:-|[ex]|\\W[ex]){1,2}(?<episode>\\d{2}(?!\\d+)))+)(?:(?:_|-|\\s|\\.)+(?<absoluteepisode>(?<!\\d+)\\d{2,3}(\\.\\d{1,2})?(?!\\d+)))+[^\\r\\n]*(?:$|\\.)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?:\\[(?<subgroup>[^\\]\\r\\n]+)\\](?:_|-|\\s|\\.)?)(?<title>[^\\r\\n]+?)(?:(?:[-_\\W](?<![()[!]))+(?<absoluteepisode>\\d{2,3}(\\.\\d{1,2})?))+(?:_|-|\\s|\\.)+(?:S?(?<season>(?<!\\d+)\\d{1,2}(?!\\d+))(?:(?:-|[ex]|\\W[ex]){1,2}(?<episode>\\d{2}(?!\\d+)))+)[^\\r\\n]*(?:$|\\.)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?:\\[(?<subgroup>[^\\]\\r\\n]+)\\][-_. ]?)(?<title>[^\\r\\n]+?)[-_. ](?:Episode)(?:[-_. ]+(?<absoluteepisode>(?<!\\d+)\\d{2,3}(\\.\\d{1,2})?(?!\\d+)))+[-_. ]*(?<hash>\\[\\w{8}\\])?(?:$|\\.)?",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?:S?(?<season>(?<!\\d+)(?:\\d{1,2}|\\d{4})(?!\\d+))(?:(?:[-_ ]?[ex])(?<episode>\\d{2,3}(?!\\d+))))",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "(?:S?(?<season>(?<!\\d+)(?:\\d{1,2}|\\d{4})(?!\\d+))(?:(?:[-_]|[ex]){1,2}(?<episode>\\d{2,3}(?!\\d+))){2,})",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)(?:(?:[-_\\W](?<![()[!]))+S?(?<season>(?<!\\d+)(?:\\d{1,2})(?!\\d+))(?:[ex]|\\W[ex]|_){1,2}(?<episode>\\d{2,3}(?!\\d+))(?:(?:-|[ex]|\\W[ex]|_){1,2}(?<episode1>\\d{2,3}(?!\\d+)))+)[^[\\]\\r\\n]*(?:\\[[^\\]\\r\\n]+\\])(?!\\\\)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)[-_. ]S(?<season>(?<!\\d+)(?:\\d{1,2}|\\d{4})(?!\\d+))(?:[E-_. ]?[ex]?(?<episode>(?<!\\d+)\\d{1,2}(?!\\d+)))+(?:[-_. ]?[ex]?(?<episode1>(?<!\\d+)\\d{1,2}(?!\\d+)))+",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?:\\W*S?(?<season>(?<!\\d+)(?:\\d{1,2}|\\d{4})(?!\\d+))(?:(?:[ex]){1,2}(?<episode>\\d{1,3}(?!\\d+)))+){2,}",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "(?<=[_.-])(?<airdate>(?<!\\d)(?<airyear>[1-9]\\d{1})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))(?=[_.-])",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "\\b((?<!HD[._ -]|HD)DVD|BDRip|720p|MKV|XviD|WMV|d3g|(BD)?REMUX)\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "\\b((?<!HD[._ -]|HD)DVD|BDRip|720p|MKV|XviD|WMV|d3g|(BD)?REMUX|[xh][-_. ]?26[45])\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "-(?<releasegroup>[a-z0-9]+)(?<!WEB-DL|WEB-RIP|480p|720p|1080p|2160p|DTS-(HD|X|MA|ES)|([a-zA-Z]{3}-ENG))(?:\\b|[-._ ])",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "\\b((?<hcsub>(\\w+(?<!SOFT|MULTI|HORRIBLE)SUBS?))|(?<hc>(HC|SUBBED)))\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "\\b((?<!H|HALF-)SBS)\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)?(?:(?:[-_\\W](?<![)[!]))*(?<year>(?:1[89]|20)\\d{2}(?!p|i|\\d+|\\]|\\W\\d+)))+(\\W+|_|$)(?!\\\\)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>(?![([])[^\\r\\n]+?)?(?:(?:[-_\\W](?<![)!]))*(?<year>(?:1[89]|20)\\d{2}(?!p|i|\\d+|\\W\\d+)))+(\\W+|_|$)(?!\\\\)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>[^\\r\\n]+?)?(?:(?:[-_\\W](?<![()[!]))*(?<year>\\[[\\w ]{1,64}\\]))+(\\W+|_|$)(?!\\\\)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>(?![([])[^\\r\\n]+?)?(?:(?:[-_\\W](?<![)[!]))*(?<year>(?:1[89]|20)\\d{2}(?!p|i|(?:1[89]|20)\\d{2}|\\]|\\W(?:1[89]|20)\\d{2})))+(\\W+|_|$)(?!\\\\)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>(?![([])[^\\r\\n]+?)?(?:(?:[-_\\W](?<![)[!]))*\\((?<year>(?:1[89]|20)\\d{2}(?!p|i|(?:1[89]|20)\\d{2}|\\]|\\W(?:1[89]|20)\\d{2})))+",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "^(?<title>(?![([])[^\\r\\n]+?)?(?:(?:[-_\\W](?<![)[!]))*\\(?\\b(?<edition>(((?:Extended[-_. ']|Ultimate[-_. '])?(?:Director[-_. ']?s|Collector[-_. ']?s|Theatrical|Anniversary|The[-_. ']Uncut|Ultimate|Final(?=(?:[-_. '](?:Cut|Edition|Version)))|Extended|Rogue|Special|Despecialized|\\d{2,3}(?:th)?[-_. ']Anniversary)(?:[-_. '](?:Cut|Edition|Version))?(?:[-_. '](?:Extended|Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']?Edit))?|(?:Uncensored|Remastered|Unrated|Uncut|IMAX|Fan[-_. ']?Edit|Edition|Restored|[234]in1))))\\b\\)?[-_. ]{1,3}(?<year>(?:1[89]|20)\\d{2}(?!p|i|\\d+|\\]|\\W\\d+)))+(\\W+|_|$)(?!\\\\)",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "(?<!\\d)(1[\\W]0(?:ch)?)(?=[^\\d]|$)|\\b(?:mono|1ch)\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "(?<!\\d)(2[\\W]0(?:ch)?)(?=[^\\d]|$)|\\bstereo\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "(?<!\\d)((6[\\W]0(?:ch)?)(?=[^\\d]|$)|(5[\\W][01](?:ch)?)(?=[^\\d]|$)|5ch|6ch)\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "(?<!\\d)7[\\W_][01]\\b",
+		"flags": "i",
+		"form": "literal",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "(?<![0-9a-f])[0-9a-f]{40}(?![0-9a-f])",
+		"flags": "gi",
+		"form": "constructor",
+		"chunk": "pages__app"
+	},
+	{
+		"pattern": "(?<!\\d)(\\d{1,2})x(\\d{2})(?!\\d)",
+		"flags": "i",
+		"form": "constructor",
+		"chunk": "pages__app"
+	}
+]
