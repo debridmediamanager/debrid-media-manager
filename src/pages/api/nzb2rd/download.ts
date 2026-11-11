@@ -3,8 +3,10 @@ import { fetchNzb, qualifyReleaseId } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { BLOCKED_MESSAGE, isNzbBlocked } from '@/services/takedown/blocklist';
 import { asTokens, orderCopies } from '@/services/usenetCopies';
+import { getClientIpFromRequest } from '@/utils/clientIp';
 import { nzbAttachment, safeNzbName } from '@/utils/nzbName';
 import { NzbSanitizeError, sanitizeNzbAsync, withAlternatesMeta } from '@/utils/nzbSanitize';
+import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 /**
@@ -20,10 +22,21 @@ import type { NextApiRequest, NextApiResponse } from 'next';
  * else neither reader needs (see utils/nzbSanitize). The articles themselves are
  * untouched, so the download is the same download.
  */
+/**
+ * nzb2rd fetches a release's other postings back from here, server to server, so
+ * its host gets in without a page. `NZB2RD_CALLER_IPS` lists that host's public IPs.
+ */
+function isNzb2rdHost(req: NextApiRequest): boolean {
+	const ip = getClientIpFromRequest(req);
+	return !!ip && (process.env.NZB2RD_CALLER_IPS ?? '').split(',').some((x) => x.trim() === ip);
+}
+
 async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET') {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
+	// Each grab spends a download from DMM's indexer accounts. Tools use Newznab.
+	if (!isNzb2rdHost(req) && !validateOwnPageRequest(req, res)) return;
 
 	const { id, title } = req.query;
 

@@ -1,4 +1,5 @@
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
+import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import { getProblemSecret, mintProblemToken } from '@/utils/problemToken';
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 
@@ -15,6 +16,9 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
 		res.setHeader('Allow', 'GET');
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
+	// Only DMM's pages get a token. Open to anyone, it let scripts mint one and
+	// then search torrents (2026-11-11: Cenluma-Media-Intake, 22,777 searches in 2.5 days).
+	if (!validateOwnPageRequest(req, res)) return;
 
 	const secret = getProblemSecret();
 	if (!secret) {

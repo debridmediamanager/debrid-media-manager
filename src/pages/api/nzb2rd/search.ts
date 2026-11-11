@@ -5,6 +5,7 @@ import { repository as db } from '@/services/repository';
 import { withoutBlockedReleases } from '@/services/takedown/blocklist';
 import { resolveTvdbId } from '@/services/tvdbLookup';
 import { recordCopies } from '@/services/usenetCopies';
+import { validateOwnPageRequest } from '@/utils/ownPageRequest';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const sameRelease = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '');
@@ -35,6 +36,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET') {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
+	// The Usenet tab's own search. Tools use Newznab, which needs a sponsorship.
+	if (!validateOwnPageRequest(req, res)) return;
 
 	const { imdbId, seasonNum, title } = req.query;
 	if (!isValidImdbId(imdbId)) {
