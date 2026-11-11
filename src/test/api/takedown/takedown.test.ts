@@ -113,11 +113,11 @@ describe('GET /api/takedown/blocklist', () => {
 describe('/api/takedown/admin', () => {
 	const auth = { authorization: `Bearer ${TOKEN}` };
 	beforeEach(() => {
-		process.env.TAKEDOWN_ADMIN_TOKEN = TOKEN;
+		process.env.ADMIN_TOKEN = TOKEN;
 		vi.spyOn(TakedownService.prototype, 'getNotice').mockResolvedValue({ id: 'n1' } as any);
 	});
 	afterEach(() => {
-		delete process.env.TAKEDOWN_ADMIN_TOKEN;
+		delete process.env.ADMIN_TOKEN;
 	});
 
 	it('refuses a wrong or missing token', async () => {
@@ -133,7 +133,7 @@ describe('/api/takedown/admin', () => {
 	});
 
 	it('refuses everything when no token is configured', async () => {
-		delete process.env.TAKEDOWN_ADMIN_TOKEN;
+		delete process.env.ADMIN_TOKEN;
 		expect((await call(adminHandler, { method: 'GET', headers: auth }))._getStatusCode()).toBe(
 			401
 		);

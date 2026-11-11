@@ -1660,7 +1660,7 @@ model MusicPlayerState {
 }
 
 /// An upstream Newznab server the `/api/newznab` aggregator fans out to, edited at
-/// `/newznab/admin`. `prefix` is baked into every opaque release id this indexer ever
+/// `/admin/newznab`. `prefix` is baked into every opaque release id this indexer ever
 /// produced, so it never changes and a row is disabled rather than deleted: a reused
 /// prefix would route an *arr's saved grabs to a different server.
 model NewznabIndexer {

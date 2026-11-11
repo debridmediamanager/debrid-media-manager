@@ -2,6 +2,8 @@ import { render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+vi.mock('next/router', () => ({ useRouter: () => ({ pathname: '/admin/newznab' }) }));
+
 vi.mock('@/components/Logo', () => ({
 	__esModule: true,
 	Logo: () => <div data-testid="logo" />,
@@ -12,7 +14,7 @@ vi.mock('next/head', () => ({
 	default: ({ children }: { children: ReactNode }) => <>{children}</>,
 }));
 
-import NewznabAdminPage from '@/pages/newznab/admin';
+import NewznabAdminPage from '@/pages/admin/newznab';
 
 const indexer = (over: Record<string, unknown> = {}) => ({
 	prefix: 'tm',
@@ -34,13 +36,13 @@ function serve(body: unknown) {
 	);
 }
 
-beforeEach(() => localStorage.setItem('dmm:newznabAdminToken', 'token'));
+beforeEach(() => localStorage.setItem('dmm:adminToken', 'token'));
 afterEach(() => {
 	vi.unstubAllGlobals();
 	localStorage.clear();
 });
 
-describe('/newznab/admin', () => {
+describe('/admin/newznab', () => {
 	// The add form has no limits yet; it crashed the page on 2026-11-11 when that
 	// null limit was read for its window.
 	it('renders the env list and an empty add form', async () => {

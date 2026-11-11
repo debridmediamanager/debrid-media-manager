@@ -3,7 +3,7 @@
 // Deliberately separate from `getIndexers()` in @/services/nzb2rd: that list is
 // what the Usenet section of a media page searches, hard-codes two servers and
 // exists to feed nzb2rd. This one lives in the `NewznabIndexer` table, edited at
-// `/newznab/admin`, so a sponsor-facing aggregator can carry the whole *arr
+// `/admin/newznab`, so a sponsor-facing aggregator can carry the whole *arr
 // indexer fleet without a code change or a redeploy. The `NEWZNAB_INDEXERS` env
 // JSON is the fallback while that table is empty. Every field here is a secret —
 // an entry's `url` and `apiKey` name an account the whole site shares, so

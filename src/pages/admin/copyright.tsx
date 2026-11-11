@@ -1,9 +1,7 @@
-import { Logo } from '@/components/Logo';
-import Head from 'next/head';
+import { AdminFetch, AdminLayout } from '@/components/admin/AdminLayout';
 import { useCallback, useEffect, useState } from 'react';
 
-// The review queue for copyright notices. The token is TAKEDOWN_ADMIN_TOKEN;
-// the API checks it on every call, so this page holds no secret of its own.
+// The review queue for copyright notices.
 
 type Notice = {
 	id: string;
@@ -23,24 +21,7 @@ type Notice = {
 	createdAt: string;
 };
 
-const TOKEN_KEY = 'dmm:takedownAdminToken';
 const STATUSES = ['pending', 'approved', 'rejected'] as const;
-
-const readToken = () => {
-	try {
-		return localStorage.getItem(TOKEN_KEY) ?? '';
-	} catch {
-		return '';
-	}
-};
-
-const saveToken = (token: string) => {
-	try {
-		localStorage.setItem(TOKEN_KEY, token);
-	} catch {
-		// A private window keeps the token for this visit only.
-	}
-};
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
@@ -135,39 +116,29 @@ function NoticeCard({
 	);
 }
 
-export default function CopyrightAdminPage() {
-	const [token, setToken] = useState('');
+function CopyrightNotices({ adminFetch }: { adminFetch: AdminFetch }) {
 	const [status, setStatus] = useState<(typeof STATUSES)[number]>('pending');
 	const [notices, setNotices] = useState<Notice[] | null>(null);
 	const [message, setMessage] = useState<string | null>(null);
-	// The token form folds to a link once a load has succeeded with it.
-	const [changingToken, setChangingToken] = useState(false);
-
-	useEffect(() => setToken(readToken()), []);
 
 	const load = useCallback(async () => {
-		if (!token) return;
-		const res = await fetch(`/api/takedown/admin?status=${status}`, {
-			headers: { Authorization: `Bearer ${token}` },
-		});
+		const res = await adminFetch(`/api/takedown/admin?status=${status}`);
 		if (!res.ok) {
 			setNotices(null);
-			setMessage(
-				res.status === 401 ? 'The token was refused.' : `Loading failed (${res.status}).`
-			);
+			if (res.status !== 401) setMessage(`Loading failed (${res.status}).`);
 			return;
 		}
 		setNotices((await res.json()).notices);
-	}, [token, status]);
+	}, [adminFetch, status]);
 
 	useEffect(() => {
 		void load();
 	}, [load]);
 
 	const onAction = async (id: string, action: 'approve' | 'reject', note: string) => {
-		const res = await fetch('/api/takedown/admin', {
+		const res = await adminFetch('/api/takedown/admin', {
 			method: 'POST',
-			headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ id, action, note }),
 		});
 		const body = await res.json().catch(() => ({}));
@@ -187,73 +158,38 @@ export default function CopyrightAdminPage() {
 	};
 
 	return (
-		<div className="flex min-h-screen flex-col items-center bg-gray-900 p-4">
-			<Head>
-				<title>Debrid Media Manager - Copyright review</title>
-				<meta name="robots" content="noindex, nofollow" />
-			</Head>
-			<Logo />
-			<div className="mt-6 flex w-full max-w-4xl flex-col gap-4 pb-16">
-				<h1 className="text-2xl font-bold text-gray-100">Copyright notices</h1>
-				{notices && !changingToken ? (
+		<>
+			<div className="flex gap-2">
+				{STATUSES.map((s) => (
 					<button
-						onClick={() => setChangingToken(true)}
-						className="self-start text-sm text-cyan-300 underline hover:text-cyan-200"
-					>
-						Change token
-					</button>
-				) : (
-					<form
-						className="flex gap-2"
-						onSubmit={(event) => {
-							event.preventDefault();
-							const value =
-								new FormData(event.currentTarget).get('token')?.toString() ?? '';
-							saveToken(value);
+						key={s}
+						onClick={() => {
 							setMessage(null);
-							setChangingToken(false);
-							setToken(value);
+							setStatus(s);
 						}}
+						className={`rounded px-3 py-1 text-sm ${
+							s === status
+								? 'bg-gray-200 text-gray-900'
+								: 'border border-gray-600 text-gray-300 hover:bg-gray-800'
+						}`}
 					>
-						<input
-							name="token"
-							type="password"
-							defaultValue={token}
-							key={token}
-							placeholder="Admin token"
-							className="flex-1 rounded border border-gray-600 bg-gray-900/60 px-3 py-2 text-sm text-gray-100"
-						/>
-						<button className="rounded bg-cyan-700 px-3 py-2 text-sm font-semibold text-white hover:bg-cyan-600">
-							Use token
-						</button>
-					</form>
-				)}
-				<div className="flex gap-2">
-					{STATUSES.map((s) => (
-						<button
-							key={s}
-							onClick={() => {
-								setMessage(null);
-								setStatus(s);
-							}}
-							className={`rounded px-3 py-1 text-sm ${
-								s === status
-									? 'bg-gray-200 text-gray-900'
-									: 'border border-gray-600 text-gray-300 hover:bg-gray-800'
-							}`}
-						>
-							{s}
-						</button>
-					))}
-				</div>
-				{message ? <p className="text-sm text-yellow-300">{message}</p> : null}
-				{notices?.length === 0 ? (
-					<p className="text-sm text-gray-400">Nothing here.</p>
-				) : null}
-				{notices?.map((notice) => (
-					<NoticeCard key={notice.id} notice={notice} onAction={onAction} />
+						{s}
+					</button>
 				))}
 			</div>
-		</div>
+			{message ? <p className="text-sm text-yellow-300">{message}</p> : null}
+			{notices?.length === 0 ? <p className="text-sm text-gray-400">Nothing here.</p> : null}
+			{notices?.map((notice) => (
+				<NoticeCard key={notice.id} notice={notice} onAction={onAction} />
+			))}
+		</>
+	);
+}
+
+export default function CopyrightAdminPage() {
+	return (
+		<AdminLayout title="Copyright notices">
+			{(adminFetch) => <CopyrightNotices adminFetch={adminFetch} />}
+		</AdminLayout>
 	);
 }

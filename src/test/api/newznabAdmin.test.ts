@@ -42,11 +42,11 @@ const row = (over: Partial<NewznabIndexerRow> = {}): NewznabIndexerRow => ({
 	...over,
 });
 
-const originalToken = process.env.NEWZNAB_ADMIN_TOKEN;
+const originalToken = process.env.ADMIN_TOKEN;
 const originalEnv = process.env.NEWZNAB_INDEXERS;
 
 beforeEach(() => {
-	process.env.NEWZNAB_ADMIN_TOKEN = TOKEN;
+	process.env.ADMIN_TOKEN = TOKEN;
 	delete process.env.NEWZNAB_INDEXERS;
 	indexers._resetUpstreamIndexersForTest();
 	vi.spyOn(NewznabIndexerService.prototype, 'getIndexer').mockResolvedValue(null);
@@ -54,7 +54,7 @@ beforeEach(() => {
 
 afterEach(() => {
 	vi.restoreAllMocks();
-	process.env.NEWZNAB_ADMIN_TOKEN = originalToken;
+	process.env.ADMIN_TOKEN = originalToken;
 	process.env.NEWZNAB_INDEXERS = originalEnv;
 	indexers._resetUpstreamIndexersForTest();
 });
@@ -64,7 +64,7 @@ describe('/api/newznab/admin', () => {
 		const list = vi.spyOn(NewznabIndexerService.prototype, 'listIndexers');
 		expect((await call({ method: 'GET' }, null))._getStatusCode()).toBe(401);
 		expect((await call({ method: 'GET' }, 'wrong'))._getStatusCode()).toBe(401);
-		delete process.env.NEWZNAB_ADMIN_TOKEN;
+		delete process.env.ADMIN_TOKEN;
 		expect((await call({ method: 'GET' }, ''))._getStatusCode()).toBe(401);
 		expect(list).not.toHaveBeenCalled();
 	});

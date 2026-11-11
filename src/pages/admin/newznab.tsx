@@ -1,28 +1,8 @@
-import { Logo } from '@/components/Logo';
+import { AdminFetch, AdminLayout } from '@/components/admin/AdminLayout';
 import type { AdminIndexer } from '@/pages/api/newznab/admin';
-import Head from 'next/head';
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 
-// The Newznab aggregator's upstream indexers. The token is NEWZNAB_ADMIN_TOKEN;
-// the API checks it on every call, and never sends a stored API key back.
-
-const TOKEN_KEY = 'dmm:newznabAdminToken';
-
-const readToken = () => {
-	try {
-		return localStorage.getItem(TOKEN_KEY) ?? '';
-	} catch {
-		return '';
-	}
-};
-
-const saveToken = (token: string) => {
-	try {
-		localStorage.setItem(TOKEN_KEY, token);
-	} catch {
-		// A private window keeps the token for this visit only.
-	}
-};
+// The Newznab aggregator's upstream indexers. The API never sends a stored API key back.
 
 const WINDOWS: [number, string][] = [
 	[60, 'minute'],
@@ -220,40 +200,31 @@ function IndexerForm({
 	);
 }
 
-export default function NewznabAdminPage() {
-	const [token, setToken] = useState('');
+function NewznabIndexers({ adminFetch }: { adminFetch: AdminFetch }) {
 	const [indexers, setIndexers] = useState<AdminIndexer[] | null>(null);
 	const [source, setSource] = useState<'database' | 'environment' | null>(null);
 	const [message, setMessage] = useState<string | null>(null);
-	const [changingToken, setChangingToken] = useState(false);
-
-	useEffect(() => setToken(readToken()), []);
 
 	const load = useCallback(async () => {
-		if (!token) return;
-		const res = await fetch('/api/newznab/admin', {
-			headers: { Authorization: `Bearer ${token}` },
-		});
+		const res = await adminFetch('/api/newznab/admin');
 		if (!res.ok) {
 			setIndexers(null);
-			setMessage(
-				res.status === 401 ? 'The token was refused.' : `Loading failed (${res.status}).`
-			);
+			if (res.status !== 401) setMessage(`Loading failed (${res.status}).`);
 			return;
 		}
 		const body = await res.json();
 		setSource(body.source);
 		setIndexers(body.indexers);
-	}, [token]);
+	}, [adminFetch]);
 
 	useEffect(() => {
 		void load();
 	}, [load]);
 
 	const onSave = async (method: 'POST' | 'PATCH', body: ReturnType<typeof bodyFrom>) => {
-		const res = await fetch('/api/newznab/admin', {
+		const res = await adminFetch('/api/newznab/admin', {
 			method,
-			headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(body),
 		});
 		const reply = await res.json().catch(() => ({}));
@@ -269,81 +240,48 @@ export default function NewznabAdminPage() {
 	};
 
 	return (
-		<div className="flex min-h-screen flex-col items-center bg-gray-900 p-4">
-			<Head>
-				<title>Debrid Media Manager - Newznab indexers</title>
-				<meta name="robots" content="noindex, nofollow" />
-			</Head>
-			<Logo />
-			<div className="mt-6 flex w-full max-w-4xl flex-col gap-4 pb-16">
-				<h1 className="text-2xl font-bold text-gray-100">Newznab indexers</h1>
-				{indexers && !changingToken ? (
-					<button
-						onClick={() => setChangingToken(true)}
-						className="self-start text-sm text-cyan-300 underline hover:text-cyan-200"
-					>
-						Change token
-					</button>
-				) : (
-					<form
-						className="flex gap-2"
-						onSubmit={(event) => {
-							event.preventDefault();
-							const value =
-								new FormData(event.currentTarget).get('token')?.toString() ?? '';
-							saveToken(value);
-							setMessage(null);
-							setChangingToken(false);
-							setToken(value);
-						}}
-					>
-						<input
-							name="token"
-							type="password"
-							defaultValue={token}
-							key={token}
-							placeholder="Admin token"
-							className="min-w-0 flex-1 rounded border border-gray-600 bg-gray-900/60 px-3 py-2 text-sm text-gray-100"
+		<>
+			{message ? <p className="text-sm text-yellow-300">{message}</p> : null}
+			{source === 'environment' && indexers ? (
+				<div className="rounded border border-yellow-600 bg-yellow-900/20 p-3 text-sm text-yellow-200">
+					<p>
+						No indexers are saved here yet, so searches use the{' '}
+						<code>NEWZNAB_INDEXERS</code> setting, listed below read-only.
+					</p>
+					<p className="mt-1">
+						Adding one here replaces that whole list. Import the {indexers.length}{' '}
+						first, or only the new one will be searched.
+					</p>
+				</div>
+			) : null}
+			{source === 'environment'
+				? indexers?.map((indexer) => (
+						<section
+							key={indexer.prefix}
+							className="rounded border border-gray-700 p-3 text-sm text-gray-300"
+						>
+							<span className="font-semibold text-gray-100">{indexer.name}</span>{' '}
+							<span className="font-mono text-xs break-all text-gray-400">
+								{indexer.prefix} · {indexer.url}
+							</span>
+						</section>
+					))
+				: indexers?.map((indexer) => (
+						<IndexerForm
+							key={`${indexer.prefix}:${JSON.stringify(indexer)}`}
+							indexer={indexer}
+							onSave={onSave}
 						/>
-						<button className="rounded bg-cyan-700 px-3 py-2 text-sm font-semibold text-white hover:bg-cyan-600">
-							Use token
-						</button>
-					</form>
-				)}
-				{message ? <p className="text-sm text-yellow-300">{message}</p> : null}
-				{source === 'environment' && indexers ? (
-					<div className="rounded border border-yellow-600 bg-yellow-900/20 p-3 text-sm text-yellow-200">
-						<p>
-							No indexers are saved here yet, so searches use the{' '}
-							<code>NEWZNAB_INDEXERS</code> setting, listed below read-only.
-						</p>
-						<p className="mt-1">
-							Adding one here replaces that whole list. Import the {indexers.length}{' '}
-							first, or only the new one will be searched.
-						</p>
-					</div>
-				) : null}
-				{source === 'environment'
-					? indexers?.map((indexer) => (
-							<section
-								key={indexer.prefix}
-								className="rounded border border-gray-700 p-3 text-sm text-gray-300"
-							>
-								<span className="font-semibold text-gray-100">{indexer.name}</span>{' '}
-								<span className="font-mono text-xs break-all text-gray-400">
-									{indexer.prefix} · {indexer.url}
-								</span>
-							</section>
-						))
-					: indexers?.map((indexer) => (
-							<IndexerForm
-								key={`${indexer.prefix}:${JSON.stringify(indexer)}`}
-								indexer={indexer}
-								onSave={onSave}
-							/>
-						))}
-				{indexers ? <IndexerForm onSave={onSave} /> : null}
-			</div>
-		</div>
+					))}
+			{indexers ? <IndexerForm onSave={onSave} /> : null}
+		</>
+	);
+}
+
+export default function NewznabAdminPage() {
+	return (
+		<AdminLayout title="Newznab indexers">
+			{(adminFetch) => <NewznabIndexers adminFetch={adminFetch} />}
+		</AdminLayout>
 	);
 }

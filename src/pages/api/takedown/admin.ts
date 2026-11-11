@@ -2,20 +2,17 @@ import { TakedownService, type TakedownStatus } from '@/services/database/takedo
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
 import { invalidateBlocklist } from '@/services/takedown/blocklist';
 import { deleteHashlistPages } from '@/services/takedown/hashlists';
-import { hasAdminToken } from '@/utils/adminToken';
-import { NextApiHandler, NextApiRequest } from 'next';
+import { isAdmin } from '@/utils/adminToken';
+import { NextApiHandler } from 'next';
 
 const STATUSES: TakedownStatus[] = ['pending', 'approved', 'rejected'];
-
-export const isTakedownAdmin = (req: NextApiRequest): boolean =>
-	hasAdminToken(req, process.env.TAKEDOWN_ADMIN_TOKEN);
 
 let service: TakedownService | null = null;
 
 // The review queue. GET lists notices; POST approves or rejects one. Rejecting
 // an approved notice reverses it.
 const handler: NextApiHandler = async (req, res) => {
-	if (!isTakedownAdmin(req)) return res.status(401).json({ error: 'Unauthorized' });
+	if (!isAdmin(req)) return res.status(401).json({ error: 'Unauthorized' });
 	service ??= new TakedownService();
 
 	if (req.method === 'GET') {

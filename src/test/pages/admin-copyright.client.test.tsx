@@ -2,11 +2,13 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+vi.mock('next/router', () => ({ useRouter: () => ({ pathname: '/admin/copyright' }) }));
+
 vi.mock('next/head', () => ({
 	default: ({ children }: { children: ReactNode }) => <>{children}</>,
 }));
 
-import CopyrightAdminPage from '@/pages/copyright/admin';
+import CopyrightAdminPage from '@/pages/admin/copyright';
 
 const notice = {
 	id: '3f2c9a1e-7b44-4d2a-9a51-0c1d2e3f4a5b',
@@ -26,9 +28,9 @@ const notice = {
 	createdAt: '2026-10-24T10:00:00Z',
 };
 
-describe('/copyright/admin', () => {
+describe('/admin/copyright', () => {
 	beforeEach(() => {
-		localStorage.setItem('dmm:takedownAdminToken', 'token');
+		localStorage.setItem('dmm:adminToken', 'token');
 		global.fetch = vi.fn(
 			async () => new Response(JSON.stringify({ notices: [notice] }))
 		) as any;

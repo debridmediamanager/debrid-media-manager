@@ -5,11 +5,11 @@ import {
 } from '@/services/database/newznabIndexers';
 import { getUpstreamIndexers, invalidateUpstreamIndexers } from '@/services/newznab/indexers';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
-import { hasAdminToken } from '@/utils/adminToken';
+import { isAdmin } from '@/utils/adminToken';
 import { NextApiHandler } from 'next';
 
-// The Newznab aggregator's upstream indexers, for /newznab/admin. GET lists them,
-// POST adds one, PATCH changes one. The token is NEWZNAB_ADMIN_TOKEN. API keys go
+// The Newznab aggregator's upstream indexers, for /admin/newznab. GET lists them,
+// POST adds one, PATCH changes one. The token is ADMIN_TOKEN. API keys go
 // in and never come back out: a response carries only their last three characters.
 
 type Limit = { rateLimit: number; windowSeconds: number } | null;
@@ -151,7 +151,7 @@ const stored = ({ createdAt, updatedAt, ...row }: NewznabIndexerRow): NewznabInd
 let service: NewznabIndexerService | null = null;
 
 const handler: NextApiHandler = async (req, res) => {
-	if (!hasAdminToken(req, process.env.NEWZNAB_ADMIN_TOKEN)) {
+	if (!isAdmin(req)) {
 		return res.status(401).json({ error: 'Unauthorized' });
 	}
 	res.setHeader('Cache-Control', 'no-store');

@@ -299,8 +299,8 @@ watermark article is.
 | `src/services/newznab/search.ts`           | Normalization, cache, fan-out, pacing, item rewrite                    |
 | `src/services/newznab/order.ts`            | Clean names before reposts and raw-subject posts on targeted pages     |
 | `src/services/newznab/indexers.ts`         | `NewznabIndexer` table (env JSON fallback) → upstream list             |
-| `src/pages/api/newznab/admin.ts`           | Admin API: list, add, change indexers (`NEWZNAB_ADMIN_TOKEN`)          |
-| `src/pages/newznab/admin.tsx`              | Admin page for the indexers                                            |
+| `src/pages/api/newznab/admin.ts`           | Admin API: list, add, change indexers (`ADMIN_TOKEN`)                  |
+| `src/pages/admin/newznab.tsx`              | Admin page for the indexers                                            |
 | `src/services/newznab/opaqueId.ts`         | Deterministic encrypted release ids                                    |
 | `src/services/newznab/xml.ts`              | Hand-rolled caps / RSS / error writers                                 |
 | `src/services/newznab/store.ts`            | B2 read-through store for cleaned NZBs                                 |
@@ -309,8 +309,8 @@ watermark article is.
 
 ## Indexer configuration
 
-The upstreams live in the `NewznabIndexer` table and are edited at `/newznab/admin` with
-`NEWZNAB_ADMIN_TOKEN` as a bearer token. Each instance reads the table at most every 30 s
+The upstreams live in the `NewznabIndexer` table and are edited at `/admin/newznab` with
+`ADMIN_TOKEN` as a bearer token. Each instance reads the table at most every 30 s
 (`loadUpstreamIndexers`); the instance that saves clears its copy at once. If the database
 cannot be read, the last list read stays in use. While the table has **no rows at all**,
 the `NEWZNAB_INDEXERS` env JSON applies, so the first row saved replaces that whole list.
@@ -324,7 +324,7 @@ the `NEWZNAB_INDEXERS` env JSON applies, so the first row saved replaces that wh
 
 ## Environment
 
-`NEWZNAB_ADMIN_TOKEN` (the admin page's bearer token; unset ⇒ the admin API answers 401),
+`ADMIN_TOKEN` (every admin page's bearer token; unset ⇒ the admin APIs answer 401),
 `NEWZNAB_INDEXERS` (fallback while the table is empty: JSON array of `{prefix, name, url, apiKey, keyless?, pacing?, grabLimit?}` —
 `url` is the full API endpoint including any non-standard api path),
 `NEWZNAB_TOKEN_SECRET` (64 hex chars; unset ⇒ the endpoint answers 910),

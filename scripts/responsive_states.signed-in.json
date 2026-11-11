@@ -11,6 +11,13 @@
 		"expectText": ["Looks like you are offline"],
 		"expectPath": "/_offline"
 	},
+	"/admin/copyright": {
+		"status": "verified",
+		"observedStates": ["rendered", "unauthenticated"],
+		"expectText": ["Copyright notices"],
+		"expectPath": "/admin/copyright",
+		"reason": "Measured without an admin token: the token form. The populated review queue needs the production admin token and is not measured."
+	},
 	"/albums": {
 		"status": "verified",
 		"observedStates": ["rendered", "loading"],
@@ -84,13 +91,6 @@
 		"observedStates": ["rendered"],
 		"expectText": ["Report copyright infringement"],
 		"expectPath": "/copyright"
-	},
-	"/copyright/admin": {
-		"status": "verified",
-		"observedStates": ["rendered", "unauthenticated"],
-		"expectText": ["Copyright notices"],
-		"expectPath": "/copyright/admin",
-		"reason": "Measured without an admin token: the token form. The populated review queue needs the production admin token and is not measured."
 	},
 	"/debridlink/login": {
 		"status": "verified",

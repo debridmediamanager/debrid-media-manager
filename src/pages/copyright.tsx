@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 
 // The public half of notice-and-takedown. What is filed here waits for review.
-// Approving it in /copyright/admin is what removes the content.
+// Approving it in /admin/copyright is what removes the content.
 
 const inputClass =
 	'w-full rounded border border-gray-600 bg-gray-900/60 px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:border-cyan-500 focus:outline-hidden';

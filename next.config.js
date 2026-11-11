@@ -68,6 +68,9 @@ const nextConfig = {
 	},
 	async redirects() {
 		return [
+			// Admin pages moved under /admin on 2026-11-11.
+			{ source: '/copyright/admin', destination: '/admin/copyright', permanent: false },
+			{ source: '/newznab/admin', destination: '/admin/newznab', permanent: false },
 			{
 				source: '/albums',
 				destination: '/music',
