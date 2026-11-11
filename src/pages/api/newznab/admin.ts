@@ -107,21 +107,29 @@ export function mergeIndexerInput(
 	try {
 		url = new URL(next.url);
 	} catch {}
-	if (!url || !['http:', 'https:'].includes(url.protocol) || next.url.length > 512) {
-		return 'The URL is the full http(s) API endpoint, e.g. https://example.com/api';
+	// The key rides in the query string of every search, so only over TLS.
+	if (!url || url.protocol !== 'https:' || next.url.length > 512) {
+		return 'The URL is the full https API endpoint, e.g. https://example.com/api';
 	}
 
 	// An empty key keeps the stored one, so the form never has to hold it.
+	let typedKey = '';
 	if (body.apiKey !== undefined) {
 		if (typeof body.apiKey !== 'string') return 'The API key must be text';
-		const apiKey = body.apiKey.trim();
-		if (apiKey.length > 255) return 'The API key is at most 255 characters';
-		if (apiKey) next.apiKey = apiKey;
+		typedKey = body.apiKey.trim();
+		if (typedKey.length > 255) return 'The API key is at most 255 characters';
+		if (typedKey) next.apiKey = typedKey;
 	}
 	for (const flag of ['keyless', 'enabled'] as const) {
 		if (body[flag] === undefined) continue;
 		if (typeof body[flag] !== 'boolean') return `${flag} must be true or false`;
 		next[flag] = body[flag] as boolean;
+	}
+	// A stored key only ever goes to the server it was saved for: keys never leave this
+	// API, and pointing the indexer elsewhere would send the key there on the next search.
+	if (existing && !typedKey && new URL(existing.url).origin !== url.origin) {
+		if (!next.keyless) return 'Moving an indexer to another server needs its API key again';
+		next.apiKey = '';
 	}
 	if (!next.apiKey && !next.keyless) {
 		return 'An API key is required unless the indexer searches without one';

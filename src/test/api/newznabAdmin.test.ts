@@ -144,6 +144,8 @@ describe('/api/newznab/admin', () => {
 		[{ prefix: 'a:b', name: 'x', url: 'https://x/api', apiKey: 'k' }, /prefix/],
 		[{ prefix: 'ng', name: '', url: 'https://x/api', apiKey: 'k' }, /name/],
 		[{ prefix: 'ng', name: 'x', url: 'ftp://x/api', apiKey: 'k' }, /URL/],
+		// The key rides in the query string, so it never goes out unencrypted.
+		[{ prefix: 'ng', name: 'x', url: 'http://x/api', apiKey: 'k' }, /https/],
 		[{ prefix: 'ng', name: 'x', url: 'not a url', apiKey: 'k' }, /URL/],
 		[{ prefix: 'ng', name: 'x', url: 'https://x/api' }, /API key is required/],
 		[
@@ -238,6 +240,70 @@ describe('/api/newznab/admin', () => {
 			'tm',
 			expect.objectContaining({ apiKey: 'new-key-000000000abc' })
 		);
+	});
+
+	// Keys never come back out of the API, so pointing a saved indexer at another server
+	// must not carry its stored key there either.
+	it('refuses moving an indexer to another host without its key typed again', async () => {
+		vi.spyOn(NewznabIndexerService.prototype, 'getIndexer').mockResolvedValue(row());
+		const update = vi.spyOn(NewznabIndexerService.prototype, 'updateIndexer');
+		const res = await call({
+			method: 'PATCH',
+			body: { prefix: 'tm', url: 'https://attacker.example/api', apiKey: '' },
+		});
+		expect(res._getStatusCode()).toBe(400);
+		expect((res._getData() as { error: string }).error).toMatch(/key again/);
+		expect(update).not.toHaveBeenCalled();
+	});
+
+	it('moves an indexer to another host with a new key, or on the same host without one', async () => {
+		vi.spyOn(NewznabIndexerService.prototype, 'getIndexer').mockResolvedValue(row());
+		const update = vi
+			.spyOn(NewznabIndexerService.prototype, 'updateIndexer')
+			.mockImplementation(async (prefix, data) => row({ prefix, ...data }));
+		expect(
+			(
+				await call({
+					method: 'PATCH',
+					body: {
+						prefix: 'tm',
+						url: 'https://new.example/api',
+						apiKey: 'new-key-000000000abc',
+					},
+				})
+			)._getStatusCode()
+		).toBe(200);
+		expect(update).toHaveBeenLastCalledWith(
+			'tm',
+			expect.objectContaining({
+				url: 'https://new.example/api',
+				apiKey: 'new-key-000000000abc',
+			})
+		);
+		expect(
+			(
+				await call({
+					method: 'PATCH',
+					body: { prefix: 'tm', url: 'https://treasure-maps.com/api/v2' },
+				})
+			)._getStatusCode()
+		).toBe(200);
+		expect(update).toHaveBeenLastCalledWith('tm', expect.objectContaining({ apiKey: KEY }));
+	});
+
+	it('drops the stored key when a keyless indexer moves host', async () => {
+		vi.spyOn(NewznabIndexerService.prototype, 'getIndexer').mockResolvedValue(
+			row({ keyless: true })
+		);
+		const update = vi
+			.spyOn(NewznabIndexerService.prototype, 'updateIndexer')
+			.mockImplementation(async (prefix, data) => row({ prefix, ...data }));
+		const res = await call({
+			method: 'PATCH',
+			body: { prefix: 'tm', url: 'https://mirror.example/api' },
+		});
+		expect(res._getStatusCode()).toBe(200);
+		expect(update).toHaveBeenCalledWith('tm', expect.objectContaining({ apiKey: '' }));
 	});
 
 	it('answers 404 for a change to an unknown prefix', async () => {

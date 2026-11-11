@@ -13,6 +13,8 @@ let service: TakedownService | null = null;
 // an approved notice reverses it.
 const handler: NextApiHandler = async (req, res) => {
 	if (!isAdmin(req)) return res.status(401).json({ error: 'Unauthorized' });
+	// Notices carry claimants' names and addresses.
+	res.setHeader('Cache-Control', 'no-store');
 	service ??= new TakedownService();
 
 	if (req.method === 'GET') {

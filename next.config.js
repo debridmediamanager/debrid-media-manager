@@ -66,6 +66,15 @@ const nextConfig = {
 				source: '/:path*',
 				headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
 			},
+			{
+				// No other site may frame the admin pages and click their buttons.
+				source: '/admin/:path*',
+				headers: [
+					{ key: 'X-Frame-Options', value: 'DENY' },
+					{ key: 'Content-Security-Policy', value: "frame-ancestors 'none'" },
+					{ key: 'Referrer-Policy', value: 'no-referrer' },
+				],
+			},
 		];
 	},
 	async redirects() {

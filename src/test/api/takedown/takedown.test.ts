@@ -132,6 +132,13 @@ describe('/api/takedown/admin', () => {
 		expect((await call(adminHandler, { method: 'GET' }))._getStatusCode()).toBe(401);
 	});
 
+	it('tells caches not to keep the notices', async () => {
+		vi.spyOn(TakedownService.prototype, 'listNotices').mockResolvedValue([]);
+		const res = await call(adminHandler, { method: 'GET', headers: auth });
+		expect(res._getStatusCode()).toBe(200);
+		expect(res._getHeaders()['Cache-Control']).toBe('no-store');
+	});
+
 	it('refuses everything when no token is configured', async () => {
 		delete process.env.ADMIN_TOKEN;
 		expect((await call(adminHandler, { method: 'GET', headers: auth }))._getStatusCode()).toBe(
