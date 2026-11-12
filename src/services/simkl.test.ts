@@ -34,6 +34,7 @@ import {
 	getSimklUserLists,
 	refreshSimklToken,
 } from './simklProvider';
+import { simklUserSchema } from './simklSchemas';
 
 /** One canned response, as `fetch` would hand it back. */
 const respond = (body: unknown, status = 200) =>
@@ -184,6 +185,25 @@ describe('token exchange', () => {
 		} finally {
 			vi.useRealTimers();
 		}
+	});
+});
+
+describe('getSimklUser profile fields', () => {
+	it('signs in a profile whose optional fields are null', async () => {
+		// Simkl's openapi.json types user.loc as ["string", "null"]; a sponsor's sign-in
+		// failed with "Simkl returned an invalid response" (2026-11-12).
+		const profile = await getSimklUser(
+			'test-access',
+			respond({
+				...userSettings200,
+				user: { ...userSettings200.user, loc: null, bio: null, gender: null, avatar: null },
+				account: { ...userSettings200.account, timezone: null },
+			})
+		);
+		expect(profile.user.name).toBe('jane_doe');
+		expect(profile.user.loc).toBeUndefined();
+		expect(profile.account.timezone).toBeUndefined();
+		expect(() => simklUserSchema.parse(profile, { mode: 'strip' })).not.toThrow();
 	});
 });
 

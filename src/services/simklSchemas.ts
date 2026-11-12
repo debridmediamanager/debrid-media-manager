@@ -41,14 +41,29 @@ export const simklUserSchema: v.Type<SimklUser> = v.object({
 	user: v.object({ ...userFields, age: v.number().optional() }),
 	account: v.object(accountFields),
 });
+// Simkl's openapi.json types user.loc as nullable; any optional text Simkl sends
+// as null is read as absent rather than refusing the whole sign-in.
+const optionalText = v
+	.string()
+	.nullable()
+	.map((value) => value ?? undefined)
+	.optional();
 // The captured settings response formats age as "27 years". DMM's public
 // profile contract has a numeric age; do not pretend that string is a number.
 export const simklProviderUserSchema: v.Type<SimklUser> = v
 	.object({
 		user: v
-			.object({ ...userFields, age: v.union(v.number(), v.string()).optional() })
+			.object({
+				name: v.string(),
+				joined_at: optionalText,
+				gender: optionalText,
+				avatar: optionalText,
+				bio: optionalText,
+				loc: optionalText,
+				age: v.union(v.number(), v.string(), v.null()).optional(),
+			})
 			.rest(v.unknown()),
-		account: v.object(accountFields).rest(v.unknown()),
+		account: v.object({ ...accountFields, timezone: optionalText }).rest(v.unknown()),
 	})
 	.rest(v.unknown())
 	.map((profile) => ({
