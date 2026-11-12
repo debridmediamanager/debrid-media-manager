@@ -89,7 +89,9 @@ async function readSimklBody<T>(
 	}
 	try {
 		return schema.parse(body, { mode });
-	} catch {
+	} catch (error) {
+		// valita names the field and the expected type, never the value.
+		console.error(`Simkl ${invalidCode}:`, error instanceof Error ? error.message : error);
 		throw new SimklError(invalidCode, 'Simkl returned an invalid response', 502);
 	}
 }
