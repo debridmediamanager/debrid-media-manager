@@ -176,7 +176,11 @@ describe('/admin/reports', () => {
 		render(<ReportsAdminPage />);
 		fireEvent.click(await screen.findByRole('button', { name: 'Look inside' }));
 		expect(await screen.findByText('Show.S04E10.mkv')).toBeInTheDocument();
-		expect(screen.getByText(/From Real-Debrid: the file list only/)).toBeInTheDocument();
+		expect(
+			screen.getByText(
+				/From Real-Debrid: the file list only\. To play it, add an AllDebrid key at the top/
+			)
+		).toBeInTheDocument();
 		expect(screen.queryByRole('link', { name: 'play' })).toBeNull();
 		expect(screen.queryByRole('link', { name: 'download' })).toBeNull();
 	});

@@ -119,6 +119,9 @@ function ReportCard({
 			setAdInside({ error: `AllDebrid: ${error instanceof Error ? error.message : error}` });
 		}
 	};
+	const playHint = adKey
+		? 'To play it, try Play via AllDebrid.'
+		: 'To play it, add an AllDebrid key at the top and use Play via AllDebrid, or use the magnet.';
 	const magnet = `magnet:?xt=urn:btih:${report.hash}${report.filename ? `&dn=${encodeURIComponent(report.filename)}` : ''}`;
 	const act = async (action: Action) => {
 		setBusy(true);
@@ -208,7 +211,7 @@ function ReportCard({
 					<p className="mt-3 text-xs text-yellow-300">{inside.error}</p>
 				) : !inside.cached ? (
 					<p className="mt-3 text-xs text-gray-400">
-						No provider has it. Try the magnet link with your own debrid.
+						No provider here has it. {playHint}
 					</p>
 				) : (
 					<>
@@ -216,7 +219,7 @@ function ReportCard({
 							From {PROVIDER_NAME[inside.provider ?? 'premiumize']}
 							{inside.provider === 'premiumize'
 								? ''
-								: ': the file list only, nothing to play here. Use the magnet with your own debrid to play it.'}
+								: `: the file list only. ${playHint}`}
 						</p>
 						<ul className="mt-1 max-h-64 space-y-1 overflow-auto rounded bg-gray-900/60 p-2 text-xs">
 							{inside.files.map((file) => (
