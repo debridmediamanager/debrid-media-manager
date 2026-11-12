@@ -81,14 +81,17 @@ function ReportCard({
 	const [note, setNote] = useState(report.note ?? '');
 	const [busy, setBusy] = useState(false);
 	const [inside, setInside] = useState<Inspected | null>(null);
-	const lookInside = async () => {
-		setInside('loading');
-		setInside(await onInspect(report.hash));
-	};
 	const [adInside, setAdInside] = useState<
 		{ cached: boolean; files: AllDebridFile[] } | { error: string } | 'loading' | null
 	>(null);
-	const lookInsideAd = async () => {
+	// Premiumize answers with play links; anything less falls through to AllDebrid in this browser.
+	const lookInside = async () => {
+		setAdInside(null);
+		setInside('loading');
+		const server = await onInspect(report.hash);
+		setInside(server);
+		if (!adKey || ('cached' in server && server.cached && server.provider === 'premiumize'))
+			return;
 		setAdInside('loading');
 		try {
 			setAdInside(await lookInsideAllDebrid(adKey, report.hash));
@@ -121,9 +124,12 @@ function ReportCard({
 			setAdInside({ error: `AllDebrid: ${error instanceof Error ? error.message : error}` });
 		}
 	};
-	const playHint = adKey
-		? 'To play it, try Play via AllDebrid.'
-		: 'To play it, add an AllDebrid key at the top and use Play via AllDebrid, or use the magnet.';
+	const playHint = adKey ? '' : 'To play it, add an AllDebrid key at the top, or use the magnet.';
+	const adHasIt =
+		typeof adInside === 'object' &&
+		adInside !== null &&
+		'cached' in adInside &&
+		adInside.cached;
 	const magnet = `magnet:?xt=urn:btih:${report.hash}${report.filename ? `&dn=${encodeURIComponent(report.filename)}` : ''}`;
 	const act = async (action: Action) => {
 		setBusy(true);
@@ -185,28 +191,28 @@ function ReportCard({
 								>
 									{season === 0 ? 'specials' : `season ${season}`}
 								</a>
-								{report.seasons.length > 1 ? (
-									<button
-										disabled={busy}
-										onClick={async () => {
-											if (
-												!window.confirm(
-													`Remove this release from season ${season} only? It stays on the other seasons.`
-												)
+								<button
+									disabled={busy}
+									onClick={async () => {
+										if (
+											!window.confirm(
+												report.seasons.length > 1
+													? `Remove this release from season ${season} only? It stays on the other seasons.`
+													: `Remove this release from season ${season}? That is its only season, so it gets hidden.`
 											)
-												return;
-											setBusy(true);
-											try {
-												await onRemoveSeason(report, season);
-											} finally {
-												setBusy(false);
-											}
-										}}
-										className="text-gray-400 underline hover:text-gray-200 disabled:opacity-50"
-									>
-										remove
-									</button>
-								) : null}
+										)
+											return;
+										setBusy(true);
+										try {
+											await onRemoveSeason(report, season);
+										} finally {
+											setBusy(false);
+										}
+									}}
+									className="text-gray-400 underline hover:text-gray-200 disabled:opacity-50"
+								>
+									remove
+								</button>
 							</span>
 						))}
 					</p>
@@ -230,7 +236,7 @@ function ReportCard({
 						</span>
 					) : null}
 				</p>
-				{inside === null ? null : inside === 'loading' ? (
+				{inside === null || adHasIt ? null : inside === 'loading' ? (
 					<p className="mt-3 text-xs text-gray-400">Looking inside…</p>
 				) : 'error' in inside ? (
 					<p className="mt-3 text-xs text-yellow-300">{inside.error}</p>
@@ -288,7 +294,7 @@ function ReportCard({
 				) : 'error' in adInside ? (
 					<p className="mt-3 text-xs text-yellow-300">{adInside.error}</p>
 				) : !adInside.cached ? (
-					<p className="mt-3 text-xs text-gray-400">Not cached on AllDebrid.</p>
+					<p className="mt-1 text-xs text-gray-400">Not cached on AllDebrid.</p>
 				) : (
 					<>
 						<p className="mt-3 text-xs text-gray-400">
@@ -325,21 +331,12 @@ function ReportCard({
 				/>
 				<div className="mt-2 flex flex-wrap gap-2">
 					<button
-						disabled={inside === 'loading'}
+						disabled={inside === 'loading' || adInside === 'loading'}
 						onClick={() => void lookInside()}
 						className={`${button} border border-gray-600 text-gray-200 hover:bg-gray-800`}
 					>
 						Look inside
 					</button>
-					{adKey ? (
-						<button
-							disabled={adInside === 'loading'}
-							onClick={() => void lookInsideAd()}
-							className={`${button} border border-yellow-700 text-yellow-200 hover:bg-gray-800`}
-						>
-							Play via AllDebrid
-						</button>
-					) : null}
 					{report.decision !== 'approved' ? (
 						<button
 							disabled={busy}

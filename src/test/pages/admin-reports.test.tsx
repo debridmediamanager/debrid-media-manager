@@ -42,6 +42,7 @@ const report = (over: Record<string, unknown> = {}) => ({
 
 afterEach(() => {
 	vi.unstubAllGlobals();
+	vi.clearAllMocks();
 	localStorage.clear();
 });
 
@@ -185,26 +186,22 @@ describe('/admin/reports', () => {
 		expect(screen.queryByRole('link', { name: 'download' })).toBeNull();
 	});
 
-	it('plays through AllDebrid from this browser once a key is saved here', async () => {
+	it('falls through to AllDebrid in this browser when no server provider can play it', async () => {
 		localStorage.setItem('dmm:adminToken', 'token');
 		vi.stubGlobal(
 			'fetch',
-			vi.fn(
-				async () =>
-					new Response(
-						JSON.stringify({
-							total: 1,
-							counts: { all: 1, agrees: 0, disagrees: 0, unjudged: 1 },
-							items: [report()],
-						})
-					)
+			vi.fn(async (_url: string, init?: RequestInit) =>
+				init?.method === 'POST'
+					? new Response(JSON.stringify({ cached: false, provider: null, files: [] }))
+					: new Response(
+							JSON.stringify({
+								total: 1,
+								counts: { all: 1, agrees: 0, disagrees: 0, unjudged: 1 },
+								items: [report()],
+							})
+						)
 			)
 		);
-		const { unmount } = render(<ReportsAdminPage />);
-		await screen.findByText('Big.Buck.Bunny.2008.1080p.mkv');
-		expect(screen.queryByRole('button', { name: 'Play via AllDebrid' })).toBeNull();
-		unmount();
-
 		localStorage.setItem('dmm:adminAllDebridKey', 'ADKEY123');
 		ad.uploadMagnet.mockResolvedValue({ magnets: [{ id: 42, ready: true, magnet: '' }] });
 		ad.getMagnetLinks.mockResolvedValue([
@@ -230,8 +227,11 @@ describe('/admin/reports', () => {
 		expect(
 			await screen.findByText(/AllDebrid key in this browser \(…123\)/)
 		).toBeInTheDocument();
-		fireEvent.click(screen.getByRole('button', { name: 'Play via AllDebrid' }));
+		expect(screen.queryAllByRole('button', { name: /Play via AllDebrid/ })).toHaveLength(0);
+		fireEvent.click(screen.getByRole('button', { name: 'Look inside' }));
 		expect(await screen.findByText('Big Buck Bunny.mp4')).toBeInTheDocument();
+		// AllDebrid's list replaces the "no provider here" answer
+		expect(screen.queryByText(/No provider here has it/)).toBeNull();
 		expect(ad.uploadMagnet).toHaveBeenCalledWith('ADKEY123', [report().hash]);
 		// one play button: the video's, not the subtitles'
 		const play = screen.getByRole('button', { name: 'play' });
@@ -296,7 +296,50 @@ describe('/admin/reports', () => {
 				(await screen.findByRole('link', { name: 'play in IINA' })).getAttribute('href')
 			).toBe(`iina://weblink?url=${encodeURIComponent('https://cdn/movie.mkv')}`);
 
-			fireEvent.click(screen.getByRole('button', { name: 'Play via AllDebrid' }));
+			// Premiumize could play it, so AllDebrid was never asked
+			expect(ad.uploadMagnet).not.toHaveBeenCalled();
+		});
+
+		it('hands AllDebrid streams to IINA when only Real-Debrid had the file list', async () => {
+			localStorage.setItem('dmm:adminToken', 'token');
+			localStorage.setItem('dmm:adminAllDebridKey', 'ADKEY123');
+			vi.stubGlobal(
+				'fetch',
+				vi.fn(async (_url: string, init?: RequestInit) =>
+					init?.method === 'POST'
+						? new Response(
+								JSON.stringify({
+									cached: true,
+									provider: 'realdebrid',
+									files: [
+										{
+											path: 'Movie.mkv',
+											size: 3e9,
+											link: null,
+											streamLink: null,
+										},
+									],
+								})
+							)
+						: new Response(
+								JSON.stringify({
+									total: 1,
+									counts: { all: 1, agrees: 0, disagrees: 0, unjudged: 1 },
+									items: [report()],
+								})
+							)
+				)
+			);
+			ad.uploadMagnet.mockResolvedValue({ magnets: [{ id: 9, ready: true, magnet: '' }] });
+			ad.getMagnetLinks.mockResolvedValue([
+				{ filename: 'Movie.mkv', size: 3e9, link: 'https://alldebrid.com/f/m', files: [] },
+			]);
+			ad.unlockLink.mockResolvedValue({ link: 'https://cdn.alldebrid/movie.mkv' });
+			const open = vi.fn();
+			vi.stubGlobal('open', open);
+			render(<ReportsAdminPage />);
+
+			fireEvent.click(await screen.findByRole('button', { name: 'Look inside' }));
 			fireEvent.click(await screen.findByRole('button', { name: 'play in IINA' }));
 			await vi.waitFor(() =>
 				expect(open).toHaveBeenCalledWith(
@@ -348,23 +391,29 @@ describe('/admin/reports', () => {
 		});
 	});
 
-	it('offers no per-season remove when a release is on one season only', async () => {
+	it('removes a release from its only season too, which hides it', async () => {
 		localStorage.setItem('dmm:adminToken', 'token');
-		vi.stubGlobal(
-			'fetch',
-			vi.fn(
-				async () =>
-					new Response(
+		const fetchMock = vi.fn(async (_url: string, init?: RequestInit) =>
+			init?.method === 'POST'
+				? new Response(JSON.stringify({ ok: true, removed: 1, remaining: [] }))
+				: new Response(
 						JSON.stringify({
 							total: 1,
 							counts: { all: 1, agrees: 0, disagrees: 0, unjudged: 1 },
 							items: [report({ kind: 'show', seasons: [4] })],
 						})
 					)
-			)
 		);
+		vi.stubGlobal('fetch', fetchMock);
+		const confirm = vi.fn(() => true);
+		vi.stubGlobal('confirm', confirm);
 		render(<ReportsAdminPage />);
-		await screen.findByRole('link', { name: 'season 4' });
-		expect(screen.queryByRole('button', { name: 'remove' })).toBeNull();
+		fireEvent.click(await screen.findByRole('button', { name: 'remove' }));
+		expect(confirm).toHaveBeenCalledWith(
+			expect.stringMatching(/only season, so it gets hidden/)
+		);
+		expect(
+			await screen.findByText('Removed from season 4, its only season, so it is hidden.')
+		).toBeInTheDocument();
 	});
 });
