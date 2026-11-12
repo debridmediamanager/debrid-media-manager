@@ -55,6 +55,11 @@ const PROVIDER_NAME = {
 	torbox: 'TorBox',
 } as const;
 
+/** On a Mac, play hands the stream to IINA; elsewhere it opens in a browser tab. */
+const isMac = () =>
+	typeof navigator !== 'undefined' && /Mac/i.test(navigator.platform || navigator.userAgent);
+const iina = (url: string) => `iina://weblink?url=${encodeURIComponent(url)}`;
+
 const PLAYABLE = /\.(mkv|mp4|m4v|avi|ts|m2ts|webm|mov|wmv|mpg)$/i;
 
 type Inspected = Inspection | { error: string } | 'loading';
@@ -90,7 +95,20 @@ function ReportCard({
 		}
 	};
 	// The tab opens on the click itself, before the unlock answers, or the browser blocks it.
+	// Decided after mount: the server render has no navigator.
+	const [mac, setMac] = useState(false);
+	useEffect(() => setMac(isMac()), []);
 	const playAd = async (link: string) => {
+		if (mac) {
+			try {
+				window.open(iina(await playableLink(adKey, link)), '_self');
+			} catch (error) {
+				setAdInside({
+					error: `AllDebrid: ${error instanceof Error ? error.message : error}`,
+				});
+			}
+			return;
+		}
 		const tab = window.open('', '_blank');
 		try {
 			const url = await playableLink(adKey, link);
@@ -215,12 +233,16 @@ function ReportCard({
 									<span className="text-gray-400">{gb(file.size)}</span>
 									{file.link && PLAYABLE.test(file.path) ? (
 										<a
-											href={file.streamLink ?? file.link}
-											target="_blank"
+											href={
+												mac
+													? iina(file.link)
+													: (file.streamLink ?? file.link)
+											}
+											target={mac ? undefined : '_blank'}
 											rel="noreferrer noopener"
 											className="text-cyan-300 underline"
 										>
-											play
+											{mac ? 'play in IINA' : 'play'}
 										</a>
 									) : null}
 									{file.link ? (
@@ -259,7 +281,7 @@ function ReportCard({
 											onClick={() => void playAd(file.link)}
 											className="text-cyan-300 underline"
 										>
-											play
+											{mac ? 'play in IINA' : 'play'}
 										</button>
 									) : null}
 								</li>

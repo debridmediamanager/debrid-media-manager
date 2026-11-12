@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/router', () => ({ useRouter: () => ({ pathname: '/admin/reports' }) }));
 vi.mock('next/head', () => ({
@@ -235,5 +235,71 @@ describe('/admin/reports', () => {
 		await vi.waitFor(() => expect(tab.location.href).toBe('https://cdn.example/bbb.mp4'));
 		expect(open).toHaveBeenCalledWith('', '_blank');
 		expect(ad.unlockLink).toHaveBeenCalledWith('ADKEY123', 'https://alldebrid.com/f/abc');
+	});
+
+	describe('on a Mac', () => {
+		const platform = Object.getOwnPropertyDescriptor(Navigator.prototype, 'platform');
+		beforeEach(() => {
+			Object.defineProperty(navigator, 'platform', { value: 'MacIntel', configurable: true });
+		});
+		afterEach(() => {
+			delete (navigator as unknown as Record<string, unknown>).platform;
+			if (platform) Object.defineProperty(Navigator.prototype, 'platform', platform);
+		});
+
+		it('hands Premiumize and AllDebrid streams to IINA', async () => {
+			localStorage.setItem('dmm:adminToken', 'token');
+			localStorage.setItem('dmm:adminAllDebridKey', 'ADKEY123');
+			vi.stubGlobal(
+				'fetch',
+				vi.fn(async (_url: string, init?: RequestInit) =>
+					init?.method === 'POST'
+						? new Response(
+								JSON.stringify({
+									cached: true,
+									provider: 'premiumize',
+									files: [
+										{
+											path: 'Movie/Movie.mkv',
+											size: 3e9,
+											link: 'https://cdn/movie.mkv',
+											streamLink: 'https://cdn/movie.mp4',
+										},
+									],
+								})
+							)
+						: new Response(
+								JSON.stringify({
+									total: 1,
+									counts: { all: 1, agrees: 0, disagrees: 0, unjudged: 1 },
+									items: [report()],
+								})
+							)
+				)
+			);
+			ad.uploadMagnet.mockResolvedValue({ magnets: [{ id: 9, ready: true, magnet: '' }] });
+			ad.getMagnetLinks.mockResolvedValue([
+				{ filename: 'Movie.mkv', size: 3e9, link: 'https://alldebrid.com/f/m', files: [] },
+			]);
+			ad.unlockLink.mockResolvedValue({ link: 'https://cdn.alldebrid/movie.mkv' });
+			const open = vi.fn();
+			vi.stubGlobal('open', open);
+			render(<ReportsAdminPage />);
+
+			fireEvent.click(await screen.findByRole('button', { name: 'Look inside' }));
+			// IINA gets the original file, not the browser's transcode
+			expect(
+				(await screen.findByRole('link', { name: 'play in IINA' })).getAttribute('href')
+			).toBe(`iina://weblink?url=${encodeURIComponent('https://cdn/movie.mkv')}`);
+
+			fireEvent.click(screen.getByRole('button', { name: 'Play via AllDebrid' }));
+			fireEvent.click(await screen.findByRole('button', { name: 'play in IINA' }));
+			await vi.waitFor(() =>
+				expect(open).toHaveBeenCalledWith(
+					`iina://weblink?url=${encodeURIComponent('https://cdn.alldebrid/movie.mkv')}`,
+					'_self'
+				)
+			);
+		});
 	});
 });
