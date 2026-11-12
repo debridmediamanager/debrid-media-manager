@@ -1,6 +1,13 @@
 import { AdminFetch, AdminLayout } from '@/components/admin/AdminLayout';
 import Poster from '@/components/poster';
 import type { AdminReport, Inspection } from '@/pages/api/admin/reports';
+import {
+	type AllDebridFile,
+	lookInsideAllDebrid,
+	playableLink,
+	readAllDebridKey,
+	saveAllDebridKey,
+} from '@/utils/adminAllDebrid';
 import { useCallback, useEffect, useState } from 'react';
 
 // Reported releases the model could not settle wait here; hiding one hides it on that title only.
@@ -56,10 +63,13 @@ function ReportCard({
 	report,
 	onAction,
 	onInspect,
+	adKey,
 }: {
 	report: AdminReport;
 	onAction: (report: AdminReport, action: Action, note: string) => Promise<void>;
 	onInspect: (hash: string) => Promise<Exclude<Inspected, 'loading'>>;
+	/** The admin's AllDebrid key from this browser, '' when none. */
+	adKey: string;
 }) {
 	const [note, setNote] = useState(report.note ?? '');
 	const [busy, setBusy] = useState(false);
@@ -67,6 +77,29 @@ function ReportCard({
 	const lookInside = async () => {
 		setInside('loading');
 		setInside(await onInspect(report.hash));
+	};
+	const [adInside, setAdInside] = useState<
+		{ cached: boolean; files: AllDebridFile[] } | { error: string } | 'loading' | null
+	>(null);
+	const lookInsideAd = async () => {
+		setAdInside('loading');
+		try {
+			setAdInside(await lookInsideAllDebrid(adKey, report.hash));
+		} catch (error) {
+			setAdInside({ error: `AllDebrid: ${error instanceof Error ? error.message : error}` });
+		}
+	};
+	// The tab opens on the click itself, before the unlock answers, or the browser blocks it.
+	const playAd = async (link: string) => {
+		const tab = window.open('', '_blank');
+		try {
+			const url = await playableLink(adKey, link);
+			if (tab) tab.location.href = url;
+			else window.open(url, '_blank');
+		} catch (error) {
+			tab?.close();
+			setAdInside({ error: `AllDebrid: ${error instanceof Error ? error.message : error}` });
+		}
 	};
 	const magnet = `magnet:?xt=urn:btih:${report.hash}${report.filename ? `&dn=${encodeURIComponent(report.filename)}` : ''}`;
 	const act = async (action: Action) => {
@@ -200,6 +233,40 @@ function ReportCard({
 						</ul>
 					</>
 				)}
+				{adInside === null ? null : adInside === 'loading' ? (
+					<p className="mt-3 text-xs text-gray-400">Asking AllDebrid…</p>
+				) : 'error' in adInside ? (
+					<p className="mt-3 text-xs text-yellow-300">{adInside.error}</p>
+				) : !adInside.cached ? (
+					<p className="mt-3 text-xs text-gray-400">Not cached on AllDebrid.</p>
+				) : (
+					<>
+						<p className="mt-3 text-xs text-gray-400">
+							From AllDebrid, played from this browser
+						</p>
+						<ul className="mt-1 max-h-64 space-y-1 overflow-auto rounded bg-gray-900/60 p-2 text-xs">
+							{adInside.files.map((file) => (
+								<li
+									key={file.link}
+									className="flex flex-wrap items-baseline gap-x-2"
+								>
+									<span className="min-w-0 flex-1 font-mono break-all text-gray-200">
+										{file.path}
+									</span>
+									<span className="text-gray-400">{gb(file.size)}</span>
+									{PLAYABLE.test(file.path) ? (
+										<button
+											onClick={() => void playAd(file.link)}
+											className="text-cyan-300 underline"
+										>
+											play
+										</button>
+									) : null}
+								</li>
+							))}
+						</ul>
+					</>
+				)}
 				<input
 					value={note}
 					onChange={(event) => setNote(event.target.value)}
@@ -214,6 +281,15 @@ function ReportCard({
 					>
 						Look inside
 					</button>
+					{adKey ? (
+						<button
+							disabled={adInside === 'loading'}
+							onClick={() => void lookInsideAd()}
+							className={`${button} border border-yellow-700 text-yellow-200 hover:bg-gray-800`}
+						>
+							Play via AllDebrid
+						</button>
+					) : null}
 					{report.decision !== 'approved' ? (
 						<button
 							disabled={busy}
@@ -246,7 +322,64 @@ function ReportCard({
 	);
 }
 
+/** The AllDebrid key lives in this browser only: AllDebrid refuses adds from DMM's servers. */
+function AllDebridKeyField({
+	value,
+	onChange,
+}: {
+	value: string;
+	onChange: (key: string) => void;
+}) {
+	const [editing, setEditing] = useState(false);
+	if (value && !editing) {
+		return (
+			<p className="text-xs text-gray-400">
+				AllDebrid key in this browser (…{value.slice(-3)}) ·{' '}
+				<button onClick={() => setEditing(true)} className="text-cyan-300 underline">
+					change
+				</button>{' '}
+				·{' '}
+				<button
+					onClick={() => {
+						saveAllDebridKey('');
+						onChange('');
+					}}
+					className="text-cyan-300 underline"
+				>
+					remove
+				</button>
+			</p>
+		);
+	}
+	return (
+		<form
+			className="flex flex-wrap items-center gap-2 text-xs text-gray-400"
+			onSubmit={(event) => {
+				event.preventDefault();
+				const key = new FormData(event.currentTarget).get('adKey')?.toString().trim() ?? '';
+				saveAllDebridKey(key);
+				onChange(key);
+				setEditing(false);
+			}}
+		>
+			<span>To play through AllDebrid, add a key. It stays in this browser:</span>
+			<input
+				name="adKey"
+				type="password"
+				autoComplete="off"
+				placeholder="AllDebrid API key"
+				className="min-w-0 flex-1 rounded border border-gray-600 bg-gray-900/60 px-2 py-1 text-sm text-gray-100"
+			/>
+			<button className="rounded border border-gray-600 px-3 py-1 text-gray-200 hover:bg-gray-800">
+				Save
+			</button>
+		</form>
+	);
+}
+
 function Reports({ adminFetch }: { adminFetch: AdminFetch }) {
+	const [adKey, setAdKey] = useState('');
+	useEffect(() => setAdKey(readAllDebridKey()), []);
 	const [status, setStatus] = useState<Status>('pending');
 	const [model, setModel] = useState<ModelFilter>('all');
 	const [page, setPage] = useState(0);
@@ -330,6 +463,7 @@ function Reports({ adminFetch }: { adminFetch: AdminFetch }) {
 
 	return (
 		<>
+			<AllDebridKeyField value={adKey} onChange={setAdKey} />
 			<div className="flex flex-wrap gap-2">
 				{STATUSES.map(([key, label]) => (
 					<button
@@ -390,6 +524,7 @@ function Reports({ adminFetch }: { adminFetch: AdminFetch }) {
 					report={report}
 					onAction={onAction}
 					onInspect={onInspect}
+					adKey={adKey}
 				/>
 			))}
 			{data && pages > 1 ? (

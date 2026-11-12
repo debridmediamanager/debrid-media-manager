@@ -12,6 +12,14 @@ vi.mock('@/components/poster', () => ({
 	),
 }));
 
+const ad = vi.hoisted(() => ({
+	uploadMagnet: vi.fn(),
+	getMagnetLinks: vi.fn(),
+	unlockLink: vi.fn(),
+	deleteMagnet: vi.fn(async () => ({ message: 'ok' })),
+}));
+vi.mock('@/services/allDebrid', () => ad);
+
 import ReportsAdminPage from '@/pages/admin/reports';
 
 const report = (over: Record<string, unknown> = {}) => ({
@@ -171,5 +179,61 @@ describe('/admin/reports', () => {
 		expect(screen.getByText(/From Real-Debrid: the file list only/)).toBeInTheDocument();
 		expect(screen.queryByRole('link', { name: 'play' })).toBeNull();
 		expect(screen.queryByRole('link', { name: 'download' })).toBeNull();
+	});
+
+	it('plays through AllDebrid from this browser once a key is saved here', async () => {
+		localStorage.setItem('dmm:adminToken', 'token');
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(
+				async () =>
+					new Response(
+						JSON.stringify({
+							total: 1,
+							counts: { all: 1, agrees: 0, disagrees: 0, unjudged: 1 },
+							items: [report()],
+						})
+					)
+			)
+		);
+		const { unmount } = render(<ReportsAdminPage />);
+		await screen.findByText('Big.Buck.Bunny.2008.1080p.mkv');
+		expect(screen.queryByRole('button', { name: 'Play via AllDebrid' })).toBeNull();
+		unmount();
+
+		localStorage.setItem('dmm:adminAllDebridKey', 'ADKEY123');
+		ad.uploadMagnet.mockResolvedValue({ magnets: [{ id: 42, ready: true, magnet: '' }] });
+		ad.getMagnetLinks.mockResolvedValue([
+			{
+				filename: 'Big Buck Bunny.mp4',
+				size: 276134947,
+				link: 'https://alldebrid.com/f/abc',
+				files: [],
+			},
+			{
+				filename: 'Big Buck Bunny.en.srt',
+				size: 140,
+				link: 'https://alldebrid.com/f/srt',
+				files: [],
+			},
+		]);
+		ad.unlockLink.mockResolvedValue({ link: 'https://cdn.example/bbb.mp4' });
+		const tab = { location: { href: '' }, close: vi.fn() };
+		const open = vi.fn(() => tab);
+		vi.stubGlobal('open', open);
+		render(<ReportsAdminPage />);
+
+		expect(
+			await screen.findByText(/AllDebrid key in this browser \(…123\)/)
+		).toBeInTheDocument();
+		fireEvent.click(screen.getByRole('button', { name: 'Play via AllDebrid' }));
+		expect(await screen.findByText('Big Buck Bunny.mp4')).toBeInTheDocument();
+		expect(ad.uploadMagnet).toHaveBeenCalledWith('ADKEY123', [report().hash]);
+		// one play button: the video's, not the subtitles'
+		const play = screen.getByRole('button', { name: 'play' });
+		fireEvent.click(play);
+		await vi.waitFor(() => expect(tab.location.href).toBe('https://cdn.example/bbb.mp4'));
+		expect(open).toHaveBeenCalledWith('', '_blank');
+		expect(ad.unlockLink).toHaveBeenCalledWith('ADKEY123', 'https://alldebrid.com/f/abc');
 	});
 });
