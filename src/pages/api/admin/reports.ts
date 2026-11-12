@@ -93,6 +93,49 @@ async function describe(
 	});
 }
 
+/**
+ * A show release listed on several season pages can be right on one and wrong on another,
+ * which a title-wide hide cannot express. This trashes it from one page only, through the
+ * same per-page trash the verdicts use (restorable, and swept if a scraper writes it back),
+ * and closes the report: kept while another season still lists it, hidden otherwise.
+ */
+async function removeFromSeason(
+	imdbId: string,
+	hash: string,
+	season: number,
+	res: Parameters<NextApiHandler>[1]
+) {
+	const listed = (await scraped!.getListings(imdbId, [hash])).get(hash)?.seasons ?? [];
+	if (!listed.includes(season)) {
+		return res.status(404).json({ error: `Not listed on season ${season}` });
+	}
+	const key = `tv:${imdbId}:${season}`;
+	const pairs = (await scraped!.getStoredPairs(key)).pairs
+		.filter((pair) => pair.hash.toLowerCase() === hash)
+		.map((pair) => ({ ...pair, rule: 'admin-season' }));
+	const name = (await reports!.getTitles([imdbId])).get(imdbId)?.title ?? imdbId;
+	const removed = await scraped!.trashPairs(key, { imdbId, name }, pairs, 'admin /admin/reports');
+	const remaining = listed.filter((s) => s !== season);
+	if (remaining.length > 0) {
+		const where =
+			remaining.length === 1 ? `season ${remaining[0]}` : `seasons ${remaining.join(', ')}`;
+		await reports!.decide(
+			imdbId,
+			hash,
+			'dismissed',
+			`Removed from season ${season} only; it stays on ${where}`
+		);
+	} else {
+		await reports!.decide(
+			imdbId,
+			hash,
+			'approved',
+			`Removed from season ${season}, its only season page`
+		);
+	}
+	return res.status(200).json({ ok: true, removed, remaining });
+}
+
 const handler: NextApiHandler = async (req, res) => {
 	if (!isAdmin(req)) return res.status(401).json({ error: 'Unauthorized' });
 	res.setHeader('Cache-Control', 'no-store');
@@ -146,6 +189,13 @@ const handler: NextApiHandler = async (req, res) => {
 	}
 	if (typeof hash !== 'string' || !HASH.test(hash)) {
 		return res.status(400).json({ error: 'hash is a lower-case infohash' });
+	}
+	if (action === 'removeFromSeason') {
+		const season = req.body?.season;
+		if (!Number.isInteger(season) || season < 0 || season > 500) {
+			return res.status(400).json({ error: 'season is a whole number' });
+		}
+		return removeFromSeason(imdbId, hash, season, res);
 	}
 	if (action === 'reopen') {
 		await reports.undecide(imdbId, hash);

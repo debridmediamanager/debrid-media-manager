@@ -306,4 +306,65 @@ describe('/admin/reports', () => {
 			);
 		});
 	});
+
+	it('removes a release listed on two seasons from one of them, after a confirm', async () => {
+		localStorage.setItem('dmm:adminToken', 'token');
+		const listed = report({
+			imdbId: 'tt4909124',
+			kind: 'show',
+			title: 'MegaMan NT Warrior',
+			seasons: [1, 3],
+		});
+		const fetchMock = vi.fn(async (_url: string, init?: RequestInit) =>
+			init?.method === 'POST'
+				? new Response(JSON.stringify({ ok: true, removed: 1, remaining: [3] }))
+				: new Response(
+						JSON.stringify({
+							total: 1,
+							counts: { all: 1, agrees: 0, disagrees: 0, unjudged: 1 },
+							items: [listed],
+						})
+					)
+		);
+		vi.stubGlobal('fetch', fetchMock);
+		vi.stubGlobal(
+			'confirm',
+			vi.fn(() => true)
+		);
+		render(<ReportsAdminPage />);
+
+		const removes = await screen.findAllByRole('button', { name: 'remove' });
+		expect(removes).toHaveLength(2);
+		fireEvent.click(removes[0]);
+		expect(
+			await screen.findByText('Removed from season 1; it stays on season 3.')
+		).toBeInTheDocument();
+		const post = fetchMock.mock.calls.find(([, i]) => i?.method === 'POST')!;
+		expect(JSON.parse(String(post[1]!.body))).toEqual({
+			imdbId: 'tt4909124',
+			hash: listed.hash,
+			action: 'removeFromSeason',
+			season: 1,
+		});
+	});
+
+	it('offers no per-season remove when a release is on one season only', async () => {
+		localStorage.setItem('dmm:adminToken', 'token');
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(
+				async () =>
+					new Response(
+						JSON.stringify({
+							total: 1,
+							counts: { all: 1, agrees: 0, disagrees: 0, unjudged: 1 },
+							items: [report({ kind: 'show', seasons: [4] })],
+						})
+					)
+			)
+		);
+		render(<ReportsAdminPage />);
+		await screen.findByRole('link', { name: 'season 4' });
+		expect(screen.queryByRole('button', { name: 'remove' })).toBeNull();
+	});
 });

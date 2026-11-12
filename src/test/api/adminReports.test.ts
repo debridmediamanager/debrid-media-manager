@@ -365,4 +365,106 @@ describe('/api/admin/reports', () => {
 			expect(fetchMock).not.toHaveBeenCalled();
 		});
 	});
+
+	describe('removing a release from one season page', () => {
+		const pair = {
+			source: 'ScrapedTrue' as const,
+			hash: HASH,
+			title: 'Rockman.EXE Stream - 01-10',
+			fileSize: 2.4e9,
+		};
+		const listedOn = (seasons: number[]) =>
+			vi
+				.spyOn(ScrapedVerdictService.prototype, 'getListings')
+				.mockResolvedValue(new Map([[HASH, { title: pair.title, seasons }]]));
+		beforeEach(() => {
+			vi.spyOn(ReportService.prototype, 'getReportsFor').mockResolvedValue([
+				filed('rd:alice', 'wrong_season'),
+			]);
+			vi.spyOn(ReportService.prototype, 'getTitles').mockResolvedValue(
+				new Map([
+					[
+						'tt4909124',
+						{ title: 'MegaMan NT Warrior', year: 2002, kind: 'show' as const },
+					],
+				])
+			);
+		});
+
+		it('takes it off that season only and closes the report, since it stays on another', async () => {
+			listedOn([1, 3]);
+			const stored = vi
+				.spyOn(ScrapedVerdictService.prototype, 'getStoredPairs')
+				.mockResolvedValue({
+					pairs: [pair, { ...pair, hash: 'other' }],
+					lastChanged: null,
+				});
+			const trash = vi
+				.spyOn(ScrapedVerdictService.prototype, 'trashPairs')
+				.mockResolvedValue(1);
+			const decide = vi.spyOn(ReportService.prototype, 'decide').mockResolvedValue();
+			const res = await call({
+				method: 'POST',
+				body: { imdbId: 'tt4909124', hash: HASH, action: 'removeFromSeason', season: 1 },
+			});
+			expect(res._getStatusCode()).toBe(200);
+			expect(stored).toHaveBeenCalledWith('tv:tt4909124:1');
+			expect(trash).toHaveBeenCalledWith(
+				'tv:tt4909124:1',
+				{ imdbId: 'tt4909124', name: 'MegaMan NT Warrior' },
+				[{ ...pair, rule: 'admin-season' }],
+				'admin /admin/reports'
+			);
+			expect(decide).toHaveBeenCalledWith(
+				'tt4909124',
+				HASH,
+				'dismissed',
+				'Removed from season 1 only; it stays on season 3'
+			);
+		});
+
+		it('hides it when that was the only season listing it', async () => {
+			listedOn([1]);
+			vi.spyOn(ScrapedVerdictService.prototype, 'getStoredPairs').mockResolvedValue({
+				pairs: [pair],
+				lastChanged: null,
+			});
+			vi.spyOn(ScrapedVerdictService.prototype, 'trashPairs').mockResolvedValue(1);
+			const decide = vi.spyOn(ReportService.prototype, 'decide').mockResolvedValue();
+			await call({
+				method: 'POST',
+				body: { imdbId: 'tt4909124', hash: HASH, action: 'removeFromSeason', season: 1 },
+			});
+			expect(decide).toHaveBeenCalledWith(
+				'tt4909124',
+				HASH,
+				'approved',
+				'Removed from season 1, its only season page'
+			);
+		});
+
+		it('refuses a season the release is not listed on', async () => {
+			listedOn([3]);
+			const trash = vi.spyOn(ScrapedVerdictService.prototype, 'trashPairs');
+			const res = await call({
+				method: 'POST',
+				body: { imdbId: 'tt4909124', hash: HASH, action: 'removeFromSeason', season: 1 },
+			});
+			expect(res._getStatusCode()).toBe(404);
+			expect(trash).not.toHaveBeenCalled();
+		});
+
+		it('refuses a season that is not a number', async () => {
+			const res = await call({
+				method: 'POST',
+				body: {
+					imdbId: 'tt4909124',
+					hash: HASH,
+					action: 'removeFromSeason',
+					season: 'one',
+				},
+			});
+			expect(res._getStatusCode()).toBe(400);
+		});
+	});
 });

@@ -69,12 +69,14 @@ function ReportCard({
 	onAction,
 	onInspect,
 	adKey,
+	onRemoveSeason,
 }: {
 	report: AdminReport;
 	onAction: (report: AdminReport, action: Action, note: string) => Promise<void>;
 	onInspect: (hash: string) => Promise<Exclude<Inspected, 'loading'>>;
 	/** The admin's AllDebrid key from this browser, '' when none. */
 	adKey: string;
+	onRemoveSeason: (report: AdminReport, season: number) => Promise<void>;
 }) {
 	const [note, setNote] = useState(report.note ?? '');
 	const [busy, setBusy] = useState(false);
@@ -174,15 +176,38 @@ function ReportCard({
 					<p className="mt-2 flex flex-wrap items-center gap-2 text-xs text-gray-400">
 						Listed on
 						{report.seasons.map((season) => (
-							<a
-								key={season}
-								href={`/show/${report.imdbId}/${season}`}
-								target="_blank"
-								rel="noreferrer noopener"
-								className="rounded bg-indigo-900/60 px-2 py-0.5 text-indigo-200 hover:bg-indigo-800"
-							>
-								{season === 0 ? 'specials' : `season ${season}`}
-							</a>
+							<span key={season} className="inline-flex items-center gap-1">
+								<a
+									href={`/show/${report.imdbId}/${season}`}
+									target="_blank"
+									rel="noreferrer noopener"
+									className="rounded bg-indigo-900/60 px-2 py-0.5 text-indigo-200 hover:bg-indigo-800"
+								>
+									{season === 0 ? 'specials' : `season ${season}`}
+								</a>
+								{report.seasons.length > 1 ? (
+									<button
+										disabled={busy}
+										onClick={async () => {
+											if (
+												!window.confirm(
+													`Remove this release from season ${season} only? It stays on the other seasons.`
+												)
+											)
+												return;
+											setBusy(true);
+											try {
+												await onRemoveSeason(report, season);
+											} finally {
+												setBusy(false);
+											}
+										}}
+										className="text-gray-400 underline hover:text-gray-200 disabled:opacity-50"
+									>
+										remove
+									</button>
+								) : null}
+							</span>
 						))}
 					</p>
 				) : null}
@@ -439,6 +464,30 @@ function Reports({ adminFetch }: { adminFetch: AdminFetch }) {
 			: { error: reply.error ?? `Looking inside failed (${res.status}).` };
 	};
 
+	const onRemoveSeason = async (report: AdminReport, season: number) => {
+		const res = await adminFetch('/api/admin/reports', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				imdbId: report.imdbId,
+				hash: report.hash,
+				action: 'removeFromSeason',
+				season,
+			}),
+		});
+		const reply = await res.json().catch(() => ({}));
+		if (!res.ok) {
+			setMessage(reply.error ?? `That failed (${res.status}).`);
+			return;
+		}
+		setMessage(
+			reply.remaining?.length
+				? `Removed from season ${season}; it stays on season ${reply.remaining.join(', ')}.`
+				: `Removed from season ${season}, its only season, so it is hidden.`
+		);
+		await load();
+	};
+
 	const onAction = async (report: AdminReport, action: Action, note: string) => {
 		const res = await adminFetch('/api/admin/reports', {
 			method: 'POST',
@@ -550,6 +599,7 @@ function Reports({ adminFetch }: { adminFetch: AdminFetch }) {
 					onAction={onAction}
 					onInspect={onInspect}
 					adKey={adKey}
+					onRemoveSeason={onRemoveSeason}
 				/>
 			))}
 			{data && pages > 1 ? (
