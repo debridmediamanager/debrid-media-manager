@@ -3192,7 +3192,7 @@ describe('zurg+rex Android serves the Plex apps', () => {
 		const result = onAndroid({ sources: ['easynews'] });
 
 		expect(result.limits).toContain(
-			'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. On Android, rex for Android is free and runs rex with its addons; the sponsor-only zurg+rex app, your own Plex server on your phone or TV box, adds zurg.'
+			'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. On Android, rex for Android is free and runs rex with its addons; for sponsors, zurg+rex, your own Plex server on your phone or TV box, also connects your debrid and Usenet library to rex.'
 		);
 		expect(result.setupLinks[0]).toEqual({
 			label: 'rex for Android guide',
@@ -3219,7 +3219,7 @@ describe('zurg+rex Android serves the Plex apps', () => {
 			const result = onAndroid({ plexRoute });
 
 			expect(result.limits).toContain(
-				'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. On Android, rex with zurg is the sponsor-only zurg+rex app, your own Plex server on your phone or TV box.'
+				'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. On Android, rex with zurg is the sponsor-only zurg+rex app, your own Plex server on your phone or TV box, which connects your debrid and Usenet library to rex.'
 			);
 			expect(result.sponsorship.freeFeatures).toEqual([]);
 		}

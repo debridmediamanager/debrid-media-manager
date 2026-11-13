@@ -678,6 +678,32 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
+	// Ben, 2026-11-13: wherever rex for Android is named, say zurg+rex is the sponsor app that
+	// connects a debrid and Usenet library to rex.
+	it('names zurg+rex for sponsors with a debrid and Usenet library wherever it names rex for Android', () => {
+		expect(
+			breaking((_, result) => {
+				const body: string[] = [];
+				walk(
+					result,
+					'result',
+					(text, path) => {
+						if (!path.endsWith('.label') && !path.endsWith('.href')) body.push(text);
+					},
+					() => undefined
+				);
+				return (
+					body.some((text) => text.includes('rex for Android')) &&
+					!body.some(
+						(text) =>
+							/sponsor[^.]*zurg\+rex|zurg\+rex[^.]*sponsor/.test(text) &&
+							text.includes('debrid and Usenet library')
+					)
+				);
+			})
+		).toEqual([]);
+	});
+
 	it('labels every link to the setup guide "Read the full setup guide"', () => {
 		expect(
 			breaking((_, result) =>

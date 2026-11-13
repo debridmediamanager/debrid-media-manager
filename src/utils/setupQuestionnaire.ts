@@ -1343,7 +1343,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	}
 	if (rex) {
 		result.limits.push(
-			`rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. ${answers.host === 'android' ? (routes.some(({ route: r }) => r.usesZurg) ? 'On Android, rex with zurg is the sponsor-only zurg+rex app, your own Plex server on your phone or TV box.' : 'On Android, rex for Android is free and runs rex with its addons; the sponsor-only zurg+rex app, your own Plex server on your phone or TV box, adds zurg.') : `${rexStremio ? 'rex and rex-stremio do not' : 'rex does not'} require sponsorship.`}`
+			`rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. ${answers.host === 'android' ? (routes.some(({ route: r }) => r.usesZurg) ? 'On Android, rex with zurg is the sponsor-only zurg+rex app, your own Plex server on your phone or TV box, which connects your debrid and Usenet library to rex.' : 'On Android, rex for Android is free and runs rex with its addons; for sponsors, zurg+rex, your own Plex server on your phone or TV box, also connects your debrid and Usenet library to rex.') : `${rexStremio ? 'rex and rex-stremio do not' : 'rex does not'} require sponsorship.`}`
 		);
 		links(note('rex/faq', 'rex compatibility and limits'));
 		if (rexWithoutZurg)
