@@ -144,7 +144,9 @@ function check(answers: SetupAnswers, result: SetupRecommendation) {
 	if (
 		answers.host === 'android' &&
 		(result.hostRequirement === 'zurg' || androidGuide >= 0) &&
-		(androidGuide !== 0 || result.setupLinks.some(({ href }) => href === `${NOTES}zurg/setup/`))
+		// With no source picked, the rex for Android guide leads and the zurg+rex guide follows.
+		(androidGuide !== (selected.length || result.hostRequirement === 'zurg' ? 0 : 1) ||
+			result.setupLinks.some(({ href }) => href === `${NOTES}zurg/setup/`))
 	)
 		fail('zurg on Android does not lead with the zurg+rex Android guide alone');
 	// rex on Android with no zurg is the free rex for Android app: its guide leads, rex-stremio stays out.
@@ -506,6 +508,32 @@ describe('setup copy and benefits for every combination of up to two sources', (
 					)
 				);
 			})
+		).toEqual([]);
+	});
+
+	// On Android an addon you write lists HTTP files; a feed producer is the computer's way.
+	it('never asks for a feed producer for rex on Android', () => {
+		expect(
+			breaking(
+				(answers, result) =>
+					answers.host === 'android' &&
+					!result.conflicts.length &&
+					texts(result).some((text) => text.includes('feed producer'))
+			)
+		).toEqual([]);
+	});
+
+	it('says files at home need their own reachable connection when rex on Android plays them away', () => {
+		expect(
+			breaking(
+				(answers, result) =>
+					answers.host === 'android' &&
+					answers.sources.includes('http-local') &&
+					result.optionalNeeds.some((need) =>
+						/runs on the Android device itself/.test(need)
+					) &&
+					!result.optionalNeeds.some((need) => /NAS or file server at home/.test(need))
+			)
 		).toEqual([]);
 	});
 

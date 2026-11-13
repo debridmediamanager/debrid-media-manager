@@ -1686,7 +1686,7 @@ describe('a no-host conflict names a route the player can use', () => {
 			{ player: 'plex', plexRoute: 'rex', sources: ['url-addon'] },
 			'rex and its source need a machine that stays on. Choose a host or a supported Android device.',
 		],
-		// zurg+rex Android feeds rex from a debrid account, but not from TorBox hosted NZBs.
+		// zurg+rex Android feeds rex from a debrid account, but not from TorBox hosted NZBs; rex for Android takes URL addons.
 		// rex runs on 32-bit Android too; only direct Usenet needs 64-bit.
 		[
 			{ player: 'plex', plexRoute: 'rex', sources: ['real-debrid'] },
@@ -3107,7 +3107,7 @@ describe('zurg+rex Android serves the Plex apps', () => {
 			onAndroid().alternatives.find(({ title }) => title.startsWith('Without zurg'))
 		).toEqual({
 			title: 'Without zurg: rex for Android with a debrid stream addon',
-			detail: 'Run rex for Android and give its Stremio addon a stream addon that returns links through your debrid account; no zurg and no sponsorship needed.',
+			detail: 'Run rex for Android and add a stream addon that returns links through your debrid account to its Stremio addon; no zurg and no sponsorship needed.',
 			links: [
 				{
 					label: 'rex for Android guide',
@@ -3147,11 +3147,7 @@ describe('zurg+rex Android serves the Plex apps', () => {
 	});
 
 	// Without a source zurg feeds it, rex on Android is the free rex for Android app.
-	it.each([
-		{ sources: ['easynews'] },
-		{ sources: ['none'] },
-		{ sources: [] },
-	] satisfies Partial<SetupAnswers>[])(
+	it.each([{ sources: ['easynews'] }] satisfies Partial<SetupAnswers>[])(
 		'gives rex on Android the Android remote wording with %o',
 		(overrides) => {
 			expect(onAndroid({ ...overrides, needs: ['remote'] }).optionalNeeds[0]).toBe(
@@ -3159,6 +3155,32 @@ describe('zurg+rex Android serves the Plex apps', () => {
 			);
 		}
 	);
+
+	// With no source picked, either app may run it.
+	it.each([{ sources: ['none'] }, { sources: [] }] satisfies Partial<SetupAnswers>[])(
+		'names no app in the Android remote wording with %o',
+		(overrides) => {
+			expect(onAndroid({ ...overrides, needs: ['remote'] }).optionalNeeds[0]).toBe(
+				'rex runs on the Android device itself; the Plex apps on it play anywhere, while other devices reach it over your home network.'
+			);
+		}
+	);
+
+	it('asks for a reachable NAS when rex on Android plays HTTP files away from home', () => {
+		expect(onAndroid({ sources: ['http-local'], needs: ['remote'] }).optionalNeeds[0]).toBe(
+			'rex for Android runs on the Android device itself; the Plex apps on it play anywhere, while other devices reach it over your home network. A NAS or file server at home needs a secure reachable connection too.'
+		);
+	});
+
+	it('names both apps as not running Plex Media Server when no zurg route runs', () => {
+		expect(
+			onAndroid({ plexRoute: 'either', sources: ['url-addon'] }).alternatives.find(
+				({ title }) => title === 'Use Plex Media Server instead'
+			)?.detail
+		).toBe(
+			'Keep or install Plex Media Server for local files and mounted zurg libraries. rex is optional; an existing Plex server can remain alongside it. Plex Media Server itself still needs a normal host; neither rex for Android nor zurg+rex runs it.'
+		);
+	});
 
 	it('gives zurg on Android the zurg+rex remote wording', () => {
 		expect(onAndroid({ needs: ['remote'] }).optionalNeeds[0]).toBe(
@@ -3170,7 +3192,7 @@ describe('zurg+rex Android serves the Plex apps', () => {
 		const result = onAndroid({ sources: ['easynews'] });
 
 		expect(result.limits).toContain(
-			'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. On Android, rex for Android runs rex and its addons with no sponsorship; the sponsor-only zurg+rex app, your own Plex server on your phone or TV box, adds zurg.'
+			'rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. On Android, rex for Android is free and runs rex with its addons; the sponsor-only zurg+rex app, your own Plex server on your phone or TV box, adds zurg.'
 		);
 		expect(result.setupLinks[0]).toEqual({
 			label: 'rex for Android guide',
@@ -3236,6 +3258,10 @@ describe('zurg+rex Android serves the Plex apps', () => {
 					href: 'https://notes.debridmediamanager.com/rex/android/',
 				},
 				{
+					label: 'zurg+rex Android guide',
+					href: 'https://notes.debridmediamanager.com/zurg/guides/android/',
+				},
+				{
 					label: 'rex compatibility and limits',
 					href: 'https://notes.debridmediamanager.com/rex/faq/',
 				},
@@ -3264,7 +3290,7 @@ describe('zurg+rex Android serves the Plex apps', () => {
 				({ source }) => source === 'easynews'
 			)?.requirements
 		).toEqual([
-			"Keep Easynews in a compatible player. For rex on Android, releases you send to zurg reach it; a compatible Stremio URL addon must supply streams and metadata through the app's Stremio addon.",
+			"Keep Easynews in a compatible player. For rex on Android, releases you send to zurg reach it; a compatible Stremio URL addon can supply the rest through the app's Stremio addon.",
 		]);
 	});
 
