@@ -77,6 +77,8 @@ const ALLOWED_HREFS = new Set([
 		'rex/stremio',
 		'rex/faq',
 		'rex/from-plex',
+		'rex/android',
+		'rex/addons',
 		'dmm/seerr',
 		'guides/remote-help',
 	].map((path) => `${NOTES}${path}/`),
@@ -115,12 +117,12 @@ function check(answers: SetupAnswers, result: SetupRecommendation) {
 		fail('a route without a host requirement has a host conflict');
 	if (result.hostRequirement !== 'none' && answers.host === 'none' && !result.conflicts.length)
 		fail('a route that needs a host has no conflict for "No host"');
-	// zurg+rex Android runs zurg and the rex zurg feeds, never arr, a mounted server or another rex feed.
+	// rex on Android (rex for Android, or zurg+rex with zurg) takes zurg and addons: URL addons through
+	// its Stremio addon, HTTP files through an addon you write. Never arr or a mounted server.
 	const zurgRex =
 		answers.player === 'plex' &&
 		(answers.plexRoute === 'rex' || answers.plexRoute === 'either') &&
-		answers.preference !== 'arr' &&
-		!selected.some((source) => source === 'url-addon' || source === 'http-local');
+		answers.preference !== 'arr';
 	if (
 		result.hostRequirement === 'server' &&
 		answers.host === 'android' &&
@@ -145,6 +147,26 @@ function check(answers: SetupAnswers, result: SetupRecommendation) {
 		(androidGuide !== 0 || result.setupLinks.some(({ href }) => href === `${NOTES}zurg/setup/`))
 	)
 		fail('zurg on Android does not lead with the zurg+rex Android guide alone');
+	// rex on Android with no zurg is the free rex for Android app: its guide leads, rex-stremio stays out.
+	const rexAndroidGuide = result.setupLinks.findIndex(
+		({ href }) => href === `${NOTES}rex/android/`
+	);
+	const zurgComponent = result.components.some((component) => /zurg/.test(component));
+	if (
+		answers.host === 'android' &&
+		zurgRex &&
+		!result.conflicts.length &&
+		!zurgComponent &&
+		rexAndroidGuide !== 0
+	)
+		fail('rex on Android without zurg does not lead with the rex for Android guide');
+	if (
+		answers.host === 'android' &&
+		!result.conflicts.length &&
+		rexAndroidGuide >= 0 &&
+		zurgComponent
+	)
+		fail('a zurg route on Android links the rex for Android guide');
 
 	const covered = result.sourceCoverage.map(({ source }) => source);
 	if (covered.length !== selected.length || selected.some((source) => !covered.includes(source)))
@@ -185,19 +207,11 @@ function check(answers: SetupAnswers, result: SetupRecommendation) {
 		({ id }) => id === 'rex-stremio-key'
 	);
 	const rexStremioFree = result.sponsorship.freeFeatures.includes('rex-stremio');
-	// On Android rex comes inside the sponsor-only zurg+rex app, so nothing of rex is named free there.
-	if (rexStremioFree !== (rexStremioKey && answers.host !== 'android'))
-		fail(
-			`rex-stremio-key offered=${rexStremioKey} but rex-stremio free=${rexStremioFree} on host ${answers.host}`
-		);
-
-	if (
-		answers.host === 'android' &&
-		rexStremioKey &&
-		!selected.includes('url-addon') &&
-		!result.alternatives.some(({ title }) => title.startsWith('Without zurg'))
-	)
-		fail('rex-stremio-key is offered on Android with no rex-stremio route or alternative');
+	if (rexStremioFree !== rexStremioKey)
+		fail(`rex-stremio-key offered=${rexStremioKey} but rex-stremio free=${rexStremioFree}`);
+	// On Android the Stremio addon of rex-addons stands in for rex-stremio.
+	if (answers.host === 'android' && rexStremioKey)
+		fail('rex-stremio-key is offered on Android, where rex-addons replaces rex-stremio');
 
 	if (selected.length === 1 && selected[0] === 'easynews') {
 		const offered = [...result.sponsorship.required, ...result.sponsorship.optional].map(
@@ -468,17 +482,49 @@ describe('setup copy and benefits for every combination of up to two sources', (
 		).toEqual([]);
 	});
 
-	it('names nothing of rex free on Android, where rex comes inside the sponsor-only app', () => {
+	// rex for Android is free; with zurg, rex on Android is the sponsor-only zurg+rex app.
+	it('names rex free on Android only when no zurg route runs, and never rex-stremio there', () => {
+		expect(
+			breaking((answers, result) => {
+				if (
+					answers.host !== 'android' ||
+					answers.player !== 'plex' ||
+					(answers.plexRoute !== 'rex' && answers.plexRoute !== 'either')
+				)
+					return false;
+				// A playback route through zurg; Sonarr/Radarr's zurg runs on a normal host.
+				const zurg = result.sourceCoverage.some(
+					({ status, integration }) =>
+						status === 'integrated' && / → zurg → /.test(integration)
+				);
+				const free = result.sponsorship.freeFeatures;
+				return (
+					(zurg && free.includes('rex')) ||
+					free.includes('rex-stremio') ||
+					texts(result).some(
+						(text) => /rex-stremio/.test(text) && !/normal host/.test(text)
+					)
+				);
+			})
+		).toEqual([]);
+	});
+
+	it('offers URL addons and HTTP files on Android through rex for Android, not a normal host', () => {
 		expect(
 			breaking(
 				(answers, result) =>
 					answers.host === 'android' &&
 					answers.player === 'plex' &&
-					(answers.plexRoute === 'rex' || answers.plexRoute === 'either') &&
-					(result.sponsorship.freeFeatures.some(
-						(feature) => feature === 'rex' || feature === 'rex-stremio'
-					) ||
-						texts(result).some((text) => /not require sponsorship/.test(text)))
+					answers.plexRoute === 'rex' &&
+					answers.preference !== 'arr' &&
+					answers.sources.some(
+						(source) => source === 'url-addon' || source === 'http-local'
+					) &&
+					!answers.sources.includes('torbox-hosted') &&
+					(result.conflicts.length > 0 ||
+						texts(result).some((text) =>
+							/Stremio URL addons(,| and| need)[^.]*normal host/.test(text)
+						))
 			)
 		).toEqual([]);
 	});

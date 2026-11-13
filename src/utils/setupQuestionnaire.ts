@@ -321,7 +321,7 @@ const ACCOUNTS_FOR_PLAYER: Record<Exclude<Player, 'unsure'>, string> = {
 const REX_ACCOUNTS =
 	'Any debrid or Usenet account works through zurg → rex on a host; Stremio URL addons through rex-stremio; local files need a feed producer. TorBox Pro hosted NZBs work through zurg on a host too.';
 const REX_ANDROID_ACCOUNTS =
-	'Any debrid account, or your own Usenet account on a 64-bit device, works through zurg → rex on the device; Stremio URL addons, local files and TorBox Pro hosted NZBs need rex or zurg on a normal host.';
+	'Any debrid account, or your own Usenet account on a 64-bit device, works through zurg → rex on the device; Stremio URL addons through the Stremio addon of rex for Android; HTTP files through an addon you write for it. TorBox Pro hosted NZBs need zurg on a normal host.';
 
 /** "A", "A or B", "A, B or C". */
 const orList = (names: string[]) =>
@@ -363,13 +363,13 @@ function resolvePlayer({
 const ANDROID_HOSTED_NZB =
 	'zurg+rex Android has no TorBox hosted NZB backend; that route needs a normal host.';
 
-/** zurg+rex Android runs zurg and the rex zurg feeds, never a mounted server, rex-stremio or another feed. */
+/** On Android rex runs on the device (rex for Android, or zurg+rex with zurg); a mounted server never does. */
 function runsOnAndroid(r: SourceRoute): boolean {
-	return r.host !== 'server' || (!!r.usesZurg && !!r.usesRex);
+	return r.host !== 'server' || !!r.usesRex;
 }
 
-/** Plex apps on rex that zurg+rex Android runs: zurg feeds it from a debrid account or own
- * Usenet, never arr, URL addons, HTTP files or TorBox hosted NZBs. */
+/** Plex apps on rex on the Android device: zurg+rex feeds it from a debrid account or own Usenet,
+ * rex-addons from Stremio URL addons or an addon you write for HTTP files. Never arr or TorBox hosted NZBs. */
 function androidRunsRex({
 	player,
 	plexRoute,
@@ -382,8 +382,12 @@ function androidRunsRex({
 		(plexRoute === 'rex' || plexRoute === 'either') &&
 		host === 'android' &&
 		preference !== 'arr' &&
-		sources.some((source) => DEBRID_SOURCES.includes(source) || source === 'usenet') &&
-		!sources.some((source) => ['url-addon', 'http-local', 'torbox-hosted'].includes(source))
+		sources.some(
+			(source) =>
+				DEBRID_SOURCES.includes(source) ||
+				['usenet', 'url-addon', 'http-local'].includes(source)
+		) &&
+		!sources.includes('torbox-hosted')
 	);
 }
 
@@ -402,13 +406,6 @@ export function hostChoiceReason(
 			answers.player === 'plex' ? 'Plex Media Server' : playerLabel(answers.player);
 		return `${server} needs a full server host; zurg+rex Android cannot give a server on that device a library.`;
 	}
-	// Name only the picked sources zurg cannot feed rex.
-	const notZurg = [
-		answers.sources.includes('url-addon') && 'Stremio URL addons',
-		answers.sources.includes('http-local') && 'HTTP files',
-	].filter(Boolean);
-	if (rex && notZurg.length)
-		return `zurg+rex Android feeds rex from zurg only; ${notZurg.join(' and ')} need rex on a normal host${answers.sources.includes('torbox-hosted') ? ', and zurg+rex Android has no TorBox hosted NZB (torbox_nzb) backend' : ''}.`;
 	// Stremio and Kodi play TorBox hosted NZBs without zurg; WebDAV, external players and rex need it.
 	if (
 		answers.sources.includes('torbox-hosted') &&
@@ -486,6 +483,8 @@ const REX = note('rex/with-zurg', 'rex with zurg');
 const ANDROID = note('zurg/guides/android', 'zurg+rex Android guide');
 const HTTP = note('rex/any-source', 'rex with any source');
 const ADDON = note('rex/stremio', 'rex with Stremio addons');
+const REX_ANDROID = note('rex/android', 'rex for Android guide');
+const REX_ADDONS = note('rex/addons', 'Building rex addons');
 const STREMIO = note('zurg/guides/stremio', 'zurg Stremio setup');
 const TORBOX_NZB = note('zurg/providers/torbox-nzb', 'zurg TorBox hosted NZB setup');
 // Two zurgs with the same dmm_api_key both read the Wanted list and fetch every title twice.
@@ -752,11 +751,11 @@ function sponsorshipFor(
 	return {
 		required: requiredBenefits,
 		optional: optionalBenefits,
-		// On Android rex comes inside the sponsor-only zurg+rex app, so nothing of rex is named free there.
+		// rex for Android is free; rex with zurg on Android is the sponsor-only zurg+rex app.
 		freeFeatures: [
 			...(usesCast ? (['cast'] as const) : []),
-			...(usesRex && answers.host !== 'android' ? (['rex'] as const) : []),
-			...(rexStremio && answers.host !== 'android' ? (['rex-stremio'] as const) : []),
+			...(usesRex && (answers.host !== 'android' || !usesZurg) ? (['rex'] as const) : []),
+			...(rexStremio ? (['rex-stremio'] as const) : []),
 		],
 		routeAvailable,
 		usesDmmTools: routes.some(
@@ -932,6 +931,24 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 	const rex =
 		player === 'plex' && (answers.plexRoute === 'rex' || answers.plexRoute === 'either');
 	if (source === 'http-local') {
+		if (rex && answers.host === 'android')
+			return Object.assign(
+				route(
+					'rex-http-android',
+					'HTTP source + rex addon → Plex apps',
+					'An addon you write for rex-addons lists your files and what each one is, and rex for Android plays them from your HTTP server. No zurg or debrid account is required.',
+					'server',
+					['Your HTTP source + your rex-addons addon → rex → Plex apps'],
+					[
+						'An addon you write for rex-addons that names each file by its IMDb or TMDB id. Local files must be served over HTTP, such as from a NAS.',
+					],
+					[REX_ADDONS],
+					[
+						'rex does not scan disks or identify files from names; a bare URL does not supply its metadata.',
+					]
+				),
+				{ usesRex: true }
+			);
 		if (rex)
 			return Object.assign(
 				route(
@@ -998,6 +1015,24 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 		);
 	}
 	if (source === 'url-addon') {
+		if (rex && answers.host === 'android')
+			return Object.assign(
+				route(
+					'rex-addons-android-plex',
+					'Stremio URL addons → rex on Android → Plex apps',
+					"The Stremio addon of rex-addons, in the app on the device, brings your addons' catalogs and streams into Plex apps.",
+					'server',
+					[
+						'Stremio catalogs + URL stream addons → Stremio addon in rex-addons → rex → Plex apps',
+					],
+					[
+						"Install the Stremio addon in the app and paste each addon's manifest.json link.",
+					],
+					[REX_ANDROID],
+					['It needs playable URLs; raw torrent streams are incompatible.']
+				),
+				{ usesRex: true }
+			);
 		if (rex)
 			return Object.assign(
 				route(
@@ -1031,8 +1066,12 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 			'Stremio URL addons are not automatically sources for the selected player.',
 			'none',
 			[],
-			['Use Stremio directly, or rex-stremio with a normal host for Plex apps.'],
-			[ADDON]
+			[
+				answers.host === 'android'
+					? 'Use Stremio directly, or the Stremio addon of rex on Android for Plex apps.'
+					: 'Use Stremio directly, or rex-stremio with a normal host for Plex apps.',
+			],
+			[answers.host === 'android' ? REX_ANDROID : ADDON]
 		);
 		r.status = 'separate';
 		return r;
@@ -1050,7 +1089,7 @@ function sourceRoute(source: SetupSource, answers: SetupAnswers, player: Player)
 			[
 				// A release sent to zurg is an NZB, so only zurg's NZB account (own Usenet, or TorBox
 				// hosted off Android) fetches it for rex.
-				`Keep Easynews in a compatible player.${rex && answers.host === 'android' ? ` For rex on Android${answers.sources.includes('usenet') ? ', only releases you send to zurg reach it' : ' there is no feed for it'}; a normal host can take a compatible URL addon or feed producer.` : rex ? (zurgNzb ? " For rex, releases you send to zurg reach it through zurg's NZB account; a compatible URL addon or feed producer can supply the rest." : ' For rex, a compatible URL addon or feed producer must supply streams and metadata.') : ''}`,
+				`Keep Easynews in a compatible player.${rex && answers.host === 'android' ? ` For rex on Android, ${answers.sources.includes('usenet') ? 'releases you send to zurg reach it; ' : ''}a compatible Stremio URL addon must supply streams and metadata through the app's Stremio addon.` : rex ? (zurgNzb ? " For rex, releases you send to zurg reach it through zurg's NZB account; a compatible URL addon or feed producer can supply the rest." : ' For rex, a compatible URL addon or feed producer must supply streams and metadata.') : ''}`,
 			],
 			[
 				DMM_CAST_LINKS.easynews,
@@ -1184,11 +1223,10 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		selected.some((source) => DEBRID_SOURCES.includes(source)) &&
 		!selected.includes('url-addon');
 	// rex-stremio is on the URL addon route, in the alternative without zurg, or, with no source, in the
-	// summary for a normal host; the Android summary leaves it to a normal host.
+	// summary for a normal host. On Android the Stremio addon of rex-addons takes its place.
 	const rexStremio =
-		rexWithoutZurg ||
-		(rex &&
-			(selected.includes('url-addon') || (!selected.length && answers.host !== 'android')));
+		answers.host !== 'android' &&
+		(rexWithoutZurg || (rex && (selected.includes('url-addon') || !selected.length)));
 	const chosenPlayer =
 		player === 'webdav'
 			? 'a WebDAV or SMB player'
@@ -1199,6 +1237,16 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		source,
 		route: sourceRoute(source, answers, player),
 	}));
+	// With zurg on the device the app is zurg+rex, which runs the same addons as rex for Android.
+	// Only a zurg that runs on the device: Sonarr/Radarr, a mounted server and TorBox hosted NZBs need a normal host.
+	if (
+		answers.host === 'android' &&
+		answers.preference !== 'arr' &&
+		!selected.includes('torbox-hosted') &&
+		routes.some(({ route: r }) => r.usesZurg && runsOnAndroid(r))
+	)
+		for (const { route: r } of routes)
+			r.links = r.links.map((link) => (link === REX_ANDROID ? ANDROID : link));
 	const integrated = routes.filter((x) => x.route.status === 'integrated');
 	const first = (integrated[0] ?? routes[0])?.route;
 	// TorBox Pro hosted NZBs belong to the TorBox account, so the pair is one source.
@@ -1296,15 +1344,23 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 	}
 	if (rex) {
 		result.limits.push(
-			`rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. ${answers.host === 'android' ? 'On Android, rex comes inside the sponsor-only zurg+rex app, your own Plex server on your phone or TV box.' : `${rexStremio ? 'rex and rex-stremio do not' : 'rex does not'} require sponsorship.`}`
+			`rex is an independent server for Plex apps, not Plex Media Server. Check its tested-client compatibility. ${answers.host === 'android' ? (routes.some(({ route: r }) => r.usesZurg) ? 'On Android, rex with zurg is the sponsor-only zurg+rex app, your own Plex server on your phone or TV box.' : 'On Android, rex for Android runs rex and its addons with no sponsorship; the sponsor-only zurg+rex app, your own Plex server on your phone or TV box, adds zurg.') : `${rexStremio ? 'rex and rex-stremio do not' : 'rex does not'} require sponsorship.`}`
 		);
 		links(note('rex/faq', 'rex compatibility and limits'));
 		if (rexWithoutZurg)
-			result.alternatives.push({
-				title: 'Without zurg: rex-stremio with a debrid stream addon',
-				detail: `Run rex and rex-stremio${answers.host === 'android' ? ' on a normal host' : ''} with a Stremio stream addon that returns links through your ${debridAccounts}; no zurg and no sponsorship needed.`,
-				links: [ADDON],
-			});
+			result.alternatives.push(
+				answers.host === 'android'
+					? {
+							title: 'Without zurg: rex for Android with a debrid stream addon',
+							detail: `Run rex for Android and give its Stremio addon a stream addon that returns links through your ${debridAccounts}; no zurg and no sponsorship needed.`,
+							links: [REX_ANDROID],
+						}
+					: {
+							title: 'Without zurg: rex-stremio with a debrid stream addon',
+							detail: `Run rex and rex-stremio with a Stremio stream addon that returns links through your ${debridAccounts}; no zurg and no sponsorship needed.`,
+							links: [ADDON],
+						}
+			);
 		if (selected.includes('http-local'))
 			result.sourceNotes.push(
 				'An HTTP file or local disk needs a feed producer for rex; the program submitting metadata can be separate from the HTTP byte server.'
@@ -1520,7 +1576,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 						'The arr workflow needs an existing or willing full host for Sonarr/Radarr and zurg.')
 				: answers.host === 'android'
 					? (hostChoiceReason(answers, answers.host) ??
-						`This route needs a normal host for ${rex ? 'rex' : playerLabel(player)}. zurg+rex Android runs zurg and the rex zurg feeds, not that whole server stack.`)
+						`This route needs a normal host for ${rex ? 'rex' : playerLabel(player)}. rex on Android takes zurg and addons, not that whole server stack.`)
 					: `${rex ? 'rex and its source need' : `${player === 'plex' ? 'Plex Media Server' : playerLabel(player)} needs`} a machine that stays on. Choose a host${androidRunsRex({ ...answers, host: 'android' }) ? ` or a supported ${android64}Android device` : ''}.`
 		);
 	const hostedNzb = routes.some(({ route: r }) => r.zurgNzb === 'hosted');
@@ -1535,8 +1591,16 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		result.conflicts.push(
 			`zurg needs a host that stays on while you watch. Choose a host${hostedNzb ? '' : ` or a supported ${android64}Android device`}${noHostClause(player, selected, answers.player === 'unsure')}.`
 		);
+	const zurgOnRoute = routes.some(({ route: r }) => r.usesZurg);
 	const androidZurg =
-		answers.host === 'android' && (result.hostRequirement === 'zurg' || androidRex);
+		answers.host === 'android' &&
+		(result.hostRequirement === 'zurg' || (androidRex && zurgOnRoute));
+	// rex for Android, the free app, when rex runs on the device and no route needs zurg.
+	const androidRexOnly = answers.host === 'android' && rex && !zurgOnRoute;
+	if (androidRexOnly && androidRex)
+		result.prerequisites.push(
+			'rex for Android needs a supported device and background operation.'
+		);
 	if (androidZurg) {
 		const app = 'needs sponsor access, a supported device and background operation;';
 		const noHostedNzb = 'has no TorBox hosted NZB (torbox_nzb) backend.';
@@ -1555,21 +1619,28 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 			);
 	}
 	// The app stands in for the desktop zurg and rex guides, so its own guide leads. rex on Android
-	// with no source zurg feeds it (none, or Easynews alone) is still the app the rex limit names;
-	// a rex route with a conflict needs a normal host, whose guides stay.
-	if (androidZurg || (answers.host === 'android' && rex && !result.conflicts.length))
+	// with no zurg route (no source, URL addons, HTTP files or Easynews) is rex for Android; a rex
+	// route with a conflict needs a normal host, whose guides stay.
+	if (androidZurg)
 		result.setupLinks = [
 			ANDROID,
 			...result.setupLinks.filter((link) => link !== ZURG && link !== REX),
+		];
+	else if (androidRexOnly && !result.conflicts.length)
+		result.setupLinks = [
+			REX_ANDROID,
+			...result.setupLinks.filter(
+				(link) => link !== ZURG && link !== REX && link !== ADDON && link !== REX_ANDROID
+			),
 		];
 	if (answers.needs.includes('remote')) {
 		const selfHosted =
 			'Self-hosted playback needs a securely reachable address; a LAN address works only at home.';
 		result.optionalNeeds.push(
 			// A media server or rex is always self-hosted; the arr download client's host does not serve playback.
-			// rex on Android is the zurg+rex app, whatever source feeds it, as in the local files note.
+			// rex on Android runs on the device itself, in either app.
 			rex && answers.host === 'android'
-				? 'zurg+rex runs on the Android device itself; the Plex apps on it play anywhere, while other devices reach it over your home network.'
+				? `${zurgOnRoute ? 'zurg+rex' : 'rex for Android'} runs on the Android device itself; the Plex apps on it play anywhere, while other devices reach it over your home network.`
 				: playerNeedsFullHost(player)
 					? selfHosted
 					: !routes.some(({ route: r }) => r.host !== 'none')
@@ -1648,7 +1719,7 @@ export function recommendSetup(answers: SetupAnswers): SetupRecommendation {
 		const cloud = `cloud titles come from ${result.conflicts.length ? 'the route you choose' : cloudRoutes > 1 ? 'the routes above' : cloudRoutes ? 'the route above' : 'the route you choose'}.`;
 		result.optionalNeeds.push(
 			rex && answers.host === 'android'
-				? 'zurg+rex Android feeds rex from zurg only; local files need rex on a normal host, or a player on the device.'
+				? 'Local files join rex on Android through an addon you write for rex-addons and an HTTP server; each source supplies its own metadata and reachable HTTP bytes.'
 				: rex
 					? 'Local files join rex through an HTTP source and a feed producer; each source supplies its own metadata and reachable HTTP bytes.'
 					: playerNeedsFullHost(player)
