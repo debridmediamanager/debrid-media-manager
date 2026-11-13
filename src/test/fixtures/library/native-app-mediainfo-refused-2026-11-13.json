@@ -1,0 +1,28 @@
+{
+	"captured": "2026-11-13 20:14 UTC, production debridmediamanager.com, before the DMM Mobile app could read stored probes",
+	"request": {
+		"headers": {
+			"content-type": "application/json",
+			"user-agent": "okhttp/4.12.0"
+		},
+		"hash": "225956129403e3d923980a34dfd17ffbe2dd0f9a"
+	},
+	"responses": {
+		"GET /api/torrents/mediainfo?hash=": {
+			"status": 403,
+			"body": {
+				"error": "This endpoint serves DMM pages only. Tools use the sponsor API: https://debridmediamanager.com/api-docs"
+			}
+		},
+		"POST /api/sponsor/mediainfo": {
+			"status": 401,
+			"body": {
+				"error": "Missing x-api-key header"
+			}
+		},
+		"POST /api/library/mediainfo": {
+			"status": 404,
+			"body": "Next.js 404 page (no such route)"
+		}
+	}
+}

@@ -13,15 +13,11 @@ const INFO_HASH = /^[a-f0-9]{40}$/;
  * skip probing what someone has probed before. Then the probes sponsors' apps
  * sent for single files (POST /api/sponsor/probes), for files zurg's snapshot
  * does not hold by size; one of those has only a name for its path, or none. A
- * hash with no stored probe is absent from the answer.
+ * hash with no stored probe is absent from the answer. The caller is checked by
+ * the route: a sponsor's key here, a DMM page or the DMM Mobile app on
+ * /api/library/mediainfo.
  */
-async function handler(req: NextApiRequest, res: NextApiResponse) {
-	if (req.method !== 'POST') {
-		res.setHeader('Allow', 'POST');
-		return res.status(405).json({ error: 'Method not allowed' });
-	}
-	if (!(await validateDmmApiKeyHeader(req, res))) return;
-
+export async function mediaInfoHandler(req: NextApiRequest, res: NextApiResponse) {
 	const hashes = (req.body as { hashes?: unknown } | undefined)?.hashes;
 	const wanted = Array.isArray(hashes)
 		? hashes.map((h) => (typeof h === 'string' ? h.toLowerCase() : ''))
@@ -51,6 +47,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 		console.error('Failed to read stored media info', error);
 		return res.status(500).json({ error: 'Internal server error' });
 	}
+}
+
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+	if (req.method !== 'POST') {
+		res.setHeader('Allow', 'POST');
+		return res.status(405).json({ error: 'Method not allowed' });
+	}
+	if (!(await validateDmmApiKeyHeader(req, res))) return;
+	return mediaInfoHandler(req, res);
 }
 
 export default withIpRateLimit(handler, RATE_LIMIT_CONFIGS.sponsorMediaInfo);

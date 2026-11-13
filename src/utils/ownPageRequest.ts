@@ -33,8 +33,9 @@ export function validateOwnPageRequest(req: NextApiRequest, res: NextApiResponse
  * A native app rather than a browser: it sends neither `Sec-Fetch-Site` nor `Origin`,
  * while a browser sends at least one on any write, and every write a page can make to
  * another site carries `Origin`. Anyone can send neither, so only together with a provider
- * login the route verifies: browser-state, and the library identification the DMM Mobile
- * app names its user's own library with (Ben's call, 2026-11-12). Never on its own.
+ * login the route verifies: browser-state, and the library identification and stored probes
+ * the DMM Mobile app names and describes its user's own library with (Ben's call,
+ * 2026-11-12). Never on its own.
  */
 export function isNativeAppRequest(req: NextApiRequest): boolean {
 	return req.headers['sec-fetch-site'] === undefined && req.headers.origin === undefined;
