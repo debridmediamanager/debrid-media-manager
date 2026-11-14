@@ -1,3 +1,4 @@
+import { ModalProvider } from '@/components/modals/ModalContext';
 import { handleAddAsMagnetInRd } from '@/utils/addMagnet';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
@@ -136,7 +137,11 @@ describe('HashlistPage RD Download', () => {
 	it('reports refused adds as failures, not started downloads (card 455)', async () => {
 		const { toast } = await import('react-hot-toast');
 		const HashlistPage = (await import('@/pages/hashlist')).default;
-		render(<HashlistPage />);
+		render(
+			<ModalProvider>
+				<HashlistPage />
+			</ModalProvider>
+		);
 
 		const allButton = await screen.findByText('Show All');
 		fireEvent.click(allButton);
@@ -145,6 +150,7 @@ describe('HashlistPage RD Download', () => {
 		const count = available.length;
 		expect(button).toHaveTextContent(`RD Download (${count})`);
 		fireEvent.click(button);
+		fireEvent.click(await screen.findByRole('button', { name: `Add ${count}` }));
 
 		await waitFor(() =>
 			expect(toast.error).toHaveBeenCalledWith(

@@ -1,3 +1,4 @@
+import Modal from '@/components/modals/modal';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
 import {
 	useAllDebridApiKey,
@@ -94,6 +95,19 @@ interface SortBy {
 }
 
 const torrentDB = new UserTorrentDB();
+
+// A bulk download used to start on one click: a misclick on "PM Download (117)",
+// beside "One per title", added 117 transfers (2026-11-14).
+async function confirmBulkAdd(count: number, service: string) {
+	const releases = `${count} release${count === 1 ? '' : 's'}`;
+	const { isConfirmed } = await Modal.fire({
+		title: `Add ${releases} to ${service}?`,
+		icon: 'question',
+		showCancelButton: true,
+		confirmButtonText: `Add ${count}`,
+	});
+	return isConfirmed;
+}
 
 // Parsing a filename costs ~0.15 ms, so a 176k-item list took ~27 s of main
 // thread in one go; with the page frozen that long Chrome offers to kill it.
@@ -594,6 +608,7 @@ function HashlistPage() {
 			);
 			return;
 		}
+		if (!(await confirmBulkAdd(yetToDownload.length, 'Real-Debrid'))) return;
 
 		const progressToast = toast.loading(
 			`Downloading 0/${yetToDownload.length} torrents...`,
@@ -655,6 +670,7 @@ function HashlistPage() {
 			);
 			return;
 		}
+		if (!(await confirmBulkAdd(yetToDownload.length, 'AllDebrid'))) return;
 
 		const progressToast = toast.loading(`Downloading 0/${yetToDownload.length} torrents...`);
 
@@ -705,6 +721,7 @@ function HashlistPage() {
 			);
 			return;
 		}
+		if (!(await confirmBulkAdd(yetToDownload.length, 'TorBox'))) return;
 
 		const progressToast = toast.loading(`Downloading 0/${yetToDownload.length} torrents...`);
 
@@ -976,6 +993,7 @@ function HashlistPage() {
 			toast('Everything already downloaded', genericToastOptions);
 			return;
 		}
+		if (!(await confirmBulkAdd(yetToDownload.length, 'Debrid-Link'))) return;
 
 		await handleAddMultipleHashesInDl(dlKey!, yetToDownload, async () => {
 			await fetchHashAndProgress();
@@ -1022,6 +1040,7 @@ function HashlistPage() {
 			toast('Everything already downloaded', genericToastOptions);
 			return;
 		}
+		if (!(await confirmBulkAdd(yetToDownload.length, 'Offcloud'))) return;
 
 		const progressToast = toast.loading(`Downloading 0/${yetToDownload.length} torrents...`);
 		const [results, errors] = await runConcurrentFunctions(
@@ -1061,6 +1080,7 @@ function HashlistPage() {
 			toast('Everything already downloaded', genericToastOptions);
 			return;
 		}
+		if (!(await confirmBulkAdd(yetToDownload.length, 'Premiumize'))) return;
 
 		const progressToast = toast.loading(`Downloading 0/${yetToDownload.length} torrents...`);
 		const [results, errors] = await runConcurrentFunctions(
