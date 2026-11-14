@@ -81,6 +81,32 @@ describe('RealDebrid auth helpers', () => {
 	});
 });
 
+// debridmediamanager.com itself (this file's origin) keeps sending RD calls through its proxies.
+describe('RealDebrid routing on debridmediamanager.com', () => {
+	it('uses the public proxy and the auth proxy, in the browser and on the server', async () => {
+		genericAxios.get.mockResolvedValue({ data: { device_code: 'dev' } });
+		realAxios.get.mockResolvedValue({ data: { id: 'X' } });
+		await getDeviceCode();
+		await getTorrentInfo('token', 'X');
+		expect(genericAxios.get.mock.calls[0][0]).toMatch(
+			/^https:\/\/proxy\.test\/https:\/\/rd\.test\/oauth/
+		);
+		expect(realAxios.get.mock.calls[0][0]).toMatch(
+			/^https:\/\/authproxy\.test\/https:\/\/rd\.test\/rest\/1\.0\/torrents\/info\/X/
+		);
+
+		vi.stubGlobal('window', undefined);
+		vi.stubEnv('DMM_ORIGIN', 'https://debridmediamanager.com');
+		try {
+			await getDeviceCode();
+			expect(genericAxios.get.mock.calls[1][0]).toMatch(/^https:\/\/proxy\.test\//);
+		} finally {
+			vi.unstubAllGlobals();
+			vi.unstubAllEnvs();
+		}
+	});
+});
+
 describe('RealDebrid user cache', () => {
 	it('deduplicates concurrent user lookups per token', async () => {
 		vi.useFakeTimers();
