@@ -59,10 +59,10 @@ vi.mock('@/hooks/auth', () => ({
 	}),
 }));
 
-vi.mock('@/hooks/castToken', () => ({
-	__esModule: true,
-	useCastToken: () => undefined,
-}));
+const castHooks = vi.hoisted(() => ({ rd: vi.fn(), tb: vi.fn(), ad: vi.fn() }));
+vi.mock('@/hooks/castToken', () => ({ __esModule: true, useCastToken: castHooks.rd }));
+vi.mock('@/hooks/torboxCastToken', () => ({ useTorBoxCastToken: castHooks.tb }));
+vi.mock('@/hooks/allDebridCastToken', () => ({ useAllDebridCastToken: castHooks.ad }));
 
 vi.mock('@/utils/browseTerms', () => ({
 	__esModule: true,
@@ -189,6 +189,19 @@ describe('IndexPage', () => {
 
 		expect(screen.getByTestId('main-actions')).toBeInTheDocument();
 		expect(screen.queryByText(/Debrid Media Manager is loading/i)).not.toBeInTheDocument();
+	});
+
+	// A cast profile keeps the member's key on our server, so the home page only
+	// resyncs one that exists; the DMM Cast pages and /kodi are what create one.
+	it('resyncs cast profiles without enrolling anyone', () => {
+		currentUserMock.mockReturnValue(settledFixture);
+
+		render(<IndexPage />);
+
+		for (const hook of [castHooks.rd, castHooks.tb, castHooks.ad]) {
+			expect(hook).toHaveBeenCalled();
+			expect(hook.mock.calls.some(([options]) => options?.enroll)).toBe(false);
+		}
 	});
 
 	it('links the API docs beside Settings, not only from the footer', () => {

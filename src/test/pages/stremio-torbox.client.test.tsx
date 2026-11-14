@@ -96,6 +96,8 @@ describe('StremioTorBoxPage', () => {
 		expect(screen.getByText('DMM Cast for TorBox')).toBeInTheDocument();
 		expect(screen.getByText('Cast from any device to Stremio')).toBeInTheDocument();
 		expect(screen.getByText('Go Home')).toBeInTheDocument();
+		// The Cast page is what creates the profile; the home page only resyncs one.
+		expect(useTorBoxCastToken).toHaveBeenCalledWith({ enroll: true });
 	});
 
 	it('should render install buttons with token', async () => {

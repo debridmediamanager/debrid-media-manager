@@ -21,7 +21,7 @@ const config: CastManageConfig = {
 
 export function ManagePage() {
 	const [apiKey, apiKeyLoading] = useRealDebridAccessToken();
-	useCastToken();
+	useCastToken({ enroll: true });
 	return <CastManagePage config={config} apiKey={apiKey} apiKeyLoading={apiKeyLoading} />;
 }
 

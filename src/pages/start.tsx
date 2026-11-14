@@ -246,10 +246,10 @@ export default function StartPage() {
 				</div>
 
 				<p className="mt-2 max-w-lg text-center text-sm text-slate-400">
-					No data or logs are stored on our servers: everything stays in your
-					browser&apos;s local storage, and you can inspect every request. The one
-					exception is a Simkl sign-in, which our server keeps so your browser never holds
-					the key.
+					Your logins stay in your browser&apos;s local storage, and you can inspect every
+					request. Our server keeps a key only for DMM Cast and the Kodi addon, which need
+					it to find your streams, for a Simkl sign-in, and for remembering your logins
+					across devices if you turn that on.
 				</p>
 				<div className="mt-4">
 					<SiteLinks>

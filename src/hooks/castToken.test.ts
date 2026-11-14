@@ -1,3 +1,4 @@
+import { saveCastProfile } from '@/utils/castApiClient';
 import { act, renderHook } from '@testing-library/react';
 import toast from 'react-hot-toast';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -90,7 +91,7 @@ describe('useCastToken', () => {
 				}),
 		});
 
-		const { result } = renderHook(() => useCastToken());
+		const { result } = renderHook(() => useCastToken({ enroll: true }));
 		await act(async () => {
 			await new Promise((resolve) => setTimeout(resolve, 0));
 		});
@@ -100,5 +101,63 @@ describe('useCastToken', () => {
 			'DMM Cast for Real-Debrid: Failed to generate user ID: DMMCAST_SALT environment variable is not set'
 		);
 		localStorage.clear();
+	});
+});
+
+/**
+ * Seen 2026-11-14: the home page called this hook bare, so every Real-Debrid member got
+ * a cast profile holding their login on our server, Cast or not. Only the DMM Cast
+ * pages and /kodi enrol; everywhere else an existing profile is resynced.
+ */
+describe('useCastToken enrolment', () => {
+	const settle = () => act(async () => new Promise((resolve) => setTimeout(resolve, 0)));
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		localStorage.clear();
+		localStorage.setItem('rd:accessToken', JSON.stringify('rd-key'));
+		global.fetch = vi.fn().mockResolvedValue({
+			json: () => Promise.resolve({ status: 'success', id: 'cast-id-123' }),
+		});
+	});
+
+	it('sends nothing for a member without a profile when not enrolling (home page)', async () => {
+		renderHook(() => useCastToken());
+		await settle();
+
+		expect(saveCastProfile).not.toHaveBeenCalled();
+		expect(global.fetch).not.toHaveBeenCalled();
+	});
+
+	it('resyncs an existing profile without enrolling', async () => {
+		localStorage.setItem('rd:castToken', JSON.stringify('cast-id-123'));
+		renderHook(() => useCastToken());
+		await settle();
+
+		expect(saveCastProfile).toHaveBeenCalledWith(
+			{ apiKey: 'rd-key' },
+			expect.any(Number),
+			expect.any(Number),
+			expect.any(Number),
+			false
+		);
+		expect(global.fetch).not.toHaveBeenCalled();
+	});
+
+	it('creates the profile and the cast id when enrolling (Cast pages, /kodi)', async () => {
+		const { result } = renderHook(() => useCastToken({ enroll: true }));
+		await settle();
+
+		expect(saveCastProfile).toHaveBeenCalledWith(
+			{ apiKey: 'rd-key' },
+			expect.any(Number),
+			expect.any(Number),
+			expect.any(Number),
+			false
+		);
+		expect(global.fetch).toHaveBeenCalledWith('/api/stremio/id', {
+			headers: { Authorization: 'Bearer rd-key' },
+		});
+		expect(result.current).toBe('cast-id-123');
 	});
 });

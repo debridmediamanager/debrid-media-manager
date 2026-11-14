@@ -24,7 +24,7 @@ const config: CastPageConfig = {
 };
 
 export function StremioTorBoxPage() {
-	const dmmCastToken = useTorBoxCastToken();
+	const dmmCastToken = useTorBoxCastToken({ enroll: true });
 	return <CastPage config={config} dmmCastToken={dmmCastToken} />;
 }
 

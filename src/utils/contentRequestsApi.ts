@@ -1,4 +1,6 @@
+import { saveCastProfile } from './castApiClient';
 import type { PublicRequest } from './contentRequest';
+import { readRdOAuthCredentials } from './rdTokenStorage';
 
 /**
  * Client side of the request board.
@@ -105,6 +107,9 @@ export async function fileContentRequest(
 		})
 	);
 	if (data.delivered === true) return { delivered: true };
+	// Fulfilment can come days later, after this 24-hour token has died, so it mints
+	// the asker's token from their cast profile: a filed request is what saves one.
+	void saveCastProfile(readRdOAuthCredentials() ?? { apiKey: rdKey });
 	return { delivered: false, request: data.request as PublicRequest };
 }
 

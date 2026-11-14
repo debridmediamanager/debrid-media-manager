@@ -1,3 +1,4 @@
+import { saveCastProfile } from '@/utils/castApiClient';
 import {
 	cancelContentRequest,
 	fetchContentRequests,
@@ -10,6 +11,8 @@ import {
 } from '@/utils/contentRequestsApi';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+vi.mock('@/utils/castApiClient', () => ({ saveCastProfile: vi.fn() }));
+
 const ok = (body: unknown) => ({ ok: true, status: 200, json: async () => body });
 const fail = (status: number, body: unknown) => ({ ok: false, status, json: async () => body });
 
@@ -18,6 +21,8 @@ const lastInit = () => lastCall()[1] ?? {};
 
 beforeEach(() => {
 	global.fetch = vi.fn() as any;
+	vi.mocked(saveCastProfile).mockClear();
+	localStorage.clear();
 });
 
 describe('fetchContentRequests', () => {
@@ -124,6 +129,31 @@ describe('fileContentRequest', () => {
 			mediaType: 'movie',
 		});
 		expect(row).toEqual({ delivered: false, request: { id: 'req-1' } });
+	});
+
+	// The home page no longer makes everyone a Real-Debrid cast profile, and fulfilment
+	// days later mints the asker's token from one: without it the request stalls with
+	// "the requester needs to reconnect Real-Debrid".
+	it('saves the asker’s cast profile once a request is filed', async () => {
+		(global.fetch as any).mockResolvedValue(ok({ request: { id: 'req-1' } }));
+		await fileContentRequest('RD', { hash: 'abc', imdbId: 'tt1234567', mediaType: 'movie' });
+		expect(saveCastProfile).toHaveBeenCalledWith({ apiKey: 'RD' });
+
+		localStorage.setItem('rd:clientId', JSON.stringify('cid'));
+		localStorage.setItem('rd:clientSecret', JSON.stringify('secret'));
+		localStorage.setItem('rd:refreshToken', JSON.stringify('refresh'));
+		await fileContentRequest('RD', { hash: 'abc', imdbId: 'tt1234567', mediaType: 'movie' });
+		expect(saveCastProfile).toHaveBeenLastCalledWith({
+			clientId: 'cid',
+			clientSecret: 'secret',
+			refreshToken: 'refresh',
+		});
+	});
+
+	it('keeps no profile when Real-Debrid already had the release', async () => {
+		(global.fetch as any).mockResolvedValue(ok({ delivered: true }));
+		await fileContentRequest('RD', { hash: 'abc', imdbId: 'tt1234567', mediaType: 'movie' });
+		expect(saveCastProfile).not.toHaveBeenCalled();
 	});
 });
 

@@ -120,8 +120,8 @@ function useCastIds(): Record<string, string> {
 	// Opening this page enrols each signed-in service in DMM Cast, as its own cast
 	// page does: Kodi plays through those addons.
 	const ids: Record<string, string | null | undefined> = {
-		rd: useCastToken(),
-		tb: useTorBoxCastToken(),
+		rd: useCastToken({ enroll: true }),
+		tb: useTorBoxCastToken({ enroll: true }),
 		ad: useAllDebridCastToken({ enroll: true }),
 		pm: usePremiumizeCastToken({ enroll: true }),
 		oc: useOffcloudCastToken({ enroll: true }),

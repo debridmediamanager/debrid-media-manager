@@ -132,13 +132,21 @@ describe('StartPage', () => {
 		).toBeInTheDocument();
 	});
 
-	it('should render data storage policy', () => {
+	// It used to say nothing was stored on our servers but Simkl, while the home page
+	// gave every Real-Debrid and TorBox member a DMM Cast profile holding their key.
+	it('says which features keep a key on our server', () => {
 		render(<StartPage />);
 
-		const policy = screen.getByText(/No data or logs are stored on our servers/i);
+		const policy = screen.getByText(/Your logins stay in your browser's local storage/i);
 		expect(policy).toHaveTextContent(/you can inspect every request/i);
-		expect(policy).toHaveTextContent(/your browser's local storage/i);
-		expect(policy).toHaveTextContent(/exception is a Simkl sign-in/i);
+		expect(policy).toHaveTextContent(
+			/keeps a key only for DMM Cast and the Kodi addon, which need it to find your streams/i
+		);
+		expect(policy).toHaveTextContent(/Simkl sign-in/i);
+		expect(policy).toHaveTextContent(
+			/remembering your logins across devices if you turn that on/i
+		);
+		expect(policy).not.toHaveTextContent(/No data or logs are stored/i);
 	});
 
 	it('links to zurg, rex, the docs and the community', () => {

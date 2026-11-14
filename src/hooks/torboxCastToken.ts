@@ -5,13 +5,25 @@ import { useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import useLocalStorage from './localStorage';
 
-export function useTorBoxCastToken() {
+interface UseTorBoxCastTokenOptions {
+	/**
+	 * Create the cast profile when there isn't one yet. Only the DMM Cast pages and
+	 * /kodi should do this: the profile keeps the member's TorBox key on our server.
+	 * Everywhere else the hook resyncs an existing profile and nothing more.
+	 */
+	enroll?: boolean;
+}
+
+export function useTorBoxCastToken({ enroll = false }: UseTorBoxCastTokenOptions = {}) {
 	const [apiKey] = useLocalStorage<string>('tb:apiKey');
 	const [dmmCastToken, setDmmCastToken] = useLocalStorage<string>('tb:castToken');
 	const hasEnsuredProfile = useRef(false);
 
 	useEffect(() => {
 		if (!apiKey) return;
+
+		// Nothing to resync and not our place to enrol: stay off the network.
+		if (!dmmCastToken && !enroll) return;
 
 		const ensureProfileAndToken = async () => {
 			try {
@@ -61,7 +73,7 @@ export function useTorBoxCastToken() {
 
 		ensureProfileAndToken();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [apiKey, dmmCastToken]);
+	}, [apiKey, dmmCastToken, enroll]);
 
 	return dmmCastToken;
 }

@@ -6,7 +6,16 @@ import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import useLocalStorage from './localStorage';
 
-export function useCastToken() {
+interface UseCastTokenOptions {
+	/**
+	 * Create the cast profile when there isn't one yet. Only the DMM Cast pages and
+	 * /kodi should do this: the profile keeps the member's Real-Debrid login on our
+	 * server. Everywhere else the hook resyncs an existing profile and nothing more.
+	 */
+	enroll?: boolean;
+}
+
+export function useCastToken({ enroll = false }: UseCastTokenOptions = {}) {
 	const [clientId] = useLocalStorage<string>('rd:clientId');
 	const [clientSecret] = useLocalStorage<string>('rd:clientSecret');
 	const [refreshToken] = useLocalStorage<string>('rd:refreshToken');
@@ -23,9 +32,9 @@ export function useCastToken() {
 				? { apiKey: accessToken }
 				: null;
 
-	// Always sync credentials and settings to server when they change
+	// Sync credentials and settings when they change, for a member who has a profile
 	useEffect(() => {
-		if (!credentials) return;
+		if (!credentials || (!dmmCastToken && !enroll)) return;
 		const movieMaxSize = Number(
 			getLocalStorageItemOrDefault('settings:movieMaxSize', defaultMovieSize)
 		);
@@ -44,11 +53,11 @@ export function useCastToken() {
 			hideCastOption
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [clientId, clientSecret, refreshToken, accessToken]);
+	}, [clientId, clientSecret, refreshToken, accessToken, enroll]);
 
 	useEffect(() => {
-		// Only run if we don't have a token but have a Real-Debrid session
-		if (!accessToken) return;
+		// Only where enrolling is allowed, and only for a Real-Debrid session
+		if (!accessToken || !enroll) return;
 
 		// If we have a legacy 5-character token, clear it to trigger regeneration
 		if (dmmCastToken && isLegacyToken(dmmCastToken)) {
@@ -79,7 +88,7 @@ export function useCastToken() {
 
 		fetchToken();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [accessToken, clientId, clientSecret, refreshToken, dmmCastToken]);
+	}, [accessToken, clientId, clientSecret, refreshToken, dmmCastToken, enroll]);
 
 	return dmmCastToken;
 }

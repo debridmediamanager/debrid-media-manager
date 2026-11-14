@@ -51,7 +51,7 @@ describe('useTorBoxCastToken', () => {
 
 		global.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
 
-		const { result } = renderHook(() => useTorBoxCastToken());
+		const { result } = renderHook(() => useTorBoxCastToken({ enroll: true }));
 
 		await act(async () => {
 			await new Promise((resolve) => setTimeout(resolve, 0));
@@ -115,7 +115,7 @@ describe('useTorBoxCastToken', () => {
 		expect(saveTorBoxCastProfile).toHaveBeenCalledTimes(1);
 	});
 
-	it('fetches token when API key exists but no token', async () => {
+	it('enrols a member without a profile on a Cast page: saves it and fetches the token', async () => {
 		const setToken = vi.fn();
 		localStorageMock.mockImplementation((key: string) => {
 			if (key === 'tb:apiKey') return ['test-key', vi.fn()];
@@ -127,7 +127,7 @@ describe('useTorBoxCastToken', () => {
 			json: () => Promise.resolve({ status: 'success', id: 'tb-token-456' }),
 		});
 
-		renderHook(() => useTorBoxCastToken());
+		renderHook(() => useTorBoxCastToken({ enroll: true }));
 
 		await act(async () => {
 			await new Promise((resolve) => setTimeout(resolve, 0));
@@ -141,6 +141,25 @@ describe('useTorBoxCastToken', () => {
 		const [url] = vi.mocked(global.fetch).mock.calls[0];
 		expect(String(url)).not.toContain('test-key');
 		expect(setToken).toHaveBeenCalledWith('tb-token-456');
+		expect(saveTorBoxCastProfile).toHaveBeenCalledWith('test-key', 100, 100, 100, false);
+	});
+
+	// Seen 2026-11-14: the home page called this hook bare, so every TorBox member got a
+	// cast profile holding their key on our server, Cast or not.
+	it('sends nothing for a member without a profile when not enrolling (home page)', async () => {
+		localStorageMock.mockImplementation((key: string) => {
+			if (key === 'tb:apiKey') return ['test-key', vi.fn()];
+			return [null, vi.fn()];
+		});
+
+		renderHook(() => useTorBoxCastToken());
+
+		await act(async () => {
+			await new Promise((resolve) => setTimeout(resolve, 0));
+		});
+
+		expect(saveTorBoxCastProfile).not.toHaveBeenCalled();
+		expect(global.fetch).not.toHaveBeenCalled();
 	});
 
 	it('does not set token on error response', async () => {
@@ -155,7 +174,7 @@ describe('useTorBoxCastToken', () => {
 			json: () => Promise.resolve({ status: 'error', message: 'Bad key' }),
 		});
 
-		renderHook(() => useTorBoxCastToken());
+		renderHook(() => useTorBoxCastToken({ enroll: true }));
 
 		await act(async () => {
 			await new Promise((resolve) => setTimeout(resolve, 0));

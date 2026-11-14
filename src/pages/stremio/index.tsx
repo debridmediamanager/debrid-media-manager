@@ -30,7 +30,7 @@ const config: CastPageConfig = {
 };
 
 export function StremioPage() {
-	const dmmCastToken = useCastToken();
+	const dmmCastToken = useCastToken({ enroll: true });
 	return <CastPage config={config} dmmCastToken={dmmCastToken} />;
 }
 

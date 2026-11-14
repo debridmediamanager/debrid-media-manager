@@ -6,7 +6,7 @@ const castTokenMock = vi.fn();
 
 vi.mock('@/hooks/castToken', () => ({
 	__esModule: true,
-	useCastToken: () => castTokenMock(),
+	useCastToken: (...args: unknown[]) => castTokenMock(...args),
 }));
 
 vi.mock('@/utils/withAuth', () => ({
@@ -39,6 +39,12 @@ describe('StremioPage', () => {
 	beforeEach(() => {
 		castTokenMock.mockReset();
 		localStorage.clear();
+	});
+
+	it('enrols in DMM Cast: this is the page that creates the profile', () => {
+		castTokenMock.mockReturnValue(undefined);
+		render(<StremioPage />);
+		expect(castTokenMock).toHaveBeenCalledWith({ enroll: true });
 	});
 
 	it('shows an error message when user is not logged in with RD', () => {

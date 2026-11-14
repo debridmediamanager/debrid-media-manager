@@ -143,9 +143,9 @@ function IndexPage() {
 		return () => clearTimeout(timer);
 	}, []);
 
-	// Each of these no-ops without that service's credentials. They also resync the
-	// cast profile, so settings that failed to reach the server heal on any visit
-	// instead of only on the service's own cast page.
+	// Each resyncs an existing cast profile, so settings that failed to reach the
+	// server heal on any visit. None enrols: a profile keeps the member's key on our
+	// server, so only the DMM Cast pages and /kodi create one.
 	useCastToken();
 	useAllDebridCastToken();
 	useTorBoxCastToken();

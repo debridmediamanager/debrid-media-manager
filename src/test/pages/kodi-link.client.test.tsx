@@ -42,9 +42,14 @@ vi.mock('next/link', () => ({
 }));
 
 const rdCast = { id: undefined as string | undefined };
-vi.mock('@/hooks/castToken', () => ({ useCastToken: () => rdCast.id }));
+const castHookCalls = vi.hoisted(() => ({ rd: [] as unknown[], tb: [] as unknown[] }));
+vi.mock('@/hooks/castToken', () => ({
+	useCastToken: (options: unknown) => (castHookCalls.rd.push(options), rdCast.id),
+}));
 vi.mock('@/hooks/allDebridCastToken', () => ({ useAllDebridCastToken: () => undefined }));
-vi.mock('@/hooks/torboxCastToken', () => ({ useTorBoxCastToken: () => undefined }));
+vi.mock('@/hooks/torboxCastToken', () => ({
+	useTorBoxCastToken: (options: unknown) => (castHookCalls.tb.push(options), undefined),
+}));
 vi.mock('@/hooks/premiumizeCastToken', () => ({ usePremiumizeCastToken: () => undefined }));
 vi.mock('@/hooks/offcloudCastToken', () => ({ useOffcloudCastToken: () => undefined }));
 vi.mock('@/hooks/debridLinkCastToken', () => ({ useDebridLinkCastToken: () => undefined }));
@@ -175,6 +180,16 @@ describe('/kodi?code= on a browser signed in to one service', () => {
 		}
 		// A browser already signed in never restores again, so the hint would mislead here.
 		expect(screen.queryByText('Remember across devices')).toBeNull();
+	});
+
+	// Linking Kodi is one step: the page itself enrols every signed-in service in DMM Cast.
+	it('enrols Real-Debrid and TorBox in DMM Cast', async () => {
+		castHookCalls.rd.length = castHookCalls.tb.length = 0;
+		await renderPage();
+
+		expect(castHookCalls.rd).toContainEqual({ enroll: true });
+		expect(castHookCalls.tb).toContainEqual({ enroll: true });
+		expect([...castHookCalls.rd, ...castHookCalls.tb]).not.toContainEqual(undefined);
 	});
 });
 

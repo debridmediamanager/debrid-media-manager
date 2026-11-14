@@ -99,6 +99,8 @@ describe('TorBoxManagePage', () => {
 		render(<TorBoxManagePage />);
 
 		expect(screen.getByText('Loading...')).toBeInTheDocument();
+		const { useTorBoxCastToken } = await import('@/hooks/torboxCastToken');
+		expect(useTorBoxCastToken).toHaveBeenCalledWith({ enroll: true });
 	});
 
 	it('should render page title', async () => {

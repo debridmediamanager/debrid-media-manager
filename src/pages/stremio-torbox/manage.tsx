@@ -21,7 +21,7 @@ const config: CastManageConfig = {
 
 export function TorBoxManagePage() {
 	const [apiKey] = useLocalStorage<string>('tb:apiKey');
-	useTorBoxCastToken();
+	useTorBoxCastToken({ enroll: true });
 	return <CastManagePage config={config} apiKey={apiKey} />;
 }
 
