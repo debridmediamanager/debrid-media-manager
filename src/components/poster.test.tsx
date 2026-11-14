@@ -1,3 +1,4 @@
+// @vitest-environment-options {"url":"https://debridmediamanager.com/"}
 import unknownFranchise from '@/test/fixtures/anime/api-anime-franchise-anidb-19795.json';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';

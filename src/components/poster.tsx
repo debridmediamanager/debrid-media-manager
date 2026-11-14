@@ -1,3 +1,4 @@
+import { isOfficialDmm } from '@/utils/officialDmm';
 import { posterUrl } from '@/utils/posterHost';
 import Image from 'next/image';
 import { memo, SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
@@ -35,6 +36,10 @@ const getPlaceholderUrl = (text: string): string => {
 	return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 };
 
+// DMM's poster cache serves debridmediamanager.com; a self-hosted copy starts at Metahub.
+const firstPoster = (imdbId: string): [FallbackStep, string] =>
+	isOfficialDmm() ? ['cdn', getPosterUrl(imdbId)] : ['metahub', getMetahubUrl(imdbId)];
+
 // Cache for resolved poster URLs to avoid duplicate lookups
 const posterCache = new Map<string, string>();
 
@@ -47,11 +52,11 @@ type PosterProps = {
 
 const Poster = memo(
 	function Poster({ imdbId, title }: PosterProps) {
-		const [posterUrl, setPosterUrl] = useState(() => getPosterUrl(imdbId));
+		const [posterUrl, setPosterUrl] = useState(() => (imdbId ? firstPoster(imdbId)[1] : ''));
 		// Refs, not state: image errors can arrive twice for one URL and while
 		// the poster API is still answering, and each handler must see where the
 		// chain is now rather than where it was when it was created.
-		const stepRef = useRef<FallbackStep>('cdn');
+		const stepRef = useRef<FallbackStep>(isOfficialDmm() ? 'cdn' : 'metahub');
 		const urlRef = useRef(posterUrl);
 		const lookupRef = useRef(false);
 		const mountedRef = useRef(true);
@@ -78,7 +83,7 @@ const Poster = memo(
 				if (cached) {
 					show(cached.startsWith('data:') ? 'placeholder' : 'api', cached);
 				} else {
-					show('cdn', getPosterUrl(imdbId));
+					show(...firstPoster(imdbId));
 				}
 			}
 		}, [imdbId, show]);
