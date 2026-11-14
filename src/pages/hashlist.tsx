@@ -41,6 +41,7 @@ import {
 	convertToTbUserTorrent,
 	convertToUserTorrent,
 } from '@/utils/fetchTorrents';
+import { filenameParse } from '@/utils/filenameParse';
 import { bestPerTitle, groupHashlist } from '@/utils/hashlistGrouping';
 import {
 	hashlistFileUrl,
@@ -70,7 +71,6 @@ import { fetchBlockedHashes } from '@/utils/takedownClient';
 import { genericToastOptions, toasterPosition } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { uniqueByHash } from '@/utils/uniqueByHash';
-import { filenameParse } from '@ctrl/video-filename-parser';
 import {
 	CheckCircle,
 	ChevronLeft,

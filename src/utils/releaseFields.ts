@@ -1,4 +1,4 @@
-import { filenameParse } from '@ctrl/video-filename-parser';
+import { filenameParse } from '@/utils/filenameParse';
 import ptt from 'parse-torrent-title';
 
 // What a release's name says about it, for API callers that would otherwise parse it

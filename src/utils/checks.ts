@@ -1,5 +1,5 @@
 import { ScrapeSearchResult } from '@/services/mediasearch';
-import { filenameParse } from '@ctrl/video-filename-parser';
+import { filenameParse } from '@/utils/filenameParse';
 import ptt from 'parse-torrent-title';
 import { cleanSearchQuery, liteCleanSearchQuery } from './search';
 import { BANNED_COMPOUND_WORDS, BANNED_WORDS_SET, STOPWORDS_SET } from './wordlists';
@@ -773,7 +773,7 @@ function levenshtein(s: string, t: string) {
 	if (n === 0 || m === 0) return n + m;
 
 	const p = new Array(n);
-	for (let y = 0; y < n; ) {
+	for (let y = 0; y < n;) {
 		p[y] = ++y;
 	}
 

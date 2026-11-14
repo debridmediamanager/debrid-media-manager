@@ -1,5 +1,5 @@
 import axiosWithRetry from '@/utils/axiosWithRetry';
-import { filenameParse } from '@ctrl/video-filename-parser';
+import { filenameParse } from '@/utils/filenameParse';
 import { languageEmojis } from './languages';
 import { MediaInfoResponse } from './types';
 

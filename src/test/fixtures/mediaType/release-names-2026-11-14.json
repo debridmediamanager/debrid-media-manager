@@ -1,0 +1,195 @@
+{
+	"_about": [
+		"Real release names, each with what it is: type is film or show, and seasons/episodes, where given, are what the show parse must find (an empty list: none). A field left out is not judged; those names are only here for their type.",
+		"Sources: archive.org = the item https://archive.org/metadata/big-buck-bunny-2008-4k-60fps ('Big Buck Bunny (2008) - 4K UHD 60 FPS', mediatype movies), whose torrent is named after the identifier, and its one video file, both fetched 2026-11-14. aster = Aster's hashlist (fixtures/hashlist/421ab9ff-....fragment.txt). library = production HashIdentification.filename, the names DMM members' libraries sent to be identified, read 2026-11-14 (read-only). pm = the Premiumize test account's transfer list, 2026-11-14. fixture = an existing fixture's release name.",
+		"The shapes: a film's `name-YEAR` slug or `Title - YEAR` read as an episode (`bunny-2008`, `Trolls Holiday-2017` as S20E17); a frame rate read as an absolute episode (`60fps` as E60, `50fps` as E50); and the episode names, HFR tags and frame rates in show names that must keep reading as they did."
+	],
+	"names": [
+		{
+			"source": "archive.org",
+			"name": "big-buck-bunny-2008-4k-60fps",
+			"type": "movie",
+			"title": "big-buck-bunny",
+			"year": "2008"
+		},
+		{
+			"source": "archive.org",
+			"name": "bbb_sunflower_2160p_60fps_normal.mp4",
+			"type": "movie"
+		},
+		{
+			"source": "aster",
+			"name": "Trolls Holiday-2017-1080p BDRip x265 10bit DTS-HD MA 5 1 English-JBENT-TAoE.mkv",
+			"type": "movie",
+			"year": "2017"
+		},
+		{
+			"source": "aster",
+			"name": "flame-2048.nowhere.to.run.2017.1080p.bluray.x264[N1C].mkv",
+			"type": "movie",
+			"year": "2017"
+		},
+		{
+			"source": "aster",
+			"name": "The Searchers - 1956 - John Wayne 2160p HDR AC3.mkv",
+			"type": "movie",
+			"year": "1956"
+		},
+		{
+			"source": "library",
+			"name": "The-Batman-2022-2160p-WEB-DL-DDP5-1-Atmos-DV-H-265-EVO+TGx+",
+			"type": "movie",
+			"year": "2022"
+		},
+		{
+			"source": "library",
+			"name": "The-Fugitive-1993-1080p-BluRay-x264-DTS-FGT",
+			"type": "movie",
+			"year": "1993"
+		},
+		{
+			"source": "library",
+			"name": "Contagion-2011-2160p-HMAX-WEB-DL-x265-10bit-HDR-DTS-HD-MA-5-1-NOGRP",
+			"type": "movie",
+			"year": "2011"
+		},
+		{
+			"source": "library",
+			"name": "Five-Nights-at-Freddys-2023-2160p-UHD-BluRay-REMUX-HDR-HEVC-Atmos-TRiToN",
+			"type": "movie",
+			"year": "2023"
+		},
+		{
+			"source": "library",
+			"name": "Million-Dollar-Baby-2004-1080p-AMZN-WEB-DL-DDP5-1-H-264-GPRS",
+			"type": "movie",
+			"year": "2004"
+		},
+		{
+			"source": "library",
+			"name": "the-sandlot-1993-vhs-full-60fps",
+			"type": "movie",
+			"year": "1993"
+		},
+		{
+			"source": "library",
+			"name": "Troy - 2004 (Directors Cut) [2160p.Ai-Upscaled.BD.Remux.HEVC.60fps.10Bit.Dolby.TrueHD.5.1.mkv",
+			"type": "movie",
+			"year": "2004"
+		},
+		{
+			"source": "library",
+			"name": "Nam Angels - Castellano - 1988 (360p_24fps_H264-128kbit_AAC)",
+			"type": "movie",
+			"year": "1988"
+		},
+		{
+			"source": "fixture",
+			"name": "Dune Part Two - 2024- WEB-DL 1080p-HD-PRIME.mp4",
+			"type": "movie",
+			"year": "2024"
+		},
+		{
+			"source": "library",
+			"name": "Asterix.And.Obelix.vs.Caesar.1999.2160p.SDR.Ai-Upscaled.DTS.5.1-23.976fps-HDCLUB.mkv",
+			"type": "movie",
+			"year": "1999"
+		},
+		{
+			"source": "library",
+			"name": "Die.Wilden.Kerle.2.2005.WEB.1080p.23.976fps.RUS.GER.&.En.sub.mkv",
+			"type": "movie",
+			"year": "2005"
+		},
+		{
+			"source": "aster",
+			"name": "Still.Smokin.1983.2160p.AI-Upscaled.H265-DirtyHippie-Rife-4.9-60fps.mkv",
+			"type": "movie",
+			"year": "1983"
+		},
+		{
+			"source": "aster",
+			"name": "Gemini.Man.2019.PROPER.2160p.UHD.Remux.HEVC.HFR.Atmos.TrueHD.7.1-playBD.mkv",
+			"type": "movie",
+			"year": "2019"
+		},
+		{
+			"source": "aster",
+			"name": "Jake.Paul.vs.Mike.Tyson.2024.1080p.NF.WEB-DL.DDP5.1.HFR.H.265-FLUX.mkv",
+			"type": "movie",
+			"year": "2024"
+		},
+		{
+			"source": "library",
+			"name": "Formula.1.Drive.to.Survive.S05.1080p.h265.50fps.atmos.d2t",
+			"type": "tv",
+			"seasons": [5],
+			"episodes": []
+		},
+		{
+			"source": "library",
+			"name": "Fawlty Towers (1975) - Complete - BRRip 1080p 50fps - Specials Extras Commentary",
+			"type": "tv",
+			"episodes": []
+		},
+		{
+			"source": "aster",
+			"name": "Call the Midwife S14E02 1080p iP WEB-DL AAC2 0 HFR H 264-RAWR[EZTVx.to].mkv",
+			"type": "tv",
+			"seasons": [14],
+			"episodes": [2]
+		},
+		{
+			"source": "aster",
+			"name": "Batman.Caped.Crusader.S01.Complete.2160p.Ai-Upscaled.HEVC.DDP.5.1-RIFE.4.18-60fps-DirtyHippie",
+			"type": "tv",
+			"seasons": [1],
+			"episodes": []
+		},
+		{
+			"source": "aster",
+			"name": "Formula.1.Drive.To.Survive.S04.2160p.NF.HFR.WEB-DL.x265.10bit.HDR.DDP5.1.Atmos-APEX[rartv]",
+			"type": "tv",
+			"seasons": [4],
+			"episodes": []
+		},
+		{
+			"source": "library",
+			"name": "Ben 10 Alien Force 2008 S01 S03 1080p 60FPS H265 10bit Zero00",
+			"type": "tv",
+			"seasons": [1],
+			"episodes": []
+		},
+		{
+			"source": "library",
+			"name": "One Piece - 1176 H3LL 1080p x264 10bit AAC Multi-Subs",
+			"type": "tv"
+		},
+		{
+			"source": "library",
+			"name": "[KiyoshiiSubs] One Piece - 1162 [1080p][H.265 - 10Bit].mkv",
+			"type": "tv"
+		},
+		{
+			"source": "library",
+			"name": "Murder-in-a-Small-Town-2024-S02E01-Acts-of-Murder-1080p-AMZN-WEB-DL-DDP5-1-H-264-Kitsune",
+			"type": "tv",
+			"seasons": [2],
+			"episodes": [1]
+		},
+		{
+			"source": "library",
+			"name": "The-Boys-2019-S05E07-2160p-HDR10DV-WEBRip-6CH-x265-HEVC-PSA",
+			"type": "tv",
+			"seasons": [5],
+			"episodes": [7]
+		},
+		{
+			"source": "pm",
+			"name": "Ash vs. Evil Dead S01-S03 (2015-) + Movies (1981-1992)",
+			"type": "tv",
+			"seasons": [1, 2, 3],
+			"episodes": []
+		}
+	]
+}
