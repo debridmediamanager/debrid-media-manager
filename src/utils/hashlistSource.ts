@@ -36,6 +36,9 @@ export const isLzUriSafe = (text: string) => LZ_URI_SAFE.test(text);
 export const hashlistDataPath = (id: string) => `lists/${id}.txt`;
 export const hashlistDataUrl = (id: string) => `${HASHLIST_HOST}/${hashlistDataPath(id)}`;
 export const hashlistFragmentForId = (id: string) => `${ID_PREFIX}${id}`;
+/** A published list page's file in the hashlists repo, by its file name. */
+export const hashlistFileUrl = (name: string) =>
+	`https://raw.githubusercontent.com/debridmediamanager/hashlists/main/${name}`;
 
 /** The stored list's id, when the fragment (without `#`) names one. */
 export function storedHashlistId(fragment: string): string | null {

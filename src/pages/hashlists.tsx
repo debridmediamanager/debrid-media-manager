@@ -1,23 +1,18 @@
+import { hashlistFileUrl } from '@/utils/hashlistSource';
 import { ChevronLeft, ChevronRight, Home, Shuffle } from 'lucide-react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 
-interface GitHubFile {
-	name: string;
-	download_url: string;
-}
-
 interface HashlistNavState {
-	files: string[]; // download_urls
-	names: string[]; // file names
+	names: string[]; // file names in the hashlists repo
 	currentIndex: number;
 }
 
 export default function HashlistsPage() {
 	const router = useRouter();
-	const [files, setFiles] = useState<GitHubFile[]>([]);
+	const [files, setFiles] = useState<string[]>([]);
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [loading, setLoading] = useState(true);
 	const [loadingHash, setLoadingHash] = useState(false);
@@ -26,16 +21,11 @@ export default function HashlistsPage() {
 	useEffect(() => {
 		async function fetchHashlists() {
 			try {
-				const response = await fetch(
-					'https://api.github.com/repos/debridmediamanager/hashlists/contents'
-				);
+				const response = await fetch('/api/hashlists/names');
 				if (!response.ok) {
 					throw new Error('Failed to fetch hashlists');
 				}
-				const data = await response.json();
-				const htmlFiles = data.filter(
-					(file: GitHubFile) => file.name.endsWith('.html') && file.name !== 'index.html'
-				);
+				const { names: htmlFiles } = (await response.json()) as { names: string[] };
 				setFiles(htmlFiles);
 				if (htmlFiles.length > 0) {
 					// Start with a random file
@@ -53,23 +43,19 @@ export default function HashlistsPage() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	async function loadHashlist(fileList: GitHubFile[], index: number) {
+	async function loadHashlist(fileList: string[], index: number) {
 		const file = fileList[index];
 		if (!file) return;
 
 		setLoadingHash(true);
 		try {
-			const response = await fetch(file.download_url);
+			const response = await fetch(hashlistFileUrl(file));
 			const html = await response.text();
 			// Extract the hash from the iframe src
 			const match = html.match(/src="https:\/\/debridmediamanager\.com\/hashlist#([^"]+)"/);
 			if (match && match[1]) {
 				// Store navigation state in sessionStorage
-				const navState: HashlistNavState = {
-					files: fileList.map((f) => f.download_url),
-					names: fileList.map((f) => f.name),
-					currentIndex: index,
-				};
+				const navState: HashlistNavState = { names: fileList, currentIndex: index };
 				sessionStorage.setItem('hashlistNav', JSON.stringify(navState));
 				router.push(`/hashlist#${match[1]}`);
 			} else {
@@ -175,7 +161,7 @@ export default function HashlistsPage() {
 						<span className="text-red-400">{error}</span>
 					) : currentFile ? (
 						<span>
-							{currentFile.name} ({currentIndex + 1}/{files.length})
+							{currentFile} ({currentIndex + 1}/{files.length})
 						</span>
 					) : (
 						'No hashlists found'

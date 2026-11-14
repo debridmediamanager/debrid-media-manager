@@ -42,7 +42,11 @@ import {
 	convertToUserTorrent,
 } from '@/utils/fetchTorrents';
 import { bestPerTitle, groupHashlist } from '@/utils/hashlistGrouping';
-import { HashlistNotPublishedError, readHashlistFragment } from '@/utils/hashlistSource';
+import {
+	hashlistFileUrl,
+	HashlistNotPublishedError,
+	readHashlistFragment,
+} from '@/utils/hashlistSource';
 import {
 	checkAvailabilityOc2,
 	checkAvailabilityPm2,
@@ -217,7 +221,6 @@ function HashlistPage() {
 
 	// Hashlist navigation state (for browsing hashlists from /hashlists page)
 	const [navState, setNavState] = useState<{
-		files: string[];
 		names: string[];
 		currentIndex: number;
 	} | null>(null);
@@ -238,11 +241,11 @@ function HashlistPage() {
 	}, []);
 
 	async function navigateToHashlist(index: number) {
-		if (!navState || index < 0 || index >= navState.files.length) return;
+		if (!navState || index < 0 || index >= navState.names.length) return;
 
 		setNavLoading(true);
 		try {
-			const response = await fetch(navState.files[index]);
+			const response = await fetch(hashlistFileUrl(navState.names[index]));
 			const html = await response.text();
 			const match = html.match(/src="https:\/\/debridmediamanager\.com\/hashlist#([^"]+)"/);
 			if (match && match[1]) {
@@ -268,16 +271,16 @@ function HashlistPage() {
 	}
 
 	function handleNavNext() {
-		if (navState && navState.currentIndex < navState.files.length - 1) {
+		if (navState && navState.currentIndex < navState.names.length - 1) {
 			navigateToHashlist(navState.currentIndex + 1);
 		}
 	}
 
 	function handleNavRandom() {
-		if (!navState || navState.files.length <= 1) return;
+		if (!navState || navState.names.length <= 1) return;
 		let newIndex;
 		do {
-			newIndex = Math.floor(Math.random() * navState.files.length);
+			newIndex = Math.floor(Math.random() * navState.names.length);
 		} while (newIndex === navState.currentIndex);
 		navigateToHashlist(newIndex);
 	}
@@ -1140,9 +1143,9 @@ function HashlistPage() {
 						</button>
 						<button
 							onClick={handleNavRandom}
-							disabled={navState.files.length <= 1 || navLoading}
+							disabled={navState.names.length <= 1 || navLoading}
 							className={`rounded border-2 border-purple-500 bg-purple-900/30 p-1.5 text-purple-100 transition-colors hover:bg-purple-800/50 ${
-								navState.files.length <= 1 || navLoading
+								navState.names.length <= 1 || navLoading
 									? 'cursor-not-allowed opacity-50'
 									: ''
 							}`}
@@ -1153,10 +1156,10 @@ function HashlistPage() {
 						<button
 							onClick={handleNavNext}
 							disabled={
-								navState.currentIndex >= navState.files.length - 1 || navLoading
+								navState.currentIndex >= navState.names.length - 1 || navLoading
 							}
 							className={`rounded border-2 border-indigo-500 bg-indigo-900/30 p-1.5 text-indigo-100 transition-colors hover:bg-indigo-800/50 ${
-								navState.currentIndex >= navState.files.length - 1 || navLoading
+								navState.currentIndex >= navState.names.length - 1 || navLoading
 									? 'cursor-not-allowed opacity-50'
 									: ''
 							}`}
@@ -1170,7 +1173,7 @@ function HashlistPage() {
 						>
 							{navLoading
 								? 'Loading...'
-								: `List ${navState.currentIndex + 1} of ${navState.files.length}`}
+								: `List ${navState.currentIndex + 1} of ${navState.names.length}`}
 						</span>
 					</div>
 					<button

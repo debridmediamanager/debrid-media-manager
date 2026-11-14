@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import tree from '../fixtures/hashlist/hashlists-tree-2026-11-14.json';
 
 vi.mock('next/router', () => ({
 	useRouter: vi.fn(() => ({
@@ -74,7 +75,7 @@ describe('HashlistsPage', () => {
 	it('should show no hashlists message when empty', async () => {
 		fetchSpy.mockResolvedValue({
 			ok: true,
-			json: () => Promise.resolve([{ name: 'index.html', download_url: '' }]),
+			json: () => Promise.resolve({ names: [] }),
 		});
 
 		const HashlistsPage = (await import('@/pages/hashlists')).default;
@@ -104,5 +105,34 @@ describe('HashlistsPage', () => {
 			.getAllByRole('link')
 			.filter((el) => el.getAttribute('href') === '/');
 		expect(homeLinks.length).toBeGreaterThan(0);
+	});
+
+	// GitHub's contents API answers with the first 1,000 entries and no more: on
+	// 2026-11-14 it stopped at 0f6a0203-….html while the repo held 15,274 lists,
+	// so Random and Next never left that first 1,000.
+	it('picks from every list, not only the first 1,000', async () => {
+		const RAW = 'https://raw.githubusercontent.com/debridmediamanager/hashlists/main/';
+		const pages = tree.tree
+			.filter((e) => e.type === 'blob' && e.path.endsWith('.html') && e.path !== 'index.html')
+			.map((e) => e.path);
+		const contents = tree.tree
+			.slice(0, 1000)
+			.map((e) => ({ name: e.path, download_url: `${RAW}${e.path}` }));
+		fetchSpy.mockImplementation(async (url) => {
+			if (url === 'https://api.github.com/repos/debridmediamanager/hashlists/contents')
+				return { ok: true, json: async () => contents };
+			if (url === '/api/hashlists/names')
+				return { ok: true, json: async () => ({ names: pages }) };
+			return new Promise(() => {});
+		});
+		const random = vi.spyOn(Math, 'random').mockReturnValue(0.999);
+
+		const HashlistsPage = (await import('@/pages/hashlists')).default;
+		render(<HashlistsPage />);
+
+		const last = pages[Math.floor(0.999 * pages.length)];
+		await waitFor(() => expect(fetchSpy).toHaveBeenCalledWith(`${RAW}${last}`));
+		expect(pages.indexOf(last)).toBeGreaterThanOrEqual(1000);
+		random.mockRestore();
 	});
 });
