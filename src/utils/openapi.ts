@@ -37,6 +37,7 @@ const {
 	sponsorProbes,
 	sponsorPlace,
 	sponsorWanted,
+	sponsorWantedComplete,
 	animeEntries,
 	takedown,
 	stream,
@@ -1018,7 +1019,7 @@ export const openApiDocument = {
 				tags: ['Sponsors'],
 				operationId: 'wantedList',
 				summary: 'Your wanted list',
-				description: `The titles you added to your wanted list on DMM, for a tool that fetches them. A film leaves the list once it is acknowledged as fetched; a show stays so new episodes are fetched.\n\n\`seasons\` lists, per season wanted, the episodes aired so far as TMDB numbers them, with \`airing: true\` while more are to come. \`released\` is a film's first home release day (never a cinema date). \`titles\` is every title TMDB knows a film by. \`upgrade\` is on a fetched film whose fetcher asked for a better copy. \`posted\` is when a post last named a film on DMM's Newznab upstreams. Fields TMDB does not know are absent.\n\n**Limit:** ${per(sponsorWanted, 'calls')} per key, shared with acknowledging.`,
+				description: `The titles you added to your wanted list on DMM, for a tool that fetches them. A film leaves the list once it is acknowledged as fetched; a show stays so new episodes are fetched.\n\n\`seasons\` lists, per season wanted, the episodes aired so far as TMDB numbers them, with \`airing: true\` while more are to come. \`released\` is a film's first home release day (never a cinema date). \`titles\` is every title TMDB knows a film by. \`upgrade\` is on a fetched film whose fetcher asked for a better copy. \`posted\` is when a post last named a film on DMM's Newznab upstreams. Fields TMDB does not know are absent.\n\n**Limit:** ${per(sponsorWanted, 'calls')} per key.`,
 				externalDocs: {
 					url: `${REPO}/sponsor-api.md#wanted-list`,
 					description: 'Wanted list',
@@ -1140,7 +1141,7 @@ export const openApiDocument = {
 				tags: ['Sponsors'],
 				operationId: 'wantedComplete',
 				summary: 'Acknowledge a fetched title',
-				description: `Says a wanted title was fetched. Only \`id\` is required. Without \`upgrade_to\` a film leaves the list; with it the film stays, carrying \`upgrade\`, until an acknowledgement without one. Each acknowledgement replaces the last one's fields, so repeating one is harmless. \`band\` records the copy against that resolution only, for a fetcher that asked for \`?bands=\`.\n\n**Limit:** ${per(sponsorWanted, 'calls')} per key, shared with the list.`,
+				description: `Says a wanted title was fetched. Only \`id\` is required. Without \`upgrade_to\` a film leaves the list; with it the film stays, carrying \`upgrade\`, until an acknowledgement without one. A show always stays: acknowledge it each time something new for it is fetched, and the list shows when that last was. Each acknowledgement replaces the last one's fields, so repeating one is harmless. \`band\` records the copy against that resolution only, for a fetcher that asked for \`?bands=\`.\n\n**Limit:** ${per(sponsorWantedComplete, 'calls')} per key.`,
 				externalDocs: {
 					url: `${REPO}/sponsor-api.md#wanted-list`,
 					description: 'Wanted list',

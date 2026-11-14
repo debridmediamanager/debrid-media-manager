@@ -71,6 +71,10 @@ export const RATE_LIMIT_CONFIGS = {
 	// The wanted list: zurg reads it about once a minute and acknowledges each film it
 	// fetched, and the website lists, adds and removes. Per sponsorship, both sides.
 	sponsorWanted: { name: 'sponsorWanted', rateLimit: 30, windowSeconds: 60 },
+	// zurg's acknowledgements, per sponsorship, apart from the list read so they never
+	// crowd it out: a zurg first telling what it already got for each followed show
+	// sends one per show as each comes round (every 30 minutes).
+	sponsorWantedComplete: { name: 'sponsorWantedComplete', rateLimit: 120, windowSeconds: 60 },
 	wanted: { name: 'wanted', rateLimit: 30, windowSeconds: 60 },
 	// Seerr talking to DMM as its Radarr and Sonarr: a download sync every minute
 	// (two calls per server), a handful per request, settings tests. Per sponsorship.

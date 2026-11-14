@@ -134,6 +134,17 @@ describe('WantedItemsService', () => {
 		expect(prismaMock.wantedItem.upsert.mock.calls[0][0].update.fulfilled).toBe(Prisma.DbNull);
 	});
 
+	// What zurg got for a show stays when its seasons change: the releases are still there.
+	it("keeps a show's acknowledgement when its seasons change", async () => {
+		prismaMock.wantedItem.findUnique.mockResolvedValue({ id: ROW.id });
+		prismaMock.wantedItem.upsert.mockResolvedValue({ ...ROW, kind: 'show' });
+		await service.want('ZP1M', { imdbId: 'tt7366338', kind: 'show', title: 'x', seasons: [1] });
+		const update = prismaMock.wantedItem.upsert.mock.calls[0][0].update;
+		expect(update.seasons).toEqual([1]);
+		expect(update).not.toHaveProperty('fulfilledAt');
+		expect(update).not.toHaveProperty('fulfilled');
+	});
+
 	describe('pinWanted', () => {
 		const pin = (over: Record<string, unknown> = {}) => ({
 			id: 'a'.repeat(45),
@@ -259,13 +270,22 @@ describe('WantedItemsService', () => {
 		});
 	});
 
+	// zurg tells each new release it gets for a show it follows: the date is the latest.
+	it("moves a show's date to its latest acknowledgement", async () => {
+		const first = new Date('2026-10-01');
+		prismaMock.wantedItem.findFirst.mockResolvedValue({ kind: 'show', fulfilledAt: first });
+		await expect(service.markFulfilled('ZP1M', ROW.id, TOOK)).resolves.toBe(true);
+		const { fulfilledAt } = prismaMock.wantedItem.updateMany.mock.calls[0][0].data;
+		expect(fulfilledAt.getTime()).toBeGreaterThan(first.getTime());
+	});
+
 	it("does not acknowledge another sponsor's item", async () => {
 		prismaMock.wantedItem.findFirst.mockResolvedValue(null);
 		await expect(service.markFulfilled('OTHER', ROW.id, TOOK)).resolves.toBe(false);
 		expect(prismaMock.wantedItem.updateMany).not.toHaveBeenCalled();
 		expect(prismaMock.wantedItem.findFirst).toHaveBeenCalledWith({
 			where: { shortId: 'OTHER', id: ROW.id },
-			select: { fulfilledAt: true, fulfilled: true },
+			select: { kind: true, fulfilledAt: true, fulfilled: true },
 		});
 	});
 

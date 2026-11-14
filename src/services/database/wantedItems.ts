@@ -131,7 +131,8 @@ export class WantedItemsService extends DatabaseClient {
 
 	/**
 	 * Adds a title, or replaces the seasons of one already wanted. Wanting a film
-	 * again after zurg fetched it starts over, so its acknowledgement is cleared.
+	 * again after zurg fetched it starts over, so its acknowledgement is cleared; a
+	 * show keeps what zurg said it got, which a change of seasons does not undo.
 	 * Null when the list is full.
 	 */
 	public async want(
@@ -150,8 +151,7 @@ export class WantedItemsService extends DatabaseClient {
 				kind: item.kind,
 				title: item.title,
 				seasons,
-				fulfilledAt: null,
-				fulfilled: Prisma.DbNull,
+				...(item.kind === 'show' ? {} : { fulfilledAt: null, fulfilled: Prisma.DbNull }),
 			},
 			create: { shortId, imdbId: item.imdbId, kind: item.kind, title: item.title, seasons },
 		});
@@ -246,8 +246,10 @@ export class WantedItemsService extends DatabaseClient {
 
 	/**
 	 * zurg's acknowledgement, with what it took. Each one replaces what was stored,
-	 * an upgrade wish included; the first date stands. With a `band` it replaces only
-	 * that resolution's copy and keeps the others. False for an unknown id.
+	 * an upgrade wish included; a film's first date stands. A show stays followed and
+	 * zurg tells each new release it got, so its date is the latest one. With a `band`
+	 * it replaces only that resolution's copy and keeps the others. False for an
+	 * unknown id.
 	 */
 	public async markFulfilled(
 		shortId: string,
@@ -257,7 +259,7 @@ export class WantedItemsService extends DatabaseClient {
 	): Promise<boolean> {
 		const row = await this.prisma.wantedItem.findFirst({
 			where: { shortId, id },
-			select: { fulfilledAt: true, fulfilled: true },
+			select: { kind: true, fulfilledAt: true, fulfilled: true },
 		});
 		if (!row) return false;
 		const before = (row.fulfilled ?? null) as WantedFulfilled | null;
@@ -270,7 +272,10 @@ export class WantedItemsService extends DatabaseClient {
 		}
 		await this.prisma.wantedItem.updateMany({
 			where: { shortId, id },
-			data: { fulfilled, fulfilledAt: row.fulfilledAt ?? new Date() },
+			data: {
+				fulfilled,
+				fulfilledAt: (row.kind !== 'show' && row.fulfilledAt) || new Date(),
+			},
 		});
 		return true;
 	}

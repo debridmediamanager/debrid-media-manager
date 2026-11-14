@@ -13,8 +13,9 @@ const UPGRADES = ['720p', '1080p', '2160p'];
  * `upgrade_to`, a resolution it still wants. Safe to repeat; the first date
  * stands, and what zurg took is replaced each time, so `{"id"}` alone, as older
  * zurgs send, ends an upgrade wish. A film is then left off the list zurg reads
- * unless it wants an upgrade; a show stays on it. 404 for an id that is not
- * this sponsor's, which includes one the sponsor removed in the meantime.
+ * unless it wants an upgrade; a show stays on it, and zurg sends one each time it
+ * gets something new for it. 404 for an id that is not this sponsor's, which
+ * includes one the sponsor removed in the meantime.
  *
  * `band`, one of the `UPGRADES`, is the resolution this copy is kept at by a zurg that
  * keeps one at each of several: it replaces only that resolution's record.
@@ -29,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	if (
 		!(await checkRateLimitFor(
 			`sponsor:${sponsor.shortId}`,
-			RATE_LIMIT_CONFIGS.sponsorWanted,
+			RATE_LIMIT_CONFIGS.sponsorWantedComplete,
 			res
 		))
 	) {

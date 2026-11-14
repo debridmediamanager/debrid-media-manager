@@ -326,7 +326,8 @@ nothing about at all has the skipped shape without being skipped.
 ## Wanted list
 
 The titles you added to your wanted list on DMM, for a tool that fetches them; zurg's
-acquisition reads it. Both calls share 30 a minute per sponsorship.
+acquisition reads it. Reading it allows 30 calls a minute per sponsorship, and
+acknowledging another 120.
 
 `GET /api/sponsor/wanted`
 
@@ -442,8 +443,10 @@ to 64) the fetcher's id of it, such as an info hash or NZB id, and `resolution` 
 `""`, `480p`, `720p`, `1080p` and `2160p`. `upgrade_to`, one of `720p`, `1080p` and
 `2160p`, needs a `resolution`, and keeps a film on the list, with `upgrade`, until an
 acknowledgement without `upgrade_to`. Each acknowledgement replaces the last one's
-fields; the first date stands, so repeating it is harmless. A film without `upgrade_to`
-then leaves the list; a show stays on it so new episodes are fetched. 400 names a
+fields; a film's first date stands, so repeating it is harmless. A film without
+`upgrade_to` then leaves the list. A show stays on it so new episodes are fetched:
+acknowledge it each time something new is fetched for it, and its date becomes that
+latest one. 400 names a
 malformed field; 404 means the item is no longer on the list.
 
 `band`, one of `720p`, `1080p` and `2160p`, is the resolution this copy is kept at, for

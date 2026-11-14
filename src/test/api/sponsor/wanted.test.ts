@@ -423,6 +423,13 @@ describe('/api/sponsor/wanted/complete', () => {
 		expect(mockRepository.markWantedFulfilled).not.toHaveBeenCalled();
 	});
 
+	// One per followed show as zurg comes round to it: never from the list read's budget.
+	it('budgets acknowledgements apart from reading the list', async () => {
+		mockRepository.markWantedFulfilled = vi.fn().mockResolvedValue(true);
+		await completeHandler(post({ id: ID }), createMockResponse());
+		expect(vi.mocked(checkRateLimitFor).mock.calls[0][1].name).toBe('sponsorWantedComplete');
+	});
+
 	it('answers 404 for an item that is not on the list', async () => {
 		mockRepository.markWantedFulfilled = vi.fn().mockResolvedValue(false);
 		const res = createMockResponse();

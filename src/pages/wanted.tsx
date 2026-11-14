@@ -691,14 +691,17 @@ export default function WantedPage() {
 											{item.kind === 'show' && <>{seasonsLabel(item)} · </>}
 											<span
 												title={[
+													item.kind === 'show' &&
+														'Followed for new episodes',
 													when(item.fulfilledAt ?? item.createdAt),
 													item.fulfilled?.release,
 												]
 													.filter(Boolean)
 													.join('\n')}
 											>
+												{/* A show is never done: its date is the last time zurg got something for it. */}
 												{item.fulfilledAt
-													? `fetched ${shortDate(item.fulfilledAt)}`
+													? `${item.kind === 'show' ? 'last got' : 'fetched'} ${shortDate(item.fulfilledAt)}`
 													: `since ${shortDate(item.createdAt)}`}
 												{item.fulfilled?.upgradeTo &&
 													` · waiting for ${item.fulfilled.upgradeTo}`}

@@ -91,7 +91,7 @@ describe('/api-docs OpenAPI document', () => {
 		expect(byPath('/api/plugins/manifest.json').description).toMatch(/5 requests per second/);
 		expect(byPath('/api/sponsor/wanted').description).toMatch(/30 calls per minute per key/);
 		expect(byPath('/api/sponsor/wanted/complete').description).toMatch(
-			/30 calls per minute per key/
+			/120 calls per minute per key/
 		);
 		expect(byPath('/api/anime/recent').description).toMatch(/60 requests per minute/);
 	});

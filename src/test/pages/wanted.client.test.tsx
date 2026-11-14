@@ -184,6 +184,45 @@ describe('/wanted', () => {
 		expect(line.getAttribute('title')).toContain(release);
 	});
 
+	// zurg follows a show for good and tells DMM each release it gets for it (card 679):
+	// such a show is not "not fetched yet", and its date is when the latest came in.
+	it('shows a followed show zurg got something for as such, not as never fetched', async () => {
+		const release = 'Chernobyl.S01E01.1080p.WEB.H264-GRP';
+		global.fetch = vi.fn(async (url: string) =>
+			url === '/api/wanted/lists'
+				? listsAnswer()
+				: new Response(
+						JSON.stringify({
+							items: [
+								{
+									...fresh,
+									id: 's',
+									imdbId: 'tt7366338',
+									kind: 'show',
+									title: 'Chernobyl',
+									fulfilledAt: '2026-11-12T11:00:00Z',
+									fulfilled: {
+										release,
+										grab: 'c'.repeat(40),
+										torrent: true,
+										resolution: '1080p',
+									},
+								},
+							],
+						})
+					)
+		) as any;
+		render(<WantedPage />);
+		fireEvent.click(await screen.findByRole('tab', { name: /Shows/ }));
+		const line = await screen.findByText(/^last got /);
+		expect(line.getAttribute('title')).toContain('Followed');
+		expect(line.getAttribute('title')).toContain(release);
+		fireEvent.change(screen.getByRole('combobox', { name: 'Show' }), {
+			target: { value: 'waiting' },
+		});
+		expect(screen.queryByText('Chernobyl')).toBeNull();
+	});
+
 	it('removes a title', async () => {
 		const fetchMock = vi.fn(async (url: string, init?: RequestInit) =>
 			init?.method === 'DELETE'
