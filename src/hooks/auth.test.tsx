@@ -284,6 +284,32 @@ describe('auth hooks', () => {
 		errorSpy.mockRestore();
 	});
 
+	// Following a link away from a title page while its Real-Debrid token renewal was
+	// still in flight left the next page on "Debrid Media Manager is loading..." until
+	// a reload: the renewal belongs to whichever page started it, and it dropped every
+	// update to the shared state once that page unmounted, `isRefreshing` included.
+	it('finishes a token renewal the page that started it left behind', async () => {
+		setStoredValue('rd:accessToken', 'stale');
+		setStoredValue('rd:refreshToken', 'refresh');
+		setStoredValue('rd:clientId', 'client');
+		setStoredValue('rd:clientSecret', 'secret');
+		let answerToken!: (v: { access_token: string; expires_in: number }) => void;
+		mockGetToken.mockReturnValue(new Promise((resolve) => (answerToken = resolve)));
+		mockGetRealDebridUser
+			.mockRejectedValueOnce(new Error('expired'))
+			.mockResolvedValueOnce({ username: 'rd-user' });
+
+		const titlePage = renderHook(() => useRealDebridAccessToken());
+		await waitFor(() => expect(titlePage.result.current[2]).toBe(true));
+
+		titlePage.unmount();
+		const home = renderHook(() => useRealDebridAccessToken());
+		await act(async () => answerToken({ access_token: 'new-token', expires_in: 3600 }));
+
+		await waitFor(() => expect(home.result.current[2]).toBe(false));
+		expect(home.result.current[1]).toBe(false);
+	});
+
 	it('authenticates after login when page remounts with new tokens', async () => {
 		mockGetRealDebridUser.mockResolvedValue({ username: 'rd-user' });
 

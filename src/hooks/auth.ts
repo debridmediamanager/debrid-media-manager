@@ -130,8 +130,9 @@ export const useRealDebrid = () => {
 	}, []);
 
 	useEffect(() => {
-		let isMounted = true;
-		let retryTimeout: ReturnType<typeof setTimeout> | null = null;
+		// No unmount guard on the work below: it writes the shared state every page reads,
+		// and a renewal dropped by the page that started it left the next page "refreshing"
+		// (stuck on "Debrid Media Manager is loading...") until a reload.
 
 		const isAuthError = (e: unknown) => {
 			const status = (e as any)?.response?.status;
@@ -203,12 +204,10 @@ export const useRealDebrid = () => {
 					globalRealDebridState.isInitialized = true;
 					try {
 						const user = await getRealDebridUser(token);
-						if (!isMounted) return;
 						globalRealDebridState.user = user as RealDebridUser;
 						globalRealDebridState.error = null;
 						globalRealDebridState.hasAuth = true;
 					} catch (e) {
-						if (!isMounted) return;
 						console.error('RealDebrid auth error:', e);
 						if (isAuthError(e)) clearRdKeys();
 						globalRealDebridState.user = null;
@@ -240,14 +239,12 @@ export const useRealDebrid = () => {
 				if (token) {
 					try {
 						const user = await getRealDebridUser(token);
-						if (isMounted) {
-							globalRealDebridState.user = user as RealDebridUser;
-							globalRealDebridState.error = null;
-							globalRealDebridState.loading = false;
-							globalRealDebridState.hasAuth = true;
-							globalRealDebridState.subscribers.forEach((fn) => fn());
-							scheduleRefresh();
-						}
+						globalRealDebridState.user = user as RealDebridUser;
+						globalRealDebridState.error = null;
+						globalRealDebridState.loading = false;
+						globalRealDebridState.hasAuth = true;
+						globalRealDebridState.subscribers.forEach((fn) => fn());
+						scheduleRefresh();
 						return;
 					} catch {
 						// Token invalid, will refresh
@@ -264,43 +261,33 @@ export const useRealDebrid = () => {
 					refreshToken
 				);
 
-				if (isMounted) {
-					setToken(access_token, expires_in);
-					const user = await getRealDebridUser(access_token);
-					globalRealDebridState.user = user as RealDebridUser;
-					globalRealDebridState.error = null;
-					globalRealDebridState.hasAuth = true;
-					globalRealDebridState.subscribers.forEach((fn) => fn());
-					scheduleRefresh();
-				}
+				setToken(access_token, expires_in);
+				const user = await getRealDebridUser(access_token);
+				globalRealDebridState.user = user as RealDebridUser;
+				globalRealDebridState.error = null;
+				globalRealDebridState.hasAuth = true;
+				globalRealDebridState.subscribers.forEach((fn) => fn());
+				scheduleRefresh();
 			} catch (e) {
-				if (isMounted) {
-					console.error('RealDebrid auth error:', e);
-					if (isAuthError(e)) {
-						clearRdKeys();
-					} else if (attempt < 3) {
-						// Retry with exponential backoff for transient errors
-						const delay = 1000 * Math.pow(2, attempt); // 1s, 2s, 4s
-						globalRealDebridState.isInitialized = false;
-						retryTimeout = setTimeout(() => {
-							if (isMounted) {
-								auth(attempt + 1);
-							}
-						}, delay);
-						return; // Keep loading/refreshing state active during retry
-					}
-					globalRealDebridState.error = e as Error;
-					globalRealDebridState.user = null;
-					globalRealDebridState.hasAuth = false;
+				console.error('RealDebrid auth error:', e);
+				if (isAuthError(e)) {
+					clearRdKeys();
+				} else if (attempt < 3) {
+					// Retry with exponential backoff for transient errors
+					const delay = 1000 * Math.pow(2, attempt); // 1s, 2s, 4s
 					globalRealDebridState.isInitialized = false;
+					setTimeout(() => auth(attempt + 1), delay);
+					return; // Keep loading/refreshing state active during retry
 				}
+				globalRealDebridState.error = e as Error;
+				globalRealDebridState.user = null;
+				globalRealDebridState.hasAuth = false;
+				globalRealDebridState.isInitialized = false;
 			}
 
-			if (isMounted) {
-				globalRealDebridState.loading = false;
-				globalRealDebridState.isRefreshing = false;
-				globalRealDebridState.subscribers.forEach((fn) => fn());
-			}
+			globalRealDebridState.loading = false;
+			globalRealDebridState.isRefreshing = false;
+			globalRealDebridState.subscribers.forEach((fn) => fn());
 		};
 
 		// Consumers mount in the same commit, and the isInitialized guard only
@@ -316,10 +303,6 @@ export const useRealDebrid = () => {
 			void run;
 		}
 
-		return () => {
-			isMounted = false;
-			if (retryTimeout) clearTimeout(retryTimeout);
-		};
 		// `token` is watched for the API-key login, which writes nothing else:
 		// with only the OAuth credentials here, a pasted key sat unvalidated
 		// until the next full reload.
