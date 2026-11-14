@@ -1952,7 +1952,7 @@ export class Repository {
 		return this.wantedItemsService.touchPolled(shortId);
 	}
 
-	// Followed lists: Trakt and MDBList lists whose new titles join the wanted list
+	// Followed lists: Trakt, MDBList and TMDB lists whose new titles join the wanted list
 	public listWantedLists(shortId: string) {
 		return this.wantedListsService.list(shortId);
 	}

@@ -40,7 +40,7 @@ const toResponse = (row: WantedListRow): WantedListResponse => ({
 });
 
 /**
- * The Trakt and MDBList lists the signed-in sponsor follows: GET lists them,
+ * The Trakt, MDBList and TMDB lists the signed-in sponsor follows: GET lists them,
  * POST `{url}` follows one and reads it at once, or reads again one already
  * followed, DELETE `?id=` unfollows (the titles it added stay wanted).
  */

@@ -1,7 +1,9 @@
 import type { WantedKind } from '@/services/database/wantedItems';
 import type { WantedListRow } from '@/services/database/wantedLists';
 import { getMdblistClient } from '@/services/mdblistClient';
+import { getMetadataCache } from '@/services/metadataCache';
 import { repository as db } from '@/services/repository';
+import { getTmdbAuthWithFreeKey, TMDB_BASE_URL, tmdbAxiosOptions } from '@/utils/tmdbAuth';
 import axios from 'axios';
 import getConfig from 'next/config';
 
@@ -11,16 +13,19 @@ const TRAKT_PAGE = 250;
 /** Lists read per cron tick: ticks are five minutes apart, so this clears 240 lists an hour. */
 export const LISTS_PER_TICK = 20;
 const IMDB_ID = /^tt\d{7,}$/;
+/** TMDB lists hold TMDB ids; each is asked for its IMDb id, this many at a time. */
+const TMDB_LOOKUPS = 8;
 
-/** What a sponsor may paste: the page of a list on trakt.tv or mdblist.com. */
+/** What a sponsor may paste: the page of a list on trakt.tv, mdblist.com or themoviedb.org. */
 export type ParsedListUrl =
 	| { source: 'trakt'; kind: 'list'; url: string; label: string; user: string; slug: string }
 	| { source: 'trakt'; kind: 'listId'; url: string; label: string; id: string }
 	| { source: 'trakt'; kind: 'watchlist'; url: string; label: string; user: string }
-	| { source: 'mdblist'; kind: 'list'; url: string; label: string; user: string; slug: string };
+	| { source: 'mdblist'; kind: 'list'; url: string; label: string; user: string; slug: string }
+	| { source: 'tmdb'; kind: 'list'; url: string; label: string; id: string };
 
 export const LIST_URL_HELP =
-	'Paste the page of a Trakt or MDBList list: https://trakt.tv/users/<user>/lists/<list>, https://trakt.tv/users/<user>/watchlist, https://trakt.tv/lists/<id> or https://mdblist.com/lists/<user>/<list>';
+	'Paste the page of a Trakt, MDBList or TMDB list: https://trakt.tv/users/<user>/lists/<list>, https://trakt.tv/users/<user>/watchlist, https://trakt.tv/lists/<id>, https://mdblist.com/lists/<user>/<list> or https://www.themoviedb.org/list/<id>';
 
 /** `url` is the page normalised, so the same list pasted two ways is followed once. */
 export function parseListUrl(raw: string): ParsedListUrl | null {
@@ -67,6 +72,17 @@ export function parseListUrl(raw: string): ParsedListUrl | null {
 			};
 		}
 		return null;
+	}
+	if (host === 'themoviedb.org') {
+		const m = path.match(/^\/list\/(\d+)(-|$)/);
+		if (!m) return null;
+		return {
+			source: 'tmdb',
+			kind: 'list',
+			url: `https://www.themoviedb.org/list/${m[1]}`,
+			label: `TMDB list ${m[1]}`,
+			id: m[1],
+		};
 	}
 	if (host === 'mdblist.com') {
 		const m = path.match(/^\/lists\/([^/]+)\/([^/]+)/);
@@ -213,9 +229,67 @@ async function readMdblist(parsed: ParsedListUrl & { source: 'mdblist' }): Promi
 	return { name: String(list.name ?? parsed.label), titles, noImdbId };
 }
 
+async function tmdbListPage(id: string, page: number) {
+	try {
+		const auth = getTmdbAuthWithFreeKey();
+		return (await axios.get(`${TMDB_BASE_URL}/list/${id}`, tmdbAxiosOptions(auth, { page })))
+			.data;
+	} catch (error) {
+		const status = axios.isAxiosError(error) ? error.response?.status : undefined;
+		if (status === 404) throw new ListUnreadable('TMDB has no such list');
+		if (status === 401 || status === 403) throw new ListUnreadable('That TMDB list is private');
+		throw new ListUnreadable(`TMDB could not be read${status ? ` (${status})` : ''}`);
+	}
+}
+
+/** A public TMDB list, by DMM's key. Its items carry TMDB ids, each looked up for its IMDb id. */
+async function readTmdb(parsed: ParsedListUrl & { source: 'tmdb' }): Promise<ListRead> {
+	const first = await tmdbListPage(parsed.id, 1);
+	const items: any[] = [...(first?.items ?? [])];
+	for (let page = 2; page <= Number(first?.total_pages ?? 1); page++) {
+		items.push(...((await tmdbListPage(parsed.id, page))?.items ?? []));
+	}
+	const media = items.filter((i) => i?.media_type === 'movie' || i?.media_type === 'tv');
+	const imdbIds: unknown[] = new Array(media.length);
+	const cache = getMetadataCache();
+	let next = 0;
+	const worker = async () => {
+		while (next < media.length) {
+			const i = next++;
+			try {
+				imdbIds[i] = (await cache.getTmdbExternalIds(media[i].id, media[i].media_type))
+					?.imdb_id;
+			} catch (error) {
+				// A title TMDB no longer has is one without an IMDb id; any other failure is
+				// TMDB not answering, so the whole read fails and is retried.
+				if (axios.isAxiosError(error) && error.response?.status === 404) continue;
+				throw new ListUnreadable('TMDB could not be read');
+			}
+		}
+	};
+	await Promise.all(Array.from({ length: TMDB_LOOKUPS }, worker));
+	const titles: ListTitle[] = [];
+	let noImdbId = 0;
+	media.forEach((item, i) => {
+		const imdbId = imdbIds[i];
+		if (typeof imdbId !== 'string' || !IMDB_ID.test(imdbId)) {
+			noImdbId++;
+			return;
+		}
+		const kind = item.media_type === 'movie' ? 'movie' : 'show';
+		titles.push({ imdbId, kind, title: String(item.title ?? item.name ?? imdbId) });
+	});
+	return { name: String(first?.name ?? parsed.label), titles, noImdbId };
+}
+
 /** The list as it is now. Throws `ListUnreadable` with a message for the sponsor. */
 export async function readList(parsed: ParsedListUrl): Promise<ListRead> {
-	const read = parsed.source === 'trakt' ? await readTrakt(parsed) : await readMdblist(parsed);
+	const read =
+		parsed.source === 'trakt'
+			? await readTrakt(parsed)
+			: parsed.source === 'mdblist'
+				? await readMdblist(parsed)
+				: await readTmdb(parsed);
 	// A title listed twice is one title.
 	const byId = new Map(read.titles.map((t) => [t.imdbId, t]));
 	return { ...read, titles: [...byId.values()] };
@@ -242,7 +316,7 @@ export async function syncWantedList(row: WantedListRow): Promise<ListSyncResult
 	const parsed = parseListUrl(row.url);
 	let read: ListRead;
 	try {
-		if (!parsed) throw new ListUnreadable('Not a Trakt or MDBList list URL');
+		if (!parsed) throw new ListUnreadable('Not a Trakt, MDBList or TMDB list URL');
 		read = await readList(parsed);
 	} catch (error) {
 		await db.recordWantedListFailure(

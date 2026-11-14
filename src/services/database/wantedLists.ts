@@ -32,7 +32,7 @@ function toRow(row: any): WantedListRow {
 	};
 }
 
-/** The Trakt and MDBList lists sponsors follow, keyed on `shortId` as `WantedItemsService` is. */
+/** The Trakt, MDBList and TMDB lists sponsors follow, keyed on `shortId` as `WantedItemsService` is. */
 export class WantedListsService extends DatabaseClient {
 	public async list(shortId: string): Promise<WantedListRow[]> {
 		if (!shortId) return [];

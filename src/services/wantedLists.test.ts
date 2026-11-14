@@ -1,5 +1,6 @@
 import type { WantedListRow } from '@/services/database/wantedLists';
 import { getMdblistClient } from '@/services/mdblistClient';
+import { getMetadataCache } from '@/services/metadataCache';
 import { repository as db } from '@/services/repository';
 import axios from 'axios';
 import { readFileSync } from 'node:fs';
@@ -16,11 +17,13 @@ import {
 vi.mock('axios');
 vi.mock('@/services/repository');
 vi.mock('@/services/mdblistClient');
+vi.mock('@/services/metadataCache');
 vi.mock('next/config', () => ({
 	default: () => ({ publicRuntimeConfig: { traktClientId: 'test-client-id' } }),
 }));
 
-// Recorded 2026-10-29 from api.trakt.tv (DMM's client id, no user token) and api.mdblist.com.
+// Recorded 2026-10-29 from api.trakt.tv (DMM's client id, no user token) and api.mdblist.com,
+// and 2026-11-14 from api.themoviedb.org: list 8704307 (films and shows) and each item's external ids.
 const FIXTURES = join(__dirname, '__fixtures__/wantedLists');
 const fixture = (name: string) => JSON.parse(readFileSync(join(FIXTURES, name), 'utf8'));
 const headersOf = (name: string) =>
@@ -35,6 +38,7 @@ const headersOf = (name: string) =>
 	);
 
 const TRAKT = 'https://api.trakt.tv';
+const TMDB_LIST = 'https://api.themoviedb.org/3/list/8704307';
 const LIST = `${TRAKT}/users/giladg/lists/latest-4k-releases`;
 const WATCHLIST = `${TRAKT}/users/sean/watchlist`;
 
@@ -54,6 +58,7 @@ function serveTrakt(profile = fixture('trakt-user-sean.json')) {
 			return { data: fixture('trakt-watchlist-sean-movies.json') };
 		if (url === `${WATCHLIST}/shows`)
 			return { data: fixture('trakt-watchlist-sean-shows.json') };
+		if (url === TMDB_LIST) return { data: fixture(`tmdb-list-8704307-p${page}.json`) };
 		throw Object.assign(new Error('Request failed with status code 404'), {
 			isAxiosError: true,
 			response: { status: 404 },
@@ -61,6 +66,21 @@ function serveTrakt(profile = fixture('trakt-user-sean.json')) {
 	});
 	vi.mocked(axios.isAxiosError).mockImplementation(((e: any) => !!e?.isAxiosError) as any);
 }
+
+const notFound = () =>
+	Object.assign(new Error('Request failed with status code 404'), {
+		isAxiosError: true,
+		response: { status: 404 },
+	});
+
+/** TMDB's answer for each of list 8704307's items, as recorded. */
+const tmdbIds = {
+	getTmdbExternalIds: vi.fn(async (id: number, kind: string) => {
+		const ids = fixture('tmdb-external-ids-8704307.json')[`${kind}:${id}`];
+		if (!ids) throw notFound();
+		return ids;
+	}),
+};
 
 const mdblist = {
 	getListByPath: vi.fn(),
@@ -84,6 +104,7 @@ beforeEach(() => {
 	vi.clearAllMocks();
 	serveTrakt();
 	vi.mocked(getMdblistClient).mockReturnValue(mdblist as any);
+	vi.mocked(getMetadataCache).mockReturnValue(tmdbIds as any);
 	mdblist.getListByPath.mockResolvedValue(
 		fixture('mdblist-list-linaspurinis-top-watched-movies-of-the-week.json')
 	);
@@ -127,7 +148,21 @@ describe('parseListUrl', () => {
 		});
 	});
 
+	it('reads a TMDB list page with or without its slug', () => {
+		const tmdb = {
+			source: 'tmdb',
+			url: 'https://www.themoviedb.org/list/8704307',
+			id: '8704307',
+		};
+		expect(
+			parseListUrl('https://www.themoviedb.org/list/8704307-limelight-watchlist?language=en')
+		).toMatchObject(tmdb);
+		expect(parseListUrl('themoviedb.org/list/8704307/')).toMatchObject(tmdb);
+	});
+
 	it('refuses what is not a list page', () => {
+		expect(parseListUrl('https://www.themoviedb.org/u/someone/lists')).toBeNull();
+		expect(parseListUrl('https://www.themoviedb.org/list/new')).toBeNull();
 		expect(parseListUrl('https://www.imdb.com/list/ls055592025/')).toBeNull();
 		expect(parseListUrl('https://trakt.tv/users/giladg')).toBeNull();
 		expect(parseListUrl('https://mdblist.com/lists/')).toBeNull();
@@ -187,6 +222,48 @@ describe('readList', () => {
 		expect(read.name).toBe('Top Watched Movies of The Week / >60');
 		expect(read.titles).toHaveLength(39);
 		expect(read.titles[0]).toEqual({ imdbId: 'tt8946378', kind: 'movie', title: 'Knives Out' });
+	});
+
+	it('reads every page of a TMDB list and finds the IMDb id of each film and show', async () => {
+		const read = await readList(parseListUrl('https://www.themoviedb.org/list/8704307')!);
+		expect(read.name).toBe('Limelight Watchlist');
+		expect(read.titles[0]).toEqual({
+			imdbId: 'tt0120382',
+			kind: 'movie',
+			title: 'The Truman Show',
+		});
+		expect(read.titles.filter((t) => t.kind === 'movie')).toHaveLength(47);
+		expect(read.titles.filter((t) => t.kind === 'show')).toHaveLength(13);
+		// tv:113988 has no IMDb id on TMDB.
+		expect(read.noImdbId).toBe(1);
+		expect(
+			vi
+				.mocked(axios.get)
+				.mock.calls.map(([, c]) => (c?.params as { page?: number } | undefined)?.page)
+		).toEqual([1, 2, 3, 4]);
+		expect(tmdbIds.getTmdbExternalIds).toHaveBeenCalledWith(1396, 'tv');
+	});
+
+	it('counts a title TMDB no longer has as one without an IMDb id', async () => {
+		tmdbIds.getTmdbExternalIds.mockRejectedValueOnce(notFound());
+		const read = await readList(parseListUrl('https://www.themoviedb.org/list/8704307')!);
+		expect(read.titles).toHaveLength(59);
+		expect(read.noImdbId).toBe(2);
+	});
+
+	it('fails the whole TMDB read when TMDB does not answer, so it is retried', async () => {
+		tmdbIds.getTmdbExternalIds.mockRejectedValueOnce(
+			Object.assign(new Error('timeout'), { isAxiosError: true, response: undefined })
+		);
+		await expect(
+			readList(parseListUrl('https://www.themoviedb.org/list/8704307')!)
+		).rejects.toThrow(new ListUnreadable('TMDB could not be read'));
+	});
+
+	it('names a list TMDB does not have', async () => {
+		await expect(
+			readList(parseListUrl('https://www.themoviedb.org/list/999999999')!)
+		).rejects.toThrow(new ListUnreadable('TMDB has no such list'));
 	});
 
 	it('names a list MDBList does not have', async () => {

@@ -130,7 +130,7 @@ describe('SponsorPanel', () => {
 		// The Wanted page imports a Radarr or Sonarr backup; it does not connect to a running one.
 		expect(
 			screen.getByText(
-				/from DMM, Kodi, Trakt and MDBList lists or a Radarr or Sonarr backup$/
+				/from DMM, Kodi, Trakt, MDBList and TMDB lists or a Radarr or Sonarr backup$/
 			)
 		).toBeInTheDocument();
 		expect(screen.getByRole('link', { name: 'SABnzbd for Sonarr and Radarr' })).toHaveAttribute(

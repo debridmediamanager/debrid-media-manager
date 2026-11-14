@@ -421,10 +421,10 @@ export default function WantedPage() {
 
 						<div className="mb-3 rounded border border-gray-700 bg-gray-800/60 p-3 text-xs text-gray-300">
 							<p className="mb-2">
-								Follow a Trakt or MDBList list and its titles are wanted, new ones
-								included: the list is read again every six hours. A title you remove
-								here stays removed, and unfollowing keeps what was added. For an
-								IMDb or Letterboxd list, make an MDBList list of it first.
+								Follow a Trakt, MDBList or TMDB list and its titles are wanted, new
+								ones included: the list is read again every six hours. A title you
+								remove here stays removed, and unfollowing keeps what was added. For
+								an IMDb or Letterboxd list, make an MDBList list of it first.
 							</p>
 							<form
 								className="flex flex-wrap gap-2"
@@ -437,7 +437,7 @@ export default function WantedPage() {
 									type="url"
 									value={listUrl}
 									onChange={(e) => setListUrl(e.target.value)}
-									placeholder="https://trakt.tv/users/<user>/lists/<list> or https://mdblist.com/lists/<user>/<list>"
+									placeholder="https://trakt.tv/users/<user>/lists/<list>, https://mdblist.com/lists/<user>/<list> or https://www.themoviedb.org/list/<id>"
 									aria-label="List URL"
 									disabled={following !== null}
 									className="min-w-0 flex-1 rounded border border-gray-600 bg-gray-900 px-2 py-1 text-gray-100 placeholder-gray-500"

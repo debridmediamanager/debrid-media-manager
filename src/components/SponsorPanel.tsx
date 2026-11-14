@@ -35,7 +35,7 @@ const PERKS: { href?: string; name: string; what: string }[] = [
 	{
 		href: '/wanted',
 		name: 'Wanted list',
-		what: 'films and shows zurg fetches for you, including new episodes and upgrades, from DMM, Kodi, Trakt and MDBList lists or a Radarr or Sonarr backup',
+		what: 'films and shows zurg fetches for you, including new episodes and upgrades, from DMM, Kodi, Trakt, MDBList and TMDB lists or a Radarr or Sonarr backup',
 	},
 	{
 		href: 'https://notes.debridmediamanager.com/dmm/seerr/',

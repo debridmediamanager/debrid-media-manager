@@ -423,9 +423,15 @@ export class MetadataCacheService {
 		const auth = this.requireTmdbAuth();
 		const url = tmdbUrl(`/${mediaType}/${tmdbId}/external_ids`, {}, auth);
 		const cacheKey = `tmdb_external_ids_${mediaType}_${tmdbId}`;
-		// Deliberately permanent: this is an id-to-id mapping, not descriptive
-		// metadata, so it does not go stale the way titles and posters do.
-		return this.fetchWithCache(url, cacheKey, 'tmdb_external_ids', tmdbRequestConfig(auth));
+		// An id-to-id mapping does not go stale, so one with an IMDb id is permanent. One
+		// without is asked again after a week: unreleased titles get their IMDb id later.
+		return this.fetchWithCache(
+			url,
+			cacheKey,
+			'tmdb_external_ids',
+			tmdbRequestConfig(auth),
+			(cached: any) => (cached?.imdb_id ? 0 : this.CACHE_DURATIONS.ID_MAPPING_MISS)
+		);
 	}
 
 	/**

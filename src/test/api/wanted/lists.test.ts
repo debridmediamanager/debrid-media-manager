@@ -12,7 +12,7 @@ vi.mock('@/services/rateLimit/withRateLimit', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/rateLimit/withRateLimit')>()),
 	checkRateLimitFor: vi.fn(),
 }));
-// Reads Trakt and MDBList; `wantedLists.test.ts` drives the real one from recorded pages.
+// Reads Trakt, MDBList and TMDB; `wantedLists.test.ts` drives the real one from recorded pages.
 vi.mock('@/services/wantedLists', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/wantedLists')>()),
 	syncWantedList: vi.fn(),

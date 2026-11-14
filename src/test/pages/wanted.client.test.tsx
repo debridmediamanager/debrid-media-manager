@@ -35,7 +35,7 @@ const film = {
 /** Added an hour ago: a list in its first day, which gets no warning yet. */
 const fresh = { ...film, createdAt: new Date(Date.now() - 3_600_000).toISOString() };
 
-/** `/api/wanted/lists`: the Trakt and MDBList lists followed, none unless given. */
+/** `/api/wanted/lists`: the Trakt, MDBList and TMDB lists followed, none unless given. */
 const listsAnswer = (lists: unknown[] = []) => new Response(JSON.stringify({ lists }));
 
 describe('/wanted', () => {

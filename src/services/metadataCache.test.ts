@@ -269,9 +269,12 @@ describe('MetadataCacheService API helpers', () => {
 			})
 		).toBe(RECENT_METADATA_TTL);
 
-		// External ids are an immutable mapping and stay permanent on purpose.
+		// External ids are an immutable mapping and stay permanent, but a title with no
+		// IMDb id yet is asked again after a week, since unreleased titles gain one later.
 		expect(externalIdsCall[2]).toBe('tmdb_external_ids');
-		expect(externalIdsCall[4]).toBeUndefined();
+		const idsLifetime = externalIdsCall[4] as (row: unknown) => number;
+		expect(idsLifetime({ id: 27205, imdb_id: 'tt1375666' })).toBe(0);
+		expect(idsLifetime({ id: 113988, imdb_id: null })).toBe(604800000);
 	});
 
 	it('getMetadataCache returns a singleton instance', () => {
