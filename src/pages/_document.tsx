@@ -63,68 +63,8 @@ export default function Document() {
 				<link rel="dns-prefetch" href="//posters7.debridmediamanager.com" />
 				<link rel="dns-prefetch" href="//posters8.debridmediamanager.com" />
 				<link rel="dns-prefetch" href="//posters9.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//proxy0.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//proxy1.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//proxy2.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//proxy3.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//proxy4.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//proxy5.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//proxy6.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//proxy7.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//proxy8.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//proxy9.debridmediamanager.com" />
 
-				{/* Preconnect to establish early connections (DNS + TCP + TLS) for all proxy and poster domains */}
-				<link
-					rel="preconnect"
-					href="https://proxy0.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://proxy1.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://proxy2.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://proxy3.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://proxy4.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://proxy5.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://proxy6.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://proxy7.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://proxy8.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://proxy9.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
+				{/* Preconnect to establish early connections (DNS + TCP + TLS) for the poster domains */}
 				<link
 					rel="preconnect"
 					href="https://posters0.debridmediamanager.com"
