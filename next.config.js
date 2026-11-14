@@ -193,7 +193,13 @@ const nextConfig = {
 	},
 };
 
-module.exports = async () => {
+module.exports = async (phase) => {
+	// Type checking needs ~3.5 GB of heap, more than Node's default on an 8 GB machine, and
+	// Next's build workers take theirs from NODE_OPTIONS. The Dockerfile sets the same.
+	const nodeOptions = process.env.NODE_OPTIONS ?? '';
+	if (phase === 'phase-production-build' && !/max[-_]old[-_]space[-_]size/.test(nodeOptions)) {
+		process.env.NODE_OPTIONS = `${nodeOptions} --max-old-space-size=6144`.trim();
+	}
 	// Serwist is ESM-only; this Next configuration is loaded as CommonJS.
 	const { default: withSerwist } = await import('@serwist/next');
 	return withSerwist(pwaConfig)(nextConfig);
