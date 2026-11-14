@@ -2,6 +2,7 @@ import { recordRdOperationEvent } from '@/lib/observability/rdOperationalStats';
 import { isRdBlockedName } from '@/utils/deInfringe';
 import { delay as delayWithMessageChannel } from '@/utils/delay';
 import { extractTorrentInputs, toMagnetUri } from '@/utils/extractHashes';
+import { isOfficialDmm } from '@/utils/officialDmm';
 import { isRdAddRefusal, RD_ADD_PAUSE_MS, RdNameRefusedError } from '@/utils/rdAddPause';
 import { readRdOAuthCredentials, writeAccessToken } from '@/utils/rdTokenStorage';
 import { torrentNameOf } from '@/utils/torrentFile';
@@ -249,6 +250,9 @@ function getUniqueRequestId() {
 }
 
 function getProxyUrl(baseUrl: string): string {
+	// These calls carry the user's RD token: a self-hosted copy keeps them on its own
+	// /api/anticors (browser) or calls RD directly (server), never DMM's proxies.
+	if (!isOfficialDmm()) return typeof window === 'undefined' ? '' : '/api/anticors?url=';
 	return baseUrl.replace('#num#', Math.floor(Math.random() * 1000).toString());
 }
 
@@ -1062,6 +1066,9 @@ export const proxyUnrestrictLink = async (
 	accessToken: string,
 	link: string
 ): Promise<UnrestrictResponse> => {
+	// DMM's unrestrict worker is for debridmediamanager.com only; a self-hosted copy
+	// keeps the token on its own server. Callers read only the filename and streamable.
+	if (!isOfficialDmm()) return unrestrictLink(accessToken, link, '');
 	try {
 		const body = JSON.stringify({ link });
 		const headers = {

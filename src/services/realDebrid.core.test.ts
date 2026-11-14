@@ -1,3 +1,4 @@
+// @vitest-environment-options {"url":"https://debridmediamanager.com/"}
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/config', () => ({
