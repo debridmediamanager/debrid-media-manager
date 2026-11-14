@@ -1,6 +1,7 @@
 import type { WantedListRow } from '@/services/database/wantedLists';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
+import { sessionId as simklSessionId } from '@/services/simklProxy';
 import {
 	LIST_URL_HELP,
 	ListUnreadable,
@@ -40,9 +41,10 @@ const toResponse = (row: WantedListRow): WantedListResponse => ({
 });
 
 /**
- * The Trakt, MDBList and TMDB lists the signed-in sponsor follows: GET lists them,
+ * The Trakt, MDBList, TMDB and Simkl lists the signed-in sponsor follows: GET lists them,
  * POST `{url}` follows one and reads it at once, or reads again one already
- * followed, DELETE `?id=` unfollows (the titles it added stay wanted).
+ * followed, DELETE `?id=` unfollows (the titles it added stay wanted). A Simkl list
+ * is read through the sponsor's DMM Simkl sign-in, taken from its cookie here.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const payload = await requireSponsor(req, res);
@@ -63,10 +65,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			const { url } = (req.body ?? {}) as Record<string, unknown>;
 			const parsed = typeof url === 'string' && url.length <= 512 ? parseListUrl(url) : null;
 			if (!parsed) return res.status(400).json({ error: LIST_URL_HELP });
+			// Without a sign-in here, a Simkl list already followed is read with the one it keeps,
+			// and a new one is refused by the read below and not kept.
+			const simklSession =
+				parsed.source === 'simkl' ? (simklSessionId(req.headers) ?? null) : null;
 			const { row, created } = await db.followWantedList(
 				payload.shortId,
 				parsed.url,
-				parsed.label
+				parsed.label,
+				simklSession
 			);
 			let result: ListSyncResult;
 			try {

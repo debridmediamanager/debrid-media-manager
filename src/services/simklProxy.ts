@@ -104,7 +104,8 @@ function approvedOrigin(req: SimklProxyRequest): string {
 function sessionCookie(id: string, origin: string): string {
 	return `${SIMKL_SESSION_COOKIE}=${id}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${id ? SIMKL_SESSION_SECONDS : 0}${origin.startsWith('https:') ? '; Secure' : ''}`;
 }
-function sessionId(headers: SimklProxyRequest['headers']): string | undefined {
+/** The DMM Simkl sign-in a request's cookie names, if it names exactly one well-formed id. */
+export function sessionId(headers: SimklProxyRequest['headers']): string | undefined {
 	const cookie = headers.cookie;
 	if (typeof cookie !== 'string') return undefined;
 	const matches = cookie

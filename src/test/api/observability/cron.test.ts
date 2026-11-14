@@ -40,7 +40,7 @@ vi.mock('@/services/nzb2rdMarkers', () => markerMocks);
 const trashSweepMocks = vi.hoisted(() => ({ sweepWrittenBackTrash: vi.fn() }));
 vi.mock('@/services/scrapedVerdicts/sweep', () => trashSweepMocks);
 
-// Reads Trakt, MDBList and TMDB; `wantedLists.test.ts` drives the real one from recorded pages.
+// Reads Trakt, MDBList, TMDB and Simkl; `wantedLists.test.ts` drives the real one from recorded pages.
 const wantedListMocks = vi.hoisted(() => ({ syncDueWantedLists: vi.fn() }));
 vi.mock('@/services/wantedLists', () => wantedListMocks);
 

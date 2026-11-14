@@ -11,6 +11,8 @@ export interface WantedListRow {
 	createdAt: Date;
 	syncedAt: Date | null;
 	error: string | null;
+	/** A Simkl list only: the follower's DMM Simkl sign-in that reads it. */
+	simklSession: string | null;
 }
 
 /** A list is read again this long after its last read, Radarr's import-list cadence. */
@@ -29,10 +31,11 @@ function toRow(row: any): WantedListRow {
 		createdAt: row.createdAt,
 		syncedAt: row.syncedAt ?? null,
 		error: row.error ?? null,
+		simklSession: row.simklSession ?? null,
 	};
 }
 
-/** The Trakt, MDBList and TMDB lists sponsors follow, keyed on `shortId` as `WantedItemsService` is. */
+/** The Trakt, MDBList, TMDB and Simkl lists sponsors follow, keyed on `shortId` as `WantedItemsService` is. */
 export class WantedListsService extends DatabaseClient {
 	public async list(shortId: string): Promise<WantedListRow[]> {
 		if (!shortId) return [];
@@ -43,18 +46,32 @@ export class WantedListsService extends DatabaseClient {
 		return rows.map(toRow);
 	}
 
-	/** The row for a list already followed, or a new unread one. `created` says which. */
+	/**
+	 * The row for a list already followed, or a new unread one. `created` says which.
+	 * Following a Simkl list again moves it to the Simkl sign-in given, so signing in to
+	 * Simkl afresh and following again mends a list whose old sign-in ended.
+	 */
 	public async follow(
 		shortId: string,
 		url: string,
-		name: string
+		name: string,
+		simklSession: string | null = null
 	): Promise<{ row: WantedListRow; created: boolean }> {
 		const existing = await this.prisma.wantedList.findUnique({
 			where: { shortId_url: { shortId, url } },
 		});
-		if (existing) return { row: toRow(existing), created: false };
+		if (existing) {
+			if (!simklSession || existing.simklSession === simklSession) {
+				return { row: toRow(existing), created: false };
+			}
+			const row = await this.prisma.wantedList.update({
+				where: { id: existing.id },
+				data: { simklSession },
+			});
+			return { row: toRow(row), created: false };
+		}
 		const row = await this.prisma.wantedList.create({
-			data: { shortId, url, name, seen: [] },
+			data: { shortId, url, name, seen: [], simklSession },
 		});
 		return { row: toRow(row), created: true };
 	}

@@ -421,10 +421,15 @@ export default function WantedPage() {
 
 						<div className="mb-3 rounded border border-gray-700 bg-gray-800/60 p-3 text-xs text-gray-300">
 							<p className="mb-2">
-								Follow a Trakt, MDBList or TMDB list and its titles are wanted, new
-								ones included: the list is read again every six hours. A title you
-								remove here stays removed, and unfollowing keeps what was added. For
-								an IMDb or Letterboxd list, make an MDBList list of it first.
+								Follow a Trakt, MDBList, TMDB or Simkl list and its titles are
+								wanted, new ones included: the list is read again every six hours. A
+								title you remove here stays removed, and unfollowing keeps what was
+								added. For an IMDb or Letterboxd list, make an MDBList list of it
+								first. A Simkl list needs you{' '}
+								<Link href="/simkl/mylists" className="text-cyan-300 underline">
+									signed in to Simkl
+								</Link>{' '}
+								here, and Simkl shows lists only to PRO and VIP members.
 							</p>
 							<form
 								className="flex flex-wrap gap-2"

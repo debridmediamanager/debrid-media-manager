@@ -5,11 +5,15 @@ import { repository as db } from '@/services/repository';
 import axios from 'axios';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import simklList200 from '../test/fixtures/simkl/list-items-200.json';
+import simklPremiumOnly200 from '../test/fixtures/simkl/premium-only-200.json';
+import simklPrivate403 from '../test/fixtures/simkl/private-list-403.json';
 import {
 	ListUnreadable,
 	parseListUrl,
 	readList,
+	SIMKL_SIGN_IN_FIRST,
 	syncDueWantedLists,
 	syncWantedList,
 } from './wantedLists';
@@ -18,6 +22,12 @@ vi.mock('axios');
 vi.mock('@/services/repository');
 vi.mock('@/services/mdblistClient');
 vi.mock('@/services/metadataCache');
+// The real Simkl session code runs against this store; only Redis is replaced.
+const simklStore = vi.hoisted(() => ({ read: vi.fn(), compareAndDelete: vi.fn() }));
+vi.mock('@/services/simklSession', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/services/simklSession')>()),
+	getSimklSessionStore: () => simklStore,
+}));
 vi.mock('next/config', () => ({
 	default: () => ({ publicRuntimeConfig: { traktClientId: 'test-client-id' } }),
 }));
@@ -97,6 +107,7 @@ const row = (over: Partial<WantedListRow> = {}): WantedListRow => ({
 	createdAt: new Date('2026-10-29T10:00:00Z'),
 	syncedAt: null,
 	error: null,
+	simklSession: null,
 	...over,
 });
 
@@ -158,6 +169,18 @@ describe('parseListUrl', () => {
 			parseListUrl('https://www.themoviedb.org/list/8704307-limelight-watchlist?language=en')
 		).toMatchObject(tmdb);
 		expect(parseListUrl('themoviedb.org/list/8704307/')).toMatchObject(tmdb);
+	});
+
+	it('reads a Simkl list page, which carries its owner', () => {
+		expect(
+			parseListUrl('https://simkl.com/5/list/2709/marvel-cinematic-universe-mcu-tv-shows')
+		).toMatchObject({
+			source: 'simkl',
+			url: 'https://simkl.com/5/list/2709',
+			id: '2709',
+		});
+		expect(parseListUrl('https://simkl.com/lists/trending/')).toBeNull();
+		expect(parseListUrl('https://simkl.com/list/new/')).toBeNull();
 	});
 
 	it('refuses what is not a list page', () => {
@@ -266,6 +289,98 @@ describe('readList', () => {
 		).rejects.toThrow(new ListUnreadable('TMDB has no such list'));
 	});
 
+	describe('a Simkl list', () => {
+		const SESSION = 'a'.repeat(43);
+		const list = parseListUrl('https://simkl.com/8199460/list/216324')!;
+		/** Simkl answering `body` with `status`, as `api.simkl.com` would. */
+		const simklAnswers = (body: unknown, status = 200) =>
+			vi.stubGlobal(
+				'fetch',
+				vi.fn(async () => new Response(JSON.stringify(body), { status }))
+			);
+
+		beforeEach(() => {
+			simklStore.read.mockResolvedValue({
+				tokens: { access_token: 'access', token_type: 'bearer', expires_in: 604800 },
+				expiresAt: Date.now() + 7 * 86400000,
+				refreshExpiresAt: Date.now() + 180 * 86400000,
+				cacheKey: 'k',
+				user: { user: { name: 'testweek' }, account: { id: 8199460, type: 'vip' } },
+			});
+		});
+		afterEach(() => vi.unstubAllGlobals());
+
+		it("reads it with the follower's Simkl sign-in", async () => {
+			simklAnswers(simklList200);
+			const read = await readList(list, SESSION);
+			expect(simklStore.read).toHaveBeenCalledWith(SESSION);
+			const [url, init] = vi.mocked(fetch).mock.calls[0];
+			expect(String(url)).toMatch(/^https:\/\/api\.simkl\.com\/lists\/216324\?/);
+			expect((init as RequestInit).headers).toEqual({ Authorization: 'Bearer access' });
+			expect(read).toEqual({
+				name: 'Unlisted TV list',
+				titles: [{ imdbId: 'tt4574334', kind: 'show', title: 'Stranger Things' }],
+				noImdbId: 0,
+			});
+		});
+
+		it('wants an anime film as a film, and counts what has no IMDb id', async () => {
+			// Synthetic variants of the published example: an anime film and an item with no IMDb id.
+			const [show] = simklList200.items;
+			simklAnswers({
+				...simklList200,
+				items: [
+					show,
+					{
+						...show,
+						type: 'anime',
+						anime_type: 'movie',
+						title: 'Spirited Away',
+						ids: { simkl_id: 1, imdb: 'tt0245429' },
+					},
+					{
+						...show,
+						type: 'anime',
+						anime_type: 'tv',
+						title: 'Frieren',
+						ids: { simkl_id: 2, imdb: 'tt22248376' },
+					},
+					{ ...show, title: 'Nothing', ids: { simkl_id: 3 } },
+				],
+			});
+			const read = await readList(list, SESSION);
+			expect(read.titles.map((t) => [t.title, t.kind])).toEqual([
+				['Stranger Things', 'show'],
+				['Spirited Away', 'movie'],
+				['Frieren', 'show'],
+			]);
+			expect(read.noImdbId).toBe(1);
+		});
+
+		it('asks for a Simkl sign-in when the follower has none', async () => {
+			await expect(readList(list, null)).rejects.toThrow(
+				new ListUnreadable(SIMKL_SIGN_IN_FIRST)
+			);
+		});
+
+		it('says the sign-in ended once it is gone from DMM', async () => {
+			simklStore.read.mockResolvedValue(null);
+			await expect(readList(list, SESSION)).rejects.toThrow(/Simkl sign-in on DMM has ended/);
+		});
+
+		it('says Simkl keeps list items for PRO and VIP, though it answers 200', async () => {
+			simklAnswers(simklPremiumOnly200);
+			await expect(readList(list, SESSION)).rejects.toThrow(/only to PRO and VIP members/);
+		});
+
+		it('names a private list', async () => {
+			simklAnswers(simklPrivate403, 403);
+			await expect(readList(list, SESSION)).rejects.toThrow(
+				new ListUnreadable('That Simkl list is private')
+			);
+		});
+	});
+
 	it('names a list MDBList does not have', async () => {
 		mdblist.getListByPath.mockResolvedValue(fixture('mdblist-list-unknown.json'));
 		await expect(
@@ -349,6 +464,20 @@ describe('syncWantedList', () => {
 		expect(
 			vi.mocked(db.wantMany).mock.calls[0][1].map((t: { imdbId: string }) => t.imdbId)
 		).toEqual(dropped);
+	});
+
+	it('reads a Simkl list through the sign-in kept on its row', async () => {
+		simklStore.read.mockResolvedValue(null);
+		await expect(
+			syncWantedList(
+				row({ url: 'https://simkl.com/8199460/list/216324', simklSession: 'b'.repeat(43) })
+			)
+		).rejects.toThrow(/Simkl sign-in on DMM has ended/);
+		expect(simklStore.read).toHaveBeenCalledWith('b'.repeat(43));
+		expect(db.recordWantedListFailure).toHaveBeenCalledWith(
+			'list-1',
+			expect.stringMatching(/Simkl sign-in on DMM has ended/)
+		);
 	});
 
 	it('records why a read failed and leaves the wanted list alone', async () => {

@@ -1214,11 +1214,11 @@ model WantedItem {
   @@unique([shortId, imdbId])
 }
 
-/// A Trakt, MDBList or TMDB list a sponsor follows: its new titles join their wanted list.
+/// A Trakt, MDBList, TMDB or Simkl list a sponsor follows: its new titles join their wanted list.
 model WantedList {
   id        String    @id @default(uuid())
   shortId   String    @db.VarChar(16)
-  /// The list's page on trakt.tv, mdblist.com or themoviedb.org, normalised; what to read is derived from it.
+  /// The list's page on trakt.tv, mdblist.com, themoviedb.org or simkl.com, normalised; what to read is derived from it.
   url       String    @db.VarChar(512)
   name      String    @db.VarChar(512)
   /// IMDb ids on the list when it was last read. Only ids not in here are added,
@@ -1231,6 +1231,9 @@ model WantedList {
   syncedAt  DateTime?
   /// Why the last read failed, or null.
   error     String?   @db.VarChar(512)
+  /// A Simkl list only: the id of the follower's DMM Simkl sign-in, whose token reads it.
+  /// Simkl answers no request without a user's token, public lists included.
+  simklSession String? @db.VarChar(64)
 
   @@unique([shortId, url])
 }

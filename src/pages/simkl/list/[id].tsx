@@ -1,3 +1,4 @@
+import FollowListButton from '@/components/FollowListButton';
 import Poster from '@/components/poster';
 import { SimklAuthNotice } from '@/components/SimklAuthNotice';
 import { SimklPremiumNotice } from '@/components/SimklPremiumNotice';
@@ -80,12 +81,19 @@ function SimklListContent({
 
 			<div className="mb-2 flex items-center justify-between">
 				<h1 className="text-xl font-bold text-white">Simkl - {data?.name ?? 'list'}</h1>
-				<Link
-					href="/simkl/mylists"
-					className="shrink-0 rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm whitespace-nowrap text-cyan-100 transition-colors hover:bg-cyan-800/50"
-				>
-					All lists
-				</Link>
+				<div className="flex shrink-0 items-center gap-2">
+					{data?.user?.id && (
+						<FollowListButton
+							url={`https://simkl.com/${data.user.id}/list/${data.id}`}
+						/>
+					)}
+					<Link
+						href="/simkl/mylists"
+						className="shrink-0 rounded border-2 border-cyan-500 bg-cyan-900/30 px-2 py-1 text-sm whitespace-nowrap text-cyan-100 transition-colors hover:bg-cyan-800/50"
+					>
+						All lists
+					</Link>
+				</div>
 			</div>
 			<div className="mb-3">
 				<SimklSourceLink />

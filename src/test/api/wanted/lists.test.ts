@@ -1,7 +1,7 @@
 import handler from '@/pages/api/wanted/lists';
 import { checkRateLimitFor } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
-import { ListUnreadable, syncWantedList } from '@/services/wantedLists';
+import { ListUnreadable, SIMKL_SIGN_IN_FIRST, syncWantedList } from '@/services/wantedLists';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { activeSponsor } from '@/test/utils/sponsor';
 import { SPONSOR_HEADER } from '@/utils/requireSponsor';
@@ -12,7 +12,7 @@ vi.mock('@/services/rateLimit/withRateLimit', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/rateLimit/withRateLimit')>()),
 	checkRateLimitFor: vi.fn(),
 }));
-// Reads Trakt, MDBList and TMDB; `wantedLists.test.ts` drives the real one from recorded pages.
+// Reads Trakt, MDBList, TMDB and Simkl; `wantedLists.test.ts` drives the real one from recorded pages.
 vi.mock('@/services/wantedLists', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/wantedLists')>()),
 	syncWantedList: vi.fn(),
@@ -30,6 +30,7 @@ const stored = {
 	createdAt: new Date('2026-10-29T10:00:00Z'),
 	syncedAt: null,
 	error: null,
+	simklSession: null,
 };
 
 describe('/api/wanted/lists', () => {
@@ -55,8 +56,66 @@ describe('/api/wanted/lists', () => {
 		delete process.env.DMM_SPONSOR_SECRET;
 	});
 
-	const call = (method: string, extra: { body?: unknown; query?: Record<string, string> } = {}) =>
-		createMockRequest({ method, headers: { [SPONSOR_HEADER]: token }, ...extra });
+	const call = (
+		method: string,
+		extra: { body?: unknown; query?: Record<string, string>; cookie?: string } = {}
+	) =>
+		createMockRequest({
+			method,
+			headers: {
+				[SPONSOR_HEADER]: token,
+				...(extra.cookie ? { cookie: extra.cookie } : {}),
+			},
+			...(extra.body !== undefined ? { body: extra.body } : {}),
+			...(extra.query ? { query: extra.query } : {}),
+		});
+
+	const SIMKL_LIST = 'https://simkl.com/8199460/list/216324/my-list';
+	const SESSION = 'a'.repeat(43);
+
+	it('follows a Simkl list through the Simkl sign-in its cookie names', async () => {
+		vi.mocked(syncWantedList).mockResolvedValue({
+			name: 'My list',
+			count: 1,
+			added: 1,
+			alreadyWanted: 0,
+			overCap: 0,
+			noImdbId: 0,
+		});
+		const res = createMockResponse();
+		await handler(
+			call('POST', {
+				body: { url: SIMKL_LIST },
+				cookie: `theme=dark; dmm_simkl_session=${SESSION}`,
+			}),
+			res
+		);
+		expect(mockRepository.followWantedList).toHaveBeenCalledWith(
+			'ZP1M',
+			'https://simkl.com/8199460/list/216324',
+			'Simkl list 216324',
+			SESSION
+		);
+		expect(res.status).toHaveBeenCalledWith(200);
+		// The sign-in is a credential: it never goes back out in the answer.
+		expect(JSON.stringify(vi.mocked(res.json).mock.calls)).not.toContain(SESSION);
+	});
+
+	it('does not keep a new Simkl list followed without a Simkl sign-in', async () => {
+		// The real read refuses a Simkl list with no sign-in; see wantedLists.test.ts.
+		vi.mocked(syncWantedList).mockRejectedValue(new ListUnreadable(SIMKL_SIGN_IN_FIRST));
+		const res = createMockResponse();
+		await handler(call('POST', { body: { url: SIMKL_LIST } }), res);
+		expect(mockRepository.followWantedList).toHaveBeenCalledWith(
+			'ZP1M',
+			'https://simkl.com/8199460/list/216324',
+			'Simkl list 216324',
+			null
+		);
+		expect(mockRepository.unfollowWantedList).toHaveBeenCalledWith('ZP1M', 'list-1');
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.json).toHaveBeenCalledWith({ error: SIMKL_SIGN_IN_FIRST });
+	});
 
 	it('follows a pasted list page, reads it at once and answers with what that did', async () => {
 		vi.mocked(syncWantedList).mockResolvedValue({
@@ -77,7 +136,8 @@ describe('/api/wanted/lists', () => {
 		expect(mockRepository.followWantedList).toHaveBeenCalledWith(
 			'ZP1M',
 			'https://trakt.tv/users/giladg/lists/latest-4k-releases',
-			"giladg's latest-4k-releases"
+			"giladg's latest-4k-releases",
+			null
 		);
 		expect(syncWantedList).toHaveBeenCalledWith(stored);
 		expect(res.status).toHaveBeenCalledWith(200);

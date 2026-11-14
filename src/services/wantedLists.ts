@@ -3,6 +3,9 @@ import type { WantedListRow } from '@/services/database/wantedLists';
 import { getMdblistClient } from '@/services/mdblistClient';
 import { getMetadataCache } from '@/services/metadataCache';
 import { repository as db } from '@/services/repository';
+import { SimklError } from '@/services/simkl';
+import { getSimklList } from '@/services/simklProvider';
+import { getSimklSessionStore, withSimklSession } from '@/services/simklSession';
 import { getTmdbAuthWithFreeKey, TMDB_BASE_URL, tmdbAxiosOptions } from '@/utils/tmdbAuth';
 import axios from 'axios';
 import getConfig from 'next/config';
@@ -16,16 +19,21 @@ const IMDB_ID = /^tt\d{7,}$/;
 /** TMDB lists hold TMDB ids; each is asked for its IMDb id, this many at a time. */
 const TMDB_LOOKUPS = 8;
 
-/** What a sponsor may paste: the page of a list on trakt.tv, mdblist.com or themoviedb.org. */
+/** What a sponsor may paste: the page of a list on trakt.tv, mdblist.com, themoviedb.org or simkl.com. */
 export type ParsedListUrl =
 	| { source: 'trakt'; kind: 'list'; url: string; label: string; user: string; slug: string }
 	| { source: 'trakt'; kind: 'listId'; url: string; label: string; id: string }
 	| { source: 'trakt'; kind: 'watchlist'; url: string; label: string; user: string }
 	| { source: 'mdblist'; kind: 'list'; url: string; label: string; user: string; slug: string }
-	| { source: 'tmdb'; kind: 'list'; url: string; label: string; id: string };
+	| { source: 'tmdb'; kind: 'list'; url: string; label: string; id: string }
+	| { source: 'simkl'; kind: 'list'; url: string; label: string; id: string };
 
 export const LIST_URL_HELP =
-	'Paste the page of a Trakt, MDBList or TMDB list: https://trakt.tv/users/<user>/lists/<list>, https://trakt.tv/users/<user>/watchlist, https://trakt.tv/lists/<id>, https://mdblist.com/lists/<user>/<list> or https://www.themoviedb.org/list/<id>';
+	'Paste the page of a Trakt, MDBList, TMDB or Simkl list: https://trakt.tv/users/<user>/lists/<list>, https://trakt.tv/users/<user>/watchlist, https://trakt.tv/lists/<id>, https://mdblist.com/lists/<user>/<list>, https://www.themoviedb.org/list/<id> or https://simkl.com/<user>/list/<id>';
+
+/** Simkl answers nothing without the reader's own token, so a Simkl list is read through their sign-in. */
+export const SIMKL_SIGN_IN_FIRST =
+	'Sign in to Simkl on DMM first, at debridmediamanager.com/simkl/mylists, then follow the Simkl list';
 
 /** `url` is the page normalised, so the same list pasted two ways is followed once. */
 export function parseListUrl(raw: string): ParsedListUrl | null {
@@ -82,6 +90,17 @@ export function parseListUrl(raw: string): ParsedListUrl | null {
 			url: `https://www.themoviedb.org/list/${m[1]}`,
 			label: `TMDB list ${m[1]}`,
 			id: m[1],
+		};
+	}
+	if (host === 'simkl.com') {
+		const m = path.match(/^\/(\d+)\/list\/(\d+)(\/|$)/);
+		if (!m) return null;
+		return {
+			source: 'simkl',
+			kind: 'list',
+			url: `https://simkl.com/${m[1]}/list/${m[2]}`,
+			label: `Simkl list ${m[2]}`,
+			id: m[2],
 		};
 	}
 	if (host === 'mdblist.com') {
@@ -282,14 +301,68 @@ async function readTmdb(parsed: ParsedListUrl & { source: 'tmdb' }): Promise<Lis
 	return { name: String(first?.name ?? parsed.label), titles, noImdbId };
 }
 
-/** The list as it is now. Throws `ListUnreadable` with a message for the sponsor. */
-export async function readList(parsed: ParsedListUrl): Promise<ListRead> {
+/**
+ * A Simkl list, read with the token of the follower's DMM Simkl sign-in, which the read
+ * also keeps fresh. Simkl gives list items only to PRO and VIP members.
+ */
+async function readSimkl(
+	parsed: ParsedListUrl & { source: 'simkl' },
+	simklSession: string | null | undefined
+): Promise<ListRead> {
+	if (!simklSession) throw new ListUnreadable(SIMKL_SIGN_IN_FIRST);
+	let list;
+	try {
+		list = await withSimklSession(simklSession, getSimklSessionStore(), (session) =>
+			getSimklList(session.tokens.access_token, Number(parsed.id))
+		);
+	} catch (error) {
+		if (!(error instanceof SimklError)) throw new ListUnreadable('Simkl could not be read');
+		if (error.isPremiumOnly) {
+			throw new ListUnreadable(
+				'Simkl gives list items only to PRO and VIP members, so this list cannot be read with your Simkl account'
+			);
+		}
+		if (error.isUnauthorized || error.code === 'signed_out') {
+			throw new ListUnreadable(
+				'Your Simkl sign-in on DMM has ended. Sign in to Simkl on DMM again, then follow the list again'
+			);
+		}
+		if (error.code === 'private_list') throw new ListUnreadable('That Simkl list is private');
+		if (error.status === 404) throw new ListUnreadable('Simkl has no such list');
+		throw new ListUnreadable(`Simkl could not be read (${error.status})`);
+	}
+	const titles: ListTitle[] = [];
+	let noImdbId = 0;
+	for (const item of list.items) {
+		const imdbId = item.ids?.imdb;
+		if (typeof imdbId !== 'string' || !IMDB_ID.test(imdbId)) {
+			noImdbId++;
+			continue;
+		}
+		// Anime is `anime` whatever it is; its `anime_type` says whether it is a film.
+		const film =
+			item.type === 'movie' || (item.type === 'anime' && item.anime_type === 'movie');
+		titles.push({ imdbId, kind: film ? 'movie' : 'show', title: String(item.title ?? imdbId) });
+	}
+	return { name: String(list.name ?? parsed.label), titles, noImdbId };
+}
+
+/**
+ * The list as it is now. Throws `ListUnreadable` with a message for the sponsor.
+ * `simklSession` is the follower's DMM Simkl sign-in, which only a Simkl list needs.
+ */
+export async function readList(
+	parsed: ParsedListUrl,
+	simklSession?: string | null
+): Promise<ListRead> {
 	const read =
 		parsed.source === 'trakt'
 			? await readTrakt(parsed)
 			: parsed.source === 'mdblist'
 				? await readMdblist(parsed)
-				: await readTmdb(parsed);
+				: parsed.source === 'tmdb'
+					? await readTmdb(parsed)
+					: await readSimkl(parsed, simklSession);
 	// A title listed twice is one title.
 	const byId = new Map(read.titles.map((t) => [t.imdbId, t]));
 	return { ...read, titles: [...byId.values()] };
@@ -316,8 +389,8 @@ export async function syncWantedList(row: WantedListRow): Promise<ListSyncResult
 	const parsed = parseListUrl(row.url);
 	let read: ListRead;
 	try {
-		if (!parsed) throw new ListUnreadable('Not a Trakt, MDBList or TMDB list URL');
-		read = await readList(parsed);
+		if (!parsed) throw new ListUnreadable('Not a Trakt, MDBList, TMDB or Simkl list URL');
+		read = await readList(parsed, row.simklSession);
 	} catch (error) {
 		await db.recordWantedListFailure(
 			row.id,

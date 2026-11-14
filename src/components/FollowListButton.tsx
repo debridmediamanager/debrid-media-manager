@@ -36,7 +36,7 @@ export async function followList(url: string): Promise<FollowListResponse> {
 }
 
 /**
- * On a Trakt list page: follow that list, so its titles, present and future,
+ * On a Trakt or Simkl list page: follow that list, so its titles, present and future,
  * are wanted. A non-sponsor gets a link to `/wanted`, which says what the list is.
  */
 export default function FollowListButton({ url }: { url: string }) {

@@ -1952,13 +1952,18 @@ export class Repository {
 		return this.wantedItemsService.touchPolled(shortId);
 	}
 
-	// Followed lists: Trakt, MDBList and TMDB lists whose new titles join the wanted list
+	// Followed lists: Trakt, MDBList, TMDB and Simkl lists whose new titles join the wanted list
 	public listWantedLists(shortId: string) {
 		return this.wantedListsService.list(shortId);
 	}
 
-	public followWantedList(shortId: string, url: string, name: string) {
-		return this.wantedListsService.follow(shortId, url, name);
+	public followWantedList(
+		shortId: string,
+		url: string,
+		name: string,
+		simklSession: string | null = null
+	) {
+		return this.wantedListsService.follow(shortId, url, name, simklSession);
 	}
 
 	public unfollowWantedList(shortId: string, id: string) {

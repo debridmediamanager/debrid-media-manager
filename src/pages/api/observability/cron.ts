@@ -169,7 +169,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			console.error('[Cron] Free request delivery failed:', e);
 		}
 
-		// The Trakt, MDBList and TMDB lists sponsors follow are read again every six hours
+		// The Trakt, MDBList, TMDB and Simkl lists sponsors follow are read again every six hours
 		// so that what is new on them gets wanted; nothing else reads them.
 		let wantedLists: CronResponse['wantedLists'];
 		try {
