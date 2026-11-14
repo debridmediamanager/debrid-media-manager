@@ -28,7 +28,6 @@ import {
 import axiosWithRetry from '@/utils/axiosWithRetry';
 import { getLocalStorageItemOrDefault, hideRdBlockedTorrentsDefault } from '@/utils/browserStorage';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
-import { cyrillicLedLast } from '@/utils/cyrillicLed';
 import { markTransferredHashes } from '@/utils/debridUploader';
 import {
 	episodeChipClasses,
@@ -581,7 +580,7 @@ const AnimePage: FunctionComponent = () => {
 
 	const filteredResults = useMemo(() => {
 		if (searchResults.length === 0) return [];
-		return cyrillicLedLast(resultsFor(query));
+		return resultsFor(query);
 	}, [query, searchResults, resultsFor]);
 
 	const expectedEpisodeCount = useMemo(() => {

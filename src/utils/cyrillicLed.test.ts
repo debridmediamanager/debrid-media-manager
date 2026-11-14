@@ -1,6 +1,8 @@
+import { SearchResult } from '@/services/mediasearch';
 import recorded from '@/test/fixtures/scraped/cyrillic-led-pages-2026-10-07.json';
 import { describe, expect, it } from 'vitest';
-import { cyrillicLedLast, isCyrillicLed } from './cyrillicLed';
+import { isCyrillicLed } from './cyrillicLed';
+import { sortByBiggest } from './results';
 
 const titles = recorded.pages.flatMap((page) =>
 	(page.value as { title?: string; filename?: string }[]).map((r) => r.title ?? r.filename!)
@@ -28,33 +30,27 @@ describe('isCyrillicLed on the recorded pages (card 248)', () => {
 	});
 });
 
-describe('cyrillicLedLast on The Vexxer (card 248)', () => {
-	const vexxer = (
-		recorded.pages.find((p) => p.key === 'movie:tt0446009')!.value as {
-			hash: string;
-			title: string;
-			fileSize: number;
-		}[]
-	).toSorted((a, b) => b.fileSize - a.fileSize);
+describe('sortByBiggest on The Vexxer (card 248)', () => {
+	const vexxer = () =>
+		(
+			recorded.pages.find((p) => p.key === 'movie:tt0446009')!
+				.value as unknown as SearchResult[]
+		).map((r) => ({ ...r }));
 
-	it('moves the releases named in Russian after the rest and keeps each group in order', () => {
-		expect(cyrillicLedLast(vexxer).map((r) => r.hash.slice(0, 8))).toEqual([
+	it('ranks the releases named in Russian after the rest, each group biggest first', () => {
+		expect(sortByBiggest(vexxer()).map((r) => r.hash.slice(0, 8))).toEqual([
 			'3e00e70c',
 			'9e3a5ffc',
 			'99ff6a2d',
 			'c847f15e',
-			'fb1d2b7a',
+			// same size: the hash decides
 			'453bb1ca',
+			'fb1d2b7a',
 			'51cda441',
 			'7688ea77',
 			'75197031',
 			'8c997e30',
 			'e61e15e5',
 		]);
-	});
-
-	it('hands back the same list when nothing is named in Russian', () => {
-		const latin = vexxer.filter((r) => !isCyrillicLed(r.title));
-		expect(cyrillicLedLast(latin)).toBe(latin);
 	});
 });

@@ -1,4 +1,6 @@
 import { SearchResult } from '@/services/mediasearch';
+import dune from '@/test/fixtures/scraped/dune-part-two-results-2026-11-14.json';
+import { isCyrillicLed } from '@/utils/cyrillicLed';
 import { describe, expect, it } from 'vitest';
 import {
 	borderColor,
@@ -233,6 +235,21 @@ describe('results utils', () => {
 			videoCount: 0,
 			...overrides,
 		}) as SearchResult;
+
+	describe('cached first on Dune: Part Two (recorded 2026-11-14)', () => {
+		const groups = (results: SearchResult[]) =>
+			results
+				.map((r) => (isAvailable(r) ? 'C' : 'U') + (isCyrillicLed(r.title) ? 'r' : 'l'))
+				.filter((g, i, all) => g !== all[i - 1]);
+		const rows = () => dune.results.map((r) => ({ ...r }) as unknown as SearchResult);
+
+		// The page used to sort cached first, then move every Russian-named release
+		// to the end, so 38 cached ones sat below 142 uncached rows.
+		it('lists every cached row first, Russian-named ones last within each group', () => {
+			expect(groups(sortByBiggest(rows()))).toEqual(['Cl', 'Cr', 'Ul', 'Ur']);
+			expect(groups(sortByMedian(rows()))).toEqual(['Cl', 'Cr', 'Ul', 'Ur']);
+		});
+	});
 
 	describe('sortByMedian', () => {
 		it('sorts available torrents before unavailable ones, however big', () => {

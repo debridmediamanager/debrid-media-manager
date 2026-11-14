@@ -1,4 +1,5 @@
 import { SearchResult } from '@/services/mediasearch';
+import { isCyrillicLed } from '@/utils/cyrillicLed';
 import { namedEpisodes } from '@/utils/seasonNaming';
 import { isVideo } from '@/utils/selectable';
 import { Download, Zap } from 'lucide-react';
@@ -115,7 +116,10 @@ export const episodeSize = (result: SearchResult, episodes = 0) => {
 };
 
 /**
- * Cached rows come first, then uncached, both biggest to smallest.
+ * Cached rows come first, then uncached, both biggest to smallest. Within each,
+ * releases named in Russian go last (card 248): they topped The Vexxer and Mad Men
+ * once listed. Moving them after the whole list instead put 38 cached ones below
+ * 142 uncached rows on Dune: Part Two.
  *
  * The two groups rank on different measures on purpose: a cached row is one the
  * user can play right now, so it ranks on the size of what they would actually
@@ -130,6 +134,9 @@ const compareBySize = (
 	const aAvailable = isAvailable(a);
 	const bAvailable = isAvailable(b);
 	if (aAvailable !== bAvailable) return aAvailable ? -1 : 1;
+
+	const aCyrillic = isCyrillicLed(a.title);
+	if (aCyrillic !== isCyrillicLed(b.title)) return aCyrillic ? 1 : -1;
 
 	const sizeOf = aAvailable ? cachedSize : totalFileSize;
 	return sizeOf(b) - sizeOf(a);

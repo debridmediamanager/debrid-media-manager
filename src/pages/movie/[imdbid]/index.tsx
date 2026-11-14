@@ -34,7 +34,7 @@ import {
 import { handleCastMovie } from '@/utils/castApiClient';
 import { fileContentRequest } from '@/utils/contentRequestsApi';
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
-import { cyrillicLedLast, isCyrillicLed } from '@/utils/cyrillicLed';
+import { isCyrillicLed } from '@/utils/cyrillicLed';
 import { handleCastMovieDebridLink } from '@/utils/debridLinkCastApiClient';
 import { markTransferredHashes } from '@/utils/debridUploader';
 import {
@@ -798,7 +798,7 @@ const MovieSearch: FunctionComponent = () => {
 		if (searchResults.length === 0) {
 			return [];
 		}
-		return cyrillicLedLast(resultsFor(query));
+		return resultsFor(query);
 	}, [query, searchResults, resultsFor]);
 
 	const totalUncachedCount = useMemo(() => {

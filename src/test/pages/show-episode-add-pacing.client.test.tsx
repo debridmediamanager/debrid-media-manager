@@ -692,8 +692,7 @@ describe('Season list next to releases named in Russian', () => {
 		vi.mocked(checkDatabaseAvailabilityRd).mockImplementation(defaultRdCheck);
 	});
 
-	it('lists the releases named in Russian after the rest', async () => {
-		const actual = await vi.importActual<typeof import('@/utils/results')>('@/utils/results');
+	it('lists the releases named in Russian after the rest of their group', async () => {
 		render(<ShowSeasonPage />);
 		await screen.findByRole('button', { name: /Instant RD \(Whole Season\)/i });
 		await waitFor(() =>
@@ -703,16 +702,14 @@ describe('Season list next to releases named in Russian', () => {
 		);
 		const listed: (Row & { rdAvailable?: boolean })[] = tvResultsProps.current.filteredResults;
 		const russian = (r: Row) => /^[А-Яа-яЁё]/.test(r.title);
+		// 0 cached, 1 cached named in Russian, 2 uncached, 3 uncached named in Russian
+		const group = (r: Row & { rdAvailable?: boolean }) =>
+			(r.rdAvailable ? 0 : 2) + (russian(r) ? 1 : 0);
 
-		// The page's own order puts a Russian pack first.
-		expect(russian(actual.sortByMedian([...listed] as any)[0])).toBe(true);
 		expect(listed).toHaveLength(madMen.value.length);
-		expect(listed.map((r) => r.hash)).toEqual(
-			[
-				...actual.sortByMedian(listed.filter((r) => !russian(r)) as any),
-				...actual.sortByMedian(listed.filter(russian) as any),
-			].map((r) => r.hash)
-		);
-		expect(listed.findIndex(russian)).toBe(listed.length - 15);
+		expect(russian(listed[0])).toBe(false);
+		// a cached Russian pack stays above every uncached release
+		expect(listed.some((r) => r.rdAvailable && russian(r))).toBe(true);
+		expect(listed.map(group)).toEqual(listed.map(group).sort((x, y) => x - y));
 	});
 });

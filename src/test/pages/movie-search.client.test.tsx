@@ -728,9 +728,9 @@ describe('Movie search page across client-side navigation', () => {
 		});
 
 		// Cached first, then biggest, put the Russian-dub BDRemux at the top of the
-		// list. The Cyrillic-led releases now follow the rest, each group in the
-		// page's own order.
-		it('lists the releases named in Russian after the rest', async () => {
+		// list. The Cyrillic-led releases now follow the rest of their group: a
+		// cached one still comes before every uncached release.
+		it('lists the releases named in Russian after the rest of their group', async () => {
 			const actual =
 				await vi.importActual<typeof import('@/utils/results')>('@/utils/results');
 			sortByBiggestMock.mockImplementation(actual.sortByBiggest);
@@ -743,17 +743,17 @@ describe('Movie search page across client-side navigation', () => {
 					r.hash.slice(0, 8)
 				)
 			).toEqual([
-				// cached, then uncached, biggest first
+				// cached, biggest first, the BDRemux named in Russian last
 				'453bb1ca',
 				'fb1d2b7a',
+				'75197031',
+				// uncached, biggest first, the two DVDRips named in Russian last
 				'3e00e70c',
 				'9e3a5ffc',
 				'99ff6a2d',
 				'c847f15e',
 				'51cda441',
 				'7688ea77',
-				// named in Russian: the cached BDRemux, then the two DVDRips
-				'75197031',
 				'8c997e30',
 				'e61e15e5',
 			]);
