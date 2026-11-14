@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ReactNode } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/components/Logo', () => ({
 	__esModule: true,
@@ -1112,5 +1112,84 @@ describe('choose your setup page', () => {
 		const label = screen.getByText('What do you already have?');
 		expect(label).toHaveClass('text-gray-400');
 		expect(label).not.toHaveClass('text-gray-500');
+	});
+});
+
+// Reported 2026-11-13: a sponsor whose key was linked in Settings was still asked to sponsor DMM
+// and got the zurg home page instead of the download page.
+describe('choose your setup page for a linked sponsor', () => {
+	function linkSponsorKey() {
+		// What Settings stores after a sponsor links their key (useSponsor).
+		const week = 7 * 864e5;
+		const claims = {
+			shortId: 'TEST',
+			githubUsername: 'x',
+			sources: ['onetime'],
+			keyVersion: 1,
+			exp: Date.now() + week,
+		};
+		const body = btoa(JSON.stringify(claims))
+			.replace(/\+/g, '-')
+			.replace(/\//g, '_')
+			.replace(/=+$/, '');
+		localStorage.setItem(
+			'dmm:sponsorToken',
+			JSON.stringify({ value: `${body}.sig`, expiry: Date.now() + week })
+		);
+		localStorage.setItem('dmm:apiKey', JSON.stringify('k'));
+	}
+
+	function reachZurgRecommendation() {
+		render(<ChooseYourSetupPage />);
+		fireEvent.click(screen.getByRole('radio', { name: /Plex apps/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('radio', { name: /Keep my existing Plex Media Server/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: /Real-Debrid/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('radio', { name: /An existing server or host/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('radio', { name: /A managed library/ }));
+		fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+		fireEvent.click(screen.getByRole('button', { name: 'See my setup' }));
+		return screen.getByTestId('sponsorship-section');
+	}
+
+	afterEach(() => localStorage.clear());
+
+	it('does not ask a linked sponsor to sponsor and links zurg nightly to the download page', () => {
+		linkSponsorKey();
+		const section = reachZurgRecommendation();
+
+		expect(within(section).queryByRole('link', { name: 'Sponsor DMM' })).toBeNull();
+		expect(within(section).queryByText(/Already sponsoring/)).toBeNull();
+		expect(within(section).queryByText(/Sponsor DMM/)).toBeNull();
+		expect(
+			within(section).getByText(
+				'Your sponsorship unlocks the required integrations below. Use the linked setup pages to set them up.'
+			)
+		).toBeInTheDocument();
+		expect(within(section).getByRole('link', { name: 'zurg nightly access' })).toHaveAttribute(
+			'href',
+			'https://zurg.debridmediamanager.com/download.html'
+		);
+	});
+
+	it('still asks everyone else to sponsor', () => {
+		const section = reachZurgRecommendation();
+
+		expect(within(section).getByRole('link', { name: 'Sponsor DMM' })).toHaveAttribute(
+			'href',
+			'https://gatekeeper.debridmediamanager.com'
+		);
+		expect(
+			within(section).getByText(
+				'Sponsor DMM to unlock the required integrations below, then use the linked setup pages.'
+			)
+		).toBeInTheDocument();
+		expect(within(section).getByRole('link', { name: 'zurg nightly access' })).toHaveAttribute(
+			'href',
+			'https://zurg.debridmediamanager.com/'
+		);
 	});
 });

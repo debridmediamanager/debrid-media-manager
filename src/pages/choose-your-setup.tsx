@@ -1,4 +1,5 @@
 import { Logo } from '@/components/Logo';
+import { useSponsor } from '@/hooks/useSponsor';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import {
 	HOST_OPTIONS,
@@ -35,6 +36,8 @@ const INITIAL_ANSWERS: SetupAnswers = {
 	preference: 'unsure',
 	needs: [],
 };
+
+const ZURG_DOWNLOAD_URL = 'https://zurg.debridmediamanager.com/download.html';
 
 type QuestionKey = 'player' | 'plexRoute' | 'sources' | 'host' | 'preference' | 'needs';
 
@@ -400,12 +403,19 @@ function SponsorBenefits({
 	hasConflicts,
 	hasSources,
 	player,
+	isSponsor,
 }: {
 	sponsorship: SetupSponsorship;
 	hasConflicts: boolean;
 	hasSources: boolean;
 	player: Player;
+	isSponsor: boolean;
 }) {
+	// A linked sponsor already has access, so their zurg nightly item opens the download page.
+	const withSponsorLinks = (benefits: SetupSponsorBenefit[]) =>
+		isSponsor
+			? benefits.map((b) => (b.id === 'zurg-nightly' ? { ...b, href: ZURG_DOWNLOAD_URL } : b))
+			: benefits;
 	const benefitList = (benefits: SetupSponsorBenefit[]) => (
 		<ul className="mt-2 space-y-2 text-sm text-gray-200">
 			{benefits.map((benefit) => (
@@ -445,46 +455,55 @@ function SponsorBenefits({
 			<div className="flex items-center gap-2">
 				<Heart className="h-4 w-4 text-pink-300" aria-hidden="true" />
 				<h3 className="text-sm font-semibold tracking-wide text-pink-200 uppercase">
-					Sponsor DMM for these benefits
+					{isSponsor ? 'Your sponsor benefits' : 'Sponsor DMM for these benefits'}
 				</h3>
 			</div>
 			<p className="mt-2 text-sm leading-6 text-gray-300">
-				{sponsorship.routeAvailable
+				{sponsorship.routeAvailable && isSponsor
 					? sponsorship.required.length
-						? 'Sponsor DMM to unlock the required integrations below, then use the linked setup pages.'
-						: sponsorship.usesDmmTools
-							? sponsorship.optional.some(
-									({ id }) => id !== 'sponsor-benefits' && id !== 'discord-role'
-								)
-								? 'Sponsorship is optional for the free tools in this setup. Sponsor DMM for the upgrades below.'
-								: 'Sponsorship is optional for the free tools in this setup.'
-							: sponsorship.hasAccount
-								? 'Sponsorship is optional here; the benefits below are for your accounts or other routes.'
-								: 'Sponsorship is optional here.'
-					: hasConflicts
-						? 'Resolve the setup requirements above first. Sponsorship does not remove them.'
-						: hasSources
-							? 'Choose a source your player supports first; DMM has no route for the selected sources with this player.'
-							: 'Choose a source first.'}
+						? 'Your sponsorship unlocks the required integrations below. Use the linked setup pages to set them up.'
+						: 'Your sponsorship includes the benefits below.'
+					: sponsorship.routeAvailable
+						? sponsorship.required.length
+							? 'Sponsor DMM to unlock the required integrations below, then use the linked setup pages.'
+							: sponsorship.usesDmmTools
+								? sponsorship.optional.some(
+										({ id }) =>
+											id !== 'sponsor-benefits' && id !== 'discord-role'
+									)
+									? 'Sponsorship is optional for the free tools in this setup. Sponsor DMM for the upgrades below.'
+									: 'Sponsorship is optional for the free tools in this setup.'
+								: sponsorship.hasAccount
+									? 'Sponsorship is optional here; the benefits below are for your accounts or other routes.'
+									: 'Sponsorship is optional here.'
+						: hasConflicts
+							? 'Resolve the setup requirements above first. Sponsorship does not remove them.'
+							: hasSources
+								? 'Choose a source your player supports first; DMM has no route for the selected sources with this player.'
+								: 'Choose a source first.'}
 			</p>
-			<a
-				href={GATEKEEPER_URL}
-				target="_blank"
-				rel="noopener noreferrer"
-				data-testid="sponsor-primary-cta"
-				className="mt-3 inline-flex items-center justify-center rounded border-2 border-pink-300 bg-pink-500/20 px-4 py-2 text-sm font-semibold text-pink-100 hover:bg-pink-500/40"
-			>
-				Sponsor DMM
-			</a>
-			<p className="mt-2 text-xs text-gray-400">
-				Already sponsoring?{' '}
-				<Link
-					href="/settings"
-					className="text-pink-200 underline underline-offset-2 hover:text-white"
-				>
-					Connect your key in DMM settings
-				</Link>
-			</p>
+			{isSponsor ? null : (
+				<>
+					<a
+						href={GATEKEEPER_URL}
+						target="_blank"
+						rel="noopener noreferrer"
+						data-testid="sponsor-primary-cta"
+						className="mt-3 inline-flex items-center justify-center rounded border-2 border-pink-300 bg-pink-500/20 px-4 py-2 text-sm font-semibold text-pink-100 hover:bg-pink-500/40"
+					>
+						Sponsor DMM
+					</a>
+					<p className="mt-2 text-xs text-gray-400">
+						Already sponsoring?{' '}
+						<Link
+							href="/settings"
+							className="text-pink-200 underline underline-offset-2 hover:text-white"
+						>
+							Connect your key in DMM settings
+						</Link>
+					</p>
+				</>
+			)}
 			{sponsorship.freeFeatures.includes('cast') ? (
 				<p className="mt-2 text-xs text-gray-400">
 					{player === 'kodi'
@@ -509,7 +528,7 @@ function SponsorBenefits({
 			{sponsorship.required.length ? (
 				<div className="mt-4">
 					<h4 className="text-sm font-medium text-pink-100">Required for this route</h4>
-					{benefitList(sponsorship.required)}
+					{benefitList(withSponsorLinks(sponsorship.required))}
 				</div>
 			) : null}
 			<div className="mt-4">
@@ -518,7 +537,7 @@ function SponsorBenefits({
 						? 'Also included or useful'
 						: 'Optional sponsor benefits'}
 				</h4>
-				{benefitList(sponsorship.optional)}
+				{benefitList(withSponsorLinks(sponsorship.optional))}
 			</div>
 		</section>
 	);
@@ -531,6 +550,7 @@ function RecommendationView({
 	onEdit,
 	onReset,
 	resultHeadingRef,
+	isSponsor,
 }: {
 	recommendation: SetupRecommendation;
 	answers: SetupAnswers;
@@ -538,6 +558,7 @@ function RecommendationView({
 	onEdit: (key: QuestionKey) => void;
 	onReset: () => void;
 	resultHeadingRef: React.RefObject<HTMLHeadingElement | null>;
+	isSponsor: boolean;
 }) {
 	return (
 		<div className="flex flex-col gap-5">
@@ -571,6 +592,7 @@ function RecommendationView({
 				hasConflicts={recommendation.conflicts.length > 0}
 				hasSources={recommendation.sourceCoverage.length > 0}
 				player={answers.player}
+				isSponsor={isSponsor}
 			/>
 
 			<div className="grid gap-5 rounded border border-gray-700 bg-gray-800/30 p-4 sm:grid-cols-2 sm:p-5">
@@ -694,6 +716,8 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 	const [compatibilityNotice, setCompatibilityNotice] = useState<string | null>(null);
 	const [currentStep, setCurrentStep] = useState(0);
 	const [submitted, setSubmitted] = useState(false);
+	// Read at the top so the token is decoded before the result opens; false until mounted, as on the server.
+	const { isSponsor } = useSponsor();
 	const questionHeadingRef = useRef<HTMLHeadingElement>(null);
 	const resultHeadingRef = useRef<HTMLHeadingElement>(null);
 
@@ -838,6 +862,7 @@ const ChooseYourSetupPage: NextPage & { disableLibraryProvider?: boolean } = () 
 						onEdit={edit}
 						onReset={reset}
 						resultHeadingRef={resultHeadingRef}
+						isSponsor={isSponsor}
 					/>
 				) : (
 					<form
