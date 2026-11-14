@@ -160,14 +160,18 @@ class LiveTransport:
     def decide(self, method, url):
         """Return (upstream URL, kind) or (None, reason) for a paused request."""
         parsed = urllib.parse.urlsplit(url)
-        if url.startswith(self.base + "/api/"):
+        # A copy not served from debridmediamanager.com sends RD calls to its own
+        # /api/anticors (src/utils/officialDmm.ts): resolve those like the cors hosts,
+        # never through production's anticors, which would use the account from its IP.
+        own_anticors = url.startswith(self.base + "/api/anticors?")
+        if url.startswith(self.base + "/api/") and not own_anticors:
             path = parsed.path
             if method == "GET" and not DMM_WRITE_PATH.search(path):
                 return PROD_ORIGIN + path + ("?" + parsed.query if parsed.query else ""), "dmm"
             if method == "POST" and path in DMM_READ_POSTS:
                 return PROD_ORIGIN + path + ("?" + parsed.query if parsed.query else ""), "dmm"
             return None, "dmm write refused"
-        if parsed.hostname and parsed.hostname.endswith("debridmediamanager.com"):
+        if own_anticors or (parsed.hostname and parsed.hostname.endswith("debridmediamanager.com")):
             target = urllib.parse.parse_qs(parsed.query).get("url", [""])[0]
         else:
             target = url
