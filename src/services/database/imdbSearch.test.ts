@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vite
 import coverage from './__fixtures__/imdb-coverage-titles.json';
 import futurama from './__fixtures__/imdb-futurama-titles.json';
 import { ImdbSearchService } from './imdbSearch';
+import { resetWorkTitleForTest } from './workTitle';
 
 const prismaMock = vi.hoisted(() => ({
 	$queryRaw: vi.fn(),
@@ -25,6 +26,7 @@ describe('ImdbSearchService', () => {
 
 	beforeEach(() => {
 		service = new ImdbSearchService();
+		resetWorkTitleForTest();
 		(prismaMock.$queryRaw as Mock).mockReset();
 		(prismaMock.imdbTitleBasics.findUnique as Mock).mockReset();
 		(prismaMock.imdbTitleRatings.findUnique as Mock).mockReset();
@@ -62,6 +64,55 @@ describe('ImdbSearchService', () => {
 			expect(results[0].imdbId).toBe('tt0111161');
 			expect(results[0].rating).toBe(9.3);
 			expect(results[0].isOriginalMatch).toBe(true);
+		});
+
+		// A database built with `prisma db push` has no work_title: this is what a self-hosted
+		// copy on zen answered every title search with (2026-11-14), so search found nothing.
+		it('matches on primary_title where work_title does not exist', async () => {
+			const shawshank = {
+				imdbId: 'tt0111161',
+				type: 'movie',
+				year: 1994,
+				title: 'The Shawshank Redemption',
+				originalTitle: 'The Shawshank Redemption',
+				rating: 9.3,
+				votes: 3200000,
+				isOriginalMatch: 1,
+			};
+			prismaMock.$queryRaw
+				.mockRejectedValueOnce(
+					new Error(
+						"Raw query failed. Code: `1054`. Message: `Unknown column 'b.work_title' in 'field list'`"
+					)
+				)
+				.mockResolvedValue([shawshank]);
+
+			const first = await service.searchTitles('shawshank');
+			const second = await service.searchTitles('shawshank redemption');
+
+			expect(first.map((r) => r.imdbId)).toEqual(['tt0111161']);
+			expect(second.map((r) => r.imdbId)).toEqual(['tt0111161']);
+			const sql = prismaMock.$queryRaw.mock.calls.map(([q]) => (q as { sql: string }).sql);
+			expect(sql[0]).toContain('MATCH(b.work_title)');
+			expect(sql[1]).toContain('MATCH(b.primary_title)');
+			// Asked once: later searches go straight to primary_title.
+			expect(sql[2]).toContain('MATCH(b.primary_title)');
+			expect(sql).toHaveLength(3);
+		});
+
+		it('still uses work_title where it exists, and passes other errors on', async () => {
+			prismaMock.$queryRaw.mockRejectedValueOnce(new Error('Lock wait timeout exceeded'));
+			const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			prismaMock.$queryRaw.mockResolvedValue([]);
+
+			await service.searchTitles('shawshank');
+			await service.searchTitles('shawshank');
+
+			const sql = prismaMock.$queryRaw.mock.calls.map(([q]) => (q as { sql: string }).sql);
+			expect(sql.filter((q) => q.includes('MATCH(b.work_title)'))).toHaveLength(2);
+			expect(sql.some((q) => q.includes('MATCH(b.primary_title)'))).toBe(false);
+			expect(warn).toHaveBeenCalledWith('Basics fulltext search failed:', expect.any(Error));
+			warn.mockRestore();
 		});
 
 		it('falls back to akas fulltext when basics returns empty', async () => {

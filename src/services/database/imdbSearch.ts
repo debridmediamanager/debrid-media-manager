@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client';
 import { DatabaseClient } from './client';
 import { FULLTEXT_STOPWORDS, isHotWord, startsHotWord } from './fulltextWords';
 import { movieTypesSql, searchableTitleSql } from './searchableTitles';
+import { withWorkTitle } from './workTitle';
 
 export type ImdbSearchResult = {
 	imdbId: string;
@@ -204,7 +205,7 @@ export class ImdbSearchService extends DatabaseClient {
 			return [];
 		}
 
-		const query = Prisma.sql`
+		const query = (column: Prisma.Sql) => Prisma.sql`
 			SELECT
 				b.tconst as imdbId,
 				CASE
@@ -217,10 +218,10 @@ export class ImdbSearchService extends DatabaseClient {
 				r.average_rating as rating,
 				r.num_votes as votes,
 				1 as isOriginalMatch,
-				MATCH(b.work_title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE) as relevance
+				MATCH(b.${column}) AGAINST(${fulltextKeyword} IN BOOLEAN MODE) as relevance
 			FROM imdb_title_basics b
 			LEFT JOIN imdb_title_ratings r ON b.tconst = r.tconst
-			WHERE MATCH(b.work_title) AGAINST(${fulltextKeyword} IN BOOLEAN MODE)
+			WHERE MATCH(b.${column}) AGAINST(${fulltextKeyword} IN BOOLEAN MODE)
 				${typeFilter}
 				${yearFilter}
 				AND b.is_adult = 0
@@ -228,7 +229,9 @@ export class ImdbSearchService extends DatabaseClient {
 			LIMIT ${limit}
 		`;
 
-		const results = await this.prisma.$queryRaw<any[]>(query);
+		const results = await withWorkTitle((column) =>
+			this.prisma.$queryRaw<any[]>(query(column))
+		);
 
 		return results.map((r) => ({
 			imdbId: r.imdbId,
