@@ -342,4 +342,29 @@ describe('/api/hashlists', () => {
 			expect(api.updateRef).not.toHaveBeenCalled();
 		});
 	});
+
+	describe('on a self-hosted copy without GH_PAT', () => {
+		it('shares a list that fits in a URL as its own link, without GitHub', async () => {
+			delete process.env.GH_PAT;
+			mockReq.method = 'POST';
+			mockReq.body = { data: SMALL_LIST };
+
+			await handler(mockReq, mockRes);
+
+			expect(mockRes.status).toHaveBeenCalledWith(200);
+			expect(mockRes.json).toHaveBeenCalledWith({ shortUrl: `/hashlist#${SMALL_LIST}` });
+			expect(Octokit).not.toHaveBeenCalled();
+		});
+
+		it('refuses a list too big for a URL rather than trying GitHub', async () => {
+			delete process.env.GH_PAT;
+			mockReq.method = 'POST';
+			mockReq.body = { data: FRAGMENT };
+
+			await handler(mockReq, mockRes);
+
+			expect(mockRes.status).toHaveBeenCalledWith(501);
+			expect(Octokit).not.toHaveBeenCalled();
+		});
+	});
 });

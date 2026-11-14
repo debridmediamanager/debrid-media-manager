@@ -98,6 +98,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	// beside its page, where every browser can open it.
 	const inline = `${HASHLIST_APP_URL}#${list}`;
 	const fitsInUrl = inline.length <= MAX_IFRAME_URL_LENGTH;
+
+	// Without GH_PAT (a self-hosted copy) there is no hashlists repo to publish to:
+	// a list that fits in a URL is shared as this copy's own link instead.
+	if (!process.env.GH_PAT) {
+		if (fitsInUrl) return void res.status(200).json({ shortUrl: `/hashlist#${list}` });
+		return void res.status(501).json({ message: 'This list is too big to share from here' });
+	}
 	const iframeSrc = fitsInUrl ? inline : `${HASHLIST_APP_URL}#${hashlistFragmentForId(uuid)}`;
 
 	const token = process.env.GH_PAT;
