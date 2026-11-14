@@ -22,7 +22,7 @@
 		"prebuild": "npm run lint",
 		"build": "next build",
 		"start": "next start",
-		"lint": "eslint src eslint-rules eslint.config.mjs && oxlint src eslint-rules eslint.config.mjs",
+		"lint": "node --max-old-space-size=6144 node_modules/eslint/bin/eslint.js src eslint-rules eslint.config.mjs && oxlint src eslint-rules eslint.config.mjs",
 		"format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json,md}'",
 		"typecheck": "tsc --noEmit",
 		"test": "vitest run",

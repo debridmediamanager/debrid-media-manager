@@ -16,9 +16,12 @@ RUN --mount=type=cache,target=/root/.npm \
 # took ~180 s of a 330 s build. The deploy stage copies its marker, so a lint
 # failure still fails the image.
 FROM base AS lint
+# docker-compose.selfhost.yml sets LINT=0: running beside the build doubles its
+# memory, and a release checkout has already passed lint here.
+ARG LINT=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npx prisma generate && npm run lint && touch /lint-passed
+RUN if [ "$LINT" != 0 ]; then npx prisma generate && npm run lint; fi && touch /lint-passed
 
 # Build stage
 FROM base AS build
@@ -26,9 +29,10 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # next.config.js points webpack's cache at node_modules/.cache; keep it between builds.
 # standalone moves out of .next so the deploy stage does not copy it twice (~500 MB).
+# Type checking needs ~3.5 GB of heap, more than Node's default on an 8 GB machine.
 RUN --mount=type=cache,target=/app/node_modules/.cache \
     --mount=type=cache,target=/app/.next/cache \
-    npx prisma generate && npx next build && mv .next/standalone /standalone
+    npx prisma generate && NODE_OPTIONS=--max-old-space-size=6144 npx next build && mv .next/standalone /standalone
 
 # Deploy stage
 FROM base AS deploy
