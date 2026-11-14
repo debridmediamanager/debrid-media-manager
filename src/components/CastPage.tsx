@@ -114,8 +114,8 @@ export function CastPage({
 						</Link>
 						<div className={`mt-2 text-sm leading-5 ${theme.alert}`}>
 							<AlertTriangle className={`mr-1 inline-block h-4 w-4 ${theme.alert}`} />
-							Private to your account: never share it. Paste it in Stremio&apos;s
-							search bar to install.
+							Private to your account: never share it. In Stremio, paste it under
+							Addons → Add addon.
 						</div>
 						<code className="mt-2 block w-full rounded bg-gray-800 p-2 text-sm break-all text-gray-300">
 							{manifest}/manifest.json

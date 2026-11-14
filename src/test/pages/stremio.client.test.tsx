@@ -109,4 +109,16 @@ describe('StremioPage', () => {
 		expect(screen.getByText(/Private to your account: never share it/i)).toBeInTheDocument();
 		expect(screen.getByText(/api\/stremio\/token123\/manifest\.json/i)).toBeInTheDocument();
 	});
+
+	// Stremio Web's search bar only searches: a pasted addon address does nothing
+	// there (guide testing, 2026-11-14). Addons → Add addon installs it.
+	it('tells people to paste the address under Addons, not in the search bar', () => {
+		localStorage.setItem('rd:accessToken', 'access123');
+		castTokenMock.mockReturnValue('token123');
+		render(<StremioPage />);
+
+		const hint = screen.getByText(/Private to your account: never share it/i);
+		expect(hint).toHaveTextContent(/Addons → Add addon/);
+		expect(hint).not.toHaveTextContent(/search bar/i);
+	});
 });
