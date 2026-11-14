@@ -31,7 +31,7 @@ const GOOD = { service: 'tb', apiKey: 'tb-good' };
 const BAD = { service: 'ad', apiKey: 'ad-refused' };
 const STORED = {
 	hash: ITEM.hash,
-	titleKey: createHash('sha1').update(`auto3:${ITEM.filename}`).digest('hex'),
+	titleKey: createHash('sha1').update(`auto4:${ITEM.filename}`).digest('hex'),
 	filename: ITEM.filename,
 	kind: 'movie',
 	imdbId: 'tt2285752',

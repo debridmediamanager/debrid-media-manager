@@ -36,7 +36,7 @@ const DURACKAJA = 'Eta-durackaja-ljubov.2011.MPEG-4-AVC.BluRay-Remux(1080p).mkv'
 const DURACKAJA_HASH = '71aaba52718e52ca9f9b3744291a7f1c28cf93a2';
 const H1 = 'a'.repeat(40);
 const H2 = 'B'.repeat(40);
-const key = (name: string) => createHash('sha1').update(`auto3:${name}`).digest('hex');
+const key = (name: string) => createHash('sha1').update(`auto4:${name}`).digest('hex');
 
 const confident = (
 	imdbId: string,
@@ -110,6 +110,34 @@ describe('/api/library/identify', () => {
 			],
 			complete: true,
 		});
+	});
+
+	// Before short films joined the identifier's titles (content-identifier 65c8930, 2026-11-14)
+	// it named this real release "Saint" (tt1167675) and was sure of it; DMM kept serving that.
+	it('asks again about answers stored before short films could be named', async () => {
+		const SINTEL = 'Sintel.2010.4K.DMRip.x264.DD.DTS.SRT-MaLLIeHbKa.mkv';
+		const stale = {
+			...storedMadMax,
+			titleKey: createHash('sha1').update(`auto3:${SINTEL}`).digest('hex'),
+			filename: SINTEL,
+			imdbId: 'tt1167675',
+			title: 'Saint',
+			year: 2010,
+		};
+		// the table answers only the keys it is asked for
+		mockRepository.getFilenameIdentifications = vi.fn(async (keys) =>
+			keys.some((k: { titleKey: string }) => k.titleKey === stale.titleKey) ? [stale] : []
+		);
+		mockIdentify.mockResolvedValue([confident('tt1727587', 'Sintel', 2010)]);
+
+		const res = await call({ items: [{ hash: H1, filename: SINTEL }] });
+
+		expect(mockIdentify).toHaveBeenCalled();
+		expect(res.json).toHaveBeenCalledWith(
+			expect.objectContaining({
+				results: [expect.objectContaining({ imdbId: 'tt1727587', title: 'Sintel' })],
+			})
+		);
 	});
 
 	it("reads a stored show's seasons from the name it was asked under", async () => {

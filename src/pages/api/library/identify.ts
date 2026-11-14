@@ -53,10 +53,10 @@ export function identificationItem(filename: string, hash: string | null): Ident
 	return {
 		hash: INFO_HASH.test(lower) ? lower : null,
 		filename: name,
-		// "auto3:" since the guards below and the hash map's split rule: older answers
-		// ("auto2:", "auto:", "tv:" or the bare name) were judged without them and are
-		// never read again
-		titleKey: createHash('sha1').update(`auto3:${name}`).digest('hex'),
+		// "auto4:" since the identifier learned short films (content-identifier 65c8930,
+		// 2026-11-14): before, it confidently named Sintel "Saint". Older answers
+		// ("auto3:", "auto2:", "auto:", "tv:" or the bare name) are never read again
+		titleKey: createHash('sha1').update(`auto4:${name}`).digest('hex'),
 	};
 }
 

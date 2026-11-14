@@ -13,7 +13,7 @@ const MAD_MAX = 'Mad.Max.Fury.Road.2015.2160p.UHD.BluRay.x265-TERMINAL';
 const LAVA = 'Lava.2014.1080p.BluRay.x264';
 const H1 = 'a'.repeat(40);
 const H2 = 'b'.repeat(40);
-const key = (name: string) => createHash('sha1').update(`auto3:${name}`).digest('hex');
+const key = (name: string) => createHash('sha1').update(`auto4:${name}`).digest('hex');
 const stored = (hash: string, name: string, confident: boolean) => ({
 	hash,
 	titleKey: key(name),
