@@ -75,20 +75,61 @@ Every 10 filled requests earns 7 days of DMM perks. One fill per person per day 
 
 ## Setup
 
-1. Have a MySQL database ready
-2. Clone this repository
-3. Create your local env file: `cp .env.example .env.local` and fill in the details
-4. Fill in required settings in `.env.local`:
-    - `DATABASE_URL` - Your MySQL connection string
-5. (Optional) Configure additional integrations in `.env.local`:
-    - `TMDB_KEY`, `OMDB_KEY`, `MDBLIST_KEY` - For enhanced movie/show metadata
-    - `TRAKT_CLIENT_ID` and `TRAKT_CLIENT_SECRET` - For Trakt integration
-    - `SIMKL_V2_CLIENT_ID`, `DMM_ORIGIN`, and `REDIS_URL` - For Simkl custom lists. Self-hosted instances need their own public AUTH V2 PKCE client with the exact `<DMM_ORIGIN>/auth/simkl` redirect registered. Redis is required for Simkl sessions; there is no in-memory fallback. The separate `SIMKL_CLIENT_ID` remains an AUTH V1 key for anonymous anime-ID lookup.
-    - `PROXY` - SOCKS5 proxy for stream proxying (e.g. `localhost:9050`)
-    - See `.env.example` for all available options
-6. Install the dependencies: `npm install`
-7. Run the app: `npm run dev` (development) or `npm run build && npm run start` (production)
-8. Head to `http://localhost:3000`
+### Docker (easiest)
+
+```bash
+git clone https://github.com/debridmediamanager/debrid-media-manager.git
+cd debrid-media-manager
+cp .env.example .env
+```
+
+In `.env` set `MYSQL_ROOT_PASSWORD` (letters and digits only), give `DMMCAST_SALT`, `DMM_PROBLEM_SECRET` and
+`DMM_SPONSOR_SECRET` each their own `openssl rand -hex 32`, and set `DMM_ORIGIN` to the address you open DMM at.
+Then:
+
+```bash
+docker compose -f docker-compose.selfhost.yml up -d --build
+```
+
+Open `http://localhost:3000`. The build needs about 4 GB of free memory. Run the same command after a `git pull`
+to update; it also updates the database tables. `docker-compose.yml` is debridmediamanager.com's own setup, not this one.
+
+### Without Docker
+
+1. Install Node.js 24, npm 11 and MySQL 8.
+2. `cp .env.example .env` and fill it in as above, plus `DATABASE_URL`. Use `.env`, not `.env.local`: Prisma only reads `.env`.
+3. `npm ci`
+4. `npx prisma db push` creates the tables. Run it again after every update. `prisma migrate deploy` cannot set up a new database.
+5. `npm run build && npm run start`, or `npm run dev` while working on the code.
+
+### Optional settings
+
+- `TMDB_KEY`, `OMDB_KEY`, `MDBLIST_KEY` - movie and show details
+- `TRAKT_CLIENT_ID` and `TRAKT_CLIENT_SECRET` - Trakt sign-in, with `<DMM_ORIGIN>/trakt/callback` as the redirect
+- `SIMKL_V2_CLIENT_ID`, `DMM_ORIGIN`, and `REDIS_URL` - For Simkl custom lists. Self-hosted instances need their own public AUTH V2 PKCE client with the exact `<DMM_ORIGIN>/auth/simkl` redirect registered. Redis is required for Simkl sessions; there is no in-memory fallback. The separate `SIMKL_CLIENT_ID` remains an AUTH V1 key for anonymous anime-ID lookup.
+- `PROXY` - SOCKS5 proxy for stream proxying (e.g. `localhost:9050`)
+- See `.env.example` for everything else
+
+### What a new copy starts with
+
+debridmediamanager.com's database of torrents and cached releases is not part of this repository, so your copy
+starts empty:
+
+- **Title search** needs IMDb's public title list. Load it with
+  `docker compose -f docker-compose.selfhost.yml run --rm imdb`, or without Docker
+  `npx tsx scripts/import-imdb.ts --data-dir ./imdb-data --apply`. The first run takes hours; add
+  `--tables imdb_title_basics,imdb_title_ratings` to load only what English titles need. Later runs write only
+  what changed, so run it again now and then to pick up new titles. A search made before the import keeps its empty
+  answer for up to 12 hours.
+- **Torrent results** come from public Stremio addons (Torrentio, MediaFusion, Peerflix) the first time someone opens
+  a title, and are saved for next time. `AIOSTREAMS_URL` can add releases from your own
+  [AIOStreams](https://github.com/Viren070/AIOStreams) setup (see `.env.example`).
+- **Cached markers** fill in as your users check titles and open their libraries.
+- **Sponsor features** run on debridmediamanager.com's own services and are off in your copy. Shared hash lists
+  stay links to your copy, and a list too big for a link cannot be shared.
+
+Real-Debrid calls go through your own server's `/api/anticors` instead of debridmediamanager.com's proxies, and
+posters come from Metahub and TMDB.
 
 Use Node.js 24 and npm 11 for installation, builds and tests. `npm run build`
 first runs the required full-source ESLint and Oxlint checks, then Next.js runs
@@ -116,17 +157,6 @@ only to following non-hidden siblings, preserving independent trailing margins.
 Do not re-register Tailwind's built-in outline or spacing utility names.
 The service-worker and library Cypress specs exercise installed caches,
 frontend HTML caching, computed spacing and forced-colors keyboard focus.
-
-### Docker
-
-```bash
-cp .env.example .env.local
-# Fill in your settings in .env.local
-docker swarm init
-docker stack deploy -c docker-compose.yml dmm
-```
-
-The website will be accessible at `http://localhost:3000`
 
 ### Log archives
 

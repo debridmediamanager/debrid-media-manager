@@ -1,0 +1,94 @@
+# Self-hosted DMM: MySQL, Redis and the web app on one machine, built from this checkout.
+#   cp .env.example .env          # set MYSQL_ROOT_PASSWORD and the three secrets
+#   docker compose -f docker-compose.selfhost.yml up -d --build
+# docker-compose.yml is debridmediamanager.com's own Swarm stack; do not use it here.
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: dmm
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?set MYSQL_ROOT_PASSWORD in .env}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 -uroot -p"$$MYSQL_ROOT_PASSWORD" --silent']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  # Creates or updates the tables on every start. The migrations folder only holds
+  # production's later changes, so `prisma migrate deploy` cannot build a fresh
+  # database. A change that would drop data stops here instead of applying.
+  schema:
+    build:
+      context: .
+      target: deps
+    working_dir: /app
+    command: npx prisma db push --skip-generate
+    volumes:
+      - ./prisma:/app/prisma:ro
+    environment:
+      DATABASE_URL: mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/dmm
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: 'no'
+
+  # IMDb's public title list, which title search and torrent results need. Run it now
+  # and then; only new and changed rows are written:
+  #   docker compose -f docker-compose.selfhost.yml run --rm imdb
+  imdb:
+    profiles: [tools]
+    build:
+      context: .
+      target: deps
+    working_dir: /app
+    # Extra arguments go to the importer, e.g. `run --rm imdb --tables imdb_title_basics,imdb_title_ratings`.
+    entrypoint:
+      - sh
+      - -c
+      - 'npx prisma generate >/dev/null && exec npx -y tsx scripts/import-imdb.ts --data-dir /data --apply "$$@"'
+      - imdb
+    volumes:
+      - ./prisma:/app/prisma:ro
+      - ./scripts:/app/scripts:ro
+      - ./src:/app/src:ro
+      - ./tsconfig.json:/app/tsconfig.json:ro
+      - imdb_data:/data
+    environment:
+      DATABASE_URL: mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/dmm
+    depends_on:
+      schema:
+        condition: service_completed_successfully
+
+  web:
+    build:
+      context: .
+      args:
+        LINT: '0'
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/dmm
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      schema:
+        condition: service_completed_successfully
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+  redis_data:
+  imdb_data:
