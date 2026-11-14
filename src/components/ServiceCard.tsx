@@ -13,6 +13,7 @@ import { TraktUser } from '@/services/trakt';
 import { TorBoxUser } from '@/services/types';
 import { escapeHtml } from '@/utils/escapeHtml';
 import { parkCurrentAccount, type AccountIdentity } from '@/utils/savedAccounts';
+import { TORBOX_PLAN_NAMES } from '@/utils/torboxPlan';
 import { Check, X } from 'lucide-react';
 import Modal from '../components/modals/modal';
 import { SavedAccountsPicker, useSavedAccounts } from './SavedAccountsPicker';
@@ -180,15 +181,7 @@ function ServiceCardBody({ service, user, onTraktLogin, onLogout, error }: Servi
         <div class="text-left">
           <p><strong>Email:</strong> ${tbUser.email}</p>
           <p><strong>Created:</strong> ${tbUser.created_at ? new Date(tbUser.created_at).toLocaleDateString() : 'N/A'}</p>
-          <p><strong>Plan:</strong> ${
-				tbUser.plan === 2
-					? 'Pro'
-					: tbUser.plan === 1
-						? 'Standard'
-						: tbUser.plan === 0
-							? 'Essential'
-							: `Free`
-			}</p>
+          <p><strong>Plan:</strong> ${TORBOX_PLAN_NAMES[tbUser.plan] ?? tbUser.plan}</p>
           <p><strong>Premium Status:</strong> ${isPremiumActive ? 'Active' : 'Inactive'}</p>
           <p><strong>Premium Expires:</strong> ${tbUser.premium_expires_at ? new Date(tbUser.premium_expires_at).toLocaleDateString() : 'N/A'}</p>
           <p><strong>Downloads:</strong> ${tbUser.total_downloaded} torrents</p>

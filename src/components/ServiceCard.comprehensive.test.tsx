@@ -1,3 +1,5 @@
+import freePlanFixture from '@/test/fixtures/torbox/user-me-free-plan-2026-10-09.json';
+import standardPlanFixture from '@/test/fixtures/torbox/user-me-standard-plan-2026-09-24.json';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -266,12 +268,15 @@ describe('ServiceCard - comprehensive', () => {
 			expect(modalArgs.html).toContain('Cooldown Until');
 		});
 
+		// TorBox numbers plans 0 Free, 1 Essential, 2 Pro, 3 Standard (not price
+		// order; checked 2026-10-03). The card read 1 as Standard and 0 as Essential.
 		it('shows plan names correctly in modal', async () => {
 			const plans = [
-				{ plan: 2, expected: 'Pro' },
-				{ plan: 1, expected: 'Standard' },
-				{ plan: 0, expected: 'Essential' },
-				{ plan: -1, expected: 'Free' },
+				// the trial account's real /user/me answers: Pro on trial, Free after
+				{ plan: standardPlanFixture.body.data.plan, expected: 'Pro' },
+				{ plan: freePlanFixture.body.data.plan, expected: 'Free' },
+				{ plan: 1, expected: 'Essential' },
+				{ plan: 3, expected: 'Standard' },
 			];
 
 			for (const { plan, expected } of plans) {
@@ -289,7 +294,9 @@ describe('ServiceCard - comprehensive', () => {
 
 				await userEvent.click(screen.getByRole('button', { name: /Torbox/i }));
 				await waitFor(() => expect(fireMock).toHaveBeenCalledTimes(1));
-				expect(fireMock.mock.calls[0][0].html).toContain(expected);
+				expect(fireMock.mock.calls[0][0].html).toContain(
+					`<strong>Plan:</strong> ${expected}</p>`
+				);
 				unmount();
 			}
 		});

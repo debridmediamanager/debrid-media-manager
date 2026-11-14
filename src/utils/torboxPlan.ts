@@ -11,6 +11,9 @@ const TIMEOUT_MS = 5000;
 /** TorBox's `plan` field: 0 Free, 1 Essential, 2 Pro, 3 Standard. */
 export const FREE_PLAN = 0;
 
+/** Plan names by TorBox's `plan` number; not price order, Standard came after Pro. */
+export const TORBOX_PLAN_NAMES: readonly string[] = ['Free', 'Essential', 'Pro', 'Standard'];
+
 export const FREE_TORBOX_PLAN_MESSAGE =
 	'Your TorBox account is on the free plan, which has no API access. DMM needs a paid TorBox plan.';
 
