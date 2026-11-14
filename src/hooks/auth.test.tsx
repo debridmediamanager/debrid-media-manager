@@ -616,6 +616,53 @@ describe('useDebridLink via useCurrentUser', () => {
 			expect(mockRefreshDebridLinkToken).toHaveBeenLastCalledWith('replacement-refresh');
 		});
 
+		// Leaving a page mid-renewal used to throw the answer away, and the next page
+		// renewed again with the refresh token the first renewal may already have spent.
+		it('keeps a renewal that finishes after the page that started it closed', async () => {
+			setStoredValue('dl:accessToken', 'expired');
+			setStoredValue('dl:refreshToken', 'old-refresh');
+			setStoredValue('dl:tokenExpiry', Date.now() - 1000);
+			const { promise, resolve: finishRefresh } = Promise.withResolvers<unknown>();
+			mockRefreshDebridLinkToken.mockReturnValueOnce(promise);
+			mockGetDebridLinkAccountInfo.mockResolvedValue(account);
+
+			const titlePage = renderHook(() => useCurrentUser());
+			await act(async () => {});
+			titlePage.unmount();
+			await act(async () => {
+				finishRefresh({
+					access_token: 'fresh',
+					refresh_token: 'replacement-refresh',
+					expires_in: 86400,
+				});
+			});
+
+			expect(window.localStorage.getItem('dl:accessToken')).toBe(JSON.stringify('fresh'));
+			expect(window.localStorage.getItem('dl:refreshToken')).toBe(
+				JSON.stringify('replacement-refresh')
+			);
+			const home = renderHook(() => useCurrentUser());
+			await waitFor(() => expect(home.result.current.dlUser).toEqual(account));
+			expect(mockRefreshDebridLinkToken).toHaveBeenCalledTimes(1);
+			expect(mockGetDebridLinkAccountInfo).toHaveBeenLastCalledWith('fresh');
+		});
+
+		it('renews once for every component on the page that reads the account', async () => {
+			setStoredValue('dl:accessToken', 'expired');
+			setStoredValue('dl:refreshToken', 'rtok');
+			setStoredValue('dl:tokenExpiry', Date.now() - 1000);
+			mockRefreshDebridLinkToken.mockResolvedValue({
+				access_token: 'fresh',
+				expires_in: 86400,
+			});
+			mockGetDebridLinkAccountInfo.mockResolvedValue(account);
+
+			const { result } = renderHook(() => [useCurrentUser(), useCurrentUser()]);
+
+			await waitFor(() => expect(result.current[1].dlUser).toEqual(account));
+			expect(mockRefreshDebridLinkToken).toHaveBeenCalledTimes(1);
+		});
+
 		it('does not renew a fresh one-day token on mount or remount', async () => {
 			setStoredValue('dl:accessToken', 'fresh');
 			setStoredValue('dl:refreshToken', 'rtok');

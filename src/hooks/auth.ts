@@ -6,7 +6,7 @@ import {
 	getDebridLinkAccountInfo,
 	type DebridLinkAccountInfo,
 } from '../services/debridLink';
-import { refreshDebridLinkToken, type DebridLinkTokenResponse } from '../services/debridLinkOAuth';
+import { refreshDebridLinkToken } from '../services/debridLinkOAuth';
 import { getOffcloudAccountInfo, type OffcloudAccountInfo } from '../services/offcloud';
 import { getPremiumizeAccountInfo, type PremiumizeAccountInfo } from '../services/premiumize';
 import { getCurrentUser as getRealDebridUser, getToken } from '../services/realDebrid';
@@ -22,7 +22,7 @@ import {
 	purgeLegacySimklCredentials,
 	subscribeSimklSessionChange,
 } from '../utils/simklLogin';
-import useLocalStorage from './localStorage';
+import useLocalStorage, { notifyLocalStorageChange } from './localStorage';
 
 export interface RealDebridUser {
 	id: number;
@@ -314,6 +314,7 @@ export const useRealDebrid = () => {
 
 export const __resetRealDebridStateForTests = () => {
 	clearRefreshTimer();
+	dlRenewals.clear();
 	globalRealDebridState = {
 		...initialRealDebridState,
 		subscribers: new Set(),
@@ -465,17 +466,46 @@ const useOffcloud = () => {
 /** Renew shortly before the measured one-day lifetime, like Real-Debrid. */
 const DL_REFRESH_WINDOW_MS = REFRESH_MARGIN_MS;
 
+// One renewal per refresh token for the whole tab, saved whether or not the page that started it
+// is still open. Per page, a renewal was dropped when its page closed and the next page spent
+// the same refresh token again; every component reading the account also renewed on its own.
+const dlRenewals = new Map<string, Promise<string>>();
+const renewDebridLinkToken = (refreshToken: string): Promise<string> => {
+	let renewal = dlRenewals.get(refreshToken);
+	if (!renewal) {
+		renewal = refreshDebridLinkToken(refreshToken)
+			.then((fresh) => {
+				const save = (key: string, value: unknown) => {
+					if (value === null) window.localStorage.removeItem(key);
+					else window.localStorage.setItem(key, JSON.stringify(value));
+					notifyLocalStorageChange(key);
+				};
+				if (fresh.refresh_token) save('dl:refreshToken', fresh.refresh_token);
+				save(
+					'dl:tokenExpiry',
+					typeof fresh.expires_in === 'number'
+						? Date.now() + fresh.expires_in * 1000
+						: null
+				);
+				save('dl:accessToken', fresh.access_token);
+				return fresh.access_token;
+			})
+			.finally(() => dlRenewals.delete(refreshToken));
+		dlRenewals.set(refreshToken, renewal);
+	}
+	return renewal;
+};
+
 const useDebridLink = () => {
 	const [user, setUser] = useState<DebridLinkUser | null>(null);
 	const [error, setError] = useState<Error | null>(null);
 	const [loading, setLoading] = useState(false);
-	const [accessToken, setAccessToken] = useLocalStorage<string>('dl:accessToken');
-	const [refreshToken, setRefreshToken] = useLocalStorage<string>('dl:refreshToken');
-	const [tokenExpiry, setTokenExpiry] = useLocalStorage<number>('dl:tokenExpiry');
+	const [accessToken] = useLocalStorage<string>('dl:accessToken');
+	const [refreshToken] = useLocalStorage<string>('dl:refreshToken');
+	const [tokenExpiry] = useLocalStorage<number>('dl:tokenExpiry');
 	const [apiKey] = useLocalStorage<string>('dl:apiKey');
 	const token = accessToken || apiKey;
 	const refreshAttempted = useRef(false);
-	const renewal = useRef<Promise<DebridLinkTokenResponse> | null>(null);
 
 	// Lazy renewal and validation are one sequence: an expired profile response
 	// must never clear a refresh credential while renewal is still in flight.
@@ -491,26 +521,14 @@ const useDebridLink = () => {
 				refreshToken &&
 				tokenExpiry &&
 				tokenExpiry - Date.now() <= DL_REFRESH_WINDOW_MS &&
-				(!refreshAttempted.current || renewal.current)
+				(!refreshAttempted.current || dlRenewals.has(refreshToken))
 			) {
 				refreshAttempted.current = true;
-				// Reuse a pending renewal if an effect is restarted before it settles.
-				renewal.current ??= refreshDebridLinkToken(refreshToken);
 				try {
-					const fresh = await renewal.current;
+					credential = await renewDebridLinkToken(refreshToken);
 					if (!isMounted) return;
-					renewal.current = null;
-					if (fresh.refresh_token) setRefreshToken(fresh.refresh_token);
-					setTokenExpiry(
-						typeof fresh.expires_in === 'number'
-							? Date.now() + fresh.expires_in * 1000
-							: null
-					);
-					setAccessToken(fresh.access_token);
-					credential = fresh.access_token;
 				} catch (e) {
 					if (!isMounted) return;
-					renewal.current = null;
 					// The stored access token may still be valid after a failed renewal.
 					console.error('[Auth] Debrid-Link token refresh failed', e);
 				}
