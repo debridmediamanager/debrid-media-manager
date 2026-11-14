@@ -166,6 +166,26 @@ describe('AvailabilityTokens', () => {
 		fireEvent.click(screen.getByText('OC ✓'));
 		expect(onQueryChange).toHaveBeenCalledWith('1080p is:oc');
 	});
+	it('counts what each button would show, and the current results for the active one', () => {
+		const counts: Record<string, number> = {
+			'1080p is:rd': 7,
+			'1080p is:ad': 3,
+			'1080p is:cached': 9,
+		};
+		render(
+			<AvailabilityTokens
+				query="1080p is:rd"
+				onQueryChange={onQueryChange}
+				rdKey="rd-key"
+				adKey="ad-key"
+				countFor={(q) => counts[q]}
+			/>
+		);
+		expect(screen.getByText('RD ✓').textContent).toBe('RD ✓7');
+		expect(screen.getByText('AD ✓').textContent).toBe('AD ✓3');
+		expect(screen.getByText('Any ✓').textContent).toBe('Any ✓9');
+	});
+
 	// The tokens sit in a horizontally scrolling chip row; wrapping stacked them
 	// into a narrow column that made the row ~168px tall on phones.
 	it('keeps the tokens on one line inside a scrolling row', () => {

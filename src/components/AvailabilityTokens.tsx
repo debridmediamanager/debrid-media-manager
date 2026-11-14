@@ -9,6 +9,8 @@ interface AvailabilityTokensProps {
 	torboxKey?: string | null;
 	premiumizeKey?: string | null;
 	offcloudKey?: string | null;
+	// How many results a query would show; each button shows the count it filters to
+	countFor?: (query: string) => number;
 }
 
 // Service colours match the library's torrent prefix badges (see utils/results.tsx):
@@ -52,6 +54,7 @@ const AvailabilityTokens: FC<AvailabilityTokensProps> = ({
 	torboxKey,
 	premiumizeKey,
 	offcloudKey,
+	countFor,
 }) => {
 	// Availability is only ever checked for services the user has a key for, so a
 	// button for an unconfigured one would always filter down to nothing
@@ -124,6 +127,11 @@ const AvailabilityTokens: FC<AvailabilityTokensProps> = ({
 						}`}
 					>
 						{label} ✓
+						{countFor && (
+							<span className="ml-1 opacity-70">
+								{countFor(isActive ? query : toggleAvailabilityToken(query, token))}
+							</span>
+						)}
 					</span>
 				);
 			})}

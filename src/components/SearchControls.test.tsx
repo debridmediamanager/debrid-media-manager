@@ -116,6 +116,26 @@ describe('SearchControls', () => {
 		expect(onQueryChange).toHaveBeenCalledWith('source:hdr videos:5');
 	});
 
+	it('shows on each filter chip how many results it filters to', () => {
+		const countFor = vi.fn((q: string) => q.length);
+		render(
+			<SearchControls
+				{...defaultProps}
+				query="hdr videos:1"
+				rdKey="rd-key"
+				colorScales={[{ threshold: 5, color: 'gray-800', label: 'Single' }]}
+				getQueryForScale={(threshold: number) => `videos:${threshold}`}
+				countFor={countFor}
+			/>
+		);
+
+		// the chip counts the query its click would set, not the current one
+		expect(countFor).toHaveBeenCalledWith('hdr videos:5');
+		expect(screen.getByText('Single').textContent).toBe(`Single${'hdr videos:5'.length}`);
+		expect(countFor).toHaveBeenCalledWith('hdr videos:1 is:rd');
+		expect(screen.getByText('RD ✓').textContent).toBe(`RD ✓${'hdr videos:1 is:rd'.length}`);
+	});
+
 	it('puts the availability filters last in the token row', () => {
 		const { container } = render(
 			<SearchControls

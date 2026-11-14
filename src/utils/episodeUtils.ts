@@ -15,6 +15,12 @@ export const getQueryForEpisodeCount = (videoCount: number, expectedEpisodeCount
 	return `videos:>${expectedEpisodeCount}`; // With extras
 };
 
+// Swap any videos: term in the query for the chip's own.
+export const withVideosQuery = (query: string, videosQuery: string) => {
+	const rest = query.replace(/\bvideos:[^\s]+/g, '').trim();
+	return rest ? `${rest} ${videosQuery}` : videosQuery;
+};
+
 // Complete literals are required for CSS source detection, including opacity.
 export const episodeChipClasses: Record<string, string> = {
 	'gray-800': 'bg-gray-800',

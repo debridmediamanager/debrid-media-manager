@@ -5,6 +5,7 @@ import {
 	getEpisodeCountLabel,
 	getExpectedEpisodeCount,
 	getQueryForEpisodeCount,
+	withVideosQuery,
 } from './episodeUtils';
 
 describe('episodeUtils', () => {
@@ -22,6 +23,13 @@ describe('episodeUtils', () => {
 		it('handles single episode shows', () => {
 			const scale = getColorScale(1);
 			expect(scale[1].threshold).toBe(0);
+		});
+	});
+
+	describe('withVideosQuery', () => {
+		it('replaces any videos: terms and keeps the rest', () => {
+			expect(withVideosQuery('hdr videos:>1 videos:<10', 'videos:1')).toBe('hdr videos:1');
+			expect(withVideosQuery('', 'videos:>1')).toBe('videos:>1');
 		});
 	});
 

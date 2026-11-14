@@ -55,6 +55,7 @@ import {
 	getColorScale,
 	getExpectedEpisodeCount,
 	getQueryForEpisodeCount,
+	withVideosQuery,
 } from '@/utils/episodeUtils';
 import {
 	checkAvailabilityOc,
@@ -1268,27 +1269,28 @@ const TvSearch: FunctionComponent = () => {
 		[imdbid, seasonNum, router, tabSuffix, torrentsAsked]
 	);
 
+	const resultsFor = useCallback(
+		(q: string) => {
+			let results = searchResults;
+			if (episodeFilter !== null && episodeReader) {
+				results = results.filter((r) =>
+					matchesTvEpisodeFilter(episodeReader(r.title), episodeFilter)
+				);
+			}
+			results = quickSearch(q, results);
+			if (hideRdBlockedTorrents) results = results.filter(shownBySettings);
+			return results;
+		},
+		[searchResults, episodeFilter, episodeReader, hideRdBlockedTorrents, shownBySettings]
+	);
+	const countFor = useCallback((q: string) => resultsFor(q).length, [resultsFor]);
+
 	const filteredResults = useMemo(() => {
 		if (searchResults.length === 0) {
 			return [];
 		}
-		let results = searchResults;
-		if (episodeFilter !== null && episodeReader) {
-			results = results.filter((r) =>
-				matchesTvEpisodeFilter(episodeReader(r.title), episodeFilter)
-			);
-		}
-		results = quickSearch(query, results);
-		if (hideRdBlockedTorrents) results = results.filter(shownBySettings);
-		return cyrillicLedLast(results);
-	}, [
-		query,
-		searchResults,
-		episodeFilter,
-		episodeReader,
-		hideRdBlockedTorrents,
-		shownBySettings,
-	]);
+		return cyrillicLedLast(resultsFor(query));
+	}, [query, searchResults, resultsFor]);
 
 	const totalUncachedCount = useMemo(() => {
 		return filteredResults.filter(
@@ -2342,17 +2344,23 @@ const TvSearch: FunctionComponent = () => {
 													scale.threshold,
 													expectedEpisodeCount
 												);
-												setQuery((prev) => {
-													const cleanedPrev = prev
-														.replace(/\bvideos:[^\s]+/g, '')
-														.trim();
-													return cleanedPrev
-														? `${cleanedPrev} ${queryText}`
-														: queryText;
-												});
+												setQuery((prev) =>
+													withVideosQuery(prev, queryText)
+												);
 											}}
 										>
 											{scale.label}
+											<span className="ml-1 opacity-70">
+												{countFor(
+													withVideosQuery(
+														query,
+														getQueryForEpisodeCount(
+															scale.threshold,
+															expectedEpisodeCount
+														)
+													)
+												)}
+											</span>
 										</span>
 									))}
 									<AvailabilityTokens
@@ -2363,6 +2371,7 @@ const TvSearch: FunctionComponent = () => {
 										torboxKey={torboxKey}
 										premiumizeKey={premiumizeKey}
 										offcloudKey={offcloudKey}
+										countFor={countFor}
 									/>
 								</div>
 							</div>

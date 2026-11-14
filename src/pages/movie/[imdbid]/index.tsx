@@ -788,12 +788,18 @@ const MovieSearch: FunctionComponent = () => {
 		[hideRdBlockedTorrents, rdKey, torboxKey, adKey]
 	);
 
+	const resultsFor = useCallback(
+		(q: string) => quickSearch(q, searchResults).filter(shownBySettings),
+		[searchResults, shownBySettings]
+	);
+	const countFor = useCallback((q: string) => resultsFor(q).length, [resultsFor]);
+
 	const filteredResults = useMemo(() => {
 		if (searchResults.length === 0) {
 			return [];
 		}
-		return cyrillicLedLast(quickSearch(query, searchResults).filter(shownBySettings));
-	}, [query, searchResults, shownBySettings]);
+		return cyrillicLedLast(resultsFor(query));
+	}, [query, searchResults, resultsFor]);
 
 	const totalUncachedCount = useMemo(() => {
 		return filteredResults.filter(
@@ -1188,6 +1194,7 @@ const MovieSearch: FunctionComponent = () => {
 							year={movieInfo.year}
 							colorScales={getColorScale()}
 							getQueryForScale={getQueryForMovieCount}
+							countFor={countFor}
 							extraTokens={
 								isMovieDigitallyReleased(movieInfo)
 									? [

@@ -1,6 +1,6 @@
 import AvailabilityTokens from '@/components/AvailabilityTokens';
 import SearchTokens from '@/components/SearchTokens';
-import { episodeChipClasses } from '@/utils/episodeUtils';
+import { episodeChipClasses, withVideosQuery } from '@/utils/episodeUtils';
 import { canReportWith } from '@/utils/reporterId';
 import { RotateCcw, Search } from 'lucide-react';
 import React from 'react';
@@ -25,6 +25,8 @@ interface SearchControlsProps {
 	colorScales?: Array<{ threshold: number; color: string; label: string }>;
 	getQueryForScale?: (threshold: number) => string;
 	extraTokens?: Array<{ label: string; query: string }>;
+	// How many results a query would show; filter chips show the count they filter to
+	countFor?: (query: string) => number;
 }
 
 const SearchControls: React.FC<SearchControlsProps> = ({
@@ -47,6 +49,7 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 	colorScales,
 	getQueryForScale,
 	extraTokens,
+	countFor,
 }) => {
 	return (
 		<>
@@ -123,15 +126,20 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 						<span
 							key={idx}
 							className={`${episodeChipClasses[scale.color]} cursor-pointer rounded px-2 py-1 text-xs whitespace-nowrap text-white`}
-							onClick={() => {
-								const queryText = getQueryForScale(scale.threshold);
-								const cleanedPrev = query.replace(/\bvideos:[^\s]+/g, '').trim();
+							onClick={() =>
 								onQueryChange(
-									cleanedPrev ? `${cleanedPrev} ${queryText}` : queryText
-								);
-							}}
+									withVideosQuery(query, getQueryForScale(scale.threshold))
+								)
+							}
 						>
 							{scale.label}
+							{countFor && (
+								<span className="ml-1 opacity-70">
+									{countFor(
+										withVideosQuery(query, getQueryForScale(scale.threshold))
+									)}
+								</span>
+							)}
 						</span>
 					))}
 				{extraTokens?.map((token) => (
@@ -154,6 +162,7 @@ const SearchControls: React.FC<SearchControlsProps> = ({
 					torboxKey={torboxKey}
 					premiumizeKey={premiumizeKey}
 					offcloudKey={offcloudKey}
+					countFor={countFor}
 				/>
 			</div>
 		</>

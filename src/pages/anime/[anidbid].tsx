@@ -30,7 +30,12 @@ import { getLocalStorageItemOrDefault, hideRdBlockedTorrentsDefault } from '@/ut
 import { handleCopyOrDownloadMagnet } from '@/utils/copyMagnet';
 import { cyrillicLedLast } from '@/utils/cyrillicLed';
 import { markTransferredHashes } from '@/utils/debridUploader';
-import { episodeChipClasses, getColorScale, getQueryForEpisodeCount } from '@/utils/episodeUtils';
+import {
+	episodeChipClasses,
+	getColorScale,
+	getQueryForEpisodeCount,
+	withVideosQuery,
+} from '@/utils/episodeUtils';
 import {
 	checkAvailabilityOc,
 	checkAvailabilityPm,
@@ -554,18 +559,30 @@ const AnimePage: FunctionComponent = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchState]);
 
+	const resultsFor = useCallback(
+		(q: string) => {
+			let results = quickSearch(q, searchResults);
+			if (hideRdBlockedTorrents) {
+				const transferableToRd = (r: SearchResult) =>
+					!!rdKey &&
+					!r.rdAvailable &&
+					((!!torboxKey && r.tbAvailable) ||
+						(!!adKey && r.adAvailable) ||
+						!!r.tbTransferred);
+				results = results.filter(
+					(r) => !isRdBlockedFilename(r.title) || transferableToRd(r)
+				);
+			}
+			return results;
+		},
+		[searchResults, hideRdBlockedTorrents, rdKey, torboxKey, adKey]
+	);
+	const countFor = useCallback((q: string) => resultsFor(q).length, [resultsFor]);
+
 	const filteredResults = useMemo(() => {
 		if (searchResults.length === 0) return [];
-		let results = quickSearch(query, searchResults);
-		if (hideRdBlockedTorrents) {
-			const transferableToRd = (r: SearchResult) =>
-				!!rdKey &&
-				!r.rdAvailable &&
-				((!!torboxKey && r.tbAvailable) || (!!adKey && r.adAvailable) || !!r.tbTransferred);
-			results = results.filter((r) => !isRdBlockedFilename(r.title) || transferableToRd(r));
-		}
-		return cyrillicLedLast(results);
-	}, [query, searchResults, hideRdBlockedTorrents, rdKey, torboxKey, adKey]);
+		return cyrillicLedLast(resultsFor(query));
+	}, [query, searchResults, resultsFor]);
 
 	const expectedEpisodeCount = useMemo(() => {
 		if (info?.episodeCount && info.episodeCount > 0) return info.episodeCount;
@@ -845,13 +862,21 @@ const AnimePage: FunctionComponent = () => {
 									scale.threshold,
 									expectedEpisodeCount
 								);
-								setQuery((prev) => {
-									const cleanedPrev = prev.replace(/\bvideos:[^\s]+/g, '').trim();
-									return cleanedPrev ? `${cleanedPrev} ${queryText}` : queryText;
-								});
+								setQuery((prev) => withVideosQuery(prev, queryText));
 							}}
 						>
 							{scale.label}
+							<span className="ml-1 opacity-70">
+								{countFor(
+									withVideosQuery(
+										query,
+										getQueryForEpisodeCount(
+											scale.threshold,
+											expectedEpisodeCount
+										)
+									)
+								)}
+							</span>
 						</span>
 					))}
 					<AvailabilityTokens
@@ -862,6 +887,7 @@ const AnimePage: FunctionComponent = () => {
 						torboxKey={torboxKey}
 						premiumizeKey={premiumizeKey}
 						offcloudKey={offcloudKey}
+						countFor={countFor}
 					/>
 				</div>
 			</div>
