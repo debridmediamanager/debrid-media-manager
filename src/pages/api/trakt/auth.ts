@@ -14,7 +14,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res.status(400).json({ error: 'Missing redirect parameter' });
 	}
 
-	if (!ALLOWED_REDIRECT_ORIGINS.includes(redirect)) {
+	// A self-hosted copy signs in at its own DMM_ORIGIN, which only the server sets.
+	const allowed = [...ALLOWED_REDIRECT_ORIGINS, process.env.DMM_ORIGIN?.replace(/\/+$/, '')];
+	if (!allowed.includes(redirect)) {
 		return res.status(400).json({ error: 'Invalid redirect origin' });
 	}
 

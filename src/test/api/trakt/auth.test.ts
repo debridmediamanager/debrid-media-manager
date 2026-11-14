@@ -28,6 +28,19 @@ describe('/api/trakt/auth', () => {
 		expect(res.json).toHaveBeenCalledWith({ error: 'Invalid redirect origin' });
 	});
 
+	it('lets a self-hosted copy sign in at its own DMM_ORIGIN, and nowhere else', async () => {
+		vi.stubEnv('DMM_ORIGIN', 'http://dmm.home.lan:3000/');
+		const own = createMockResponse();
+		await handler(createMockRequest({ query: { redirect: 'http://dmm.home.lan:3000' } }), own);
+		const url = (own.redirect as ReturnType<typeof vi.fn>).mock.calls[0][0] as string;
+		expect(url).toContain(encodeURIComponent('http://dmm.home.lan:3000/trakt/callback'));
+
+		const other = createMockResponse();
+		await handler(createMockRequest({ query: { redirect: 'http://evil.lan:3000' } }), other);
+		expect(other.status).toHaveBeenCalledWith(400);
+		vi.unstubAllEnvs();
+	});
+
 	it('redirects to Trakt OAuth URL for localhost:3000', async () => {
 		const req = createMockRequest({ query: { redirect: 'http://localhost:3000' } });
 		const res = createMockResponse();
