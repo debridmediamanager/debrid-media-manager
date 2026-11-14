@@ -1,7 +1,7 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GUEST_MODE_KEY } from './guestMode';
-import { withAuth } from './withAuth';
+import { RD_REFRESH_WAIT_MS, withAuth } from './withAuth';
 
 const mockPush = vi.fn();
 const mockRouter = {
@@ -249,6 +249,32 @@ describe('withAuth', () => {
 		render(<WrappedComponent />);
 
 		expect(mockPush).not.toHaveBeenCalled();
+	});
+
+	it('shows the page once a renewal has run past its wait, rather than loading forever', () => {
+		vi.useFakeTimers();
+		try {
+			mockUseRealDebridAccessToken.mockReturnValue([null, false, true]);
+			mockUseAllDebridApiKey.mockReturnValue(null);
+			localStorage.setItem('rd:refreshToken', 'refresh');
+			localStorage.setItem('rd:clientId', 'client');
+			localStorage.setItem('rd:clientSecret', 'secret');
+
+			const TestComponent = () => <div data-testid="test-component">Test Content</div>;
+			const WrappedComponent = withAuth(TestComponent);
+
+			render(<WrappedComponent />);
+			expect(screen.getByText(/Debrid Media Manager is loading/)).toBeInTheDocument();
+
+			act(() => {
+				vi.advanceTimersByTime(RD_REFRESH_WAIT_MS);
+			});
+
+			expect(screen.getByTestId('test-component')).toBeInTheDocument();
+			expect(mockPush).not.toHaveBeenCalled();
+		} finally {
+			vi.useRealTimers();
+		}
 	});
 
 	it('does not redirect when has refresh credentials', () => {

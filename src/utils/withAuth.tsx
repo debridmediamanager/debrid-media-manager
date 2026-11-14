@@ -24,6 +24,9 @@ const START_ROUTE = '/start';
 const LOGIN_ROUTE = '/login';
 const HOME_ROUTE = '/';
 const RETURN_URL_KEY = 'dmm_return_url';
+// The longest a page waits on a Real-Debrid token renewal before it shows anyway. A renewal
+// that never reported its end once kept pages on the loading screen until a reload.
+export const RD_REFRESH_WAIT_MS = 15000;
 
 export interface WithAuthOptions {
 	/**
@@ -51,6 +54,11 @@ export const withAuth = <P extends object>(
 		const [isLoading, setIsLoading] = useState(true);
 		const [loggedOut, setLoggedOut] = useState(false);
 		const [rdKey, rdLoading, rdIsRefreshing] = useRealDebridAccessToken();
+		const [refreshWaitElapsed, setRefreshWaitElapsed] = useState(false);
+		useEffect(() => {
+			const timer = setTimeout(() => setRefreshWaitElapsed(true), RD_REFRESH_WAIT_MS);
+			return () => clearTimeout(timer);
+		}, []);
 		const adKey = useAllDebridApiKey();
 		const [tbKey] = useState(() => {
 			if (typeof window !== 'undefined') {
@@ -120,7 +128,7 @@ export const withAuth = <P extends object>(
 
 		useEffect(() => {
 			// Don't redirect if token is refreshing
-			if (rdIsRefreshing) {
+			if (rdIsRefreshing && !refreshWaitElapsed) {
 				return;
 			}
 
@@ -163,6 +171,7 @@ export const withAuth = <P extends object>(
 			rdKey,
 			rdLoading,
 			rdIsRefreshing,
+			refreshWaitElapsed,
 			hasCredential,
 			handoff,
 			hasRefreshCredentials,
