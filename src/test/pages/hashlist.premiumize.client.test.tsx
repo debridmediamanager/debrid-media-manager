@@ -139,4 +139,18 @@ describe('HashlistPage with a Premiumize key', () => {
 		fireEvent.click(await screen.findByRole('button', { name: `Add ${cached}` }));
 		await waitFor(() => expect(handleAddAsMagnetInPm).toHaveBeenCalledTimes(cached));
 	});
+
+	// The cached-only filter hides what Premiumize does not have, but its toggle
+	// showed only with an RD, AD or TorBox key: the rest of the list was unreachable.
+	it('offers Show All, which lists what Premiumize does not have', async () => {
+		await renderPage();
+
+		await screen.findByRole('button', { name: `PM Download (${cached})` });
+		fireEvent.click(screen.getByRole('button', { name: 'Show All' }));
+
+		expect(
+			await screen.findByRole('button', { name: `PM Download (${list.torrents.length})` })
+		).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'Show Instant' })).toBeInTheDocument();
+	});
 });

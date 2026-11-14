@@ -198,6 +198,8 @@ function HashlistPage() {
 	const pmKey = usePremiumizeCredential();
 	const ocKey = useOffcloudApiKey();
 	const dlKey = useDebridLinkCredential();
+	// The cached-only filter and its Show All toggle go together, for every provider.
+	const anyDebridKey = !!(rdKey || adKey || tbKey || pmKey || ocKey || dlKey);
 	const {
 		addTorrent: addToCache,
 		removeTorrent: removeFromCache,
@@ -462,7 +464,7 @@ function HashlistPage() {
 		let tmpList = notYetDownloaded;
 
 		// Filter for instantly available torrents if enabled and keys are present
-		if (showOnlyAvailable && (rdKey || adKey || tbKey || pmKey || ocKey || dlKey)) {
+		if (showOnlyAvailable && anyDebridKey) {
 			tmpList = tmpList.filter(
 				(t) =>
 					t.rdAvailable ||
@@ -1268,7 +1270,7 @@ function HashlistPage() {
 				>
 					One per title
 				</button>
-				{mounted && (rdKey || adKey || tbKey) && (
+				{mounted && anyDebridKey && (
 					<button
 						className={`mr-2 mb-2 rounded border-2 ${
 							showOnlyAvailable
