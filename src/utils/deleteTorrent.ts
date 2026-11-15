@@ -10,6 +10,7 @@ import {
 	PutioError,
 	cancelPutioTransfers,
 	deletePutioFiles,
+	getPutioAccountInfo,
 	getPutioTransfer,
 	removePutioTransfers,
 } from '@/services/putio';
@@ -17,6 +18,7 @@ import { deleteTorrent as deleteRdTorrent } from '@/services/realDebrid';
 import { deleteTorrent as deleteTbTorrent, deleteWebDownload } from '@/services/torbox';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
+import Modal from '../components/modals/modal';
 import { parseOffcloudRowId } from './offcloudRow';
 import { parsePremiumizeRowId } from './premiumizeRow';
 import { parsePutioRowId } from './putioRow';
@@ -237,6 +239,21 @@ export const handleDeleteDlTorrent = async (
 /** The tail of the put.io delete queue; see `handleDeletePtTorrent`. */
 let ptDeletes: Promise<unknown> = Promise.resolve();
 
+/** Whether deleted files go to put.io's trash, asked once per token per page load. */
+const ptTrashEnabled = new Map<string, Promise<boolean>>();
+const putioTrashEnabled = (ptKey: string): Promise<boolean> => {
+	let known = ptTrashEnabled.get(ptKey);
+	if (!known) {
+		known = getPutioAccountInfo(ptKey).then((info) => info.settings?.trash_enabled !== false);
+		known.catch(() => ptTrashEnabled.delete(ptKey));
+		ptTrashEnabled.set(ptKey, known);
+	}
+	return known;
+};
+
+/** Accounts whose owner agreed, this page load, that put.io deletes for good. */
+const ptPermanentDeleteConfirmed = new Set<string>();
+
 /**
  * Removes a put.io row: its files first, then its transfer, never retried.
  *
@@ -269,9 +286,20 @@ const deletePtRow = async (ptKey: string, id: string, disableToast: boolean): Pr
 	}
 	try {
 		const transfer = await getPutioTransfer(ptKey, transferId);
-		if (typeof transfer.file_id === 'number' && transfer.file_id > 0) {
-			await deletePutioFiles(ptKey, [transfer.file_id]);
+		const hasFiles = typeof transfer.file_id === 'number' && transfer.file_id > 0;
+		const toTrash = hasFiles && (await putioTrashEnabled(ptKey));
+		if (hasFiles && !toTrash && !ptPermanentDeleteConfirmed.has(ptKey)) {
+			const { isConfirmed } = await Modal.fire({
+				title: 'Delete for good?',
+				text: "put.io's trash is off for this account, so deleting removes the files for good.",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: 'Delete for good',
+			});
+			if (!isConfirmed) return false;
+			ptPermanentDeleteConfirmed.add(ptKey);
 		}
+		if (hasFiles) await deletePutioFiles(ptKey, [transfer.file_id!]);
 		await cancelPutioTransfers(ptKey, [transferId]);
 		if (['SEEDING', 'PREPARING_SEED', 'STOPPING'].includes(transfer.status ?? '')) {
 			await removePutioTransfers(ptKey, [transferId]);
@@ -280,7 +308,9 @@ const deletePtRow = async (ptKey: string, id: string, disableToast: boolean): Pr
 		// "asked"; the next library fetch is what confirms it.
 		if (!disableToast)
 			toast(
-				`Deleted ${id} from put.io. Its files wait in put.io's trash, which still counts against your storage.`,
+				toTrash
+					? `Deleted ${id} from put.io. Its files wait in put.io's trash, which still counts against your storage.`
+					: `Deleted ${id} from put.io.`,
 				magnetToastOptions
 			);
 		return true;

@@ -11,7 +11,11 @@ const pt = vi.hoisted(() => ({
 	cancelPutioTransfers: vi.fn(),
 	removePutioTransfers: vi.fn(),
 	listPutioTransfers: vi.fn(),
+	getPutioAccountInfo: vi.fn(),
 }));
+
+const modalFire = vi.hoisted(() => vi.fn());
+vi.mock('../components/modals/modal', () => ({ __esModule: true, default: { fire: modalFire } }));
 vi.mock('@/services/putio', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/putio')>()),
 	...pt,
@@ -35,6 +39,8 @@ beforeEach(() => {
 	Object.values(pt).forEach((fn) => fn.mockReset());
 	// What the account holds, as put.io's live transfer list reports it.
 	pt.listPutioTransfers.mockResolvedValue([]);
+	pt.getPutioAccountInfo.mockResolvedValue(paid['account-info-trial'].body.info);
+	modalFire.mockReset();
 	toastMock.mockReset();
 	toastMock.success.mockReset();
 	toastMock.error.mockReset();
@@ -321,6 +327,50 @@ describe('handleDeletePtTorrent', () => {
 		);
 		await expect(handleDeletePtTorrent('k', `pt:${seeding.id}`)).resolves.toBe(false);
 		expect(pt.deletePutioFiles).toHaveBeenCalledTimes(1);
+	});
+
+	it('says a transfer with no files was deleted without mentioning the trash', async () => {
+		pt.getPutioTransfer.mockResolvedValue(queued);
+		await handleDeletePtTorrent('k', `pt:${queued.id}`);
+		expect(toastMock).toHaveBeenCalledWith(
+			`Deleted pt:${queued.id} from put.io.`,
+			expect.anything()
+		);
+		expect(pt.getPutioAccountInfo).not.toHaveBeenCalled();
+	});
+
+	describe('with put.io trash off', () => {
+		const noTrash = {
+			...paid['account-info-trial'].body.info,
+			settings: { ...paid['account-info-trial'].body.info.settings, trash_enabled: false },
+		};
+		// Separate tokens: the setting and the confirmation are kept per account.
+		it('asks first, and deletes nothing when the answer is no', async () => {
+			pt.getPutioAccountInfo.mockResolvedValue(noTrash);
+			pt.getPutioTransfer.mockResolvedValue(seeding);
+			modalFire.mockResolvedValue({ isConfirmed: false });
+			await expect(handleDeletePtTorrent('no-trash-1', `pt:${seeding.id}`)).resolves.toBe(
+				false
+			);
+			expect(modalFire).toHaveBeenCalledTimes(1);
+			expect(pt.deletePutioFiles).not.toHaveBeenCalled();
+			expect(pt.cancelPutioTransfers).not.toHaveBeenCalled();
+		});
+
+		it('deletes after a yes without saying the files wait in the trash, and asks once', async () => {
+			pt.getPutioAccountInfo.mockResolvedValue(noTrash);
+			pt.getPutioTransfer.mockResolvedValue(seeding);
+			modalFire.mockResolvedValue({ isConfirmed: true });
+			await handleDeletePtTorrent('no-trash-2', `pt:${seeding.id}`);
+			await handleDeletePtTorrent('no-trash-2', `pt:${seeding.id}`);
+			expect(modalFire).toHaveBeenCalledTimes(1);
+			expect(pt.getPutioAccountInfo).toHaveBeenCalledTimes(1);
+			expect(pt.deletePutioFiles).toHaveBeenCalledTimes(2);
+			expect(toastMock).toHaveBeenLastCalledWith(
+				`Deleted pt:${seeding.id} from put.io.`,
+				expect.anything()
+			);
+		});
 	});
 
 	it('refuses a row id that names no transfer', async () => {

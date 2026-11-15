@@ -113,6 +113,8 @@ export interface PutioAccountInfo {
 	disk?: { avail: number; size: number; used: number };
 	/** Bytes in put.io's trash, which still count against `disk.used` (recorded). */
 	trash_size?: number;
+	/** `trash_enabled` false makes a delete permanent; recorded true by default. */
+	settings?: { trash_enabled?: boolean };
 }
 
 export interface PutioAddMultiResult {
