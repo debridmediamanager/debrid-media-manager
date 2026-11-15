@@ -55,7 +55,11 @@ vi.mock('@/utils/fetchTorrents', () => ({
 		(data: any) => ({ id: `tb:w${data.id ?? 'unknown'}` }) as any
 	),
 	withOriginalRdNames: vi.fn(async (_key: string, rows: any[]) => rows),
+	convertToPutioUserTorrent: vi.fn((data: any) => ({ id: `pt:${data.id}` }) as any),
 }));
+
+const mockListPutioTransfers = vi.hoisted(() => vi.fn());
+vi.mock('@/services/putio', () => ({ listPutioTransfers: mockListPutioTransfers }));
 
 const mockGetUserTorrentsList = vi.mocked(getUserTorrentsList);
 const mockGetMagnetStatus = vi.mocked(getMagnetStatus);
@@ -90,6 +94,32 @@ describe('UnifiedLibraryFetcher', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+	});
+
+	describe('put.io', () => {
+		it('lists every transfer through the limiter and never caches under the token', async () => {
+			const { fetcher, cache, limiter } = createFetcher();
+			mockListPutioTransfers.mockResolvedValueOnce([{ id: 1 }, { id: 2 }]);
+
+			const result = await fetcher.fetchLibrary('putio', 'pt-token');
+
+			expect(result).toEqual([{ id: 'pt:1' }, { id: 'pt:2' }]);
+			expect(limiter.execute).toHaveBeenCalledWith(
+				'putio',
+				'pt-library',
+				expect.any(Function)
+			);
+			// CacheManager logs its keys, and a key would carry the token.
+			expect(cache.get).not.toHaveBeenCalled();
+			expect(cache.set).not.toHaveBeenCalled();
+		});
+
+		it('throws on a failed listing instead of returning an empty library', async () => {
+			const { fetcher } = createFetcher();
+			mockListPutioTransfers.mockRejectedValueOnce(new Error('put.io had a server error'));
+
+			await expect(fetcher.fetchLibrary('putio', 'pt-token')).rejects.toThrow('server error');
+		});
 	});
 
 	it('returns cached RealDebrid data when present', async () => {

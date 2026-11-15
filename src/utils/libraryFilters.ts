@@ -118,6 +118,7 @@ export const filterLibraryItems = ({
 			pm: 'Premiumize',
 			oc: 'Offcloud',
 			dl: 'Debrid-Link',
+			pt: 'put.io',
 		};
 		nextHelpText = `Showing torrents from ${serviceNames[serviceValue] ?? serviceValue}`;
 	}

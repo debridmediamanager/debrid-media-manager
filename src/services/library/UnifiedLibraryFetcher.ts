@@ -4,11 +4,13 @@
  */
 
 import { MagnetStatus, getMagnetStatus } from '@/services/allDebrid';
+import { listPutioTransfers } from '@/services/putio';
 import { getUserTorrentsList } from '@/services/realDebrid';
 import { getTorrentList, getWebDownloadList } from '@/services/torbox';
 import { UserTorrent } from '@/torrent/userTorrent';
 import {
 	convertToAllDebridUserTorrent,
+	convertToPutioUserTorrent,
 	convertToTbUserTorrent,
 	convertToTbWebDownloadUserTorrent,
 	convertToUserTorrent,
@@ -25,7 +27,7 @@ import { UnifiedRateLimiter, getGlobalRateLimiter } from '../rateLimit/UnifiedRa
 export const TORBOX_PAGE_SIZE = 1000;
 
 export type LibraryService =
-	'realdebrid' | 'alldebrid' | 'torbox' | 'premiumize' | 'offcloud' | 'debridlink';
+	'realdebrid' | 'alldebrid' | 'torbox' | 'premiumize' | 'offcloud' | 'debridlink' | 'putio';
 
 export interface FetchOptions {
 	forceRefresh?: boolean;
@@ -104,6 +106,8 @@ export class UnifiedLibraryFetcher {
 				return this.fetchOffcloudLibrary(token, options);
 			case 'debridlink':
 				return this.fetchDebridLinkLibrary(token, options);
+			case 'putio':
+				return this.fetchPutioLibrary(token, options);
 			default:
 				throw new Error(`Unknown service: ${service}`);
 		}
@@ -145,6 +149,25 @@ export class UnifiedLibraryFetcher {
 		// Same short TTL the other services use, so a staleness sweep collapses
 		// several tabs into one fetch.
 		await this.cache.set(cacheKey, torrents, undefined, 5 * 60 * 1000);
+		return torrents;
+	}
+
+	/**
+	 * put.io: every transfer, paged by cursor, with no per-row fan-out (the
+	 * listing has no files; the modal lists them). A failed page throws, so the
+	 * rows already shown stay rather than being replaced by a short list.
+	 *
+	 * Deliberately not cached here: CacheManager logs its keys, and these keys
+	 * carry the token, which put.io asks apps to keep out of logs.
+	 */
+	private async fetchPutioLibrary(token: string, options: FetchOptions): Promise<UserTorrent[]> {
+		const transfers = await this.rateLimiter.execute('putio', 'pt-library', () =>
+			listPutioTransfers(token)
+		);
+		const limited = options.maxItems ? transfers.slice(0, options.maxItems) : transfers;
+		const torrents = limited.map((transfer) => convertToPutioUserTorrent(transfer));
+		options.onProgress?.(torrents.length, torrents.length);
+		options.onBatchComplete?.(torrents);
 		return torrents;
 	}
 

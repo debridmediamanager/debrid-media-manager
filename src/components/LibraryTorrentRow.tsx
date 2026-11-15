@@ -14,6 +14,7 @@ import {
 	handleDeleteDlTorrent,
 	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
+	handleDeletePtTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
@@ -22,6 +23,7 @@ import { providerHashKey, type LibraryGrouping } from '@/utils/libraryGrouping';
 import { identifiedTitle, type LibraryIdentification } from '@/utils/libraryIdentify';
 import { getOffcloudStatusText } from '@/utils/offcloudStatus';
 import { getPremiumizeStatusText } from '@/utils/premiumizeStatus';
+import { getPutioStatusText } from '@/utils/putioRow';
 import { getRealDebridStatusText } from '@/utils/realDebridStatus';
 import { torrentPrefix } from '@/utils/results';
 import { shortenNumber } from '@/utils/speed';
@@ -73,6 +75,7 @@ interface TorrentRowProps {
 	pmKey: string | null;
 	ocKey: string | null;
 	dlKey: string | null;
+	ptKey?: string | null;
 	shouldDownloadMagnets: boolean;
 	grouping: LibraryGrouping;
 	hashFilter?: string;
@@ -96,6 +99,7 @@ function TorrentRow({
 	pmKey,
 	ocKey,
 	dlKey,
+	ptKey = null,
 	shouldDownloadMagnets,
 	grouping,
 	hashFilter,
@@ -166,6 +170,8 @@ function TorrentRow({
 			return getOffcloudStatusText(torrent.serviceStatus);
 		} else if (torrent.id.startsWith('dl:')) {
 			return getDebridLinkStatusText(torrent.serviceStatus);
+		} else if (torrent.id.startsWith('pt:')) {
+			return getPutioStatusText(torrent.serviceStatus);
 		}
 		return torrent.serviceStatus; // Fallback to raw status
 	};
@@ -447,7 +453,8 @@ function TorrentRow({
 		? identifiedTitle(identification, torrent.title)
 		: torrent.title;
 	const filenameIsTitle = normalizeName(torrent.filename) === normalizeName(displayTitle);
-	const multipleServices = [rdKey, adKey, tbKey, pmKey, ocKey, dlKey].filter(Boolean).length > 1;
+	const multipleServices =
+		[rdKey, adKey, tbKey, pmKey, ocKey, dlKey, ptKey].filter(Boolean).length > 1;
 
 	// The provider's own word for "done" is on nearly every row and says nothing;
 	// anything else (expired, stalled, an error, a transfer under way) is shown.
@@ -772,6 +779,9 @@ function TorrentRow({
 							// what settles it.
 							if (dlKey && torrent.id.startsWith('dl:')) {
 								success = await handleDeleteDlTorrent(dlKey, torrent.id);
+							}
+							if (ptKey && torrent.id.startsWith('pt:')) {
+								success = await handleDeletePtTorrent(ptKey, torrent.id);
 							}
 							if (success) onDelete(torrent.id);
 						}}

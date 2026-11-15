@@ -51,11 +51,18 @@ vi.mock('@/contexts/LibraryCacheContext', () => ({
 }));
 
 const mockCredentials = vi.hoisted(
-	(): { rd: string | null; ad: string | null; tb: string | null; pm: string | null } => ({
+	(): {
+		rd: string | null;
+		ad: string | null;
+		tb: string | null;
+		pm: string | null;
+		pt: string | null;
+	} => ({
 		rd: 'test-rd-key',
 		ad: 'test-ad-key',
 		tb: 'test-tb-key',
 		pm: null,
+		pt: null,
 	})
 );
 
@@ -67,6 +74,7 @@ vi.mock('@/hooks/auth', () => ({
 	usePremiumizeCredential: () => mockCredentials.pm,
 	useOffcloudApiKey: () => null,
 	useDebridLinkCredential: () => null,
+	usePutioAccessToken: () => mockCredentials.pt,
 }));
 
 vi.mock('@/hooks/useRelativeTimeLabel', () => ({
@@ -77,6 +85,7 @@ vi.mock('@/hooks/useRelativeTimeLabel', () => ({
 const mockHandleAddAsMagnetInRd = vi.fn();
 const mockHandleAddAsMagnetInPm = vi.fn();
 const mockHandleAddAsMagnetInAd = vi.fn();
+const mockHandleAddAsMagnetInPt = vi.fn();
 
 const mockAddFilesInRd = vi.fn();
 const mockAddHashesInRd = vi.fn();
@@ -103,6 +112,9 @@ vi.mock('@/utils/addMagnet', () => ({
 	handleAddMultipleHashesInPm: vi.fn(),
 	handleAddMultipleHashesInOc: vi.fn(),
 	handleAddMultipleHashesInDl: vi.fn(),
+	handleAddAsMagnetInPt: (...args: unknown[]) => mockHandleAddAsMagnetInPt(...args),
+	handleAddMultipleHashesInPt: vi.fn(),
+	handleAddMultipleTorrentFilesInPt: vi.fn(),
 	handleAddMultipleTorrentFilesInRd: (...args: unknown[]) => mockAddFilesInRd(...args),
 	handleAddMultipleTorrentFilesInAd: vi.fn(),
 	handleAddMultipleTorrentFilesInPm: vi.fn(),
@@ -196,6 +208,7 @@ describe('Library Page - addMagnet Query Parameter', () => {
 		mockCredentials.rd = 'test-rd-key';
 		mockCredentials.ad = 'test-ad-key';
 		mockCredentials.tb = 'test-tb-key';
+		mockCredentials.pt = null;
 	});
 
 	it('should optimistically add RealDebrid torrent to cache when addMagnet query param is present', async () => {
@@ -250,6 +263,31 @@ describe('Library Page - addMagnet Query Parameter', () => {
 
 		mockCredentials.ad = 'test-ad-key';
 		mockCredentials.tb = 'test-tb-key';
+	});
+
+	it('adds a magnet to put.io when put.io is the only sign-in', async () => {
+		mockCredentials.rd = null;
+		mockCredentials.ad = null;
+		mockCredentials.tb = null;
+		mockCredentials.pt = 'test-pt-key';
+		// withAuth reads the stored credential itself
+		localStorage.setItem('pt:accessToken', 'test-pt-key');
+		const testHash = '08ada5a7a6183aae1e09d831df6748d566095a10';
+		mockRouter.query = { addMagnet: testHash };
+		mockHandleAddAsMagnetInPt.mockImplementation(async (_key, _hash, callback) => {
+			await callback?.({ id: 'pt:9001', hash: testHash });
+		});
+
+		render(<LibraryPage />);
+
+		await waitFor(() => expect(mockHandleAddAsMagnetInPt).toHaveBeenCalledTimes(1));
+		expect(mockHandleAddAsMagnetInPt.mock.calls[0][0]).toBe('test-pt-key');
+		expect(mockHandleAddAsMagnetInPt.mock.calls[0][1]).toBe(testHash);
+		expect(mockModalFire).not.toHaveBeenCalled();
+		await waitFor(() =>
+			expect(mockAddTorrent).toHaveBeenCalledWith(expect.objectContaining({ id: 'pt:9001' }))
+		);
+		localStorage.removeItem('pt:accessToken');
 	});
 
 	it('should optimistically add AllDebrid torrent to cache when addMagnet query param is present', async () => {

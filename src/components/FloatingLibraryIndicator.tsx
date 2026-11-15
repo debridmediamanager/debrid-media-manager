@@ -4,6 +4,7 @@ import {
 	useDebridLinkCredential,
 	useOffcloudApiKey,
 	usePremiumizeCredential,
+	usePutioAccessToken,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
@@ -23,6 +24,7 @@ export default function FloatingLibraryIndicator() {
 	const pmKey = usePremiumizeCredential();
 	const ocKey = useOffcloudApiKey();
 	const dlKey = useDebridLinkCredential();
+	const ptKey = usePutioAccessToken();
 	const [mounted, setMounted] = useState(false);
 	const lastFetchLabel = useRelativeTimeLabel(lastFetchTime, 'Just now');
 
@@ -42,7 +44,8 @@ export default function FloatingLibraryIndicator() {
 		!!tbKey?.trim() ||
 		!!pmKey?.trim() ||
 		!!ocKey?.trim() ||
-		!!dlKey?.trim();
+		!!dlKey?.trim() ||
+		!!ptKey?.trim();
 
 	const handleRefresh = async () => {
 		try {

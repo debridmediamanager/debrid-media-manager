@@ -7,6 +7,7 @@ import {
 	useDebridLinkCredential,
 	useOffcloudApiKey,
 	usePremiumizeCredential,
+	usePutioAccessToken,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
@@ -120,6 +121,7 @@ vi.mock('@/hooks/auth', () => ({
 	usePremiumizeCredential: vi.fn(),
 	useOffcloudApiKey: vi.fn(),
 	useDebridLinkCredential: vi.fn(),
+	usePutioAccessToken: vi.fn(),
 }));
 
 const callsForService = (service: string) =>
@@ -138,6 +140,7 @@ const mockedUseTorBoxAccessToken = vi.mocked(useTorBoxAccessToken);
 const mockedUsePremiumizeApiKey = vi.mocked(usePremiumizeCredential);
 const mockedUseOffcloudApiKey = vi.mocked(useOffcloudApiKey);
 const mockedUseDebridLinkCredential = vi.mocked(useDebridLinkCredential);
+const mockedUsePutioAccessToken = vi.mocked(usePutioAccessToken);
 
 describe('EnhancedLibraryCacheContext refreshLibrary', () => {
 	beforeEach(() => {
@@ -154,10 +157,28 @@ describe('EnhancedLibraryCacheContext refreshLibrary', () => {
 		mockedUsePremiumizeApiKey.mockReturnValue(null);
 		mockedUseOffcloudApiKey.mockReturnValue(null);
 		mockedUseDebridLinkCredential.mockReturnValue(null);
+		mockedUsePutioAccessToken.mockReturnValue(null);
 		window.localStorage.clear();
 	});
 
 	afterEach(() => {});
+
+	// put.io has its own row list: without it, pt: rows fall through every
+	// per-provider branch and vanish from the library on the next replace.
+	it('fetches put.io on sign-in and keeps its rows through a whole-library replace', async () => {
+		mockedUsePutioAccessToken.mockReturnValue('pt-token');
+		fetchLibraryMock.mockResolvedValue([{ id: 'pt:1', filename: 'a', hash: 'h' }] as any);
+
+		const { result } = renderHook(() => useEnhancedLibraryCache(), { wrapper });
+
+		await waitFor(() => expect(callsForService('putio')).toBe(1));
+		expect(fetchLibraryMock).toHaveBeenCalledWith('putio', 'pt-token', expect.anything());
+		await waitFor(() => expect(result.current.ptLibrary.map((t) => t.id)).toEqual(['pt:1']));
+
+		act(() => result.current.replaceLibrary([...result.current.libraryItems]));
+		await waitFor(() => expect(result.current.libraryItems.map((t) => t.id)).toEqual(['pt:1']));
+		expect(result.current.stats.ptItems).toBe(1);
+	});
 
 	it('refreshes every authenticated service when called without an explicit target', async () => {
 		mockedUseRealDebridAccessToken.mockReturnValue(['rd-token', false, false]);

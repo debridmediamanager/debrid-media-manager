@@ -9,6 +9,13 @@ import {
 	type OffcloudFile,
 } from '@/services/offcloud';
 import { getPremiumizeItemDetails } from '@/services/premiumize';
+import {
+	PutioError,
+	getPutioDownloadUrl,
+	getPutioTransfer,
+	listPutioTransferFiles,
+	type PutioFile,
+} from '@/services/putio';
 import { addHashAsMagnet, proxyUnrestrictLink, selectFiles } from '@/services/realDebrid';
 import { requestDownloadLink, requestWebDownloadLink } from '@/services/torbox';
 import { TorBoxTorrentInfo } from '@/services/types';
@@ -21,12 +28,14 @@ import {
 	handleDeleteDlTorrent,
 	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
+	handleDeletePtTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
 import { parseOffcloudRowId } from '@/utils/offcloudRow';
 import { getOffcloudStatusText } from '@/utils/offcloudStatus';
 import { getPremiumizeStatusText } from '@/utils/premiumizeStatus';
+import { getPutioStatusText, getPutioUserTorrentStatus, parsePutioRowId } from '@/utils/putioRow';
 import { retryRdAddThroughPause } from '@/utils/rdAddPause';
 import { getRdExportLinks } from '@/utils/rdExportLinks';
 import { magnetToastOptions } from '@/utils/toastOptions';
@@ -1815,6 +1824,212 @@ export const showInfoForDL = async (
 				a.click();
 				URL.revokeObjectURL(a.href);
 				toast.success('Download links exported.', magnetToastOptions);
+			});
+		},
+	});
+};
+
+const putioMessage = (error: unknown, fallback: string) =>
+	error instanceof PutioError ? error.message : fallback;
+
+/**
+ * Info modal for a put.io library row, which is one transfer.
+ *
+ * The transfer is read fresh for its `file_id`, which is one file or a folder,
+ * and that is listed (folders walked within bounds, `listPutioTransferFiles`).
+ * A download link is minted per file on click, never earlier and never kept:
+ * put.io binds each one to the IP that asked. No Watch or Cast: both resolve on
+ * DMM's server, which would get a link bound to the server's address. Names and
+ * links stay out of the console, as put.io asks.
+ */
+export const showInfoForPT = async (
+	ptKey: string,
+	torrent: {
+		id: string;
+		hash: string;
+		filename: string;
+		title: string;
+		bytes: number;
+		serviceStatus: string;
+		progress: number;
+		added: Date;
+	},
+	shouldDownloadMagnets?: boolean,
+	handlers: {
+		onDeletePt?: (ptKey: string, id: string) => Promise<void>;
+		poster?: DialogPoster;
+	} = {}
+): Promise<void> => {
+	const transferId = parsePutioRowId(torrent.id);
+	if (!transferId) {
+		toast.error(`Unrecognised put.io row ${torrent.id}.`, magnetToastOptions);
+		return;
+	}
+	// A URL transfer has no info hash; its magnet-shaped actions are left out.
+	const hasInfoHash = /^[a-fA-F0-9]{40}$/.test(torrent.hash);
+
+	Modal.showLoading();
+
+	let serviceStatus = torrent.serviceStatus;
+	let progress = torrent.progress;
+	let files: (PutioFile & { path: string })[] = [];
+	let truncated = false;
+	let listError: string | null = null;
+	try {
+		const fresh = await getPutioTransfer(ptKey, transferId);
+		serviceStatus = fresh.status ?? serviceStatus;
+		progress = getPutioUserTorrentStatus(fresh.status, fresh.percent_done)[1];
+		if (typeof fresh.file_id === 'number' && fresh.file_id > 0) {
+			({ files, truncated } = await listPutioTransferFiles(ptKey, fresh.file_id));
+		}
+	} catch (error) {
+		listError = putioMessage(error, 'Could not list the files.');
+		console.error(
+			'[torrentModal] listing failed (PT)',
+			error instanceof PutioError ? error.code : 'unknown'
+		);
+	}
+
+	const totalBytes = files.reduce((sum, file) => sum + (file.size ?? 0), 0) || torrent.bytes;
+	// Premiumize's rows already mint a link per file on click, which is put.io's shape too.
+	const rows: PremiumizeFileRow[] = files.map((file) => ({
+		fileId: String(file.id),
+		filename: file.path,
+		filesize: file.size ?? 0,
+	}));
+
+	const libraryActions = `
+        <div class="mb-3 flex justify-center items-center flex-wrap">
+            ${hasInfoHash ? renderButton('share', { link: `${await handleShare({ ...torrent, bytes: totalBytes })}` }) : ''}
+            ${renderButton('delete', { id: 'btn-delete-pt' })}
+            ${hasInfoHash ? renderButton('magnet', { id: 'btn-magnet-copy-pt', text: shouldDownloadMagnets ? 'Download' : 'Copy' }) : ''}
+            ${rows.length ? renderButton('exportLinks', { id: 'btn-export-links-pt' }) : ''}
+        </div>`;
+
+	const infoRows = [
+		{ label: 'Size', value: (totalBytes / 1024 ** 3).toFixed(2) + ' GB' },
+		{ label: 'ID', value: torrent.id },
+		{ label: 'Status', value: getPutioStatusText(serviceStatus) },
+		...(progress > 0 && progress < 100 ? [{ label: 'Progress', value: progress + '%' }] : []),
+		...(hasInfoHash ? [] : [{ label: 'Info hash', value: 'none reported by put.io' }]),
+		{
+			label: 'Added',
+			value: new Date(torrent.added).toLocaleString(undefined, { timeZone: 'UTC' }),
+		},
+	];
+
+	const notice = listError
+		? `<div class="mb-2 rounded border border-red-600 bg-red-900/30 p-2 text-sm text-red-100">${listError}</div>`
+		: truncated
+			? `<div class="mb-2 rounded border border-amber-600 bg-amber-900/30 p-2 text-sm text-amber-100">
+            This holds more files than DMM lists here; put.io's own site shows them all.
+        </div>`
+			: '';
+
+	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${torrent.filename}</h1>
+    ${libraryActions}
+    ${notice}
+    <div class="text-sm text-gray-200">
+        ${renderInfoTable(infoRows)}
+    </div>
+    <div class="text-sm max-h-60 mb-2 text-left p-1 bg-gray-900">
+        <div class="overflow-x-auto" style="max-width: 100%;">
+            <table class="table-auto">
+                <tbody>
+                    ${renderTorrentInfoPM(rows, { canWatch: false })}
+                </tbody>
+            </table>
+        </div>
+    </div>`;
+
+	await Modal.fire({
+		html,
+		poster: handlers.poster,
+		showConfirmButton: false,
+		showCancelButton: false,
+		customClass: {
+			htmlContainer: '!mx-1',
+			popup: '!bg-gray-900 !text-gray-100 !px-4 !py-3',
+			confirmButton: 'haptic',
+			cancelButton: 'haptic',
+		},
+		width: '800px',
+		showCloseButton: true,
+		inputAutoFocus: true,
+		didOpen: () => {
+			document
+				.querySelectorAll<HTMLButtonElement>('button[data-pm-file-id]')
+				.forEach((button) => {
+					button.addEventListener('click', async () => {
+						if (button.disabled) return;
+						button.disabled = true;
+						// Opened inside the click, so a popup blocker lets it through;
+						// it is pointed at the link once put.io has minted one.
+						const tab = window.open('', '_blank');
+						try {
+							const url = await getPutioDownloadUrl(
+								ptKey,
+								Number(button.dataset.pmFileId)
+							);
+							if (tab) tab.location.href = url;
+							else window.location.href = url;
+						} catch (error) {
+							tab?.close();
+							toast.error(
+								putioMessage(error, 'put.io returned no link.'),
+								magnetToastOptions
+							);
+						} finally {
+							button.disabled = false;
+						}
+					});
+				});
+
+			document.getElementById('btn-magnet-copy-pt')?.addEventListener('click', () => {
+				void handleCopyOrDownloadMagnet(torrent.hash, shouldDownloadMagnets);
+			});
+
+			document.getElementById('btn-delete-pt')?.addEventListener('click', async () => {
+				try {
+					if (handlers.onDeletePt) await handlers.onDeletePt(ptKey, torrent.id);
+					else if (await handleDeletePtTorrent(ptKey, torrent.id)) Modal.close();
+				} catch {
+					// handleDeletePtTorrent reports its own failure
+				}
+			});
+
+			// One link per file, minted in turn, then saved as a file. They are
+			// bound to this browser's IP, so the list works only from here.
+			document.getElementById('btn-export-links-pt')?.addEventListener('click', async () => {
+				const toastId = toast.loading('Fetching download links...', magnetToastOptions);
+				const lines: string[] = [];
+				let failed = 0;
+				for (const row of rows) {
+					try {
+						lines.push(await getPutioDownloadUrl(ptKey, Number(row.fileId)));
+					} catch {
+						failed++;
+					}
+				}
+				if (!lines.length) {
+					toast.error('Failed to fetch download links.', {
+						...magnetToastOptions,
+						id: toastId,
+					});
+					return;
+				}
+				const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+				const a = document.createElement('a');
+				a.href = URL.createObjectURL(blob);
+				a.download = `${torrent.filename}.txt`;
+				a.click();
+				URL.revokeObjectURL(a.href);
+				toast.success(
+					failed
+						? `Exported ${lines.length} links; ${failed} failed.`
+						: 'Download links exported.',
+					{ ...magnetToastOptions, id: toastId }
+				);
 			});
 		},
 	});

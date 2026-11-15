@@ -20,6 +20,7 @@ interface LibraryActionButtonsProps {
 	pmKey?: string | null;
 	ocKey?: string | null;
 	dlKey?: string | null;
+	ptKey?: string | null;
 	showDedupe: boolean;
 	showHashCombine: boolean;
 }
@@ -43,6 +44,7 @@ export default function LibraryActionButtons({
 	pmKey,
 	ocKey,
 	dlKey,
+	ptKey,
 	showDedupe,
 	showHashCombine,
 }: LibraryActionButtonsProps) {
@@ -149,6 +151,15 @@ export default function LibraryActionButtons({
 						DL Restore
 					</LibraryButton>
 				</>
+			)}
+
+			{/* No restore for put.io: a backup restore re-adds every row, and each put.io
+			    add downloads into the account's storage. Add takes the same list. */}
+			{ptKey && (
+				<LibraryButton variant="teal" onClick={() => onAddMagnet('pt')}>
+					<Link2 className="mr-1 inline-block h-4 w-4 text-teal-500" />
+					PT&nbsp;Add
+				</LibraryButton>
 			)}
 
 			<LibraryButton variant="indigo" onClick={onLocalBackup}>

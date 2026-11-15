@@ -19,4 +19,4 @@ export function canReinsert(t: UserTorrent): boolean {
 }
 
 export const NOT_REINSERTABLE =
-	'None of these can be reinserted: Premiumize, Offcloud and Debrid-Link have no reinsert, TorBox reannounces only active torrents, and AllDebrid restarts only failed ones.';
+	'None of these can be reinserted: Premiumize, Offcloud, Debrid-Link and put.io have no reinsert, TorBox reannounces only active torrents, and AllDebrid restarts only failed ones.';

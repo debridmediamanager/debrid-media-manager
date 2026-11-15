@@ -11,6 +11,7 @@ import {
 	handleDeleteDlTorrent,
 	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
+	handleDeletePtTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
@@ -87,6 +88,9 @@ const mockHandleDeleteOcTorrent = handleDeleteOcTorrent as MockedFunction<
 >;
 const mockHandleDeleteDlTorrent = handleDeleteDlTorrent as MockedFunction<
 	typeof handleDeleteDlTorrent
+>;
+const mockHandleDeletePtTorrent = handleDeletePtTorrent as MockedFunction<
+	typeof handleDeletePtTorrent
 >;
 
 describe('LibraryTorrentRow Reinsert Functionality', () => {
@@ -298,6 +302,49 @@ describe('LibraryTorrentRow Reinsert Functionality', () => {
 			// The Offcloud key is the whole account, so it never reaches a URL.
 			expect(url).not.toContain('test-oc-key');
 			expect(init.headers.Authorization).toBe('Bearer test-oc-key');
+		});
+	});
+
+	describe('put.io rows', () => {
+		const ptProps = (overrides: Partial<UserTorrent> = {}) => ({
+			...defaultProps,
+			rdKey: null,
+			ptKey: 'test-pt-key',
+			torrent: {
+				...mockTorrent,
+				id: 'pt:9004',
+				hash: 'c'.repeat(40),
+				status: UserTorrentStatus.downloading,
+				progress: 40,
+				serviceStatus: 'WAITING_FOR_COMPLETE_QUEUE',
+				...overrides,
+			},
+		});
+
+		it('deletes through the put.io handler and drops the row only on success', async () => {
+			mockHandleDeletePtTorrent.mockResolvedValueOnce(false).mockResolvedValueOnce(true);
+			const onDelete = vi.fn();
+
+			const { container } = render(<LibraryTorrentRow {...ptProps()} onDelete={onDelete} />);
+			const button = container.querySelector('button[title="Delete"]')!;
+			fireEvent.click(button);
+			await waitFor(() =>
+				expect(mockHandleDeletePtTorrent).toHaveBeenCalledWith('test-pt-key', 'pt:9004')
+			);
+			expect(onDelete).not.toHaveBeenCalled();
+			fireEvent.click(button);
+			await waitFor(() => expect(onDelete).toHaveBeenCalledWith('pt:9004'));
+		});
+
+		it("names put.io's status rather than showing the raw word", () => {
+			render(<LibraryTorrentRow {...ptProps()} />);
+			expect(screen.getByText(/Finishing/)).toBeInTheDocument();
+			expect(screen.queryByText(/WAITING_FOR_COMPLETE_QUEUE/)).toBeNull();
+		});
+
+		it('offers no cast for a put.io row', () => {
+			const { container } = render(<LibraryTorrentRow {...ptProps()} />);
+			expect(container.querySelector('button[title^="Cast"]')).toBeNull();
 		});
 	});
 

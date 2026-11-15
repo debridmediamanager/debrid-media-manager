@@ -3,6 +3,7 @@ import {
 	showInfoForDL,
 	showInfoForOC,
 	showInfoForPM,
+	showInfoForPT,
 	showInfoForRD,
 	showInfoForTB,
 } from '@/components/showInfo/index';
@@ -350,4 +351,26 @@ export async function handleShowInfoForDL(
 
 	const player = window.localStorage.getItem('settings:player') || defaultPlayer;
 	await showInfoForDL(player, dlKey, t, shouldDownloadMagnets, { onDeleteDl, poster });
+}
+
+export async function handleShowInfoForPT(
+	t: UserTorrent,
+	ptKey: string,
+	setUserTorrentsList: (fn: (prev: UserTorrent[]) => UserTorrent[]) => void,
+	setSelectedTorrents: Dispatch<SetStateAction<Set<string>>>,
+	shouldDownloadMagnets?: boolean,
+	poster?: DialogPoster
+) {
+	const onDeletePt = async (key: string, id: string) => {
+		const { handleDeletePtTorrent } = await import('./deleteTorrent');
+		if (!(await handleDeletePtTorrent(key, id))) return;
+		setUserTorrentsList((prev) => prev.filter((torrent) => torrent.id !== id));
+		setSelectedTorrents((prev) => {
+			prev.delete(id);
+			return new Set(prev);
+		});
+		Modal.close();
+	};
+
+	await showInfoForPT(ptKey, t, shouldDownloadMagnets, { onDeletePt, poster });
 }
