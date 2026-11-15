@@ -469,9 +469,10 @@ export async function listPutioTransferFiles(
 }
 
 /**
- * A download URL for one file. It carries a credential (`oauth_token` and a
- * signed `u=`, recorded), so it is minted on click and never logged or kept.
- * The docs bind it to the asking IP; it also served from a second IP when tried.
+ * A download URL for one file. Its `oauth_token` is the account's long-lived
+ * download token (measured: the one `account/info?download_token=1` returns), and
+ * it served bytes from another IP too, so the URL is a key to the account's
+ * downloads: minted on click, never logged or kept.
  */
 export async function getPutioDownloadUrl(token: string, fileId: number): Promise<string> {
 	const { url } = await ptRequest<{ url?: string }>(token, `/files/${fileId}/url`);

@@ -38,6 +38,7 @@ vi.mock('../../utils/hashList', () => ({
 }));
 
 import { _testing } from '@/services/putio';
+import toast from 'react-hot-toast';
 import { showInfoForPT } from './index';
 
 /** The real put.io client over a fetch that answers from the fixtures. */
@@ -128,6 +129,29 @@ describe('showInfoForPT', () => {
 
 		await vi.waitFor(() => expect(tab.location.href).toBe(paid['file-url'].body.url));
 		expect(paths().filter((p) => p.endsWith('/url'))).toEqual(['/v2/files/1102/url']);
+	});
+
+	// Measured: a link's oauth_token is the account's long-lived download token, and
+	// the link served from another IP, so an exported list is a key to the account.
+	it('warns that exported links work as a key and must not be shared', async () => {
+		const success = vi.spyOn(toast, 'success');
+		URL.createObjectURL = vi.fn(() => 'blob:links');
+		URL.revokeObjectURL = vi.fn();
+		mocks.modalFireMock.mockImplementation(async ({ html, didOpen }) => {
+			document.body.innerHTML = html;
+			didOpen();
+			return { isConfirmed: false };
+		});
+
+		await showInfoForPT('pt-key', row(9009));
+		document.getElementById('btn-export-links-pt')!.click();
+
+		await vi.waitFor(() =>
+			expect(success).toHaveBeenCalledWith(
+				expect.stringMatching(/key to your put\.io downloads: do not share them/),
+				expect.anything()
+			)
+		);
 	});
 
 	it('refuses a row id that names no transfer', async () => {

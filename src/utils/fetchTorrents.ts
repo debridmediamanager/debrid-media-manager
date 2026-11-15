@@ -1104,7 +1104,7 @@ export const fetchOffcloud = async (
  * Written to the SDK's transfer schema with every field but `id` read as
  * possibly null, because no real transfer had been seen yet. The listing has
  * no files, like Offcloud's history, so the info modal lists them on open, and
- * no download URL is ever stored: put.io binds each one to the IP that asked.
+ * no download URL is ever stored: each carries the account's download token.
  */
 export function convertToPutioUserTorrent(
 	transfer: PutioTransfer,

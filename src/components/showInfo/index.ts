@@ -1831,6 +1831,8 @@ export const showInfoForDL = async (
 
 // A transfer outlives its files: deleted on put.io, they answer 404 while the
 // transfer still names them (recorded).
+const PT_LINKS_ARE_KEYS = 'These links work as a key to your put.io downloads: do not share them.';
+
 const putioMessage = (error: unknown, fallback: string) =>
 	error instanceof PutioError
 		? error.status === 404
@@ -1844,9 +1846,9 @@ const putioMessage = (error: unknown, fallback: string) =>
  * The transfer is read fresh for its `file_id`, which is one file or a folder,
  * and that is listed (folders walked within bounds, `listPutioTransferFiles`).
  * A download link is minted per file on click, never earlier and never kept:
- * put.io binds each one to the IP that asked. No Watch or Cast: both resolve on
- * DMM's server, which would get a link bound to the server's address. Names and
- * links stay out of the console, as put.io asks.
+ * each carries the account's download token and works from any IP (measured). No
+ * Watch or Cast: both resolve on DMM's server, which would need the put.io token
+ * there. Names and links stay out of the console, as put.io asks.
  */
 export const showInfoForPT = async (
 	ptKey: string,
@@ -2004,8 +2006,8 @@ export const showInfoForPT = async (
 				}
 			});
 
-			// One link per file, minted in turn, then saved as a file. They are
-			// bound to this browser's IP, so the list works only from here.
+			// One link per file, minted in turn, then saved as a file. Each carries the
+			// account's download token, so the file is a key to the account's downloads.
 			document.getElementById('btn-export-links-pt')?.addEventListener('click', async () => {
 				const toastId = toast.loading('Fetching download links...', magnetToastOptions);
 				const lines: string[] = [];
@@ -2031,10 +2033,8 @@ export const showInfoForPT = async (
 				a.click();
 				URL.revokeObjectURL(a.href);
 				toast.success(
-					failed
-						? `Exported ${lines.length} links; ${failed} failed.`
-						: 'Download links exported.',
-					{ ...magnetToastOptions, id: toastId }
+					`${failed ? `Exported ${lines.length} links; ${failed} failed.` : 'Download links exported.'} ${PT_LINKS_ARE_KEYS}`,
+					{ ...magnetToastOptions, id: toastId, duration: 10_000 }
 				);
 			});
 		},
