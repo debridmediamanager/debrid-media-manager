@@ -2,6 +2,7 @@ import account from '@/test/fixtures/putio/account.json';
 import files from '@/test/fixtures/putio/files.json';
 import oauth from '@/test/fixtures/putio/oauth.json';
 import recorded from '@/test/fixtures/putio/recorded-2026-11-15.json';
+import paid from '@/test/fixtures/putio/recorded-paid-2026-11-15.json';
 import transfers from '@/test/fixtures/putio/transfers.json';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
@@ -42,6 +43,7 @@ const reply = (body: unknown, status = 200) =>
 
 const recordedReply = (name: keyof typeof recorded) =>
 	reply(recorded[name].body, recorded[name].status ?? 200);
+const paidReply = (name: keyof typeof paid) => reply(paid[name].body, paid[name].status);
 
 const fetchMock = vi.fn();
 
@@ -142,7 +144,30 @@ describe('put.io request envelope', () => {
 });
 
 describe('listPutioTransfers', () => {
-	it('asks for pages, newest first, and follows the cursor', async () => {
+	it('asks for pages and follows the cursor until it runs out (recorded pages)', async () => {
+		// Recorded at per_page=2 over five transfers: two pages carry a cursor. The
+		// last page is modelled by the recorded cursor-less one-transfer listing.
+		fetchMock
+			.mockResolvedValueOnce(paidReply('transfers-list-four'))
+			.mockResolvedValueOnce(paidReply('transfers-list-continue'))
+			.mockResolvedValueOnce(paidReply('transfers-list-one'));
+		const all = await listPutioTransfers(TOKEN);
+		expect(all).toHaveLength(paid['transfers-list-four'].body.total);
+
+		const first = call(0);
+		expect(first.path).toBe('/v2/transfers/list');
+		// Without per_page put.io returns the 1000 *oldest* transfers.
+		expect(first.query.per_page).toBe(String(TRANSFERS_PAGE_SIZE));
+		expect(call(1)).toMatchObject({
+			path: '/v2/transfers/list/continue',
+			method: 'POST',
+			query: { per_page: String(TRANSFERS_PAGE_SIZE) },
+			form: { cursor: paid['transfers-list-four'].body.cursor },
+		});
+		expect(call(2).form).toEqual({ cursor: paid['transfers-list-continue'].body.cursor });
+	});
+
+	it('follows a schema-shaped cursor too', async () => {
 		fetchMock
 			.mockResolvedValueOnce(reply(transfers.list))
 			.mockResolvedValueOnce(reply(transfers.continue));
@@ -150,11 +175,6 @@ describe('listPutioTransfers', () => {
 		expect(all).toHaveLength(
 			transfers.list.transfers.length + transfers.continue.transfers.length
 		);
-
-		const first = call(0);
-		expect(first.path).toBe('/v2/transfers/list');
-		// Without per_page put.io returns the 1000 *oldest* transfers.
-		expect(first.query.per_page).toBe(String(TRANSFERS_PAGE_SIZE));
 		const next = call(1);
 		expect(next.path).toBe('/v2/transfers/list/continue');
 		expect(next.method).toBe('POST');
@@ -192,10 +212,12 @@ describe('adding', () => {
 
 	it('checks the size against free space, then adds the magnet as a form field', async () => {
 		fetchMock
-			.mockResolvedValueOnce(reply({ status: 'OK', disk_avail: 10 * 1024 ** 3, ret: [] }))
-			.mockResolvedValueOnce(reply(transfers.add));
+			.mockResolvedValueOnce(paidReply('transfers-info-paid'))
+			.mockResolvedValueOnce(paidReply('transfers-add-known'));
 		const transfer = await addPutioTransfer(TOKEN, MAGNET);
-		expect(transfer.id).toBe(transfers.add.transfer.id);
+		expect(transfer.id).toBe(paid['transfers-add-known'].body.transfer.id);
+		// What the add answers is not yet a usable row (recorded): see convertToPutioUserTorrent.
+		expect(transfer).toMatchObject({ status: 'PREPARING_DOWNLOAD', hash: null, file_id: null });
 		expect(call(0)).toMatchObject({ path: '/v2/transfers/info', form: { urls: MAGNET } });
 		expect(call(1)).toMatchObject({ path: '/v2/transfers/add', form: { url: MAGNET } });
 	});
@@ -228,14 +250,17 @@ describe('adding', () => {
 		expect(fetchMock).toHaveBeenCalledTimes(2);
 	});
 
-	it('sends add-multi as one JSON form field and returns the per-url errors', async () => {
+	it('sends add-multi as one JSON form field and returns the per-url errors (recorded)', async () => {
 		const other = `magnet:?xt=urn:btih:${'16'.repeat(20)}`;
 		fetchMock
-			.mockResolvedValueOnce(reply({ status: 'OK', disk_avail: 1e12, ret: [] }))
-			.mockResolvedValueOnce(reply(transfers.addMulti));
+			.mockResolvedValueOnce(paidReply('transfers-info-paid'))
+			.mockResolvedValueOnce(paidReply('transfers-add-multi'));
 		const result = await addPutioTransfers(TOKEN, [MAGNET, other]);
 		expect(result.transfers).toHaveLength(1);
-		expect(result.errors[0].error_type).toBe('INVALID_URL');
+		expect(result.errors[0]).toMatchObject({
+			error_type: 'UNSUPPORTED_URI_SCHEME',
+			status_code: 400,
+		});
 		expect(JSON.parse(call(1).form!.urls)).toEqual([{ url: MAGNET }, { url: other }]);
 		expect(call(0).form!.urls).toBe(`${MAGNET}\n${other}`);
 	});
@@ -264,8 +289,22 @@ describe('removing', () => {
 		expect(fetchMock).not.toHaveBeenCalled();
 	});
 
-	it('posts comma-joined ids, skipping files that are already gone', async () => {
-		fetchMock.mockResolvedValue(reply(files.delete));
+	it('reads a refused URL as UNSUPPORTED_URI_SCHEME (recorded)', async () => {
+		fetchMock
+			.mockResolvedValueOnce(paidReply('transfers-info-paid'))
+			.mockResolvedValueOnce(paidReply('transfers-add-garbage'));
+		await expect(addPutioTransfer(TOKEN, MAGNET)).rejects.toMatchObject({
+			status: 400,
+			code: 'UNSUPPORTED_URI_SCHEME',
+		});
+	});
+
+	it('posts comma-joined ids, skipping files that are already gone (recorded answers)', async () => {
+		// Both answer 200 OK whether or not the ids exist, so an echo proves nothing.
+		fetchMock
+			.mockResolvedValueOnce(paidReply('files-delete-again'))
+			.mockResolvedValueOnce(paidReply('transfers-cancel-unknown-id'))
+			.mockResolvedValueOnce(paidReply('transfers-cancel-unknown-id'));
 		await deletePutioFiles(TOKEN, [11, 12]);
 		await cancelPutioTransfers(TOKEN, [3]);
 		await removePutioTransfers(TOKEN, [3]);
@@ -326,8 +365,8 @@ describe('files and links', () => {
 	});
 
 	it('mints a download link for one file', async () => {
-		fetchMock.mockResolvedValueOnce(reply(files.url));
-		await expect(getPutioDownloadUrl(TOKEN, 1101)).resolves.toBe(files.url.url);
+		fetchMock.mockResolvedValueOnce(paidReply('file-url'));
+		await expect(getPutioDownloadUrl(TOKEN, 1101)).resolves.toBe(paid['file-url'].body.url);
 		expect(call(0).path).toBe('/v2/files/1101/url');
 	});
 

@@ -36,6 +36,7 @@ import {
 	ADD_MULTI_CHUNK_SIZE,
 	addPutioTransfer,
 	addPutioTransfers,
+	getPutioTransfer,
 	PutioError,
 	uploadPutioTorrentFile,
 } from '@/services/putio';
@@ -60,6 +61,7 @@ import {
 	TorBoxRateLimitError,
 } from '@/services/torbox';
 import { TorBoxTorrentInfo, TorBoxWebDownload, TorrentInfoResponse } from '@/services/types';
+import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { delay } from '@/utils/delay';
 import { AxiosError } from 'axios';
@@ -1566,6 +1568,22 @@ export const handleAddMultipleTorrentFilesInDl = async (
 };
 
 const PT_BATCH_DELAY = process.env.VITEST_WORKER_ID ? 0 : 250;
+/** A known torrent was COMPLETED about 1.4 s after its add (recorded 2026-11-15). */
+const PT_REFETCH_DELAY = process.env.VITEST_WORKER_ID ? 0 : 1500;
+
+/**
+ * The hashes this browser's copy of the library holds on put.io. put.io does not
+ * dedupe: the same magnet twice made a second transfer and a second folder, and
+ * spent the storage twice (recorded). Without a local library the add goes ahead.
+ */
+const putioHeldHashes = async (): Promise<Set<string>> => {
+	try {
+		const rows = await new UserTorrentDB().all();
+		return new Set(rows.filter((t) => t.id.startsWith('pt:')).map((t) => t.hash));
+	} catch {
+		return new Set();
+	}
+};
 
 /** put.io's refusals are already readable (see `PutioError`); anything else is not. */
 const ptErrorMessage = (error: unknown): string | null =>
@@ -1588,9 +1606,17 @@ export const handleAddAsMagnetInPt = async (
 		if (!silent) toast.error('That is not a valid info hash.', magnetToastOptions);
 		throw new PutioError('That is not a valid info hash.', 'invalid_info_hash');
 	}
+	if ((await putioHeldHashes()).has(sourceHash)) {
+		if (!silent) toast('Already in your put.io.', magnetToastOptions);
+		return;
+	}
 	try {
 		const added = await addPutioTransfer(ptKey, toMagnetUri(hash));
-		const row = convertToPutioUserTorrent(added, sourceHash);
+		// The add answers before put.io has read the magnet: no name, hash, size or
+		// files yet (recorded). One more look a moment later finds most of them.
+		await delay(PT_REFETCH_DELAY);
+		const fresh = await getPutioTransfer(ptKey, added.id).catch(() => added);
+		const row = convertToPutioUserTorrent(fresh, sourceHash);
 		if (callback) await callback(row);
 		if (!silent) {
 			toast.success(
@@ -1624,12 +1650,21 @@ export const handleAddMultipleHashesInPt = async (
 	sources: string[],
 	callback?: () => Promise<void>
 ) => {
-	const valid = sources.filter((source) => {
+	const held = await putioHeldHashes();
+	const seen = new Set<string>();
+	const valid: string[] = [];
+	let invalid = 0;
+	for (const source of sources) {
 		const hash = extractTorrentInputs(source)[0]?.hash;
-		return !!hash && isValidHash(hash);
-	});
+		if (!hash || !isValidHash(hash)) invalid++;
+		else if (!held.has(hash) && !seen.has(hash)) {
+			seen.add(hash);
+			valid.push(source);
+		}
+	}
+	const skipped = sources.length - invalid - valid.length;
 	let added = 0;
-	let refused = sources.length - valid.length;
+	let refused = invalid;
 	let stoppedBy: string | null = null;
 	for (let i = 0; i < valid.length; i += ADD_MULTI_CHUNK_SIZE) {
 		if (i > 0) await delay(PT_BATCH_DELAY);
@@ -1651,6 +1686,7 @@ export const handleAddMultipleHashesInPt = async (
 	}
 	if (callback) await callback();
 	const parts = [`Added ${added} to put.io`];
+	if (skipped > 0) parts.push(`${skipped} already there`);
 	if (refused > 0) parts.push(`${refused} refused`);
 	toast(`${parts.join(' — ')}.`, magnetToastOptions);
 	if (stoppedBy) toast.error(`${stoppedBy} Stopped early.`, magnetToastOptions);

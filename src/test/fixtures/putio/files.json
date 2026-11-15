@@ -1,9 +1,4 @@
 {
-	"delete": {
-		"status": "OK",
-		"skipped": 0,
-		"cursor": null
-	},
 	"folder": {
 		"status": "OK",
 		"parent": {
@@ -163,9 +158,5 @@
 				"updated_at": "2026-11-09T11:00:00"
 			}
 		]
-	},
-	"url": {
-		"status": "OK",
-		"url": "https://s100.put.io/download/1101?oauth_token=REDACTED"
 	}
 }

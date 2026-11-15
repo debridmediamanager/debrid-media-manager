@@ -1,4 +1,5 @@
 import files from '@/test/fixtures/putio/files.json';
+import paid from '@/test/fixtures/putio/recorded-paid-2026-11-15.json';
 import transfers from '@/test/fixtures/putio/transfers.json';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -52,7 +53,7 @@ const route = (url: string) => {
 		return files.subfolder;
 	if (pathname === '/v2/files/list' && searchParams.get('parent_id') === '1010')
 		return files.singleFile;
-	if (/^\/v2\/files\/\d+\/url$/.test(pathname)) return files.url;
+	if (/^\/v2\/files\/\d+\/url$/.test(pathname)) return paid['file-url'].body;
 	throw new Error(`unrouted ${pathname}`);
 };
 
@@ -125,7 +126,7 @@ describe('showInfoForPT', () => {
 		const button = document.querySelector<HTMLButtonElement>('button[data-pm-file-id="1102"]')!;
 		button.click();
 
-		await vi.waitFor(() => expect(tab.location.href).toBe(files.url.url));
+		await vi.waitFor(() => expect(tab.location.href).toBe(paid['file-url'].body.url));
 		expect(paths().filter((p) => p.endsWith('/url'))).toEqual(['/v2/files/1102/url']);
 	});
 

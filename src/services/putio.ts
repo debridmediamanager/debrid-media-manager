@@ -4,10 +4,10 @@ import { extractTorrentInputs, isValidHash } from '@/utils/extractHashes';
  * put.io API client, called straight from the browser.
  *
  * Written to put.io's published TypeScript client schemas and API docs
- * (devs.put.io), not to captures: on 2026-11-15 only the sign-in endpoints and
- * the 401 envelope had been seen live. Everything else - transfers, files,
- * links, add-multi - is the documented shape read tolerantly, so a field that
- * turns out missing or null degrades a row instead of throwing.
+ * (devs.put.io), then checked against answers recorded on 2026-11-15 from an
+ * account without a plan and then with one (`src/test/fixtures/putio/README.md`
+ * says what each shows). Fields are read tolerantly, so one that turns out
+ * missing or null degrades a row instead of throwing.
  *
  * What is load-bearing:
  *
@@ -464,8 +464,9 @@ export async function listPutioTransferFiles(
 }
 
 /**
- * A download URL for one file. It carries a token valid only from the IP that
- * asked (docs), which is why the browser mints it, on click, and nothing keeps it.
+ * A download URL for one file. It carries a credential (`oauth_token` and a
+ * signed `u=`, recorded), so it is minted on click and never logged or kept.
+ * The docs bind it to the asking IP; it also served from a second IP when tried.
  */
 export async function getPutioDownloadUrl(token: string, fileId: number): Promise<string> {
 	const { url } = await ptRequest<{ url?: string }>(token, `/files/${fileId}/url`);

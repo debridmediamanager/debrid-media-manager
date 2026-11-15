@@ -1110,7 +1110,11 @@ export function convertToPutioUserTorrent(
 	transfer: PutioTransfer,
 	knownHash?: string
 ): UserTorrent {
-	const filename = transfer.name || 'noname';
+	const hash = (knownHash || putioTransferHash(transfer)).toLowerCase();
+	// A fresh add is named after the magnet it was given (recorded). The hash reads
+	// as an unnamed "Magnet" row, as other providers' unnamed rows do.
+	const filename =
+		transfer.name && !/^magnet:/i.test(transfer.name) ? transfer.name : hash || 'noname';
 	const [status, progress] = getPutioUserTorrentStatus(transfer.status, transfer.percent_done);
 
 	let mediaType: UserTorrent['mediaType'] = getTypeByNameAndFileCount(filename);
@@ -1132,7 +1136,7 @@ export function convertToPutioUserTorrent(
 		id: toPutioRowId(transfer.id),
 		filename,
 		title: getMediaId(info ?? filename, mediaType, false) || filename,
-		hash: (knownHash || putioTransferHash(transfer)).toLowerCase(),
+		hash,
 		bytes: transfer.size ?? 0,
 		progress,
 		status,

@@ -1,3 +1,4 @@
+import paid from '@/test/fixtures/putio/recorded-paid-2026-11-15.json';
 import transfers from '@/test/fixtures/putio/transfers.json';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -13,6 +14,15 @@ const pt = vi.hoisted(() => ({
 vi.mock('@/services/putio', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/putio')>()),
 	...pt,
+}));
+
+// The library this browser holds, as `putioHeldHashes` reads it.
+const held = vi.hoisted(() => ({ rows: [] as { id: string; hash: string }[] }));
+vi.mock('@/torrent/db', () => ({
+	__esModule: true,
+	default: vi.fn().mockImplementation(function () {
+		return { all: async () => held.rows };
+	}),
 }));
 
 const toastMock = vi.hoisted(() => Object.assign(vi.fn(), { success: vi.fn(), error: vi.fn() }));
@@ -31,6 +41,7 @@ const hashN = (n: number) => n.toString(16).padStart(40, '0');
 
 beforeEach(() => {
 	Object.values(pt).forEach((fn) => fn.mockReset());
+	held.rows = [];
 	toastMock.mockReset();
 	toastMock.success.mockReset();
 	toastMock.error.mockReset();
@@ -44,18 +55,48 @@ describe('handleAddAsMagnetInPt', () => {
 		expect(pt.addPutioTransfer).not.toHaveBeenCalled();
 	});
 
-	it('adds the magnet and hands back a pt: row carrying the hash it sent', async () => {
-		pt.addPutioTransfer.mockResolvedValue({ ...transfers.add.transfer, hash: null });
+	// Recorded: the add answers PREPARING_DOWNLOAD with the magnet as its name and
+	// no hash; a moment later the same transfer is COMPLETED and named.
+	it('builds the row from a second look at the new transfer (recorded)', async () => {
+		const added = paid['transfers-add-known'].body.transfer;
+		pt.addPutioTransfer.mockResolvedValue(added);
+		pt.getPutioTransfer.mockResolvedValue(paid['transfer-completed'].body.transfer);
 		const callback = vi.fn();
 		await handleAddAsMagnetInPt('k', HASH, callback);
+
 		expect(pt.addPutioTransfer).toHaveBeenCalledWith('k', `magnet:?xt=urn:btih:${HASH}`);
+		expect(pt.getPutioTransfer).toHaveBeenCalledWith('k', added.id);
 		const row = callback.mock.calls[0][0];
-		expect(row.id).toBe(`pt:${transfers.add.transfer.id}`);
-		expect(row.hash).toBe(HASH);
+		expect(row).toMatchObject({ id: `pt:${added.id}`, hash: HASH, filename: 'Big Buck Bunny' });
+		expect(toastMock.success).toHaveBeenCalledWith('On put.io — ready.', expect.anything());
+	});
+
+	it('falls back to the add answer, titled by its hash, when the second look fails', async () => {
+		pt.addPutioTransfer.mockResolvedValue(paid['transfers-add-known'].body.transfer);
+		pt.getPutioTransfer.mockRejectedValue(new PutioError('x', 'network_error'));
+		const callback = vi.fn();
+		await handleAddAsMagnetInPt('k', HASH, callback);
+		expect(callback.mock.calls[0][0]).toMatchObject({ hash: HASH, filename: HASH });
 		expect(toastMock.success).toHaveBeenCalledWith(
 			'Added to put.io — downloading.',
 			expect.anything()
 		);
+	});
+
+	// Recorded: put.io made a second transfer and folder for the same magnet.
+	it('does not add a release the library already holds on put.io', async () => {
+		held.rows = [{ id: 'pt:9001', hash: HASH }];
+		await handleAddAsMagnetInPt('k', `magnet:?xt=urn:btih:${HASH.toUpperCase()}`);
+		expect(pt.addPutioTransfer).not.toHaveBeenCalled();
+		expect(toastMock).toHaveBeenCalledWith('Already in your put.io.', expect.anything());
+	});
+
+	it('still adds a release another provider holds', async () => {
+		held.rows = [{ id: 'rd:ABC', hash: HASH }];
+		pt.addPutioTransfer.mockResolvedValue(paid['transfers-add-known'].body.transfer);
+		pt.getPutioTransfer.mockResolvedValue(paid['transfer-completed'].body.transfer);
+		await handleAddAsMagnetInPt('k', HASH);
+		expect(pt.addPutioTransfer).toHaveBeenCalledTimes(1);
 	});
 
 	it('shows put.io’s readable refusal, never raw API text', async () => {
@@ -87,6 +128,25 @@ describe('handleAddMultipleHashesInPt', () => {
 		expect(pt.addPutioTransfers.mock.calls[0][1][0]).toBe(`magnet:?xt=urn:btih:${hashN(1)}`);
 		expect(toastMock).toHaveBeenCalledWith(
 			`Added ${ADD_MULTI_CHUNK_SIZE + 1} to put.io — 3 refused.`,
+			expect.anything()
+		);
+	});
+
+	it('leaves out what put.io already holds and repeats within the list', async () => {
+		held.rows = [{ id: 'pt:9001', hash: hashN(1) }];
+		pt.addPutioTransfers.mockImplementation(async (_k: string, urls: string[]) => ({
+			transfers: urls.map((_, i) => ({ id: i + 1 })),
+			errors: [],
+		}));
+		await handleAddMultipleHashesInPt('k', [
+			hashN(1),
+			hashN(2),
+			`magnet:?xt=urn:btih:${hashN(2)}&dn=again`,
+		]);
+		expect(pt.addPutioTransfers).toHaveBeenCalledTimes(1);
+		expect(pt.addPutioTransfers.mock.calls[0][1]).toEqual([`magnet:?xt=urn:btih:${hashN(2)}`]);
+		expect(toastMock).toHaveBeenCalledWith(
+			'Added 1 to put.io — 2 already there.',
 			expect.anything()
 		);
 	});
