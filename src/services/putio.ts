@@ -510,8 +510,6 @@ export const putioTransferHash = (transfer: Pick<PutioTransfer, 'hash' | 'source
 	return (/^magnet:\?/i.test(source.trim()) && btihOf(source)) || '';
 };
 
-export const isValidPutioBtih = (source: string): boolean => btihOf(source) !== null;
-
 export const _testing = {
 	PT_API_BASE,
 	PT_UPLOAD_BASE,
