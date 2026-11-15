@@ -8,6 +8,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	ADD_MULTI_CHUNK_SIZE,
 	FILES_PAGE_SIZE,
+	INFO_TIMEOUT_MS,
 	MAX_FOLDER_DEPTH,
 	MAX_LISTED_FILES,
 	PutioError,
@@ -222,6 +223,25 @@ describe('adding', () => {
 		// What the add answers is not yet a usable row (recorded): see convertToPutioUserTorrent.
 		expect(transfer).toMatchObject({ status: 'PREPARING_DOWNLOAD', hash: null, file_id: null });
 		expect(call(0)).toMatchObject({ path: '/v2/transfers/info', form: { urls: MAGNET } });
+		expect(call(1)).toMatchObject({ path: '/v2/transfers/add', form: { url: MAGNET } });
+	});
+
+	it('adds anyway when the size check gets no answer: put.io hangs on a torrent it has never seen', async () => {
+		// Measured 2026-11-15: /transfers/info gave no answer in 45 s for a real hash
+		// put.io did not know, while the add of the same hash answered in 0.2 s.
+		vi.useFakeTimers();
+		fetchMock
+			.mockImplementationOnce(
+				(_url: string, init: RequestInit) =>
+					new Promise((_resolve, reject) =>
+						init.signal!.addEventListener('abort', () => reject(new Error('aborted')))
+					)
+			)
+			.mockResolvedValueOnce(paidReply('transfers-add-unknown'));
+		const adding = addPutioTransfer(TOKEN, MAGNET);
+		await vi.advanceTimersByTimeAsync(INFO_TIMEOUT_MS);
+		const transfer = await adding;
+		expect(transfer.id).toBe(paid['transfers-add-unknown'].body.transfer.id);
 		expect(call(1)).toMatchObject({ path: '/v2/transfers/add', form: { url: MAGNET } });
 	});
 

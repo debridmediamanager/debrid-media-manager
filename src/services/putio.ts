@@ -30,6 +30,10 @@ const PT_API_BASE = 'https://api.put.io/v2';
 const PT_UPLOAD_BASE = 'https://upload.put.io/v2';
 
 const REQUEST_TIMEOUT_MS = 30_000;
+// `/transfers/info` answers a torrent put.io knows in ~0.2 s and can hang past
+// 45 s on one it has never seen (measured 2026-11-15), so the space check gets
+// a short wait and is skipped when it runs out.
+export const INFO_TIMEOUT_MS = 5_000;
 
 /** How long every call stands down after a 429 whose reset time we cannot read. */
 export const RATE_LIMIT_BACKOFF_MS = 60_000;
@@ -162,12 +166,20 @@ interface RequestOptions {
 	form?: Record<string, string>;
 	multipart?: FormData;
 	base?: string;
+	timeoutMs?: number;
 }
 
 async function ptRequest<T>(
 	token: string | null,
 	path: string,
-	{ method = 'GET', query, form, multipart, base = PT_API_BASE }: RequestOptions = {}
+	{
+		method = 'GET',
+		query,
+		form,
+		multipart,
+		base = PT_API_BASE,
+		timeoutMs = REQUEST_TIMEOUT_MS,
+	}: RequestOptions = {}
 ): Promise<T> {
 	if (Date.now() < rateLimitedUntil) {
 		throw new PutioError(readable(429, 'rate_limited'), 'rate_limited', 429);
@@ -179,7 +191,7 @@ async function ptRequest<T>(
 	}
 
 	const controller = new AbortController();
-	const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+	const timer = setTimeout(() => controller.abort(), timeoutMs);
 	let response: Response;
 	try {
 		response = await fetch(url.toString(), {
@@ -244,7 +256,11 @@ export async function getPutioTransferInfo(
 	const body = await ptRequest<{
 		disk_avail?: number;
 		ret?: { file_size?: number | null }[];
-	}>(token, '/transfers/info', { method: 'POST', form: { urls: magnets.join('\n') } });
+	}>(token, '/transfers/info', {
+		method: 'POST',
+		form: { urls: magnets.join('\n') },
+		timeoutMs: INFO_TIMEOUT_MS,
+	});
 	return {
 		diskAvail: body.disk_avail ?? 0,
 		sizes: magnets.map((_, i) => body.ret?.[i]?.file_size ?? 0),
@@ -259,7 +275,16 @@ const gib = (bytes: number) => `${(bytes / 1024 ** 3).toFixed(1)} GB`;
  * report, so that message names both.
  */
 async function ensurePutioSpace(token: string, magnets: string[]): Promise<void> {
-	const { diskAvail, sizes } = await getPutioTransferInfo(token, magnets);
+	let info: { diskAvail: number; sizes: number[] };
+	try {
+		info = await getPutioTransferInfo(token, magnets);
+	} catch (error) {
+		// No answer in time means put.io does not know one of these yet; the add
+		// itself answers at once, and put.io refuses what cannot fit.
+		if (error instanceof PutioError && error.code === 'network_error') return;
+		throw error;
+	}
+	const { diskAvail, sizes } = info;
 	const needed = sizes.reduce((sum, size) => sum + size, 0);
 	if (needed <= diskAvail) return;
 	// Deleted files go to put.io's trash and still use the space (recorded), so
