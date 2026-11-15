@@ -1,5 +1,6 @@
 import { BOOT_GUARD_SCRIPT } from '@/utils/bootGuard';
 import { LOOKBEHIND_SHIM_SCRIPT } from '@/utils/lookbehindShim';
+import { POSTER_PRECONNECT_SCRIPT } from '@/utils/posterPreconnect';
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SOCIAL_CARD } from '@/utils/siteMeta';
 import { Head, Html, Main, NextScript } from 'next/document';
 
@@ -52,68 +53,9 @@ export default function Document() {
 				<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 				<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 				<link rel="manifest" href="/site.webmanifest" />
-				{/* DNS prefetch for faster DNS lookups */}
-				<link rel="dns-prefetch" href="//posters0.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//posters1.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//posters2.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//posters3.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//posters4.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//posters5.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//posters6.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//posters7.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//posters8.debridmediamanager.com" />
-				<link rel="dns-prefetch" href="//posters9.debridmediamanager.com" />
-
-				{/* Preconnect to establish early connections (DNS + TCP + TLS) for the poster domains */}
-				<link
-					rel="preconnect"
-					href="https://posters0.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://posters1.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://posters2.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://posters3.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://posters4.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://posters5.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://posters6.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://posters7.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://posters8.debridmediamanager.com"
-					crossOrigin="anonymous"
-				/>
-				<link
-					rel="preconnect"
-					href="https://posters9.debridmediamanager.com"
-					crossOrigin="anonymous"
+				<script
+					id="dmm-poster-preconnect"
+					dangerouslySetInnerHTML={{ __html: POSTER_PRECONNECT_SCRIPT }}
 				/>
 			</Head>
 			<body>

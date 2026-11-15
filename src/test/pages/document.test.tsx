@@ -13,12 +13,18 @@ vi.mock('next/document', () => ({
 import Document from '@/pages/_document';
 
 describe('Custom Document', () => {
-	it('renders SEO meta tags and dns-prefetch links', () => {
+	it('renders SEO meta tags', () => {
 		const html = renderToStaticMarkup(<Document />);
 		expect(html).toContain('name="description"');
 		expect(html).toContain('property="og:title"');
-		expect(html.match(/rel="dns-prefetch"/g)?.length ?? 0).toBeGreaterThan(5);
-		expect(html.match(/rel="preconnect"/g)?.length ?? 0).toBeGreaterThan(5);
+	});
+
+	// A self-hosted copy never loads posters from DMM's poster cache, so the page no longer
+	// names those hosts itself: the inline script adds them on debridmediamanager.com only.
+	it('preconnects to the poster hosts only through the host-gated script', () => {
+		const html = renderToStaticMarkup(<Document />);
+		expect(html).toContain('<script id="dmm-poster-preconnect">');
+		expect(html).not.toMatch(/<link[^>]*posters\d\.debridmediamanager\.com/);
 	});
 
 	// Fizzy #587: a 404ed chunk left the SSR loading screen with no way out.

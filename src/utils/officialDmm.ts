@@ -1,4 +1,4 @@
-const OFFICIAL_HOST = /(^|\.)debridmediamanager\.com$/i;
+export const OFFICIAL_HOST = /(^|\.)debridmediamanager\.com$/i;
 
 /**
  * Whether this copy of DMM is the one at debridmediamanager.com. A self-hosted copy
