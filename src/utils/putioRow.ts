@@ -47,7 +47,11 @@ const PT_STATUS: Record<PutioTransferStatus, [UserTorrentStatus, string]> = {
 const lookup = (status: string | null | undefined) =>
 	Object.hasOwn(PT_STATUS, status ?? '') ? PT_STATUS[status as PutioTransferStatus] : null;
 
-/** A status put.io adds later shows as itself and counts as an error until mapped. */
+/**
+ * A status put.io adds later shows as itself and counts as waiting until mapped,
+ * never as an error: error rows are what the Failed filter and "Delete shown"
+ * act on, and those would delete its files.
+ */
 export const getPutioStatusText = (status: string | null | undefined): string =>
 	lookup(status)?.[1] ?? (status || 'Unknown');
 
@@ -55,7 +59,7 @@ export const getPutioUserTorrentStatus = (
 	status: string | null | undefined,
 	percentDone: number | null | undefined
 ): [UserTorrentStatus, number] => {
-	const mapped = lookup(status)?.[0] ?? UserTorrentStatus.error;
+	const mapped = lookup(status)?.[0] ?? UserTorrentStatus.waiting;
 	if (mapped === UserTorrentStatus.finished) return [mapped, 100];
 	const progress = typeof percentDone === 'number' ? Math.max(0, Math.min(100, percentDone)) : 0;
 	return [mapped, progress];

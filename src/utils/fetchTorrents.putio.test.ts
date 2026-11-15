@@ -87,7 +87,7 @@ describe('convertToPutioUserTorrent', () => {
 	it('survives a transfer with nothing but an id', () => {
 		const row = convertToPutioUserTorrent({ id: 7 });
 		expect(row).toMatchObject({ id: 'pt:7', filename: 'noname', hash: '', bytes: 0 });
-		expect(row.status).toBe(UserTorrentStatus.error);
+		expect(row.status).toBe(UserTorrentStatus.waiting);
 	});
 
 	it('prefers the hash the caller just added with', () => {

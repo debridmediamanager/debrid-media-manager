@@ -42,8 +42,11 @@ describe('put.io transfer status', () => {
 		expect(getPutioUserTorrentStatus('IN_QUEUE', null)).toEqual([UserTorrentStatus.waiting, 0]);
 	});
 
-	it('shows a status put.io adds later as itself, as an error until mapped', () => {
-		expect(getPutioUserTorrentStatus('NEW_THING', 50)).toEqual([UserTorrentStatus.error, 50]);
+	// An error row is what the Failed filter and "Delete shown" act on: a status
+	// DMM does not know yet must never look failed and get its files deleted.
+	it('shows a status put.io adds later as itself, as in progress until mapped', () => {
+		expect(getPutioUserTorrentStatus('NEW_THING', 50)).toEqual([UserTorrentStatus.waiting, 50]);
+		expect(getPutioUserTorrentStatus(null, null)).toEqual([UserTorrentStatus.waiting, 0]);
 		expect(getPutioStatusText('NEW_THING')).toBe('NEW_THING');
 		expect(getPutioStatusText(null)).toBe('Unknown');
 		// Not a prototype key either.
