@@ -294,6 +294,35 @@ describe('handleDeletePtTorrent', () => {
 		expect(toastMock).toHaveBeenCalledWith(expect.stringMatching(/trash/), expect.anything());
 	});
 
+	it('deletes put.io rows one at a time, however many are asked for at once', async () => {
+		const order: string[] = [];
+		pt.getPutioTransfer.mockImplementation(async (_k: string, id: number) => {
+			order.push(`get ${id}`);
+			return { ...queued, id };
+		});
+		pt.cancelPutioTransfers.mockImplementation(async (_k: string, [id]: number[]) => {
+			await new Promise((resolve) => setTimeout(resolve, 5));
+			order.push(`cancel ${id}`);
+		});
+
+		const results = await Promise.all([
+			handleDeletePtTorrent('k', 'pt:1'),
+			handleDeletePtTorrent('k', 'pt:2'),
+		]);
+		expect(results).toEqual([true, true]);
+		expect(order).toEqual(['get 1', 'cancel 1', 'get 2', 'cancel 2']);
+	});
+
+	// A cancel during another cancel answers 400 TRANSFER_CANCEL_TIMEOUT (docs).
+	it('does not report a row deleted when its cancel is refused after its files went', async () => {
+		pt.getPutioTransfer.mockResolvedValue(seeding);
+		pt.cancelPutioTransfers.mockRejectedValue(
+			new PutioError('refused', 'TRANSFER_CANCEL_TIMEOUT', 400)
+		);
+		await expect(handleDeletePtTorrent('k', `pt:${seeding.id}`)).resolves.toBe(false);
+		expect(pt.deletePutioFiles).toHaveBeenCalledTimes(1);
+	});
+
 	it('refuses a row id that names no transfer', async () => {
 		await expect(handleDeletePtTorrent('k', 'pt:0')).resolves.toBe(false);
 		expect(pt.getPutioTransfer).not.toHaveBeenCalled();

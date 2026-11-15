@@ -234,6 +234,9 @@ export const handleDeleteDlTorrent = async (
 	}
 };
 
+/** The tail of the put.io delete queue; see `handleDeletePtTorrent`. */
+let ptDeletes: Promise<unknown> = Promise.resolve();
+
 /**
  * Removes a put.io row: its files first, then its transfer, never retried.
  *
@@ -241,13 +244,24 @@ export const handleDeleteDlTorrent = async (
  * and is refused). Files go to put.io's trash when the account keeps one. Then
  * `/transfers/cancel` drops the entry, except that a seeding transfer only stops
  * seeding and stays as COMPLETED (docs), so those are also removed. If deleting
- * the files fails nothing else happens, so the row stays and can be retried.
+ * the files fails nothing else happens, so the row stays and can be retried; a
+ * refused cancel after the files went reports the row as not deleted.
+ *
+ * One row at a time, whoever asks: put.io refuses a cancel while another runs
+ * (400 TRANSFER_CANCEL_TIMEOUT, docs), and one 429 stands every call down for a
+ * minute, so the library's four-at-a-time bulk delete would collect refusals.
  */
-export const handleDeletePtTorrent = async (
+export const handleDeletePtTorrent = (
 	ptKey: string,
 	id: string,
 	disableToast: boolean = false
 ): Promise<boolean> => {
+	const run = ptDeletes.then(() => deletePtRow(ptKey, id, disableToast));
+	ptDeletes = run.catch(() => undefined);
+	return run;
+};
+
+const deletePtRow = async (ptKey: string, id: string, disableToast: boolean): Promise<boolean> => {
 	const transferId = parsePutioRowId(id);
 	if (!transferId) {
 		toast.error(`Unrecognised put.io row ${id}.`);
