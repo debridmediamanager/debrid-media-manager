@@ -377,6 +377,22 @@ describe('handleDeletePtTorrent', () => {
 			expect(pt.cancelPutioTransfers).not.toHaveBeenCalled();
 		});
 
+		// A cancelled sweep of ten rows must not ask ten times.
+		it('remembers a no for the page load and deletes no later row either', async () => {
+			pt.getPutioAccountInfo.mockResolvedValue(noTrash);
+			pt.getPutioTransfer.mockResolvedValue(seeding);
+			modalFire.mockResolvedValue({ isConfirmed: false });
+			const results = await Promise.all([
+				handleDeletePtTorrent('no-trash-3', `pt:${seeding.id}`),
+				handleDeletePtTorrent('no-trash-3', `pt:${seeding.id}`),
+				handleDeletePtTorrent('no-trash-3', `pt:${seeding.id}`),
+			]);
+			expect(results).toEqual([false, false, false]);
+			expect(modalFire).toHaveBeenCalledTimes(1);
+			expect(pt.deletePutioFiles).not.toHaveBeenCalled();
+			expect(pt.cancelPutioTransfers).not.toHaveBeenCalled();
+		});
+
 		it('deletes after a yes without saying the files wait in the trash, and asks once', async () => {
 			pt.getPutioAccountInfo.mockResolvedValue(noTrash);
 			pt.getPutioTransfer.mockResolvedValue(seeding);

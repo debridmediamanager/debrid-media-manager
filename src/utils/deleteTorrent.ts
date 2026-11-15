@@ -253,6 +253,8 @@ const putioTrashEnabled = (ptKey: string): Promise<boolean> => {
 
 /** Accounts whose owner agreed, this page load, that put.io deletes for good. */
 const ptPermanentDeleteConfirmed = new Set<string>();
+/** Accounts whose owner said no, this page load: later rows are not asked again. */
+const ptPermanentDeleteRefused = new Set<string>();
 
 /**
  * Removes a put.io row: its files first, then its transfer, never retried.
@@ -289,6 +291,7 @@ const deletePtRow = async (ptKey: string, id: string, disableToast: boolean): Pr
 		const hasFiles = typeof transfer.file_id === 'number' && transfer.file_id > 0;
 		const toTrash = hasFiles && (await putioTrashEnabled(ptKey));
 		if (hasFiles && !toTrash && !ptPermanentDeleteConfirmed.has(ptKey)) {
+			if (ptPermanentDeleteRefused.has(ptKey)) return false;
 			const { isConfirmed } = await Modal.fire({
 				title: 'Delete for good?',
 				text: "put.io's trash is off for this account, so deleting removes the files for good.",
@@ -296,7 +299,10 @@ const deletePtRow = async (ptKey: string, id: string, disableToast: boolean): Pr
 				showCancelButton: true,
 				confirmButtonText: 'Delete for good',
 			});
-			if (!isConfirmed) return false;
+			if (!isConfirmed) {
+				ptPermanentDeleteRefused.add(ptKey);
+				return false;
+			}
 			ptPermanentDeleteConfirmed.add(ptKey);
 		}
 		if (hasFiles) await deletePutioFiles(ptKey, [transfer.file_id!]);
