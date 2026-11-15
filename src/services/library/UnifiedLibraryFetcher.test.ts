@@ -97,18 +97,16 @@ describe('UnifiedLibraryFetcher', () => {
 	});
 
 	describe('put.io', () => {
-		it('lists every transfer through the limiter and never caches under the token', async () => {
+		it('lists every transfer and never caches under the token', async () => {
 			const { fetcher, cache, limiter } = createFetcher();
 			mockListPutioTransfers.mockResolvedValueOnce([{ id: 1 }, { id: 2 }]);
 
 			const result = await fetcher.fetchLibrary('putio', 'pt-token');
 
 			expect(result).toEqual([{ id: 'pt:1' }, { id: 'pt:2' }]);
-			expect(limiter.execute).toHaveBeenCalledWith(
-				'putio',
-				'pt-library',
-				expect.any(Function)
-			);
+			// The client stands down on a 429 by itself; a limiter budget here would
+			// count one page walk as one request and pace nothing.
+			expect(limiter.execute).not.toHaveBeenCalled();
 			// CacheManager logs its keys, and a key would carry the token.
 			expect(cache.get).not.toHaveBeenCalled();
 			expect(cache.set).not.toHaveBeenCalled();

@@ -161,9 +161,9 @@ export class UnifiedLibraryFetcher {
 	 * carry the token, which put.io asks apps to keep out of logs.
 	 */
 	private async fetchPutioLibrary(token: string, options: FetchOptions): Promise<UserTorrent[]> {
-		const transfers = await this.rateLimiter.execute('putio', 'pt-library', () =>
-			listPutioTransfers(token)
-		);
+		// No limiter budget: the client stands down on a 429 itself, and a budget
+		// here would count a whole page walk as one request.
+		const transfers = await listPutioTransfers(token);
 		const limited = options.maxItems ? transfers.slice(0, options.maxItems) : transfers;
 		const torrents = limited.map((transfer) => convertToPutioUserTorrent(transfer));
 		options.onProgress?.(torrents.length, torrents.length);

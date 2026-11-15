@@ -107,18 +107,6 @@ export class UnifiedRateLimiter {
 			burstSize: 5,
 		});
 
-		// put.io publishes no limits, and a 429's reset header is not readable from
-		// the browser, so the client stands down for a fixed minute on its own.
-		// Hence no retries here, a small budget and little concurrency.
-		this.configs.set('putio', {
-			maxRequestsPerMinute: 60,
-			maxConcurrent: 2,
-			retryAttempts: 0,
-			backoffMultiplier: 2,
-			jitterRange: 0.2,
-			burstSize: 5,
-		});
-
 		// Initialize structures for each service
 		for (const service of this.configs.keys()) {
 			this.queues.set(service, []);
