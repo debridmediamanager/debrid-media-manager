@@ -26,7 +26,7 @@ import { extractTorrentInputs, isValidHash } from '@/utils/extractHashes';
  */
 
 const PT_API_BASE = 'https://api.put.io/v2';
-/** Uploads must use this host (docs). Its CORS has not been measured. */
+/** Uploads must use this host (docs); measured to allow the browser with `authorization`. */
 const PT_UPLOAD_BASE = 'https://upload.put.io/v2';
 
 const REQUEST_TIMEOUT_MS = 30_000;
@@ -149,6 +149,7 @@ const readable = (status: number, code: string): string => {
 	if (status === 429)
 		return 'put.io is limiting requests. Wait a minute; if it keeps happening, open put.io in this browser to clear it.';
 	if (status === 404) return 'put.io no longer has that item.';
+	if (code === 'INVALID_TORRENT') return 'put.io could not read that .torrent file.';
 	if (status >= 500) return `put.io had a server error (${status}). Try again later.`;
 	return `put.io refused the request (${code}).`;
 };

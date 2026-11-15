@@ -238,6 +238,26 @@ describe('handleAddMultipleHashesInPt', () => {
 });
 
 describe('handleAddMultipleTorrentFilesInPt', () => {
+	// Recorded: a file that is not a torrent answers 400 INVALID_TORRENT.
+	it('says why each upload failed and carries on with the rest', async () => {
+		pt.uploadPutioTorrentFile
+			.mockRejectedValueOnce(
+				new PutioError('put.io could not read that .torrent file.', 'INVALID_TORRENT', 400)
+			)
+			.mockResolvedValueOnce(paid['files-upload-torrent'].body.transfer);
+		const files = [1, 2].map((n) => new File(['x'], `${n}.torrent`));
+		await handleAddMultipleTorrentFilesInPt('k', files);
+		expect(toastMock.error).toHaveBeenCalledWith(
+			'put.io could not read that .torrent file.',
+			expect.anything()
+		);
+		expect(pt.uploadPutioTorrentFile).toHaveBeenCalledTimes(2);
+		expect(toastMock).toHaveBeenCalledWith(
+			'Added 1 torrent file to put.io.',
+			expect.anything()
+		);
+	});
+
 	it('stops uploading once put.io refuses the account', async () => {
 		pt.uploadPutioTorrentFile
 			.mockResolvedValueOnce({ id: 1 })

@@ -1739,6 +1739,10 @@ export const handleAddMultipleTorrentFilesInPt = async (
 				stoppedBy = error.message;
 				break;
 			}
+			toast.error(
+				ptErrorMessage(error) ?? 'Failed to upload a .torrent file to put.io.',
+				magnetToastOptions
+			);
 		}
 	}
 	if (callback) await callback();

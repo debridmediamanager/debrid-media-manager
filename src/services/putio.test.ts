@@ -30,6 +30,7 @@ import {
 	putioTransferHash,
 	removePutioTransfers,
 	requestPutioDeviceCode,
+	uploadPutioTorrentFile,
 } from './putio';
 
 const TOKEN = 'pt-test-token';
@@ -281,6 +282,28 @@ describe('adding', () => {
 		fetchMock.mockResolvedValueOnce(recordedReply('transfers-info-mixed'));
 		const info = await getPutioTransferInfo(TOKEN, ['a', 'b']);
 		expect(info).toEqual({ diskAvail: 0, sizes: [0, 129302391] });
+	});
+});
+
+describe('uploading a .torrent', () => {
+	const file = new File(['d8:announce'], 'release.torrent');
+
+	it('sends it to upload.put.io as a torrent and reads the new transfer (recorded)', async () => {
+		fetchMock.mockResolvedValueOnce(paidReply('files-upload-torrent'));
+		const transfer = await uploadPutioTorrentFile(TOKEN, file);
+		expect(transfer).toMatchObject({ status: 'IN_QUEUE', type: 'TORRENT', source: 'upload' });
+		const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+		expect(new URL(url).host).toBe('upload.put.io');
+		expect((init.body as FormData).get('torrent')).toBe('true');
+	});
+
+	it('says plainly when put.io cannot read the file (recorded)', async () => {
+		fetchMock.mockResolvedValueOnce(paidReply('files-upload-junk'));
+		await expect(uploadPutioTorrentFile(TOKEN, file)).rejects.toMatchObject({
+			status: 400,
+			code: 'INVALID_TORRENT',
+			message: 'put.io could not read that .torrent file.',
+		});
 	});
 });
 

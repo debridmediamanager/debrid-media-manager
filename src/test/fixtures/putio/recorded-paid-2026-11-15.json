@@ -415,6 +415,63 @@
 			"total": 2
 		}
 	},
+	"files-upload-junk": {
+		"status": 400,
+		"body": {
+			"error_id": null,
+			"error_message": "File or link given is not a .torrent file or is corrupt.",
+			"error_type": "INVALID_TORRENT",
+			"error_uri": "http://api.put.io/v2/docs",
+			"extra": {},
+			"status": "ERROR",
+			"status_code": 400
+		}
+	},
+	"files-upload-torrent": {
+		"status": 200,
+		"body": {
+			"status": "OK",
+			"transfer": {
+				"availability": null,
+				"callback_url": null,
+				"client_ip": null,
+				"completion_percent": null,
+				"created_at": "2026-11-15T04:58:33.086450",
+				"created_torrent": false,
+				"current_ratio": null,
+				"down_speed": null,
+				"download_id": null,
+				"downloaded": null,
+				"error_message": null,
+				"estimated_time": null,
+				"file_id": null,
+				"finished_at": null,
+				"hash": "c9e15763f722f23e98a29decdfae341b98d53056",
+				"id": 9102,
+				"is_private": false,
+				"name": "Cosmos Laundromat",
+				"peers_connected": null,
+				"peers_getting_from_us": null,
+				"peers_sending_to_us": null,
+				"percent_done": null,
+				"save_parent_id": 0,
+				"seconds_seeding": null,
+				"simulated": false,
+				"size": 220864086,
+				"source": "upload",
+				"started_at": null,
+				"status": "IN_QUEUE",
+				"subscription_id": null,
+				"torrent_link": null,
+				"tracker": null,
+				"tracker_message": null,
+				"type": "TORRENT",
+				"up_speed": null,
+				"uploaded": null,
+				"userfile_exists": false
+			}
+		}
+	},
 	"transfer-after-file-delete": {
 		"status": 200,
 		"body": {

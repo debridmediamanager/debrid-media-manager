@@ -49,6 +49,10 @@ token is stored. The download URL in `file-url` is replaced whole, because put.i
   200 and keeps files. Both answer 200 OK for ids that do not exist (`files-delete-again`,
   `transfers-cancel-unknown-id`), so a success proves nothing.
 - Deleted files go to put.io's trash (`trash-list`) and still count against the storage.
+- `upload.put.io` accepts a browser upload (its CORS reflects the origin and allows
+  `authorization`). A `.torrent` answers 200 with an `IN_QUEUE` transfer whose `source` is
+  `upload` (`files-upload-torrent`); anything else answers 400 `INVALID_TORRENT`
+  (`files-upload-junk`).
 
 ## Schema-derived
 
