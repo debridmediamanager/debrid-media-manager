@@ -50,6 +50,9 @@ vi.mock('./render', () => ({
 	__esModule: true,
 	renderTorrentInfo: vi.fn(() => '<tr></tr>'),
 	renderTorrentInfoTB: vi.fn(() => '<tr></tr>'),
+	renderTorrentInfoPM: vi.fn(() => '<tr></tr>'),
+	renderTorrentInfoOC: vi.fn(() => '<tr></tr>'),
+	renderTorrentInfoDL: vi.fn(() => '<tr></tr>'),
 }));
 
 vi.mock('./watchButtons', () => ({
@@ -72,7 +75,14 @@ import axios from 'axios';
 import adFixture from '../../test/fixtures/alldebrid-library-magnet.json';
 import restartRefused from '../../test/fixtures/alldebrid-restart-refused.json';
 import Modal from '../modals/modal';
-import { showInfoForAD, showInfoForRD, showInfoForTB } from './index';
+import {
+	showInfoForAD,
+	showInfoForDL,
+	showInfoForOC,
+	showInfoForPM,
+	showInfoForRD,
+	showInfoForTB,
+} from './index';
 
 beforeEach(() => {
 	vi.clearAllMocks();
@@ -548,5 +558,129 @@ describe('AllDebrid popup Reinsert', () => {
 		const [url, body] = post.mock.calls.at(-1)!;
 		expect(url).toContain('/magnet/restart');
 		expect(String(body)).toBe('id=813291548');
+	});
+});
+
+// Card 692: a release name comes from whoever made the torrent, and the dialog
+// renders it as HTML, so a name holding markup ran script that could read every
+// token in localStorage.
+describe('release names in the details dialogs', () => {
+	const evil = '<img src=x onerror=alert(1)>';
+	const added = new Date('2026-11-01T00:00:00Z');
+	const providerRow = {
+		hash: 'a'.repeat(40),
+		filename: evil,
+		title: evil,
+		bytes: 1024,
+		serviceStatus: 'finished',
+		progress: 100,
+		added,
+	};
+
+	const dialogs: Array<[string, () => Promise<void>]> = [
+		[
+			'Real-Debrid',
+			() =>
+				showInfoForRD(
+					'app',
+					'rd-key',
+					{
+						id: 1,
+						hash: 'hash-1',
+						filename: evil,
+						bytes: 1024,
+						original_filename: evil,
+						original_bytes: 1024,
+						progress: 100,
+						speed: 0,
+						seeders: 0,
+						status: 'downloaded',
+						fake: false,
+						links: [],
+						files: [],
+						added: added.toISOString(),
+					} as any,
+					'tt1234567',
+					'movie',
+					false
+				),
+		],
+		[
+			'Real-Debrid search result',
+			() =>
+				showInfoForRD(
+					'app',
+					'rd-key',
+					{
+						id: 1,
+						hash: 'hash-1',
+						filename: evil,
+						bytes: 1024,
+						original_filename: evil,
+						original_bytes: 1024,
+						progress: 100,
+						speed: 0,
+						seeders: 0,
+						status: 'downloaded',
+						fake: true,
+						links: [],
+						files: [],
+						added: added.toISOString(),
+					} as any,
+					'',
+					'movie',
+					false
+				),
+		],
+		[
+			'AllDebrid',
+			() =>
+				showInfoForAD('app', 'ad-key', {
+					id: 'ad-1',
+					hash: 'hash-ad',
+					filename: evil,
+					size: 1024,
+					status: 'Ready',
+					statusCode: 4,
+					uploadDate: 1700000000,
+					links: [],
+				} as any),
+		],
+		[
+			'TorBox',
+			() =>
+				showInfoForTB(
+					'app',
+					'tb-key',
+					{
+						id: 7,
+						hash: 'hash-tb',
+						name: evil,
+						size: 1024,
+						download_state: 'downloaded',
+						download_finished: true,
+						download_present: true,
+						progress: 1,
+						created_at: added.toISOString(),
+						files: [],
+					} as any,
+					false
+				),
+		],
+		[
+			'Premiumize',
+			() => showInfoForPM('app', 'pm-key', { ...providerRow, id: 'pm:1', selectedFiles: [] }),
+		],
+		['Offcloud', () => showInfoForOC('app', 'oc-key', { ...providerRow, id: 'oc:abc' })],
+		['Debrid-Link', () => showInfoForDL('app', 'dl-key', { ...providerRow, id: 'dl:abc' })],
+	];
+
+	it.each(dialogs)('%s shows the name as text, never as markup', async (_, open) => {
+		vi.spyOn(console, 'error').mockImplementation(() => {});
+		await open();
+
+		const html = mocks.modalFireMock.mock.calls.at(-1)![0].html as string;
+		expect(html).toContain('&lt;img src=x onerror=alert(1)&gt;');
+		expect(html).not.toContain('<img src=x');
 	});
 });

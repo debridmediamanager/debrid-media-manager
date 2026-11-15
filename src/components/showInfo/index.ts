@@ -159,7 +159,7 @@ export const showInfoForRD = async (
     </div>`
 		: '';
 
-	let html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${info.filename}</h1>
+	let html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${escapeHtml(info.filename)}</h1>
     ${libraryActions}
     <hr class="border-gray-600"/>
     <div class="text-sm max-h-60 mb-2 text-left p-1 bg-gray-900">
@@ -215,8 +215,8 @@ export const showInfoForRD = async (
 				{
 					label: 'Original filename',
 					value: searchAgainButton
-						? `<span class="mr-2">${info.original_filename}</span>${searchAgainButton}`
-						: info.original_filename,
+						? `<span class="mr-2">${escapeHtml(info.original_filename)}</span>${searchAgainButton}`
+						: escapeHtml(info.original_filename),
 				},
 			]
 		: [];
@@ -750,7 +750,7 @@ export const showInfoForAD = async (
 				...getStreamInfo(mediaInfo),
 			];
 
-	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${info.filename}</h1>
+	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${escapeHtml(info.filename)}</h1>
     ${libraryActions}
     <div class="text-sm text-gray-200">
         ${renderInfoTable(allInfoRows)}
@@ -1051,7 +1051,7 @@ export const showInfoForTB = async (
 				...getStreamInfo(mediaInfo),
 			];
 
-	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${info.name}</h1>
+	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${escapeHtml(info.name)}</h1>
     ${libraryActions}
     <div class="text-sm text-gray-200">
         ${renderInfoTable(infoRows)}
@@ -1266,7 +1266,7 @@ export const showInfoForPM = async (
 		},
 	];
 
-	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${torrent.filename}</h1>
+	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${escapeHtml(torrent.filename)}</h1>
     ${libraryActions}
     <div class="text-sm text-gray-200">
         ${renderInfoTable(infoRows)}
@@ -1521,7 +1521,7 @@ export const showInfoForOC = async (
         </div>`
 		: '';
 
-	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${torrent.filename}</h1>
+	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${escapeHtml(torrent.filename)}</h1>
     ${libraryActions}
     ${stuckNotice}
     <div class="text-sm text-gray-200">
@@ -1727,7 +1727,7 @@ export const showInfoForDL = async (
         </div>`
 		: '';
 
-	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${torrent.filename}</h1>
+	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${escapeHtml(torrent.filename)}</h1>
     ${libraryActions}
     ${zipNotice}
     <div class="text-sm text-gray-200">
