@@ -135,6 +135,21 @@ export const IMDB_TABLES: TableSpec[] = [
 	},
 ];
 
+/**
+ * title.basics without its tvEpisode rows, about 9.9M of its 12.8M (2026-09-27), for
+ * `--skip-episodes`: a self-hosted copy's first import then writes ~2.9M rows instead.
+ * Search never offers episodes; what goes missing is their names, which placement uses
+ * to match a release named by its episode title. The header line passes through.
+ */
+export async function* withoutEpisodes(
+	lines: AsyncIterable<string> | Iterable<string>
+): AsyncIterable<string> {
+	for await (const line of lines) if (parseImdbLine(line)[1] !== 'tvEpisode') yield line;
+}
+
+/** A complete title.basics dump's floor once its episodes are left out. */
+export const BASICS_WITHOUT_EPISODES_MIN_ROWS = 2_000_000;
+
 /** A dump field as the column stores it. */
 function fromDump(kind: Kind, field: string | null): Value {
 	if (kind === 'bool') return field !== null && Number(field) ? 1 : 0;

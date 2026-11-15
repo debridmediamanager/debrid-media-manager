@@ -117,8 +117,9 @@ starts empty:
 
 - **Title search** needs IMDb's public title list. Load it with
   `docker compose -f docker-compose.selfhost.yml run --rm imdb`, or without Docker
-  `npx tsx scripts/import-imdb.ts --data-dir ./imdb-data --apply`. The first run takes hours; add
-  `--tables imdb_title_basics,imdb_title_ratings` to load only what English titles need. Later runs write only
+  `npx tsx scripts/import-imdb.ts --data-dir ./imdb-data --apply`. The full first run takes many hours. For a
+  quick start add `--tables imdb_title_basics,imdb_title_ratings --skip-episodes`, which loads only what English
+  titles need and leaves out IMDb's 10 million TV episodes (about 90 minutes on a 2-core machine). Later runs write only
   what changed, so run it again now and then to pick up new titles. A search made before the import keeps its empty
   answer for up to 12 hours.
 - **Torrent results** come from public Stremio addons (Torrentio, MediaFusion, Peerflix) the first time someone opens

@@ -8,6 +8,7 @@ import {
 	mysqlStore,
 	parseImdbLine,
 	syncTable,
+	withoutEpisodes,
 	type ImdbStore,
 	type TableSpec,
 } from './imdbSync';
@@ -241,6 +242,28 @@ describe('syncTable', () => {
 
 		const second = await syncTable(spec('imdb_title_basics'), BASICS, store);
 		expect(second).toMatchObject({ inserted: 0, updated: 0, linksAdded: 0 });
+	});
+
+	it('leaves the TV episodes out of basics for --skip-episodes, and keeps every other type', async () => {
+		const { store, tables } = memoryStore();
+
+		const result = await syncTable(spec('imdb_title_basics'), withoutEpisodes(BASICS), store);
+
+		const kept = [...tables.get('imdb_title_basics')!.rows.values()].map(([id, type]) => [
+			id,
+			type,
+		]);
+		expect(kept).toEqual([
+			['tt0073045', 'movie'],
+			['tt0149460', 'tvSeries'],
+			['tt0471711', 'video'],
+			['tt1023337', 'short'],
+		]);
+		expect(result).toMatchObject({ read: 4, inserted: 4 });
+		const linked = new Set(
+			[...tables.get('imdb_title_genres')!.rows.values()].map(([id]) => id)
+		);
+		expect([...linked].sort()).toEqual(['tt0073045', 'tt0149460', 'tt0471711', 'tt1023337']);
 	});
 
 	it('refuses a dump shorter than a complete one', async () => {

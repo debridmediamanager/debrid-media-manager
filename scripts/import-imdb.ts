@@ -12,6 +12,8 @@
  *   --tables a,b       only these tables, e.g. imdb_title_ratings,imdb_title_basics
  *   --reuse-hours N    reuse a dump downloaded less than N hours ago (default 20)
  *   --partial-dump     accept a dump shorter than a complete one (tests on a slice)
+ *   --skip-episodes    leave IMDb's ~10M TV episodes out of imdb_title_basics (self-hosted
+ *                      copies: search never offers them; see withoutEpisodes)
  *
  * Only new and changed rows are written and nothing is deleted;
  * `src/services/imdbImport/imdbSync.ts` holds the rules and says why. Every
@@ -25,7 +27,13 @@ import { join } from 'path';
 import { createInterface } from 'readline';
 import { createGunzip } from 'zlib';
 import { downloadDump } from '../src/services/imdbImport/download';
-import { IMDB_TABLES, mysqlStore, syncTable } from '../src/services/imdbImport/imdbSync';
+import {
+	BASICS_WITHOUT_EPISODES_MIN_ROWS,
+	IMDB_TABLES,
+	mysqlStore,
+	syncTable,
+	withoutEpisodes,
+} from '../src/services/imdbImport/imdbSync';
 
 const IMDB_DATASETS_URL = 'https://datasets.imdbws.com';
 
@@ -71,8 +79,15 @@ async function main(prisma: PrismaClient) {
 	const only = argValue('--tables')?.split(',');
 	const reuseMs = Number(argValue('--reuse-hours') ?? 20) * 60 * 60 * 1000;
 	const partial = process.argv.includes('--partial-dump');
+	const skipEpisodes = process.argv.includes('--skip-episodes');
+	const filtered = (table: string) => skipEpisodes && table === 'imdb_title_basics';
 	const tables = (only ? IMDB_TABLES.filter((t) => only.includes(t.table)) : IMDB_TABLES).map(
-		(t) => (partial ? { ...t, minRows: 0 } : t)
+		(t) =>
+			partial
+				? { ...t, minRows: 0 }
+				: filtered(t.table)
+					? { ...t, minRows: BASICS_WITHOUT_EPISODES_MIN_ROWS }
+					: t
 	);
 	if (only && tables.length !== only.length) throw new RunFailure(`unknown table in ${only}`);
 
@@ -88,7 +103,8 @@ async function main(prisma: PrismaClient) {
 		const started = Date.now();
 		try {
 			const path = await download(dataDir, spec.file, reuseMs);
-			const result = await syncTable(spec, lines(path), store, { log, dryRun: !apply });
+			const input = filtered(spec.table) ? withoutEpisodes(lines(path)) : lines(path);
+			const result = await syncTable(spec, input, store, { log, dryRun: !apply });
 			log(
 				`${spec.table}: ${result.read} read, ${result.inserted} new, ${result.updated} changed, ` +
 					`${result.linksAdded} links added, ${result.rejected} refused ` +

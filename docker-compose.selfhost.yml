@@ -51,7 +51,8 @@ services:
       context: .
       target: deps
     working_dir: /app
-    # Extra arguments go to the importer, e.g. `run --rm imdb --tables imdb_title_basics,imdb_title_ratings`.
+    # Extra arguments go to the importer, e.g. a quick first run:
+    #   run --rm imdb --tables imdb_title_basics,imdb_title_ratings --skip-episodes
     entrypoint:
       - sh
       - -c
