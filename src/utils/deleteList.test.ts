@@ -99,4 +99,39 @@ describe('deleteFilteredTorrents', () => {
 
 		expect(toast.dismiss).toHaveBeenCalledWith('toast-id');
 	});
+
+	// put.io rows wait one at a time in put.io's own queue (and may wait on a
+	// "Delete for good?" prompt). Sharing the pool of four, they held its slots and
+	// stalled every other provider's rows behind them.
+	it("gives put.io rows a pool of one beside the other providers' pool of four", async () => {
+		const actual = await vi.importActual<typeof import('./batch')>('./batch');
+		runConcurrentFunctionsMock.mockImplementation(actual.runConcurrentFunctions);
+		let release!: () => void;
+		const putioWaits = new Promise<void>((resolve) => (release = resolve));
+		const started: string[] = [];
+		const torrents = ['pt:1', 'pt:2', 'pt:3', 'pt:4', 'rd:a', 'ad:b'].map((id) => ({
+			id,
+		})) as any[];
+		const wrapDeleteFn = (torrent: any) => async () => {
+			started.push(torrent.id);
+			if (torrent.id.startsWith('pt:')) await putioWaits;
+			return torrent.id;
+		};
+
+		const done = deleteFilteredTorrents(torrents, wrapDeleteFn);
+		await vi.waitFor(() => expect(started).toEqual(expect.arrayContaining(['rd:a', 'ad:b'])));
+		expect(started.filter((id) => id.startsWith('pt:'))).toEqual(['pt:1']);
+		release();
+
+		await expect(done).resolves.toHaveLength(6);
+		expect(
+			runConcurrentFunctionsMock.mock.calls.map(([fns, concurrency]) => [
+				fns.length,
+				concurrency,
+			])
+		).toEqual([
+			[2, 4],
+			[4, 1],
+		]);
+	});
 });
