@@ -7,10 +7,12 @@ import { describe, expect, it } from 'vitest';
 import {
 	addPutioTransfer,
 	cancelPutioTransfers,
+	deletePutioFiles,
 	getPutioAccountInfo,
 	getPutioTransfer,
 	listPutioTransferFiles,
 	listPutioTransfers,
+	putioTransferHash,
 } from './putio';
 
 /**
@@ -18,8 +20,10 @@ import {
  *
  * Skipped unless PUTIO_LIVE_TOKEN is set, so `npm run test` never reaches put.io.
  * The default checks only read: the account, the transfer list and the root folder.
- * PUTIO_LIVE_MUTATE=1 also adds PUTIO_LIVE_HASH (Big Buck Bunny by default), which
- * spends the account's storage, and cancels the transfer again; its files stay.
+ * PUTIO_LIVE_MUTATE=1 also adds PUTIO_LIVE_HASH (Big Buck Bunny by default) unless
+ * the account already holds it (put.io does not dedupe), then deletes its files and
+ * cancels the transfer. Deleted files sit in put.io's trash and still count against
+ * the storage until the trash is emptied on put.io.
  *
  *	PUTIO_LIVE_TOKEN=<token> npx vitest run --config vitest.live.config.ts src/services/putio.live.test.ts
  *
@@ -43,6 +47,10 @@ describe.skipIf(!TOKEN)('Integration: put.io live reads', () => {
 			expect(typeof transfer.status).toBe('string');
 		}
 
+		// The root folder, walked within the client's bounds.
+		const root = await listPutioTransferFiles(TOKEN!, 0);
+		for (const file of root.files) expect(typeof file.id).toBe('number');
+
 		const withFiles = transfers.find((t) => typeof t.file_id === 'number' && t.file_id > 0);
 		if (withFiles) {
 			const { files } = await listPutioTransferFiles(TOKEN!, withFiles.file_id!);
@@ -56,10 +64,19 @@ describe.skipIf(!TOKEN)('Integration: put.io live reads', () => {
 });
 
 describe.skipIf(!TOKEN || !MUTATE)('Integration: put.io live add (PUTIO_LIVE_MUTATE=1)', () => {
-	it('adds a magnet, reads it back by id and cancels it', async () => {
+	it('adds a magnet, reads it back by id and removes it again', async () => {
+		const held = (await listPutioTransfers(TOKEN!)).some((t) => putioTransferHash(t) === HASH);
+		if (held) {
+			console.log('live: the account already holds the hash; not adding a second copy');
+			return;
+		}
 		const added = await addPutioTransfer(TOKEN!, `magnet:?xt=urn:btih:${HASH}`);
+		await new Promise((resolve) => setTimeout(resolve, 3000));
 		const fresh = await getPutioTransfer(TOKEN!, added.id);
 		expect(fresh.id).toBe(added.id);
+		if (typeof fresh.file_id === 'number' && fresh.file_id > 0) {
+			await deletePutioFiles(TOKEN!, [fresh.file_id]);
+		}
 		await cancelPutioTransfers(TOKEN!, [added.id]);
 		console.log(
 			`live: added status=${added.status} now=${fresh.status} file_id=${fresh.file_id}`
