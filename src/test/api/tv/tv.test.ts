@@ -98,7 +98,12 @@ describe('/api/tv pairing', () => {
 		const { userCode, deviceCode } = await start();
 		expect((await approveWith(userCode, { 'pt:accessToken': '"pt"' })).status).toBe(400);
 
-		const approved = await approveWith(userCode, { ...STATE, 'pt:accessToken': '"pt"' });
+		// Saved put.io logins ("Add another account") ride under a synced prefix.
+		const approved = await approveWith(userCode, {
+			...STATE,
+			'pt:accessToken': '"pt"',
+			'dmm:accounts:pt': '[{"id":"1","keys":{"pt:accessToken":"\\"old\\""}}]',
+		});
 		expect(approved.json).toEqual({ services: ['rd', 'ad'] });
 		expect((await call(poll, { deviceCode })).json).toEqual({ status: 'linked', state: STATE });
 	});

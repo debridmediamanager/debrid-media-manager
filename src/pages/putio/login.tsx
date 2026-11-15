@@ -210,8 +210,8 @@ export default function PutioLoginPage() {
 							Debrid Media Manager is an integration for put.io; put.io did not make
 							it. DMM never asks for your put.io password. Your token stays in this
 							browser, which calls put.io directly. It reaches DMM&rsquo;s server only
-							with your other logins: when you turn on remembering them across
-							devices, or hand them to DMM Mobile or a TV. The names and hashes of
+							with your other logins, when you turn on remembering them across
+							devices; linking a TV or Kodi leaves it out. The names and hashes of
 							your put.io transfers go to DMM&rsquo;s server to name the movies and
 							shows in your library, as they do for every service.
 						</p>

@@ -125,6 +125,7 @@ describe('/tv?code= on a browser signed in to Real-Debrid and AllDebrid', () => 
 	it("approves with this browser's synced state and names what the TV got", async () => {
 		// Never sent: no TV app can use put.io.
 		localStorage.setItem('pt:accessToken', '"pttoken"');
+		localStorage.setItem('dmm:accounts:pt', '[{"id":"1","keys":{}}]');
 		fetchMock.mockResolvedValue(reply(200, { services: ['rd', 'ad'] }));
 		await renderPage();
 

@@ -60,8 +60,11 @@ export const SIGN_IN_KEYS = [
  */
 export const PAIRING_SIGN_IN_KEYS = SIGN_IN_KEYS.filter((key) => !key.startsWith('pt:'));
 
+/** Without the put.io token, and without the put.io logins parked by "Add another account". */
 export const withoutPutio = (state: BrowserState): BrowserState =>
-	Object.fromEntries(Object.entries(state).filter(([key]) => !key.startsWith('pt:')));
+	Object.fromEntries(
+		Object.entries(state).filter(([key]) => !key.startsWith('pt:') && key !== 'dmm:accounts:pt')
+	);
 
 /** Prefixes: every `settings:*` flag and the parked logins of the account switcher. */
 export const SYNCED_PREFIXES = ['settings:', 'dmm:accounts:'] as const;
