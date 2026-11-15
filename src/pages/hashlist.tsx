@@ -5,6 +5,7 @@ import {
 	useDebridLinkCredential,
 	useOffcloudApiKey,
 	usePremiumizeCredential,
+	usePutioAccessToken,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
@@ -24,8 +25,10 @@ import {
 	handleAddAsMagnetInDl,
 	handleAddAsMagnetInOc,
 	handleAddAsMagnetInPm,
+	handleAddAsMagnetInPt,
 	handleAddAsMagnetInRd,
 	handleAddMultipleHashesInDl,
+	handleAddMultipleHashesInPt,
 } from '@/utils/addMagnet';
 import { runConcurrentFunctions } from '@/utils/batch';
 import {
@@ -33,6 +36,7 @@ import {
 	handleDeleteDlTorrent,
 	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
+	handleDeletePtTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
@@ -198,6 +202,9 @@ function HashlistPage() {
 	const pmKey = usePremiumizeCredential();
 	const ocKey = useOffcloudApiKey();
 	const dlKey = useDebridLinkCredential();
+	// Not in anyDebridKey: put.io has no cache check, so a cached-only filter
+	// would hide every row from a put.io-only user.
+	const ptKey = usePutioAccessToken();
 	// The cached-only filter and its Show All toggle go together, for every provider.
 	const anyDebridKey = !!(rdKey || adKey || tbKey || pmKey || ocKey || dlKey);
 	const {
@@ -1005,6 +1012,54 @@ function HashlistPage() {
 		});
 	}
 
+	async function addPt(hash: string) {
+		try {
+			await handleAddAsMagnetInPt(ptKey!, hash, async (userTorrent) => {
+				await torrentDB.addAll([userTorrent]);
+				addToCache(userTorrent);
+				await fetchHashAndProgress(hash);
+			});
+		} catch {
+			// handleAddAsMagnetInPt reports its own failure
+		}
+	}
+
+	async function deletePt(hash: string) {
+		const torrents = await torrentDB.getAllByHash(hash);
+		for (const t of torrents) {
+			if (!t.id.startsWith('pt:')) continue;
+			if (!(await handleDeletePtTorrent(ptKey!, t.id))) continue;
+			await torrentDB.deleteById(t.id);
+			removeFromCache(t.id);
+			setHashAndProgress((prev) => {
+				const newHashAndProgress = { ...prev };
+				delete newHashAndProgress[`pt:${hash}`];
+				return newHashAndProgress;
+			});
+		}
+	}
+
+	/**
+	 * Sends the shown list to put.io in add-multi chunks. Every add downloads and
+	 * uses the account's storage, so the size is checked against free space per
+	 * chunk and the sweep stops at the first refusal of the account.
+	 */
+	async function downloadNonDupeTorrentsInPt() {
+		const libraryHashes = await torrentDB.hashes();
+		const yetToDownload = filteredList
+			.filter((t) => !libraryHashes.has(t.hash))
+			.map((t) => t.hash);
+		if (yetToDownload.length === 0) {
+			toast('Everything already downloaded', genericToastOptions);
+			return;
+		}
+		if (!(await confirmBulkAdd(yetToDownload.length, 'put.io'))) return;
+
+		await handleAddMultipleHashesInPt(ptKey!, yetToDownload, async () => {
+			await fetchHashAndProgress();
+		});
+	}
+
 	async function addOc(hash: string) {
 		try {
 			await handleAddAsMagnetInOc(ocKey!, hash, async (userTorrent) => {
@@ -1367,6 +1422,18 @@ function HashlistPage() {
 					</button>
 				)}
 
+				{mounted && ptKey && (
+					<button
+						className={`mr-2 mb-2 rounded border-2 border-[#d946ef] bg-[#d946ef]/30 px-2 py-1 text-fuchsia-100 transition-colors hover:bg-[#d946ef]/50 ${
+							filteredList.length === 0 ? 'cursor-not-allowed opacity-60' : ''
+						}`}
+						onClick={downloadNonDupeTorrentsInPt}
+						disabled={filteredList.length === 0}
+					>
+						PT Download ({filteredList.length})
+					</button>
+				)}
+
 				{Object.keys(router.query).length !== 0 && (
 					<Link
 						href="/hashlist"
@@ -1376,10 +1443,10 @@ function HashlistPage() {
 					</Link>
 				)}
 
-				{mounted && !rdKey && !adKey && !tbKey && !pmKey && !ocKey && !dlKey && (
+				{mounted && !rdKey && !adKey && !tbKey && !pmKey && !ocKey && !dlKey && !ptKey && (
 					<>
 						<span className="mr-2 mb-2 rounded px-2 py-1 text-white">
-							Login to RD/AD/TB/PM/OC/DL to download
+							Login to RD/AD/TB/PM/OC/DL/put.io to download
 						</span>
 					</>
 				)}
@@ -1666,6 +1733,24 @@ function HashlistPage() {
 											>
 												<Download className="mr-1 inline h-3 w-3" />
 												DL
+											</button>
+										)}
+										{mounted && ptKey && isDownloading('pt', t.hash) && (
+											<button
+												className="ml-2 rounded border-2 border-red-500 bg-red-900/30 px-2 py-1 text-red-100 transition-colors hover:bg-red-800/50"
+												onClick={() => deletePt(t.hash)}
+											>
+												<X className="mr-1 inline h-3 w-3" />
+												PT ({hashAndProgress[`pt:${t.hash}`] || 0}%)
+											</button>
+										)}
+										{mounted && ptKey && notInLibrary('pt', t.hash) && (
+											<button
+												className="ml-2 rounded border-2 border-[#d946ef] bg-[#d946ef]/30 px-2 py-1 text-fuchsia-100 transition-colors hover:bg-[#d946ef]/50"
+												onClick={() => addPt(t.hash)}
+											>
+												<Download className="mr-1 inline h-3 w-3" />
+												PT
 											</button>
 										)}
 									</td>

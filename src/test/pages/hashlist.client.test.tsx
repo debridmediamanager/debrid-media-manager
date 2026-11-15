@@ -51,6 +51,7 @@ vi.mock('@/hooks/auth', () => ({
 	usePremiumizeCredential: vi.fn(() => null),
 	useOffcloudApiKey: vi.fn(() => null),
 	useDebridLinkCredential: vi.fn(() => null),
+	usePutioAccessToken: vi.fn(() => null),
 }));
 
 vi.mock('@/contexts/LibraryCacheContext', () => ({
@@ -144,7 +145,9 @@ describe('HashlistPage', () => {
 		const HashlistPage = (await import('@/pages/hashlist')).default;
 		render(<HashlistPage />);
 
-		expect(screen.getByText('Login to RD/AD/TB/PM/OC/DL to download')).toBeInTheDocument();
+		expect(
+			screen.getByText('Login to RD/AD/TB/PM/OC/DL/put.io to download')
+		).toBeInTheDocument();
 	});
 
 	it('offers the Offcloud bulk download once an Offcloud key is present', async () => {
@@ -156,7 +159,7 @@ describe('HashlistPage', () => {
 
 		expect(screen.getByText('OC Download (0)')).toBeInTheDocument();
 		expect(
-			screen.queryByText('Login to RD/AD/TB/PM/OC/DL to download')
+			screen.queryByText('Login to RD/AD/TB/PM/OC/DL/put.io to download')
 		).not.toBeInTheDocument();
 
 		vi.mocked(useOffcloudApiKey).mockReturnValue(null);
@@ -171,10 +174,25 @@ describe('HashlistPage', () => {
 
 		expect(screen.getByText('DL Download (0)')).toBeInTheDocument();
 		expect(
-			screen.queryByText('Login to RD/AD/TB/PM/OC/DL to download')
+			screen.queryByText('Login to RD/AD/TB/PM/OC/DL/put.io to download')
 		).not.toBeInTheDocument();
 
 		vi.mocked(useDebridLinkCredential).mockReturnValue(null);
+	});
+
+	it('offers the put.io bulk download once a put.io token is present', async () => {
+		const { usePutioAccessToken } = await import('@/hooks/auth');
+		vi.mocked(usePutioAccessToken).mockReturnValue('pt-token');
+
+		const HashlistPage = (await import('@/pages/hashlist')).default;
+		render(<HashlistPage />);
+
+		expect(screen.getByText('PT Download (0)')).toBeInTheDocument();
+		expect(
+			screen.queryByText('Login to RD/AD/TB/PM/OC/DL/put.io to download')
+		).not.toBeInTheDocument();
+
+		vi.mocked(usePutioAccessToken).mockReturnValue(null);
 	});
 
 	// /hashlist opened without a #fragment (a bookmark, or the nav link) has no

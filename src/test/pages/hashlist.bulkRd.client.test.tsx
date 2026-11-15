@@ -54,6 +54,7 @@ vi.mock('@/hooks/auth', () => ({
 	usePremiumizeCredential: vi.fn(() => null),
 	useOffcloudApiKey: vi.fn(() => null),
 	useDebridLinkCredential: vi.fn(() => null),
+	usePutioAccessToken: vi.fn(() => null),
 }));
 
 vi.mock('@/contexts/LibraryCacheContext', () => ({
