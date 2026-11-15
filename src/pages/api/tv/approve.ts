@@ -1,6 +1,11 @@
 import { approvePairing, normalizeUserCode } from '@/services/devicePairing';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
-import { MAX_STATE_BYTES, pickSyncedState, signedInServices } from '@/utils/browserStateKeys';
+import {
+	MAX_STATE_BYTES,
+	pickSyncedState,
+	signedInServices,
+	withoutPutio,
+} from '@/utils/browserStateKeys';
 import { getClientIpFromRequest } from '@/utils/clientIp';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -19,7 +24,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (!userCode) {
 		return res.status(400).json({ error: 'That is not a TV code. It looks like ABCD-EFGH.' });
 	}
-	const state = pickSyncedState(req.body?.state);
+	const state = withoutPutio(pickSyncedState(req.body?.state));
 	if (Buffer.byteLength(JSON.stringify(state)) > MAX_STATE_BYTES) {
 		return res.status(413).json({
 			error: 'This browser holds more DMM settings than a TV can be sent. Try again from another browser.',

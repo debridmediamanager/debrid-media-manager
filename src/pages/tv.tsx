@@ -1,5 +1,5 @@
 import { BackToDashboard, Card, SupportLine } from '@/components/IndexerSetup';
-import { SIGN_IN_KEYS } from '@/utils/browserStateKeys';
+import { PAIRING_SIGN_IN_KEYS, withoutPutio } from '@/utils/browserStateKeys';
 import { collectState } from '@/utils/browserStateSync';
 import { withAuth } from '@/utils/withAuth';
 import { CheckCircle2, Tv } from 'lucide-react';
@@ -35,7 +35,7 @@ const SERVICES = [
 /** Signed in to any debrid service when `service` is omitted, to that one otherwise. */
 const signedIn = (service?: string) => {
 	try {
-		return SIGN_IN_KEYS.some(
+		return PAIRING_SIGN_IN_KEYS.some(
 			(key) => (!service || key.startsWith(`${service}:`)) && !!localStorage.getItem(key)
 		);
 	} catch {
@@ -91,7 +91,7 @@ function LinkCard() {
 				headers: { 'content-type': 'application/json' },
 				body: JSON.stringify({
 					userCode: code,
-					state: collectState(),
+					state: withoutPutio(collectState()),
 					confirmOtherNetwork,
 				}),
 			});

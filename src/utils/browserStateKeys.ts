@@ -53,6 +53,16 @@ export const SIGN_IN_KEYS = [
 	'pt:accessToken',
 ] as const;
 
+/**
+ * The sign-ins a TV or Kodi can use. put.io signs in this browser only: neither DMM
+ * Mobile nor the Kodi addon speaks to it, so pairing neither counts its token nor
+ * carries it to DMM's server.
+ */
+export const PAIRING_SIGN_IN_KEYS = SIGN_IN_KEYS.filter((key) => !key.startsWith('pt:'));
+
+export const withoutPutio = (state: BrowserState): BrowserState =>
+	Object.fromEntries(Object.entries(state).filter(([key]) => !key.startsWith('pt:')));
+
 /** Prefixes: every `settings:*` flag and the parked logins of the account switcher. */
 export const SYNCED_PREFIXES = ['settings:', 'dmm:accounts:'] as const;
 

@@ -91,6 +91,16 @@ describe('/tv?code= on a browser with no DMM sign-in', () => {
 	});
 });
 
+describe('/tv?code= on a browser signed in to put.io only', () => {
+	it('treats it as signed in to nothing a TV can use', async () => {
+		localStorage.setItem('pt:accessToken', '"pttoken"');
+		await renderPage();
+
+		expect(authed).not.toHaveBeenCalled();
+		expect(screen.getByRole('button', { name: 'Link TV' })).toBeDisabled();
+	});
+});
+
 describe('/tv?code= on a browser signed in to Real-Debrid and AllDebrid', () => {
 	beforeEach(() => {
 		localStorage.setItem('rd:accessToken', '"rdtoken"');
@@ -113,6 +123,8 @@ describe('/tv?code= on a browser signed in to Real-Debrid and AllDebrid', () => 
 	});
 
 	it("approves with this browser's synced state and names what the TV got", async () => {
+		// Never sent: no TV app can use put.io.
+		localStorage.setItem('pt:accessToken', '"pttoken"');
 		fetchMock.mockResolvedValue(reply(200, { services: ['rd', 'ad'] }));
 		await renderPage();
 

@@ -198,6 +198,25 @@ describe('/kodi?code= on a browser signed in to one service', () => {
  * server, whose DMM Cast setup failed. The page said the browser was not signed in to DMM and,
  * since it was, offered no Real-Debrid sign-in either: nothing on screen was true or actionable.
  */
+// Kodi plays through DMM Cast, which put.io has none of: a put.io-only browser
+// waited on "Setting up DMM Cast" forever.
+describe('/kodi on a browser signed in to put.io only', () => {
+	beforeEach(() => {
+		push.mockClear();
+		localStorage.clear();
+		localStorage.setItem('pt:accessToken', 'token');
+		rdCast.id = undefined;
+		enCast.id = undefined;
+	});
+
+	it('offers the sign-ins Kodi can use instead of waiting on DMM Cast', async () => {
+		await renderPage();
+
+		expect(screen.queryByText(/Setting up DMM Cast for your sign-in/)).toBeNull();
+		expect(screen.getByText(/not signed in to DMM/)).toBeInTheDocument();
+	});
+});
+
 describe('/kodi on a browser signed in whose DMM Cast setup has not answered', () => {
 	beforeEach(() => {
 		push.mockClear();

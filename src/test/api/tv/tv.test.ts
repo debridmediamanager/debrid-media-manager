@@ -93,6 +93,16 @@ describe('/api/tv pairing', () => {
 		expect((await call(poll, { deviceCode: started.json.deviceCode }, APP)).status).toBe(200);
 	});
 
+	// No TV app can use put.io, so its token is neither counted nor kept on the server.
+	it('drops a put.io token and does not count put.io as a sign-in', async () => {
+		const { userCode, deviceCode } = await start();
+		expect((await approveWith(userCode, { 'pt:accessToken': '"pt"' })).status).toBe(400);
+
+		const approved = await approveWith(userCode, { ...STATE, 'pt:accessToken': '"pt"' });
+		expect(approved.json).toEqual({ services: ['rd', 'ad'] });
+		expect((await call(poll, { deviceCode })).json).toEqual({ status: 'linked', state: STATE });
+	});
+
 	it('refuses a browser with no debrid sign-in, however much else it holds', async () => {
 		const { userCode, deviceCode } = await start();
 		const refused = await approveWith(userCode, {

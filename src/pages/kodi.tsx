@@ -8,7 +8,7 @@ import { useOffcloudCastToken } from '@/hooks/offcloudCastToken';
 import { usePremiumizeCastToken } from '@/hooks/premiumizeCastToken';
 import { useTorBoxCastToken } from '@/hooks/torboxCastToken';
 import { useSponsor } from '@/hooks/useSponsor';
-import { SIGN_IN_KEYS } from '@/utils/browserStateKeys';
+import { PAIRING_SIGN_IN_KEYS } from '@/utils/browserStateKeys';
 import { toasterPosition } from '@/utils/toastOptions';
 import { withAuth } from '@/utils/withAuth';
 import { CheckCircle2, Tv } from 'lucide-react';
@@ -57,7 +57,7 @@ const EASYNEWS_KEY = 'en:account';
  */
 const signedIn = (service?: string, debridOnly = false) => {
 	try {
-		return [...SIGN_IN_KEYS, ...(debridOnly ? [] : [EASYNEWS_KEY])].some(
+		return [...PAIRING_SIGN_IN_KEYS, ...(debridOnly ? [] : [EASYNEWS_KEY])].some(
 			(key) => (!service || key.startsWith(`${service}:`)) && !!localStorage.getItem(key)
 		);
 	} catch {
