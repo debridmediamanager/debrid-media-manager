@@ -32,6 +32,7 @@ import {
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
+import { escapeHtml } from '@/utils/escapeHtml';
 import { parseOffcloudRowId } from '@/utils/offcloudRow';
 import { getOffcloudStatusText } from '@/utils/offcloudStatus';
 import { getPremiumizeStatusText } from '@/utils/premiumizeStatus';
@@ -1934,7 +1935,7 @@ export const showInfoForPT = async (
         </div>`
 			: '';
 
-	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${torrent.filename}</h1>
+	const html = `<h1 class="text-lg font-bold mt-3 mb-2 text-gray-100">${escapeHtml(torrent.filename)}</h1>
     ${libraryActions}
     ${notice}
     <div class="text-sm text-gray-200">

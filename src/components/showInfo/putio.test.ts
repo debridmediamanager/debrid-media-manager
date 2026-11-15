@@ -154,6 +154,14 @@ describe('showInfoForPT', () => {
 		);
 	});
 
+	// Release names come from whoever made the torrent and reach the dialog as HTML.
+	it('shows a release name as text, never as markup', async () => {
+		await showInfoForPT('pt-key', { ...row(9009), filename: '<img src=x onerror=alert(1)>' });
+		const html = htmlOfLastModal();
+		expect(html).toContain('&lt;img src=x onerror=alert(1)&gt;');
+		expect(html).not.toContain('<img src=x');
+	});
+
 	it('refuses a row id that names no transfer', async () => {
 		await showInfoForPT('pt-key', { ...row(9009), id: 'pt:' });
 		expect(mocks.modalFireMock).not.toHaveBeenCalled();
