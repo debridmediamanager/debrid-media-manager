@@ -48,7 +48,7 @@ import { convertToUserTorrent } from '@/utils/fetchTorrents';
 import { generateTokenAndHash } from '@/utils/token';
 import { TRANSFER_LABELS, TRANSFER_STEP_TOAST_MS, TRANSFER_TOAST_MS } from '@/utils/transferPhase';
 import { exceedsTransferSizeCap, tooLargeMessage } from '@/utils/transferSize';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 const torrentDB = new UserTorrentDB();
@@ -110,7 +110,11 @@ export function useTorrentManagement(
 	putioKey: string | null = null
 ) {
 	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
-	const { addTorrent: addToCache, removeTorrent: removeFromCache } = useLibraryCache();
+	const {
+		addTorrent: addToCache,
+		removeTorrent: removeFromCache,
+		libraryItems,
+	} = useLibraryCache();
 
 	const fetchHashAndProgress = useCallback(async (hash?: string) => {
 		const torrents = await torrentDB.all();
@@ -121,6 +125,18 @@ export function useTorrentManagement(
 		}
 		setHashAndProgress((prev) => ({ ...prev, ...records }));
 	}, []);
+
+	// A page opened before the library finished loading read no put.io rows from the
+	// local copy, so every release it holds offered "Add" (and put.io does not
+	// dedupe). Filled in here once the library has them.
+	useEffect(() => {
+		const rows = (libraryItems ?? []).filter((t) => t.id.startsWith('pt:') && t.hash);
+		if (rows.length === 0) return;
+		setHashAndProgress((prev) => ({
+			...prev,
+			...Object.fromEntries(rows.map((t) => [`pt:${t.hash}`, t.progress])),
+		}));
+	}, [libraryItems]);
 
 	const addRd = useCallback(
 		async (

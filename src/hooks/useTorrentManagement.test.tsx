@@ -2,7 +2,7 @@ import { recordRdAddPause, resetRdThrottleTracking } from '@/services/realDebrid
 import adRegression from '@/test/fixtures/allDebridAvailable/regressed-magnet-2026-11-05.json';
 import { UserTorrentStatus } from '@/torrent/userTorrent';
 import { findJoinableTransfer, followTransferToRd } from '@/utils/debridUploader';
-import { act, renderHook } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import toast from 'react-hot-toast';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useTorrentManagement } from './useTorrentManagement';
@@ -64,10 +64,14 @@ const {
 	mockHandleDeleteDlTorrent: vi.fn(),
 }));
 
+const libraryCache = vi.hoisted(() => ({
+	items: [] as { id: string; hash: string; progress: number }[],
+}));
 vi.mock('@/contexts/LibraryCacheContext', () => ({
 	useLibraryCache: () => ({
 		addTorrent: mockAddTorrentToCache,
 		removeTorrent: mockRemoveTorrentFromCache,
+		libraryItems: libraryCache.items,
 	}),
 }));
 
@@ -264,6 +268,19 @@ describe('useTorrentManagement', () => {
 				setSearchResults
 			)
 		);
+
+	// Seen live: a fresh browser opened a movie page before the library loaded, and
+	// every release put.io held still offered "Add to PT".
+	it('shows put.io rows the library loads after the page opened', async () => {
+		const { result, rerender } = renderManagementHook();
+		expect(result.current.hashAndProgress['pt:hash-held']).toBeUndefined();
+
+		libraryCache.items = [{ id: 'pt:9001', hash: 'hash-held', progress: 100 }];
+		rerender();
+
+		await waitFor(() => expect(result.current.hashAndProgress['pt:hash-held']).toBe(100));
+		libraryCache.items = [];
+	});
 
 	it('adds RD torrents, submits availability, and updates progress state', async () => {
 		const { result } = renderManagementHook();
