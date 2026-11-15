@@ -28,8 +28,8 @@ import filmsBeforeShows from '@/test/fixtures/placement/films-before-shows.json'
 import filmsByTitle from '@/test/fixtures/placement/films-by-title.json';
 import filmsInShows from '@/test/fixtures/placement/films-in-show-releases.json';
 import filmsOfEpisodes from '@/test/fixtures/placement/films-of-imdb-episodes.json';
-import filmsTitledApart from '@/test/fixtures/placement/films-titled-apart.json';
 import filmsOfSentEpisodeIds from '@/test/fixtures/placement/films-of-sent-episode-ids.json';
+import filmsTitledApart from '@/test/fixtures/placement/films-titled-apart.json';
 import filmsBeforeColons from '@/test/fixtures/placement/films-titled-before-a-colon.json';
 import filmsTitledByShow from '@/test/fixtures/placement/films-titled-by-show.json';
 import firefly from '@/test/fixtures/placement/firefly-1437.json';
@@ -67,13 +67,14 @@ import byRuntime from '@/test/fixtures/placement/shows-told-apart-by-runtime.jso
 import siblingShows from '@/test/fixtures/placement/sibling-shows.json';
 import specialsByTitle from '@/test/fixtures/placement/specials-by-title.json';
 import spellingVariants from '@/test/fixtures/placement/spelling-variants.json';
+import splitShowGenericTitles from '@/test/fixtures/placement/split-show-generic-titles.json';
 import subtitledSpecials from '@/test/fixtures/placement/subtitled-specials.json';
 import tagsBeforeTitles from '@/test/fixtures/placement/tags-before-titles.json';
-import splitShowGenericTitles from '@/test/fixtures/placement/split-show-generic-titles.json';
 import titleChecks from '@/test/fixtures/placement/title-checks.json';
 import titleEpisodes from '@/test/fixtures/placement/title-episode-numbers.json';
 import titleParts from '@/test/fixtures/placement/title-parts.json';
 import liveFind from '@/test/fixtures/placement/tmdb-find-tt14986406.json';
+import topGear from '@/test/fixtures/placement/top-gear-tvdb-title.json';
 import tvdbSegments from '@/test/fixtures/placement/tvdb-segments.json';
 import wwe from '@/test/fixtures/placement/wwe-air-dates.json';
 import { buildAnimeIndex, spelledAlike } from '@/utils/episodePlacement';
@@ -150,6 +151,10 @@ const recordedSources = (r: any): PlacementSources => ({
 	tvdbSeriesOf: async (id) =>
 		r.tvdbSeriesOf?.[id]
 			? (r.tvdbSeriesOf[id].data ?? []).map((row: any) => row.series.id)
+			: null,
+	tvdbNamesOf: async (id) =>
+		r.tvdbSeriesOf?.[id]
+			? (r.tvdbSeriesOf[id].data ?? []).map((row: any) => row.series.name)
 			: null,
 	tvdbEpisodes: async (id, order) =>
 		r.tvdbEpisodes?.[order ? `${id}/${order}` : id]?.data.episodes ?? null,
@@ -1813,6 +1818,47 @@ describe('a Chinese title naming its season', () => {
 			]).toEqual([91801, 4, episode]);
 		}
 	);
+});
+
+describe('same-named shows told apart by the title TheTVDB gives them', () => {
+	// a sponsor's zurg (Discord, 2026-11-01) held `Top.Gear.S29E03.1080p.WEB.H264-CBFM` unplaced:
+	// TMDB names the 2002 BBC series (45) and the original (4498) both Top Gear, and both hold an
+	// S29E03; TVDB titles the original `Top Gear (1978)`; see the fixtures README
+	const ask = async (c: (typeof topGear.cases)[number]) =>
+		(
+			await place(
+				[c.request as PlaceRequest],
+				Infinity,
+				recordedSources(topGear.answers),
+				async (list) =>
+					list.map(({ name }) => (topGear.answers.identify as any)[name] ?? null)
+			)
+		).releases[0];
+
+	it.each(topGear.cases.map((c) => [c.request.name, c] as const))('%s', async (_, c) => {
+		expect(await ask(c)).toEqual(c.expect);
+	});
+
+	it('places a Top Gear named with no year on the 2002 series', async () => {
+		for (const c of topGear.cases) {
+			const placed = await ask(c);
+			expect([placed.tmdbId, placed.imdbId]).toEqual([45, 'tt1628033']);
+		}
+	});
+
+	it('leaves the tie where TVDB cannot be asked', async () => {
+		const [c] = topGear.cases;
+		const placed = (
+			await place(
+				[c.request as PlaceRequest],
+				Infinity,
+				{ ...recordedSources(topGear.answers), tvdbNamesOf: async () => null },
+				async (list) =>
+					list.map(({ name }) => (topGear.answers.identify as any)[name] ?? null)
+			)
+		).releases[0];
+		expect(placed.tmdbId).toBeNull();
+	});
 });
 
 describe('same-named shows told apart by how long their episodes run', () => {

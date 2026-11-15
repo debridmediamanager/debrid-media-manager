@@ -217,6 +217,8 @@ export interface PlacementSources {
 	identifier(names: string[]): Promise<Map<string, IdentifierResult> | null>;
 	/** TheTVDB's series for an IMDb id (`search/remoteid`); absent or null where TVDB cannot be asked. */
 	tvdbSeriesOf?(imdbId: string): Promise<number[] | null>;
+	/** TheTVDB's names of the series it lists for an IMDb id (`search/remoteid`); absent or null where TVDB cannot be asked. */
+	tvdbNamesOf?(imdbId: string): Promise<string[] | null>;
 	/** TheTVDB's series search for a title first aired in a year (`search`); absent or null where TVDB cannot be asked. */
 	searchTvdb?(query: string, year: number): Promise<any[] | null>;
 	/** A TheTVDB series' episodes in its default (aired) order, which Plex numbers by, or its DVD order. */
@@ -911,8 +913,37 @@ async function namesakeLook(
 	}
 	const most = better.filter((there) => count(there) === Math.max(...better.map(count)));
 	const made = most.length > 1 ? await streamedOn(release, most, sources) : most;
-	const [best, ...tied] = made.length > 1 ? await runsAsLong(release, made, sources) : made;
+	const timed = made.length > 1 ? await runsAsLong(release, made, sources) : made;
+	const [best, ...tied] = timed.length > 1 ? await tvdbTitled(release, timed, sources) : timed;
 	return best && !tied.length ? best : placed;
+}
+
+/**
+ * Of shows a release places as well on, the one TheTVDB titles as the name does, with no year or
+ * country beside it: scene names follow TVDB, which titles the 2002 BBC series `Top Gear` and the
+ * original `Top Gear (1978)`, so `Top.Gear.S29E03.1080p.WEB.H264-CBFM` is the 2002 series, though
+ * TMDB names both Top Gear and both hold an S29E03 (a sponsor's zurg, Discord, 2026-11-01).
+ * Narrowed only for a name giving no year, where TVDB answered for every show, titles one alone so,
+ * and content-identifier ranks that show first for the name.
+ */
+async function tvdbTitled(
+	release: PlaceRequest,
+	shows: PlacedRelease[],
+	sources: PlacementSources
+): Promise<PlacedRelease[]> {
+	const { title, year } = parseName(release.name);
+	if (year || !sources.tvdbNamesOf) return shows;
+	const names = await Promise.all(
+		shows.map((there) => (there.imdbId ? sources.tvdbNamesOf!(there.imdbId) : null))
+	);
+	if (names.some((list) => list === null)) return shows;
+	const titledSo = shows.filter((_, at) =>
+		names[at]!.some((name) => letters(name) === letters(title))
+	);
+	// and the show content-identifier ranks first for the name: a P2P name drops the year scene
+	// keeps, so `The.Flash.S01E04.Going.Rogue…` is the 2014 series TVDB titles `The Flash (2014)`
+	const top = (await sources.identifier([release.name]))?.get(release.name)?.matches[0];
+	return titledSo.length === 1 && top && titledSo[0].imdbId === top.imdbId ? titledSo : shows;
 }
 
 /**
@@ -2638,6 +2669,14 @@ export const cachedSources: PlacementSources = {
 				(answer.data ?? [])
 					.map((row: any) => row?.series?.id)
 					.filter((id: unknown) => typeof id === 'number')
+		),
+	tvdbNamesOf: (imdbId) =>
+		settle(() => getMetadataCache().getTvdb(`search/remoteid/${imdbId}`)).then(
+			(answer) =>
+				answer &&
+				(answer.data ?? [])
+					.map((row: any) => row?.series?.name)
+					.filter((name: unknown) => typeof name === 'string')
 		),
 	searchTvdb: (query, year) =>
 		settle(() =>
