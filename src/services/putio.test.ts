@@ -7,7 +7,9 @@ import transfers from '@/test/fixtures/putio/transfers.json';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
 	ADD_MULTI_CHUNK_SIZE,
+	FILES_PAGE_SIZE,
 	MAX_FOLDER_DEPTH,
+	MAX_LISTED_FILES,
 	PutioError,
 	RATE_LIMIT_BACKOFF_MS,
 	TRANSFERS_PAGE_SIZE,
@@ -348,6 +350,26 @@ describe('files and links', () => {
 		const { files: listed } = await listPutioTransferFiles(TOKEN, 1010);
 		expect(listed).toHaveLength(1);
 		expect(listed[0]).toMatchObject({ id: 1010, path: 'Example.Movie.2026.1080p.mkv' });
+	});
+
+	it('says the list is cut when one folder holds more files than DMM lists', async () => {
+		const page = (n: number, cursor: string | null) => ({
+			status: 'OK',
+			cursor,
+			parent: { id: 1, name: 'big', file_type: 'FOLDER' },
+			files: Array.from({ length: FILES_PAGE_SIZE }, (_, i) => ({
+				id: n * FILES_PAGE_SIZE + i + 10,
+				name: `f${n}-${i}.mkv`,
+				file_type: 'VIDEO',
+			})),
+		});
+		fetchMock
+			.mockResolvedValueOnce(reply(page(0, 'c1')))
+			.mockResolvedValueOnce(reply(page(1, 'c2')))
+			.mockResolvedValueOnce(reply(page(2, null)));
+		const { files: listed, truncated } = await listPutioTransferFiles(TOKEN, 1);
+		expect(listed).toHaveLength(MAX_LISTED_FILES);
+		expect(truncated).toBe(true);
 	});
 
 	it('stops descending past the depth bound and says so', async () => {

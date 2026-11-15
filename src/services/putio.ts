@@ -411,7 +411,7 @@ export const deletePutioFiles = async (token: string, fileIds: number[]) =>
 async function listPutioFolder(
 	token: string,
 	parentId: number
-): Promise<{ files: PutioFile[]; parent: PutioFile | null }> {
+): Promise<{ files: PutioFile[]; parent: PutioFile | null; more: boolean }> {
 	const query = { parent_id: parentId, per_page: FILES_PAGE_SIZE };
 	let page = await ptRequest<{
 		files?: PutioFile[];
@@ -428,7 +428,7 @@ async function listPutioFolder(
 		});
 		files.push(...(page.files ?? []));
 	}
-	return { files, parent };
+	return { files, parent, more: Boolean(page.cursor) };
 }
 
 const isFolder = (file: Pick<PutioFile, 'file_type'>) => file.file_type === 'FOLDER';
@@ -454,8 +454,9 @@ export async function listPutioTransferFiles(
 			break;
 		}
 		const folder = queue.shift()!;
-		const { files: children, parent } = await listPutioFolder(token, folder.id);
+		const { files: children, parent, more } = await listPutioFolder(token, folder.id);
 		listings++;
+		if (more) truncated = true;
 		if (listings === 1 && parent && !isFolder(parent)) {
 			return { files: [{ ...parent, path: parent.name }], truncated: false };
 		}
@@ -467,7 +468,10 @@ export async function listPutioTransferFiles(
 			else truncated = true;
 		}
 	}
-	return { files: files.slice(0, MAX_LISTED_FILES), truncated };
+	return {
+		files: files.slice(0, MAX_LISTED_FILES),
+		truncated: truncated || files.length > MAX_LISTED_FILES,
+	};
 }
 
 /**
