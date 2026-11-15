@@ -14,13 +14,14 @@
 
 ## What is this?
 
-[Debrid Media Manager](https://debridmediamanager.com/) is a free open source web app for building a movie and TV library without filling a hard drive. It adds torrents to Real-Debrid and AllDebrid and TorBox and Premiumize and Offcloud and Debrid-Link. It also helps you keep the collection tidy.
+[Debrid Media Manager](https://debridmediamanager.com/) is a free open source web app for building a movie and TV library without filling a hard drive. It adds torrents to Real-Debrid and AllDebrid and TorBox and Premiumize and Offcloud and Debrid-Link, and to put.io. It also helps you keep the collection tidy.
 
 Two sister projects take it further. [zurg](https://zurg.debridmediamanager.com/) puts every debrid account and Usenet in one folder that Plex and Jellyfin and Emby read like a normal drive. [rex](https://rex.debridmediamanager.com/) is a media server for the Plex apps that owns no files.
 
 ## Features
 
-This builds on top of the amazing service brought by [Real-Debrid](https://real-debrid.com/?id=20475782), [AllDebrid](https://alldebrid.com/?uid=1kk5i&lang=en), [TorBox](https://torbox.app/subscription?referral=74ffa560-7381-4a18-adb1-cef97378c670), [Premiumize](https://www.premiumize.me/), [Offcloud](https://offcloud.com/), and [Debrid-Link](https://debrid-link.com/id/diG1t).
+This builds on top of the amazing service brought by [Real-Debrid](https://real-debrid.com/?id=20475782), [AllDebrid](https://alldebrid.com/?uid=1kk5i&lang=en), [TorBox](https://torbox.app/subscription?referral=74ffa560-7381-4a18-adb1-cef97378c670), [Premiumize](https://www.premiumize.me/), [Offcloud](https://offcloud.com/), [Debrid-Link](https://debrid-link.com/id/diG1t) and [put.io](https://put.io/).
+DMM is an integration for put.io; put.io did not make it.
 
 ### Library management
 
@@ -30,6 +31,11 @@ See your torrents in one place. Sort them by name, size, status or date added. G
 Premiumize Offcloud and Debrid-Link. Debrid-Link hash lists stay **cached-only**. Full magnets and `.torrent`
 files can start a download. TorBox also accepts direct HTTP(S) links. Debrid-Link **Watch** stays cached-only
 and returns an error on a miss.
+
+**put.io** signs in with put.io's device link or a pasted OAuth token, never a password. It has no cache check,
+so every add downloads into your put.io storage; DMM checks the size against your free space first. The
+library lists your transfers, and download links are made in your browser when you click one. There is no
+Watch or Cast for put.io yet.
 
 ### Torrent search
 
