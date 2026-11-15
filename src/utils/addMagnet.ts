@@ -37,8 +37,11 @@ import {
 	addPutioTransfer,
 	addPutioTransfers,
 	getPutioTransfer,
+	listPutioTransfers,
 	PutioError,
+	putioTransferHash,
 	uploadPutioTorrentFile,
+	type PutioTransfer,
 } from '@/services/putio';
 import { rdLongRefusal } from '@/services/rdAddOutcomes';
 import {
@@ -61,7 +64,6 @@ import {
 	TorBoxRateLimitError,
 } from '@/services/torbox';
 import { TorBoxTorrentInfo, TorBoxWebDownload, TorrentInfoResponse } from '@/services/types';
-import UserTorrentDB from '@/torrent/db';
 import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { delay } from '@/utils/delay';
 import { AxiosError } from 'axios';
@@ -1572,18 +1574,22 @@ const PT_BATCH_DELAY = process.env.VITEST_WORKER_ID ? 0 : 250;
 const PT_REFETCH_DELAY = process.env.VITEST_WORKER_ID ? 0 : 1500;
 
 /**
- * The hashes this browser's copy of the library holds on put.io. put.io does not
- * dedupe: the same magnet twice made a second transfer and a second folder, and
- * spent the storage twice (recorded). Without a local library the add goes ahead.
+ * The account's transfers by hash, asked of put.io itself: put.io does not dedupe
+ * (the same magnet twice made a second transfer and folder, recorded), and this
+ * browser's copy of the library is empty or stale on a fresh load. A failed
+ * transfer does not count as held.
  */
-const putioHeldHashes = async (): Promise<Set<string>> => {
-	try {
-		const rows = await new UserTorrentDB().all();
-		return new Set(rows.filter((t) => t.id.startsWith('pt:')).map((t) => t.hash));
-	} catch {
-		return new Set();
+const putioTransfersByHash = async (ptKey: string): Promise<Map<string, PutioTransfer>> => {
+	const byHash = new Map<string, PutioTransfer>();
+	for (const transfer of await listPutioTransfers(ptKey)) {
+		const hash = putioTransferHash(transfer);
+		if (hash && transfer.status !== 'ERROR') byHash.set(hash, transfer);
 	}
+	return byHash;
 };
+
+/** Hashes with a put.io add under way in this tab, so a second click cannot add twice. */
+const ptAddsInFlight = new Set<string>();
 
 /** put.io's refusals are already readable (see `PutioError`); anything else is not. */
 const ptErrorMessage = (error: unknown): string | null =>
@@ -1606,11 +1612,16 @@ export const handleAddAsMagnetInPt = async (
 		if (!silent) toast.error('That is not a valid info hash.', magnetToastOptions);
 		throw new PutioError('That is not a valid info hash.', 'invalid_info_hash');
 	}
-	if ((await putioHeldHashes()).has(sourceHash)) {
-		if (!silent) toast('Already in your put.io.', magnetToastOptions);
-		return;
-	}
+	if (ptAddsInFlight.has(sourceHash)) return;
+	ptAddsInFlight.add(sourceHash);
 	try {
+		const held = (await putioTransfersByHash(ptKey)).get(sourceHash);
+		if (held) {
+			// Handed back like an add, so the page shows the row it already has.
+			if (callback) await callback(convertToPutioUserTorrent(held, sourceHash));
+			if (!silent) toast('Already in your put.io.', magnetToastOptions);
+			return;
+		}
 		const added = await addPutioTransfer(ptKey, toMagnetUri(hash));
 		// The add answers before put.io has read the magnet: no name, hash, size or
 		// files yet (recorded). One more look a moment later finds most of them.
@@ -1634,6 +1645,8 @@ export const handleAddAsMagnetInPt = async (
 		if (!silent)
 			toast.error(ptErrorMessage(error) ?? 'Failed to add to put.io.', magnetToastOptions);
 		throw error;
+	} finally {
+		ptAddsInFlight.delete(sourceHash);
 	}
 };
 
@@ -1650,22 +1663,33 @@ export const handleAddMultipleHashesInPt = async (
 	sources: string[],
 	callback?: () => Promise<void>
 ) => {
-	const held = await putioHeldHashes();
-	const seen = new Set<string>();
+	// Claimed before the first await, so a second sweep started meanwhile skips them.
+	const mine: string[] = [];
 	const valid: string[] = [];
 	let invalid = 0;
 	for (const source of sources) {
 		const hash = extractTorrentInputs(source)[0]?.hash;
 		if (!hash || !isValidHash(hash)) invalid++;
-		else if (!held.has(hash) && !seen.has(hash)) {
-			seen.add(hash);
+		else if (!ptAddsInFlight.has(hash)) {
+			ptAddsInFlight.add(hash);
+			mine.push(hash);
 			valid.push(source);
 		}
 	}
-	const skipped = sources.length - invalid - valid.length;
 	let added = 0;
 	let refused = invalid;
 	let stoppedBy: string | null = null;
+	let skipped = sources.length - invalid - valid.length;
+	try {
+		// One listing per sweep, for the same reason as a single add.
+		const held = await putioTransfersByHash(ptKey);
+		const fresh = valid.filter((source) => !held.has(extractTorrentInputs(source)[0].hash));
+		skipped += valid.length - fresh.length;
+		valid.splice(0, valid.length, ...fresh);
+	} catch (error) {
+		stoppedBy = ptErrorMessage(error) ?? 'Could not read your put.io transfers.';
+		valid.length = 0;
+	}
 	for (let i = 0; i < valid.length; i += ADD_MULTI_CHUNK_SIZE) {
 		if (i > 0) await delay(PT_BATCH_DELAY);
 		try {
@@ -1675,15 +1699,6 @@ export const handleAddMultipleHashesInPt = async (
 			);
 			added += result.transfers.length;
 			refused += result.errors.length;
-			// Kept locally at once, the way a single add's row is, so the guard above
-			// sees them before the next library fetch (put.io would add them again).
-			try {
-				await new UserTorrentDB().addAll(
-					result.transfers.map((transfer) => convertToPutioUserTorrent(transfer))
-				);
-			} catch {
-				// no local library; the next fetch lists them
-			}
 		} catch (error) {
 			console.error(
 				'Error adding magnets to put.io:',
@@ -1693,6 +1708,7 @@ export const handleAddMultipleHashesInPt = async (
 			break;
 		}
 	}
+	mine.forEach((hash) => ptAddsInFlight.delete(hash));
 	if (callback) await callback();
 	const parts = [`Added ${added} to put.io`];
 	if (skipped > 0) parts.push(`${skipped} already there`);

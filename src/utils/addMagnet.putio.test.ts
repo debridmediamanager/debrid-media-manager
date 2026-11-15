@@ -10,24 +10,11 @@ const pt = vi.hoisted(() => ({
 	deletePutioFiles: vi.fn(),
 	cancelPutioTransfers: vi.fn(),
 	removePutioTransfers: vi.fn(),
+	listPutioTransfers: vi.fn(),
 }));
 vi.mock('@/services/putio', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/putio')>()),
 	...pt,
-}));
-
-// The library this browser holds, as `putioHeldHashes` reads it.
-const held = vi.hoisted(() => ({ rows: [] as { id: string; hash: string }[] }));
-vi.mock('@/torrent/db', () => ({
-	__esModule: true,
-	default: vi.fn().mockImplementation(function () {
-		return {
-			all: async () => held.rows,
-			addAll: async (rows: { id: string; hash: string }[]) => {
-				held.rows.push(...rows);
-			},
-		};
-	}),
 }));
 
 const toastMock = vi.hoisted(() => Object.assign(vi.fn(), { success: vi.fn(), error: vi.fn() }));
@@ -46,7 +33,8 @@ const hashN = (n: number) => n.toString(16).padStart(40, '0');
 
 beforeEach(() => {
 	Object.values(pt).forEach((fn) => fn.mockReset());
-	held.rows = [];
+	// What the account holds, as put.io's live transfer list reports it.
+	pt.listPutioTransfers.mockResolvedValue([]);
 	toastMock.mockReset();
 	toastMock.success.mockReset();
 	toastMock.error.mockReset();
@@ -88,19 +76,40 @@ describe('handleAddAsMagnetInPt', () => {
 		);
 	});
 
-	// Recorded: put.io made a second transfer and folder for the same magnet.
-	it('does not add a release the library already holds on put.io', async () => {
-		held.rows = [{ id: 'pt:9001', hash: HASH }];
-		await handleAddAsMagnetInPt('k', `magnet:?xt=urn:btih:${HASH.toUpperCase()}`);
+	// Recorded: put.io made a second transfer and folder for the same magnet. On a
+	// fresh browser the local library is empty, so only put.io's own list can tell.
+	it('asks put.io first and does not add a release it already holds', async () => {
+		const completed = paid['transfer-completed'].body.transfer;
+		pt.listPutioTransfers.mockResolvedValue([completed]);
+		const callback = vi.fn();
+		await handleAddAsMagnetInPt('k', `magnet:?xt=urn:btih:${HASH.toUpperCase()}`, callback);
 		expect(pt.addPutioTransfer).not.toHaveBeenCalled();
 		expect(toastMock).toHaveBeenCalledWith('Already in your put.io.', expect.anything());
+		// The page gets the row it already has, so its button shows it.
+		expect(callback.mock.calls[0][0]).toMatchObject({ id: `pt:${completed.id}`, hash: HASH });
 	});
 
-	it('still adds a release another provider holds', async () => {
-		held.rows = [{ id: 'rd:ABC', hash: HASH }];
+	it('finds a fresh add put.io has not named yet by the magnet in its source', async () => {
+		pt.listPutioTransfers.mockResolvedValue([paid['transfers-add-known'].body.transfer]);
+		await handleAddAsMagnetInPt('k', HASH);
+		expect(pt.addPutioTransfer).not.toHaveBeenCalled();
+	});
+
+	it('adds again when the only transfer with that hash failed', async () => {
+		pt.listPutioTransfers.mockResolvedValue([
+			{ ...paid['transfer-completed'].body.transfer, status: 'ERROR' },
+		]);
 		pt.addPutioTransfer.mockResolvedValue(paid['transfers-add-known'].body.transfer);
 		pt.getPutioTransfer.mockResolvedValue(paid['transfer-completed'].body.transfer);
 		await handleAddAsMagnetInPt('k', HASH);
+		expect(pt.addPutioTransfer).toHaveBeenCalledTimes(1);
+	});
+
+	it('adds once when the button is pressed twice before the first add answers', async () => {
+		pt.addPutioTransfer.mockResolvedValue(paid['transfers-add-known'].body.transfer);
+		pt.getPutioTransfer.mockResolvedValue(paid['transfer-completed'].body.transfer);
+		await Promise.all([handleAddAsMagnetInPt('k', HASH), handleAddAsMagnetInPt('k', HASH)]);
+		expect(pt.listPutioTransfers).toHaveBeenCalledTimes(1);
 		expect(pt.addPutioTransfer).toHaveBeenCalledTimes(1);
 	});
 
@@ -138,7 +147,14 @@ describe('handleAddMultipleHashesInPt', () => {
 	});
 
 	it('leaves out what put.io already holds and repeats within the list', async () => {
-		held.rows = [{ id: 'pt:9001', hash: hashN(1) }];
+		pt.listPutioTransfers.mockResolvedValue([
+			{
+				id: 9001,
+				status: 'COMPLETED',
+				hash: null,
+				source: `magnet:?xt=urn:btih:${hashN(1)}`,
+			},
+		]);
 		pt.addPutioTransfers.mockImplementation(async (_k: string, urls: string[]) => ({
 			transfers: urls.map((_, i) => ({ id: i + 1 })),
 			errors: [],
@@ -156,27 +172,44 @@ describe('handleAddMultipleHashesInPt', () => {
 		);
 	});
 
-	// put.io does not dedupe, and a hash list's callback only re-reads the local
-	// library: a second click before any refresh must not add everything again.
-	it('remembers what it just added, so a second click adds nothing', async () => {
-		pt.addPutioTransfers.mockImplementation(async (_k: string, urls: string[]) => ({
+	// put.io does not dedupe: a second click, after the first sweep or while it
+	// runs, must not add everything again.
+	it('lists put.io once per sweep, so a second click adds nothing', async () => {
+		const live: unknown[] = [];
+		pt.listPutioTransfers.mockImplementation(async () => [...live]);
+		pt.addPutioTransfers.mockImplementation(async (_k: string, urls: string[]) => {
 			// The add-multi answer names no hash yet; the magnet is in `source` (recorded).
-			transfers: urls.map((url, i) => ({
+			const made = urls.map((url, i) => ({
 				...paid['transfers-add-known'].body.transfer,
 				id: 100 + i,
 				name: url,
 				source: url,
-			})),
-			errors: [],
-		}));
+			}));
+			live.push(...made);
+			return { transfers: made, errors: [] };
+		});
 		const sources = [hashN(1), hashN(2)];
 		await handleAddMultipleHashesInPt('k', sources);
 		await handleAddMultipleHashesInPt('k', sources);
 		expect(pt.addPutioTransfers).toHaveBeenCalledTimes(1);
+		expect(pt.listPutioTransfers).toHaveBeenCalledTimes(2);
 		expect(toastMock).toHaveBeenLastCalledWith(
 			'Added 0 to put.io — 2 already there.',
 			expect.anything()
 		);
+	});
+
+	it('skips hashes another sweep is adding right now', async () => {
+		let release!: () => void;
+		pt.listPutioTransfers.mockImplementationOnce(
+			() => new Promise((resolve) => (release = () => resolve([])))
+		);
+		pt.addPutioTransfers.mockResolvedValue({ transfers: [{ id: 1 }], errors: [] });
+		const first = handleAddMultipleHashesInPt('k', [hashN(1)]);
+		await handleAddMultipleHashesInPt('k', [hashN(1)]);
+		release();
+		await first;
+		expect(pt.addPutioTransfers).toHaveBeenCalledTimes(1);
 	});
 
 	it('stops the sweep on the first refusal of the account, e.g. no space', async () => {
