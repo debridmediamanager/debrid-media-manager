@@ -39,7 +39,11 @@ token is stored. The download URL in `file-url` is replaced whole, because put.i
   (`transfers-list-four`); `POST transfers/list/continue` follows it (`transfers-list-continue`).
   Without `per_page` there is no cursor (`transfers-list-one`, `transfers-list-two`).
 - A transfer's `file_id` is its folder (`file-folder`); listing it gives the files
-  (`files-list-folder`). `files/{id}/url` returns a download URL that carries a credential.
+  (`files-list-folder`). A single-file torrent's `file_id` is the file itself
+  (`transfer-single-file`, `file-single`), and listing a file's id answers `files: []` with
+  the file as `parent` (`files-list-of-file`). Listing a deleted folder answers 404 NotFound
+  (`files-list-deleted-folder`). `files/{id}/url` returns a download URL whose `oauth_token`
+  is the account's long-lived download token; it served from another IP too.
 - `files/delete` answers 200 and leaves the transfer `COMPLETED` with a dangling `file_id`
   (`transfer-after-file-delete`, `file-deleted-get` is the 404 for it). `transfers/cancel` answers
   200 and keeps files. Both answer 200 OK for ids that do not exist (`files-delete-again`,
@@ -52,9 +56,7 @@ token is stored. The download URL in `file-url` is replaced whole, because put.i
 published TypeScript client schemas and its API docs, not captured. They stay only for shapes no
 capture shows: a transfer for every status in the SDK's `TransferStatusSchema` (only
 `PREPARING_DOWNLOAD`, `IN_QUEUE`, `DOWNLOADING` and `COMPLETED` were seen), a URL transfer with no
-hash, a transfer with every field null, a folder inside a folder, and a single-file transfer whose
-`file_id` is the file itself (listing it is assumed to answer `files: []` with the file as `parent`,
-as another working integration reads it). `oauth.json` follows the device-link shapes measured on
+hash, a transfer with every field null, and a folder inside a folder. `oauth.json` follows the device-link shapes measured on
 2026-11-15, with a placeholder token.
 
 Replace each with a capture when one exists, move what it shows into the lists above, and point the

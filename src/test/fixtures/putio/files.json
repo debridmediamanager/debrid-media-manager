@@ -86,32 +86,6 @@
 			}
 		]
 	},
-	"singleFile": {
-		"status": "OK",
-		"parent": {
-			"content_type": "video/x-matroska",
-			"created_at": "2026-11-09T11:00:00",
-			"crc32": null,
-			"extension": "mkv",
-			"file_type": "VIDEO",
-			"first_accessed_at": null,
-			"folder_type": "REGULAR",
-			"icon": null,
-			"id": 1010,
-			"is_hidden": false,
-			"is_mp4_available": false,
-			"is_shared": false,
-			"name": "Example.Movie.2026.1080p.mkv",
-			"opensubtitles_hash": null,
-			"parent_id": 0,
-			"screenshot": null,
-			"size": 2147483648,
-			"updated_at": "2026-11-09T11:00:00"
-		},
-		"cursor": null,
-		"total": 0,
-		"files": []
-	},
 	"subfolder": {
 		"status": "OK",
 		"parent": {

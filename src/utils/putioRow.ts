@@ -25,8 +25,9 @@ export const parsePutioRowId = (rowId: string): number | null => {
 
 /**
  * Every status in the SDK's `TransferStatusSchema`, as a library status and a
- * label. Read from the SDK's names, not from captures: no real transfer has been
- * seen yet. STOPPING is taken as stopping a finished transfer's seeding, so it
+ * label. PREPARING_DOWNLOAD, IN_QUEUE, DOWNLOADING and COMPLETED were recorded;
+ * the rest are read from the SDK's names. STOPPING is taken as stopping a finished
+ * transfer's seeding, so it
  * counts as finished like SEEDING and PREPARING_SEED.
  */
 const PT_STATUS: Record<PutioTransferStatus, [UserTorrentStatus, string]> = {

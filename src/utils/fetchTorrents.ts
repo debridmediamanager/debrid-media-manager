@@ -1101,8 +1101,8 @@ export const fetchOffcloud = async (
 /**
  * Builds a library row from a put.io transfer.
  *
- * Written to the SDK's transfer schema with every field but `id` read as
- * possibly null, because no real transfer had been seen yet. The listing has
+ * Every field but `id` is read as possibly null: a fresh add has no hash, size,
+ * files or name yet, only the magnet as its name (recorded). The listing has
  * no files, like Offcloud's history, so the info modal lists them on open, and
  * no download URL is ever stored: each carries the account's download token.
  */

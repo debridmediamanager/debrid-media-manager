@@ -98,6 +98,33 @@
 			"status": "OK"
 		}
 	},
+	"file-single": {
+		"status": 200,
+		"body": {
+			"file": {
+				"content_type": "application/x-iso9660-image",
+				"crc32": "3e6a2f66",
+				"created_at": "2026-11-15T05:01:04",
+				"extension": "iso",
+				"file_type": "FILE",
+				"first_accessed_at": null,
+				"folder_type": "REGULAR",
+				"icon": "https://api.put.io/placeholder.png",
+				"id": 5101,
+				"is_hidden": false,
+				"is_mp4_available": false,
+				"is_shared": false,
+				"name": "debian-13.7.0-amd64-netinst.iso",
+				"opensubtitles_hash": null,
+				"parent_id": 0,
+				"screenshot": null,
+				"sha1": "",
+				"size": 792723456,
+				"updated_at": "2026-11-15T05:01:04"
+			},
+			"status": "OK"
+		}
+	},
 	"file-url": {
 		"status": 200,
 		"body": {
@@ -119,6 +146,18 @@
 			"cursor": null,
 			"skipped": 0,
 			"status": "OK"
+		}
+	},
+	"files-list-deleted-folder": {
+		"status": 404,
+		"body": {
+			"error_id": null,
+			"error_message": "The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.",
+			"error_type": "NotFound",
+			"error_uri": "http://api.put.io/v2/docs",
+			"extra": {},
+			"status": "ERROR",
+			"status_code": 404
 		}
 	},
 	"files-list-folder": {
@@ -215,6 +254,35 @@
 			},
 			"status": "OK",
 			"total": 3
+		}
+	},
+	"files-list-of-file": {
+		"status": 200,
+		"body": {
+			"cursor": null,
+			"files": [],
+			"parent": {
+				"content_type": "application/x-iso9660-image",
+				"crc32": "3e6a2f66",
+				"created_at": "2026-11-15T05:01:04",
+				"extension": "iso",
+				"file_type": "FILE",
+				"first_accessed_at": null,
+				"folder_type": "REGULAR",
+				"icon": "https://api.put.io/placeholder.png",
+				"id": 5101,
+				"is_hidden": false,
+				"is_mp4_available": false,
+				"is_shared": false,
+				"name": "debian-13.7.0-amd64-netinst.iso",
+				"opensubtitles_hash": null,
+				"parent_id": 0,
+				"screenshot": null,
+				"sha1": "",
+				"size": 792723456,
+				"updated_at": "2026-11-15T05:01:04"
+			},
+			"status": "OK"
 		}
 	},
 	"files-list-root": {
@@ -479,6 +547,51 @@
 				"up_speed": null,
 				"uploaded": null,
 				"userfile_exists": false
+			}
+		}
+	},
+	"transfer-single-file": {
+		"status": 200,
+		"body": {
+			"status": "OK",
+			"transfer": {
+				"availability": 0,
+				"callback_url": null,
+				"client_ip": null,
+				"completion_percent": 100,
+				"created_at": "2026-11-15T05:01:03",
+				"created_torrent": false,
+				"current_ratio": 1.0,
+				"down_speed": 0,
+				"download_id": 790,
+				"downloaded": 792723456,
+				"error_message": null,
+				"estimated_time": null,
+				"file_id": 5101,
+				"finished_at": "2026-11-15T05:01:04",
+				"hash": "7acf8fb590b2060dd9c3146ef770169d593433b0",
+				"id": 9101,
+				"is_private": false,
+				"name": "debian-13.7.0-amd64-netinst.iso",
+				"peers_connected": 10,
+				"peers_getting_from_us": 1,
+				"peers_sending_to_us": 0,
+				"percent_done": 100,
+				"save_parent_id": 0,
+				"seconds_seeding": 4974,
+				"simulated": true,
+				"size": 792723456,
+				"source": "magnet:?xt=urn:btih:7acf8fb590b2060dd9c3146ef770169d593433b0",
+				"started_at": "2026-11-15T05:01:03",
+				"status": "COMPLETED",
+				"subscription_id": null,
+				"torrent_link": null,
+				"tracker": null,
+				"tracker_message": null,
+				"type": "TORRENT",
+				"up_speed": 730582,
+				"uploaded": 805453824,
+				"userfile_exists": true
 			}
 		}
 	},

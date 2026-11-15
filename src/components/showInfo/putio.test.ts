@@ -46,14 +46,10 @@ const route = (url: string) => {
 	const { pathname, searchParams } = new URL(url);
 	if (pathname === '/v2/transfers/9009')
 		return { status: 'OK', transfer: transfers.continue.transfers[0] };
-	if (pathname === '/v2/transfers/9010')
-		return { status: 'OK', transfer: transfers.continue.transfers[1] };
 	if (pathname === '/v2/files/list' && searchParams.get('parent_id') === '1009')
 		return files.folder;
 	if (pathname === '/v2/files/list' && searchParams.get('parent_id') === '1103')
 		return files.subfolder;
-	if (pathname === '/v2/files/list' && searchParams.get('parent_id') === '1010')
-		return files.singleFile;
 	if (/^\/v2\/files\/\d+\/url$/.test(pathname)) return paid['file-url'].body;
 	throw new Error(`unrouted ${pathname}`);
 };
@@ -105,13 +101,6 @@ describe('showInfoForPT', () => {
 		expect(html).not.toContain('Watch');
 		expect(html).not.toContain('pt-key');
 		expect(paths().some((p) => p.endsWith('/url'))).toBe(false);
-	});
-
-	it('lists a single-file transfer as that file', async () => {
-		await showInfoForPT('pt-key', row(9010));
-
-		expect(htmlOfLastModal()).toContain('Example.Movie.2026.1080p.mkv');
-		expect(paths()).toEqual(['/v2/transfers/9010', '/v2/files/list']);
 	});
 
 	it('mints the link for the clicked file only, in a tab opened by the click', async () => {
@@ -214,12 +203,22 @@ describe('showInfoForPT on recorded answers', () => {
 		expect(html).toContain('Big Buck Bunny.en.srt');
 	});
 
+	it('lists a single-file transfer as that file', async () => {
+		const transfer = paid['transfer-single-file'].body.transfer;
+		serve({
+			[`/v2/transfers/${transfer.id}`]: paid['transfer-single-file'],
+			[`/v2/files/list?${transfer.file_id}`]: paid['files-list-of-file'],
+		});
+		await showInfoForPT('pt-key', recordedRow(transfer));
+		expect(htmlOfLastModal()).toContain('debian-13.7.0-amd64-netinst.iso');
+	});
+
 	// files/delete leaves the transfer COMPLETED, still naming the deleted folder.
 	it('says the files are gone when put.io no longer has them, and keeps the row removable', async () => {
 		const transfer = paid['transfer-after-file-delete'].body.transfer;
 		serve({
 			[`/v2/transfers/${transfer.id}`]: paid['transfer-after-file-delete'],
-			[`/v2/files/list?${transfer.file_id}`]: paid['file-deleted-get'],
+			[`/v2/files/list?${transfer.file_id}`]: paid['files-list-deleted-folder'],
 		});
 		await showInfoForPT('pt-key', recordedRow(transfer));
 		expect(htmlOfLastModal()).toContain('These files are no longer on put.io.');

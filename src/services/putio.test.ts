@@ -345,11 +345,16 @@ describe('files and links', () => {
 		expect(call(1).query).toMatchObject({ parent_id: '1103' });
 	});
 
-	it('returns a single-file transfer as that one file', async () => {
-		fetchMock.mockResolvedValueOnce(reply(files.singleFile));
-		const { files: listed } = await listPutioTransferFiles(TOKEN, 1010);
+	// Recorded: listing a file's id answers no children, with the file as parent.
+	it('returns a single-file transfer as that one file (recorded)', async () => {
+		fetchMock.mockResolvedValueOnce(paidReply('files-list-of-file'));
+		const { files: listed } = await listPutioTransferFiles(TOKEN, 5101);
 		expect(listed).toHaveLength(1);
-		expect(listed[0]).toMatchObject({ id: 1010, path: 'Example.Movie.2026.1080p.mkv' });
+		expect(listed[0]).toMatchObject({
+			id: 5101,
+			path: 'debian-13.7.0-amd64-netinst.iso',
+			file_type: 'FILE',
+		});
 	});
 
 	it('says the list is cut when one folder holds more files than DMM lists', async () => {
