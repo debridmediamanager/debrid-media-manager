@@ -99,6 +99,23 @@ describe('PutioLoginPage', () => {
 			expect(checkPutioDeviceCode.mock.calls.every(([code]) => code === 'TZLUOH')).toBe(true);
 		});
 
+		it('drops a token that arrives after the page closed', async () => {
+			vi.useFakeTimers({ shouldAdvanceTime: true });
+			let answer!: (token: string) => void;
+			checkPutioDeviceCode.mockImplementationOnce(
+				() => new Promise((resolve) => (answer = resolve))
+			);
+			const { unmount } = render(<PutioLoginPage />);
+			await startDeviceLink();
+			await act(() => vi.advanceTimersByTimeAsync(POLL_MS));
+			expect(checkPutioDeviceCode).toHaveBeenCalledTimes(1);
+
+			unmount();
+			await act(async () => answer('late-token-0000000000'));
+			expect(setAccessToken).not.toHaveBeenCalled();
+			expect(replace).not.toHaveBeenCalled();
+		});
+
 		it('keeps polling through a network error and offers a new code after a 404', async () => {
 			vi.useFakeTimers({ shouldAdvanceTime: true });
 			checkPutioDeviceCode

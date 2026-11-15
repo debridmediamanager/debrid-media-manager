@@ -73,6 +73,8 @@ export default function PutioLoginPage() {
 						interval = Math.min(interval * 2, PUTIO_POLL_MAX_MS);
 					continue;
 				}
+				// The page may have closed while put.io answered.
+				if (cancelled.current) return;
 				if (token) {
 					setAccessToken(token);
 					await finish();
