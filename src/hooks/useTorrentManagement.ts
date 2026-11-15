@@ -11,6 +11,7 @@ import {
 	handleAddAsMagnetInDl,
 	handleAddAsMagnetInOc,
 	handleAddAsMagnetInPm,
+	handleAddAsMagnetInPt,
 	handleAddAsMagnetInRd,
 	handleAddAsMagnetInTb,
 	handleAddCachedInDl,
@@ -38,6 +39,7 @@ import {
 	handleDeleteDlTorrent,
 	handleDeleteOcTorrent,
 	handleDeletePmTorrent,
+	handleDeletePtTorrent,
 	handleDeleteRdTorrent,
 	handleDeleteTbTorrent,
 } from '@/utils/deleteTorrent';
@@ -104,7 +106,8 @@ export function useTorrentManagement(
 	debridLinkKey: string | null,
 	imdbId: string,
 	searchResults: SearchResult[],
-	setSearchResults: React.Dispatch<React.SetStateAction<SearchResult[]>>
+	setSearchResults: React.Dispatch<React.SetStateAction<SearchResult[]>>,
+	putioKey: string | null = null
 ) {
 	const [hashAndProgress, setHashAndProgress] = useState<Record<string, number>>({});
 	const { addTorrent: addToCache, removeTorrent: removeFromCache } = useLibraryCache();
@@ -612,6 +615,31 @@ export function useTorrentManagement(
 		[debridLinkKey, imdbId, searchResults, fetchHashAndProgress, addToCache]
 	);
 
+	/**
+	 * Adds a hash to put.io. No cache check exists, so this always downloads and
+	 * spends the account's storage; the handler has already said why on failure.
+	 */
+	const addPt = useCallback(
+		async (hash: string) => {
+			if (!putioKey) return;
+			try {
+				await handleAddAsMagnetInPt(putioKey, hash, async (userTorrent: UserTorrent) => {
+					await torrentDB.add(userTorrent);
+					addToCache(userTorrent);
+					setHashAndProgress((prev) => ({
+						...prev,
+						[`${userTorrent.id.substring(0, 3)}${userTorrent.hash}`]:
+							userTorrent.progress,
+					}));
+					await fetchHashAndProgress();
+				});
+			} catch {
+				// handleAddAsMagnetInPt reports its own failure
+			}
+		},
+		[putioKey, fetchHashAndProgress, addToCache]
+	);
+
 	// Sends a TorBox-cached search-result torrent into the user's RD account via
 	// the debrid uploader service, which rewrites the torrent with de-infringed
 	// filenames so RD accepts it — which is why this works even on RD-blocked
@@ -929,6 +957,27 @@ export function useTorrentManagement(
 		[debridLinkKey, removeFromCache]
 	);
 
+	/** Removes the put.io rows for a hash; a row put.io did not let go of stays. */
+	const deletePt = useCallback(
+		async (hash: string) => {
+			if (!putioKey) return;
+
+			const torrents = await torrentDB.getAllByHash(hash);
+			for (const t of torrents) {
+				if (!t.id.startsWith('pt:')) continue;
+				if (!(await handleDeletePtTorrent(putioKey, t.id))) continue;
+				await torrentDB.deleteById(t.id);
+				removeFromCache(t.id);
+				setHashAndProgress((prev) => {
+					const newHashAndProgress = { ...prev };
+					delete newHashAndProgress[`pt:${hash}`];
+					return newHashAndProgress;
+				});
+			}
+		},
+		[putioKey, removeFromCache]
+	);
+
 	/**
 	 * Adds to TorBox, Premiumize or Offcloud and keeps the result only if the
 	 * service already had it.
@@ -1055,6 +1104,7 @@ export function useTorrentManagement(
 		addPm,
 		addOc,
 		addDl,
+		addPt,
 		addCached,
 		sendTbToRd,
 		deleteRd,
@@ -1063,5 +1113,6 @@ export function useTorrentManagement(
 		deletePm,
 		deleteOc,
 		deleteDl,
+		deletePt,
 	};
 }

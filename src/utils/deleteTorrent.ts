@@ -6,12 +6,20 @@ import {
 	deletePremiumizeItem,
 	deletePremiumizeTransfer,
 } from '@/services/premiumize';
+import {
+	PutioError,
+	cancelPutioTransfers,
+	deletePutioFiles,
+	getPutioTransfer,
+	removePutioTransfers,
+} from '@/services/putio';
 import { deleteTorrent as deleteRdTorrent } from '@/services/realDebrid';
 import { deleteTorrent as deleteTbTorrent, deleteWebDownload } from '@/services/torbox';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { parseOffcloudRowId } from './offcloudRow';
 import { parsePremiumizeRowId } from './premiumizeRow';
+import { parsePutioRowId } from './putioRow';
 import { magnetToastOptions } from './toastOptions';
 import { isWebDownloadRowId, parseTorBoxRowId } from './torboxWebDownload';
 
@@ -221,6 +229,48 @@ export const handleDeleteDlTorrent = async (
 		const apiError = getErrorMessage(error);
 		toast.error(
 			apiError ? `Debrid-Link error: ${apiError}` : `Failed to delete ${id} in Debrid-Link.`
+		);
+		return false;
+	}
+};
+
+/**
+ * Removes a put.io row: its files first, then its transfer, never retried.
+ *
+ * The transfer is read fresh for its `file_id` (a file or folder; 0 is the root
+ * and is refused). Files go to put.io's trash when the account keeps one. Then
+ * `/transfers/cancel` drops the entry, except that a seeding transfer only stops
+ * seeding and stays as COMPLETED (docs), so those are also removed. If deleting
+ * the files fails nothing else happens, so the row stays and can be retried.
+ */
+export const handleDeletePtTorrent = async (
+	ptKey: string,
+	id: string,
+	disableToast: boolean = false
+): Promise<boolean> => {
+	const transferId = parsePutioRowId(id);
+	if (!transferId) {
+		toast.error(`Unrecognised put.io row ${id}.`);
+		return false;
+	}
+	try {
+		const transfer = await getPutioTransfer(ptKey, transferId);
+		if (typeof transfer.file_id === 'number' && transfer.file_id > 0) {
+			await deletePutioFiles(ptKey, [transfer.file_id]);
+		}
+		await cancelPutioTransfers(ptKey, [transferId]);
+		if (['SEEDING', 'PREPARING_SEED', 'STOPPING'].includes(transfer.status ?? '')) {
+			await removePutioTransfers(ptKey, [transferId]);
+		}
+		if (!disableToast) toast(`Deleted ${id} from put.io.`, magnetToastOptions);
+		return true;
+	} catch (error) {
+		console.error(
+			'Error deleting put.io transfer:',
+			error instanceof PutioError ? error.code : 'unknown'
+		);
+		toast.error(
+			error instanceof PutioError ? error.message : `Failed to delete ${id} in put.io.`
 		);
 		return false;
 	}

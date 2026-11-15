@@ -18,6 +18,7 @@ import {
 	useDebridLinkCredential,
 	useOffcloudApiKey,
 	usePremiumizeCredential,
+	usePutioAccessToken,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
@@ -287,6 +288,7 @@ const TvSearch: FunctionComponent = () => {
 	// so it takes no part in the availability sweep, the cached/uncached counts
 	// or the `is:` filters.
 	const debridLinkKey = useDebridLinkCredential();
+	const putioKey = usePutioAccessToken();
 
 	// Library sync status - used to prevent auto-availability check while library is still loading
 	const { isFetching: isLibrarySyncing, libraryItems } = useLibraryCache();
@@ -456,6 +458,8 @@ const TvSearch: FunctionComponent = () => {
 		deletePm,
 		deleteOc,
 		deleteDl,
+		addPt,
+		deletePt,
 	} = useTorrentManagement(
 		rdKey,
 		adKey,
@@ -465,7 +469,8 @@ const TvSearch: FunctionComponent = () => {
 		debridLinkKey,
 		imdbid as string,
 		searchResults,
-		setSearchResults
+		setSearchResults,
+		putioKey
 	);
 
 	const { fetchEpisodeFromExternalSource, getEnabledSources } = useExternalSources(
@@ -2429,6 +2434,9 @@ const TvSearch: FunctionComponent = () => {
 						deletePm={deletePm}
 						deleteOc={deleteOc}
 						deleteDl={deleteDl}
+						putioKey={putioKey}
+						addPt={addPt}
+						deletePt={deletePt}
 						imdbId={imdbid as string}
 						isHashServiceChecking={isHashServiceChecking}
 					/>

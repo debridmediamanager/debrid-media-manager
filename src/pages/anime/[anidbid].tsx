@@ -11,6 +11,7 @@ import {
 	useDebridLinkCredential,
 	useOffcloudApiKey,
 	usePremiumizeCredential,
+	usePutioAccessToken,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
@@ -155,6 +156,7 @@ const AnimePage: FunctionComponent = () => {
 	const premiumizeKey = usePremiumizeCredential();
 	const offcloudKey = useOffcloudApiKey();
 	const debridLinkKey = useDebridLinkCredential();
+	const putioKey = usePutioAccessToken();
 
 	// A bare `/anime/anidb-17617` from the old page or a search id: one address.
 	useEffect(() => {
@@ -196,6 +198,8 @@ const AnimePage: FunctionComponent = () => {
 		deletePm,
 		deleteOc,
 		deleteDl,
+		addPt,
+		deletePt,
 	} = useTorrentManagement(
 		rdKey,
 		adKey,
@@ -205,7 +209,8 @@ const AnimePage: FunctionComponent = () => {
 		debridLinkKey,
 		imdbId,
 		searchResults,
-		setSearchResults
+		setSearchResults,
+		putioKey
 	);
 
 	// AniDB's episode count, 0 while unknown: a cached pack ranks on its largest that
@@ -930,6 +935,9 @@ const AnimePage: FunctionComponent = () => {
 				deletePm={deletePm}
 				deleteOc={deleteOc}
 				deleteDl={deleteDl}
+				putioKey={putioKey}
+				addPt={addPt}
+				deletePt={deletePt}
 				imdbId={mediaKey}
 				isHashServiceChecking={isHashServiceChecking}
 			/>

@@ -126,6 +126,7 @@ vi.mock('@/hooks/auth', () => ({
 	usePremiumizeCredential: () => authKeys.pm,
 	useOffcloudApiKey: () => authKeys.oc,
 	useDebridLinkCredential: () => authKeys.dl,
+	usePutioAccessToken: () => null,
 }));
 
 vi.mock('@/hooks/useExternalSources', () => ({

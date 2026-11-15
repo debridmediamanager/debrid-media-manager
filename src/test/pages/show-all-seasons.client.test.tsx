@@ -102,6 +102,7 @@ vi.mock('@/hooks/auth', () => ({
 	usePremiumizeCredential: () => keys.pm,
 	useOffcloudApiKey: () => keys.oc,
 	useDebridLinkCredential: () => null,
+	usePutioAccessToken: () => null,
 }));
 
 vi.mock('@/hooks/useSeasonPackAdder', () => ({

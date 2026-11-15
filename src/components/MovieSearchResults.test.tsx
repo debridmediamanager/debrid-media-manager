@@ -576,6 +576,40 @@ describe('MovieSearchResults', () => {
 		});
 	});
 
+	describe('put.io', () => {
+		it('offers an add with no instant badge, cast or watch: put.io has no cache check', async () => {
+			const { props } = renderComponent({
+				rdKey: null,
+				putioKey: 'pt-key',
+				addPt: vi.fn().mockResolvedValue(undefined),
+				player: 'vlc',
+				filteredResults: [{ ...baseResult }],
+			});
+
+			const group = document.querySelector('[data-action-group="pt"]')!;
+			expect(group.textContent).not.toMatch(/Instant|Cast|Watch/);
+			await userEvent.click(screen.getByRole('button', { name: /Add to PT/i }));
+			await waitFor(() => expect(props.addPt).toHaveBeenCalledWith('hash1'));
+		});
+
+		it('offers removal instead once the row is in the put.io library', async () => {
+			const { props } = renderComponent({
+				putioKey: 'pt-key',
+				deletePt: vi.fn().mockResolvedValue(undefined),
+				hashAndProgress: { 'pt:hash1': 40 },
+			});
+
+			expect(screen.queryByRole('button', { name: /Add to PT/i })).toBeNull();
+			await userEvent.click(screen.getByRole('button', { name: /PT \(40%\)/i }));
+			await waitFor(() => expect(props.deletePt).toHaveBeenCalledWith('hash1'));
+		});
+
+		it('shows nothing for put.io without a put.io sign-in', () => {
+			renderComponent();
+			expect(document.querySelector('[data-action-group="pt"]')).toBeNull();
+		});
+	});
+
 	describe('Debrid-Link', () => {
 		it('offers the add button on a row with no availability flag set anywhere', async () => {
 			// The add button is offered whether or not the sweep marked the row:

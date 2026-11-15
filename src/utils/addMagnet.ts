@@ -32,6 +32,13 @@ import {
 	PremiumizeError,
 	uploadPremiumizeTorrentFile,
 } from '@/services/premiumize';
+import {
+	ADD_MULTI_CHUNK_SIZE,
+	addPutioTransfer,
+	addPutioTransfers,
+	PutioError,
+	uploadPutioTorrentFile,
+} from '@/services/putio';
 import { rdLongRefusal } from '@/services/rdAddOutcomes';
 import {
 	addHashAsMagnet,
@@ -53,19 +60,20 @@ import {
 	TorBoxRateLimitError,
 } from '@/services/torbox';
 import { TorBoxTorrentInfo, TorBoxWebDownload, TorrentInfoResponse } from '@/services/types';
-import { UserTorrent } from '@/torrent/userTorrent';
+import { UserTorrent, UserTorrentStatus } from '@/torrent/userTorrent';
 import { delay } from '@/utils/delay';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { fetchRdNamesOnRecord } from './availability';
 import { ALLDEBRID_ACCOUNT_CODES } from './castAddonFailure';
 import { handleDeleteRdTorrent } from './deleteTorrent';
-import { extractTorrentInputs, toMagnetUri } from './extractHashes';
+import { extractTorrentInputs, isValidHash, toMagnetUri } from './extractHashes';
 import {
 	buildPremiumizeRowSources,
 	convertToDlUserTorrent,
 	convertToOffcloudUserTorrent,
 	convertToPremiumizeUserTorrent,
+	convertToPutioUserTorrent,
 	convertToTbUserTorrent,
 	convertToTbWebDownloadUserTorrent,
 } from './fetchTorrents';
@@ -1555,4 +1563,124 @@ export const handleAddMultipleTorrentFilesInDl = async (
 		`Added ${success} torrent file${success === 1 ? '' : 's'} to Debrid-Link.`,
 		magnetToastOptions
 	);
+};
+
+const PT_BATCH_DELAY = process.env.VITEST_WORKER_ID ? 0 : 250;
+
+/** put.io's refusals are already readable (see `PutioError`); anything else is not. */
+const ptErrorMessage = (error: unknown): string | null =>
+	error instanceof PutioError ? error.message : null;
+
+/**
+ * Adds a magnet to put.io. There is no cache check to ask first, so every add
+ * spends the account's storage; `addPutioTransfer` validates the hash and
+ * checks the size against free space before it asks. Logs carry the error
+ * code only: put.io asks apps to keep names and URLs out of logs.
+ */
+export const handleAddAsMagnetInPt = async (
+	ptKey: string,
+	hash: string,
+	callback?: (torrent: UserTorrent) => Promise<void>,
+	silent: boolean = false
+) => {
+	const sourceHash = extractTorrentInputs(hash)[0]?.hash ?? null;
+	if (!sourceHash || !isValidHash(sourceHash)) {
+		if (!silent) toast.error('That is not a valid info hash.', magnetToastOptions);
+		throw new PutioError('That is not a valid info hash.', 'invalid_info_hash');
+	}
+	try {
+		const added = await addPutioTransfer(ptKey, toMagnetUri(hash));
+		const row = convertToPutioUserTorrent(added, sourceHash);
+		if (callback) await callback(row);
+		if (!silent) {
+			toast.success(
+				row.status === UserTorrentStatus.finished
+					? 'On put.io — ready.'
+					: 'Added to put.io — downloading.',
+				magnetToastOptions
+			);
+		}
+	} catch (error) {
+		console.error(
+			'Error adding magnet to put.io:',
+			error instanceof PutioError ? error.code : 'unknown'
+		);
+		if (!silent)
+			toast.error(ptErrorMessage(error) ?? 'Failed to add to put.io.', magnetToastOptions);
+		throw error;
+	}
+};
+
+/**
+ * Adds many magnets or hashes to put.io, `ADD_MULTI_CHUNK_SIZE` per request.
+ *
+ * Each chunk is checked against free space before it is sent. A thrown error is
+ * about the account or the request, never one URL (those come back in
+ * `errors`): no plan, no space, rate limited, signed out. Every later chunk
+ * would collect the same answer, so the sweep stops there and says why.
+ */
+export const handleAddMultipleHashesInPt = async (
+	ptKey: string,
+	sources: string[],
+	callback?: () => Promise<void>
+) => {
+	const valid = sources.filter((source) => {
+		const hash = extractTorrentInputs(source)[0]?.hash;
+		return !!hash && isValidHash(hash);
+	});
+	let added = 0;
+	let refused = sources.length - valid.length;
+	let stoppedBy: string | null = null;
+	for (let i = 0; i < valid.length; i += ADD_MULTI_CHUNK_SIZE) {
+		if (i > 0) await delay(PT_BATCH_DELAY);
+		try {
+			const result = await addPutioTransfers(
+				ptKey,
+				valid.slice(i, i + ADD_MULTI_CHUNK_SIZE).map(toMagnetUri)
+			);
+			added += result.transfers.length;
+			refused += result.errors.length;
+		} catch (error) {
+			console.error(
+				'Error adding magnets to put.io:',
+				error instanceof PutioError ? error.code : 'unknown'
+			);
+			stoppedBy = ptErrorMessage(error) ?? 'put.io refused the request.';
+			break;
+		}
+	}
+	if (callback) await callback();
+	const parts = [`Added ${added} to put.io`];
+	if (refused > 0) parts.push(`${refused} refused`);
+	toast(`${parts.join(' — ')}.`, magnetToastOptions);
+	if (stoppedBy) toast.error(`${stoppedBy} Stopped early.`, magnetToastOptions);
+};
+
+/** `.torrent` uploads, one at a time, stopping on the first refusal of the account. */
+export const handleAddMultipleTorrentFilesInPt = async (
+	ptKey: string,
+	files: File[],
+	callback?: () => Promise<void>
+) => {
+	let added = 0;
+	let stoppedBy: string | null = null;
+	for (let i = 0; i < files.length; i++) {
+		if (i > 0) await delay(PT_BATCH_DELAY);
+		try {
+			await uploadPutioTorrentFile(ptKey, files[i]);
+			added++;
+		} catch (error) {
+			console.error(
+				'Error uploading torrent file to put.io:',
+				error instanceof PutioError ? error.code : 'unknown'
+			);
+			if (error instanceof PutioError && [401, 402, 429].includes(error.status)) {
+				stoppedBy = error.message;
+				break;
+			}
+		}
+	}
+	if (callback) await callback();
+	toast(`Added ${added} torrent file${added === 1 ? '' : 's'} to put.io.`, magnetToastOptions);
+	if (stoppedBy) toast.error(`${stoppedBy} Stopped early.`, magnetToastOptions);
 };

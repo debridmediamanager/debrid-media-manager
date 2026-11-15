@@ -106,6 +106,10 @@ type MovieSearchResultsProps = {
 	deletePm: (hash: string) => Promise<void>;
 	deleteOc: (hash: string) => Promise<void>;
 	deleteDl?: (hash: string) => Promise<void>;
+	/** put.io's OAuth token. put.io has no cache check, so it gets add and remove only. */
+	putioKey?: string | null;
+	addPt?: (hash: string) => Promise<void>;
+	deletePt?: (hash: string) => Promise<void>;
 	imdbId?: string;
 	isHashServiceChecking: (hash: string, service: DebridService) => boolean;
 };
@@ -145,6 +149,9 @@ const MovieSearchResults = ({
 	deletePm,
 	deleteOc,
 	deleteDl,
+	putioKey,
+	addPt,
+	deletePt,
 	imdbId,
 	isHashServiceChecking,
 }: MovieSearchResultsProps) => {
@@ -330,6 +337,33 @@ const MovieSearchResults = ({
 		setLoadingHashes((prev) => new Set(prev).add(hash));
 		try {
 			await deleteDl(hash);
+		} finally {
+			setLoadingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+
+	const handleAddPt = async (hash: string) => {
+		if (!addPt || loadingHashes.has(hash)) return;
+		setLoadingHashes((prev) => new Set(prev).add(hash));
+		try {
+			await addPt(hash);
+		} finally {
+			setLoadingHashes((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(hash);
+				return newSet;
+			});
+		}
+	};
+	const handleDeletePt = async (hash: string) => {
+		if (!deletePt || loadingHashes.has(hash)) return;
+		setLoadingHashes((prev) => new Set(prev).add(hash));
+		try {
+			await deletePt(hash);
 		} finally {
 			setLoadingHashes((prev) => {
 				const newSet = new Set(prev);
@@ -543,14 +577,16 @@ const MovieSearchResults = ({
 					isDownloaded('tb', r.hash) ||
 					isDownloaded('pm', r.hash) ||
 					isDownloaded('oc', r.hash) ||
-					isDownloaded('dl', r.hash);
+					isDownloaded('dl', r.hash) ||
+					isDownloaded('pt', r.hash);
 				const downloading =
 					isDownloading('rd', r.hash) ||
 					isDownloading('ad', r.hash) ||
 					isDownloading('tb', r.hash) ||
 					isDownloading('pm', r.hash) ||
 					isDownloading('oc', r.hash) ||
-					isDownloading('dl', r.hash);
+					isDownloading('dl', r.hash) ||
+					isDownloading('pt', r.hash);
 				const inYourLibrary = downloaded || downloading;
 
 				if (onlyShowCached && !isAvailable(r) && !inYourLibrary) return null;
@@ -1205,6 +1241,48 @@ const MovieSearchResults = ({
 													)}
 													Watch (DL)
 												</span>
+											</button>
+										)}
+									</span>
+								)}
+
+								{putioKey && (
+									<span
+										data-action-group="pt"
+										className="inline-flex max-w-full flex-wrap items-center gap-1"
+									>
+										{/* — PT —
+	    put.io has no cache check, so there is no instant badge, cast or
+	    watch here: an add always downloads and uses put.io storage. */}
+										{inLibrary('pt', r.hash) && (
+											<button
+												className={`haptic-sm inline rounded border-2 border-red-500 bg-red-900/30 px-1 text-xs text-red-100 transition-colors hover:bg-red-800/50 ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleDeletePt(r.hash)}
+												disabled={isLoading}
+											>
+												{isLoading ? (
+													<Loader2 className="inline-block h-3 w-3 animate-spin" />
+												) : (
+													<X className="mr-2 inline h-3 w-3" />
+												)}
+												{isLoading
+													? 'Removing...'
+													: `PT (${hashAndProgress[`pt:${r.hash}`] + '%'})`}
+											</button>
+										)}
+										{notInLibrary('pt', r.hash) && (
+											<button
+												className={`haptic-sm inline rounded border-2 px-1 text-xs transition-colors ${addButtonClass(false, r.noVideos)} ${isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
+												onClick={() => handleAddPt(r.hash)}
+												disabled={isLoading}
+												title="put.io has no cache check: adding downloads it and uses your put.io storage"
+											>
+												{isLoading ? (
+													<Loader2 className="inline-block h-3 w-3 animate-spin" />
+												) : (
+													<Download className="mr-2 inline h-3 w-3" />
+												)}
+												{isLoading ? 'Adding...' : 'Add to PT'}
 											</button>
 										)}
 									</span>

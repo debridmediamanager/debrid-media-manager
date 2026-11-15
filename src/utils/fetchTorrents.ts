@@ -15,6 +15,7 @@ import {
 	type PremiumizeItem,
 	type PremiumizeTransfer,
 } from '@/services/premiumize';
+import { putioTransferHash, type PutioTransfer } from '@/services/putio';
 import { getTorrentInfo, getUserTorrentsList } from '@/services/realDebrid';
 import { getTorrentList, getWebDownloadList } from '@/services/torbox';
 import { TorBoxTorrentInfo, TorBoxWebDownload, UserTorrentResponse } from '@/services/types';
@@ -31,6 +32,7 @@ import { getTypeByNameAndFileCount } from './mediaType';
 import { toOffcloudRowId } from './offcloudRow';
 import { getOffcloudUserTorrentStatus } from './offcloudStatus';
 import { toPremiumizeRowId, type PremiumizeRowKind } from './premiumizeRow';
+import { getPutioUserTorrentStatus, parsePutioDate, toPutioRowId } from './putioRow';
 import { checkArithmeticSequenceInFilenames, isVideo } from './selectable';
 import { genericToastOptions } from './toastOptions';
 import { toWebDownloadRowId } from './torboxWebDownload';
@@ -1093,6 +1095,57 @@ export const fetchOffcloud = async (
 		console.error('[OffcloudFetch] error', { elapsedMs: Date.now() - startedAt, error });
 	}
 };
+
+// ==================== put.io ====================
+
+/**
+ * Builds a library row from a put.io transfer.
+ *
+ * Written to the SDK's transfer schema with every field but `id` read as
+ * possibly null, because no real transfer had been seen yet. The listing has
+ * no files, like Offcloud's history, so the info modal lists them on open, and
+ * no download URL is ever stored: put.io binds each one to the IP that asked.
+ */
+export function convertToPutioUserTorrent(
+	transfer: PutioTransfer,
+	knownHash?: string
+): UserTorrent {
+	const filename = transfer.name || 'noname';
+	const [status, progress] = getPutioUserTorrentStatus(transfer.status, transfer.percent_done);
+
+	let mediaType: UserTorrent['mediaType'] = getTypeByNameAndFileCount(filename);
+	let info: ParsedFilename | undefined;
+	try {
+		info = mediaType === 'movie' ? filenameParse(filename) : filenameParse(filename, true);
+	} catch {
+		// flip the condition if parsing throws, exactly as the other services do
+		mediaType = mediaType === 'movie' ? 'tv' : 'movie';
+		try {
+			info = mediaType === 'movie' ? filenameParse(filename) : filenameParse(filename, true);
+		} catch {
+			info = undefined;
+		}
+	}
+	if (info && (!info.title || !/\w/.test(info.title))) info = undefined;
+
+	return {
+		id: toPutioRowId(transfer.id),
+		filename,
+		title: getMediaId(info ?? filename, mediaType, false) || filename,
+		hash: (knownHash || putioTransferHash(transfer)).toLowerCase(),
+		bytes: transfer.size ?? 0,
+		progress,
+		status,
+		serviceStatus: transfer.status ?? '',
+		added: parsePutioDate(transfer.created_at) ?? new Date(),
+		mediaType,
+		info,
+		links: [],
+		selectedFiles: [],
+		seeders: transfer.peers_sending_to_us ?? 0,
+		speed: transfer.down_speed ?? 0,
+	};
+}
 
 // ==================== Debrid-Link ====================
 

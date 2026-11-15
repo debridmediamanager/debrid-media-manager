@@ -14,6 +14,7 @@ import {
 	useDebridLinkCredential,
 	useOffcloudApiKey,
 	usePremiumizeCredential,
+	usePutioAccessToken,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
@@ -205,6 +206,7 @@ const MovieSearch: FunctionComponent = () => {
 	// so it takes no part in the availability sweep, the cached/uncached counts
 	// or the `is:` filters.
 	const debridLinkKey = useDebridLinkCredential();
+	const putioKey = usePutioAccessToken();
 
 	/**
 	 * A user holding only Real-Debrid cannot start a transfer at all: the uploader
@@ -285,6 +287,8 @@ const MovieSearch: FunctionComponent = () => {
 		deletePm,
 		deleteOc,
 		deleteDl,
+		addPt,
+		deletePt,
 	} = useTorrentManagement(
 		rdKey,
 		adKey,
@@ -294,7 +298,8 @@ const MovieSearch: FunctionComponent = () => {
 		debridLinkKey,
 		imdbid as string,
 		searchResults,
-		setSearchResults
+		setSearchResults,
+		putioKey
 	);
 
 	const { fetchMovieFromExternalSource, getEnabledSources } = useExternalSources(
@@ -1251,6 +1256,9 @@ const MovieSearch: FunctionComponent = () => {
 								deletePm={deletePm}
 								deleteOc={deleteOc}
 								deleteDl={deleteDl}
+								putioKey={putioKey}
+								addPt={addPt}
+								deletePt={deletePt}
 								imdbId={imdbid as string}
 								isHashServiceChecking={isHashServiceChecking}
 							/>
