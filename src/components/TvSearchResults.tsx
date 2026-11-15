@@ -3,7 +3,7 @@ import { FileData, SearchResult } from '@/services/mediasearch';
 import { oneFilePerEpisode } from '@/utils/castLibraryPlan';
 import { downloadMagnetFile } from '@/utils/downloadMagnet';
 import { getEpisodeCountClass, getEpisodeCountLabel } from '@/utils/episodeUtils';
-import { reporterIdFor } from '@/utils/reporterId';
+import { canReportWith, reporterIdFor } from '@/utils/reporterId';
 import {
 	borderColor,
 	btnColor,
@@ -1298,19 +1298,28 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 													)}
 												</button>
 											)}
-										<ReportButton
-											hash={r.hash}
-											imdbId={imdbId!}
-											userId={reporterIdFor({
-												rdKey,
-												adKey,
-												torboxKey,
-												premiumizeKey,
-												offcloudKey,
-												debridLinkKey,
-											})}
-											isShow={true}
-										/>
+										{canReportWith({
+											rdKey,
+											adKey,
+											torboxKey,
+											premiumizeKey,
+											offcloudKey,
+											debridLinkKey,
+										}) && (
+											<ReportButton
+												hash={r.hash}
+												imdbId={imdbId!}
+												userId={reporterIdFor({
+													rdKey,
+													adKey,
+													torboxKey,
+													premiumizeKey,
+													offcloudKey,
+													debridLinkKey,
+												})}
+												isShow={true}
+											/>
+										)}
 									</div>
 								</div>
 							</div>

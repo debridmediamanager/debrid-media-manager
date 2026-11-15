@@ -604,6 +604,18 @@ describe('MovieSearchResults', () => {
 			await waitFor(() => expect(props.deletePt).toHaveBeenCalledWith('hash1'));
 		});
 
+		// put.io has no reporter identity, so a report from it posted an empty userId
+		// and /api/report refused it every time.
+		it('offers no report button to a put.io-only user', () => {
+			renderComponent({ rdKey: null, putioKey: 'pt-key' });
+			expect(screen.queryByTestId('report-button')).toBeNull();
+		});
+
+		it('keeps the report button for a user with a reporting sign-in', () => {
+			renderComponent({ putioKey: 'pt-key' });
+			expect(screen.getByTestId('report-button')).toBeTruthy();
+		});
+
 		it('shows nothing for put.io without a put.io sign-in', () => {
 			renderComponent();
 			expect(document.querySelector('[data-action-group="pt"]')).toBeNull();

@@ -240,6 +240,19 @@ describe('TvSearchResults', () => {
 	// The action row reads left to right as "what each service can do", then the
 	// things that are not tied to a service. Watch used to sit inside the RD
 	// group, which made it look like an RD action when it picks its own service.
+	describe('report button', () => {
+		// put.io has no reporter identity; its reports posted an empty userId.
+		it('is left out for a put.io-only user', () => {
+			renderTv({ rdKey: null, putioKey: 'pt-key' });
+			expect(screen.queryByTestId('report-button')).toBeNull();
+		});
+
+		it('stays for a user with a reporting sign-in', () => {
+			renderTv({ putioKey: 'pt-key' });
+			expect(screen.getByTestId('report-button')).toHaveAttribute('data-user-id', 'rd');
+		});
+	});
+
 	describe('size line', () => {
 		it('shows total and median per episode for a pack', () => {
 			renderTv({

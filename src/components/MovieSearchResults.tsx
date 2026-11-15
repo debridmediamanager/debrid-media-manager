@@ -1,7 +1,7 @@
 import type { DebridService } from '@/hooks/useAvailabilityCheck';
 import { SearchResult } from '@/services/mediasearch';
 import { downloadMagnetFile } from '@/utils/downloadMagnet';
-import { reporterIdFor } from '@/utils/reporterId';
+import { canReportWith, reporterIdFor } from '@/utils/reporterId';
 import {
 	borderColor,
 	btnColor,
@@ -1336,18 +1336,27 @@ const MovieSearchResults = ({
 										)}
 									</button>
 								)}
-								<ReportButton
-									hash={r.hash}
-									imdbId={imdbId!}
-									userId={reporterIdFor({
-										rdKey,
-										adKey,
-										torboxKey,
-										premiumizeKey,
-										offcloudKey,
-										debridLinkKey,
-									})}
-								/>
+								{canReportWith({
+									rdKey,
+									adKey,
+									torboxKey,
+									premiumizeKey,
+									offcloudKey,
+									debridLinkKey,
+								}) && (
+									<ReportButton
+										hash={r.hash}
+										imdbId={imdbId!}
+										userId={reporterIdFor({
+											rdKey,
+											adKey,
+											torboxKey,
+											premiumizeKey,
+											offcloudKey,
+											debridLinkKey,
+										})}
+									/>
+								)}
 							</div>
 						</div>
 					</div>
