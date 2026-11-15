@@ -129,6 +129,22 @@ describe('withAuth', () => {
 		expect(mockPush).not.toHaveBeenCalledWith('/start');
 	});
 
+	it('renders wrapped component when authenticated with put.io', async () => {
+		mockUseRealDebridAccessToken.mockReturnValue([null, false, false]);
+		mockUseAllDebridApiKey.mockReturnValue(null);
+		localStorage.setItem('pt:accessToken', 'pt-test-token');
+
+		const TestComponent = () => <div data-testid="test-component">Test Content</div>;
+		const WrappedComponent = withAuth(TestComponent);
+
+		render(<WrappedComponent />);
+
+		await waitFor(() => {
+			expect(screen.getByTestId('test-component')).toBeInTheDocument();
+		});
+		expect(mockPush).not.toHaveBeenCalledWith('/start');
+	});
+
 	// gatekeeper's handoff lands on /settings with nothing stored yet; the page has
 	// to render so the sponsor panel can take the key, or the fragment is lost.
 	it('keeps the page for a key handed over in the fragment, with nothing stored', async () => {

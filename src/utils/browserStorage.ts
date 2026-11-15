@@ -58,6 +58,7 @@ export const hideRdBlockedTorrentsDefault = (fallback: boolean): boolean => {
 	const hasPm = !!getLocalStorageItem('pm:accessToken') || !!getLocalStorageItem('pm:apiKey');
 	const hasOc = !!getLocalStorageItem('oc:apiKey');
 	const hasDl = !!getLocalStorageItem('dl:accessToken') || !!getLocalStorageItem('dl:apiKey');
+	const hasPt = !!getLocalStorageItem('pt:accessToken');
 
-	return hasRd && !hasAd && !hasTb && !hasPm && !hasOc && !hasDl;
+	return hasRd && !hasAd && !hasTb && !hasPm && !hasOc && !hasDl && !hasPt;
 };

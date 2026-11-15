@@ -4,6 +4,7 @@ import {
 	useDebridLogin,
 	useOffcloudApiKey,
 	usePremiumizeCredential,
+	usePutioAccessToken,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
@@ -34,6 +35,7 @@ vi.mock('@/hooks/auth', () => ({
 	usePremiumizeCredential: vi.fn(),
 	useOffcloudApiKey: vi.fn(),
 	useDebridLinkCredential: vi.fn(),
+	usePutioAccessToken: vi.fn(),
 }));
 
 describe('StartPage', () => {
@@ -44,6 +46,7 @@ describe('StartPage', () => {
 	let mockLoginWithPremiumize: any;
 	let mockLoginWithOffcloud: any;
 	let mockLoginWithDebridLink: any;
+	let mockLoginWithPutio: any;
 
 	beforeEach(() => {
 		mockPush = vi.fn();
@@ -53,6 +56,7 @@ describe('StartPage', () => {
 		mockLoginWithPremiumize = vi.fn();
 		mockLoginWithOffcloud = vi.fn();
 		mockLoginWithDebridLink = vi.fn();
+		mockLoginWithPutio = vi.fn();
 
 		vi.mocked(useRouter).mockReturnValue({
 			push: mockPush,
@@ -68,6 +72,7 @@ describe('StartPage', () => {
 			loginWithPremiumize: mockLoginWithPremiumize,
 			loginWithOffcloud: mockLoginWithOffcloud,
 			loginWithDebridLink: mockLoginWithDebridLink,
+			loginWithPutio: mockLoginWithPutio,
 		});
 
 		vi.mocked(useRealDebridAccessToken).mockReturnValue([null, false, false]);
@@ -76,6 +81,7 @@ describe('StartPage', () => {
 		vi.mocked(usePremiumizeCredential).mockReturnValue(null);
 		vi.mocked(useOffcloudApiKey).mockReturnValue(null);
 		vi.mocked(useDebridLinkCredential).mockReturnValue(null);
+		vi.mocked(usePutioAccessToken).mockReturnValue(null);
 	});
 
 	it('should render the start page correctly', () => {
@@ -103,6 +109,7 @@ describe('StartPage', () => {
 		expect(screen.getByText('Login with Premiumize')).toBeInTheDocument();
 		expect(screen.getByText('Login with Offcloud')).toBeInTheDocument();
 		expect(screen.getByText('Login with Debrid-Link')).toBeInTheDocument();
+		expect(screen.getByText('Login with put.io')).toBeInTheDocument();
 	});
 
 	it('should render account creation links', () => {
@@ -187,6 +194,9 @@ describe('StartPage', () => {
 
 		fireEvent.click(screen.getByText('Login with Debrid-Link'));
 		expect(mockLoginWithDebridLink).toHaveBeenCalledTimes(1);
+
+		fireEvent.click(screen.getByText('Login with put.io'));
+		expect(mockLoginWithPutio).toHaveBeenCalledTimes(1);
 	});
 
 	it('should redirect to home when user is logged in with Real-Debrid', () => {
@@ -233,6 +243,14 @@ describe('StartPage', () => {
 	// is what this reads rather than one of the two keys behind it.
 	it('should redirect to home when user is logged in with Debrid-Link', () => {
 		vi.mocked(useDebridLinkCredential).mockReturnValue('dl-test-token');
+
+		render(<StartPage />);
+
+		expect(mockPush).toHaveBeenCalledWith('/');
+	});
+
+	it('should redirect to home when user is logged in with put.io', () => {
+		vi.mocked(usePutioAccessToken).mockReturnValue('pt-test-token');
 
 		render(<StartPage />);
 

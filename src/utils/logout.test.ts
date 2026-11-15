@@ -40,6 +40,19 @@ describe('handleLogout', () => {
 		expect(router.reload).toHaveBeenCalled();
 	});
 
+	// The put.io card logs out with the `pt:` prefix; every put.io key goes with it.
+	it('clears every pt: key for a put.io logout, and nothing else', async () => {
+		localStorage.setItem('pt:accessToken', 'token');
+		localStorage.setItem('pt:other', 'x');
+		localStorage.setItem('dl:accessToken', 'keep');
+		const router = { reload: vi.fn(), push: vi.fn() };
+
+		await handleLogout('pt:', router);
+
+		expect(Object.keys(localStorage).filter((key) => key.startsWith('pt:'))).toEqual([]);
+		expect(localStorage.getItem('dl:accessToken')).toBe('keep');
+	});
+
 	it('clears all keys and navigates to /start when no prefix is provided', async () => {
 		localStorage.setItem('foo', 'bar');
 		const router = { reload: vi.fn(), push: vi.fn() };

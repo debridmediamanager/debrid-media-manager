@@ -26,6 +26,8 @@ export const SYNCED_KEYS = [
 	'dl:accessToken',
 	'dl:refreshToken',
 	'dl:tokenExpiry',
+	// Rides along with another login; put.io is not an identity (no SYNC_SERVICES entry).
+	'pt:accessToken',
 	'dmm:sponsorToken',
 	'dmm:apiKey',
 	'trakt:accessToken',
@@ -48,6 +50,7 @@ export const SIGN_IN_KEYS = [
 	'oc:apiKey',
 	'dl:accessToken',
 	'dl:apiKey',
+	'pt:accessToken',
 ] as const;
 
 /** Prefixes: every `settings:*` flag and the parked logins of the account switcher. */

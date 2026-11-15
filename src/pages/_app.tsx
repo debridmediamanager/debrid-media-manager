@@ -95,6 +95,7 @@ export default function App({ Component, pageProps }: AppWithProvidersProps) {
 		'/premiumize/login',
 		'/offcloud/login',
 		'/debridlink/login',
+		'/putio/login',
 	];
 	const disableLibraryProvider =
 		authRoutes.includes(router.pathname) || Component.disableLibraryProvider === true;

@@ -9,12 +9,13 @@ import {
 import { refreshDebridLinkToken } from '../services/debridLinkOAuth';
 import { getOffcloudAccountInfo, type OffcloudAccountInfo } from '../services/offcloud';
 import { getPremiumizeAccountInfo, type PremiumizeAccountInfo } from '../services/premiumize';
+import { getPutioAccountInfo, isPutioAuthError, type PutioAccountInfo } from '../services/putio';
 import { getCurrentUser as getRealDebridUser, getToken } from '../services/realDebrid';
 import type { SimklSession } from '../services/simkl';
 import { SimklError, getSimklSession } from '../services/simkl';
 import { TorBoxUser, getUserData } from '../services/torbox';
 import { TraktUser, getTraktUser } from '../services/trakt';
-import { clearDlKeys, clearRdKeys } from '../utils/clearLocalStorage';
+import { clearDlKeys, clearPtKeys, clearRdKeys } from '../utils/clearLocalStorage';
 import { readStoredAccessToken } from '../utils/rdTokenStorage';
 import { getSafeRedirectPath } from '../utils/router';
 import {
@@ -58,6 +59,12 @@ export type OffcloudUser = OffcloudAccountInfo;
  * timestamp, which is the one field here it is easy to render as 1970.
  */
 export type DebridLinkUser = DebridLinkAccountInfo;
+
+/**
+ * put.io's `account/info`: a username, mail, disk and `account_status`. An
+ * account with no plan reads `"stranger"` and still signs in (recorded).
+ */
+export type PutioUser = PutioAccountInfo;
 
 export interface AllDebridUser {
 	username: string;
@@ -565,6 +572,47 @@ const useDebridLink = () => {
 	return { user, error, hasAuth: !!token, loading };
 };
 
+/**
+ * put.io's token is long-lived, so there is no renewal. Only a 401 signs the
+ * user out (put.io's app checklist); 429, 5xx and network errors keep the token
+ * and settle on the error instead.
+ */
+const usePutio = () => {
+	const [user, setUser] = useState<PutioUser | null>(null);
+	const [error, setError] = useState<Error | null>(null);
+	const [loading, setLoading] = useState(false);
+	const [token] = useLocalStorage<string>('pt:accessToken');
+
+	useEffect(() => {
+		if (!token) return;
+		let isMounted = true;
+		setLoading(true);
+		getPutioAccountInfo(token)
+			.then((info) => {
+				if (!isMounted) return;
+				setUser(info);
+				setError(null);
+				setLoading(false);
+			})
+			.catch((e) => {
+				if (!isMounted) return;
+				if (isPutioAuthError(e)) {
+					clearPtKeys();
+					setUser(null);
+					setError(null);
+				} else {
+					setError(e as Error);
+				}
+				setLoading(false);
+			});
+		return () => {
+			isMounted = false;
+		};
+	}, [token]);
+
+	return { user, error, hasAuth: !!token, loading };
+};
+
 const useTrakt = () => {
 	const [user, setUser] = useState<TraktUser | null>(null);
 	const [error, setError] = useState<Error | null>(null);
@@ -734,6 +782,12 @@ export const useDebridLinkCredential = () => {
 	return accessToken || apiKey;
 };
 
+/** The put.io OAuth token, from the device link or pasted; there is one credential. */
+export const usePutioAccessToken = () => {
+	const [token] = useLocalStorage<string>('pt:accessToken');
+	return token;
+};
+
 // Main hook that combines all services
 export const useCurrentUser = () => {
 	const rd = useRealDebrid();
@@ -742,6 +796,7 @@ export const useCurrentUser = () => {
 	const pm = usePremiumize();
 	const oc = useOffcloud();
 	const dl = useDebridLink();
+	const pt = usePutio();
 	const trakt = useTrakt();
 	const simkl = useSimklAuth();
 
@@ -765,6 +820,9 @@ export const useCurrentUser = () => {
 		dlUser: dl.user,
 		dlError: dl.error,
 		hasDLAuth: dl.hasAuth,
+		ptUser: pt.user,
+		ptError: pt.error,
+		hasPTAuth: pt.hasAuth,
 		traktUser: trakt.user,
 		traktError: trakt.error,
 		hasTraktAuth: trakt.hasAuth,
@@ -802,5 +860,6 @@ export const useDebridLogin = () => {
 		loginWithPremiumize: () => navigateToLogin('/premiumize/login'),
 		loginWithOffcloud: () => navigateToLogin('/offcloud/login'),
 		loginWithDebridLink: () => navigateToLogin('/debridlink/login'),
+		loginWithPutio: () => navigateToLogin('/putio/login'),
 	};
 };

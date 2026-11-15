@@ -87,12 +87,14 @@ function IndexPage() {
 		pmUser,
 		ocUser,
 		dlUser,
+		ptUser,
 		rdError,
 		adError,
 		tbError,
 		pmError,
 		ocError,
 		dlError,
+		ptError,
 		traktUser,
 		traktError,
 		simklUser,
@@ -103,6 +105,7 @@ function IndexPage() {
 		hasPMAuth,
 		hasOCAuth,
 		hasDLAuth,
+		hasPTAuth,
 		hasTraktAuth,
 		hasSimklAuth,
 		isLoading,
@@ -114,6 +117,7 @@ function IndexPage() {
 		loginWithPremiumize,
 		loginWithOffcloud,
 		loginWithDebridLink,
+		loginWithPutio,
 	} = useDebridLogin();
 	const isGuest = useGuestMode();
 	const [browseTerms] = useState(getTerms(2));
@@ -130,6 +134,7 @@ function IndexPage() {
 		(!hasPMAuth || !!pmUser || !!pmError) &&
 		(!hasOCAuth || !!ocUser || !!ocError) &&
 		(!hasDLAuth || !!dlUser || !!dlError) &&
+		(!hasPTAuth || !!ptUser || !!ptError) &&
 		(!hasTraktAuth || !!traktUser || !!traktError) &&
 		(!hasSimklAuth || !!simklUser || !!simklError);
 
@@ -179,9 +184,9 @@ function IndexPage() {
 		// playback and cast preferences and cannot show, replace or clear a
 		// credential, and "clear site data" drops all seven accounts to fix one.
 		//
-		// Real-Debrid and Debrid-Link drop their own keys on a rejected
-		// credential (`clearRdKeys` / `clearDlKeys`, both then setting error to
-		// null), so those two only ever reach here on a transient failure and
+		// Real-Debrid, Debrid-Link and put.io drop their own keys on a rejected
+		// credential (`clearRdKeys` / `clearDlKeys` / `clearPtKeys`, then setting
+		// error to null), so those three only ever reach here on a transient failure and
 		// Retry really is their answer. The other five park on the card until
 		// the user acts, which is the case this whole flow was built for.
 		if (rdError) {
@@ -202,6 +207,9 @@ function IndexPage() {
 		if (dlError) {
 			toast.error('Debrid-Link profile failed. Use the Debrid-Link card below.');
 		}
+		if (ptError) {
+			toast.error('put.io profile failed. Use the put.io card below.');
+		}
 		if (traktError) {
 			toast.error('Trakt profile fetch failed. Use the Trakt card below.');
 		}
@@ -221,7 +229,7 @@ function IndexPage() {
 				toast('Local DB still open. Refresh and retry.', genericToastOptions);
 			};
 		}
-	}, [rdError, adError, tbError, pmError, ocError, dlError, traktError, simklError]);
+	}, [rdError, adError, tbError, pmError, ocError, dlError, ptError, traktError, simklError]);
 
 	useEffect(() => {
 		if (rdUser) {
@@ -266,7 +274,15 @@ function IndexPage() {
 	const actionButtonClasses =
 		'haptic-sm w-full rounded border-2 border-gray-500 bg-gray-800/30 px-4 py-2 text-sm font-medium text-gray-100 transition-colors hover:bg-gray-700/50';
 
-	const debridServiceFailed = !!(rdError || adError || tbError || pmError || ocError || dlError);
+	const debridServiceFailed = !!(
+		rdError ||
+		adError ||
+		tbError ||
+		pmError ||
+		ocError ||
+		dlError ||
+		ptError
+	);
 
 	const debridServiceCards = (
 		<>
@@ -310,6 +326,13 @@ function IndexPage() {
 				error={dlError}
 				user={dlUser}
 				onTraktLogin={loginWithDebridLink}
+				onLogout={logout}
+			/>
+			<ServiceCard
+				service="pt"
+				error={ptError}
+				user={ptUser}
+				onTraktLogin={loginWithPutio}
 				onLogout={logout}
 			/>
 		</>

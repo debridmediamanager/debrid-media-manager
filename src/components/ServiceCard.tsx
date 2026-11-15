@@ -3,11 +3,13 @@ import {
 	DebridLinkUser,
 	OffcloudUser,
 	PremiumizeUser,
+	PutioUser,
 	RealDebridUser,
 } from '@/hooks/auth';
 import { debridLinkPremiumDaysLeft, isDebridLinkPremium } from '@/services/debridLink';
 import { isOffcloudPremium } from '@/services/offcloud';
 import { isPremiumizePremium } from '@/services/premiumize';
+import { isPutioActive } from '@/services/putio';
 import { SimklUser } from '@/services/simkl';
 import { TraktUser } from '@/services/trakt';
 import { TorBoxUser } from '@/services/types';
@@ -19,7 +21,7 @@ import Modal from '../components/modals/modal';
 import { SavedAccountsPicker, useSavedAccounts } from './SavedAccountsPicker';
 
 interface ServiceCardProps {
-	service: 'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'dl' | 'trakt' | 'simkl';
+	service: 'rd' | 'ad' | 'tb' | 'pm' | 'oc' | 'dl' | 'pt' | 'trakt' | 'simkl';
 	user: RealDebridUser | AllDebridUser | TraktUser | SimklUser | any | null;
 	onTraktLogin: () => void;
 	onLogout: (prefix: string) => void;
@@ -34,6 +36,7 @@ const SERVICE_LABELS: Record<ServiceCardProps['service'], string> = {
 	pm: 'Premiumize',
 	oc: 'Offcloud',
 	dl: 'Debrid-Link',
+	pt: 'put.io',
 	trakt: 'Trakt',
 	simkl: 'Simkl',
 };
@@ -51,6 +54,7 @@ const SERVICE_PREFIXES: Record<ServiceCardProps['service'], string> = {
 	pm: 'pm:',
 	oc: 'oc:',
 	dl: 'dl:',
+	pt: 'pt:',
 	trakt: 'trakt:',
 	simkl: 'simkl:',
 };
@@ -63,6 +67,7 @@ const SERVICE_LOGIN_PATHS: Partial<Record<ServiceCardProps['service'], string>> 
 	pm: '/premiumize/login',
 	oc: '/offcloud/login',
 	dl: '/debridlink/login',
+	pt: '/putio/login',
 };
 
 /**
@@ -101,6 +106,10 @@ export function accountIdentity(
 				: null;
 		case 'dl':
 			return 'username' in user ? { id: user.username, label: user.username } : null;
+		case 'pt':
+			return 'user_id' in user && 'username' in user
+				? { id: String(user.user_id), label: String(user.username) }
+				: null;
 		default:
 			return null;
 	}
@@ -244,6 +253,22 @@ function ServiceCardBody({ service, user, onTraktLogin, onLogout, error }: Servi
         <p><strong>Points:</strong> ${dlUser.pts}</p>
         <p><strong>Type:</strong> ${isDebridLinkPremium(dlUser) ? 'premium' : 'free'}</p>
         <p><strong>Days Remaining:</strong> ${debridLinkPremiumDaysLeft(dlUser)}</p>
+      </div>
+    `;
+		} else if (service === 'pt' && user && 'user_id' in user && 'username' in user) {
+			const ptUser = user as PutioUser;
+			title = 'put.io';
+			prefix = 'pt:';
+			// No plan reads `account_status: "stranger"` with zero disk; such an
+			// account signs in but put.io refuses every add and link (402).
+			const disk = ptUser.disk ?? { avail: 0, size: 0, used: 0 };
+			html = `
+      <div class="text-left">
+        <p><strong>Username:</strong> ${escapeHtml(ptUser.username)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(ptUser.mail ?? '')}</p>
+        <p><strong>Plan:</strong> ${isPutioActive(ptUser) ? 'active' : 'no active plan'}</p>
+        <p><strong>Storage:</strong> ${formatBytes(disk.used)} of ${formatBytes(disk.size)} used, ${formatBytes(disk.avail)} free</p>
+        <p class="mt-2 text-xs">DMM is an integration for put.io; put.io did not make it.</p>
       </div>
     `;
 		} else if (service === 'simkl' && user && 'account' in user) {
@@ -540,6 +565,34 @@ function ServiceCardBody({ service, user, onTraktLogin, onLogout, error }: Servi
 				className="haptic w-full rounded border-2 border-[#38bdf8] bg-[#38bdf8]/30 py-1 text-center text-sky-100 transition-colors hover:bg-[#38bdf8]/50"
 			>
 				Debrid-Link Login
+			</button>
+		);
+	}
+
+	if (service === 'pt') {
+		const ptUser = user as PutioUser | null;
+		// Fuchsia, clear of AllDebrid's amber and the other identity colours.
+		// Written out in full because Tailwind only keeps literal class names.
+		return ptUser ? (
+			<button
+				onClick={() => showUserInfo('pt')}
+				className="haptic flex items-center justify-center gap-2 rounded border-2 border-[#d946ef] bg-[#d946ef]/30 p-1 text-fuchsia-100 transition-colors hover:bg-[#d946ef]/50"
+			>
+				<span className="font-medium">put.io</span>
+				<span>{ptUser.username}</span>
+				{isPutioActive(ptUser) ? (
+					<Check className="h-4 w-4 text-green-500" />
+				) : (
+					<X className="h-4 w-4 text-red-500" aria-label="No active plan" />
+				)}
+			</button>
+		) : (
+			<button
+				type="button"
+				onClick={onTraktLogin}
+				className="haptic w-full rounded border-2 border-[#d946ef] bg-[#d946ef]/30 py-1 text-center text-fuchsia-100 transition-colors hover:bg-[#d946ef]/50"
+			>
+				put.io Login
 			</button>
 		);
 	}

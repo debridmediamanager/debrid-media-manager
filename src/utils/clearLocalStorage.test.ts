@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest';
-import { clearDlKeys, clearRdKeys } from './clearLocalStorage';
+import { clearDlKeys, clearPtKeys, clearRdKeys } from './clearLocalStorage';
 
 describe('clearLocalStorage', () => {
 	let localStorageMock: Storage;
@@ -141,6 +141,25 @@ describe('clearLocalStorage', () => {
 				.filter((event) => event.type === 'local-storage')
 				.map((event) => (event as CustomEvent).detail?.key);
 			expect(notified).toEqual(expect.arrayContaining(['dl:accessToken']));
+			expect(dispatchEventSpy.mock.calls.some(([e]) => (e as Event).type === 'logout')).toBe(
+				true
+			);
+		});
+	});
+
+	describe('clearPtKeys', () => {
+		// put.io answers a dead token with 401 Unauthorized; every pt: key goes,
+		// and nothing that belongs to another provider.
+		it('removes every pt: key and nothing else', () => {
+			localStorageMock.setItem('pt:accessToken', 'token');
+			localStorageMock.setItem('pt:somethingLater', 'x');
+			localStorageMock.setItem('dl:accessToken', 'other');
+
+			clearPtKeys();
+
+			expect(localStorageMock.removeItem).toHaveBeenCalledWith('pt:accessToken');
+			expect(localStorageMock.removeItem).toHaveBeenCalledWith('pt:somethingLater');
+			expect(localStorageMock.removeItem).not.toHaveBeenCalledWith('dl:accessToken');
 			expect(dispatchEventSpy.mock.calls.some(([e]) => (e as Event).type === 'logout')).toBe(
 				true
 			);

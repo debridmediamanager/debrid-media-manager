@@ -7,6 +7,7 @@ import {
 	useDebridLogin,
 	useOffcloudApiKey,
 	usePremiumizeCredential,
+	usePutioAccessToken,
 	useRealDebridAccessToken,
 	useTorBoxAccessToken,
 } from '@/hooks/auth';
@@ -32,6 +33,7 @@ export default function StartPage() {
 		loginWithPremiumize,
 		loginWithOffcloud,
 		loginWithDebridLink,
+		loginWithPutio,
 	} = useDebridLogin();
 	const [rdToken] = useRealDebridAccessToken();
 	const adKey = useAllDebridApiKey();
@@ -39,14 +41,15 @@ export default function StartPage() {
 	const pmKey = usePremiumizeCredential();
 	const ocKey = useOffcloudApiKey();
 	const dlKey = useDebridLinkCredential();
+	const ptKey = usePutioAccessToken();
 
 	// Redirect to index if already logged in
 	useEffect(() => {
-		const isLoggedIn = rdToken || adKey || tbKey || pmKey || ocKey || dlKey;
+		const isLoggedIn = rdToken || adKey || tbKey || pmKey || ocKey || dlKey || ptKey;
 		if (isLoggedIn) {
 			router.push('/');
 		}
-	}, [rdToken, adKey, tbKey, pmKey, ocKey, dlKey, router]);
+	}, [rdToken, adKey, tbKey, pmKey, ocKey, dlKey, ptKey, router]);
 
 	return (
 		<div className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -224,6 +227,25 @@ export default function StartPage() {
 						rel="noopener noreferrer"
 						aria-label="Create an account with Debrid-Link"
 						title="Create an account with Debrid-Link"
+					>
+						Create account
+					</a>
+				</div>
+
+				<div className="my-1 grid w-full max-w-sm grid-cols-2 gap-2">
+					<button
+						className="rounded bg-blue-600 px-2 py-2 text-sm text-white hover:bg-blue-700 sm:px-3 sm:text-base"
+						onClick={loginWithPutio}
+					>
+						Login with put.io
+					</button>
+					<a
+						className="flex items-center justify-center rounded bg-green-700 px-2 py-2 text-center text-sm text-white hover:bg-green-800 sm:px-3 sm:text-base"
+						href="https://put.io/"
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label="Create an account with put.io"
+						title="Create an account with put.io"
 					>
 						Create account
 					</a>

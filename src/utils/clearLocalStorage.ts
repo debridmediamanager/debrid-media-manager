@@ -33,3 +33,6 @@ export const clearRdKeys = () => clearKeysWithPrefix('rd:');
  * it would keep triggering a refresh against a token that is gone.
  */
 export const clearDlKeys = () => clearKeysWithPrefix('dl:');
+
+/** put.io's one credential, `pt:accessToken`, dropped when put.io answers 401. */
+export const clearPtKeys = () => clearKeysWithPrefix('pt:');

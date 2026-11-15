@@ -1,9 +1,11 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { StrictMode, type ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { PutioError } from '../services/putio';
 import type * as SimklService from '../services/simkl';
 import type { SimklSession, SimklUser } from '../services/simkl';
 import { SimklError } from '../services/simkl';
+import putioUnpaid from '../test/fixtures/putio/recorded-2026-11-15.json';
 import logoutUnavailable from '../test/fixtures/simkl/session-unavailable-503.json';
 import signedOut from '../test/fixtures/simkl/signed-out-401.json';
 import profileFixture from '../test/fixtures/simkl/user-settings-200.json';
@@ -32,6 +34,7 @@ const {
 	mockGetOffcloudAccountInfo,
 	mockGetDebridLinkAccountInfo,
 	mockRefreshDebridLinkToken,
+	mockGetPutioAccountInfo,
 	mockGetTraktUser,
 	mockGetSimklSession,
 	mockLogoutSimkl,
@@ -44,6 +47,7 @@ const {
 	mockGetOffcloudAccountInfo: vi.fn(),
 	mockGetDebridLinkAccountInfo: vi.fn(),
 	mockRefreshDebridLinkToken: vi.fn(),
+	mockGetPutioAccountInfo: vi.fn(),
 	mockGetTraktUser: vi.fn(),
 	mockGetSimklSession: vi.fn(),
 	mockLogoutSimkl: vi.fn(),
@@ -77,6 +81,11 @@ vi.mock('../services/debridLink', () => ({
 
 vi.mock('../services/debridLinkOAuth', () => ({
 	refreshDebridLinkToken: mockRefreshDebridLinkToken,
+}));
+
+vi.mock('../services/putio', async (importOriginal) => ({
+	...(await importOriginal<typeof import('../services/putio')>()),
+	getPutioAccountInfo: mockGetPutioAccountInfo,
 }));
 
 vi.mock('../services/trakt', () => ({
@@ -751,7 +760,64 @@ describe('useDebridLink via useCurrentUser', () => {
 	});
 });
 
+describe('usePutio via useCurrentUser', () => {
+	beforeEach(() => {
+		window.localStorage.clear();
+		__resetRealDebridStateForTests();
+		vi.clearAllMocks();
+	});
+
+	it('loads an account with no plan (recorded) and keeps the token', async () => {
+		setStoredValue('pt:accessToken', 'pt-token');
+		mockGetPutioAccountInfo.mockResolvedValue(putioUnpaid['account-info-unpaid'].body.info);
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.ptUser).not.toBeNull());
+		expect(result.current.hasPTAuth).toBe(true);
+		expect(result.current.ptUser?.account_status).toBe('stranger');
+		expect(mockGetPutioAccountInfo).toHaveBeenCalledWith('pt-token');
+	});
+
+	it('signs out on a 401 only, dropping every pt: key', async () => {
+		setStoredValue('pt:accessToken', 'revoked');
+		mockGetPutioAccountInfo.mockRejectedValue(new PutioError('x', 'Unauthorized', 401));
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(window.localStorage.getItem('pt:accessToken')).toBeNull());
+		expect(result.current.ptUser).toBeNull();
+		expect(result.current.ptError).toBeNull();
+	});
+
+	it.each([
+		['rate limited', new PutioError('x', 'rate_limited', 429)],
+		['a server error', new PutioError('x', 'http_502', 502)],
+		['a network error', new PutioError('x', 'network_error')],
+	])('keeps the token on %s', async (_label, failure) => {
+		setStoredValue('pt:accessToken', 'pt-token');
+		mockGetPutioAccountInfo.mockRejectedValue(failure);
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.ptError).not.toBeNull());
+		expect(window.localStorage.getItem('pt:accessToken')).not.toBeNull();
+	});
+});
+
 describe('useDebridLogin', () => {
+	it('sends put.io sign-in to its own login page, carrying the return path', () => {
+		routerPush.mockClear();
+
+		const { result } = renderHook(() => useDebridLogin());
+		result.current.loginWithPutio();
+
+		expect(routerPush).toHaveBeenCalledWith({
+			pathname: '/putio/login',
+			query: { redirect: '/library' },
+		});
+	});
+
 	it('sends Offcloud sign-in to its own login page, carrying the return path', () => {
 		routerPush.mockClear();
 

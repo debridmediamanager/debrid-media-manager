@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import putioRecorded from '../test/fixtures/putio/recorded-2026-11-15.json';
 import { ServiceCard } from './ServiceCard';
 
 const modalControls = vi.hoisted(() => ({
@@ -271,6 +272,46 @@ describe('ServiceCard', () => {
 		// The seedbox is premium-only, so a free account gets the X.
 		expect(
 			screen.getByRole('button', { name: /Debrid-Link/ }).querySelector('.text-red-500')
+		).toBeTruthy();
+	});
+
+	// Recorded 2026-11-15: an account with no plan signs in as "stranger" with
+	// zero disk, and put.io refuses every add, so the card must not look premium.
+	it('marks a put.io account with no plan and says so in its details', async () => {
+		fireMock.mockResolvedValueOnce({ isConfirmed: true });
+		render(
+			<ServiceCard
+				service="pt"
+				user={putioRecorded['account-info-unpaid'].body.info}
+				onTraktLogin={vi.fn()}
+				onLogout={vi.fn()}
+			/>
+		);
+
+		const card = screen.getByRole('button', { name: /put\.io/ });
+		expect(card).toHaveTextContent('someone');
+		expect(card.querySelector('.text-red-500')).toBeTruthy();
+		await userEvent.click(card);
+		await waitFor(() => expect(fireMock).toHaveBeenCalled());
+		expect(fireMock.mock.calls[0][0].title).toBe('put.io');
+		expect(fireMock.mock.calls[0][0].html).toContain('no active plan');
+		expect(fireMock.mock.calls[0][0].html).toContain('put.io did not make it');
+	});
+
+	it('shows an active put.io account as usable', () => {
+		render(
+			<ServiceCard
+				service="pt"
+				user={{
+					...putioRecorded['account-info-unpaid'].body.info,
+					account_status: 'active',
+				}}
+				onTraktLogin={vi.fn()}
+				onLogout={vi.fn()}
+			/>
+		);
+		expect(
+			screen.getByRole('button', { name: /put\.io/ }).querySelector('.text-green-500')
 		).toBeTruthy();
 	});
 

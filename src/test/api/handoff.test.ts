@@ -117,6 +117,17 @@ describe('redeemBrowserHandoff', () => {
 		expect(reload).toHaveBeenCalled();
 	});
 
+	// put.io counts as a sign-in here, so a link cannot plant someone else's
+	// logins in a browser that is signed in to put.io alone.
+	it('leaves a browser signed in only to put.io as it is', async () => {
+		localStorage.setItem('pt:accessToken', '"own-pt"');
+		const { data } = await create(APP_STATE);
+		await openWith(data.code);
+
+		expect(localStorage.getItem('rd:refreshToken')).toBeNull();
+		expect(localStorage.getItem('pt:accessToken')).toBe('"own-pt"');
+	});
+
 	it('reloads signed out when the code is spent', async () => {
 		const { data } = await create(APP_STATE);
 		await redeem(data.code);
