@@ -1,0 +1,15 @@
+{
+	"code": {
+		"code": "TZLUOH",
+		"qr_code_url": "https://api.put.io/v2/oauth2/oob/qr/TZLUOH",
+		"status": "OK"
+	},
+	"linked": {
+		"oauth_token": "FIXTURETOKEN00000000",
+		"status": "OK"
+	},
+	"pending": {
+		"oauth_token": null,
+		"status": "OK"
+	}
+}

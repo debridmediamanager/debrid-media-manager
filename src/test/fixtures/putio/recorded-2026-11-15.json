@@ -1,0 +1,207 @@
+{
+	"account-info-unpaid": {
+		"status": 200,
+		"body": {
+			"info": {
+				"account_active": null,
+				"account_status": "stranger",
+				"avatar_url": "https://avatars.example.com/placeholder.png",
+				"can_create_sub_account": false,
+				"disk": {
+					"avail": 0,
+					"size": 0,
+					"used": 0
+				},
+				"family_owner": "someone",
+				"files_will_be_deleted_at": null,
+				"is_eligible_for_friend_invitation": false,
+				"is_sub_account": false,
+				"mail": "someone@example.com",
+				"monthly_bandwidth_usage": 0,
+				"password_last_changed_at": null,
+				"private_download_host_ip": null,
+				"settings": {
+					"beta_user": false,
+					"callback_url": null,
+					"dark_theme": false,
+					"default_download_folder": 0,
+					"diagnostics_enabled": true,
+					"dont_autoselect_subtitles": false,
+					"fluid_layout": false,
+					"hide_subtitles": false,
+					"history_enabled": true,
+					"is_invisible": false,
+					"locale": null,
+					"login_mails_enabled": true,
+					"next_episode": true,
+					"product_analytics_enabled": false,
+					"pushover_token": null,
+					"show_optimistic_usage": false,
+					"sort_by": "NAME_ASC",
+					"start_from": true,
+					"subtitle_languages": [],
+					"theater_mode": false,
+					"theme": "auto",
+					"transfer_sort_by": null,
+					"trash_enabled": true,
+					"tunnel_route_name": "cdn77",
+					"two_factor_enabled": false,
+					"use_private_download_ip": false,
+					"use_start_from": true,
+					"video_player": null
+				},
+				"trash_size": 0,
+				"user_id": 424242,
+				"username": "someone",
+				"warnings": {}
+			},
+			"status": "OK"
+		}
+	},
+	"bad-token": {
+		"status": 401,
+		"body": {
+			"error_id": null,
+			"error_message": "The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.",
+			"error_type": "Unauthorized",
+			"error_uri": "http://api.put.io/v2/docs",
+			"extra": {},
+			"status": "ERROR",
+			"status_code": 401
+		}
+	},
+	"file-missing": {
+		"status": 402,
+		"body": {
+			"error_id": null,
+			"error_message": "Please buy a plan to make it work",
+			"error_type": "PaymentRequired",
+			"error_uri": "http://api.put.io/v2/docs",
+			"extra": {},
+			"status": "ERROR",
+			"status_code": 402
+		}
+	},
+	"files-list-root-empty": {
+		"status": 200,
+		"body": {
+			"cursor": null,
+			"files": [],
+			"parent": {
+				"content_type": "application/x-directory",
+				"crc32": null,
+				"created_at": "2026-11-15T03:20:44",
+				"extension": null,
+				"file_type": "FOLDER",
+				"first_accessed_at": null,
+				"folder_type": "REGULAR",
+				"icon": "https://api.put.io/images/file_types/folder.png",
+				"id": 0,
+				"is_hidden": false,
+				"is_mp4_available": false,
+				"is_shared": false,
+				"name": "Your Files",
+				"opensubtitles_hash": null,
+				"parent_id": null,
+				"screenshot": null,
+				"sha1": "",
+				"size": 0,
+				"sort_by": "NAME_ASC",
+				"updated_at": "2026-11-15T03:28:42.708815"
+			},
+			"status": "OK",
+			"total": 0
+		}
+	},
+	"oauth-validate": {
+		"status": 200,
+		"body": {
+			"result": true,
+			"token_id": 1234567,
+			"token_scope": "default",
+			"user_id": 424242
+		}
+	},
+	"transfer-missing": {
+		"status": 404,
+		"body": {
+			"error_id": null,
+			"error_message": "The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.",
+			"error_type": "NotFound",
+			"error_uri": "http://api.put.io/v2/docs",
+			"extra": {},
+			"status": "ERROR",
+			"status_code": 404
+		}
+	},
+	"transfers-add-bad-url": {
+		"status": 402,
+		"body": {
+			"error_id": null,
+			"error_message": "Please buy a plan to make it work",
+			"error_type": "PaymentRequired",
+			"error_uri": "http://api.put.io/v2/docs",
+			"extra": {},
+			"status": "ERROR",
+			"status_code": 402
+		}
+	},
+	"transfers-add-unpaid": {
+		"status": 402,
+		"body": {
+			"error_id": null,
+			"error_message": "Please buy a plan to make it work",
+			"error_type": "PaymentRequired",
+			"error_uri": "http://api.put.io/v2/docs",
+			"extra": {},
+			"status": "ERROR",
+			"status_code": 402
+		}
+	},
+	"transfers-info-mixed": {
+		"status": 200,
+		"body": {
+			"disk_avail": 0,
+			"ret": [
+				{
+					"file_size": 0,
+					"human_size": "unknown",
+					"name": "0123456789abcdef0123456789abcdef01234567",
+					"type_name": "folder",
+					"url": "magnet:?xt=urn:btih:0123456789abcdef0123456789abcdef01234567"
+				},
+				{
+					"file_size": 129302391,
+					"human_size": "123.3 M",
+					"name": "08ada5a7a6183aae1e09d831df6748d566095a10",
+					"type_name": "folder",
+					"url": "magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10"
+				}
+			],
+			"status": "OK"
+		}
+	},
+	"transfers-info-unpaid": {
+		"status": 200,
+		"body": {
+			"disk_avail": 0,
+			"ret": [
+				{
+					"file_size": 276445467,
+					"human_size": "263.6 M",
+					"name": "Big Buck Bunny",
+					"type_name": "folder",
+					"url": "magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c&dn=Big+Buck+Bunny"
+				}
+			],
+			"status": "OK"
+		}
+	},
+	"transfers-list-empty": {
+		"status": 200,
+		"body": {
+			"status": "OK",
+			"transfers": []
+		}
+	}
+}

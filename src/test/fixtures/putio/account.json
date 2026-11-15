@@ -1,0 +1,26 @@
+{
+	"info": {
+		"account_active": true,
+		"account_status": "active",
+		"avatar_url": "https://example.com/avatar.png",
+		"can_create_sub_account": false,
+		"disk": {
+			"avail": 107374182400,
+			"size": 107374182400,
+			"used": 0
+		},
+		"family_owner": null,
+		"files_will_be_deleted_at": null,
+		"is_eligible_for_friend_invitation": false,
+		"is_sub_account": false,
+		"mail": "someone@example.com",
+		"monthly_bandwidth_usage": 0,
+		"password_last_changed_at": null,
+		"private_download_host_ip": null,
+		"trash_size": 0,
+		"user_id": 424242,
+		"username": "someone",
+		"warnings": {}
+	},
+	"status": "OK"
+}
