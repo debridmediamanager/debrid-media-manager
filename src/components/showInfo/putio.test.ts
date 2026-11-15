@@ -136,3 +136,55 @@ describe('showInfoForPT', () => {
 		expect(mocks.fetchMock).not.toHaveBeenCalled();
 	});
 });
+
+describe('showInfoForPT on recorded answers', () => {
+	type Recorded = { status: number; body: unknown };
+	const serve = (routes: Record<string, Recorded>) =>
+		mocks.fetchMock.mockImplementation(async (url: string) => {
+			const { pathname, searchParams } = new URL(url);
+			const key = searchParams.get('parent_id')
+				? `${pathname}?${searchParams.get('parent_id')}`
+				: pathname;
+			const answer = routes[key];
+			if (!answer) throw new Error(`unrouted ${key}`);
+			return {
+				ok: answer.status < 300,
+				status: answer.status,
+				json: async () => answer.body,
+			};
+		});
+	const recordedRow = (transfer: { id: number; hash: string; name: string; size: number }) => ({
+		id: `pt:${transfer.id}`,
+		hash: transfer.hash,
+		filename: transfer.name,
+		title: transfer.name,
+		bytes: transfer.size,
+		serviceStatus: 'COMPLETED',
+		progress: 100,
+		added: new Date('2026-11-15T04:01:29Z'),
+	});
+
+	it("lists a completed transfer's folder", async () => {
+		const transfer = paid['transfer-completed'].body.transfer;
+		serve({
+			[`/v2/transfers/${transfer.id}`]: paid['transfer-completed'],
+			[`/v2/files/list?${transfer.file_id}`]: paid['files-list-folder'],
+		});
+		await showInfoForPT('pt-key', recordedRow(transfer));
+		const html = htmlOfLastModal();
+		expect(html).toContain('Big Buck Bunny.mp4');
+		expect(html).toContain('Big Buck Bunny.en.srt');
+	});
+
+	// files/delete leaves the transfer COMPLETED, still naming the deleted folder.
+	it('says the files are gone when put.io no longer has them, and keeps the row removable', async () => {
+		const transfer = paid['transfer-after-file-delete'].body.transfer;
+		serve({
+			[`/v2/transfers/${transfer.id}`]: paid['transfer-after-file-delete'],
+			[`/v2/files/list?${transfer.file_id}`]: paid['file-deleted-get'],
+		});
+		await showInfoForPT('pt-key', recordedRow(transfer));
+		expect(htmlOfLastModal()).toContain('These files are no longer on put.io.');
+		expect(htmlOfLastModal()).toContain('btn-delete-pt');
+	});
+});

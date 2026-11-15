@@ -228,6 +228,8 @@ describe('adding', () => {
 		const error = await addPutioTransfer(TOKEN, MAGNET).catch((e) => e);
 		expect(error.code).toBe('not_enough_space');
 		expect(error.message).toMatch(/no free space, or .* no active plan/);
+		// Deleted files still count until put.io's trash is emptied (recorded).
+		expect(error.message).toMatch(/trash/);
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 	});
 

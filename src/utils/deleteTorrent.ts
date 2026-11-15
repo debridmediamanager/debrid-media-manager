@@ -262,7 +262,13 @@ export const handleDeletePtTorrent = async (
 		if (['SEEDING', 'PREPARING_SEED', 'STOPPING'].includes(transfer.status ?? '')) {
 			await removePutioTransfers(ptKey, [transferId]);
 		}
-		if (!disableToast) toast(`Deleted ${id} from put.io.`, magnetToastOptions);
+		// put.io answers OK even for ids it does not have (recorded), so this is
+		// "asked"; the next library fetch is what confirms it.
+		if (!disableToast)
+			toast(
+				`Deleted ${id} from put.io. Its files wait in put.io's trash, which still counts against your storage.`,
+				magnetToastOptions
+			);
 		return true;
 	} catch (error) {
 		console.error(

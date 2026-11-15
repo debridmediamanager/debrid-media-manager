@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import putioRecorded from '../test/fixtures/putio/recorded-2026-11-15.json';
+import putioPaid from '../test/fixtures/putio/recorded-paid-2026-11-15.json';
 import { ServiceCard } from './ServiceCard';
 
 const modalControls = vi.hoisted(() => ({
@@ -296,6 +297,25 @@ describe('ServiceCard', () => {
 		expect(fireMock.mock.calls[0][0].title).toBe('put.io');
 		expect(fireMock.mock.calls[0][0].html).toContain('no active plan');
 		expect(fireMock.mock.calls[0][0].html).toContain('put.io did not make it');
+	});
+
+	it('shows a paid put.io account, its storage and its trash (recorded)', async () => {
+		fireMock.mockResolvedValueOnce({ isConfirmed: true });
+		const info = {
+			...putioPaid['account-info-trial'].body.info,
+			disk: { avail: 100, size: 107374182400, used: 107374182300 },
+			trash_size: 552890934,
+		};
+		render(<ServiceCard service="pt" user={info} onTraktLogin={vi.fn()} onLogout={vi.fn()} />);
+
+		const card = screen.getByRole('button', { name: /put\.io/ });
+		expect(card.querySelector('.text-green-500')).toBeTruthy();
+		await userEvent.click(card);
+		await waitFor(() => expect(fireMock).toHaveBeenCalled());
+		const html = fireMock.mock.calls[0][0].html;
+		expect(html).toContain('<strong>Plan:</strong> active');
+		expect(html).toContain('100.00 GB used');
+		expect(html).toContain('<strong>Trash:</strong> 527.28 MB');
 	});
 
 	it('shows an active put.io account as usable', () => {

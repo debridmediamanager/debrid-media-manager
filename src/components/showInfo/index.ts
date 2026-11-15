@@ -1829,8 +1829,14 @@ export const showInfoForDL = async (
 	});
 };
 
+// A transfer outlives its files: deleted on put.io, they answer 404 while the
+// transfer still names them (recorded).
 const putioMessage = (error: unknown, fallback: string) =>
-	error instanceof PutioError ? error.message : fallback;
+	error instanceof PutioError
+		? error.status === 404
+			? 'These files are no longer on put.io.'
+			: error.message
+		: fallback;
 
 /**
  * Info modal for a put.io library row, which is one transfer.

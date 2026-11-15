@@ -268,6 +268,7 @@ function ServiceCardBody({ service, user, onTraktLogin, onLogout, error }: Servi
         <p><strong>Email:</strong> ${escapeHtml(ptUser.mail ?? '')}</p>
         <p><strong>Plan:</strong> ${isPutioActive(ptUser) ? 'active' : 'no active plan'}</p>
         <p><strong>Storage:</strong> ${formatBytes(disk.used)} of ${formatBytes(disk.size)} used, ${formatBytes(disk.avail)} free</p>
+        <p><strong>Trash:</strong> ${formatBytes(ptUser.trash_size ?? 0)}, counted in the storage used until emptied</p>
         <p class="mt-2 text-xs">DMM is an integration for put.io; put.io did not make it.</p>
       </div>
     `;

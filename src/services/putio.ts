@@ -111,6 +111,8 @@ export interface PutioAccountInfo {
 	account_status?: string;
 	account_active?: boolean | null;
 	disk?: { avail: number; size: number; used: number };
+	/** Bytes in put.io's trash, which still count against `disk.used` (recorded). */
+	trash_size?: number;
 }
 
 export interface PutioAddMultiResult {
@@ -257,10 +259,13 @@ async function ensurePutioSpace(token: string, magnets: string[]): Promise<void>
 	const { diskAvail, sizes } = await getPutioTransferInfo(token, magnets);
 	const needed = sizes.reduce((sum, size) => sum + size, 0);
 	if (needed <= diskAvail) return;
+	// Deleted files go to put.io's trash and still use the space (recorded), so
+	// emptying it is often the way out; DMM never empties it itself.
 	throw new PutioError(
-		diskAvail > 0
+		(diskAvail > 0
 			? `Not enough space on put.io: this needs ${gib(needed)} and ${gib(diskAvail)} is free.`
-			: 'put.io has no free space, or your put.io account has no active plan.',
+			: 'put.io has no free space, or your put.io account has no active plan.') +
+			" Files you delete stay in put.io's trash and still count until it is emptied.",
 		'not_enough_space'
 	);
 }

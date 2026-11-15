@@ -219,6 +219,20 @@ describe('handleDeletePtTorrent', () => {
 		expect(pt.cancelPutioTransfers).not.toHaveBeenCalled();
 	});
 
+	// Recorded: after files/delete the transfer stays COMPLETED naming the deleted
+	// folder; both calls still answer OK, so the row must stay removable.
+	it('removes a transfer whose files put.io already deleted', async () => {
+		const transfer = paid['transfer-after-file-delete'].body.transfer;
+		pt.getPutioTransfer.mockResolvedValue(transfer);
+		pt.deletePutioFiles.mockResolvedValue(paid['files-delete-again'].body);
+		pt.cancelPutioTransfers.mockResolvedValue(paid['transfers-cancel-completed'].body);
+
+		await expect(handleDeletePtTorrent('k', `pt:${transfer.id}`)).resolves.toBe(true);
+		expect(pt.deletePutioFiles).toHaveBeenCalledWith('k', [transfer.file_id]);
+		expect(pt.cancelPutioTransfers).toHaveBeenCalledWith('k', [transfer.id]);
+		expect(toastMock).toHaveBeenCalledWith(expect.stringMatching(/trash/), expect.anything());
+	});
+
 	it('refuses a row id that names no transfer', async () => {
 		await expect(handleDeletePtTorrent('k', 'pt:0')).resolves.toBe(false);
 		expect(pt.getPutioTransfer).not.toHaveBeenCalled();
