@@ -162,6 +162,12 @@ describe('showInfoForPT', () => {
 		expect(html).not.toContain('<img src=x');
 	});
 
+	// put.io's times carry no zone; the dialog says which one it shows.
+	it('labels the added time as UTC', async () => {
+		await showInfoForPT('pt-key', row(9009));
+		expect(htmlOfLastModal()).toMatch(/\d{1,2}:\d{2}:\d{2}(\s?[AP]M)? UTC/);
+	});
+
 	it('refuses a row id that names no transfer', async () => {
 		await showInfoForPT('pt-key', { ...row(9009), id: 'pt:' });
 		expect(mocks.modalFireMock).not.toHaveBeenCalled();

@@ -1923,7 +1923,7 @@ export const showInfoForPT = async (
 		...(hasInfoHash ? [] : [{ label: 'Info hash', value: 'none reported by put.io' }]),
 		{
 			label: 'Added',
-			value: new Date(torrent.added).toLocaleString(undefined, { timeZone: 'UTC' }),
+			value: `${new Date(torrent.added).toLocaleString(undefined, { timeZone: 'UTC' })} UTC`,
 		},
 	];
 
