@@ -1675,6 +1675,15 @@ export const handleAddMultipleHashesInPt = async (
 			);
 			added += result.transfers.length;
 			refused += result.errors.length;
+			// Kept locally at once, the way a single add's row is, so the guard above
+			// sees them before the next library fetch (put.io would add them again).
+			try {
+				await new UserTorrentDB().addAll(
+					result.transfers.map((transfer) => convertToPutioUserTorrent(transfer))
+				);
+			} catch {
+				// no local library; the next fetch lists them
+			}
 		} catch (error) {
 			console.error(
 				'Error adding magnets to put.io:',

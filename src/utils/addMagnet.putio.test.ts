@@ -21,7 +21,12 @@ const held = vi.hoisted(() => ({ rows: [] as { id: string; hash: string }[] }));
 vi.mock('@/torrent/db', () => ({
 	__esModule: true,
 	default: vi.fn().mockImplementation(function () {
-		return { all: async () => held.rows };
+		return {
+			all: async () => held.rows,
+			addAll: async (rows: { id: string; hash: string }[]) => {
+				held.rows.push(...rows);
+			},
+		};
 	}),
 }));
 
@@ -147,6 +152,29 @@ describe('handleAddMultipleHashesInPt', () => {
 		expect(pt.addPutioTransfers.mock.calls[0][1]).toEqual([`magnet:?xt=urn:btih:${hashN(2)}`]);
 		expect(toastMock).toHaveBeenCalledWith(
 			'Added 1 to put.io — 2 already there.',
+			expect.anything()
+		);
+	});
+
+	// put.io does not dedupe, and a hash list's callback only re-reads the local
+	// library: a second click before any refresh must not add everything again.
+	it('remembers what it just added, so a second click adds nothing', async () => {
+		pt.addPutioTransfers.mockImplementation(async (_k: string, urls: string[]) => ({
+			// The add-multi answer names no hash yet; the magnet is in `source` (recorded).
+			transfers: urls.map((url, i) => ({
+				...paid['transfers-add-known'].body.transfer,
+				id: 100 + i,
+				name: url,
+				source: url,
+			})),
+			errors: [],
+		}));
+		const sources = [hashN(1), hashN(2)];
+		await handleAddMultipleHashesInPt('k', sources);
+		await handleAddMultipleHashesInPt('k', sources);
+		expect(pt.addPutioTransfers).toHaveBeenCalledTimes(1);
+		expect(toastMock).toHaveBeenLastCalledWith(
+			'Added 0 to put.io — 2 already there.',
 			expect.anything()
 		);
 	});
