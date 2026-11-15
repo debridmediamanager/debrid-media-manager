@@ -1,3 +1,4 @@
+import path from 'path';
 import { defineConfig } from 'vitest/config';
 
 /**
@@ -16,6 +17,7 @@ import { defineConfig } from 'vitest/config';
  * Run with:
  *
  *	DL_LIVE_TOKEN=<token> npx vitest run --config vitest.live.config.ts
+ *	PUTIO_LIVE_TOKEN=<token> npx vitest run --config vitest.live.config.ts
  *
  * Without the token the suite skips itself, which is why these files are kept
  * out of the default `include` rather than relying on that skip: a token in the
@@ -27,4 +29,7 @@ export default defineConfig({
 		setupFiles: [],
 		include: ['src/**/*.live.test.ts'],
 	},
+	// The same `@/` alias as vitest.config.ts; without it no client that imports a
+	// shared helper loads here at all.
+	resolve: { alias: { '@': path.resolve(__dirname, './src') } },
 });
