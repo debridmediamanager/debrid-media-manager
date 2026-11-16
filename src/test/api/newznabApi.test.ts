@@ -15,6 +15,7 @@ import {
 } from '@/services/newznab/search';
 import { getStoredNzb, putStoredNzb } from '@/services/newznab/store';
 import { getUpstreamLimiter } from '@/services/newznab/upstreamLimiter';
+import { _resetUpstreamCapsForTest } from '@/services/newznab/upstreamQuery';
 import { parseNewznabResponse } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, RedisRateLimiter } from '@/services/rateLimit/middlewareRateLimiter';
 import { repository } from '@/services/repository';
@@ -24,6 +25,7 @@ import althubMovie from '@/test/fixtures/newznab-fresh/althub-movie-2026-10-31.j
 import drunkenslugMovie from '@/test/fixtures/newznab-fresh/drunkenslug-movie-2026-10-31.json';
 import nzbgeekMovie from '@/test/fixtures/newznab/nzbgeek-movie-2026-11-01.json';
 import tvIdAnswers from '@/test/fixtures/newznab/tv-id-search-answers-2026-11-15.json';
+import upstreamCapsCorpus from '@/test/fixtures/newznab/upstream-caps-2026-11-16.json';
 import recordedMarkers from '@/test/fixtures/transfers/failed-marker-polls-2026-10-07.json';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
 import { sanitizeNzb, withAlternatesMeta } from '@/utils/nzbSanitize';
@@ -49,6 +51,16 @@ vi.mock('@/services/rateLimit/withRateLimit', async (importOriginal) => {
 });
 
 vi.mock('@/services/repository');
+
+/** TMDB's TVDB id per IMDb id, for the TV searches that send one; empty = TMDB knows none. */
+const tvdbByImdb = new Map<string, number>();
+vi.mock('@/services/metadataCache', () => ({
+	getMetadataCache: () => ({
+		searchTmdbByImdb: async (imdb: string) =>
+			tvdbByImdb.has(imdb) ? { tv_results: [{ id: tvdbByImdb.get(imdb)! + 1e9 }] } : {},
+		getTmdbTvInfo: async (tmdbId: number) => ({ external_ids: { tvdb_id: tmdbId - 1e9 } }),
+	}),
+}));
 
 /** Just the sorted-set commands RedisRateLimiter uses, held in memory. */
 function fakeRedis() {
@@ -251,9 +263,11 @@ function itemTitles(res: MockResponse): string[] {
 		.filter((title) => title !== 'DMM');
 }
 
-/** Every URL global fetch was called with, in order. */
+/** Every URL global fetch was called with, in order, less the upstreams' caps reads. */
 function fetchedUrls(): string[] {
-	return fetchMock.mock.calls.map(([input]) => String(input));
+	return fetchMock.mock.calls
+		.map(([input]) => String(input))
+		.filter((u) => !u.includes('t=caps'));
 }
 
 beforeAll(() => {
@@ -271,6 +285,8 @@ beforeEach(() => {
 	delete process.env.NEWZNAB_PUBLIC_BASE;
 	setIndexers(INDEXERS);
 	_resetUpstreamLimiterForTest();
+	_resetUpstreamCapsForTest();
+	tvdbByImdb.clear();
 
 	// A fresh sponsorship per test: the in-memory limiter is a module singleton
 	// and its buckets are keyed on this.
@@ -466,6 +482,10 @@ describe('GET /api/newznab/api search', () => {
 	});
 
 	it('forwards the normalised query upstream, imdb id stripped of its tt', async () => {
+		await run({ t: 'movie', imdbid: 'tt0111161', apikey: SPONSOR_KEY });
+		// Bare digits: House-of-Usenet and NinjaCentral return nothing for `tt…`.
+		expect(new URL(fetchedUrls()[0]).searchParams.get('imdbid')).toBe('0111161');
+
 		await run({
 			t: 'tvsearch',
 			imdbid: 'tt0111161',
@@ -476,10 +496,12 @@ describe('GET /api/newznab/api search', () => {
 			apikey: SPONSOR_KEY,
 		});
 
-		const url = new URL(fetchedUrls()[0]);
+		const url = new URL(
+			fetchedUrls().find((u) => u.includes('t=tvsearch') && u.startsWith(FIRST_HOST))!
+		);
 		expect(url.searchParams.get('t')).toBe('tvsearch');
-		// Bare digits: House-of-Usenet and NinjaCentral return nothing for `tt…`.
-		expect(url.searchParams.get('imdbid')).toBe('0111161');
+		// One id per TV search, the TVDB one: see upstreamQuery.
+		expect(url.searchParams.has('imdbid')).toBe(false);
 		expect(url.searchParams.get('tvdbid')).toBe('121361');
 		expect(url.searchParams.get('season')).toBe('2');
 		expect(url.searchParams.get('ep')).toBe('9');
@@ -488,6 +510,96 @@ describe('GET /api/newznab/api search', () => {
 		expect(url.searchParams.get('o')).toBe('json');
 		// A client asking for ten must not poison the cache with a set of ten.
 		expect(url.searchParams.get('limit')).toBe('100');
+	});
+
+	// Recorded 2026-11-16 on DMM's eight upstreams: their caps, and how many of a show's
+	// posts each finds by IMDb id, by TVDB id and by both. Whatever DMM sends an upstream
+	// must find as many as the best of those; an upstream it skips must have none to find.
+	describe('asks each upstream by the id it finds most with', () => {
+		const corpus = upstreamCapsCorpus as {
+			shows: { imdb: string; tvdb: string; season: number; ep: number }[];
+			upstreams: {
+				name: string;
+				searching: string;
+				found: Record<string, Record<'imdbid' | 'tvdbid' | 'both', number | string>>;
+			}[];
+		};
+		const hosts = corpus.upstreams.map((_, i) => `https://upstream-${i}.invalid/api`);
+
+		beforeEach(() => {
+			setIndexers(
+				corpus.upstreams.map((u, i) => ({
+					prefix: `u${i}`,
+					name: u.name,
+					url: hosts[i],
+					apiKey: `key-of-upstream-${i}`,
+				}))
+			);
+			for (const show of corpus.shows) tvdbByImdb.set(show.imdb, Number(show.tvdb));
+			fetchMock.mockImplementation(async (input: unknown) => {
+				const url = String(input);
+				const i = hosts.findIndex((host) => url.startsWith(host));
+				if (url.includes('t=caps')) {
+					return textResponse(`<caps>${corpus.upstreams[i].searching}</caps>`);
+				}
+				return jsonResponse({ channel: {} });
+			});
+		});
+
+		for (const [client, ids] of [
+			['zurg (IMDb id only)', (s: { imdb: string }) => ({ imdbid: s.imdb })],
+			[
+				'Sonarr (both ids)',
+				(s: { imdb: string; tvdb: string }) => ({ imdbid: s.imdb, tvdbid: s.tvdb }),
+			],
+		] as const) {
+			it(client, async () => {
+				for (const show of corpus.shows) {
+					fetchMock.mockClear();
+					await run({
+						t: 'tvsearch',
+						...ids(show),
+						season: String(show.season),
+						ep: String(show.ep),
+						apikey: SPONSOR_KEY,
+					});
+					const sent = fetchedUrls();
+					corpus.upstreams.forEach((upstream, i) => {
+						const found = upstream.found[show.imdb];
+						const counts = Object.values(found).map((n) =>
+							typeof n === 'number' ? n : 0
+						);
+						const url = sent.find((u) => u.startsWith(hosts[i]));
+						const where = `${upstream.name} for ${show.imdb}`;
+						if (!url) {
+							expect(Math.max(...counts), `${where}: skipped`).toBe(0);
+							return;
+						}
+						const params = new URL(url).searchParams;
+						const choice =
+							params.has('imdbid') && params.has('tvdbid')
+								? 'both'
+								: params.has('tvdbid')
+									? 'tvdbid'
+									: 'imdbid';
+						const got = found[choice];
+						expect(typeof got === 'number' ? got : 0, `${where}: by ${choice}`).toBe(
+							Math.max(...counts)
+						);
+					});
+				}
+			});
+		}
+
+		it('leaves out an upstream with no film search', async () => {
+			await run({ t: 'movie', imdbid: 'tt0111161', apikey: SPONSOR_KEY });
+			const asked = fetchedUrls().map((u) => hosts.findIndex((host) => u.startsWith(host)));
+			const noFilms = corpus.upstreams.findIndex((u) =>
+				/<movie-search available="no"/.test(u.searching)
+			);
+			expect(asked).not.toContain(noFilms);
+			expect(asked).toHaveLength(corpus.upstreams.length - 1);
+		});
 	});
 
 	it('drops a malformed parameter rather than forwarding it', async () => {

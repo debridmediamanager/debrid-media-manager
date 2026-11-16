@@ -32,6 +32,7 @@ import { loadUpstreamIndexers, UpstreamIndexer } from './indexers';
 import { encryptReleaseId } from './opaqueId';
 import { cleanNamesFirst } from './order';
 import { getUpstreamLimiter } from './upstreamLimiter';
+import { upstreamPlan } from './upstreamQuery';
 import { MAX_LIMIT, NewznabRssItem } from './xml';
 
 export { _resetUpstreamLimiterForTest } from './upstreamLimiter';
@@ -209,11 +210,17 @@ async function pacedIndexers(indexers: UpstreamIndexer[]): Promise<UpstreamIndex
 	return indexers.filter((_, index) => verdicts[index]);
 }
 
-function askUpstreams(t: string, params: Record<string, string>, indexers: UpstreamIndexer[]) {
+/** `indexers` asked, each with what the plan sends it (see upstreamQuery). */
+function askUpstreams(
+	t: string,
+	plan: Map<UpstreamIndexer, Record<string, string>>,
+	indexers: UpstreamIndexer[]
+) {
 	return fanOut(
 		// `fanOut` types its callback on the narrower Indexer; every element it
 		// passes back is one of the UpstreamIndexers handed in.
-		(indexer: Indexer) => buildUpstreamUrl(indexer as UpstreamIndexer, t, params),
+		(indexer: Indexer) =>
+			buildUpstreamUrl(indexer as UpstreamIndexer, t, plan.get(indexer as UpstreamIndexer)!),
 		`newznab ${t}`,
 		indexers
 	);
@@ -266,13 +273,16 @@ async function completed(
 	if (!missing || Date.now() - missing.askedAt.getTime() < REFILL_AFTER_MS) {
 		return cached.results;
 	}
-	const wanted = (await loadUpstreamIndexers()).filter((i) =>
-		missing.prefixes.includes(i.prefix)
+	const plan = await upstreamPlan(
+		t as SearchType,
+		params,
+		(await loadUpstreamIndexers()).filter((i) => missing.prefixes.includes(i.prefix))
 	);
+	const wanted = [...plan.keys()];
 	if (wanted.length === 0) return cached.results;
 
 	const asked = await pacedIndexers(wanted);
-	const { lists, answered } = await askUpstreams(t, params, asked);
+	const { lists, answered } = await askUpstreams(t, plan, asked);
 	const results = everyPosting([cached.results, ...lists]);
 	if (answered.some(Boolean)) await recordCopies(results);
 	// Written even when nothing answered: the write dates the next try.
@@ -367,9 +377,10 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 		return page(await completed(t, params, key, cached));
 	}
 
-	const configured = await loadUpstreamIndexers();
+	const plan = await upstreamPlan(t as SearchType, params, await loadUpstreamIndexers());
+	const configured = [...plan.keys()];
 	const indexers = await pacedIndexers(configured);
-	const { ok, lists, answered } = await askUpstreams(t, params, indexers);
+	const { ok, lists, answered } = await askUpstreams(t, plan, indexers);
 
 	if (!ok) {
 		// Nothing answered — including the case where every indexer was over its
@@ -508,7 +519,9 @@ export async function sweepFreshPosts(
 	const last = await db.newznabSweptAt();
 	if (last && now - last.at.getTime() < FRESH_SWEEP_EVERY_MS) return { swept: false, ids: 0 };
 	const since = last ? last.at.getTime() : now - FRESH_WATCH_STALE_MS;
-	const indexers = await pacedIndexers(await loadUpstreamIndexers());
+	// An upstream with no film search (AniFix) is not asked for films.
+	const filmIndexers = await upstreamPlan('movie', { cat: '2000' }, await loadUpstreamIndexers());
+	const indexers = await pacedIndexers([...filmIndexers.keys()]);
 	const found: UsenetResult[] = [];
 	let answered = false;
 	for (const [t, cat] of [['movie', '2000']]) {

@@ -1,0 +1,385 @@
+{
+	"_source": "Read 2026-11-16 from DMM's eight upstreams, from inside the dmm_web container. 'searching' is each upstream's t=caps block as served. 'found' counts, per show, how many posts a t=tvsearch&season&ep&limit=100 answer named the show with (title matching 'name'): by IMDb id alone, by TVDB id alone, and by both ids in one request; 'error' = an error envelope. Show TVDB ids are TMDB's external_ids.",
+	"capturedAt": "2026-11-16T15:26:21.831Z",
+	"shows": [
+		{
+			"imdb": "tt0944947",
+			"tvdb": "121361",
+			"season": 1,
+			"ep": 1,
+			"name": "game.of.thrones"
+		},
+		{
+			"imdb": "tt11280740",
+			"tvdb": "371980",
+			"season": 1,
+			"ep": 1,
+			"name": "severance"
+		},
+		{
+			"imdb": "tt22248376",
+			"tvdb": "424536",
+			"season": 1,
+			"ep": 1,
+			"name": "frieren"
+		},
+		{
+			"imdb": "tt14452776",
+			"tvdb": "403294",
+			"season": 2,
+			"ep": 1,
+			"name": "the.bear"
+		},
+		{
+			"imdb": "tt0386676",
+			"tvdb": "73244",
+			"season": 3,
+			"ep": 5,
+			"name": "the.office"
+		},
+		{
+			"imdb": "tt13443470",
+			"tvdb": "397060",
+			"season": 1,
+			"ep": 1,
+			"name": "wednesday"
+		},
+		{
+			"imdb": "tt0388629",
+			"tvdb": "81797",
+			"season": 1,
+			"ep": 1,
+			"name": "one.piece"
+		}
+	],
+	"upstreams": [
+		{
+			"name": "DrunkenSlug",
+			"searching": "<searching> <search available=\"yes\" supportedParams=\"q\"/> <tv-search available=\"yes\" supportedParams=\"q,vid,tvdbid,traktid,rid,tvmazeid,imdbid,tmdbid,season,ep\"/> <movie-search available=\"yes\" supportedParams=\"q,imdbid\"/> <audio-search available=\"no\" supportedParams=\"\"/> </searching>",
+			"found": {
+				"tt0944947": {
+					"imdbid": 98,
+					"tvdbid": 98,
+					"both": 98
+				},
+				"tt11280740": {
+					"imdbid": 78,
+					"tvdbid": 78,
+					"both": 78
+				},
+				"tt22248376": {
+					"imdbid": 0,
+					"tvdbid": 25,
+					"both": 25
+				},
+				"tt14452776": {
+					"imdbid": 46,
+					"tvdbid": 46,
+					"both": 46
+				},
+				"tt0386676": {
+					"imdbid": 39,
+					"tvdbid": 39,
+					"both": 39
+				},
+				"tt13443470": {
+					"imdbid": 67,
+					"tvdbid": 67,
+					"both": 67
+				},
+				"tt0388629": {
+					"imdbid": 62,
+					"tvdbid": 62,
+					"both": 62
+				}
+			}
+		},
+		{
+			"name": "altHUB",
+			"searching": "<searching> <search available=\"yes\" supportedParams=\"q\" /> <tv-search available=\"yes\" supportedParams=\"q,rid,tvdbid,imdbid,tvmazeid,season,ep\" /> <movie-search available=\"yes\" supportedParams=\"q,imdbid,genre\"/> </searching>",
+			"found": {
+				"tt0944947": {
+					"imdbid": 46,
+					"tvdbid": 46,
+					"both": 46
+				},
+				"tt11280740": {
+					"imdbid": 49,
+					"tvdbid": 49,
+					"both": 49
+				},
+				"tt22248376": {
+					"imdbid": 28,
+					"tvdbid": 28,
+					"both": 28
+				},
+				"tt14452776": {
+					"imdbid": 1,
+					"tvdbid": 33,
+					"both": 1
+				},
+				"tt0386676": {
+					"imdbid": 18,
+					"tvdbid": 18,
+					"both": 18
+				},
+				"tt13443470": {
+					"imdbid": 49,
+					"tvdbid": 49,
+					"both": 49
+				},
+				"tt0388629": {
+					"imdbid": 30,
+					"tvdbid": 30,
+					"both": 30
+				}
+			}
+		},
+		{
+			"name": "NZBgeek",
+			"searching": "<searching><search available=\"yes\" supportedParams=\"q,group\"/><tv-search available=\"yes\" supportedParams=\"q,rid,tvdbid,tvmazeid,season,ep\"/><movie-search available=\"yes\" supportedParams=\"q,imdbid,genre\"/><audio-search available=\"yes\" supportedParams=\"q\"/></searching>",
+			"found": {
+				"tt0944947": {
+					"imdbid": 0,
+					"tvdbid": 98,
+					"both": 0
+				},
+				"tt11280740": {
+					"imdbid": 0,
+					"tvdbid": 53,
+					"both": 0
+				},
+				"tt22248376": {
+					"imdbid": 0,
+					"tvdbid": 75,
+					"both": 0
+				},
+				"tt14452776": {
+					"imdbid": 0,
+					"tvdbid": 41,
+					"both": 0
+				},
+				"tt0386676": {
+					"imdbid": 0,
+					"tvdbid": 43,
+					"both": 0
+				},
+				"tt13443470": {
+					"imdbid": 0,
+					"tvdbid": 58,
+					"both": 0
+				},
+				"tt0388629": {
+					"imdbid": 0,
+					"tvdbid": 27,
+					"both": 0
+				}
+			}
+		},
+		{
+			"name": "NzbLife",
+			"searching": "<searching> <search available=\"yes\" supportedParams=\"q\" /> <tv-search available=\"yes\" supportedParams=\"q,rid,tvdbid,tvmazeid,season,ep\" /> <movie-search available=\"yes\" supportedParams=\"q,imdbid,genre\"/> </searching>",
+			"found": {
+				"tt0944947": {
+					"imdbid": 0,
+					"tvdbid": 96,
+					"both": 96
+				},
+				"tt11280740": {
+					"imdbid": 0,
+					"tvdbid": 65,
+					"both": 65
+				},
+				"tt22248376": {
+					"imdbid": 0,
+					"tvdbid": 26,
+					"both": 26
+				},
+				"tt14452776": {
+					"imdbid": 0,
+					"tvdbid": 41,
+					"both": 41
+				},
+				"tt0386676": {
+					"imdbid": 0,
+					"tvdbid": 44,
+					"both": 0
+				},
+				"tt13443470": {
+					"imdbid": 0,
+					"tvdbid": 0,
+					"both": 0
+				},
+				"tt0388629": {
+					"imdbid": 0,
+					"tvdbid": 0,
+					"both": 0
+				}
+			}
+		},
+		{
+			"name": "Treasure Maps",
+			"searching": "<searching> <search available=\"yes\" supportedParams=\"q\" /> <tv-search available=\"yes\" supportedParams=\"q,rid,rageid,tvdbid,tmdbid,tvmazeid,imdbid,season,ep,year,genre\" /> <movie-search available=\"yes\" supportedParams=\"q,imdbid,tmdbid,genre,rating,year,genre,director,actors\"/> <music-search available=\"yes\" supportedParams=\"q,artist,publisher,tracks,year,deezeralbumid\"/> <book-search available=\"yes\" supportedParams=\"q,author,publisher,isbn,isbn_13\"/> <console-search available=\"yes\" supportedParams=\"q,platform,publisher,igdbid\"/> <trending-search available=\"yes\" supportedParams=\"media,feed,limit,lang\"/> </searching>",
+			"found": {
+				"tt0944947": {
+					"imdbid": 95,
+					"tvdbid": 95,
+					"both": 95
+				},
+				"tt11280740": {
+					"imdbid": 61,
+					"tvdbid": 61,
+					"both": 61
+				},
+				"tt22248376": {
+					"imdbid": 66,
+					"tvdbid": 66,
+					"both": 66
+				},
+				"tt14452776": {
+					"imdbid": 35,
+					"tvdbid": 35,
+					"both": 35
+				},
+				"tt0386676": {
+					"imdbid": 30,
+					"tvdbid": 30,
+					"both": 30
+				},
+				"tt13443470": {
+					"imdbid": 66,
+					"tvdbid": 66,
+					"both": 66
+				},
+				"tt0388629": {
+					"imdbid": 93,
+					"tvdbid": 93,
+					"both": 93
+				}
+			}
+		},
+		{
+			"name": "NZBAtlas",
+			"searching": "<searching> <search available=\"yes\" supportedParams=\"q\" /> <tv-search available=\"yes\" supportedParams=\"q,rid,tvdbid,imdbid,tvmazeid,season,ep\" /> <movie-search available=\"yes\" supportedParams=\"q,imdbid,genre\"/> </searching>",
+			"found": {
+				"tt0944947": {
+					"imdbid": 0,
+					"tvdbid": 4,
+					"both": 4
+				},
+				"tt11280740": {
+					"imdbid": 0,
+					"tvdbid": 4,
+					"both": 4
+				},
+				"tt22248376": {
+					"imdbid": 0,
+					"tvdbid": 1,
+					"both": 1
+				},
+				"tt14452776": {
+					"imdbid": 0,
+					"tvdbid": 2,
+					"both": 2
+				},
+				"tt0386676": {
+					"imdbid": 0,
+					"tvdbid": 0,
+					"both": 0
+				},
+				"tt13443470": {
+					"imdbid": 0,
+					"tvdbid": 3,
+					"both": 3
+				},
+				"tt0388629": {
+					"imdbid": 0,
+					"tvdbid": 0,
+					"both": 0
+				}
+			}
+		},
+		{
+			"name": "ameNZB",
+			"searching": "<searching> <search available=\"yes\" supportedParams=\"q,cat,limit,offset\"/> <tv-search available=\"yes\" supportedParams=\"q,cat,limit,offset,tvdbid,tvmazeid,rid,tvrageid,traktid,imdbid,season,ep\"/> <movie-search available=\"yes\" supportedParams=\"q,cat,limit,offset,imdbid,tmdbid,traktid\"/> <audio-search available=\"no\" supportedParams=\"\"/> <book-search available=\"no\" supportedParams=\"\"/> </searching>",
+			"found": {
+				"tt0944947": {
+					"imdbid": 0,
+					"tvdbid": 0,
+					"both": 0
+				},
+				"tt11280740": {
+					"imdbid": 0,
+					"tvdbid": 0,
+					"both": 0
+				},
+				"tt22248376": {
+					"imdbid": 24,
+					"tvdbid": 24,
+					"both": 24
+				},
+				"tt14452776": {
+					"imdbid": 0,
+					"tvdbid": 0,
+					"both": 0
+				},
+				"tt0386676": {
+					"imdbid": 0,
+					"tvdbid": 0,
+					"both": 0
+				},
+				"tt13443470": {
+					"imdbid": 0,
+					"tvdbid": 0,
+					"both": 0
+				},
+				"tt0388629": {
+					"imdbid": 34,
+					"tvdbid": 36,
+					"both": 34
+				}
+			}
+		},
+		{
+			"name": "AniFix",
+			"searching": "<searching><search available=\"yes\" supportedParams=\"q,cat,maxage,limit,offset\" /><tv-search available=\"yes\" supportedParams=\"q,tvdbid,season,ep,cat,maxage,limit,offset\" /><movie-search available=\"no\" supportedParams=\"\" /></searching>",
+			"found": {
+				"tt0944947": {
+					"imdbid": "error",
+					"tvdbid": 0,
+					"both": 0
+				},
+				"tt11280740": {
+					"imdbid": "error",
+					"tvdbid": 0,
+					"both": 0
+				},
+				"tt22248376": {
+					"imdbid": "error",
+					"tvdbid": 0,
+					"both": 0
+				},
+				"tt14452776": {
+					"imdbid": "error",
+					"tvdbid": 0,
+					"both": 0
+				},
+				"tt0386676": {
+					"imdbid": "error",
+					"tvdbid": 0,
+					"both": 0
+				},
+				"tt13443470": {
+					"imdbid": "error",
+					"tvdbid": 0,
+					"both": 0
+				},
+				"tt0388629": {
+					"imdbid": "error",
+					"tvdbid": 0,
+					"both": 0
+				}
+			}
+		}
+	]
+}
