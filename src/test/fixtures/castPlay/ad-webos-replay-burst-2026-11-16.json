@@ -1,0 +1,15 @@
+{
+	"_comment": "First 120 of 5,517 GETs one LG webOS Stremio client sent to one AllDebrid Cast play URL on dmm-01, 2026-11-16 06:05-08:08 UTC (proxy-host-3 access log). Each answered 307 and each unlocked a new AllDebrid link; AllDebrid then warned the account about thousands of links without a download. Seconds since the first request; the user id, client IP and /f/ token are not kept.",
+	"durationSeconds": 7362,
+	"offsetsSeconds": [
+		0, 0, 0, 2, 2, 3, 3, 4, 5, 5, 7, 7, 12, 13, 14, 15, 15, 16, 16, 17, 18, 18, 19, 20, 21, 22,
+		22, 23, 24, 24, 25, 26, 26, 28, 29, 29, 30, 31, 32, 33, 33, 34, 35, 36, 38, 38, 39, 40, 40,
+		41, 43, 44, 46, 47, 48, 49, 51, 53, 54, 55, 56, 58, 59, 60, 61, 63, 65, 66, 67, 68, 69, 71,
+		72, 73, 74, 76, 77, 78, 79, 80, 82, 83, 85, 86, 87, 88, 89, 90, 92, 93, 94, 96, 98, 99, 100,
+		102, 103, 105, 106, 108, 109, 110, 111, 113, 114, 115, 116, 117, 118, 119, 121, 122, 124,
+		125, 126, 128, 129, 130, 131, 133
+	],
+	"start": "2026-11-16T06:05:30Z",
+	"totalRequests": 5517,
+	"userAgent": "Mozilla/5.0 (Web0S; Linux) StremioOrigin"
+}

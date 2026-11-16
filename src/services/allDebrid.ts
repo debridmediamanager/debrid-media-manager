@@ -828,7 +828,7 @@ export function isValidSHA40Hash(hash: string): boolean {
 // Link Unlocking
 // ====================================================================
 
-interface UnlockLinkData {
+export interface UnlockLinkData {
 	link: string;
 	host: string;
 	filename: string;

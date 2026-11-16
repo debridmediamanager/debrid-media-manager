@@ -5,8 +5,8 @@ import {
 	getMagnetStatusAd,
 	getSavedLinks,
 	MagnetFile,
-	unlockLink,
 } from '@/services/allDebrid';
+import { unlockLinkOnce } from '@/utils/allDebridUnlockMemo';
 import { libraryArtFor, withLibraryArt } from '@/utils/castLibraryArt';
 
 export const PAGE_SIZE = 12;
@@ -100,7 +100,7 @@ export async function getAllDebridSavedLink(apiKey: string, idPart: string, user
 	}
 
 	// Errors propagate: the route tells a refused key from a hoster outage.
-	const unlocked = await unlockLink(apiKey, link);
+	const unlocked = await unlockLinkOnce(apiKey, link);
 
 	const metaId = `dmm-ad:${idPart}`;
 	const size = unlocked.filesize ?? 0;

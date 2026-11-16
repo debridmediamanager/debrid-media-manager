@@ -41,6 +41,7 @@ import {
 	parseSavedLinkMetaId,
 	savedLinkMetaId,
 } from './allDebridCastCatalogHelper';
+import { clearUnlockMemo } from './allDebridUnlockMemo';
 
 describe('allDebridCastCatalogHelper', () => {
 	it('assigns video indices after sorting so play URLs match /play/[hash] resolver', async () => {
@@ -134,6 +135,7 @@ describe('AllDebrid saved links', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		clearUnlockMemo();
 		process.env.DMM_ORIGIN = 'https://dmm.test';
 		mockGetMagnetStatus.mockResolvedValue({ data: { magnets: [] } });
 		mockGetSavedLinks.mockResolvedValue([]);

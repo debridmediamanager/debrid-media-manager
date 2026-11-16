@@ -1,6 +1,7 @@
-import { getAllDebridUser, getMagnetFiles, MagnetFile, unlockLink } from '@/services/allDebrid';
+import { getAllDebridUser, getMagnetFiles, MagnetFile } from '@/services/allDebrid';
 import { repository as db } from '@/services/repository';
 import { parseSavedLinkMetaId } from '@/utils/allDebridCastCatalogHelper';
+import { unlockLinkOnce } from '@/utils/allDebridUnlockMemo';
 import {
 	CastItemGoneError,
 	CastPlayFailure,
@@ -170,7 +171,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		// A saved link is already the source; there is no magnet to fall back to.
 		if (savedLink) {
 			refusedLink = savedLink;
-			const url = (await unlockLink(apiKey, savedLink)).link;
+			const url = (await unlockLinkOnce(apiKey, savedLink)).link;
 			servedLink = savedLink;
 			return url;
 		}
@@ -184,11 +185,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		refusedLink = link ?? undefined;
 		if (!link) {
 			refusedLink = await linkFromMagnet(apiKey, magnetId, fileIndex);
-			return (await unlockLink(apiKey, refusedLink)).link;
+			return (await unlockLinkOnce(apiKey, refusedLink)).link;
 		}
 
 		try {
-			const url = (await unlockLink(apiKey, link)).link;
+			const url = (await unlockLinkOnce(apiKey, link)).link;
 			servedLink = link;
 			return url;
 		} catch (unlockError) {
@@ -202,7 +203,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			);
 			try {
 				const fresh = await linkFromMagnet(apiKey, magnetId, fileIndex);
-				return (await unlockLink(apiKey, fresh)).link;
+				return (await unlockLinkOnce(apiKey, fresh)).link;
 			} catch {
 				// For anyone but the caster the magnet id means nothing, so its
 				// refusal says nothing about the stream; the stored link's does.

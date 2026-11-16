@@ -1,7 +1,9 @@
 import handler from '@/pages/api/stremio-ad/[userid]/play/[hash]';
 import { getAllDebridUser, getMagnetFiles, unlockLink } from '@/services/allDebrid';
 import { repository } from '@/services/repository';
+import burst from '@/test/fixtures/castPlay/ad-webos-replay-burst-2026-11-16.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { clearUnlockMemo } from '@/utils/allDebridUnlockMemo';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
@@ -21,6 +23,7 @@ describe('/api/stremio-ad/[userid]/play/[hash]', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		clearUnlockMemo();
 		res = createMockResponse();
 		mockRepository.getAllDebridCastProfile = vi.fn();
 		// Default: no stored link, so the existing cases exercise the magnet path
@@ -191,6 +194,7 @@ describe('/api/stremio-ad/[userid]/play/[hash] saved links', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		clearUnlockMemo();
 		res = createMockResponse();
 		mockRepository.getAllDebridCastProfile = vi.fn().mockResolvedValue({ apiKey: 'key' });
 		mockRepository.touchAvailabilityAdByLink = vi.fn().mockResolvedValue(undefined);
@@ -207,6 +211,7 @@ describe('/api/stremio-ad/[userid]/play/[hash] saved links', () => {
 		);
 
 		vi.mocked(mockRepository.touchAvailabilityAdByLink).mockClear();
+		clearUnlockMemo();
 		mockUnlockLink.mockRejectedValue(adError('LINK_DOWN'));
 		mockRepository.removeDeadAllDebridLink = vi.fn().mockResolvedValue(undefined);
 		await handler(
@@ -230,6 +235,52 @@ describe('/api/stremio-ad/[userid]/play/[hash] saved links', () => {
 		mockUnlockLink.mockRejectedValue(adError('LINK_DOWN'));
 		await handler(createMockRequest({ query: { userid: 'user1', hash: `${ID}:0` } }), res);
 		expect(res.redirect).toHaveBeenCalledWith(307, VIDEO('file-unavailable'));
+	});
+
+	// An LG webOS Stremio player asked for one play URL 5,517 times in two hours, and
+	// every request unlocked a new AllDebrid link: AllDebrid warned the account for
+	// "thousands of links without any download". Replays the first 120 of them.
+	it('unlocks once for a player that keeps asking for the same file', async () => {
+		let minted = 0;
+		mockUnlockLink.mockImplementation(
+			async () => ({ link: `https://cdn.test/${++minted}` }) as any
+		);
+		const offsets: number[] = burst.offsetsSeconds;
+		for (const second of new Set(offsets)) {
+			const same = offsets.filter((o) => o === second);
+			const answers = same.map(() => createMockResponse());
+			await Promise.all(
+				answers.map((r) =>
+					handler(
+						createMockRequest({
+							query: { userid: 'user1', hash: `${ID}:0` },
+							headers: { 'user-agent': burst.userAgent },
+						}),
+						r
+					)
+				)
+			);
+			for (const r of answers) expect(r.redirect).toHaveBeenCalledWith('https://cdn.test/1');
+		}
+		expect(mockUnlockLink).toHaveBeenCalledTimes(1);
+	});
+
+	it('asks AllDebrid again after a refusal, and for another account', async () => {
+		mockUnlockLink.mockRejectedValueOnce(adError('LINK_DOWN'));
+		mockRepository.removeDeadAllDebridLink = vi.fn().mockResolvedValue(undefined);
+		await handler(createMockRequest({ query: { userid: 'user1', hash: `${ID}:0` } }), res);
+		mockUnlockLink.mockResolvedValue({ link: 'https://cdn.test/file.mkv' } as any);
+		const again = createMockResponse();
+		await handler(createMockRequest({ query: { userid: 'user1', hash: `${ID}:0` } }), again);
+		expect(again.redirect).toHaveBeenCalledWith('https://cdn.test/file.mkv');
+
+		mockRepository.getAllDebridCastProfile = vi.fn().mockResolvedValue({ apiKey: 'other' });
+		await handler(
+			createMockRequest({ query: { userid: 'user2', hash: `${ID}:0` } }),
+			createMockResponse()
+		);
+		expect(mockUnlockLink).toHaveBeenLastCalledWith('other', LINK);
+		expect(mockUnlockLink).toHaveBeenCalledTimes(3);
 	});
 
 	it('still rejects a genuinely malformed id', async () => {

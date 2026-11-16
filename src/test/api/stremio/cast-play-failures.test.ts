@@ -10,6 +10,7 @@ import providerRecorded from '@/test/fixtures/castAddonFailures/provider-failure
 import tbPlanRestricted from '@/test/fixtures/torbox/createtorrent-plan-restricted-2026-09-23.json';
 import tbBadToken from '@/test/fixtures/torbox/user-me-bad-token-2026-09-24.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
+import { clearUnlockMemo } from '@/utils/allDebridUnlockMemo';
 import http from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -180,6 +181,7 @@ afterAll(() => {
 });
 
 beforeEach(() => {
+	clearUnlockMemo();
 	net.routes.length = 0;
 	net.calls.length = 0;
 	vi.clearAllMocks();
