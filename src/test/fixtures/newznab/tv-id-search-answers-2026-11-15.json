@@ -1,0 +1,1945 @@
+{
+	"_source": "Answers DMM's Newznab cache held for TV searches by id, read from production 2026-11-16. Indexer prefixes and native ids are relabelled; titles are as the indexers sent them.",
+	"ignoredId": {
+		"query": "ep=26&imdbid=42132738&season=1",
+		"note": "Must Date the Playboy! (tt42132738): one indexer answered with every recent S01E26, a zurg grabbed Lets.Go.S01E26 for it",
+		"results": [
+			{
+				"id": "ah:mdtp-s01e26-000",
+				"title": "Batwheels.S01E26.FiNNiSH.720p.WEB.H264-LAKKA-xpost"
+			},
+			{
+				"id": "ah:mdtp-s01e26-001",
+				"title": "Atomic.Betty.S01E26.Franken.Brain.Evil.Idol.PTV.WEB-DL.AAC.2.0.H.264-PiRaTeS"
+			},
+			{
+				"id": "ah:mdtp-s01e26-002",
+				"title": "The.Lion.Guard.S01E26.Ono.the.Tickbird.1080p.DSNP.WEB-DL.AAC.2.0.H.264-FLUX"
+			},
+			{
+				"id": "ah:mdtp-s01e26-003",
+				"title": "Spellbinder.S01E26.Flight.720p.TUBI.WEB-DL.AAC2.0.H.264-OldT"
+			},
+			{
+				"id": "ah:mdtp-s01e26-004",
+				"title": "ALVINNN.And.the.Chipmunks.S01E26.Warbie.and.Man.Cave.1080p.NF.WEB-DL.DDP5.1.H.264-XEBEC"
+			},
+			{
+				"id": "ah:mdtp-s01e26-005",
+				"title": "Kiff-2023-S01E26-Friendship.In.The.Time.Of.Cheese.Caves-DSNP.WEBDL-1080p-EAC3.5.1-h264-NTb"
+			},
+			{
+				"id": "ah:mdtp-s01e26-006",
+				"title": "Maddie.and.Triggs.S01E26.The.Treasure.Indoors.720p.CBC.WEB-DL.AAC.2.0.H.264-4f8c4100292"
+			},
+			{
+				"id": "ah:mdtp-s01e26-007",
+				"title": "Maverick.S01E26.1080p.BluRay.x264-SEGMENT"
+			},
+			{
+				"id": "ah:mdtp-s01e26-008",
+				"title": "Big.City.Greens.S01E26.Paint.Misbehavin.1080p.DSNP.WEB-DL.AAC2.0.H.264-NTb"
+			},
+			{
+				"id": "ah:mdtp-s01e26-009",
+				"title": "Maverick.S01E26.720p.BluRay.x264-SEGMENT"
+			},
+			{
+				"id": "ah:mdtp-s01e26-010",
+				"title": "Imagination.Movers.S01E26.Rockabye.Rich.MULTI.1080p.DSNP.US.WEB-DL.AAC2.0.x264-AndreMor"
+			},
+			{
+				"id": "ah:mdtp-s01e26-011",
+				"title": "Winx.Club.the.Magic.Is.Back.S01E26.1080p.NF.WEB-DL.DDP5.1.H.264.DUAL-BiOMA"
+			},
+			{
+				"id": "ah:mdtp-s01e26-012",
+				"title": "Pigeon.Boy.2002.S01E26.PIGEON.QUIZ.1080p.AMZN.WEB.DL.AAC.2.0.H.264-OldT"
+			},
+			{
+				"id": "ah:mdtp-s01e26-013",
+				"title": "Scent.of.Time.2023.S01E26.720p.HMAX.WEB-DL.DUAL.DDP5.1.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-014",
+				"title": "Scent.of.Time.2023.S01E26.1080p.HMAX.WEB-DL.DUAL.DDP5.1.H.265-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-015",
+				"title": "Code.Lyoko.S01E26.1080p.NF.WEB-DL.DDP2.0.MULTi.x264-OLdT"
+			},
+			{
+				"id": "ah:mdtp-s01e26-016",
+				"title": "PAC-MAN.e.as.Aventuras.Fantasmagoricas.S01E26.A.Invasao.Dos.Cabecas.Pontudas.720p.PLUTOLATAM.WEB-DL.AAC2.0.x264-AndreMor"
+			},
+			{
+				"id": "ah:mdtp-s01e26-017",
+				"title": "The.Three.Stooges.Comedy.Gold.Standard.S01E26.Playing.the.Ponies.720p.TUBI.WEB-DL.AAC2.0.x264-AndreMor"
+			},
+			{
+				"id": "ah:mdtp-s01e26-018",
+				"title": "Future.Boy.Conan.(1978).S01E26v3.Denouement.[Bluray-1080p][Opus.2.0][Dual.Audio][AV1]-BlackRabbit"
+			},
+			{
+				"id": "ah:mdtp-s01e26-019",
+				"title": "Adventure.Time.S01E26.Gut.Grinder.1080p.MAX.WEB-DL.DDP2.0.H.264-Kitsune"
+			},
+			{
+				"id": "ah:mdtp-s01e26-020",
+				"title": "Pingu.S01E26.720p.TV2.WEB-DL.AAC2.0.H.264-NORViNE"
+			},
+			{
+				"id": "ah:mdtp-s01e26-021",
+				"title": "Lets.Go.S01E26.2160p.TX.WEB-DL.AAC2.0.HDR.HFR.H.265-MWeb"
+			},
+			{
+				"id": "ah:mdtp-s01e26-022",
+				"title": "Lets.Go.S01E26.2160p.TX.WEB-DL.AAC2.0.H.265-MWeb"
+			},
+			{
+				"id": "ah:mdtp-s01e26-023",
+				"title": "Lets.Go.S01E26.1080p.TX.WEB-DL.AAC2.0.H.264-MWeb"
+			},
+			{
+				"id": "ah:mdtp-s01e26-024",
+				"title": "The.Confession.Truth.S01E26.1080p.iQIYI.WEB-DL.AAC2.0.H.264-MWeb"
+			},
+			{
+				"id": "ah:mdtp-s01e26-025",
+				"title": "Cupids.Kitchen.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-026",
+				"title": "Cupids.Kitchen.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-027",
+				"title": "You.Are.My.Hero.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-028",
+				"title": "You.Are.My.Hero.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-029",
+				"title": "Detective.Kong.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-030",
+				"title": "Detective.Kong.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-031",
+				"title": "Bing.S01E26.Storytime.1080p.iP.WEB-DL.AAC2.0.x264-AndreMor"
+			},
+			{
+				"id": "ah:mdtp-s01e26-032",
+				"title": "Batman.The.Brave.and.the.Bold.S01E26.Inside.the.Outsiders.1080p.MAX.WEB-DL.DDP2.0.H.264-Kitsune"
+			},
+			{
+				"id": "ah:mdtp-s01e26-033",
+				"title": "My.Mowgli.Boy.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-034",
+				"title": "My.Mowgli.Boy.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-035",
+				"title": "Never.Gone.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-036",
+				"title": "Never.Gone.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-037",
+				"title": "Le.Coup.de.Foudre.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-038",
+				"title": "Le.Coup.de.Foudre.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-039",
+				"title": "Youth.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-040",
+				"title": "Youth.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-041",
+				"title": "Mickey.Mouse.Funhouse.S01E26.Welcome.to.Giant.Crab.Island.-.Ghosts.of.Haunted.Gulch.720p.DSNP.WEB-DL.AAC2.0.H.264-OldT"
+			},
+			{
+				"id": "ah:mdtp-s01e26-042",
+				"title": "Mickey.Mouse.Funhouse.S01E26.Welcome.to.Giant.Crab.Island.-.Ghosts.of.Haunted.Gulch.720p.DSNP.WEB-DL.AAC2.0.H.264-OldT"
+			},
+			{
+				"id": "ah:mdtp-s01e26-043",
+				"title": "Qing.Qing.Zi.Jin.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-044",
+				"title": "Qing.Qing.Zi.Jin.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-045",
+				"title": "A.Lifetime.Love.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-046",
+				"title": "A.Lifetime.Love.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-047",
+				"title": "The.Long.Ballad.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-048",
+				"title": "The.Long.Ballad.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-049",
+				"title": "I.Will.Never.Let.You.Go.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-050",
+				"title": "I.Will.Never.Let.You.Go.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-051",
+				"title": "Joy.of.Life.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-052",
+				"title": "Mickey.Mouse.Funhouse.S01E26.Welcome.to.Giant.Crab.Island.-.Ghosts.of.Haunted.Gulch.1080p.DSNP.WEB-DL.AAC2.0.H.264-OldT"
+			},
+			{
+				"id": "ah:mdtp-s01e26-053",
+				"title": "Derailment.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-054",
+				"title": "Derailment.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-055",
+				"title": "Mickey.Mouse.Funhouse.S01E26.Welcome.to.Giant.Crab.Island.-.Ghosts.of.Haunted.Gulch.1080p.DSNP.WEB-DL.AAC2.0.H.264-OldT"
+			},
+			{
+				"id": "ah:mdtp-s01e26-056",
+				"title": "Margarita.Make.Your.Story.Count.2024.S01E26.2160p.HMAX.WEB-DL.MULTi.DDP5.1.H.265-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-057",
+				"title": "Margarita.Make.Your.Story.Count.2024.S01E26.1080p.HMAX.WEB-DL.MULTi.DDP5.1.H.265-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-058",
+				"title": "Margarita.Make.Your.Story.Count.2024.S01E26.720p.HMAX.WEB-DL.MULTi.DDP5.1.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-059",
+				"title": "Time.Seems.to.Have.Forgotten.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-060",
+				"title": "Time.Seems.to.Have.Forgotten.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-061",
+				"title": "The.Eternal.Love.2.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-062",
+				"title": "The.Eternal.Love.2.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-063",
+				"title": "Women.Walk.the.Line.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-064",
+				"title": "Women.Walk.the.Line.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-065",
+				"title": "Falling.Into.You.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-066",
+				"title": "Falling.Into.You.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-067",
+				"title": "My.Calorie.Boy.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-068",
+				"title": "My.Calorie.Boy.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-069",
+				"title": "Jia.jin.chai.S01E26.480p.x264-mSD"
+			},
+			{
+				"id": "ah:mdtp-s01e26-070",
+				"title": "Simmer.Down.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-071",
+				"title": "Simmer.Down.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-072",
+				"title": "Everyone.Wants.to.Meet.You.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-073",
+				"title": "Everyone.Wants.to.Meet.You.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-074",
+				"title": "Standing.in.the.Time.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-075",
+				"title": "Standing.in.the.Time.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-076",
+				"title": "THE.LEGEND.OF.HEROES.Hot.Blooded.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-077",
+				"title": "THE.LEGEND.OF.HEROES.Hot.Blooded.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-078",
+				"title": "Everlasting.Longing.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-079",
+				"title": "Everlasting.Longing.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-080",
+				"title": "Les.Belles.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-081",
+				"title": "Love.Island.Australia.Unseen.Uncut.S01E26.1080p.WEB.H264-SPAMnEGGS"
+			},
+			{
+				"id": "ah:mdtp-s01e26-082",
+				"title": "The.Glory.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-083",
+				"title": "The.Glory.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-084",
+				"title": "Weaving.a.Tale.of.Love.2.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-085",
+				"title": "Weaving.a.Tale.of.Love.2.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-086",
+				"title": "The.Great.Long.March.S01E26.2026.2160p.IQ.WEB-DL.H.265.DDP5.1.2Audios-HHWEB"
+			},
+			{
+				"id": "ah:mdtp-s01e26-087",
+				"title": "The.Great.Long.March.S01E26.2026.2160p.WEB-DL.H.265.EDR.DDP5.1.2Audios-HHWEB"
+			},
+			{
+				"id": "ah:mdtp-s01e26-088",
+				"title": "The.Great.Long.March.S01E26.2026.1080p.WEB-DL.H.264.AAC2.0-HHWEB"
+			},
+			{
+				"id": "ah:mdtp-s01e26-089",
+				"title": "Rebirth.For.You.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-090",
+				"title": "Rebirth.For.You.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-091",
+				"title": "A.Female.Student.Arrives.at.the.Imperial.College.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-092",
+				"title": "A.Female.Student.Arrives.at.the.Imperial.College.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-093",
+				"title": "A.Dream.of.Splendor.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-094",
+				"title": "A.Dream.of.Splendor.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-095",
+				"title": "Imong.S01E26.1080p.AMZN.WEB-DL.DD+2.0.H.264-playWEB"
+			},
+			{
+				"id": "ah:mdtp-s01e26-096",
+				"title": "Imong.S01E26.1080p.AMZN.WEB-DL.DD+2.0.H.264-playWEB"
+			},
+			{
+				"id": "ah:mdtp-s01e26-097",
+				"title": "Sword.Dynasty.S01E26.720p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-098",
+				"title": "Sword.Dynasty.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			},
+			{
+				"id": "ah:mdtp-s01e26-099",
+				"title": "The.King.of.Blaze.S01E26.1080p.VIKI.WEB-DL.AAC2.0.H.264-FUZEER"
+			}
+		]
+	},
+	"kept": {
+		"jojo": {
+			"query": "cat=5000,5030,5040,5045,5070&imdbid=2359704&season=6&tvdbid=262954",
+			"results": [
+				{
+					"id": "ds:jojo-000",
+					"title": "[anon].JoJo's.Bizarre.Adventure.-.S06E07.(1080p.NF.WEB-DL.Dual.Audio.H.264.Custom.ED.AAC).[Custom.Mux]"
+				},
+				{
+					"id": "ds:jojo-001",
+					"title": "[Trix].JoJo's.Bizarre.Adventure.(2012).S06E07.[WEB-DL.1080p.AV1.AAC].(Tri.Audio,.Multi.Subs)"
+				},
+				{
+					"id": "ds:jojo-002",
+					"title": "[Feibanyama].JoJos.Bizarre.Adventure.S06E06.[NF.WebRip.1080p.H265.Veryslow.AAC.Multi-Audio.Multi-Subs]"
+				},
+				{
+					"id": "ds:jojo-003",
+					"title": "[Trix].JoJo's.Bizarre.Adventure.(2012).S06E06.[WEB-DL.1080p.AV1.AAC].(Tri.Audio,.Multi.Subs)"
+				},
+				{
+					"id": "ds:jojo-004",
+					"title": "[anon].JoJo's.Bizarre.Adventure.-.S06E06.(1080p.NF.WEB-DL.Dual.Audio.H.264.Custom.ED.AAC).[Custom.Mux]"
+				},
+				{
+					"id": "ds:jojo-005",
+					"title": "[Mythicore] JoJo's Bizarre Adventure - S06E03 (720p HEVC 10-bit Dual-Audio Multi-Subs)"
+				},
+				{
+					"id": "ds:jojo-006",
+					"title": "JJBA - S06E04 - 2160p HDR Ai Upscale -Mesc"
+				},
+				{
+					"id": "ds:jojo-007",
+					"title": "JoJo.no.Kimyo.na.Boken.S06E04.The.Devil's.Palm.1080p.NF.WEB-DL.AAC2.0.H.264-playWEB"
+				},
+				{
+					"id": "ds:jojo-008",
+					"title": "[DKB] Steel Ball Run  JoJo no Kimyou na Bouken - S06E04 [1080p][HEVC x265 10bit][Dual-Audio][Multi-Subs][weekly]"
+				},
+				{
+					"id": "ds:jojo-009",
+					"title": "JoJos Bizarre Adventure (2012) S06E03 1080p NF WEB-DL MULTi AAC2.0 AV1 (Multi-Audio   Dual-Audio, Multi-Subs) (JoJo no Kimyou na Bouken  Steel Ball Run) (Weekly) [Trix]"
+				},
+				{
+					"id": "ds:jojo-010",
+					"title": "[Judas] JoJo`s Bizarre Adventure (JoJo no Kimyou na Bouken) - S06E04 [1080p][HEVC x265 10bit][Dual-Audio][Multi-Subs] (Weekly)"
+				},
+				{
+					"id": "ds:jojo-011",
+					"title": "[ToonsHub] JoJos Bizarre Adventure S06E04 1080p NF WEB-DL MULTi AAC2.0 H.264 (JoJo no Kimyou na Bouken  Adventure, Multi-Audio, Multi-Subs)"
+				},
+				{
+					"id": "ds:jojo-012",
+					"title": "[anon] JoJo's Bizarre Adventure - S06E04 (1080p NF WEB-DL Dual Audio H.264 Custom ED AAC) [Custom Mux].mkv"
+				},
+				{
+					"id": "ds:jojo-013",
+					"title": "[VARYG] JoJos Bizarre Adventure S06E04 The Devils Palm 1080p NF WEB-DL MULTi AAC2.0 H.264 (JoJo no Kimyou na Bouken Part 5  Ougon no Kaze, Multi-Subs)"
+				},
+				{
+					"id": "ds:jojo-014",
+					"title": "JoJos Bizarre Adventure S06E04 The Devils Palm 1080p NF WEB-DL DUAL AAC2.0 H.264-VARYG (JoJo no Kimyou na Bouken Part 5  Ougon no Kaze, Dual-Audio, Multi-Subs)"
+				},
+				{
+					"id": "ds:jojo-015",
+					"title": "JoJos Bizarre Adventure 2012 S06E04 MULTi AD 1080p NF WEB-DL AAC2.0 x264-Tsundere-Raws (VF, FRENCH, SUBFRENCH, VOSTFR, Steel Ball Run JoJo's Bizarre Adventure, Steel Ball Run JoJo no Kimyou na Bouken, JoJo's Bizarre Adventure Part 7 Steel Ba"
+				},
+				{
+					"id": "ds:jojo-016",
+					"title": "JoJos Bizarre Adventure 2012 S06E04 MULTi AD 1080p NF WEB-DL AAC2.0 AV1-Tsundere-Raws (VF, FRENCH, SUBFRENCH, VOSTFR, Steel Ball Run JoJo's Bizarre Adventure, Steel Ball Run JoJo no Kimyou na Bouken, JoJo's Bizarre Adventure Part 7 Steel Bal"
+				},
+				{
+					"id": "ds:jojo-017",
+					"title": "JoJos Bizarre Adventure 2012 S06E04 MULTi AD 1080p NF WEB-DL AAC2.0 H.265-Tsundere-Raws (VF, FRENCH, SUBFRENCH, VOSTFR, Steel Ball Run JoJo's Bizarre Adventure, Steel Ball Run JoJo no Kimyou na Bouken, JoJo's Bizarre Adventure Part 7 Steel B"
+				},
+				{
+					"id": "ds:jojo-018",
+					"title": "[ToonsHub] JoJos Bizarre Adventure S06E04 1080p NF WEB-DL DUAL AAC2.0 H.264 (JoJo no Kimyou na Bouken  Adventure, Dual-Audio, Multi-Subs)"
+				},
+				{
+					"id": "ds:jojo-019",
+					"title": "[anon].JoJo's.Bizarre.Adventure.-.S06E03.(1080p.NF.WEB-DL.Dual.Audio.H.264.Custom.ED.AAC).[Custom.Mux]"
+				},
+				{
+					"id": "ds:jojo-020",
+					"title": "[anon].JoJo's.Bizarre.Adventure.-.S06E02.(1080p.NF.WEB-DL.Dual.Audio.H.264.Custom.ED.AAC).[Custom.Mux]"
+				},
+				{
+					"id": "ds:jojo-021",
+					"title": "[DKB].Steel.Ball.Run.JoJo.no.Kimyou.na.Bouken.-.S06E01.[1080p][HEVC.x265.10bit][Dual-Audio][Multi-Subs][7F9F9E8E]"
+				},
+				{
+					"id": "ds:jojo-022",
+					"title": "[DKB].Steel.Ball.Run.JoJo.no.Kimyou.na.Bouken.-.S06E02.[1080p][HEVC.x265.10bit][Dual-Audio][Multi-Subs][8430A4BC]"
+				},
+				{
+					"id": "ds:jojo-023",
+					"title": "JoJo's.Bizarre.Adventure.-.S06E03.The.Desert-Born.Outlaws"
+				},
+				{
+					"id": "ds:jojo-024",
+					"title": "[Anime Chap] JoJo's Bizarre Adventure Part 7  Steel Ball Run S06E03 [WEB 1080p] {Corrected Names} Episode 03 [Dual Audio]"
+				},
+				{
+					"id": "ds:jojo-025",
+					"title": "[DKB] Steel Ball Run  JoJo no Kimyou na Bouken - S06E02 [1080p][HEVC x265 10bit][Dual-Audio][Multi-Subs][weekly]"
+				},
+				{
+					"id": "ds:jojo-026",
+					"title": "[DKB] Steel Ball Run  JoJo no Kimyou na Bouken - S06E01 [1080p][HEVC x265 10bit][Dual-Audio][Multi-Subs][weekly]"
+				},
+				{
+					"id": "ds:jojo-027",
+					"title": "[DKB] Steel Ball Run  JoJo no Kimyou na Bouken - S06E03 [1080p][HEVC x265 10bit][Dual-Audio][Multi-Subs][weekly]"
+				},
+				{
+					"id": "ds:jojo-028",
+					"title": "JJBA - S06E03 - 2160p HDR Ai Upscale -Mesc"
+				},
+				{
+					"id": "ds:jojo-029",
+					"title": "[Trix] JoJos Bizarre Adventure (2012) S06E03 1080p NF WEB-DL MULTi AAC2.0 AV1 (Multi-Audio   Dual-Audio, Multi-Subs) (JoJo no Kimyou na Bouken  Steel Ball Run) (Weekly)"
+				},
+				{
+					"id": "ds:jojo-030",
+					"title": "[Judas] JoJo`s Bizarre Adventure (JoJo no Kimyou na Bouken) - S06E03 [1080p][HEVC x265 10bit][Dual-Audio][Multi-Subs] (Weekly)"
+				},
+				{
+					"id": "ds:jojo-031",
+					"title": "JoJos Bizarre Adventure S06E03 The Desert-Born Outlaws 1080p NF WEB-DL MULTi AAC2.0 H.264-VARYG (JoJo no Kimyou na Bouken Part 5  Ougon no Kaze, Multi-Audio, Multi-Subs)"
+				},
+				{
+					"id": "ds:jojo-032",
+					"title": "JoJos Bizarre Adventure S06E03 The Desert-Born Outlaws 1080p NF WEB-DL DUAL AAC2.0 H.264-VARYG (JoJo no Kimyou na Bouken Part 5  Ougon no Kaze, Dual-Audio, Multi-Subs)"
+				},
+				{
+					"id": "ds:jojo-033",
+					"title": "JoJos.Bizarre.Adventure.S06E03.The.Desert-Born.Outlaws.1080p.NF.WEB-DL.MULTi.AAC2.0.H.264.MSubs-ToonsHub"
+				},
+				{
+					"id": "ds:jojo-034",
+					"title": "[ToonsHub] JoJos Bizarre Adventure S06E03 1080p NF WEB-DL MULTi AAC2.0 H.264 (JoJo no Kimyou na Bouken  Steel Ball Run - 2nd - 3rd STAGE, Multi-Audio, Multi-Subs)"
+				},
+				{
+					"id": "ds:jojo-035",
+					"title": "JoJos Bizarre Adventure 2012 S06E03 MULTi AD 1080p NF WEB-DL AAC2.0 x264-Tsundere-Raws (VF, FRENCH, SUBFRENCH, VOSTFR, JoJo's Bizarre Adventure Stardust Crusaders, Le Bizzarre Avventure di JoJo, SBR)"
+				},
+				{
+					"id": "ds:jojo-036",
+					"title": "JoJos Bizarre Adventure 2012 S06E03 MULTi AD 1080p NF WEB-DL AAC2.0 H.265-Tsundere-Raws (VF, FRENCH, SUBFRENCH, VOSTFR, JoJo's Bizarre Adventure Stardust Crusaders, Le Bizzarre Avventure di JoJo, SBR)"
+				},
+				{
+					"id": "ds:jojo-037",
+					"title": "JoJos Bizarre Adventure 2012 S06E03 MULTi AD 1080p NF WEB-DL AAC2.0 AV1-Tsundere-Raws (VF, FRENCH, SUBFRENCH, VOSTFR, JoJo's Bizarre Adventure Stardust Crusaders, JoJo's Bizarre Adventure Golden Wind)"
+				},
+				{
+					"id": "ds:jojo-038",
+					"title": "[ToonsHub] JoJos Bizarre Adventure S06E03 1080p NF WEB-DL DUAL AAC2.0 H.264 (Dual-Audio, Multi-Subs)"
+				},
+				{
+					"id": "ds:jojo-039",
+					"title": "[Mythicore] JoJos Bizarre Adventure S06E02 [720p 10bit HEVC Dual-Audio]"
+				},
+				{
+					"id": "ds:jojo-040",
+					"title": "[Mythicore] JoJos Bizarre Adventure S06E01 [720p 10bit HEVC Dual-Audio]"
+				},
+				{
+					"id": "ds:jojo-041",
+					"title": "JoJos.Bizarre.Adventure.S06E01.[NF.WebRip.1080p.H265.Veryslow.AAC.Multi-Audio.Multi-Subs].(Steel.Ball.Run.JoJo.no.Kimyou.na.Bouken)"
+				},
+				{
+					"id": "ds:jojo-042",
+					"title": "JJBA - S06E02 - 2160p HDR Ai Upscale -Mesc"
+				},
+				{
+					"id": "ds:jojo-043",
+					"title": "[Feibanyama] JoJos Bizarre Adventure S06E02 [NF WebRip 1080p H265 Veryslow AAC Multi-Audio Multi-Subs] (Steel Ball Run  JoJo no Kimyou na Bouken)"
+				},
+				{
+					"id": "ds:jojo-044",
+					"title": "[Feibanyama] JoJos Bizarre Adventure S06E01 [NF WebRip 1080p H265 Veryslow AAC Multi-Audio Multi-Subs] (Steel Ball Run  JoJo no Kimyou na Bouken)"
+				},
+				{
+					"id": "ds:jojo-045",
+					"title": "[Anime Chap] JoJo's Bizarre Adventure Part 7  Steel Ball Run S06E02 [WEB 1080p] {Corrected Names} Episode 02 [Dual Audio]"
+				},
+				{
+					"id": "ds:jojo-046",
+					"title": "JoJo.no.Kimyo.na.Boken.S06E02.The.Sheriff's.Request.to.Mountain.Tim.1080p.NF.WEB-DL.AAC2.0.H.264-playWEB"
+				},
+				{
+					"id": "ds:jojo-047",
+					"title": "[Judas] JoJo`s Bizarre Adventure (JoJo no Kimyou na Bouken) - S06E02 [1080p][HEVC x265 10bit][Dual-Audio][Multi-Subs] (Weekly)"
+				},
+				{
+					"id": "ds:jojo-048",
+					"title": "[Trix].JoJo's.Bizarre.Adventure.(2012).S06E02.[WEB-DL.1080p.AV1.AAC].(Tri.Audio,.Multi.Subs)"
+				},
+				{
+					"id": "ds:jojo-049",
+					"title": "JoJos Bizarre Adventure (2012) S06E02 1080p NF WEB-DL MULTi AAC2.0 AV1 (Multi-Audio   Dual-Audio, Multi-Subs) (JoJo no Kimyou na Bouken  Steel Ball Run) (Weekly) [Trix]"
+				},
+				{
+					"id": "ds:jojo-050",
+					"title": "JoJos.Bizarre.Adventure.S06E02.The.Sheriffs.Request.to.Mountain.Tim.1080p.NF.WEB-DL.DUAL.AAC2.0.H.264-VARYG"
+				},
+				{
+					"id": "ds:jojo-051",
+					"title": "JoJos.Bizarre.Adventure.S06E02.The.Sheriffs.Request.to.Mountain.Tim.1080p.NF.WEB-DL.MULTi.AAC2.0.H.264-VARYG"
+				},
+				{
+					"id": "ds:jojo-052",
+					"title": "JoJos Bizarre Adventure S06E02 The Sheriffs Request to Mountain Tim 1080p NF WEB-DL MULTi AAC2.0 H.264-VARYG (JoJo no Kimyou na Bouken Part 5  Ougon no Kaze, Multi-Audio, Multi-Subs)"
+				},
+				{
+					"id": "ds:jojo-053",
+					"title": "JoJos Bizarre Adventure S06E02 The Sheriffs Request to Mountain Tim 1080p NF WEB-DL DUAL AAC2.0 H.264-VARYG (JoJo no Kimyou na Bouken Part 5  Ougon no Kaze, Dual-Audio, Multi-Subs)"
+				},
+				{
+					"id": "ds:jojo-054",
+					"title": "JoJos.Bizarre.Adventure.S06E02.The.Sheriffs.Request.to.Mountain.Tim.1080p.NF.WEB-DL.MULTi.AAC2.0.H.264.MSubs-ToonsHub"
+				},
+				{
+					"id": "ds:jojo-055",
+					"title": "[ToonsHub] JoJos Bizarre Adventure S06E02 1080p NF WEB-DL MULTi AAC2.0 H.264 (Multi-Audio, Multi-Subs)"
+				},
+				{
+					"id": "ds:jojo-056",
+					"title": "JoJos.Bizarre.Adventure.S06E02.The.Sheriffs.Request.to.Mountain.Tim.1080p.NF.WEB-DL.DUAL.AAC2.0.H.264.MSubs-ToonsHub"
+				},
+				{
+					"id": "ds:jojo-057",
+					"title": "JoJos.Bizarre.Adventure.2012.S06E02.MULTi.AD.1080p.NF.WEB-DL.AAC2.0.AV1-Tsundere-Raws"
+				}
+			]
+		},
+		"battle-through-the-heavens": {
+			"query": "cat=5000,5010,5020,5030,5040,5045,5060,5070&imdbid=12409194&season=5",
+			"results": [
+				{
+					"id": "ds:battle-through-the-heavens-000",
+					"title": "[Shridhuu][4K] Battle Through the Heavens      Doupo Cangqiong - S05E212"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-001",
+					"title": "[Shridhuu][1080p HBR] Battle Through the Heavens      Doupo Cangqiong - S05E212"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-002",
+					"title": "Fights.Break.Sphere.S05E211.2017.2160p.TX.WEB-DL.H.265.AAC2.0-HHWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-003",
+					"title": "[Shridhuu].Battle.Through.the.Heavens.S05E211.[1080p.HEVC.HBR.+.AAC2.0,.HiFi,.AAC5.1,.DDP2.0]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-004",
+					"title": "[Shridhuu].Battle.Through.the.Heavens.S05E211.[2160p.HEVC.+.AAC2.0,.HiFi,.AAC5.1,.DDP2.0]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-005",
+					"title": "[Shridhuu][1080p HBR] Battle Through the Heavens      Doupo Cangqiong - S05E211"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-006",
+					"title": "[Shridhuu][4K] Battle Through the Heavens      Doupo Cangqiong - S05E211"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-007",
+					"title": "[Shridhuu].Battle.Through.the.Heavens.S05E210.[2160p.HEVC.+.DDP2.0,.AAC2.0]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-008",
+					"title": "[Shridhuu].Battle.Through.the.Heavens.S05E210.[1080p.HEVC.HBR.+.DDP2.0,.AAC2.0]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-009",
+					"title": "[Shridhuu][4K] Battle Through the Heavens      Doupo Cangqiong - S05E210"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-010",
+					"title": "[Shridhuu][1080p HBR] Battle Through the Heavens      Doupo Cangqiong - S05E210"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-011",
+					"title": "[Shridhuu].Battle.Through.the.Heavens.S05E209.[1080p.HEVC.HBR.+.DDP2.0,.AAC2.0]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-012",
+					"title": "[Shridhuu].Battle.Through.the.Heavens.S05E209.[2160p.HEVC.+.DDP2.0,.AAC2.0]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-013",
+					"title": "[Shridhuu][1080p HBR] Battle Through the Heavens      Doupo Cangqiong - S05E209"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-014",
+					"title": "[Shridhuu][4K] Battle Through the Heavens      Doupo Cangqiong - S05E209"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-015",
+					"title": "[Shridhuu].Battle.Through.the.Heavens.S05E208.[2160p.HEVC.+.DDP2.0,.AAC2.0]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-016",
+					"title": "[Shridhuu].Battle.Through.the.Heavens.S05E208.[1080p.HEVC.HBR.+.DDP2.0,.AAC2.0]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-017",
+					"title": "[Shridhuu][1080p HBR] Battle Through the Heavens      Doupo Cangqiong - S05E208"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-018",
+					"title": "[Shridhuu][4K] Battle Through the Heavens      Doupo Cangqiong - S05E208"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-019",
+					"title": "Fights.Break.Sphere.2022.S05E202.2160p.WEB-DL.H.265.AAC-PTerWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-020",
+					"title": "Fights.Break.Sphere.2022.S05E201.2160p.WEB-DL.H.265.AAC-PTerWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-021",
+					"title": "Fights.Break.Sphere.2022.S05E200.2160p.WEB-DL.H.265.AAC-PTerWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-022",
+					"title": "Fights.Break.Sphere.2022.S05E199.2160p.WEB-DL.H.265.AAC-PTerWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-023",
+					"title": "Fights.Break.Sphere.2022.S05E198.2160p.WEB-DL.H.265.AAC-PTerWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-024",
+					"title": "Fights.Break.Sphere.2022.S05E197.2160p.WEB-DL.H.265.AAC-PTerWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-025",
+					"title": "Fights.Break.Sphere.2022.S05E196.2160p.WEB-DL.H.265.AAC-PTerWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-026",
+					"title": "Fights.Break.Sphere.2022.S05E195.2160p.WEB-DL.H.265.AAC-PTerWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-027",
+					"title": "Fights.Break.Sphere.2022.S05E194.2160p.WEB-DL.H.265.AAC-PTerWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-028",
+					"title": "Fights.Break.Sphere.2022.S05E193.2160p.WEB-DL.H.265.AAC-PTerWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-029",
+					"title": "Fights.Break.Sphere.2022.S05E192.2160p.WEB-DL.H.265.AAC-PTerWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-030",
+					"title": "Fights.Break.Sphere.2022.S05E191.2160p.WEB-DL.H.265.AAC-PTerWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-031",
+					"title": "Fights.Break.Sphere.2022.S05E190.2160p.WEB-DL.H.265.AAC-PTerWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-032",
+					"title": "Fights.Break.Sphere.2022.S05E189.2160p.WEB-DL.H.265.AAC-PTerWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-033",
+					"title": "Fights.Break.Sphere.2024.S05E180.2160p.WEB-DL.H.265.AAC-UBWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-034",
+					"title": "Fights.Break.Sphere.2024.S05E180.1080p.WEB-DL.H.264.AAC-UBWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-035",
+					"title": "Fights.Break.Sphere.S05E180.2022.2160p.WEB-DL.H.265.AAC-HHWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-036",
+					"title": "Fights.Break.Sphere.S05E178.2022.1080p.WEB-DL.H.265.AAC-ADWeb"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-037",
+					"title": "Fights.Break.Sphere.2024.S05E178.2160p.WEB-DL.H.265.AAC-UBWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-038",
+					"title": "Fights.Break.Sphere.S05E178.2022.2160p.WEB-DL.H.265.AAC-CMCTV"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-039",
+					"title": "Fights.Break.Sphere.S05E178.2022.2160p.WEB-DL.H.265.AAC-ADWeb"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-040",
+					"title": "Fights.Break.Sphere.2024.S05E178.1080p.WEB-DL.H.264.AAC-UBWEB"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-041",
+					"title": "Battle Through the Heavens Season 5 Episode 121"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-042",
+					"title": "[MxT] Battle Through the Heavens - S05E58 [Web.1080p.HEVC.10bit.AAC]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-043",
+					"title": "[MxT] Battle Through the Heavens - S05E58 [Web.4K.SDR.HEVC.8bit.AAC.eAC3]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-044",
+					"title": "[FS Pavilion] Battle Through The Heavens S5"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-045",
+					"title": "[MxT] BTTH S05E56 [4K.AAC.EAC3]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-046",
+					"title": "[MxT] BTTH S05E56"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-047",
+					"title": "[MxT] BTTH S05E55 [4K.AAC.EAC3]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-048",
+					"title": "[MxT] BTTH S05E55"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-049",
+					"title": "[MxT] BTTH S05E54 [4K.AAC.EAC3]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-050",
+					"title": "[MxT] BTTH S05E54"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-051",
+					"title": "[MxT] BTTH S05E53"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-052",
+					"title": "[MxT] BTTH S05E53 [4K.AAC.EAC3]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-053",
+					"title": "BTTH S05E52"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-054",
+					"title": "BTTH S05E52 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-055",
+					"title": "BTTH S05E51 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-056",
+					"title": "BTTH S05E51"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-057",
+					"title": "BTTH S05E50 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-058",
+					"title": "BTTH S05E50"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-059",
+					"title": "BTTH S05E49 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-060",
+					"title": "BTTH S05E49"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-061",
+					"title": "BTTH S05E48 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-062",
+					"title": "BTTH S05E48"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-063",
+					"title": "BTTH S05E47"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-064",
+					"title": "BTTH S05E47 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-065",
+					"title": "BTTH S05E46"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-066",
+					"title": "BTTH S05E46 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-067",
+					"title": "BTTH S05E45 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-068",
+					"title": "BTTH S05E45"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-069",
+					"title": "BTTH S05E44"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-070",
+					"title": "BTTH S05E44 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-071",
+					"title": "BTTH S05E43 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-072",
+					"title": "BTTH S05E43"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-073",
+					"title": "BTTH S05E42"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-074",
+					"title": "BTTH S05E42 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-075",
+					"title": "BTTH S05E41"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-076",
+					"title": "BTTH S05E41 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-077",
+					"title": "Battle Through the Heavens - S05E40 [WebDL.4K.HEVC.8bit.AAC.EAC3][MxT]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-078",
+					"title": "Battle Through the Heavens - S05E40 [WebDL.1080p.HEVC.10bit.AAC][MxT]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-079",
+					"title": "Battle Through the Heavens - S05E03 [WebDL.1080p.HEVC.10bit.AAC][MxT]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-080",
+					"title": "BTTH S05E39 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-081",
+					"title": "BTTH S05E39"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-082",
+					"title": "BTTH S05E38"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-083",
+					"title": "BTTH S05E38 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-084",
+					"title": "BTTH S05E37 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-085",
+					"title": "BTTH S05E37"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-086",
+					"title": "BTTH S05E36 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-087",
+					"title": "BTTH S05E36"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-088",
+					"title": "BTTH S05E35"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-089",
+					"title": "BTTH S05E35 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-090",
+					"title": "BTTH S05E34 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-091",
+					"title": "BTTH S05E34"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-092",
+					"title": "BTTH S05E33 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-093",
+					"title": "BTTH S05E33"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-094",
+					"title": "BTTH S05E32"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-095",
+					"title": "BTTH S05E32 [4K]"
+				},
+				{
+					"id": "ds:battle-through-the-heavens-096",
+					"title": "BTTH S05E31"
+				}
+			]
+		},
+		"peaky-blinders": {
+			"query": "cat=5000,5010,5020,5030,5040,5045,5060,5070&ep=1&imdbid=2442560&season=1",
+			"results": [
+				{
+					"id": "ds:peaky-blinders-000",
+					"title": "Peaky.Blinders.S01E01.Episode.1.1080p.10bit.BluRay.AAC2.0.HEVC-Vyndros"
+				},
+				{
+					"id": "ds:peaky-blinders-001",
+					"title": "Peaky.Blinders.S01E01.Episode.1.1080p.ITA-ENG.BluRay.x265.AAC-V3SP4EV3R"
+				},
+				{
+					"id": "ds:peaky-blinders-002",
+					"title": "Peaky.Blinders.S01E01.2013.1080p.Netflix.WEB-DL.AVC.AAC.2.0-DBTV"
+				},
+				{
+					"id": "ds:peaky-blinders-003",
+					"title": "Peaky.Blinders.(2013).S01E01.1080p.NF.Web-DL.[TR-EN].AAC2.0.H.264-TURG"
+				},
+				{
+					"id": "ds:peaky-blinders-004",
+					"title": "Peaky.Blinders.S01E01.Episode.1.1080p.NF.WEB-DL.DDP2.0.H.264-Kitsune"
+				},
+				{
+					"id": "ds:peaky-blinders-005",
+					"title": "Peaky.Blinders.2013.S01E01.German.DL.AAC.1080p.NF.WEB.H264-WAREZCX"
+				},
+				{
+					"id": "ds:peaky-blinders-006",
+					"title": "Peaky.Blinders.2013.S01E01.German.DL.AAC.720p.NF.WEB.H264-WAREZCX"
+				},
+				{
+					"id": "ds:peaky-blinders-007",
+					"title": "Peaky.Blinders.2013.S01E01.German.DL.AAC.1080p.NF.WEB.H265-WAREZCX"
+				},
+				{
+					"id": "ds:peaky-blinders-008",
+					"title": "Peaky.Blinders.2013.S01E01.German.DL.AAC.1080p.NF.WEB.AV1-WAREZCX"
+				},
+				{
+					"id": "ds:peaky-blinders-009",
+					"title": "Peaky.Blinders.S01E01.iTALiAN.MULTi.1080p.WEB.H264-NTROPiC"
+				},
+				{
+					"id": "ds:peaky-blinders-010",
+					"title": "Peaky.Blinders.S01E01.1080p"
+				},
+				{
+					"id": "ds:peaky-blinders-011",
+					"title": "Peaky Blinders Gangs of Birmingham S01E01 German DL AC3 5 1 720p Bluray x264-4SF"
+				},
+				{
+					"id": "ds:peaky-blinders-012",
+					"title": "Peaky.Blinders.-.Gangs.of.Birmingham.S01E01.Geschenk.des.Teufels.GERMAN.5.1.DL.DTSHD.720p.BDRiP.x264-TvR"
+				},
+				{
+					"id": "ds:peaky-blinders-013",
+					"title": "Peaky.Blinders.S01E01.1080p.NF.WEB-DL.DDP2.0.x264-NINJACENTRAL"
+				},
+				{
+					"id": "ds:peaky-blinders-014",
+					"title": "Peaky.Blinders.S01E01.German.DL.DTSHD.MA.5.1.1080p.Bluray.x264-iND"
+				},
+				{
+					"id": "ds:peaky-blinders-015",
+					"title": "Peaky.Blinders.S01E01.German.DL.AC3.5.1.720p.Bluray.x264-iND"
+				},
+				{
+					"id": "ds:peaky-blinders-016",
+					"title": "Peaky.Blinders.Gangs.of.Birmingham.S01E01.German.DL.1080p.BluRay.x264-iNTENTiON"
+				},
+				{
+					"id": "ds:peaky-blinders-017",
+					"title": "Peaky.Blinders.Gangs.of.Birmingham.S01E01.German.DL.720p.BluRay.x264-iNTENTiON"
+				},
+				{
+					"id": "ds:peaky-blinders-018",
+					"title": "Peaky.Blinders.S01E01.German.AC3D.DL.1080p.BDRip.x265-FuN"
+				},
+				{
+					"id": "ds:peaky-blinders-019",
+					"title": "Peaky.Blinders.S01E01.576p.BluRay.DD.2.0.x264-HiSD"
+				},
+				{
+					"id": "ds:peaky-blinders-020",
+					"title": "Peaky.Blinders.Gangs.of.Birmingham.S01E01.German.DL.720p.BluRay.x264-iNTENTiON"
+				},
+				{
+					"id": "ds:peaky-blinders-021",
+					"title": "Peaky.Blinders.S01E01.720p.BluRay.X264-7SinS"
+				},
+				{
+					"id": "ds:peaky-blinders-022",
+					"title": "Peaky.Blinders.Gangs.of.Birmingham.S01E01.Geschenk.des.Teufels.GERMAN.DUBBED.DL.1080p.BluRay.x264-TVP"
+				},
+				{
+					"id": "ds:peaky-blinders-023",
+					"title": "Peaky.Blinders.S01E01.Geschenk.des.Teufels.GERMAN.DUBBED.DL.720p.BluRay.x264-TVP"
+				},
+				{
+					"id": "ds:peaky-blinders-024",
+					"title": "Peaky Blinders Gangs of Birmingham S01E01 Geschenk des Teufels GERMAN DUBBED DL 720p BluRay x264 TVP"
+				},
+				{
+					"id": "ds:peaky-blinders-025",
+					"title": "(BBC) Peaky Blinders - S01E01 720p BluRay X264-7SinS (NLsub)"
+				},
+				{
+					"id": "ds:peaky-blinders-026",
+					"title": "Peaky Blinders S01E01 Herplaatsing"
+				},
+				{
+					"id": "ds:peaky-blinders-027",
+					"title": "(BBC) The Peaky Blinders S01E01 1080p WEB-DL AAC2 0 H 264-ECI (NLsub)"
+				},
+				{
+					"id": "ds:peaky-blinders-028",
+					"title": "Peaky.Blinders.S01E01.720p.WEB-DL.AAC2.0.H.264-ECI"
+				},
+				{
+					"id": "ds:peaky-blinders-029",
+					"title": "(BBC two) Peaky Blinders - S01E01 Repack 720p HDTV x264-TLA (NLsub)"
+				},
+				{
+					"id": "ds:peaky-blinders-030",
+					"title": "Peaky Blinders S01E01 REPACK 720p HDTV x264 TLA"
+				},
+				{
+					"id": "ds:peaky-blinders-031",
+					"title": "Peaky.Blinders.S01E01.REPACK.720p.HDTV.x264-TLA"
+				},
+				{
+					"id": "ds:peaky-blinders-032",
+					"title": "Peaky.Blinders.S01E01.REPACK.HDTV.x264-TLA"
+				},
+				{
+					"id": "ds:peaky-blinders-033",
+					"title": "Peaky.Blinders.S01E01.720p.HDTV.x264-TLA"
+				},
+				{
+					"id": "ds:peaky-blinders-034",
+					"title": "Peaky blinders BBC s01e01     IMDB 8 7"
+				},
+				{
+					"id": "ds:peaky-blinders-035",
+					"title": "Peaky.Blinders.S01E01.HDTV.x264-TLA"
+				}
+			]
+		},
+		"ascendance-of-a-bookworm": {
+			"query": "cat=5000,5010,5020,5030,5040,5045,5060,5070&imdbid=10885406&season=2",
+			"results": [
+				{
+					"id": "ds:ascendance-of-a-bookworm-000",
+					"title": "[UQW].Honzuki.no.Gekokujou.Season.2.[BDRip.1080p.HEVC-YUV420P10.FLAC]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-001",
+					"title": "[sam].Ascendance.of.a.Bookworm.S2.[BD.1080p.FLAC]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-002",
+					"title": "Honzuki no Gekokujou - S02E13 - ENGLISH 480p WEB x264 -NanDesuKa (CR).mkv (English Dub)"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-003",
+					"title": "Honzuki no Gekokujou - S02E13 - ENGLISH 720p WEB x264 -NanDesuKa (CR).mkv (English Dub)"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-004",
+					"title": "Honzuki no Gekokujou - S02E13 - ENGLISH 1080p WEB x264 -NanDesuKa (CR).mkv (English Dub)"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-005",
+					"title": "[Anime Time] Ascendance of a Bookworm (Season 1 + Season 2 + OVA) [Dual Audio][BD][1080p][HEVC 10bit x265][AAC][Eng Sub] Honzuki no Gekokujou"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-006",
+					"title": "[Mr.Deadpool] Ascendance of a Bookworm(Honzuki no Gekokujou S2) S02 810p x265 Dual Audio"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-007",
+					"title": "[LostYears] Ascendance of a Bookworm - S02E10 (WEB 810p Hi444PP AAC) [Dual-Audio]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-008",
+					"title": "[LostYears] Ascendance of a Bookworm - S02E09 (WEB 810p Hi444PP AAC) [Dual-Audio]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-009",
+					"title": "Ascendance.Of.A.Bookworm.S02E12.1080p.WEB.H.264-E.N.D"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-010",
+					"title": "Ascendance.Of.A.Bookworm.S02E11.1080p.WEB.H.264-E.N.D"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-011",
+					"title": "Ascendance.Of.A.Bookworm.S02E10.1080p.WEB.H.264-E.N.D"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-012",
+					"title": "Ascendance.Of.A.Bookworm.S02E09.1080p.WEB.H.264-E.N.D"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-013",
+					"title": "Ascendance.Of.A.Bookworm.S02E08.1080p.WEB.H.264-E.N.D"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-014",
+					"title": "Ascendance.Of.A.Bookworm.S02E07.1080p.WEB.H.264-E.N.D"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-015",
+					"title": "Ascendance.Of.A.Bookworm.S02E06.1080p.WEB.H.264-E.N.D"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-016",
+					"title": "Ascendance.Of.A.Bookworm.S02E05.1080p.WEB.H.264-E.N.D"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-017",
+					"title": "Ascendance.Of.A.Bookworm.S02E04.1080p.WEB.H.264-E.N.D"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-018",
+					"title": "Ascendance.Of.A.Bookworm.S02E03.1080p.WEB.H.264-E.N.D"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-019",
+					"title": "Ascendance.Of.A.Bookworm.S02E02.1080p.WEB.H.264-E.N.D"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-020",
+					"title": "Ascendance.Of.A.Bookworm.S02E01.1080p.WEB.H.264-E.N.D"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-021",
+					"title": "[Golumpa] Ascendance of a Bookworm S2 - 12 (Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen S2) [English Dub] [CR-Dub 1080p x264 AAC] [MKV] [33373717]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-022",
+					"title": "[Golumpa] Ascendance of a Bookworm S2 - 12 (Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen S2) [English Dub] [CR-Dub 720p x264 AAC] [MKV] [EEBCF9BB]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-023",
+					"title": "[Golumpa] Ascendance of a Bookworm S2 - 11 (Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen S2) [English Dub] [CR-Dub 1080p x264 AAC] [MKV] [EC53AD94]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-024",
+					"title": "[Golumpa] Ascendance of a Bookworm S2 - 11 (Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen S2) [English Dub] [CR-Dub 720p x264 AAC] [MKV] [9D0834F1]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-025",
+					"title": "[Golumpa] Ascendance of a Bookworm S2 - 10 (Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen S2) [English Dub] [CR-Dub 720p x264 AAC] [MKV] [6ACD760D]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-026",
+					"title": "[Golumpa] Ascendance of a Bookworm S2 - 10 (Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen S2) [English Dub] [CR-Dub 1080p x264 AAC] [MKV] [B4F92C6B]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-027",
+					"title": "[Golumpa] Ascendance of a Bookworm S2 - 09 (Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen S2) [English Dub] [CR-Dub 720p x264 AAC] [MKV] [30DE65E5]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-028",
+					"title": "[Golumpa] Ascendance of a Bookworm S2 - 09 (Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen S2) [English Dub] [CR-Dub 1080p x264 AAC] [MKV] [DE0C8283]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-029",
+					"title": "[LostYears] Ascendance of a Bookworm - S02E08 (WEB 810p Hi444PP AAC) [Dual-Audio]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-030",
+					"title": "[Golumpa] Ascendance of a Bookworm S2 - 08 (Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen S2) [English Dub] [CR-Dub 1080p x264 AAC] [MKV] [743976F9]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-031",
+					"title": "[Golumpa] Ascendance of a Bookworm S2 - 08 (Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen S2) [English Dub] [CR-Dub 720p x264 AAC] [MKV] [CB19768D]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-032",
+					"title": "[Golumpa] Ascendance of a Bookworm S2 - 07 (Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen S2) [English Dub] [CR-Dub 1080p x264 AAC] [MKV] [59E83868]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-033",
+					"title": "[Golumpa] Ascendance of a Bookworm S2 - 07 (Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen S2) [English Dub] [CR-Dub 720p x264 AAC] [MKV] [1D183644]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-034",
+					"title": "[LostYears] Ascendance of a Bookworm - S02E07 (WEB 810p Hi444PP AAC) [Dual-Audio]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-035",
+					"title": "[Golumpa] Ascendance of a Bookworm S2 - 01-06 (Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen S2) [English Dub] [CR-Dub 1080p x264 AAC] [MKV]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-036",
+					"title": "[Golumpa] Ascendance of a Bookworm S2 - 01-06 (Honzuki no Gekokujou - Shisho ni Naru Tame ni wa Shudan o Erande Iraremasen S2) [English Dub] [CR-Dub 720p x264 AAC] [MKV]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-037",
+					"title": "[LostYears] Ascendance of a Bookworm - S02E06 (WEB 810p Hi444PP AAC) [Dual-Audio]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-038",
+					"title": "[Yabai Desu Ne] Ascendence of a Bookworm Aka Honzuki no Gekokujou S02E05 [Episode 19] [1080p] [Dual Audio] [WEBDL]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-039",
+					"title": "[LostYears] Ascendance of a Bookworm - S02E05 (WEB 810p Hi444PP AAC) [Dual-Audio]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-040",
+					"title": "[LostYears] Ascendance of a Bookworm - S02E04 (WEB 810p Hi444PP AAC) [Dual-Audio]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-041",
+					"title": "[LostYears] Ascendance of a Bookworm - S02E03 (WEB 810p Hi444PP AAC) [Dual-Audio]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-042",
+					"title": "[LostYears] Ascendance of a Bookworm - S02E02 (WEB 810p Hi444PP AAC) [Dual-Audio]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-043",
+					"title": "[LostYears] Ascendance of a Bookworm - S02E01 (WEB 810p Hi444PP AAC) [Dual-Audio]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-044",
+					"title": "[HR] Honzuki no Gekokujou S02 [Web 1080p x265]~HR-P"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-045",
+					"title": "[Judas] Honzuki No Gekokujou - S02E12 (Ascendance of a Bookworm) [1080p][HEVC x265 10bit][Multi-Subs] (Weekly)"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-046",
+					"title": "[HR] Honzuki no Gekokujou 25 - S02E11 [1080p x265] (Petit).mkv"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-047",
+					"title": "[Judas] Honzuki No Gekokujou - S02E11 (Ascendance of a Bookworm) [1080p][HEVC x265 10bit][Multi-Subs] (Weekly)"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-048",
+					"title": "[HR] Honzuki no Gekokujou 24 - S02E10 [1080p x265] (Petit).mkv"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-049",
+					"title": "[HR] Honzuki no Gekokujou 23 - S02E09 [1080p x265] (Petit).mkv"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-050",
+					"title": "[HR] Honzuki no Gekokujou 22 - S02E08 [1080p x265] (Petit).mkv"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-051",
+					"title": "[Judas] Honzuki No Gekokujou - S02E10 (Ascendance of a Bookworm) [1080p][HEVC x265 10bit][Multi-Subs]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-052",
+					"title": "[Judas] Honzuki No Gekokujou - S02E09 v2 (Ascendance of a Bookworm) [1080p][HEVC x265 10bit][Multi-Subs]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-053",
+					"title": "[Judas] Honzuki No Gekokujou - S02E09 (Ascendance of a Bookworm) [1080p][HEVC x265 10bit][Multi-Subs]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-054",
+					"title": "[Judas] Honzuki No Gekokujou - S02E08 (Ascendance of a Bookworm) [1080p][HEVC x265 10bit][Multi-Subs]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-055",
+					"title": "[HR] Honzuki no Gekokujou 21 - S02E07 [1080p x265] (Petit).mkv"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-056",
+					"title": "[Judas] Honzuki No Gekokujou - S02E07 (Ascendance of a Bookworm) [1080p][HEVC x265 10bit][Multi-Subs]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-057",
+					"title": "[HR] Honzuki no Gekokujou 20 - S02E06 [1080p x265] (Petit).mkv"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-058",
+					"title": "[Justanime] Honzuki no Gekokujou S2- 06 [1080p] [SUB]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-059",
+					"title": "[Judas] Honzuki No Gekokujou - S02E06 (Ascendance of a Bookworm) [1080p][HEVC x265 10bit][Multi-Subs]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-060",
+					"title": "[HR] Honzuki no Gekokujou 19 - S02E05 [1080p x265] (Petit).mkv"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-061",
+					"title": "[Judas] Honzuki No Gekokujou - S02E05 (Ascendance of a Bookworm) [1080p][HEVC x265 10bit][Multi-Subs]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-062",
+					"title": "[HR] Honzuki no Gekokujou 18 - S02E04 [1080p x265] (Petit).mkv"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-063",
+					"title": "[Judas] Honzuki No Gekokujou - S02E04 (Ascendance of a Bookworm) [1080p][HEVC x265 10bit][Multi-Subs]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-064",
+					"title": "[HR] Honzuki no Gekokujou 17 - S02E03 [1080p x265] (Petit).mkv"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-065",
+					"title": "Honzuki.No.Gekokujou-S02E03.Ascendance.of.a.Bookworm.1080pHEVC.x265.10bitMulti-Subs"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-066",
+					"title": "[Judas] Honzuki No Gekokujou - S02E03 (Ascendance of a Bookworm) [1080p][HEVC x265 10bit][Multi-Subs]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-067",
+					"title": "[HR] Honzuki no Gekokujou 16 - S02E02 [1080p x265] (Petit).mkv"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-068",
+					"title": "[HR] Honzuki no Gekokujou 15 - S02E01 [1080p x265] (Petit).mkv"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-069",
+					"title": "Honzuki.No.Gekokujou-S02E02.Ascendance.of.a.Bookworm.1080pHEVC.x265.10bitMulti-Subs"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-070",
+					"title": "[Judas] Honzuki No Gekokujou - S02E02 (Ascendance of a Bookworm) [1080p][HEVC x265 10bit][Multi-Subs]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-071",
+					"title": "[Cerberus] Honzuki no Gekokujou (Ascendance of a Bookworm) S02E01 [WEB 1080p HEVC 10-bit]"
+				},
+				{
+					"id": "ds:ascendance-of-a-bookworm-072",
+					"title": "[Judas] Honzuki No Gekokujou - S02E01 (Ascendance of a Bookworm) [1080p][HEVC x265 10bit][Multi-Subs]"
+				}
+			]
+		},
+		"tales-from-the-crypt": {
+			"query": "cat=5000,2000&imdbid=0096708&season=1&tvdbid=73029",
+			"results": [
+				{
+					"id": "ds:tales-from-the-crypt-000",
+					"title": "Tales.From.The.Crypt.S01E05.1080p.HEVC.x265-MeGusta"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-001",
+					"title": "Tales.From.The.Crypt.S01E04.1080p.HEVC.x265-MeGusta"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-002",
+					"title": "Tales.From.The.Crypt.S01E01.1080p.HEVC.x265-MeGusta"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-003",
+					"title": "Tales.From.The.Crypt.S01E02.1080p.HEVC.x265-MeGusta"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-004",
+					"title": "Tales.From.The.Crypt.S01E03.XviD-AFG"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-005",
+					"title": "Tales.From.The.Crypt.S01E02.XviD-AFG"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-006",
+					"title": "Tales.From.The.Crypt.S01E05.XviD-AFG"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-007",
+					"title": "Tales.From.The.Crypt.S01E04.XviD-AFG"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-008",
+					"title": "Tales.From.The.Crypt.S01E02.720p.HEVC.x265-MeGusta"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-009",
+					"title": "Tales.From.The.Crypt.S01E01.720p.HEVC.x265-MeGusta"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-010",
+					"title": "Tales.From.The.Crypt.S01E05.1080p.AV1.10bit-MeGusta"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-011",
+					"title": "Tales.From.The.Crypt.S01E03.1080p.HEVC.x265-MeGusta"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-012",
+					"title": "Tales.From.The.Crypt.S01E05.720p.HEVC.x265-MeGusta"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-013",
+					"title": "Tales.From.The.Crypt.S01E01.XviD-AFG"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-014",
+					"title": "Tales.From.The.Crypt.S01E04.720p.HEVC.x265-MeGusta"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-015",
+					"title": "Tales.From.The.Crypt.S01E05.1080p.WEB.H264-OUTPOST31-xpost"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-016",
+					"title": "Tales.From.The.Crypt.S01E03.1080p.WEB.H264-OUTPOST31-xpost"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-017",
+					"title": "Tales.From.The.Crypt.S01E04.1080p.WEB.H264-OUTPOST31-xpost"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-018",
+					"title": "Tales.From.The.Crypt.S01E01.1080p.WEB.H264-OUTPOST31-xpost"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-019",
+					"title": "Tales.From.The.Crypt.S01E02.1080p.WEB.H264-OUTPOST31-xpost"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-020",
+					"title": "Tales.From.The.Crypt.S01E03.720p.HEVC.x265-MeGusta"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-021",
+					"title": "Tales.From.the.Crypt.(1989).S01.1080p.AMZN.WEB-DL.DDP.2.0.x265"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-022",
+					"title": "Tales.From.the.Crypt.(1989).S01.1080p.AMZN.WEB-DL.DDP.2.0.H.264"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-023",
+					"title": "Tales.From.The.Crypt.1989.S01E05.DUAL.iNTERNAL.DVD.480i.AC3.2.0.REMUX-seedpool.mkv-xpost"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-024",
+					"title": "Tales.From.The.Crypt.1989.S01E02.DUAL.iNTERNAL.DVD.480i.AC3.2.0.REMUX-seedpool.mkv-xpost"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-025",
+					"title": "Tales.From.The.Crypt.1989.S01E03.DUAL.iNTERNAL.DVD.480i.AC3.2.0.REMUX-seedpool.mkv-xpost"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-026",
+					"title": "Tales.From.The.Crypt.1989.S01E01.DUAL.iNTERNAL.DVD.480i.AC3.2.0.REMUX-seedpool.mkv-xpost"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-027",
+					"title": "Tales.From.The.Crypt.1989.S01E06.DUAL.iNTERNAL.DVD.480i.AC3.2.0.REMUX-seedpool.mkv-xpost"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-028",
+					"title": "Tales.From.The.Crypt.1989.S01E04.DUAL.iNTERNAL.DVD.480i.AC3.2.0.REMUX-seedpool.mkv-xpost"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-029",
+					"title": "Tales.From.The.Crypt.1989.S01.DUAL.iNTERNAL.DVD.480i.AC3.2.0.REMUX-seedpool"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-030",
+					"title": "Tales.From.The.Crypt.S01E01.480p.DVDRip.x264-Sticky83 [cb8NdVYCQ2]-xpost"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-031",
+					"title": "Tales.From.The.Crypt.S01E03.480p.DVDRip.x264-Sticky83 [eGg10OpYIo]-xpost"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-032",
+					"title": "Tales.From.The.Crypt.S01E06.480p.DVDRip.x264-Sticky83 [eSDfDb4EMb]-xpost"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-033",
+					"title": "Tales.From.The.Crypt.S01-S07.Complete.DVDRip"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-034",
+					"title": "Tales.From.The.Crypt.S01-S07.Complete.DVDRip-xpost"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-035",
+					"title": "Tales.From.The.Crypt.s01.720p.WEB-DL"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-036",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 43"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-037",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 42"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-038",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 41"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-039",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 40"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-040",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 39"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-041",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 37"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-042",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 36"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-043",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 35"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-044",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 33"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-045",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 32"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-046",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 31"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-047",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 30"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-048",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 28"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-049",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 27"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-050",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 26"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-051",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 25"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-052",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 24"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-053",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 23"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-054",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 22"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-055",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 21"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-056",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 20"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-057",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 19"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-058",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 18"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-059",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 16"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-060",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 15"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-061",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 12"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-062",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 11"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-063",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 10"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-064",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 09"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-065",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 08"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-066",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 03"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-067",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 02"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-068",
+					"title": "Geschichten.aus.der.Gruft.S01-S07 -Teil 01"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-069",
+					"title": "Tales.From.The.Crypt.S01E03.NTSC.DVD.x264-CtrlSD"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-070",
+					"title": "Tales.From.The.Crypt.S01E02.NTSC.DVD.x264-CtrlSD"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-071",
+					"title": "Tales.From.The.Crypt.S01E01.NTSC.DVD.x264-CtrlSD"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-072",
+					"title": "Geschichten.aus.der.Gruft.S01-S07"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-073",
+					"title": "Tales.From.The.Crypt.S01E06.REPACK.DVDRip-XviD-SAVANNAH"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-074",
+					"title": "Tales.From.The.Crypt.S01E05.REPACK.DVDRip-XviD-SAVANNAH"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-075",
+					"title": "Tales.From.The.Crypt.S01E04.REPACK.DVDRip-XviD-SAVANNAH"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-076",
+					"title": "Tales.From.The.Crypt.S01E03.DVDRip-XviD-SAVANNAH"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-077",
+					"title": "Tales.From.The.Crypt.S01E02.DVDRip-XviD-SAVANNAH"
+				},
+				{
+					"id": "ds:tales-from-the-crypt-078",
+					"title": "Tales.From.The.Crypt.S01E01.DVDRip-XviD-SAVANNAH"
+				}
+			]
+		},
+		"haunting-of-hill-house": {
+			"query": "cat=5000,2000&ep=4&imdbid=6763664&season=1&tvdbid=345246",
+			"results": [
+				{
+					"id": "ds:haunting-of-hill-house-000",
+					"title": "The Haunting of Hill House S01E04 2160p NF WEB-DL DV HDR 10bit HEVC [Hindi NF DDP 5.1 + English DDP Atmos 5.1] x265 (SiC-KiNGSMAN)"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-001",
+					"title": "The Haunting of Hill House S01E04 Extended Cut 1080p BluRay [Hindi NF DDP 5.1 + English DD 5.1] x264 (DON-KiNGSMAN)"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-002",
+					"title": "The.Haunting.of.Hill.House.S01E04.The.Twin.Thing.2160p.NF.WEB-DL.DDP.5.1.Atmos.DoVi.HDR.HEVC-SiC"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-003",
+					"title": "The Haunting of Hill House S01E04 2160p NF WEB-DL SDR 10bit HEVC [Hindi NF DDP 5.1 + English DDP Atmos 5.1] x265 (HONE-KiNGSMAN)"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-004",
+					"title": "The Haunting of Hill House (2018) S01E04 (2160p NF WEB-DL H265 SDR DDP Atmos 5.1 English - HONE)"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-005",
+					"title": "The Haunting of Hill House S01E04 Extended Cut 1080p BluRay 10bit HEVC [Hindi NF DDP 5.1 + English AAC 5.1] x265 (Silence-KiNGSMAN)"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-006",
+					"title": "The.Haunting.of.Hill.House.S01E04.The.Twin.Thing.1080p.NF.WEB-DL.DDP5.1.H.264.DUAL-RiPER"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-007",
+					"title": "The.Haunting.of.Hill.House.S01E04.The.Twin.Thing.2160p.NF.WEB-DL.DDP5.1.HEVC.DUAL-alfaHD"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-008",
+					"title": "The.Haunting.of.Bly.Manor.2020.S01E04.2160p.NF.WEB-DL.H265.SDR.DDP.Atmos.5.1.English-HONE"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-009",
+					"title": "The.Haunting.of.Hill.House.S01E04.1080p.BluRay.x264-ROVERS"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-010",
+					"title": "The.Haunting.of.Bly.Manor.2020.S01E04.2160p.NF.WEB-DL.H265.HDR.DDP.Atmos.5.1.English-HONE"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-011",
+					"title": "The.Haunting.of.Hill.House.S01E04.The.Twin.Thing.1080p.NF.WEB-DL.AAC5.1.H.264-NINJACENTRAL"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-012",
+					"title": "The.Haunting.of.Bly.Manor.2020.S01E04.2160p.NF.WEB-DL.Hybrid.H265.DV.HDR.DDP.Atmos.5.1.English-HONE"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-013",
+					"title": "Spuk.in.Hill.House.S01E04.German.DUBBED.WebRip.x264-AIDA"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-014",
+					"title": "The.Haunting.of.Hill.House.S01E04.The.Twin.Thing.1080p.TrueHD.5.1.AVC.REMUX-FraMeSToR"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-015",
+					"title": "The.Haunting.of.Hill.House.S01E04.The.Twin.Thing.1080p.BluRay.REMUX.AVC.TrueHD.5.1-EPSiLON"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-016",
+					"title": "The.Haunting.Of.Hill.House.2018.S01E04.2160p.NF.WEB-DL.HEVC.SDR.DDPA5.1.English-HONE"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-017",
+					"title": "The.Haunting.of.Hill.House.S01E04.1080p.BluRay.DD5.1.x264-DON"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-018",
+					"title": "The.Haunting.of.Hill.House.S01E04.720p.WEBRip.X264-METCON"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-019",
+					"title": "The.Haunting.of.Hill.House.S01E04.2160p.WEBRip.X264-DEFLATE"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-020",
+					"title": "Hill.House.1x04.Una.Cosa.Da.Gemelli.ITA.WEBMux.x264-NovaRip"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-021",
+					"title": "Hill.House.1x04.Una.Cosa.Da.Gemelli.ITA-ENG.1080p.WEBMux.DD5.1.x264-NovaRip"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-022",
+					"title": "The.Haunting.of.Hill.House.S01E04.2160p.1080p.HEVC.x265-MeGusta"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-023",
+					"title": "The.Haunting.of.House.Hill.S01E04.PROPER.1080p.WEBRip.X264-DEFLATE"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-024",
+					"title": "The.Haunting.of.House.Hill.S01E04.PROPER.1080p.HEVC.x265-MeGusta"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-025",
+					"title": "The.Haunting.of.Hill.House.S01E04.The.Twin.Thing.720p.NF.WEB-DL.DDP5.1.x264-TOMMY"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-026",
+					"title": "The.Haunting.of.Hill.House.S01E04.1080p.WEBRip.X264-METCON"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-027",
+					"title": "The.Haunting.of.Hill.House.S01E04.The.Twin.Thing.1080p.NF.WEB-DL.DDP5.1.x264-TOMMY"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-028",
+					"title": "The.Haunting.of.Hill.House.S01E04.iNTERNAL.1080p.WEB.x264-STRiFE"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-029",
+					"title": "The.Haunting.of.Hill.House.S01E04.The.Twin.Thing.NF.WEB-DL.DDP2.0.x264-NTG"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-030",
+					"title": "The.Haunting.of.Hill.House.S01E04.The.Twin.Thing.720p.NF.WEB-DL.DDP5.1.x264-NTG"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-031",
+					"title": "The.Haunting.of.Hill.House.S01E04.The.Twin.Thing.1080p.NF.WEB-DL.DDP5.1.x264-NTG"
+				},
+				{
+					"id": "ds:haunting-of-hill-house-032",
+					"title": "The.Haunting.of.Hill.House.S01E04.1080p.NF.WEB-DL.DDP5.1.x264-MZABI"
+				}
+			]
+		}
+	}
+}

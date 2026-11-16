@@ -27,6 +27,7 @@ import { repository as db } from '@/services/repository';
 import { withoutBlockedReleases } from '@/services/takedown/blocklist';
 import { recordCopies } from '@/services/usenetCopies';
 import type { NextApiRequest } from 'next';
+import { withoutIgnoredIds } from './ignoredIds';
 import { loadUpstreamIndexers, UpstreamIndexer } from './indexers';
 import { encryptReleaseId } from './opaqueId';
 import { cleanNamesFirst } from './order';
@@ -353,8 +354,14 @@ export async function runSearch(t: string, query: NewznabQuery): Promise<SearchP
 	if (cached?.isFresh) cached.results = await completed(t, params, key, cached);
 	// Filtered on the way out rather than before caching, so an approval or a
 	// reversal applies to entries already cached.
+	const byShowId =
+		t === 'tvsearch' && (params.imdbid !== undefined || params.tvdbid !== undefined);
 	const page = async (results: CachedUsenetResult[]) =>
-		toPage(await withoutBlockedReleases(results), apiKey, { limit, offset, targeted });
+		toPage(
+			await withoutBlockedReleases(byShowId ? withoutIgnoredIds(results) : results),
+			apiKey,
+			{ limit, offset, targeted }
+		);
 	if (cached?.isFresh) return page(cached.results);
 	if (cached && targeted && (await noNewPostSince(key, cached.updatedAt))) {
 		return page(await completed(t, params, key, cached));

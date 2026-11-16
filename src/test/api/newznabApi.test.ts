@@ -23,6 +23,7 @@ import cocaineBear from '@/test/fixtures/easynews/nzb2rd-search-cocaine-bear-202
 import althubMovie from '@/test/fixtures/newznab-fresh/althub-movie-2026-10-31.json';
 import drunkenslugMovie from '@/test/fixtures/newznab-fresh/drunkenslug-movie-2026-10-31.json';
 import nzbgeekMovie from '@/test/fixtures/newznab/nzbgeek-movie-2026-11-01.json';
+import tvIdAnswers from '@/test/fixtures/newznab/tv-id-search-answers-2026-11-15.json';
 import recordedMarkers from '@/test/fixtures/transfers/failed-marker-polls-2026-10-07.json';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
 import { sanitizeNzb, withAlternatesMeta } from '@/utils/nzbSanitize';
@@ -508,6 +509,34 @@ describe('GET /api/newznab/api search', () => {
 
 	// The whole point of the cache: an *arr polls the same searches on a timer,
 	// and every miss spends a call against one shared upstream account.
+	it('leaves out an upstream that ignored the show id it was asked for', async () => {
+		const cached = (results: { id: string; title: string }[]) =>
+			results.map((result) => ({ ...result, size: 1 })) as CachedUsenetResult[];
+		const ignored = cached(tvIdAnswers.ignoredId.results);
+		const peaky = cached(tvIdAnswers.kept['peaky-blinders'].results);
+		cacheStore.set('tvsearch:ep=26&imdbid=42132738&season=1', [...ignored, ...peaky]);
+		cacheStore.set('search:q=must date the playboy', ignored);
+
+		const byId = itemTitles(
+			await run({
+				t: 'tvsearch',
+				imdbid: 'tt42132738',
+				season: '1',
+				ep: '26',
+				apikey: SPONSOR_KEY,
+			})
+		);
+		expect(byId).not.toContain('Lets.Go.S01E26.2160p.TX.WEB-DL.AAC2.0.HDR.HFR.H.265-MWeb');
+		expect([...byId].sort()).toEqual(peaky.map((r) => r.title).sort());
+
+		// A search by name asked for every show it matches.
+		const byName = itemTitles(
+			await run({ t: 'search', q: 'must date the playboy', apikey: SPONSOR_KEY })
+		);
+		expect(byName).toHaveLength(ignored.length);
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
 	it('serves an identical second search without touching an upstream', async () => {
 		await run({ t: 'search', q: 'some release', apikey: SPONSOR_KEY });
 		expect(fetchedUrls()).toHaveLength(2);

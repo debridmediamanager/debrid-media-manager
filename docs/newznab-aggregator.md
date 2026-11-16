@@ -157,6 +157,15 @@ existed are served in it too, and it is a pure function of the cached set, so pa
 `offset` sees each item once. Untargeted queries are RSS syncs, which the \*arrs read as
 "what is new", and keep the merged order.
 
+A TV search by `imdbid` or `tvdbid` leaves out one upstream's part of the answer when
+its posts name six or more shows and no word runs through half of them
+(`withoutIgnoredIds`, `src/services/newznab/ignoredIds.ts`). An upstream that does not
+know the id answers as if none had been sent: every recent post of that season and
+episode, of every show. A client trusts an id search to be about the id, and a zurg
+took `Lets.Go.S01E26` for Must Date the Playboy! from such an answer. The posts of one
+show share a word however they are spelled (a translated title, fansub group prefixes),
+so those stay. Like the order, it is applied at page time.
+
 Total upstream outage falls back to a stale cache entry rather than answering empty —
 an \*arr reads an empty feed as "these releases are gone".
 
@@ -298,6 +307,7 @@ watermark article is.
 | `src/services/newznab/auth.ts`             | `apikey`/header → sponsor lookup, 100 vs 101                           |
 | `src/services/newznab/search.ts`           | Normalization, cache, fan-out, pacing, item rewrite                    |
 | `src/services/newznab/order.ts`            | Clean names before reposts and raw-subject posts on targeted pages     |
+| `src/services/newznab/ignoredIds.ts`       | Drops an upstream that ignored a show id and answered with every show  |
 | `src/services/newznab/indexers.ts`         | `NewznabIndexer` table (env JSON fallback) → upstream list             |
 | `src/pages/api/newznab/admin.ts`           | Admin API: list, add, change indexers (`ADMIN_TOKEN`)                  |
 | `src/pages/admin/newznab.tsx`              | Admin page for the indexers                                            |
