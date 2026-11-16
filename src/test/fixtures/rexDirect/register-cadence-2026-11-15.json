@@ -1,0 +1,27 @@
+{
+	"requests": [
+		{ "t": 0, "status": 403 },
+		{ "t": 67, "status": 202 },
+		{ "t": 140, "status": 200 },
+		{ "t": 15304, "status": 200 },
+		{ "t": 15370, "status": 200 },
+		{ "t": 20740, "status": 200 },
+		{ "t": 20807, "status": 200 },
+		{ "t": 21125, "status": 200 },
+		{ "t": 21229, "status": 200 },
+		{ "t": 23353, "status": 200 },
+		{ "t": 23419, "status": 200 },
+		{ "t": 25487, "status": 200 },
+		{ "t": 25553, "status": 200 },
+		{ "t": 26544, "status": 200 },
+		{ "t": 26691, "status": 200 },
+		{ "t": 26761, "status": 200 },
+		{ "t": 63622, "status": 200 },
+		{ "t": 63688, "status": 200 },
+		{ "t": 101368, "status": 200 },
+		{ "t": 101435, "status": 200 },
+		{ "t": 103862, "status": 200 },
+		{ "t": 103954, "status": 200 }
+	],
+	"source": "dmm-01's proxy access log: every POST /api/rex-direct/register from one rex (User-Agent rex/0.1) on one home IP, 2026-11-15 11:12:21 UTC to 2026-11-16 16:04:15 UTC. Seconds from the first request and DMM's answer; the address is left out. A claim (403 before plex.tv lists it, 202 while its certificate was issued), then restarts, each a start and a call 66 s later, and the 6-hourly calls."
+}
