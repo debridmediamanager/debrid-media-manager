@@ -28,6 +28,37 @@ interface CachedToken {
 export const TOKEN_REUSE_MS = 25 * 60 * 1000; // server TTL is 30 min (utils/problemToken)
 
 let cached: CachedToken | null = null;
+
+// The cache also lives in localStorage so a reload or another tab reuses it
+// instead of running the Turnstile check again.
+const STORAGE_KEY = 'dmm:availabilityToken';
+
+function readStored(): CachedToken | null {
+	try {
+		const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? 'null');
+		if (
+			typeof stored?.token === 'string' &&
+			typeof stored?.hash === 'string' &&
+			typeof stored?.expiresAt === 'number' &&
+			// a clock moved backwards must not stretch the reuse window
+			stored.expiresAt <= Date.now() + TOKEN_REUSE_MS
+		) {
+			return stored;
+		}
+	} catch {
+		// no storage (private mode, blocked site data) or junk in it
+	}
+	return null;
+}
+
+function writeStored(token: CachedToken | null): void {
+	try {
+		if (token) localStorage.setItem(STORAGE_KEY, JSON.stringify(token));
+		else localStorage.removeItem(STORAGE_KEY);
+	} catch {
+		// memory cache still works
+	}
+}
 let inFlight: Promise<[string, string]> | null = null;
 
 /** The site key /api/challenge last asked for, so later mints skip the 401 round trip. */
@@ -63,6 +94,7 @@ async function fetchToken(): Promise<[string, string]> {
 		hash: payload.hash,
 		expiresAt: Date.now() + TOKEN_REUSE_MS,
 	};
+	writeStored(cached);
 
 	return [payload.token, payload.hash];
 }
@@ -74,6 +106,7 @@ async function fetchToken(): Promise<[string, string]> {
  * sweeps at once should cost one mint, not one per sweep.
  */
 export async function generateTokenAndHash(): Promise<[string, string]> {
+	if (!cached || Date.now() >= cached.expiresAt) cached = readStored() ?? cached;
 	if (cached && Date.now() < cached.expiresAt) {
 		return [cached.token, cached.hash];
 	}
@@ -92,4 +125,5 @@ export function resetTokenCache(): void {
 	cached = null;
 	inFlight = null;
 	turnstileSiteKey = null;
+	writeStored(null);
 }
