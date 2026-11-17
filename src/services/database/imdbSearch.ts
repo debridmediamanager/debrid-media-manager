@@ -165,11 +165,12 @@ export class ImdbSearchService extends DatabaseClient {
 
 	/**
 	 * The keyword in fulltext boolean mode, null when it has no word to require.
-	 * Stopwords are optional (no +), other words required (+). So is a word
-	 * shorter than innodb_ft_min_token_size (3 on dmmdb), which no index holds:
-	 * required, "10 Things I Hate About You" matched nothing and fell through to
-	 * the LIKE scan, 47 s (2026-10-19). A query of nothing but short words keeps
-	 * them required, as before.
+	 * Words the index holds are required (+). A stopword or a word shorter than
+	 * innodb_ft_min_token_size (3 on dmmdb) is left out: required, "10 Things I
+	 * Hate About You" matched nothing (2026-10-19), and kept optional as "19*" it
+	 * widened to every indexed word it starts, 458-567 MB of full-text memory per
+	 * release-name search for the same rows (2026-11-17). A query of nothing but
+	 * short words keeps them required, as before.
 	 */
 	static fulltextKeyword(keyword: string): string | null {
 		const words = keyword
@@ -185,7 +186,10 @@ export class ImdbSearchService extends DatabaseClient {
 		}
 		// No prefix on the start of a hot word: "epi*" expands to "episode".
 		const term = (w: string) => (startsHotWord(w) ? w : `${w}*`);
-		return words.map((w) => (required(w) ? `+${term(w)}` : term(w))).join(' ');
+		return words
+			.filter(required)
+			.map((w) => `+${term(w)}`)
+			.join(' ');
 	}
 
 	/**

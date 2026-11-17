@@ -171,7 +171,7 @@ describe('ImdbSearchService', () => {
 		// CZaRS) [PMZ], searched as "10 things i hate about you movie": "10" is shorter than
 		// innodb_ft_min_token_size, so requiring it matched nothing in either fulltext index and
 		// the search fell through to the LIKE scan, 47 s on dmmdb (2026-10-19).
-		it('leaves words no fulltext index holds optional', async () => {
+		it('does not require words no fulltext index holds', async () => {
 			prismaMock.$queryRaw.mockResolvedValueOnce([
 				{
 					imdbId: 'tt0147800',
@@ -192,7 +192,7 @@ describe('ImdbSearchService', () => {
 			expect(results.map((r) => r.imdbId)).toEqual(['tt0147800']);
 			expect(prismaMock.$queryRaw).toHaveBeenCalledTimes(1);
 			expect(prismaMock.$queryRaw.mock.calls[0][0].values).toContain(
-				'10* +things* +hate* about* +you*'
+				'+things* +hate* +you*'
 			);
 		});
 
@@ -260,7 +260,25 @@ describe('ImdbSearchService', () => {
 			expect(ImdbSearchService.fulltextKeyword('up')).toBe('+up*');
 			expect(ImdbSearchService.fulltextKeyword('24')).toBe('+24*');
 			expect(ImdbSearchService.fulltextKeyword('the')).toBeNull();
-			expect(ImdbSearchService.fulltextKeyword('up the')).toBe('+up* the*');
+			expect(ImdbSearchService.fulltextKeyword('up the')).toBe('+up*');
+		});
+
+		// Release names searched on 2026-11-17 07:10-07:52 UTC (dmm slow log). A word the index
+		// cannot hold widened to every indexed word it starts ("19*" to 1984, 1999, ...): 458-567 MB
+		// of full-text memory and ~4 s each, against 2-10 MB and 0.05 s with the same rows without
+		// them. 48 of them in 40 min ran mysqld's RSS from 84 to 101 GiB (MemoryLow alert).
+		it('drops words the index cannot hold once another word is required', () => {
+			expect(ImdbSearchService.fulltextKeyword('newsensations 19 01 28 kendra spade xxx')).toBe(
+				'+newsensations* +kendra* +spade* +xxx*'
+			);
+			expect(
+				ImdbSearchService.fulltextKeyword(
+					'Tokidoki Bosotto Russia go de Dereru Tonari no Alya san'
+				)
+			).toBe('+Tokidoki* +Bosotto* +Russia* +Dereru* +Tonari* +Alya* +san*');
+			expect(ImdbSearchService.fulltextKeyword('Hell Kitchen 2013 03 19')).toBe(
+				'+Hell* +Kitchen* +2013*'
+			);
 		});
 
 		// "20/20" arrives as "20 20": no word is in the fulltext index, so its exact
