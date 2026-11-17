@@ -233,5 +233,11 @@ export const RATE_LIMIT_CONFIGS = {
 	availabilityWrite: { name: 'availabilityWrite', rateLimit: 90, windowSeconds: 60 },
 	availabilityDl: { name: 'availabilityDl', rateLimit: 180, windowSeconds: 60 },
 	playable: { name: 'playable', rateLimit: 120, windowSeconds: 60 },
+	// The open title search (/api/search/title): DMM's search box, and every zurg without a
+	// sponsor key, which files its library by name at one search a second. Over 2026-10-19..
+	// 11-17 (285k searches) the busiest zurg reached 62 a minute, one address with two zurgs
+	// 97, and two scripts 121-133. 90 leaves zurg's pace alone and caps those; a refused zurg
+	// ends its pass and carries on in the next.
+	titleSearch: { name: 'titleSearch', rateLimit: 90, windowSeconds: 60 },
 	default: { name: 'default', rateLimit: 5, windowSeconds: 1 }, // 5 requests per second for other endpoints
 } as const;

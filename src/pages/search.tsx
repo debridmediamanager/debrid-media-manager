@@ -39,6 +39,8 @@ function Search() {
 				const res = await fetch(endpoint);
 				const body = await res.json();
 				if (body.errorMessage) throw new Error(body.errorMessage);
+				// a refusal (429 past 90 searches a minute) is no empty result
+				if (!res.ok) throw new Error(`Search answered ${res.status}`);
 				return body.results ?? [];
 			} catch (err) {
 				console.error('[Search] fetchData failed', { query, error: err });

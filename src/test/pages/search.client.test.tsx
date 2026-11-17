@@ -229,6 +229,29 @@ describe('SearchPage', () => {
 		});
 	});
 
+	// past 90 searches a minute the route answers 429 {"error": ...}, which read as no results
+	it('says a refused search failed instead of showing no results', async () => {
+		mockQuery = { query: 'severance' };
+		vi.mocked(useRouter).mockReturnValue({
+			push: mockPush,
+			query: mockQuery,
+			pathname: '/search',
+			asPath: '/search?query=severance',
+		} as any);
+		global.fetch = vi.fn<typeof fetch>().mockResolvedValue(
+			new Response(JSON.stringify({ error: 'Rate limit exceeded' }), {
+				status: 429,
+				headers: { 'Content-Type': 'application/json' },
+			})
+		);
+
+		render(<SearchPage />);
+
+		await waitFor(() => {
+			expect(screen.getByText(/Failed to fetch search results/)).toBeInTheDocument();
+		});
+	});
+
 	it('should handle search errors gracefully', async () => {
 		mockQuery = { query: 'broken query' };
 

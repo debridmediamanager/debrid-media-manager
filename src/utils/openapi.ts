@@ -328,6 +328,7 @@ export const openApiDocument = {
 						description:
 							'No `keyword`; answers `{"status": "error", "errorMessage": "..."}`',
 					},
+					...errors('429'),
 				},
 			},
 		},
