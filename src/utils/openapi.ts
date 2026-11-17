@@ -41,6 +41,7 @@ const {
 	animeEntries,
 	takedown,
 	stream,
+	titleSearch,
 } = RATE_LIMIT_CONFIGS;
 
 const perAddress = per(RATE_LIMIT_CONFIGS.default, 'requests');
@@ -272,7 +273,7 @@ export const openApiDocument = {
 				operationId: 'searchTitles',
 				summary: 'Find a title by name',
 				description:
-					"Movies and shows from IMDb's title list whose name matches `keyword`, best match first. A year at the end of the keyword (`matrix 1999`) narrows it. Use the `imdbid` with the sponsor endpoints or Torznab.",
+					`Movies and shows from IMDb's title list whose name matches \`keyword\`, best match first. A year at the end of the keyword (\`matrix 1999\`) narrows it. Use the \`imdbid\` with the sponsor endpoints or Torznab.\n\n**Limit:** ${per(titleSearch, 'searches')}.`,
 				parameters: [
 					{
 						name: 'keyword',

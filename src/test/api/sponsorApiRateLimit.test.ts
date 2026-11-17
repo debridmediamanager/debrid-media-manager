@@ -13,6 +13,7 @@
  */
 import embyHandler from '@/pages/api/emby-plugins/[...route]';
 import pluginsHandler from '@/pages/api/plugins/[...route]';
+import titleSearchHandler from '@/pages/api/search/title';
 import sponsorAvailabilityHandler from '@/pages/api/sponsor/availability';
 import sponsorIdentifyHandler from '@/pages/api/sponsor/identify';
 import sponsorMediaInfoHandler from '@/pages/api/sponsor/mediainfo';
@@ -94,5 +95,11 @@ describe('rate limits on the documented API', () => {
 			sabLike
 		);
 		expect(await servedBeforeRefusal(embyHandler, '/api/emby-plugins/')).toBe(sabLike);
+	});
+
+	// Open to anyone and unlimited until 2026-11-17. A keyless zurg files its library by name
+	// here at one search a second (62 a minute at most over a month); two scripts ran 121-133.
+	it('caps the open title search at 90 a minute, above zurg\'s pace', async () => {
+		expect(await servedBeforeRefusal(titleSearchHandler, '/api/search/title')).toBe(90);
 	});
 });

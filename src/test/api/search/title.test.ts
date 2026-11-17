@@ -10,9 +10,6 @@ const { searchImdbTitlesMock } = vi.hoisted(() => {
 	};
 });
 
-// the real limiter (its in-memory backend: no Redis here), which src/test/setup.ts stubs out
-vi.unmock('@/services/rateLimit/withRateLimit');
-
 vi.mock('@/services/repository', () => ({
 	repository: {
 		searchImdbTitles: searchImdbTitlesMock,
@@ -34,27 +31,6 @@ describe('/api/search/title', () => {
 			expect(res.status).toHaveBeenCalledWith(200);
 		}
 		expect(searchImdbTitlesMock).toHaveBeenCalledTimes(1);
-	});
-
-	// One address's searches over 2026-10-19..11-17 (285k in the proxy log): a keyless zurg
-	// files its library at one a second, 62 a minute at most; two scripts ran 121-133.
-	it('refuses an address past 90 searches a minute and leaves others alone', async () => {
-		searchImdbTitlesMock.mockResolvedValue([]);
-		const search = async (ip: string, i: number) => {
-			const res = createMockResponse();
-			await handler(
-				createMockRequest({ query: { keyword: `title ${i}` }, headers: { 'x-real-ip': ip } }),
-				res
-			);
-			return res;
-		};
-		for (let i = 0; i < 90; i++) {
-			expect((await search('198.51.100.7', i)).status).toHaveBeenCalledWith(200);
-		}
-		const refused = await search('198.51.100.7', 90);
-		expect(refused.status).toHaveBeenCalledWith(429);
-		expect(refused._getHeaders()['Retry-After']).toBeDefined();
-		expect((await search('198.51.100.8', 0)).status).toHaveBeenCalledWith(200);
 	});
 
 	it('returns 400 when keyword is missing', async () => {
