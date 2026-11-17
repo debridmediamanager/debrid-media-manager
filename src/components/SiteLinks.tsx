@@ -2,6 +2,7 @@
 // listed as a site, not as an offer: sponsors get their API key there too, and the
 // info card hides its own gatekeeper link from sponsors.
 export const SITE_LINKS = [
+	{ label: 'DMM Mobile', href: '/mobile' },
 	{ label: 'zurg', href: 'https://zurg.debridmediamanager.com/' },
 	{ label: 'Download zurg', href: 'https://zurg.debridmediamanager.com/download.html' },
 	{ label: 'rex', href: 'https://rex.debridmediamanager.com/' },

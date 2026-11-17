@@ -9,6 +9,7 @@ describe('SiteLinks', () => {
 		const nav = screen.getByRole('navigation', { name: 'Other DMM sites' });
 		const hrefs = [...nav.querySelectorAll('a')].map((a) => a.getAttribute('href'));
 		expect(hrefs).toEqual([
+			'/mobile',
 			'https://zurg.debridmediamanager.com/',
 			'https://zurg.debridmediamanager.com/download.html',
 			'https://rex.debridmediamanager.com/',
