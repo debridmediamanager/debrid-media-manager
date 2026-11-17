@@ -1,4 +1,5 @@
 import Poster from '@/components/poster';
+import { useTraktAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { useCachedList } from '@/hooks/useCachedList';
 import { TraktCollectionItem, getCollectionMovies, getCollectionShows } from '@/services/trakt';
@@ -10,7 +11,7 @@ import Link from 'next/link';
 import { Toaster } from 'react-hot-toast';
 
 function TraktCollection() {
-	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
+	const { token: traktToken } = useTraktAccessToken();
 	const [traktUserSlug] = useLocalStorage<string>('trakt:userSlug');
 
 	const { data, loading } = useCachedList<TraktCollectionItem[]>(

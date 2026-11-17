@@ -1,18 +1,27 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
+/**
+ * Trades a sign-in code (GET `?code=`) or a refresh token (POST `{refresh_token}`) for
+ * Trakt tokens, adding DMM's client secret here so it never reaches the browser.
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	const { code, redirect } = req.query;
-	if (!code || typeof code !== 'string') {
+	// A refresh token is a lasting credential, so it comes in a POST body, never in a logged URL.
+	const refreshToken =
+		req.method === 'POST' && typeof req.body?.refresh_token === 'string'
+			? req.body.refresh_token
+			: '';
+	const { code, redirect } = refreshToken ? req.body : req.query;
+	if (!refreshToken && (!code || typeof code !== 'string')) {
 		res.status(400).json({ errorMessage: "Missing 'code' query parameter" });
 		return;
 	}
 
 	const requestBody = {
-		code,
+		...(refreshToken ? { refresh_token: refreshToken } : { code }),
 		client_id: process.env.TRAKT_CLIENT_ID,
 		client_secret: process.env.TRAKT_CLIENT_SECRET,
 		redirect_uri: redirect ?? '',
-		grant_type: 'authorization_code',
+		grant_type: refreshToken ? 'refresh_token' : 'authorization_code',
 	};
 
 	try {

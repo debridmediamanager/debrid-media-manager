@@ -15,7 +15,7 @@ import type { SimklSession } from '../services/simkl';
 import { SimklError, getSimklSession } from '../services/simkl';
 import { TorBoxUser, getUserData } from '../services/torbox';
 import { TraktUser, getTraktUser } from '../services/trakt';
-import { clearDlKeys, clearPtKeys, clearRdKeys } from '../utils/clearLocalStorage';
+import { clearDlKeys, clearPtKeys, clearRdKeys, clearTraktKeys } from '../utils/clearLocalStorage';
 import { readStoredAccessToken } from '../utils/rdTokenStorage';
 import { getSafeRedirectPath } from '../utils/router';
 import {
@@ -473,6 +473,13 @@ const useOffcloud = () => {
 /** Renew shortly before the measured one-day lifetime, like Real-Debrid. */
 const DL_REFRESH_WINDOW_MS = REFRESH_MARGIN_MS;
 
+/** Writes what useLocalStorage reads, and tells its instances. */
+const save = (key: string, value: unknown) => {
+	if (value === null) window.localStorage.removeItem(key);
+	else window.localStorage.setItem(key, JSON.stringify(value));
+	notifyLocalStorageChange(key);
+};
+
 // One renewal per refresh token for the whole tab, saved whether or not the page that started it
 // is still open. Per page, a renewal was dropped when its page closed and the next page spent
 // the same refresh token again; every component reading the account also renewed on its own.
@@ -482,11 +489,6 @@ const renewDebridLinkToken = (refreshToken: string): Promise<string> => {
 	if (!renewal) {
 		renewal = refreshDebridLinkToken(refreshToken)
 			.then((fresh) => {
-				const save = (key: string, value: unknown) => {
-					if (value === null) window.localStorage.removeItem(key);
-					else window.localStorage.setItem(key, JSON.stringify(value));
-					notifyLocalStorageChange(key);
-				};
 				if (fresh.refresh_token) save('dl:refreshToken', fresh.refresh_token);
 				save(
 					'dl:tokenExpiry',
@@ -613,15 +615,129 @@ const usePutio = () => {
 	return { user, error, hasAuth: !!token, loading };
 };
 
+const TRAKT_ACCESS = 'trakt:accessToken';
+const TRAKT_REFRESH = 'trakt:refreshToken';
+
+/** Raw read: useLocalStorage hides the expiry and drops a lapsed token on read. */
+const readStored = (key: string): any => {
+	try {
+		return JSON.parse(window.localStorage.getItem(key) ?? 'null');
+	} catch {
+		return null;
+	}
+};
+const storedTraktToken = (): string | null => {
+	const stored = readStored(TRAKT_ACCESS);
+	return typeof stored === 'string' ? stored : (stored?.value ?? null);
+};
+const traktTokenExpiresSoon = () => {
+	const expiry = readStored(TRAKT_ACCESS)?.expiry;
+	return typeof expiry === 'number' && expiry - Date.now() <= REFRESH_MARGIN_MS;
+};
+
+// Trakt refresh tokens are single-use: a refresh returns a new one and voids the one sent
+// (developer.trakt.tv, POST /oauth/token). If two hooks or tabs spent the same token, the
+// loser's invalid_grant would sign Trakt out. So one renewal per token per tab, Web Locks
+// across tabs, and the stored token is re-read before it is spent or dropped.
+const traktRenewals = new Map<string, Promise<string | null>>();
+
+/** A fresh access token, or null once Trakt refused the refresh token and its keys are gone. */
+const renewTraktToken = (refreshToken: string): Promise<string | null> => {
+	const renew = async (): Promise<string | null> => {
+		// Another tab spent it while this one waited: use what that tab stored.
+		if (readStored(TRAKT_REFRESH) !== refreshToken) return storedTraktToken();
+		const response = await fetch('/api/trakt/exchange', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				refresh_token: refreshToken,
+				redirect: `${window.location.origin}/trakt/callback`,
+			}),
+		});
+		const data = await response.json().catch(() => ({}));
+		if (response.ok && data.access_token) {
+			if (data.refresh_token) save(TRAKT_REFRESH, data.refresh_token);
+			save(
+				TRAKT_ACCESS,
+				typeof data.expires_in === 'number'
+					? { value: data.access_token, expiry: Date.now() + data.expires_in * 1000 }
+					: data.access_token
+			);
+			return data.access_token;
+		}
+		// A refused grant, read as kodiTrackers' refreshLink does: 400 live, 401 in the older
+		// docs. invalid_client is DMM's setup to fix; signing the user out would not help.
+		if (
+			(response.status === 400 || response.status === 401) &&
+			data.error !== 'invalid_client'
+		) {
+			// Without Web Locks another tab can rotate it meanwhile, and its tokens are good.
+			if (readStored(TRAKT_REFRESH) !== refreshToken) return storedTraktToken();
+			clearTraktKeys();
+			return null;
+		}
+		throw new Error(
+			`Trakt token refresh failed: ${data.error_description || data.error || response.status}`
+		);
+	};
+	let renewal = traktRenewals.get(refreshToken);
+	if (!renewal) {
+		// Web Locks exist only in secure contexts (not jsdom, not plain-http LAN hosts).
+		renewal = (async (): Promise<string | null> =>
+			typeof navigator !== 'undefined' && navigator.locks
+				? navigator.locks.request('dmm:trakt-refresh', renew)
+				: renew())().finally(() => traktRenewals.delete(refreshToken));
+		traktRenewals.set(refreshToken, renewal);
+	}
+	return renewal;
+};
+
+/**
+ * The Trakt access token, renewed through the refresh token once it has lapsed (which
+ * useLocalStorage reads as no token) or is about to. Pages that call Trakt read this.
+ */
+export const useTraktAccessToken = () => {
+	const [token] = useLocalStorage<string>(TRAKT_ACCESS);
+	const [refreshToken] = useLocalStorage<string>(TRAKT_REFRESH);
+	const [error, setError] = useState<Error | null>(null);
+	const renewed = useRef(false);
+
+	useEffect(() => {
+		setError(null);
+		if (!refreshToken || (token && !traktTokenExpiresSoon())) return;
+		// Once per mount, so a token that comes back already due cannot loop; a remounted
+		// effect joins the renewal in flight.
+		if (renewed.current && !traktRenewals.has(refreshToken)) return;
+		renewed.current = true;
+		let active = true;
+		renewTraktToken(refreshToken).catch((e) => {
+			console.error('[Auth] Trakt token refresh failed', e);
+			if (active) setError(e as Error);
+		});
+		return () => {
+			active = false;
+		};
+	}, [token, refreshToken]);
+
+	return { token, refreshToken, error };
+};
+
 const useTrakt = () => {
 	const [user, setUser] = useState<TraktUser | null>(null);
 	const [error, setError] = useState<Error | null>(null);
 	const [loading, setLoading] = useState(false);
-	const [token] = useLocalStorage<string>('trakt:accessToken');
+	const { token, refreshToken, error: renewError } = useTraktAccessToken();
 	const [_, setUserSlug] = useLocalStorage<string>('trakt:userSlug');
+	const retried = useRef(false);
 
 	useEffect(() => {
 		if (!token) {
+			// Signed out here or in another tab; a pending renewal sets the token instead.
+			if (!refreshToken) {
+				setUser(null);
+				setError(null);
+				setLoading(false);
+			}
 			return;
 		}
 
@@ -637,6 +753,17 @@ const useTrakt = () => {
 			})
 			.catch((e) => {
 				if (!isMounted) return;
+				// Refused before its expiry: renew once. The new token re-runs this effect;
+				// a refused refresh token clears the keys, which signs Trakt out.
+				if ((e as any)?.response?.status === 401 && refreshToken && !retried.current) {
+					retried.current = true;
+					renewTraktToken(refreshToken).catch((renewFailure) => {
+						if (!isMounted) return;
+						setError(renewFailure as Error);
+						setLoading(false);
+					});
+					return;
+				}
 				setError(e as Error);
 				setLoading(false);
 			});
@@ -646,7 +773,7 @@ const useTrakt = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [token]);
 
-	return { user, error, hasAuth: !!token, loading };
+	return { user, error: error ?? renewError, hasAuth: !!(token || refreshToken), loading };
 };
 
 // Only in-flight account reads are shared; account data is not persisted in the browser.

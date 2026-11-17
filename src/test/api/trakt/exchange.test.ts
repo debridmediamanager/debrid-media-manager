@@ -1,4 +1,6 @@
 import handler from '@/pages/api/trakt/exchange';
+import refused from '@/test/fixtures/kodi-trackers/trakt-refresh-invalid-grant.json';
+import refreshed from '@/test/fixtures/kodi-trackers/trakt-refresh-ok.json';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -161,5 +163,59 @@ describe('/api/trakt/exchange', () => {
 
 		expect(res.status).toHaveBeenCalledWith(401);
 		expect(res.json).toHaveBeenCalledWith(errorData);
+	});
+
+	// Trakt's answers to a refresh of DMM's own app, recorded live (fixtures/kodi-trackers/README.md).
+	describe('refresh', () => {
+		const traktAnswers = (fixture: { status: number; body: unknown }) =>
+			mockFetch.mockResolvedValue({
+				ok: fixture.status === 200,
+				status: fixture.status,
+				text: () => Promise.resolve(JSON.stringify(fixture.body)),
+			});
+		const refresh = () =>
+			createMockRequest({
+				method: 'POST',
+				body: {
+					refresh_token: 'old-refresh',
+					redirect: 'https://debridmediamanager.com/trakt/callback',
+				},
+			});
+
+		it('spends the refresh token with the client secret added server-side', async () => {
+			traktAnswers(refreshed);
+			const res = createMockResponse();
+
+			await handler(refresh(), res);
+
+			expect(JSON.parse(mockFetch.mock.calls[0][1].body)).toEqual({
+				refresh_token: 'old-refresh',
+				client_id: 'test-client-id',
+				client_secret: 'test-client-secret',
+				redirect_uri: 'https://debridmediamanager.com/trakt/callback',
+				grant_type: 'refresh_token',
+			});
+			expect(res.status).toHaveBeenCalledWith(200);
+			expect(res.json).toHaveBeenCalledWith(refreshed.body);
+		});
+
+		it("passes Trakt's refusal through with its status", async () => {
+			traktAnswers(refused);
+			const res = createMockResponse();
+
+			await handler(refresh(), res);
+
+			expect(res.status).toHaveBeenCalledWith(400);
+			expect(res.json).toHaveBeenCalledWith(refused.body);
+		});
+
+		it('takes no refresh token from the query string, which logs keep', async () => {
+			const res = createMockResponse();
+
+			await handler(createMockRequest({ query: { refresh_token: 'old-refresh' } }), res);
+
+			expect(res.status).toHaveBeenCalledWith(400);
+			expect(mockFetch).not.toHaveBeenCalled();
+		});
 	});
 });

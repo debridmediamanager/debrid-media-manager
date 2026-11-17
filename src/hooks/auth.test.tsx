@@ -1,10 +1,13 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { StrictMode, type ReactNode } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { PutioError } from '../services/putio';
 import type * as SimklService from '../services/simkl';
 import type { SimklSession, SimklUser } from '../services/simkl';
 import { SimklError } from '../services/simkl';
+import traktRefreshRefused from '../test/fixtures/kodi-trackers/trakt-refresh-invalid-grant.json';
+import traktRefreshOk from '../test/fixtures/kodi-trackers/trakt-refresh-ok.json';
+import traktSettings from '../test/fixtures/kodi-trackers/trakt-users-settings.json';
 import putioUnpaid from '../test/fixtures/putio/recorded-2026-11-15.json';
 import logoutUnavailable from '../test/fixtures/simkl/session-unavailable-503.json';
 import signedOut from '../test/fixtures/simkl/signed-out-401.json';
@@ -18,7 +21,9 @@ import {
 	useDebridLogin,
 	useRealDebridAccessToken,
 	useSimklAuth,
+	useTraktAccessToken,
 } from './auth';
+import { notifyLocalStorageChange } from './localStorage';
 
 const routerPush = vi.fn();
 vi.mock('next/router', () => ({
@@ -802,6 +807,189 @@ describe('usePutio via useCurrentUser', () => {
 
 		await waitFor(() => expect(result.current.ptError).not.toBeNull());
 		expect(window.localStorage.getItem('pt:accessToken')).not.toBeNull();
+	});
+});
+
+// Fizzy 398: Trakt's tokens lapse (24 h, 7 days in its newer docs) and nothing renewed them, so the
+// card read "Trakt Login" with a working refresh token in storage. Trakt's /oauth/token answers
+// are the live recordings of DMM's own app; /api/trakt/exchange passes them through unchanged
+// (src/test/api/trakt/exchange.test.ts). Both tokens were redacted to the same string, so they
+// get distinct stand-ins here to show which one lands where.
+describe('useTrakt via useCurrentUser', () => {
+	const rotated = {
+		...traktRefreshOk.body,
+		access_token: 'fresh-access',
+		refresh_token: 'rotated-refresh',
+	};
+	const profile = traktSettings.body;
+	const fetchMock = vi.fn();
+	const answer = (fixture: { status: number; body: unknown }) =>
+		new Response(JSON.stringify(fixture.body), { status: fixture.status });
+	const unauthorized = () =>
+		Object.assign(new Error('Request failed with status code 401'), {
+			response: { status: 401 },
+		});
+	const traktKeys = () => Object.keys(window.localStorage).filter((k) => k.startsWith('trakt:'));
+	const signedInWith = (expiry: number) => {
+		setStoredValue('trakt:accessToken', { value: 'old-access', expiry });
+		setStoredValue('trakt:refreshToken', 'old-refresh');
+		setStoredValue('trakt:userSlug', 'yowmamasita');
+	};
+	const LAPSED = () => Date.now() - 1000;
+	const DAYS_LEFT = () => Date.now() + 3 * 24 * 3600 * 1000;
+
+	beforeEach(() => {
+		window.localStorage.clear();
+		__resetRealDebridStateForTests();
+		vi.clearAllMocks();
+		fetchMock.mockReset();
+		vi.stubGlobal('fetch', fetchMock);
+		mockGetTraktUser.mockImplementation((token: string) =>
+			token === 'fresh-access' ? Promise.resolve(profile) : Promise.reject(unauthorized())
+		);
+	});
+
+	afterEach(() => {
+		vi.unstubAllGlobals();
+		delete (navigator as any).locks;
+	});
+
+	it.each([
+		['has lapsed', LAPSED],
+		['is about to lapse', () => Date.now() + 60_000],
+	])('renews an access token that %s and stays signed in', async (_label, expiry) => {
+		signedInWith(expiry());
+		fetchMock.mockResolvedValue(answer({ status: 200, body: rotated }));
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.traktUser).toEqual(profile));
+		expect(result.current.hasTraktAuth).toBe(true);
+		expect(result.current.traktError).toBeNull();
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+		const [url, init] = fetchMock.mock.calls[0];
+		expect(url).toBe('/api/trakt/exchange');
+		expect(init.method).toBe('POST');
+		expect(JSON.parse(init.body)).toEqual({
+			refresh_token: 'old-refresh',
+			redirect: `${window.location.origin}/trakt/callback`,
+		});
+		// Single-use: the rotated refresh token replaces the spent one.
+		expect(JSON.parse(window.localStorage.getItem('trakt:refreshToken')!)).toBe(
+			'rotated-refresh'
+		);
+		const stored = JSON.parse(window.localStorage.getItem('trakt:accessToken')!);
+		expect(stored.value).toBe('fresh-access');
+		expect(stored.expiry).toBeGreaterThan(Date.now() + (rotated.expires_in - 60) * 1000);
+	});
+
+	it('renews once when Trakt answers 401 for an unexpired access token', async () => {
+		signedInWith(DAYS_LEFT());
+		fetchMock.mockResolvedValue(answer({ status: 200, body: rotated }));
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.traktUser).toEqual(profile));
+		expect(mockGetTraktUser).toHaveBeenNthCalledWith(1, 'old-access');
+		expect(mockGetTraktUser).toHaveBeenLastCalledWith('fresh-access');
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+		expect(result.current.traktError).toBeNull();
+	});
+
+	it.each([
+		['a lapsed token', LAPSED],
+		['a 401', DAYS_LEFT],
+	])(
+		'signs Trakt out cleanly when Trakt refuses the refresh token after %s',
+		async (_label, expiry) => {
+			signedInWith(expiry());
+			fetchMock.mockResolvedValue(answer(traktRefreshRefused));
+
+			const { result } = renderHook(() => useCurrentUser());
+
+			await waitFor(() => expect(traktKeys()).toEqual([]));
+			expect(result.current.hasTraktAuth).toBe(false);
+			expect(result.current.traktUser).toBeNull();
+			// No error: the card offers "Trakt Login" instead of the failed-profile toast.
+			expect(result.current.traktError).toBeNull();
+		}
+	);
+
+	it('keeps every key and shows the error when the refresh gets no answer', async () => {
+		signedInWith(LAPSED());
+		fetchMock.mockResolvedValue(
+			answer({
+				status: 502,
+				body: {
+					error: 'token_exchange_failed',
+					error_description: 'Trakt returned non-JSON response',
+				},
+			})
+		);
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.traktError).not.toBeNull());
+		expect(JSON.parse(window.localStorage.getItem('trakt:refreshToken')!)).toBe('old-refresh');
+		expect(result.current.hasTraktAuth).toBe(true);
+	});
+
+	it('does not renew again when the renewed token is refused too', async () => {
+		signedInWith(DAYS_LEFT());
+		fetchMock.mockResolvedValue(answer({ status: 200, body: rotated }));
+		mockGetTraktUser.mockImplementation(() => Promise.reject(unauthorized()));
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.traktError).not.toBeNull());
+		await act(async () => {});
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+	});
+
+	it('spends a refresh token once for every consumer mounting at the same time', async () => {
+		signedInWith(LAPSED());
+		const { promise, resolve } = Promise.withResolvers<Response>();
+		fetchMock.mockReturnValue(promise);
+		const wrapper = ({ children }: { children: ReactNode }) => (
+			<StrictMode>{children}</StrictMode>
+		);
+
+		const home = renderHook(() => useCurrentUser(), { wrapper });
+		const watchlist = renderHook(() => useTraktAccessToken(), { wrapper });
+		await act(async () => {});
+		await act(async () => resolve(answer({ status: 200, body: rotated })));
+
+		await waitFor(() => expect(home.result.current.traktUser).toEqual(profile));
+		expect(watchlist.result.current.token).toBe('fresh-access');
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+	});
+
+	it('uses the pair another tab stored while it waited for the lock', async () => {
+		signedInWith(LAPSED());
+		// The other tab holds the lock first and rotates the pair before this tab's turn.
+		Object.defineProperty(navigator, 'locks', {
+			configurable: true,
+			value: {
+				request: async (_name: string, run: () => Promise<unknown>) => {
+					setStoredValue('trakt:refreshToken', 'rotated-refresh');
+					setStoredValue('trakt:accessToken', {
+						value: 'fresh-access',
+						expiry: Date.now() + rotated.expires_in * 1000,
+					});
+					notifyLocalStorageChange('trakt:refreshToken');
+					notifyLocalStorageChange('trakt:accessToken');
+					return run();
+				},
+			},
+		});
+
+		const { result } = renderHook(() => useCurrentUser());
+
+		await waitFor(() => expect(result.current.traktUser).toEqual(profile));
+		expect(fetchMock).not.toHaveBeenCalled();
+		expect(JSON.parse(window.localStorage.getItem('trakt:refreshToken')!)).toBe(
+			'rotated-refresh'
+		);
 	});
 });
 

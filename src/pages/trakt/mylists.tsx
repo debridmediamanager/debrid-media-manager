@@ -1,4 +1,5 @@
 import Poster from '@/components/poster';
+import { useTraktAccessToken } from '@/hooks/auth';
 import useLocalStorage from '@/hooks/localStorage';
 import { useCachedList } from '@/hooks/useCachedList';
 import {
@@ -16,7 +17,7 @@ import { useRouter } from 'next/router';
 import { Toaster } from 'react-hot-toast';
 
 function TraktMyLists() {
-	const [traktToken] = useLocalStorage<string>('trakt:accessToken');
+	const { token: traktToken } = useTraktAccessToken();
 	const [traktUserSlug] = useLocalStorage<string>('trakt:userSlug');
 	const router = useRouter();
 	const selectedList = typeof router.query.list === 'string' ? router.query.list : '';

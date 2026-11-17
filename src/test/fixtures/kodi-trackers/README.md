@@ -1,4 +1,9 @@
 Tracker answers behind `/api/kodi/tracker/*`, read by `src/test/api/kodi/tracker.test.ts`.
+The web sign-in uses the same Trakt app, so `trakt-refresh-ok.json`, `trakt-refresh-invalid-grant.json`
+and `trakt-users-settings.json` also drive its token renewal (`src/hooks/auth.test.tsx`,
+`src/test/api/trakt/exchange.test.ts`). Trakt documents the same shapes for `POST /oauth/token`:
+<https://developer.trakt.tv/openapi.json> (refresh tokens are single-use, refusals are `400`) and
+the older <https://trakt.docs.apiary.io/#reference/authentication-oauth/refresh-token> (`401`).
 Each file is `{status, body}`: the HTTP status and the body as received (`""` for an empty
 body). Replace a file with a live capture of the same call and the tests run on it as is.
 

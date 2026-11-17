@@ -36,3 +36,6 @@ export const clearDlKeys = () => clearKeysWithPrefix('dl:');
 
 /** put.io's one credential, `pt:accessToken`, dropped when put.io answers 401. */
 export const clearPtKeys = () => clearKeysWithPrefix('pt:');
+
+/** Trakt's tokens and user slug, dropped when Trakt refuses the refresh token. */
+export const clearTraktKeys = () => clearKeysWithPrefix('trakt:');
