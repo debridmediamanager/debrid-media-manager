@@ -1,6 +1,7 @@
 import type { WantedItemRow } from '@/services/database/wantedItems';
 import { TMDB_TV_APPEND } from '@/services/metadata';
 import { getMetadataCache } from '@/services/metadataCache';
+import type { WantedHints } from '@/services/wantedHints';
 import { firstUnairedEpisode } from '@/utils/tvEpisodes';
 
 /** One season of a wanted show as zurg reads it: the episodes aired so far. */
@@ -24,7 +25,7 @@ export interface WantedSeason {
 }
 
 /** A wanted title as `/api/sponsor/wanted` answers it. See docs/sponsor-api.md. */
-export interface WantedForZurg {
+export interface WantedForZurg extends WantedHints {
 	id: string;
 	kind: 'movie' | 'show';
 	title: string;

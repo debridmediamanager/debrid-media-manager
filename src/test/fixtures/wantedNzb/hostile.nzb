@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="https://indexer.example.invalid/track.xsl?uid=424242"?>
+<!DOCTYPE nzb [
+	<!ENTITY lol "lol">
+	<!ENTITY lol2 "&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;">
+	<!ENTITY lol3 "&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;">
+	<!ENTITY xxe SYSTEM "file:///etc/passwd">
+	<!ENTITY planted "<file subject='entity.bin'><segments><segment bytes='1' number='1'>entity@planted.invalid</segment></segments></file>">
+]>
+<!-- downloaded by user 424242 from indexer.example.invalid at 2026-11-19 -->
+<nzb xmlns="http://www.newzbin.com/DTD/2003/nzb" xmlns:idx="https://indexer.example.invalid/ns" idx:uid="424242">
+	<head>
+		<meta type="tag">0a624180.27889905291</meta>
+		<meta type="x-indexer-id">indexer.example.invalid:9f8e7d</meta>
+		<meta type="name">Tracked.By.User.424242</meta>
+		<meta type="category">TV &gt; HD</meta>
+		<meta type="x-dmm-id">not-a-real-token</meta>
+		<meta type="password">s3cret&amp;pw</meta>
+		<meta type="password">second-password-424242</meta>
+	</head>
+	<!--
+	<file subject="commented.out.bin">
+		<segments><segment bytes="1" number="1">comment@planted.invalid</segment></segments>
+	</file>
+	-->
+	<idx:watermark uid="424242">&xxe;&lol3;</idx:watermark>
+	<file date="1763511111" idx:uid="424242" poster="424242@indexer.example.invalid" subject='[1/2] - "Show.S01E07.1080p.WEB.h264-GRP.mkv" yEnc (1/2)' onload="alert(1)">
+		<groups>
+			<group>alt.binaries.user424242</group>
+			<group>alt.binaries.example</group>
+		</groups>
+		<idx:note>fetched for 424242</idx:note>
+		<segments>
+			<segment number="2" bytes="512000" idx:uid="424242">part2of2.abc123<!-- 424242 -->@news.example.invalid</segment>
+			<segment number="1" bytes="716800">&lt;part1of2.abc123@news.example.invalid&gt;</segment>
+		</segments>
+	</file>
+	<file poster="424242@indexer.example.invalid" subject="[2/2] - &quot;Show.S01E07.1080p.WEB.h264-GRP.par2&quot; yEnc (1/1)">
+		<segments>
+			<segment bytes="40960" number="1">par2.abc123@news.example.invalid</segment>
+		</segments>
+	</file>
+	<file subject="empty.bin"><segments></segments></file>
+</nzb>
+<!-- newznab 2026-11-19 13:29:00 uid=424242 -->

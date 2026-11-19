@@ -202,11 +202,11 @@ function decodeEntities(raw: string): string {
 	);
 }
 
-function escapeText(value: string): string {
+export function escapeText(value: string): string {
 	return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-function escapeAttr(value: string): string {
+export function escapeAttr(value: string): string {
 	return escapeText(value).replace(/"/g, '&quot;');
 }
 
@@ -226,7 +226,7 @@ function parseAttrs(raw: string): Record<string, string> {
  * and lose every attribute after it, which for a sanitizer means silently
  * emitting a mangled file rather than failing.
  */
-function findTagEnd(xml: string, start: number): number {
+export function findTagEnd(xml: string, start: number): number {
 	let quote: string | null = null;
 	for (let i = start; i < xml.length; i++) {
 		const char = xml[i];

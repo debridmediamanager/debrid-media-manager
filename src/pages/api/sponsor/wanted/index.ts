@@ -6,6 +6,7 @@ import { grabUrl } from '@/services/newznab/search';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
 import { resolveWantedReused, type WantedForZurg } from '@/services/wanted';
+import { wantedHints, type WantedHints } from '@/services/wantedHints';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 /** TMDB lookups in flight at once; each is a metadata-cache read almost every time. */
@@ -80,8 +81,9 @@ const postsId = (imdbId: string) => `imdb:${Number(imdbId.replace(/^tt/i, ''))}`
  * already acknowledged are left out unless it wants a better release; shows stay,
  * so new episodes are fetched as they air. With `?bands=` a film is left out only once
  * every band holds a copy zurg wants no better than, and carries `bands` instead of
- * `upgrade`. A film with `pins` is done once acknowledged, bands or not. See
- * docs/sponsor-api.md.
+ * `upgrade`. A film with `pins` is done once acknowledged, bands or not. With
+ * `?hints=1` a title carries `known` and `condemned`: what other sponsors' zurgs took
+ * and what they found bad (services/wantedHints). See docs/sponsor-api.md.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET') {
@@ -108,7 +110,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	const apiKey = req.headers['x-api-key'] as string;
 	try {
-		const rows = (await db.listWanted(sponsor.shortId)).filter(
+		// Without the have/missing snapshots: zurg wrote them and reads none of them back.
+		const rows = (await db.listWanted(sponsor.shortId, undefined, false)).filter(
 			(row) =>
 				row.kind === 'show' ||
 				!row.fulfilledAt ||
@@ -118,6 +121,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const posts = await db.newznabFreshPosts(
 			rows.filter((row) => row.kind === 'movie').map((row) => postsId(row.imdbId))
 		);
+		// Hints are a help, never a condition: a failed read sends the list without them.
+		const hints =
+			req.query.hints === '1'
+				? await wantedHints(rows, sponsor.shortId, apiKey).catch((error) => {
+						console.error('[sponsor/wanted] hints failed', error);
+						return new Map<string, WantedHints>();
+					})
+				: new Map<string, WantedHints>();
 		const items: WantedForZurg[] = [];
 		for (let i = 0; i < rows.length; i += RESOLVE_AT_ONCE) {
 			items.push(
@@ -130,6 +141,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 							...(await resolveWantedReused(row)),
 							...(pins && { pins }),
 							...(posted && { posted: posted.toISOString() }),
+							...hints.get(row.id),
 						};
 						if (bands) {
 							const held = bandsOf(row, bands);

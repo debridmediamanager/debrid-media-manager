@@ -20,6 +20,7 @@ import { parseNewznabResponse } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, RedisRateLimiter } from '@/services/rateLimit/middlewareRateLimiter';
 import { repository } from '@/services/repository';
 import { setBlocklistForTests } from '@/services/takedown/blocklist';
+import { WANTED_NZB_PREFIX } from '@/services/wantedHistory';
 import cocaineBear from '@/test/fixtures/easynews/nzb2rd-search-cocaine-bear-2023-2026-11-08.json';
 import althubMovie from '@/test/fixtures/newznab-fresh/althub-movie-2026-10-31.json';
 import drunkenslugMovie from '@/test/fixtures/newznab-fresh/drunkenslug-movie-2026-10-31.json';
@@ -29,6 +30,9 @@ import upstreamCapsCorpus from '@/test/fixtures/newznab/upstream-caps-2026-11-16
 import recordedMarkers from '@/test/fixtures/transfers/failed-marker-polls-2026-10-07.json';
 import { createMockRequest, createMockResponse, MockResponse } from '@/test/utils/api';
 import { sanitizeNzb, withAlternatesMeta } from '@/utils/nzbSanitize';
+import { cleanUploadedNzb } from '@/utils/nzbUpload';
+import { readFileSync } from 'fs';
+import path from 'path';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // setup.ts stubs the whole rate limit module out, which would take
@@ -970,6 +974,25 @@ describe('GET /api/newznab/api grab', () => {
 		mockGetStored.mockResolvedValue(null);
 		const miss = await run({ t: 'get', id, apikey: SPONSOR_KEY });
 		expect(body(miss)).toContain('<error code="300"');
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
+	// A zurg's upload is stored under `wanted:<sha>` (PUT /api/sponsor/wanted/nzb/<sha>) and
+	// handed to other zurgs as a hint whose `nzb` is this grab. What the upload was cleaned
+	// to must come back as it was stored, with no rewrite on every grab.
+	it("serves another zurg's upload from the store, unchanged", async () => {
+		const sha = 'a'.repeat(64);
+		const stored = await cleanUploadedNzb(
+			readFileSync(path.resolve(__dirname, '../fixtures/wantedNzb/hostile.nzb'), 'utf8')
+		);
+		const id = encryptReleaseId(WANTED_NZB_PREFIX, sha);
+		mockGetStored.mockResolvedValue(stored);
+
+		const hit = await run({ t: 'get', id, apikey: SPONSOR_KEY });
+
+		expect(mockGetStored).toHaveBeenCalledWith('wanted', sha);
+		expect(body(hit)).toBe(withAlternatesMeta(stored, [], id));
+		expect(mockPutStored).not.toHaveBeenCalled();
 		expect(fetchMock).not.toHaveBeenCalled();
 	});
 

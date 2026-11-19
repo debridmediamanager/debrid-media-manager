@@ -75,6 +75,11 @@ export const RATE_LIMIT_CONFIGS = {
 	// crowd it out: a zurg first telling what it already got for each followed show
 	// sends one per show as each comes round (every 30 minutes).
 	sponsorWantedComplete: { name: 'sponsorWantedComplete', rateLimit: 120, windowSeconds: 60 },
+	// zurg's history reports, up to 20 titles a call, and the NZBs it uploads for other
+	// sponsors' zurgs. Per sponsorship, each apart from the list read and from each other.
+	sponsorWantedHistory: { name: 'sponsorWantedHistory', rateLimit: 60, windowSeconds: 60 },
+	// An upload is parsed and rebuilt, up to 8 MB of it, so it is paced lower.
+	sponsorWantedNzb: { name: 'sponsorWantedNzb', rateLimit: 20, windowSeconds: 60 },
 	wanted: { name: 'wanted', rateLimit: 30, windowSeconds: 60 },
 	// Seerr talking to DMM as its Radarr and Sonarr: a download sync every minute
 	// (two calls per server), a handful per request, settings tests. Per sponsorship.

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nzb xmlns="http://www.newzbin.com/DTD/2003/nzb">
+	<head>
+		<meta type="password">s3cret&amp;pw</meta>
+	</head>
+	<file poster="poster@example.invalid" date="1763500000" subject="[1/2] - &quot;Show.S01E07.1080p.WEB.h264-GRP.mkv&quot; yEnc (1/2)">
+		<groups>
+			<group>alt.binaries.example</group>
+		</groups>
+		<segments>
+			<segment bytes="716800" number="1">part1of2.abc123@news.example.invalid</segment>
+			<segment bytes="512000" number="2">part2of2.abc123@news.example.invalid</segment>
+		</segments>
+	</file>
+	<file poster="poster@example.invalid" date="1763500000" subject="[2/2] - &quot;Show.S01E07.1080p.WEB.h264-GRP.par2&quot; yEnc (1/1)">
+		<groups>
+			<group>alt.binaries.example</group>
+		</groups>
+		<segments>
+			<segment bytes="40960" number="1">par2.abc123@news.example.invalid</segment>
+		</segments>
+	</file>
+</nzb>

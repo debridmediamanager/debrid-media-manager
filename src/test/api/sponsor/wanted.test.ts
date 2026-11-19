@@ -4,11 +4,13 @@ import { _resetTokenSecretForTest, decryptReleaseId } from '@/services/newznab/o
 import { checkRateLimitFor } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
 import { resolveWantedReused } from '@/services/wanted';
+import { wantedHints } from '@/services/wantedHints';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/repository');
 vi.mock('@/services/wanted', () => ({ resolveWantedReused: vi.fn() }));
+vi.mock('@/services/wantedHints', () => ({ wantedHints: vi.fn() }));
 vi.mock('@/services/rateLimit/withRateLimit', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/services/rateLimit/withRateLimit')>()),
 	checkRateLimitFor: vi.fn(),
@@ -60,6 +62,56 @@ describe('/api/sponsor/wanted', () => {
 
 	const get = (headers: Record<string, string> = { 'x-api-key': sponsorKey }) =>
 		createMockRequest({ method: 'GET', headers });
+
+	describe('hints', () => {
+		const KNOWN = [
+			{
+				release: 'The.Matrix.1999.1080p',
+				torrent: true,
+				hash: 'b'.repeat(40),
+				size: 1,
+				resolution: '1080p',
+				taken: 2,
+			},
+		];
+		const hinted = (query: Record<string, string>) =>
+			createMockRequest({ method: 'GET', headers: { 'x-api-key': sponsorKey }, query });
+
+		it('carries known and condemned only when asked with ?hints=1', async () => {
+			mockRepository.listWanted = vi.fn().mockResolvedValue([row({})]);
+			vi.mocked(wantedHints).mockResolvedValue(new Map([[ID, { known: KNOWN }]]));
+
+			const plain = createMockResponse();
+			await listHandler(get(), plain);
+			expect(wantedHints).not.toHaveBeenCalled();
+			expect(vi.mocked(plain.json).mock.calls[0][0].items[0]).not.toHaveProperty('known');
+
+			const res = createMockResponse();
+			await listHandler(hinted({ hints: '1' }), res);
+			expect(wantedHints).toHaveBeenCalledWith(
+				[expect.objectContaining({ id: ID })],
+				'ZP1M',
+				sponsorKey
+			);
+			expect(vi.mocked(res.json).mock.calls[0][0].items[0]).toMatchObject({
+				id: ID,
+				known: KNOWN,
+			});
+		});
+
+		it('still answers the list when the hints cannot be read', async () => {
+			mockRepository.listWanted = vi.fn().mockResolvedValue([row({})]);
+			vi.mocked(wantedHints).mockRejectedValue(new Error('db down'));
+			const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+			const res = createMockResponse();
+			await listHandler(hinted({ hints: '1' }), res);
+
+			expect(res.status).toHaveBeenCalledWith(200);
+			expect(vi.mocked(res.json).mock.calls[0][0].items).toHaveLength(1);
+			error.mockRestore();
+		});
+	});
 
 	describe('pins', () => {
 		const HASH = '9e26b9f3327b7175604928437b0766cf04ea695054e26';
@@ -169,7 +221,8 @@ describe('/api/sponsor/wanted', () => {
 		expect(res.status).toHaveBeenCalledWith(200);
 		const { items } = vi.mocked(res.json).mock.calls[0][0];
 		expect(items.map((i: { id: string }) => i.id)).toEqual(['b', 'c']);
-		expect(mockRepository.listWanted).toHaveBeenCalledWith('ZP1M');
+		// Without the have/missing snapshots, which zurg never reads back.
+		expect(mockRepository.listWanted).toHaveBeenCalledWith('ZP1M', undefined, false);
 		expect(mockRepository.touchWantedPolled).toHaveBeenCalledWith('ZP1M');
 	});
 

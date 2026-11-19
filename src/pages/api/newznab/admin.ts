@@ -3,9 +3,11 @@ import {
 	type NewznabIndexerInput,
 	type NewznabIndexerRow,
 } from '@/services/database/newznabIndexers';
+import { EASYNEWS_NZB_PREFIX } from '@/services/easynews';
 import { getUpstreamIndexers, invalidateUpstreamIndexers } from '@/services/newznab/indexers';
 import { getIndexers } from '@/services/nzb2rd';
 import { RATE_LIMIT_CONFIGS, withIpRateLimit } from '@/services/rateLimit/withRateLimit';
+import { WANTED_NZB_PREFIX } from '@/services/wantedHistory';
 import { isAdmin } from '@/utils/adminToken';
 import { NextApiHandler } from 'next';
 
@@ -96,6 +98,10 @@ export function mergeIndexerInput(
 	if (!existing) {
 		const prefix = typeof body.prefix === 'string' ? body.prefix.trim() : '';
 		if (!PREFIX.test(prefix)) return 'The prefix is 1 to 16 lowercase letters or digits';
+		// Stored NZBs that came from no upstream live under these.
+		if (prefix === EASYNEWS_NZB_PREFIX || prefix === WANTED_NZB_PREFIX) {
+			return `The prefix "${prefix}" is reserved`;
+		}
 		next.prefix = prefix;
 	}
 	if (body.name !== undefined) {
