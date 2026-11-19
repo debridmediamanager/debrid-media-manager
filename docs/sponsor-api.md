@@ -551,7 +551,9 @@ name. Reporting allows 60 calls a minute per sponsorship, uploading NZBs another
 
 A call takes at most 20 items, 200 events and 256 KB. `id` is the wanted item's id.
 `seasons`, for a show, is the whole snapshot and replaces the last one: `have` and
-`missing` are aired episode numbers, at most 200 seasons of 2,000 episodes each.
+`missing` are aired episode numbers, at most 200 seasons of 2,000 episodes each. `have` is what
+zurg took and confirmed, or found in the library as the very release its search answered;
+an episode the library holds under another release is `missing` until zurg takes one.
 
 An event needs `key`, `at` and `kind`:
 

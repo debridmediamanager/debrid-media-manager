@@ -99,6 +99,13 @@ export default function WantedHistoryDialog({
 						<Loader2 className="mx-auto h-5 w-5 animate-spin text-gray-400" />
 					)}
 					{history && history.seasons.length > 0 && (
+						<p className="mb-1 text-[11px] text-gray-500">
+							Aired episodes zurg took, or found in your library as the release it
+							searched for. An episode you added another way shows as missing until
+							zurg takes one.
+						</p>
+					)}
+					{history && history.seasons.length > 0 && (
 						<ul className="mb-3 divide-y divide-gray-800 rounded border border-gray-700">
 							{history.seasons.map((s) => (
 								<li key={s.season}>
