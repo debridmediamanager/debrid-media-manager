@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
@@ -28,6 +28,83 @@ vi.mock('react-window', () => ({
 		</div>
 	),
 }));
+
+const sponsor = vi.hoisted(() => ({ isSponsor: false }));
+vi.mock('@/hooks/useSponsor', () => ({
+	useSponsor: () => ({ isSponsor: sponsor.isSponsor }),
+	sponsorHeaders: () => ({ 'x-dmm-sponsor': 'token' }),
+}));
+
+// The calendar listed every show airing and had no way to keep only the ones a
+// sponsor follows; the wanted list knew them and the page never asked it.
+describe('CalendarPage for a sponsor', () => {
+	const today = new Date();
+	const iso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+	const episode = (title: string, imdb: string) => ({
+		title,
+		season: 1,
+		episode: 1,
+		firstAired: `${iso}T20:00:00.000Z`,
+		isPremiere: false,
+		ids: { imdb },
+		network: 'HBO',
+	});
+	const serve = () => {
+		Element.prototype.scrollTo = vi.fn();
+		global.fetch = vi.fn(async (url: RequestInfo | URL) => ({
+			ok: true,
+			json: async () =>
+				String(url).startsWith('/api/wanted')
+					? {
+							items: [
+								{ imdbId: 'tt0000001', kind: 'show' },
+								{ imdbId: 'tt0000003', kind: 'movie' },
+							],
+						}
+					: {
+							range: { start: iso, days: 14 },
+							days: [
+								{
+									date: iso,
+									items: [
+										episode('Followed Show', 'tt0000001'),
+										episode('Other Show', 'tt0000002'),
+									],
+								},
+							],
+							tmdb: { airingToday: [], onTheAir: [] },
+						},
+		})) as unknown as typeof fetch;
+	};
+	afterEach(() => {
+		sponsor.isSponsor = false;
+	});
+
+	it('keeps only the shows on the wanted list once asked to', async () => {
+		sponsor.isSponsor = true;
+		serve();
+		const CalendarPage = (await import('@/pages/calendar')).default;
+		render(<CalendarPage />);
+		expect((await screen.findAllByText('Other Show')).length).toBeGreaterThan(0);
+
+		fireEvent.click(screen.getByRole('button', { name: 'My wanted shows' }));
+
+		await waitFor(() => expect(screen.queryByText('Other Show')).not.toBeInTheDocument());
+		expect(screen.getAllByText('Followed Show').length).toBeGreaterThan(0);
+		expect(screen.getByRole('button', { name: 'My wanted shows' })).toHaveAttribute(
+			'aria-pressed',
+			'true'
+		);
+	});
+
+	it('offers no such filter to someone who is not a sponsor', async () => {
+		serve();
+		const CalendarPage = (await import('@/pages/calendar')).default;
+		render(<CalendarPage />);
+		await screen.findAllByText('Other Show');
+		expect(screen.queryByRole('button', { name: 'My wanted shows' })).not.toBeInTheDocument();
+	});
+});
 
 describe('CalendarPage', () => {
 	let fetchSpy: Mock<(...args: Parameters<typeof fetch>) => any>;

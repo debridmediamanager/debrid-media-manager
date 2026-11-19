@@ -1,4 +1,5 @@
 import Poster from '@/components/poster';
+import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
 import Head from 'next/head';
 import Link from 'next/link';
 import {
@@ -518,6 +519,11 @@ function CalendarPage() {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 	const [query, setQuery] = useState('');
+	const { isSponsor } = useSponsor();
+	/** Only the shows on the sponsor's wanted list; their ids are read on first use. */
+	const [mineOnly, setMineOnly] = useState(false);
+	const [wantedShows, setWantedShows] = useState<Set<string> | null>(null);
+	const [wantedError, setWantedError] = useState('');
 	const [showGoogleAdd, setShowGoogleAdd] = useState(false);
 	const [showAppleAdd, setShowAppleAdd] = useState(false);
 
@@ -625,16 +631,43 @@ function CalendarPage() {
 
 	const searchMatcher = useMemo(() => createSearchMatcher(queryTerms), [queryTerms]);
 
+	const mine = mineOnly ? wantedShows : null;
 	const filteredDays = useMemo(() => {
-		if (queryTerms.length === 0) return processedDays;
+		if (queryTerms.length === 0 && !mine) return processedDays;
 
 		return processedDays
 			.map((day) => ({
 				...day,
-				items: day.items.filter(searchMatcher),
+				items: day.items.filter(
+					(item) =>
+						(!mine || mine.has(item._imdbId ?? '')) &&
+						(queryTerms.length === 0 || searchMatcher(item))
+				),
 			}))
 			.filter((day) => day.items.length > 0);
-	}, [processedDays, queryTerms, searchMatcher]);
+	}, [processedDays, queryTerms, searchMatcher, mine]);
+
+	const toggleMineOnly = useCallback(async () => {
+		if (mineOnly) return setMineOnly(false);
+		setMineOnly(true);
+		if (wantedShows) return;
+		setWantedError('');
+		try {
+			const res = await fetch('/api/wanted', { headers: sponsorHeaders() });
+			const body = await res.json();
+			if (!res.ok) throw new Error(body.error || res.statusText);
+			setWantedShows(
+				new Set(
+					(body.items as { imdbId: string; kind: string }[])
+						.filter((item) => item.kind === 'show')
+						.map((item) => item.imdbId)
+				)
+			);
+		} catch (e) {
+			setMineOnly(false);
+			setWantedError(e instanceof Error ? e.message : 'unreachable');
+		}
+	}, [mineOnly, wantedShows]);
 
 	// ─────────────────────────────────────────────────────────────────────────
 	// Derived Values
@@ -660,7 +693,7 @@ function CalendarPage() {
 		return `${formatDayLabel(data.range.start)} - ${formatDayLabel(toIsoDate(endDate))}`;
 	}, [data]);
 
-	const hasSearch = queryTerms.length > 0;
+	const hasSearch = queryTerms.length > 0 || !!mine;
 	const isSearching = query !== deferredQuery;
 
 	// ─────────────────────────────────────────────────────────────────────────
@@ -867,6 +900,24 @@ function CalendarPage() {
 							)}
 						</div>
 						<div className="flex flex-col gap-2 sm:flex-1 sm:flex-row sm:items-center sm:justify-between">
+							{isSponsor && (
+								<button
+									onClick={toggleMineOnly}
+									aria-pressed={mineOnly}
+									title={
+										wantedError
+											? `Could not read your wanted list: ${wantedError}`
+											: 'Only the shows on your wanted list'
+									}
+									className={`haptic-sm inline-flex items-center justify-center rounded-full border px-3 py-1.5 text-xs font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300 ${
+										mineOnly
+											? 'border-cyan-400 bg-cyan-700/60 text-white'
+											: 'border-gray-600 bg-gray-800/70 text-gray-200 hover:border-cyan-400'
+									}`}
+								>
+									My wanted shows
+								</button>
+							)}
 							{hasSearch && filteredEvents.length > 0 && (
 								<button
 									onClick={handleExportFilteredIcs}
@@ -889,9 +940,11 @@ function CalendarPage() {
 
 				{!loading && !error && filteredDays.length === 0 && (
 					<p className="text-sm text-gray-300">
-						{hasSearch
-							? 'No episodes match your search.'
-							: 'No episodes scheduled in this window.'}
+						{mine
+							? 'None of your wanted shows airs in this window.'
+							: hasSearch
+								? 'No episodes match your search.'
+								: 'No episodes scheduled in this window.'}
 					</p>
 				)}
 
