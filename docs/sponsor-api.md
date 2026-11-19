@@ -425,6 +425,56 @@ with `season` and `episode` (a multi-episode file's first); a show on the list o
 its pins follows no season, so its `seasons` is empty. A film with a pin leaves the list
 once acknowledged, `bands` or not.
 
+`GET /api/sponsor/wanted?hints=1` adds two optional lists to a title, built from what
+other sponsors' fetchers reported (see [Wanted history](#wanted-history)):
+
+```json
+"known": [
+	{
+		"release": "The.Matrix.1999.1080p.BluRay.x264-GRP",
+		"torrent": true,
+		"hash": "<info hash>",
+		"size": 9000000000,
+		"resolution": "1080p",
+		"pack": false,
+		"taken": 3
+	},
+	{
+		"release": "Show.S01E07.1080p.WEB.h264-GRP",
+		"torrent": false,
+		"nzb": "https://debridmediamanager.com/api/newznab/api?t=get&id=<token>&apikey=<your DMM API key>",
+		"id": "<sha256>",
+		"size": 1234567890,
+		"resolution": "1080p",
+		"season": 1,
+		"episode": 7,
+		"taken": 2
+	}
+],
+"condemned": [
+	{ "release": "The.Matrix.1999.2160p.WEB-BAD", "hash": "<info hash>" },
+	{ "release": "Show.S01E07.720p.WEB-BAD", "size": 734003200, "nzb_sha": "<sha256>" }
+]
+```
+
+`known` lists releases other sponsors' fetchers took and confirmed for the title: at most
+10, or 10 a season for a show and only of the seasons you want, most taken first. `taken`
+counts the sponsors who took it, never yours. A torrent carries its `hash`. An NZB is
+listed only when DMM can serve it, and carries `nzb`, its grab URL with the key the list
+was read with as a pin's does, and `id`, which stays the same for the same NZB. `season`
+and `episode` are absent where the fetcher named none. A known release is one more
+candidate: put it through your own quality, language and size rules and check what you
+got, as with any other.
+
+`condemned` lists releases at least two sponsors turned down for what is in them (wrong
+content, no video, only a sample, missing articles, a password, an unreadable NZB, a
+provider that gave up on it), with nobody confirming them since: at most 20. A torrent
+carries its `hash`; an NZB its `size` and, when known, `nzb_sha`, the sha256 its reporter
+named it by. A release turned down for one fetcher's own settings is never listed.
+
+A hint names a release and a count. It never names a sponsor or where an NZB came from.
+Hints are up to ten minutes behind the reports they are built from.
+
 `POST /api/sponsor/wanted/complete` says the title was fetched:
 
 ```json
@@ -452,6 +502,124 @@ malformed field; 404 means the item is no longer on the list.
 `band`, one of `720p`, `1080p` and `2160p`, is the resolution this copy is kept at, for
 a fetcher that asked for `?bands=`. The acknowledgement then replaces only that band's
 record and leaves the others alone.
+
+## Wanted history
+
+What a fetcher did for each wanted title. The Wanted page shows it, and the releases it
+took or found bad become [hints](#wanted-list) for other sponsors' fetchers, without your
+name. Reporting allows 60 calls a minute per sponsorship, uploading NZBs another 20.
+
+`POST /api/sponsor/wanted/history`
+
+```json
+{
+	"items": [
+		{
+			"id": "5d1e…",
+			"seasons": [{ "season": 1, "have": [1, 2, 3], "missing": [7] }],
+			"events": [
+				{
+					"key": "grab:S01E07:1",
+					"at": "2026-11-19T13:29:00Z",
+					"kind": "grabbed",
+					"release": "Show.S01E07.1080p.WEB.h264-GRP",
+					"torrent": false,
+					"nzb": "<sha256 of the anonymized NZB>",
+					"dmm_id": "<the NZB's x-dmm-id, when DMM served it>",
+					"size": 1234567890,
+					"posted": "2026-11-18T00:00:00Z",
+					"season": 1,
+					"episode": 7,
+					"pack": false,
+					"resolution": "1080p"
+				},
+				{
+					"key": "rej:9c1f",
+					"at": "2026-11-19T13:20:00Z",
+					"kind": "rejected",
+					"reason": "missing_articles",
+					"detail": "412 of 9,300 articles gone",
+					"release": "Show.S01E07.2160p.WEB.h265-GRP",
+					"torrent": false,
+					"nzb": "<sha256>"
+				}
+			]
+		}
+	]
+}
+```
+
+A call takes at most 20 items, 200 events and 256 KB. `id` is the wanted item's id.
+`seasons`, for a show, is the whole snapshot and replaces the last one: `have` and
+`missing` are aired episode numbers, at most 200 seasons of 2,000 episodes each.
+
+An event needs `key`, `at` and `kind`:
+
+- `key` is 1 to 64 characters of `A-Z`, `a-z`, `0-9`, `:`, `_` and `-`, unique within its
+  item and the same when the event is sent again. An event already stored under its item
+  and key is ignored, so a call is safe to repeat.
+- `at` is when it happened, as ISO 8601.
+- `kind` is `grabbed` (taken **and** confirmed: checked and in place), `rejected` (a
+  candidate that was fetched or tried and turned down), `removed` (a grabbed release set
+  aside or replaced later) or `failed` (a search that ended with nothing; it names no
+  release).
+- `reason` is a code, required unless `kind` is `grabbed`, where it must be empty:
+    - about the release itself, counted against it for every sponsor: `wrong_content`,
+      `no_video`, `sample`, `missing_articles`, `provider_gave_up`, `unreadable_nzb`,
+      `password`
+    - about your own settings or luck, shown in your history only: `quality`, `language`,
+      `size`, `excluded`, `provider_refused`, `add_failed`, `fetch_failed`, `upgraded`,
+      `other`
+    - for `failed`: `nothing_found`, `nothing_passed`, `indexers_benched`, `other`
+- `detail` is up to 300 characters of your own wording, and `release` up to 512, required
+  for `grabbed`. Either one carrying an URL (`://`), `apikey` or a control character
+  refuses the call. Never send an indexer's name, an NZB's address, an account name or a
+  file path.
+- A torrent (`"torrent": true`) carries `hash`, its info hash as 40 lowercase hex
+  characters, and neither `nzb` nor `dmm_id`. An NZB carries `nzb`, the sha256 (64
+  lowercase hex) of the file after anonymizing it as below, and `dmm_id`, the `x-dmm-id`
+  meta of the NZB, when it came from DMM's Newznab endpoint.
+- `size` is in bytes, `posted` when the release was posted, `season`, `episode` and `pack`
+  what it holds, and `resolution` one of `""`, `480p`, `720p`, `1080p` and `2160p`.
+
+```json
+{ "ok": true, "stored": 2, "unknown": [], "want_nzb": ["<sha256>"] }
+```
+
+`stored` counts the events that were new. `unknown` lists item ids no longer on your
+list: drop their events. `want_nzb` lists the sha256s of grabbed NZBs DMM does not hold
+and would like uploaded; one with a `dmm_id` is never asked for. 400 names the first
+malformed field and stores nothing of the call.
+
+Events about your own settings and empty searches are kept 30 days, grabs and verdicts
+on a release 180.
+
+`PUT /api/sponsor/wanted/nzb/<sha256>` uploads an NZB `want_nzb` asked for, with
+`Content-Type: application/x-nzb`. The body is at most 8 MB, plain or with
+`Content-Encoding: gzip`, and `<sha256>` is the sha256 of the plain bytes, the one the
+event named.
+
+Anonymize the NZB **before** hashing and uploading it:
+
+- keep only `<file>` elements with their `poster`, `date` and `subject`, their `<groups>`
+  and their `<segments>` (each segment's `bytes`, `number` and Message-ID);
+- keep `<head><meta type="password">` and drop every other meta, every comment,
+  processing instruction and DOCTYPE, and every other attribute;
+- write it the same way every time, so the same posting hashes the same.
+
+DMM does not rely on that. It reads only each file's subject, its segments and the
+password out of the upload, expands no entity a DOCTYPE declares, and stores a copy it
+rebuilt itself, written with one fixed group and without posters or dates. It keeps no
+record of who uploaded an NZB. Other sponsors' fetchers get it as a `known` hint, served
+by DMM's Newznab endpoint like any other.
+
+```json
+{ "ok": true }
+```
+
+Repeating an upload is harmless. 400 means the body does not hash to `<sha256>` or is
+not an NZB with at least one usable file, 404 that `want_nzb` did not ask you for it,
+413 that it is over 8 MB, and 503 that DMM could not store it: try again later.
 
 ## Seerr, Overseerr and Jellyseerr
 

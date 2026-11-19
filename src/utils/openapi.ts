@@ -38,6 +38,8 @@ const {
 	sponsorPlace,
 	sponsorWanted,
 	sponsorWantedComplete,
+	sponsorWantedHistory,
+	sponsorWantedNzb,
 	animeEntries,
 	takedown,
 	stream,
@@ -64,6 +66,7 @@ const errors = (...codes: string[]) =>
 	Object.fromEntries(codes.map((code) => [code, { $ref: `#/components/responses/${code}` }]));
 
 const HASH = 'f0ec5bc0e0a8d1cdfe6bc0c5ce4c5be39a9e2c6a';
+const SHA256 = '2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae';
 const hashes = (max: number) => ({
 	type: 'array',
 	items: ref('InfoHash'),
@@ -272,8 +275,7 @@ export const openApiDocument = {
 				security: [],
 				operationId: 'searchTitles',
 				summary: 'Find a title by name',
-				description:
-					`Movies and shows from IMDb's title list whose name matches \`keyword\`, best match first. A year at the end of the keyword (\`matrix 1999\`) narrows it. Use the \`imdbid\` with the sponsor endpoints or Torznab.\n\n**Limit:** ${per(titleSearch, 'searches')}.`,
+				description: `Movies and shows from IMDb's title list whose name matches \`keyword\`, best match first. A year at the end of the keyword (\`matrix 1999\`) narrows it. Use the \`imdbid\` with the sponsor endpoints or Torznab.\n\n**Limit:** ${per(titleSearch, 'searches')}.`,
 				parameters: [
 					{
 						name: 'keyword',
@@ -1036,6 +1038,13 @@ export const openApiDocument = {
 						schema: { type: 'string' },
 						example: '1080p,2160p',
 					},
+					{
+						name: 'hints',
+						in: 'query',
+						description:
+							"`1` adds `known` and `condemned` to each title: releases other sponsors' fetchers took and confirmed for it, and releases at least two of them found bad. A hint names a release and how many took it, never who.",
+						schema: { enum: ['1'] },
+					},
 				],
 				responses: {
 					'200': ok(
@@ -1101,6 +1110,45 @@ export const openApiDocument = {
 														size: { type: 'integer' },
 														season: { type: 'integer' },
 														episode: { type: 'integer' },
+													},
+												},
+												known: {
+													type: 'array',
+													description:
+														"With `?hints=1`: releases other sponsors' fetchers took and confirmed for this title, most taken first, at most 10 (a season, for a show). A torrent carries `hash`; an NZB `nzb`, its grab URL with your key, and `id`. One more candidate for your own rules, never a way round them.",
+													items: {
+														type: 'object',
+														properties: {
+															release: { type: 'string' },
+															torrent: { type: 'boolean' },
+															hash: { type: 'string' },
+															nzb: { type: 'string' },
+															id: { type: 'string' },
+															size: { type: 'integer' },
+															resolution: { type: 'string' },
+															season: { type: 'integer' },
+															episode: { type: 'integer' },
+															pack: { type: 'boolean' },
+															taken: {
+																type: 'integer',
+																description:
+																	'Other sponsors who took it',
+															},
+														},
+													},
+												},
+												condemned: {
+													type: 'array',
+													description:
+														'With `?hints=1`: releases at least two sponsors turned down for what is in them (wrong content, no video, a sample, missing articles, a password), with nobody confirming them since. At most 20.',
+													items: {
+														type: 'object',
+														properties: {
+															release: { type: 'string' },
+															hash: { type: 'string' },
+															size: { type: 'integer' },
+															nzb_sha: { type: 'string' },
+														},
 													},
 												},
 											},
@@ -1184,6 +1232,203 @@ export const openApiDocument = {
 					'404': {
 						description: 'The item is no longer on the list',
 						content: json(ref('Error'), { error: 'Not on this wanted list' }),
+					},
+					...errors('400', '401', '429'),
+				},
+			},
+		},
+		'/api/sponsor/wanted/history': {
+			post: {
+				tags: ['Sponsors'],
+				operationId: 'wantedHistory',
+				summary: 'Report what was done for wanted titles',
+				description: `What a fetcher did for wanted titles: each release it took and confirmed (\`grabbed\`), turned down (\`rejected\`) or set aside later (\`removed\`), and each search that ended with nothing (\`failed\`). At most 20 items, 200 events and 256 KB a call. An event resent under the same item and \`key\` is not stored twice. \`seasons\` replaces a show's have/missing snapshot. The Wanted page shows all of it; grabs and content verdicts also become other sponsors' hints, without your name.\n\n\`detail\` and \`release\` are refused when they carry an URL or an API key. Never send an indexer's name, an NZB's address, an account name or a file path.\n\n**Limit:** ${per(sponsorWantedHistory, 'calls')} per key.`,
+				externalDocs: {
+					url: `${REPO}/sponsor-api.md#wanted-history`,
+					description: 'Wanted history',
+				},
+				security: sponsorKey,
+				requestBody: body(
+					{
+						type: 'object',
+						required: ['items'],
+						properties: {
+							items: {
+								type: 'array',
+								maxItems: 20,
+								items: {
+									type: 'object',
+									required: ['id'],
+									properties: {
+										id: { type: 'string', description: 'The wanted item id' },
+										seasons: {
+											type: 'array',
+											description: 'Shows only: the whole snapshot',
+											items: {
+												type: 'object',
+												required: ['season'],
+												properties: {
+													season: { type: 'integer' },
+													have: {
+														type: 'array',
+														items: { type: 'integer' },
+													},
+													missing: {
+														type: 'array',
+														items: { type: 'integer' },
+													},
+												},
+											},
+										},
+										events: {
+											type: 'array',
+											items: {
+												type: 'object',
+												required: ['key', 'at', 'kind'],
+												properties: {
+													key: {
+														type: 'string',
+														pattern: '^[A-Za-z0-9:_-]{1,64}$',
+														description:
+															'Unique per item, the same on a resend',
+													},
+													at: { type: 'string', format: 'date-time' },
+													kind: {
+														enum: [
+															'grabbed',
+															'rejected',
+															'failed',
+															'removed',
+														],
+													},
+													reason: {
+														type: 'string',
+														description:
+															'A code; required unless `kind` is `grabbed`',
+													},
+													detail: { type: 'string', maxLength: 300 },
+													release: { type: 'string', maxLength: 512 },
+													torrent: { type: 'boolean' },
+													hash: {
+														type: 'string',
+														pattern: '^[0-9a-f]{40}$',
+														description: 'A torrent: its info hash',
+													},
+													nzb: {
+														type: 'string',
+														pattern: '^[0-9a-f]{64}$',
+														description:
+															'An NZB: the sha256 of the anonymized file',
+													},
+													dmm_id: {
+														type: 'string',
+														description:
+															"The NZB's `x-dmm-id` when it came from DMM's Newznab endpoint",
+													},
+													size: { type: 'integer' },
+													posted: { type: 'string', format: 'date-time' },
+													season: { type: 'integer' },
+													episode: { type: 'integer' },
+													pack: { type: 'boolean' },
+													resolution: {
+														enum: [
+															'',
+															'480p',
+															'720p',
+															'1080p',
+															'2160p',
+														],
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					{
+						items: [
+							{
+								id: '5d1e…',
+								seasons: [{ season: 1, have: [1, 2, 3], missing: [7] }],
+								events: [
+									{
+										key: 'grab:S01E07:1',
+										at: '2026-11-19T13:29:00Z',
+										kind: 'grabbed',
+										release: 'Show.S01E07.1080p.WEB.h264-GRP',
+										torrent: false,
+										nzb: SHA256,
+										size: 1234567890,
+										season: 1,
+										episode: 7,
+										resolution: '1080p',
+									},
+								],
+							},
+						],
+					}
+				),
+				responses: {
+					'200': ok(
+						'Recorded',
+						{
+							type: 'object',
+							properties: {
+								ok: { const: true },
+								stored: { type: 'integer', description: 'Events that were new' },
+								unknown: {
+									type: 'array',
+									items: { type: 'string' },
+									description: 'Item ids no longer on your list',
+								},
+								want_nzb: {
+									type: 'array',
+									items: { type: 'string' },
+									description: 'sha256s of grabbed NZBs DMM would like uploaded',
+								},
+							},
+						},
+						{ ok: true, stored: 1, unknown: [], want_nzb: [SHA256] }
+					),
+					...errors('400', '401', '429'),
+				},
+			},
+		},
+		'/api/sponsor/wanted/nzb/{sha}': {
+			put: {
+				tags: ['Sponsors'],
+				operationId: 'wantedNzbUpload',
+				summary: 'Upload a grabbed NZB',
+				description: `Uploads an NZB that \`want_nzb\` asked for, anonymized first: only each file's subject, poster, date, groups and segments and the archive password, with every other meta, comment and attribute removed. DMM rebuilds it again before storing it and keeps no record of who sent it. The body is at most 8 MB, plain or with \`Content-Encoding: gzip\`; the path is the sha256 of the plain bytes. Safe to repeat.\n\n**Limit:** ${per(sponsorWantedNzb, 'calls')} per key.`,
+				externalDocs: {
+					url: `${REPO}/sponsor-api.md#wanted-history`,
+					description: 'Wanted history',
+				},
+				security: sponsorKey,
+				parameters: [
+					{
+						name: 'sha',
+						in: 'path',
+						required: true,
+						description: 'sha256 of the body, 64 lowercase hex characters',
+						schema: { type: 'string', pattern: '^[0-9a-f]{64}$' },
+					},
+				],
+				requestBody: {
+					required: true,
+					content: { 'application/x-nzb': { schema: { type: 'string' } } },
+				},
+				responses: {
+					'200': ok('Stored', { type: 'object', properties: { ok: { const: true } } }),
+					'404': {
+						description: 'DMM did not ask you for an NZB of that sha256',
+						content: json(ref('Error'), { error: 'DMM did not ask for that NZB' }),
+					},
+					'413': {
+						description: 'The body is over 8 MB',
+						content: json(ref('Error'), { error: 'An uploaded NZB is at most 8 MB' }),
 					},
 					...errors('400', '401', '429'),
 				},

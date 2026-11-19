@@ -32,10 +32,11 @@ function routeExists(path: string): boolean {
 		if (rest.length === 0) return existsSync(`${dir}.ts`) || existsSync(join(dir, 'index.ts'));
 		const [head, ...tail] = rest;
 		if (head.startsWith('{')) {
-			return ['[id]', '[userid]', '[mediaType]', '[...route]', '[[...path]]'].some((name) =>
-				name.includes('...')
-					? existsSync(join(dir, `${name}.ts`))
-					: walk(join(dir, name), tail)
+			return ['[id]', '[userid]', '[mediaType]', '[sha]', '[...route]', '[[...path]]'].some(
+				(name) =>
+					name.includes('...')
+						? existsSync(join(dir, `${name}.ts`))
+						: walk(join(dir, name), tail)
 			);
 		}
 		return (
