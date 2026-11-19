@@ -28,8 +28,8 @@ export interface OtherStreamsLimitChoice {
  * The sponsor-only values used to be missing from the list entirely, which hid
  * the perk from exactly the people it is meant to reach: a non-sponsor saw a
  * dropdown that stopped at 5 and no reason to think it went further. They are
- * listed and disabled instead. The ceiling is unchanged, and the server checks
- * it again on every save, so this only decides what is on screen.
+ * listed and disabled instead. The ceiling is unchanged and enforced where
+ * streams are served (castOtherStreamsLimit), so this only decides what is on screen.
  *
  * `current` is kept in the list even when it sits above the ceiling, which is
  * what a sponsor who set 10 and then lapsed will have stored (the stream routes

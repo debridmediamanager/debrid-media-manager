@@ -67,6 +67,20 @@ describe('/api/stremio-en profile, links and addon routes', () => {
 		expect(tooMany._getStatusCode()).toBe(400);
 	});
 
+	// 2026-11-19: a browser still holding 10 from a lapsed sponsorship had this save answered 400.
+	it('saves 10 from a non-sponsor with no grant, on both routes', async () => {
+		mockRepository.updateEasynewsCastSettings = vi.fn().mockResolvedValue(true);
+		for (const [route, body] of [
+			[saveProfile, { apiKey: 'secret' }],
+			[updateSizeLimits, { userId: 'en-user' }],
+		] as const) {
+			const res = createMockResponse();
+			await route(post({ ...body, otherStreamsLimit: 10 }), res);
+			expect(res._getStatusCode()).toBe(200);
+		}
+		expect(mockRepository.setCastSponsorGrant).toHaveBeenCalledWith('en', 'en-user', null);
+	});
+
 	it('updates settings by cast id alone, and answers 404 for an unknown one', async () => {
 		mockRepository.updateEasynewsCastSettings = vi.fn().mockResolvedValue(true);
 		const ok = createMockResponse();
