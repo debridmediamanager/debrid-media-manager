@@ -73,14 +73,14 @@ describe('API /api/stremio-ad/cast/updateSizeLimits', () => {
 		expect(res._getStatusCode()).toBe(400);
 		expect(res._getData()).toEqual({
 			status: 'error',
-			errorMessage: 'otherStreamsLimit must be an integer between 0 and 5',
+			errorMessage: 'otherStreamsLimit must be an integer between 0 and 10',
 		});
 	});
 
-	it('returns 400 when otherStreamsLimit exceeds 5', async () => {
+	it('returns 400 when otherStreamsLimit exceeds 10', async () => {
 		const req = createMockRequest({
 			method: 'POST',
-			body: { apiKey: 'key', otherStreamsLimit: 6 },
+			body: { apiKey: 'key', otherStreamsLimit: 11 },
 		});
 		const res = createMockResponse();
 
@@ -101,7 +101,7 @@ describe('API /api/stremio-ad/cast/updateSizeLimits', () => {
 		expect(res._getStatusCode()).toBe(400);
 		expect(res._getData()).toEqual({
 			status: 'error',
-			errorMessage: 'otherStreamsLimit must be an integer between 0 and 5',
+			errorMessage: 'otherStreamsLimit must be an integer between 0 and 10',
 		});
 	});
 
@@ -234,7 +234,7 @@ describe('API /api/stremio-ad/cast/updateSizeLimits', () => {
 		it('still validates otherStreamsLimit', async () => {
 			const req = createMockRequest({
 				method: 'POST',
-				body: { castToken: 'cast-1', otherStreamsLimit: 9 },
+				body: { castToken: 'cast-1', otherStreamsLimit: 11 },
 			});
 			const res = createMockResponse();
 

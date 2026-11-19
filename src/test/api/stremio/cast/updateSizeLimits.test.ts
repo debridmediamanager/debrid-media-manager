@@ -204,19 +204,19 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 		expect(res.status).toHaveBeenCalledWith(200);
 	});
 
-	it('rejects otherStreamsLimit greater than 5', async () => {
+	it('rejects otherStreamsLimit greater than 10', async () => {
 		req.body = {
 			clientId: 'client',
 			clientSecret: 'secret',
 			refreshToken: 'refresh',
-			otherStreamsLimit: 10,
+			otherStreamsLimit: 11,
 		};
 
 		await handler(req as NextApiRequest, res as NextApiResponse);
 
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
-			error: 'otherStreamsLimit must be an integer between 0 and 5',
+			error: 'otherStreamsLimit must be an integer between 0 and 10',
 		});
 	});
 
@@ -232,7 +232,7 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
-			error: 'otherStreamsLimit must be an integer between 0 and 5',
+			error: 'otherStreamsLimit must be an integer between 0 and 10',
 		});
 	});
 
@@ -248,7 +248,7 @@ describe('/api/stremio/cast/updateSizeLimits', () => {
 
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
-			error: 'otherStreamsLimit must be an integer between 0 and 5',
+			error: 'otherStreamsLimit must be an integer between 0 and 10',
 		});
 	});
 

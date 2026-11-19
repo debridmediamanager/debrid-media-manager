@@ -2,7 +2,7 @@ import { repository as db } from '@/services/repository';
 import { recordOtherStreamsGrant } from '@/utils/castOtherStreamsLimit';
 import { resolveOffcloudUser } from '@/utils/offcloudCastApiHelpers';
 import { sponsorIdOfRequest } from '@/utils/requireSponsor';
-import { maxOtherStreamsLimit } from '@/utils/sponsorLimits';
+import { SPONSOR_MAX_OTHER_STREAMS_LIMIT } from '@/utils/sponsorLimits';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 // POST, not GET: the API key travels in the body so it never reaches an access
@@ -29,9 +29,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	let sponsorShortId: string | null = null;
 	if (otherStreamsLimit !== undefined) {
-		// Sponsors may raise this; everyone else stays at the standard ceiling.
+		// Above the standard 5 is accepted from anyone and stored: only an active sponsor's grant
+		// makes the stream routes serve it. Refusing it failed every sync of a lapsed sponsor.
 		sponsorShortId = await sponsorIdOfRequest(req);
-		const maxLimit = maxOtherStreamsLimit(sponsorShortId !== null);
+		const maxLimit = SPONSOR_MAX_OTHER_STREAMS_LIMIT;
 		const limit = Number(otherStreamsLimit);
 		if (!Number.isInteger(limit) || limit < 0 || limit > maxLimit) {
 			res.status(400).json({

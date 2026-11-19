@@ -1,4 +1,5 @@
 import handler from '@/pages/api/stremio/cast/saveProfile';
+import { repository } from '@/services/repository';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { activeSponsor, sponsorshipLapsed } from '@/test/utils/sponsor';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -203,7 +204,7 @@ describe('/api/stremio/cast/saveProfile', () => {
 	it('validates otherStreamsLimit range', async () => {
 		const req = createMockRequest({
 			method: 'POST',
-			body: { clientId: 'id', clientSecret: 'secret', otherStreamsLimit: 10 },
+			body: { clientId: 'id', clientSecret: 'secret', otherStreamsLimit: 11 },
 		});
 		const res = createMockResponse();
 
@@ -211,7 +212,7 @@ describe('/api/stremio/cast/saveProfile', () => {
 
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({
-			error: 'otherStreamsLimit must be an integer between 0 and 5',
+			error: 'otherStreamsLimit must be an integer between 0 and 10',
 		});
 	});
 
@@ -265,13 +266,14 @@ describe('/api/stremio/cast/saveProfile', () => {
 			expect(mockSaveCastProfile).not.toHaveBeenCalled();
 		});
 
-		// A forged token must not buy the raised ceiling, or the gate is decorative.
-		it('refuses 10 when the token is forged', async () => {
+		// A forged token buys nothing: the save goes through, as it must for the automatic
+		// sync, but with no grant, so the stream routes serve the standard limit.
+		it('saves 10 from a forged token without a grant', async () => {
 			const res = createMockResponse();
 			await handler(save(10, { 'x-dmm-sponsor': 'forged.signature' }), res);
 
-			expect(res.status).toHaveBeenCalledWith(400);
-			expect(mockSaveCastProfile).not.toHaveBeenCalled();
+			expect(res.status).toHaveBeenCalledWith(200);
+			expect(repository.setCastSponsorGrant).toHaveBeenCalledWith('rd', 'user-1', null);
 		});
 
 		it('still lets a sponsor set a value inside the standard range', async () => {
@@ -280,21 +282,19 @@ describe('/api/stremio/cast/saveProfile', () => {
 			expect(res.status).toHaveBeenCalledWith(200);
 		});
 
-		// The regression: a token minted while the pledge was live stays signed and
-		// unexpired for up to a week after gatekeeper zeroes the row, so trusting the
-		// signature alone kept the raised ceiling for that whole window.
-		it('refuses 10 once the sponsorship behind the token has lapsed', async () => {
+		// A token minted while the pledge was live stays signed and unexpired for up to a
+		// week after gatekeeper zeroes the row, so the signature alone must not record a
+		// grant. The save itself goes through: refusing it failed every sync, and so every
+		// Kodi link, of a lapsed sponsor whose browser still held 10 (2026-11-19).
+		it('saves 10 without a grant once the sponsorship behind the token has lapsed', async () => {
 			const token = sponsorToken();
 			sponsorshipLapsed();
 
 			const res = createMockResponse();
 			await handler(save(10, { 'x-dmm-sponsor': token }), res);
 
-			expect(res.status).toHaveBeenCalledWith(400);
-			expect(res.json).toHaveBeenCalledWith({
-				error: 'otherStreamsLimit must be an integer between 0 and 5',
-			});
-			expect(mockSaveCastProfile).not.toHaveBeenCalled();
+			expect(res.status).toHaveBeenCalledWith(200);
+			expect(repository.setCastSponsorGrant).toHaveBeenCalledWith('rd', 'user-1', null);
 		});
 	});
 

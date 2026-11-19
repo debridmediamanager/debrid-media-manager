@@ -125,7 +125,7 @@ describe('/api/stremio-tb/cast/saveProfile', () => {
 	it('validates otherStreamsLimit range', async () => {
 		const req = createMockRequest({
 			method: 'POST',
-			body: { apiKey: 'tb-key', otherStreamsLimit: 10 },
+			body: { apiKey: 'tb-key', otherStreamsLimit: 11 },
 		});
 		const res = createMockResponse();
 

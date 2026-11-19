@@ -56,14 +56,14 @@ describe('/api/stremio-en profile, links and addon routes', () => {
 		expect(JSON.stringify(res._getData())).not.toContain('secret');
 	});
 
-	it('refuses a login Easynews rejects, and a raised limit for a non-sponsor', async () => {
+	it('refuses a login Easynews rejects, and a limit above 10', async () => {
 		mockResolve.mockResolvedValue({ valid: false });
 		const refused = createMockResponse();
 		await saveProfile(post({ apiKey: 'wrong' }), refused);
 		expect(refused._getStatusCode()).toBe(401);
 
 		const tooMany = createMockResponse();
-		await saveProfile(post({ apiKey: 'secret', otherStreamsLimit: 10 }), tooMany);
+		await saveProfile(post({ apiKey: 'secret', otherStreamsLimit: 11 }), tooMany);
 		expect(tooMany._getStatusCode()).toBe(400);
 	});
 

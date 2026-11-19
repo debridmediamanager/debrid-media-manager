@@ -144,7 +144,7 @@ describe('/api/stremio-ad/cast/saveProfile', () => {
 	it('validates otherStreamsLimit range', async () => {
 		const req = createMockRequest({
 			method: 'POST',
-			body: { apiKey: 'ad-key', otherStreamsLimit: 10 },
+			body: { apiKey: 'ad-key', otherStreamsLimit: 11 },
 		});
 		const res = createMockResponse();
 

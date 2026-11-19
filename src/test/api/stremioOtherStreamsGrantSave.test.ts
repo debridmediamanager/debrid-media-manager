@@ -1,6 +1,7 @@
 /**
  * The save half of the sponsor-only "other streams" limit: every cast save path
- * that stores a limit above 5 has to record which sponsorship allowed it, or the
+ * that stores a limit above 5 has to record which sponsorship allowed it (none, for
+ * a non-sponsor, whose save is accepted all the same), or the
  * stream routes cannot tell an active sponsor's 10 from a lapsed one's. A save
  * at 5 or below drops the grant, and a save that leaves the limit alone keeps it.
  */
@@ -125,6 +126,19 @@ describe.each(paths)('$name', ({ service, handler, body }) => {
 			200
 		);
 		expect(db.setCastSponsorGrant).toHaveBeenCalledWith(service, USER, TEST_SPONSOR_SHORT_ID);
+	});
+
+	// 2026-11-19: a browser that still held 10 from a lapsed sponsorship had every sync
+	// answered 400, so /kodi could set up no new service and a relink dropped three of five.
+	it('saves 10 from a non-sponsor, with no grant for the stream routes to honour', async () => {
+		expect(await save({ otherStreamsLimit: 10 })).toBe(200);
+		expect(db.setCastSponsorGrant).toHaveBeenCalledWith(service, USER, null);
+	});
+
+	it('still refuses 11', async () => {
+		expect(await save({ otherStreamsLimit: 11 }, { 'x-dmm-sponsor': activeSponsor() })).toBe(
+			400
+		);
 	});
 
 	it('drops the grant when a sponsor saves 5 or below', async () => {
