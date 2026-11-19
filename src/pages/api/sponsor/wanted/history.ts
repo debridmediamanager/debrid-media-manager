@@ -13,9 +13,11 @@ export const config = { api: { bodyParser: { sizeLimit: '256kb' } } };
  * at most 20 items and 200 events a call. Each event is a release it took and
  * confirmed (`grabbed`), turned down (`rejected`) or set aside later (`removed`), or
  * a search that ended with nothing (`failed`). `seasons` replaces a show's have/missing
- * snapshot. Answers `{ok, stored, unknown, want_nzb}`: how many events were new (one
- * resent under its item and `key` is not stored twice), the item ids no longer on the
- * list, and the sha256s of grabbed NZBs DMM would like uploaded. See docs/sponsor-api.md.
+ * snapshot. Answers `{ok, stored, unknown, want_nzb, refused?}`: how many events were new
+ * (one resent under its item and `key` is not stored twice), the item ids no longer on the
+ * list, the sha256s of grabbed NZBs DMM would like uploaded, and the events or snapshots
+ * that did not read and were left out. Only a body that is not a report at all is a 400.
+ * See docs/sponsor-api.md.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'POST') {
@@ -33,8 +35,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	) {
 		return res.status(429).json({ error: 'Rate limit exceeded' });
 	}
-	const items = parseHistory(req.body);
-	if (typeof items === 'string') return res.status(400).json({ error: items });
+	const parsed = parseHistory(req.body);
+	if (typeof parsed === 'string') return res.status(400).json({ error: parsed });
+	const { items, refused } = parsed;
 
 	try {
 		const owned = await db.ownedWanted(
@@ -67,6 +70,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			stored,
 			unknown: items.filter((item) => !owned.has(item.id)).map((item) => item.id),
 			want_nzb: candidates.filter((sha) => !held.has(sha)),
+			// What did not read and was left out, the first 20; absent when all of it did.
+			...(refused.length && { refused }),
 		});
 	} catch (error) {
 		console.error('[sponsor/wanted/history] failed', error);

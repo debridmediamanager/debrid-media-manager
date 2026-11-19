@@ -185,14 +185,27 @@ function parseEvent(itemId: string, raw: unknown): WantedEventInput | string {
 	};
 }
 
-/** The body of POST /api/sponsor/wanted/history, or what is wrong with it. */
-export function parseHistory(body: unknown): ParsedHistoryItem[] | string {
+/** How many refusals an answer names; a report holds at most 200 events. */
+const MAX_REFUSED = 20;
+
+/**
+ * The body of POST /api/sponsor/wanted/history, or what is wrong with it as a whole.
+ * One event or snapshot that does not read is left out and named in `refused`, never a
+ * reason to refuse the rest: zurg does not send a report twice.
+ */
+export function parseHistory(
+	body: unknown
+): { items: ParsedHistoryItem[]; refused: string[] } | string {
 	const items = isObject(body) ? body.items : undefined;
 	if (!Array.isArray(items) || items.length > MAX_HISTORY_ITEMS) {
 		return `Expected {"items": [...]} with at most ${MAX_HISTORY_ITEMS} items`;
 	}
 	const out: ParsedHistoryItem[] = [];
 	const seen = new Set<string>();
+	const refused: string[] = [];
+	const refuse = (what: string) => {
+		if (refused.length < MAX_REFUSED) refused.push(what);
+	};
 	let total = 0;
 	for (const [i, item] of items.entries()) {
 		if (!isObject(item) || typeof item.id !== 'string' || !ITEM_ID.test(item.id)) {
@@ -210,15 +223,15 @@ export function parseHistory(body: unknown): ParsedHistoryItem[] | string {
 		const parsed: ParsedHistoryItem = { id, events: [] };
 		if (item.seasons !== undefined) {
 			const seasons = parseSeasons(item.seasons);
-			if (typeof seasons === 'string') return `items[${i}]: ${seasons}`;
-			parsed.seasons = seasons;
+			if (typeof seasons === 'string') refuse(`items[${i}]: ${seasons}`);
+			else parsed.seasons = seasons;
 		}
 		for (const [j, raw] of rawEvents.entries()) {
 			const event = parseEvent(id, raw);
-			if (typeof event === 'string') return `items[${i}].events[${j}]: ${event}`;
-			parsed.events.push(event);
+			if (typeof event === 'string') refuse(`items[${i}].events[${j}]: ${event}`);
+			else parsed.events.push(event);
 		}
 		out.push(parsed);
 	}
-	return out;
+	return { items: out, refused };
 }

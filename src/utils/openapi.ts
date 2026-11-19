@@ -1388,6 +1388,12 @@ export const openApiDocument = {
 									items: { type: 'string' },
 									description: 'sha256s of grabbed NZBs DMM would like uploaded',
 								},
+								refused: {
+									type: 'array',
+									items: { type: 'string' },
+									description:
+										'Events or snapshots that did not read and were left out, at most 20; absent when everything was stored',
+								},
 							},
 						},
 						{ ok: true, stored: 1, unknown: [], want_nzb: [SHA256] }
@@ -1401,7 +1407,7 @@ export const openApiDocument = {
 				tags: ['Sponsors'],
 				operationId: 'wantedNzbUpload',
 				summary: 'Upload a grabbed NZB',
-				description: `Uploads an NZB that \`want_nzb\` asked for, anonymized first: only each file's subject, poster, date, groups and segments and the archive password, with every other meta, comment and attribute removed. DMM rebuilds it again before storing it and keeps no record of who sent it. The body is at most 8 MB, plain or with \`Content-Encoding: gzip\`; the path is the sha256 of the plain bytes. Safe to repeat.\n\n**Limit:** ${per(sponsorWantedNzb, 'calls')} per key.`,
+				description: `Uploads an NZB that \`want_nzb\` asked for, anonymized first: only each file's subject and segments and the archive password, with posters, dates, groups, every other meta, comment and attribute removed. DMM rebuilds it again before storing it and keeps no record of who sent it. The body is at most 8 MB, plain or with \`Content-Encoding: gzip\`; the path is the sha256 of the plain bytes. Safe to repeat.\n\n**Limit:** ${per(sponsorWantedNzb, 'calls')} per key.`,
 				externalDocs: {
 					url: `${REPO}/sponsor-api.md#wanted-history`,
 					description: 'Wanted history',

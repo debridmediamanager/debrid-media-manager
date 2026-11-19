@@ -237,6 +237,28 @@ describe('POST /api/sponsor/wanted/history', () => {
 				],
 			},
 		],
+	])('refuses %s and stores nothing', async (_what, body) => {
+		const res = await post(body);
+		expect(res._getStatusCode()).toBe(400);
+		expect(mockRepository.recordWantedEvents).not.toHaveBeenCalled();
+		expect(mockRepository.setWantedProgress).not.toHaveBeenCalled();
+	});
+
+	// One event zurg got wrong must not cost the report it came in: zurg marks a
+	// report sent whatever DMM made of it, so a 400 here lost up to 200 events.
+	it('stores the rest of a report holding one bad event, and names the bad one', async () => {
+		const res = await post({
+			items: [{ id: ID, events: [grabbed(), grabbed({ key: 'grab:2', resolution: '4k' })] }],
+		});
+		expect(res._getStatusCode()).toBe(200);
+		const [, , events] = mockRepository.recordWantedEvents.mock.calls[0];
+		expect(events.map((e: { key: string }) => e.key)).toEqual(['grab:1']);
+		expect((res._getData() as { refused: string[] }).refused).toEqual([
+			expect.stringMatching(/^items\[0\]\.events\[1\]: "resolution"/),
+		]);
+	});
+
+	it.each([
 		['a key outside the alphabet', one(grabbed({ key: 'a b' }))],
 		['a 65-character key', one(grabbed({ key: 'k'.repeat(65) }))],
 		['no key', one(grabbed({ key: undefined }))],
@@ -305,10 +327,11 @@ describe('POST /api/sponsor/wanted/history', () => {
 				],
 			},
 		],
-	])('refuses %s and stores nothing', async (_what, body) => {
+	])('leaves out %s, says so, and stores nothing of it', async (_what, body) => {
 		const res = await post(body);
-		expect(res._getStatusCode()).toBe(400);
-		expect(mockRepository.recordWantedEvents).not.toHaveBeenCalled();
+		expect(res._getStatusCode()).toBe(200);
+		expect((res._getData() as { refused: string[] }).refused).toHaveLength(1);
+		expect(mockRepository.recordWantedEvents.mock.calls[0][2]).toEqual([]);
 		expect(mockRepository.setWantedProgress).not.toHaveBeenCalled();
 	});
 

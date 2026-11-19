@@ -588,8 +588,17 @@ An event needs `key`, `at` and `kind`:
 
 `stored` counts the events that were new. `unknown` lists item ids no longer on your
 list: drop their events. `want_nzb` lists the sha256s of grabbed NZBs DMM does not hold
-and would like uploaded; one with a `dmm_id` is never asked for. 400 names the first
-malformed field and stores nothing of the call.
+and would like uploaded; one with a `dmm_id` is never asked for.
+
+An event or a `seasons` snapshot that does not read is left out and the rest is stored:
+the answer then carries `refused`, up to 20 lines such as
+`items[0].events[3]: "resolution" must be ...`. Do not send those again as they are.
+Only a body that is not a report at all (no `items`, more than 20 items or 200 events,
+an item id twice or malformed) is a 400, which stores nothing.
+
+A `failed` event replaces the earlier `failed` events of the same title and `reason`,
+so each title holds one per reason, the newest. A verdict on a release is counted for
+other sponsors only when the event names it by `hash`, `nzb` or `dmm_id`.
 
 Events about your own settings and empty searches are kept 30 days, grabs and verdicts
 on a release 180.
@@ -601,8 +610,9 @@ event named.
 
 Anonymize the NZB **before** hashing and uploading it:
 
-- keep only `<file>` elements with their `poster`, `date` and `subject`, their `<groups>`
-  and their `<segments>` (each segment's `bytes`, `number` and Message-ID);
+- keep only `<file>` elements with their `subject` and their `<segments>` (each segment's
+  `bytes`, `number` and Message-ID); drop `poster` and `date`, and write one fixed
+  `<group>` (zurg writes `alt.binaries.misc`);
 - keep `<head><meta type="password">` and drop every other meta, every comment,
   processing instruction and DOCTYPE, and every other attribute;
 - write it the same way every time, so the same posting hashes the same.

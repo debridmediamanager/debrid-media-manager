@@ -133,12 +133,32 @@ export class WantedEventsService extends DatabaseClient {
 					// A zurg's clock can run ahead; nothing happened after DMM heard of it.
 					at: event.at > now ? now : event.at,
 					size: event.size === null ? null : BigInt(event.size),
-					shared: isShared(event.kind, event.reason),
+					// A verdict counts for others only on a release they can tell it by.
+					shared:
+						isShared(event.kind, event.reason) &&
+						!!(event.hash || event.nzb || event.dmmId),
 				},
 			];
 		});
 		if (!data.length) return 0;
 		const { count } = await this.prisma.wantedEvent.createMany({ data, skipDuplicates: true });
+		// One "nothing taken" per item and reason, the newest: zurg keys each on its
+		// wording, which changes with every count, and keeps only the last itself.
+		const failed = new Map<string, (typeof data)[number]>();
+		for (const row of data) {
+			if (row.kind === 'failed') failed.set(`${row.itemId} ${row.reason}`, row);
+		}
+		for (const row of failed.values()) {
+			await this.prisma.wantedEvent.deleteMany({
+				where: {
+					itemId: row.itemId,
+					shortId,
+					kind: 'failed',
+					reason: row.reason,
+					key: { not: row.key },
+				},
+			});
+		}
 		return count;
 	}
 

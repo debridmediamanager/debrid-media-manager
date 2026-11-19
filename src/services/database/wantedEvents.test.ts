@@ -107,6 +107,39 @@ describe('WantedEventsService', () => {
 		expect(data[1]).toMatchObject({ shared: false, at: NOW });
 	});
 
+	// zurg keeps one "nothing taken" per reason and keys it on its wording, which
+	// changes with every count: stored as told, a title failing every half hour
+	// pushed its grabs out of the 200 events the website shows.
+	it('keeps one failed search per item and reason, the newest', async () => {
+		prismaMock.wantedEvent.createMany.mockResolvedValue({ count: 1 });
+		await service.record(
+			'ZP1M',
+			new Map([[ID, { imdbId: 'tt0115082' }]]),
+			[event({ key: 'f-2', kind: 'failed', reason: 'nothing_passed', nzb: null })],
+			NOW
+		);
+		expect(prismaMock.wantedEvent.deleteMany).toHaveBeenCalledWith({
+			where: {
+				itemId: ID,
+				shortId: 'ZP1M',
+				kind: 'failed',
+				reason: 'nothing_passed',
+				key: { not: 'f-2' },
+			},
+		});
+	});
+
+	it('shares no verdict on a release it cannot name', async () => {
+		prismaMock.wantedEvent.createMany.mockResolvedValue({ count: 1 });
+		await service.record(
+			'ZP1M',
+			new Map([[ID, { imdbId: 'tt0115082' }]]),
+			[event({ kind: 'rejected', reason: 'no_video', nzb: null })],
+			NOW
+		);
+		expect(prismaMock.wantedEvent.createMany.mock.calls[0][0].data[0].shared).toBe(false);
+	});
+
 	it('writes nothing when no event is for an owned item', async () => {
 		expect(await service.record('ZP1M', new Map(), [event()])).toBe(0);
 		expect(prismaMock.wantedEvent.createMany).not.toHaveBeenCalled();
