@@ -16,6 +16,7 @@ import { deliverFreeRequests } from '@/services/requestDelivery';
 import { sweepWrittenBackTrash, type SweepResult } from '@/services/scrapedVerdicts/sweep';
 import { fileCompletedTransfers, type FilingSweepResult } from '@/services/transferFilingSweep';
 import { syncDueWantedLists } from '@/services/wantedLists';
+import { pruneWantedNzbs } from '@/services/wantedNzbs';
 import { REQUEST_TTL_MS } from '@/utils/contentRequest';
 import { secretEquals } from '@/utils/secretEquals';
 
@@ -50,6 +51,7 @@ interface CronResponse {
 	usenetCopiesPruned?: number;
 	usenetDeadPruned?: number;
 	wantedEventsPruned?: number;
+	wantedNzbsPruned?: number;
 	error?: string;
 }
 
@@ -223,6 +225,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			console.error('[Cron] Pruning old wanted history failed:', e);
 		}
 
+		// After the events, so an upload whose last event has just gone goes with it.
+		let wantedNzbsPruned: number | undefined;
+		try {
+			wantedNzbsPruned = await pruneWantedNzbs();
+		} catch (e) {
+			console.error('[Cron] Pruning unreferenced wanted NZBs failed:', e);
+		}
+
 		return res.status(200).json({
 			success: true,
 			timestamp: new Date().toISOString(),
@@ -250,6 +260,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			usenetCopiesPruned,
 			usenetDeadPruned,
 			wantedEventsPruned,
+			wantedNzbsPruned,
 		});
 	} catch (error) {
 		console.error('[Cron] Job failed:', error);

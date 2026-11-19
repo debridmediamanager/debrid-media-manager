@@ -189,6 +189,25 @@ export class WantedEventsService extends DatabaseClient {
 		await this.prisma.wantedNzb.createMany({ data: [{ sha }], skipDuplicates: true });
 	}
 
+	/**
+	 * Uploads no event names any more: every event that told of the NZB has been
+	 * pruned, so no hint can offer it. Read through the index on `nzb`.
+	 */
+	public async unreferencedNzbs(limit: number): Promise<string[]> {
+		const rows = await this.prisma.$queryRaw<{ sha: string }[]>(Prisma.sql`
+			SELECT n.sha AS sha
+			FROM WantedNzb n
+			WHERE NOT EXISTS (SELECT 1 FROM WantedEvent e WHERE e.nzb = n.sha)
+			LIMIT ${limit}
+		`);
+		return rows.map((row) => row.sha);
+	}
+
+	/** Drops the record that the store holds this NZB. */
+	public async forgetNzb(sha: string): Promise<void> {
+		await this.prisma.wantedNzb.deleteMany({ where: { sha } });
+	}
+
 	/** Whether this sponsor reported grabbing an NZB of this sha that DMM did not serve. */
 	public async reportedNzb(shortId: string, sha: string): Promise<boolean> {
 		const row = await this.prisma.wantedEvent.findFirst({

@@ -1942,6 +1942,14 @@ export class Repository {
 		return this.wantedEventsService.markNzbHeld(sha);
 	}
 
+	public unreferencedWantedNzbs(limit: number) {
+		return this.wantedEventsService.unreferencedNzbs(limit);
+	}
+
+	public forgetWantedNzb(sha: string) {
+		return this.wantedEventsService.forgetNzb(sha);
+	}
+
 	public reportedWantedNzb(shortId: string, sha: string) {
 		return this.wantedEventsService.reportedNzb(shortId, sha);
 	}

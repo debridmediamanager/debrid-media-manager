@@ -601,7 +601,8 @@ so each title holds one per reason, the newest. A verdict on a release is counte
 other sponsors only when the event names it by `hash`, `nzb` or `dmm_id`.
 
 Events about your own settings and empty searches are kept 30 days, grabs and verdicts
-on a release 180.
+on a release 180. An uploaded NZB is deleted once no event names it any more, so 180 days
+after the last grab of it that a zurg reported.
 
 `PUT /api/sponsor/wanted/nzb/<sha256>` uploads an NZB `want_nzb` asked for, with
 `Content-Type: application/x-nzb`. The body is at most 8 MB, plain or with

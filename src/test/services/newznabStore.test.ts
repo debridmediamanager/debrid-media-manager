@@ -1,5 +1,6 @@
 import {
 	_resetStoreForTest,
+	deleteStoredNzb,
 	getStoredNzb,
 	isStoreConfigured,
 	nzbObjectKey,
@@ -328,5 +329,62 @@ describe('putStoredNzb', () => {
 
 		expect(await putStoredNzb('ds', 'abc123', XML)).toBe(false);
 		expect(calls()).toHaveLength(6);
+	});
+});
+
+describe('deleteStoredNzb', () => {
+	const NAME = 'nzb/wanted/abc.nzb';
+
+	it('deletes every version of exactly that name, and no neighbour sharing its prefix', async () => {
+		fetchMock
+			.mockResolvedValueOnce(respond({ json: AUTH_BODY }))
+			.mockResolvedValueOnce(
+				respond({
+					json: {
+						files: [
+							{ fileName: NAME, fileId: 'v2' },
+							{ fileName: NAME, fileId: 'v1' },
+							{ fileName: `${NAME}.bak`, fileId: 'other' },
+						],
+					},
+				})
+			)
+			.mockResolvedValue(respond({ json: {} }));
+
+		expect(await deleteStoredNzb('wanted', 'abc')).toBe(true);
+
+		const [, listCall, ...deletes] = calls();
+		expect(listCall[0]).toBe(`${API_URL}/b2api/v2/b2_list_file_versions`);
+		expect(JSON.parse((listCall[1] as any).body)).toMatchObject({
+			bucketId: 'bucket-abc',
+			startFileName: NAME,
+			prefix: NAME,
+		});
+		expect(deletes.map(([url, init]) => [url, JSON.parse((init as any).body)])).toEqual([
+			[`${API_URL}/b2api/v2/b2_delete_file_version`, { fileName: NAME, fileId: 'v2' }],
+			[`${API_URL}/b2api/v2/b2_delete_file_version`, { fileName: NAME, fileId: 'v1' }],
+		]);
+	});
+
+	it('counts an object that is not there as gone', async () => {
+		fetchMock
+			.mockResolvedValueOnce(respond({ json: AUTH_BODY }))
+			.mockResolvedValueOnce(respond({ json: { files: [] } }));
+		expect(await deleteStoredNzb('wanted', 'abc')).toBe(true);
+		expect(calls()).toHaveLength(2);
+	});
+
+	it('answers false when a version could not be deleted, the listing failed or B2 is not set up', async () => {
+		fetchMock
+			.mockResolvedValueOnce(respond({ json: AUTH_BODY }))
+			.mockResolvedValueOnce(respond({ json: { files: [{ fileName: NAME, fileId: 'v1' }] } }))
+			.mockResolvedValueOnce(respond({ status: 500 }));
+		expect(await deleteStoredNzb('wanted', 'abc')).toBe(false);
+
+		fetchMock.mockReset().mockResolvedValueOnce(respond({ status: 503 }));
+		expect(await deleteStoredNzb('wanted', 'abc')).toBe(false);
+
+		unconfigure();
+		expect(await deleteStoredNzb('wanted', 'abc')).toBe(false);
 	});
 });

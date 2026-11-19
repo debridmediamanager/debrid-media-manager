@@ -409,3 +409,57 @@ export async function putStoredNzb(
 		return false;
 	}
 }
+
+/**
+ * Removes a stored NZB, every version of it. `true` once nothing is left under its
+ * name, which includes one that was never there; `false` on any failure, and never
+ * throws, so the caller keeps its record of the object and asks again later.
+ */
+export async function deleteStoredNzb(prefix: string, nativeId: string): Promise<boolean> {
+	const config = getConfig();
+	if (!config) return false;
+	const fileName = nzbObjectKey(prefix, nativeId);
+
+	const attempt = async (state: AuthState): Promise<MaybeUnauthorized<boolean>> => {
+		const bucketId = await resolveBucketId(config, state);
+		if (bucketId === UNAUTHORIZED) return UNAUTHORIZED;
+		if (!bucketId) return false;
+		const call = (name: string, body: unknown) =>
+			fetch(`${state.apiUrl}/b2api/v2/${name}`, {
+				method: 'POST',
+				headers: { Authorization: state.token, 'Content-Type': 'application/json' },
+				body: JSON.stringify(body),
+				signal: AbortSignal.timeout(CONTROL_TIMEOUT_MS),
+			});
+
+		// ponytail: one page of versions; a put makes one, so a name holds a handful at most
+		const listed = await call('b2_list_file_versions', {
+			bucketId,
+			startFileName: fileName,
+			prefix: fileName,
+			maxFileCount: 100,
+		});
+		if (listed.status === 401) return UNAUTHORIZED;
+		if (!listed.ok) return false;
+		const { files = [] } = (await listed.json()) as {
+			files?: { fileName?: string; fileId?: string }[];
+		};
+		for (const file of files) {
+			// The prefix also matches longer names, which are other objects.
+			if (file.fileName !== fileName || !file.fileId) continue;
+			const res = await call('b2_delete_file_version', { fileName, fileId: file.fileId });
+			if (res.status === 401) return UNAUTHORIZED;
+			if (!res.ok) return false;
+		}
+		return true;
+	};
+
+	try {
+		const outcome = await attempt(await getAuth(config));
+		if (outcome !== UNAUTHORIZED) return outcome;
+		return (await attempt(await getAuth(config, true))) === true;
+	} catch (error) {
+		console.error('Error deleting NZB from B2:', error);
+		return false;
+	}
+}

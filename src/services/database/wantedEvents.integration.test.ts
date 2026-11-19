@@ -266,6 +266,21 @@ describe.skipIf(!dockerAvailable)('Wanted history against MySQL 8.0.36 (Integrat
 		expect(await service.reportedNzb('AAAA', HELD)).toBe(false);
 	});
 
+	it('lists the uploads no event names any more, and forgets one', async () => {
+		const kept = 'c'.repeat(64);
+		const orphan = 'd'.repeat(64);
+		await service.record('AAAA', await owned('AAAA'), [
+			event({ key: 'g-kept', torrent: false, hash: null, nzb: kept }),
+		]);
+		await service.markNzbHeld(kept);
+		await service.markNzbHeld(orphan);
+
+		expect(await service.unreferencedNzbs(10)).toEqual([orphan]);
+		await service.forgetNzb(orphan);
+		expect(await service.unreferencedNzbs(10)).toEqual([]);
+		expect([...(await service.heldNzbs([kept, orphan]))]).toEqual([kept]);
+	});
+
 	it("prunes a zurg's own events after 30 days and shared ones after 180", async () => {
 		await service.record('AAAA', await owned('AAAA'), [
 			event({ key: 'grab' }),
