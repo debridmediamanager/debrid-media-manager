@@ -15,7 +15,7 @@ const TOKEN = /^[A-Za-z0-9_-]+$/;
 
 /** The qualified, lowercased id a report names, or null for one that names nothing. */
 function postingOf(raw: unknown): string | null {
-	if (typeof raw !== 'string' || raw.length > 128) return null;
+	if (typeof raw !== 'string' || raw.length > 512) return null;
 	if (QUALIFIED_ID.test(raw)) return raw.toLowerCase();
 	const token = TOKEN.test(raw) ? decryptReleaseId(raw) : null;
 	return token

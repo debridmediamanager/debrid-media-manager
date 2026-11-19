@@ -64,6 +64,18 @@ describe('POST /api/usenet/dead', () => {
 		);
 	});
 
+	it('takes the grab token of an NZB a zurg uploaded, which is longer than 128 characters', async () => {
+		// 132 characters on the zen rig of 2026-11-19; at a 128 limit it named nothing.
+		const sha = 'ab'.repeat(32);
+		const token = encryptReleaseId('wanted', sha);
+		expect(token.length).toBeGreaterThan(128);
+
+		const res = await post({ ids: [token] }, ZURG);
+
+		expect(res._getData()).toEqual({ marked: 1 });
+		expect(mockRepo.recordUsenetDead).toHaveBeenCalledWith([`wanted:${sha}`], 'zurg');
+	});
+
 	it("takes a sponsor's zurg report, on that sponsor's budget", async () => {
 		const res = await post({ ids: ['en:087f6a3ae880ec5d81efc65e065067ec084adc52df8a5'] }, ZURG);
 
