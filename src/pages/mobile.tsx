@@ -1,15 +1,26 @@
 import { PolicyPage } from '@/components/PolicyPage';
-import { MOBILE_LATEST_API, MOBILE_RELEASES_URL, pickMobileApks } from '@/utils/mobileApks';
+import {
+	MOBILE_ALTSTORE_SOURCE,
+	MOBILE_LATEST_API,
+	MOBILE_RELEASES_URL,
+	pickMobileApks,
+	pickMobileIpa,
+} from '@/utils/mobileApks';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 const PLAY_GROUP = 'https://groups.google.com/g/dmm-mobile-beta';
 const PLAY_OPT_IN = 'https://play.google.com/apps/testing/com.debridmediamanager.library';
 
-/** Where to get DMM Mobile: the APK straight from GitHub, or the Google Play test. */
+const ADD_SOURCE = `source?url=${encodeURIComponent(MOBILE_ALTSTORE_SOURCE)}`;
+const BUTTON =
+	'mt-1 inline-block rounded bg-cyan-700 px-4 py-2 font-semibold !text-white !no-underline hover:bg-cyan-600';
+
+/** Where to get DMM Mobile: the APK from GitHub or the Google Play test, and the iOS build for AltStore or SideStore. */
 export default function MobilePage() {
 	// The release page until GitHub names the newest files.
 	const [apks, setApks] = useState({ arm64: MOBILE_RELEASES_URL, armv7: MOBILE_RELEASES_URL });
+	const [ipa, setIpa] = useState(MOBILE_RELEASES_URL);
 	useEffect(() => {
 		fetch(MOBILE_LATEST_API)
 			.then((response) => response.json())
@@ -20,6 +31,10 @@ export default function MobilePage() {
 					armv7: armv7 ?? MOBILE_RELEASES_URL,
 				});
 			})
+			.catch(() => undefined);
+		fetch(MOBILE_ALTSTORE_SOURCE)
+			.then((response) => response.json())
+			.then((source) => setIpa(pickMobileIpa(source) ?? MOBILE_RELEASES_URL))
 			.catch(() => undefined);
 	}, []);
 
@@ -35,10 +50,7 @@ export default function MobilePage() {
 		>
 			<section>
 				<h2>Android phones, tablets and TVs</h2>
-				<a
-					href={apks.arm64}
-					className="mt-1 inline-block rounded bg-cyan-700 px-4 py-2 font-semibold !text-white !no-underline hover:bg-cyan-600"
-				>
+				<a href={apks.arm64} className={BUTTON}>
 					Download for Android
 				</a>
 				<p className="mt-3">
@@ -62,7 +74,38 @@ export default function MobilePage() {
 				</p>
 			</section>
 			<section>
-				<h2>iPhone, iPad and Apple TV</h2>
+				<h2>iPhone and iPad</h2>
+				<p>
+					DMM Mobile is not on the App Store yet. Install it with{' '}
+					<a href="https://altstore.io/">AltStore</a> or{' '}
+					<a href="https://sidestore.io/">SideStore</a>, which sign it with your own Apple
+					ID. Open this page on the iPhone or iPad and tap the button for the app you
+					have:
+				</p>
+				<p className="flex flex-wrap gap-2">
+					<a href={`altstore://${ADD_SOURCE}`} className={BUTTON}>
+						Add to AltStore
+					</a>
+					<a href={`sidestore://${ADD_SOURCE}`} className={BUTTON}>
+						Add to SideStore
+					</a>
+				</p>
+				<p className="mt-3">
+					That adds the DMM Mobile source. Install the app from it, and updates arrive the
+					same way. iOS 16.4 or newer. If the buttons do nothing, paste this address into
+					the Sources tab:
+				</p>
+				<p className="break-all">
+					<code>{MOBILE_ALTSTORE_SOURCE}</code>
+				</p>
+				<p>
+					Sideloadly and other tools take <a href={ipa}>the .ipa file</a>. With a free
+					Apple ID the app has to be refreshed every 7 days, which AltStore and SideStore
+					do for you.
+				</p>
+			</section>
+			<section>
+				<h2>Apple TV</h2>
 				<p>Not available yet.</p>
 			</section>
 			<section>

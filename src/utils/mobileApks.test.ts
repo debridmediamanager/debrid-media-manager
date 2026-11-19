@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import altstore from '../test/fixtures/github-dmm-mobile-altstore-2026-11-19.json';
 import release from '../test/fixtures/github-dmm-mobile-release-v1.3.0.json';
-import { pickMobileApks } from './mobileApks';
+import { pickMobileApks, pickMobileIpa } from './mobileApks';
 
 // GitHub's answer for DMM Mobile's v1.3.0 release, trimmed to the fields the page reads.
 describe('pickMobileApks', () => {
@@ -18,5 +19,19 @@ describe('pickMobileApks', () => {
 			arm64: undefined,
 			armv7: undefined,
 		});
+	});
+});
+
+// DMM Mobile's altstore.json as GitHub served it on 2026-11-19, the day the first iOS build went up.
+describe('pickMobileIpa', () => {
+	it('picks the newest iOS build from the AltStore source', () => {
+		expect(pickMobileIpa(altstore)).toBe(
+			'https://github.com/debridmediamanager/dmm-mobile/releases/download/v1.3.0/dmm-mobile-1.3.0-5-ios.ipa'
+		);
+	});
+
+	it('finds nothing in an answer that is not a source', () => {
+		expect(pickMobileIpa({})).toBeUndefined();
+		expect(pickMobileIpa({ apps: [{ versions: [] }] })).toBeUndefined();
 	});
 });

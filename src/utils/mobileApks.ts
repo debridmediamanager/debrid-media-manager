@@ -14,3 +14,13 @@ export function pickMobileApks(release: Release): { arm64?: string; armv7?: stri
 		)?.browser_download_url;
 	return { arm64: url('arm64-v8a'), armv7: url('armeabi-v7a') };
 }
+
+/** The AltStore/SideStore source for the iPhone and iPad build, kept in DMM Mobile's repository. */
+export const MOBILE_ALTSTORE_SOURCE =
+	'https://raw.githubusercontent.com/debridmediamanager/dmm-mobile/main/altstore.json';
+
+type AltSource = { apps?: { versions?: { downloadURL?: string }[] }[] };
+
+/** The newest iOS build's file: the first version the source lists. */
+export const pickMobileIpa = (source: AltSource): string | undefined =>
+	source.apps?.[0]?.versions?.[0]?.downloadURL;
