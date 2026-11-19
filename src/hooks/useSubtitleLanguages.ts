@@ -26,14 +26,17 @@ export function useSubtitleLanguages(hashes: string[], enabled: boolean) {
 		const wanted = key.split(',');
 		const controller = new AbortController();
 		const timer = setTimeout(async () => {
-			const { known, missing } = cachedSubtitleLanguages(wanted);
-			if (known.size) {
-				setLanguages((prev) => {
-					const next = new Map(prev);
-					known.forEach((langs, hash) => next.set(hash, langs));
-					return next;
-				});
-			}
+			// Take what the cache holds now. A hash it no longer answers for (expired,
+			// or cached as having no snapshot) loses any languages read earlier: it is
+			// unknown until it is answered again, so a failed refresh cannot keep it known.
+			const { known, missing, unknown } = cachedSubtitleLanguages(wanted);
+			setLanguages((prev) => {
+				const next = new Map(prev);
+				missing.forEach((hash) => next.delete(hash));
+				unknown.forEach((hash) => next.delete(hash));
+				known.forEach((langs, hash) => next.set(hash, langs));
+				return next;
+			});
 			if (!missing.length) return;
 			setChecking(true);
 			await fetchSubtitleLanguages(
@@ -44,6 +47,7 @@ export function useSubtitleLanguages(hashes: string[], enabled: boolean) {
 						const next = new Map(prev);
 						answers.forEach((langs, hash) => {
 							if (langs) next.set(hash, langs);
+							else next.delete(hash);
 						});
 						return next;
 					});

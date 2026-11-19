@@ -50,7 +50,10 @@ function readStore(deps: CacheDeps): Store {
 
 function writeStore(store: Store, deps: CacheDeps) {
 	const now = (deps.now ?? Date.now)();
-	let entries = Object.entries(store).filter(([, [, expires]]) => expires > now);
+	// Storage is the user's to edit: an entry of any other shape is dropped, not read.
+	let entries = Object.entries(store).filter(
+		([, entry]) => Array.isArray(entry) && entry[1] > now
+	);
 	if (entries.length > MAX_ENTRIES) {
 		entries = entries.sort((a, b) => b[1][1] - a[1][1]).slice(0, MAX_ENTRIES);
 	}

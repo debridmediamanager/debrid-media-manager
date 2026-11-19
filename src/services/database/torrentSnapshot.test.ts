@@ -21,6 +21,9 @@ describe('TorrentSnapshotService', () => {
 			$disconnect: vi.fn(),
 		};
 
+		// An interactive transaction runs its callback against the same client here.
+		mockPrisma.$transaction = vi.fn(async (fn: any, options: any) => fn(mockPrisma, options));
+
 		service = new TorrentSnapshotService();
 		(service as any).prisma = mockPrisma;
 	});
@@ -64,6 +67,22 @@ describe('TorrentSnapshotService', () => {
 				},
 			});
 			expect(result).toEqual(rows);
+		});
+
+		it('reads the newest days and their rows in one REPEATABLE READ transaction', async () => {
+			mockPrisma.torrentSnapshot.groupBy.mockResolvedValue([
+				{ hash: 'hash1', _max: { addedDate: new Date('2024-01-03') } },
+			]);
+			mockPrisma.torrentSnapshot.findMany.mockResolvedValue([
+				row('hash1', '2024-01-03', 'latest'),
+			]);
+
+			await service.getSnapshotsByHashes(['hash1']);
+
+			expect(mockPrisma.$transaction).toHaveBeenCalledTimes(1);
+			expect(mockPrisma.$transaction.mock.calls[0][1]).toEqual({
+				isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead,
+			});
 		});
 
 		it('skips the row read when no hash has a snapshot', async () => {

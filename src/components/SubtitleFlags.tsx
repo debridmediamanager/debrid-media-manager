@@ -34,7 +34,11 @@ interface SubtitleFilterSummaryProps {
 /** "3 matches, 24 unknown" under a `subs:` filter, so an empty result is not read as "none have it". */
 export function SubtitleFilterSummary({ matches, unknown, checking }: SubtitleFilterSummaryProps) {
 	return (
-		<div className="mb-2 text-xs text-gray-400" data-testid="subtitle-filter-summary">
+		<div
+			className="mb-2 text-xs text-gray-400"
+			data-testid="subtitle-filter-summary"
+			role="status"
+		>
 			{matches} {matches === 1 ? 'match' : 'matches'}, {unknown} unknown
 			{checking && ' (checking subtitles…)'}
 			<span

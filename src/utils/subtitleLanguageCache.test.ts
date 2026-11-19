@@ -24,7 +24,9 @@ const release = (language: string) => ({
 		1: {
 			path: '/a.mkv',
 			bytes: 1,
-			MediaInfo: { streams: [{ codec_type: 'subtitle', tags: { language } }] },
+			MediaInfo: {
+				streams: [{ codec_type: 'video' }, { codec_type: 'subtitle', tags: { language } }],
+			},
 		},
 	},
 });
@@ -100,6 +102,22 @@ describe('fetchSubtitleLanguages', () => {
 		expect(cachedSubtitleLanguages([hash(5)], { storage, now: () => 0 }).missing).toEqual([
 			hash(5),
 		]);
+	});
+
+	it('drops an entry of another shape instead of failing every later save', async () => {
+		const storage = memoryStorage();
+		storage.setItem(STORAGE_KEY, JSON.stringify({ [hash(9)]: null, [hash(8)]: 'x' }));
+		const onBatch = vi.fn();
+		const post = vi.fn(async () => ok({ releases: { [hash(0)]: release('en') } }));
+
+		await fetchSubtitleLanguages([hash(0)], onBatch, {
+			post: post as any,
+			storage,
+			now: () => 0,
+		});
+
+		expect(onBatch).toHaveBeenCalledTimes(1);
+		expect(Object.keys(JSON.parse(storage.data.get(STORAGE_KEY)!))).toEqual([hash(0)]);
 	});
 
 	it('caps the stored entries, dropping the soonest to expire', async () => {

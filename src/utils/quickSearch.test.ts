@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { quickSearch, quickSearchLibrary } from './quickSearch';
+import { normalizeLanguage } from './subtitleLanguages';
 
 describe('quickSearchLibrary', () => {
 	const data: any[] = [
@@ -134,5 +135,25 @@ describe('quickSearch subs:', () => {
 
 	it('ANDs with the other terms', () => {
 		expect(titles('subs:en only')).toEqual(['English only']);
+	});
+
+	it('treats a track tagged ht and one tagged hat as the same language', () => {
+		const haitian = [
+			{ title: 'Tagged ht', hash: 'h1', videoCount: 1 },
+			{ title: 'Tagged hat', hash: 'h2', videoCount: 1 },
+			{ title: 'French', hash: 'h3', videoCount: 1 },
+		] as any[];
+		const known = new Map([
+			['h1', [normalizeLanguage('ht')!]],
+			['h2', [normalizeLanguage('hat')!]],
+			['h3', ['fre']],
+		]);
+		for (const q of ['subs:ht', 'subs:hat']) {
+			expect(quickSearch(q, haitian, known).map((r) => r.title)).toEqual([
+				'Tagged ht',
+				'Tagged hat',
+			]);
+		}
+		expect(quickSearch('-subs:hat', haitian, known).map((r) => r.title)).toEqual(['French']);
 	});
 });
