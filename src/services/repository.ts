@@ -44,6 +44,7 @@ import {
 	TransferMetaService,
 	type TransferMetaSource,
 	type UsenetDeadSource,
+	WantedEventsService,
 	WantedItemsService,
 	WantedListsService,
 	ZurgKeysService,
@@ -81,6 +82,7 @@ export type RepositoryDependencies = Partial<{
 	sponsorProviderKeysService: SponsorProviderKeysService;
 	browserStateService: BrowserStateService;
 	wantedItemsService: WantedItemsService;
+	wantedEventsService: WantedEventsService;
 	wantedListsService: WantedListsService;
 	streamHealthService: StreamHealthService;
 	historyAggregationService: HistoryAggregationService;
@@ -119,6 +121,7 @@ export class Repository {
 	private sponsorProviderKeysService: SponsorProviderKeysService;
 	private browserStateService: BrowserStateService;
 	private wantedItemsService: WantedItemsService;
+	private wantedEventsService: WantedEventsService;
 	private wantedListsService: WantedListsService;
 	private streamHealthService: StreamHealthService;
 	private historyAggregationService: HistoryAggregationService;
@@ -156,6 +159,7 @@ export class Repository {
 		sponsorProviderKeysService,
 		browserStateService,
 		wantedItemsService,
+		wantedEventsService,
 		wantedListsService,
 		streamHealthService,
 		historyAggregationService,
@@ -192,6 +196,7 @@ export class Repository {
 			sponsorProviderKeysService ?? new SponsorProviderKeysService();
 		this.browserStateService = browserStateService ?? new BrowserStateService();
 		this.wantedItemsService = wantedItemsService ?? new WantedItemsService();
+		this.wantedEventsService = wantedEventsService ?? new WantedEventsService();
 		this.wantedListsService = wantedListsService ?? new WantedListsService();
 		this.rexDirectService = rexDirectService ?? new RexDirectService();
 		this.streamHealthService = streamHealthService ?? new StreamHealthService();
@@ -229,6 +234,7 @@ export class Repository {
 			this.sponsorProviderKeysService.disconnect(),
 			this.browserStateService.disconnect(),
 			this.wantedItemsService.disconnect(),
+			this.wantedEventsService.disconnect(),
 			this.wantedListsService.disconnect(),
 			this.streamHealthService.disconnect(),
 			this.historyAggregationService.disconnect(),
@@ -1911,8 +1917,45 @@ export class Repository {
 	}
 
 	// Wanted list: titles a sponsor's zurg fetches
-	public listWanted(shortId: string, imdbId?: string) {
-		return this.wantedItemsService.list(shortId, imdbId);
+	public listWanted(shortId: string, imdbId?: string, withProgress?: boolean) {
+		return this.wantedItemsService.list(shortId, imdbId, withProgress);
+	}
+
+	// Wanted history: what zurg reports it did for each title, and the NZBs zurgs share
+	public ownedWanted(...args: Parameters<WantedEventsService['owned']>) {
+		return this.wantedEventsService.owned(...args);
+	}
+
+	public recordWantedEvents(...args: Parameters<WantedEventsService['record']>) {
+		return this.wantedEventsService.record(...args);
+	}
+
+	public setWantedProgress(...args: Parameters<WantedEventsService['setProgress']>) {
+		return this.wantedEventsService.setProgress(...args);
+	}
+
+	public heldWantedNzbs(shas: string[]) {
+		return this.wantedEventsService.heldNzbs(shas);
+	}
+
+	public markWantedNzbHeld(sha: string) {
+		return this.wantedEventsService.markNzbHeld(sha);
+	}
+
+	public reportedWantedNzb(shortId: string, sha: string) {
+		return this.wantedEventsService.reportedNzb(shortId, sha);
+	}
+
+	public wantedHistory(shortId: string, id: string) {
+		return this.wantedEventsService.history(shortId, id);
+	}
+
+	public wantedHintRows(imdbIds: string[]) {
+		return this.wantedEventsService.hintRows(imdbIds);
+	}
+
+	public pruneWantedEvents(localBefore: Date, sharedBefore: Date) {
+		return this.wantedEventsService.prune(localBefore, sharedBefore);
 	}
 
 	public want(shortId: string, item: Parameters<WantedItemsService['want']>[1]) {

@@ -7,6 +7,7 @@ import {
 	type RequestReconcileResult,
 } from '@/services/contentRequestReconcile';
 import { USENET_COPIES_TTL_MS, USENET_DEAD_TTL_MS } from '@/services/database/nzb2rdMap';
+import { WANTED_LOCAL_TTL_MS, WANTED_SHARED_TTL_MS } from '@/services/database/wantedEvents';
 import { reconcileDebridTransfers, type ReconcileResult } from '@/services/debridTransferReconcile';
 import { sweepFreshPosts } from '@/services/newznab/search';
 import { reconcileNzb2rdMarkers, type MarkerReconcileResult } from '@/services/nzb2rdMarkers';
@@ -48,6 +49,7 @@ interface CronResponse {
 	newznabFresh?: { swept: boolean; ids: number };
 	usenetCopiesPruned?: number;
 	usenetDeadPruned?: number;
+	wantedEventsPruned?: number;
 	error?: string;
 }
 
@@ -209,6 +211,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			console.error('[Cron] Pruning old dead-posting reports failed:', e);
 		}
 
+		// zurg's wanted history: a zurg's own rules and empty searches are read for 30
+		// days, grabs and content verdicts, which other sponsors' hints count, for 180.
+		let wantedEventsPruned: number | undefined;
+		try {
+			wantedEventsPruned = await repository.pruneWantedEvents(
+				new Date(Date.now() - WANTED_LOCAL_TTL_MS),
+				new Date(Date.now() - WANTED_SHARED_TTL_MS)
+			);
+		} catch (e) {
+			console.error('[Cron] Pruning old wanted history failed:', e);
+		}
+
 		return res.status(200).json({
 			success: true,
 			timestamp: new Date().toISOString(),
@@ -235,6 +249,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			newznabFresh,
 			usenetCopiesPruned,
 			usenetDeadPruned,
+			wantedEventsPruned,
 		});
 	} catch (error) {
 		console.error('[Cron] Job failed:', error);

@@ -30,6 +30,7 @@ import { TorBoxOperationalService } from './torboxOperational';
 import { TorrentSnapshotService } from './torrentSnapshot';
 import { TransferFilingService } from './transferFiling';
 import { TransferMetaService } from './transferMeta';
+import { WantedEventsService } from './wantedEvents';
 import { WantedItemsService } from './wantedItems';
 import { WantedListsService } from './wantedLists';
 import { ZurgKeysService } from './zurgKeys';
@@ -67,6 +68,7 @@ export {
 	TorrentSnapshotService,
 	TransferFilingService,
 	TransferMetaService,
+	WantedEventsService,
 	WantedItemsService,
 	WantedListsService,
 	ZurgKeysService,

@@ -145,6 +145,26 @@ describe('WantedItemsService', () => {
 		expect(update).not.toHaveProperty('fulfilled');
 	});
 
+	describe('progress', () => {
+		const progress = [{ season: 1, have: [1, 2, 3], missing: [7] }];
+
+		it('lists a show with how many episodes zurg holds and which it lacks', async () => {
+			prismaMock.wantedItem.findMany.mockResolvedValue([{ ...ROW, kind: 'show', progress }]);
+			const [item] = await service.list('ZP1M');
+			expect(item.progress).toEqual([{ season: 1, have: 3, missing: [7] }]);
+			expect(prismaMock.wantedItem.findMany.mock.calls[0][0]).not.toHaveProperty('omit');
+		});
+
+		it("leaves the snapshots unread for zurg's poll", async () => {
+			prismaMock.wantedItem.findMany.mockResolvedValue([ROW]);
+			const [item] = await service.list('ZP1M', undefined, false);
+			expect(prismaMock.wantedItem.findMany.mock.calls[0][0].omit).toEqual({
+				progress: true,
+			});
+			expect(item).not.toHaveProperty('progress');
+		});
+	});
+
 	describe('pinWanted', () => {
 		const pin = (over: Record<string, unknown> = {}) => ({
 			id: 'a'.repeat(45),

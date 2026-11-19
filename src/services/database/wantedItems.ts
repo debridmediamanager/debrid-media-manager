@@ -54,6 +54,11 @@ export interface WantedItemRow {
 	lastPolledAt: Date | null;
 	/** Absent when nothing is pinned. */
 	pins?: WantedPin[];
+	/**
+	 * Shows only, once zurg reported it: per season how many aired episodes it holds
+	 * and which it lacks. Absent from the list zurg polls.
+	 */
+	progress?: { season: number; have: number; missing: number[] }[];
 }
 
 /**
@@ -95,6 +100,15 @@ function toRow(row: any): WantedItemRow {
 		fulfilled: row.fulfilled ?? null,
 		lastPolledAt: row.lastPolledAt ?? null,
 		...(Array.isArray(row.pins) && row.pins.length ? { pins: row.pins } : {}),
+		...(Array.isArray(row.progress) && row.progress.length
+			? {
+					progress: row.progress.map((s: any) => ({
+						season: s.season,
+						have: Array.isArray(s.have) ? s.have.length : 0,
+						missing: Array.isArray(s.missing) ? s.missing : [],
+					})),
+				}
+			: {}),
 	};
 }
 
@@ -106,12 +120,20 @@ function toRow(row: any): WantedItemRow {
  * list it is.
  */
 export class WantedItemsService extends DatabaseClient {
-	/** The whole list, or with `imdbId` just that title's row (none or one). */
-	public async list(shortId: string, imdbId?: string): Promise<WantedItemRow[]> {
+	/**
+	 * The whole list, or with `imdbId` just that title's row (none or one).
+	 * `withProgress: false` leaves the have/missing snapshots unread, for zurg's poll.
+	 */
+	public async list(
+		shortId: string,
+		imdbId?: string,
+		withProgress = true
+	): Promise<WantedItemRow[]> {
 		if (!shortId) return [];
 		const rows = await this.prisma.wantedItem.findMany({
 			where: { shortId, ...(imdbId && { imdbId }) },
 			orderBy: { createdAt: 'desc' },
+			...(!withProgress && { omit: { progress: true } }),
 		});
 		return rows.map(toRow);
 	}
