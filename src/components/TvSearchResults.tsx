@@ -1,3 +1,4 @@
+import SubtitleFlags from '@/components/SubtitleFlags';
 import type { DebridService } from '@/hooks/useAvailabilityCheck';
 import { FileData, SearchResult } from '@/services/mediasearch';
 import { oneFilePerEpisode } from '@/utils/castLibraryPlan';
@@ -14,6 +15,7 @@ import {
 	isAvailable,
 	totalFileSize,
 } from '@/utils/results';
+import type { SubtitleLanguageMap } from '@/utils/subtitleLanguages';
 import {
 	getBiggestVideoFile,
 	openWatch,
@@ -58,6 +60,8 @@ const addButtonClass = (avail: boolean, noVideos: boolean) =>
 
 type TvSearchResultsProps = {
 	filteredResults: SearchResult[];
+	/** Embedded subtitle languages by lowercase hash; a missing hash is unknown. */
+	subtitleLanguages?: SubtitleLanguageMap;
 	expectedEpisodeCount: number;
 	// How many episodes a pack holds, 0 when unknown (see packEpisodes and episodeSize).
 	seasonEpisodes?: number | ((result: SearchResult) => number);
@@ -126,6 +130,7 @@ type TvSearchResultsProps = {
 
 const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 	filteredResults,
+	subtitleLanguages,
 	expectedEpisodeCount,
 	seasonEpisodes = 0,
 	onlyShowCached,
@@ -550,6 +555,10 @@ const TvSearchResults: React.FC<TvSearchResultsProps> = ({
 									<h2 className="line-clamp-2 overflow-hidden text-sm leading-tight font-bold break-words text-ellipsis">
 										{r.title}
 									</h2>
+									<SubtitleFlags
+										languages={subtitleLanguages?.get(r.hash.toLowerCase())}
+										isPack={r.videoCount > 1}
+									/>
 
 									{r.videoCount > 0 ? (
 										<div className="text-xs text-gray-300">

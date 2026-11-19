@@ -101,3 +101,38 @@ describe('quickSearch', () => {
 		});
 	});
 });
+
+describe('quickSearch subs:', () => {
+	const data: any[] = [
+		{ title: 'Greek and English', hash: 'AAA', videoCount: 1 },
+		{ title: 'English only', hash: 'bbb', videoCount: 1 },
+		{ title: 'Probed, no tagged subs', hash: 'ccc', videoCount: 1 },
+		{ title: 'Never probed', hash: 'ddd', videoCount: 1 },
+	];
+	const subtitles = new Map<string, string[]>([
+		['aaa', ['eng', 'gre']],
+		['bbb', ['eng']],
+		['ccc', []],
+	]);
+	const titles = (query: string) => quickSearch(query, data, subtitles).map((r) => r.title);
+
+	it('matches el, ell and gre alike, whatever the case of the hash', () => {
+		expect(titles('subs:el')).toEqual(['Greek and English']);
+		expect(titles('subs:ell')).toEqual(['Greek and English']);
+		expect(titles('subs:GRE')).toEqual(['Greek and English']);
+	});
+
+	it('never counts an unknown release as having or lacking a language', () => {
+		expect(titles('subs:en')).toEqual(['Greek and English', 'English only']);
+		expect(titles('-subs:el')).toEqual(['English only', 'Probed, no tagged subs']);
+	});
+
+	it('matches nothing for a code that is not a language, or without languages', () => {
+		expect(titles('subs:zz')).toEqual([]);
+		expect(quickSearch('subs:el', data)).toEqual([]);
+	});
+
+	it('ANDs with the other terms', () => {
+		expect(titles('subs:en only')).toEqual(['English only']);
+	});
+});

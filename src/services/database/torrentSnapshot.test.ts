@@ -12,6 +12,7 @@ describe('TorrentSnapshotService', () => {
 				upsert: vi.fn(),
 				findFirst: vi.fn(),
 				findMany: vi.fn(),
+				groupBy: vi.fn(),
 			},
 			contributedProbe: {
 				createMany: vi.fn(),
@@ -25,89 +26,71 @@ describe('TorrentSnapshotService', () => {
 	});
 
 	describe('getSnapshotsByHashes', () => {
+		const row = (hash: string, day: string, data: string) => ({
+			id: `${hash}:${day}`,
+			hash,
+			addedDate: new Date(day),
+			payload: { data },
+		});
+
 		it('returns empty array for empty hash list', async () => {
 			const result = await service.getSnapshotsByHashes([]);
+			expect(result).toEqual([]);
+			expect(mockPrisma.torrentSnapshot.groupBy).not.toHaveBeenCalled();
+			expect(mockPrisma.torrentSnapshot.findMany).not.toHaveBeenCalled();
+		});
+
+		it('finds the newest day of each hash, then reads only those rows', async () => {
+			mockPrisma.torrentSnapshot.groupBy.mockResolvedValue([
+				{ hash: 'hash1', _max: { addedDate: new Date('2024-01-03') } },
+				{ hash: 'hash2', _max: { addedDate: new Date('2024-01-02') } },
+			]);
+			const rows = [row('hash1', '2024-01-03', 'latest'), row('hash2', '2024-01-02', 'two')];
+			mockPrisma.torrentSnapshot.findMany.mockResolvedValue(rows);
+
+			const result = await service.getSnapshotsByHashes(['hash1', 'hash2']);
+
+			expect(mockPrisma.torrentSnapshot.groupBy).toHaveBeenCalledWith({
+				by: ['hash'],
+				where: { hash: { in: ['hash1', 'hash2'] } },
+				_max: { addedDate: true },
+			});
+			expect(mockPrisma.torrentSnapshot.findMany).toHaveBeenCalledWith({
+				where: {
+					OR: [
+						{ hash: 'hash1', addedDate: new Date('2024-01-03') },
+						{ hash: 'hash2', addedDate: new Date('2024-01-02') },
+					],
+				},
+			});
+			expect(result).toEqual(rows);
+		});
+
+		it('skips the row read when no hash has a snapshot', async () => {
+			mockPrisma.torrentSnapshot.groupBy.mockResolvedValue([]);
+
+			const result = await service.getSnapshotsByHashes(['hash1']);
+
 			expect(result).toEqual([]);
 			expect(mockPrisma.torrentSnapshot.findMany).not.toHaveBeenCalled();
 		});
 
-		it('fetches snapshots for given hashes', async () => {
-			const mockSnapshots = [
-				{
-					id: 'hash1:2024-01-01',
-					hash: 'hash1',
-					addedDate: new Date('2024-01-01'),
-					payload: { data: 'test1' },
-				},
-				{
-					id: 'hash2:2024-01-02',
-					hash: 'hash2',
-					addedDate: new Date('2024-01-02'),
-					payload: { data: 'test2' },
-				},
-			];
-
-			mockPrisma.torrentSnapshot.findMany.mockResolvedValue(mockSnapshots);
-
-			const result = await service.getSnapshotsByHashes(['hash1', 'hash2']);
-
-			expect(mockPrisma.torrentSnapshot.findMany).toHaveBeenCalledWith({
-				where: {
-					hash: { in: ['hash1', 'hash2'] },
-				},
-				orderBy: { addedDate: 'desc' },
-			});
-
-			expect(result).toEqual(mockSnapshots);
-		});
-
-		it('deduplicates snapshots by hash keeping latest', async () => {
-			const mockSnapshots = [
-				{
-					id: 'hash1:2024-01-03',
-					hash: 'hash1',
-					addedDate: new Date('2024-01-03'),
-					payload: { data: 'latest' },
-				},
-				{
-					id: 'hash1:2024-01-01',
-					hash: 'hash1',
-					addedDate: new Date('2024-01-01'),
-					payload: { data: 'older' },
-				},
-				{
-					id: 'hash2:2024-01-02',
-					hash: 'hash2',
-					addedDate: new Date('2024-01-02'),
-					payload: { data: 'test2' },
-				},
-			];
-
-			mockPrisma.torrentSnapshot.findMany.mockResolvedValue(mockSnapshots);
-
-			const result = await service.getSnapshotsByHashes(['hash1', 'hash2']);
-
-			expect(result).toHaveLength(2);
-			expect(result.find((s) => s.hash === 'hash1')?.payload).toEqual({ data: 'latest' });
-		});
-
-		it('handles single hash', async () => {
-			const mockSnapshot = {
-				id: 'hash1:2024-01-01',
-				hash: 'hash1',
-				addedDate: new Date('2024-01-01'),
-				payload: { data: 'test' },
-			};
-
-			mockPrisma.torrentSnapshot.findMany.mockResolvedValue([mockSnapshot]);
+		it('keeps one row when two of a hash share its newest day', async () => {
+			mockPrisma.torrentSnapshot.groupBy.mockResolvedValue([
+				{ hash: 'hash1', _max: { addedDate: new Date('2024-01-03') } },
+			]);
+			mockPrisma.torrentSnapshot.findMany.mockResolvedValue([
+				row('hash1', '2024-01-03', 'a'),
+				{ ...row('hash1', '2024-01-03', 'b'), id: 'hash1:other' },
+			]);
 
 			const result = await service.getSnapshotsByHashes(['hash1']);
 
-			expect(result).toEqual([mockSnapshot]);
+			expect(result).toHaveLength(1);
 		});
 
 		it('handles database errors gracefully', async () => {
-			mockPrisma.torrentSnapshot.findMany.mockRejectedValue(
+			mockPrisma.torrentSnapshot.groupBy.mockRejectedValue(
 				new Error('Database connection error')
 			);
 

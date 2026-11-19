@@ -8,6 +8,7 @@ import MediaHeader from '@/components/MediaHeader';
 import ResultsTabs, { NoTorrentsYet } from '@/components/ResultsTabs';
 import SearchSourceProgress from '@/components/SearchSourceProgress';
 import SearchTokens from '@/components/SearchTokens';
+import { SubtitleFilterSummary } from '@/components/SubtitleFlags';
 import TvSearchResults from '@/components/TvSearchResults';
 import UsenetResults from '@/components/UsenetResults';
 import WantedButton from '@/components/WantedButton';
@@ -32,6 +33,7 @@ import {
 	type SeasonAdderService,
 	type SeasonRunState,
 } from '@/hooks/useSeasonPackAdder';
+import { useSubtitleLanguages } from '@/hooks/useSubtitleLanguages';
 import { useTorrentManagement } from '@/hooks/useTorrentManagement';
 import { SearchApiResponse, SearchResult, hasSubstantialTitle } from '@/services/mediasearch';
 import type { UsenetResult } from '@/services/nzb2rd';
@@ -92,6 +94,7 @@ import {
 	defaultShowSeasonFilter,
 } from '@/utils/settings';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
+import { hasSubsToken, withoutSubsTokens } from '@/utils/subtitleLanguages';
 import { castToastOptions, searchToastOptions, toasterPosition } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { handleCastTvShowTorBox } from '@/utils/torboxCastApiClient';
@@ -255,6 +258,7 @@ const TvSearch: FunctionComponent = () => {
 		defaultEpisodeSize
 	);
 	const onlyTrustedTorrents = getLocalStorageBoolean('settings:onlyTrustedTorrents', false);
+	const showSubtitleFlags = getLocalStorageBoolean('settings:showSubtitleFlags', false);
 	const hideRdBlockedTorrents = hideRdBlockedTorrentsDefault(false);
 	const storedTorrentsFilter = useMemo(
 		() => getLocalStorageItemOrDefault('settings:defaultTorrentsFilter', defaultFilterSetting),
@@ -1274,6 +1278,15 @@ const TvSearch: FunctionComponent = () => {
 		[imdbid, seasonNum, router, tabSuffix, torrentsAsked]
 	);
 
+	// Subtitle languages are asked for once the results have rendered, and only
+	// when the user shows the flags or filters with subs: (opt in).
+	const filteringBySubs = hasSubsToken(query);
+	const resultHashes = useMemo(() => searchResults.map((r) => r.hash), [searchResults]);
+	const { languages: subtitleLanguages, checking: checkingSubtitles } = useSubtitleLanguages(
+		resultHashes,
+		showSubtitleFlags || filteringBySubs
+	);
+
 	const resultsFor = useCallback(
 		(q: string) => {
 			let results = searchResults;
@@ -1282,11 +1295,18 @@ const TvSearch: FunctionComponent = () => {
 					matchesTvEpisodeFilter(episodeReader(r.title), episodeFilter)
 				);
 			}
-			results = quickSearch(q, results);
+			results = quickSearch(q, results, subtitleLanguages);
 			if (hideRdBlockedTorrents) results = results.filter(shownBySettings);
 			return results;
 		},
-		[searchResults, episodeFilter, episodeReader, hideRdBlockedTorrents, shownBySettings]
+		[
+			searchResults,
+			episodeFilter,
+			episodeReader,
+			hideRdBlockedTorrents,
+			shownBySettings,
+			subtitleLanguages,
+		]
 	);
 	const countFor = useCallback((q: string) => resultsFor(q).length, [resultsFor]);
 
@@ -1296,6 +1316,14 @@ const TvSearch: FunctionComponent = () => {
 		}
 		return resultsFor(query);
 	}, [query, searchResults, resultsFor]);
+
+	// Under a subs: filter, the releases the other terms keep whose subtitles are unknown.
+	const subtitleUnknownCount = useMemo(() => {
+		if (!filteringBySubs) return 0;
+		return resultsFor(withoutSubsTokens(query)).filter(
+			(r) => !subtitleLanguages.has(r.hash.toLowerCase())
+		).length;
+	}, [filteringBySubs, query, resultsFor, subtitleLanguages]);
 
 	const totalUncachedCount = useMemo(() => {
 		return filteredResults.filter(
@@ -2395,8 +2423,19 @@ const TvSearch: FunctionComponent = () => {
 							</div>
 						)}
 
+					{filteringBySubs && searchResults.length > 0 && (
+						<SubtitleFilterSummary
+							matches={filteredResults.length}
+							unknown={subtitleUnknownCount}
+							checking={checkingSubtitles}
+						/>
+					)}
+
 					<TvSearchResults
 						filteredResults={filteredResults}
+						subtitleLanguages={
+							showSubtitleFlags || filteringBySubs ? subtitleLanguages : undefined
+						}
 						expectedEpisodeCount={expectedEpisodeCount}
 						seasonEpisodes={seasonEpisodes}
 						onlyShowCached={onlyShowCached}

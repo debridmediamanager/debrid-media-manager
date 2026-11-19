@@ -6,6 +6,7 @@ import MovieSearchResults from '@/components/MovieSearchResults';
 import ResultsTabs, { NoTorrentsYet } from '@/components/ResultsTabs';
 import SearchControls from '@/components/SearchControls';
 import SearchSourceProgress from '@/components/SearchSourceProgress';
+import { SubtitleFilterSummary } from '@/components/SubtitleFlags';
 import UsenetResults from '@/components/UsenetResults';
 import WantedButton from '@/components/WantedButton';
 import { useLibraryCache } from '@/contexts/LibraryCacheContext';
@@ -22,6 +23,7 @@ import { useAnimeEntries } from '@/hooks/useAnimeEntries';
 import { useAvailabilityCheck } from '@/hooks/useAvailabilityCheck';
 import { useExternalSources } from '@/hooks/useExternalSources';
 import { useMassReport } from '@/hooks/useMassReport';
+import { useSubtitleLanguages } from '@/hooks/useSubtitleLanguages';
 import { useTorrentManagement } from '@/hooks/useTorrentManagement';
 import { SearchApiResponse, SearchResult, hasSubstantialTitle } from '@/services/mediasearch';
 import UserTorrentDB from '@/torrent/db';
@@ -70,6 +72,7 @@ import {
 	defaultPlayer,
 } from '@/utils/settings';
 import { getStremioDetailUrl } from '@/utils/stremioLinks';
+import { hasSubsToken, withoutSubsTokens } from '@/utils/subtitleLanguages';
 import { castToastOptions, searchToastOptions, toasterPosition } from '@/utils/toastOptions';
 import { generateTokenAndHash } from '@/utils/token';
 import { handleCastMovieTorBox } from '@/utils/torboxCastApiClient';
@@ -160,6 +163,7 @@ const MovieSearch: FunctionComponent = () => {
 	const player = getLocalStorageItemOrDefault('settings:player', defaultPlayer);
 	const movieMaxSize = getLocalStorageItemOrDefault('settings:movieMaxSize', defaultMovieSize);
 	const onlyTrustedTorrents = getLocalStorageBoolean('settings:onlyTrustedTorrents', false);
+	const showSubtitleFlags = getLocalStorageBoolean('settings:showSubtitleFlags', false);
 	const hideRdBlockedTorrents = hideRdBlockedTorrentsDefault(false);
 	const defaultTorrentsFilter = getLocalStorageItemOrDefault(
 		'settings:defaultTorrentsFilter',
@@ -793,9 +797,18 @@ const MovieSearch: FunctionComponent = () => {
 		[hideRdBlockedTorrents, rdKey, torboxKey, adKey]
 	);
 
+	// Subtitle languages are asked for once the results have rendered, and only
+	// when the user shows the flags or filters with subs: (opt in).
+	const filteringBySubs = hasSubsToken(query);
+	const resultHashes = useMemo(() => searchResults.map((r) => r.hash), [searchResults]);
+	const { languages: subtitleLanguages, checking: checkingSubtitles } = useSubtitleLanguages(
+		resultHashes,
+		showSubtitleFlags || filteringBySubs
+	);
+
 	const resultsFor = useCallback(
-		(q: string) => quickSearch(q, searchResults).filter(shownBySettings),
-		[searchResults, shownBySettings]
+		(q: string) => quickSearch(q, searchResults, subtitleLanguages).filter(shownBySettings),
+		[searchResults, shownBySettings, subtitleLanguages]
 	);
 	const countFor = useCallback((q: string) => resultsFor(q).length, [resultsFor]);
 
@@ -805,6 +818,14 @@ const MovieSearch: FunctionComponent = () => {
 		}
 		return resultsFor(query);
 	}, [query, searchResults, resultsFor]);
+
+	// Under a subs: filter, the releases the other terms keep whose subtitles are unknown.
+	const subtitleUnknownCount = useMemo(() => {
+		if (!filteringBySubs) return 0;
+		return resultsFor(withoutSubsTokens(query)).filter(
+			(r) => !subtitleLanguages.has(r.hash.toLowerCase())
+		).length;
+	}, [filteringBySubs, query, resultsFor, subtitleLanguages]);
 
 	const totalUncachedCount = useMemo(() => {
 		return filteredResults.filter(
@@ -1212,11 +1233,23 @@ const MovieSearch: FunctionComponent = () => {
 							}
 						/>
 					)}
+					{!noTorrents && filteringBySubs && searchResults.length > 0 && (
+						<SubtitleFilterSummary
+							matches={filteredResults.length}
+							unknown={subtitleUnknownCount}
+							checking={checkingSubtitles}
+						/>
+					)}
 
 					{searchResults.length > 0 && (
 						<>
 							<MovieSearchResults
 								filteredResults={filteredResults}
+								subtitleLanguages={
+									showSubtitleFlags || filteringBySubs
+										? subtitleLanguages
+										: undefined
+								}
 								onlyShowCached={onlyShowCached}
 								movieMaxSize={movieMaxSize}
 								rdKey={rdKey}
