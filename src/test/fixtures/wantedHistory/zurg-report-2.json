@@ -1,0 +1,94 @@
+{
+	"items": [
+		{
+			"id": "22272aec-e44c-11f1-8f8b-767b177f6029",
+			"seasons": [
+				{
+					"season": 1,
+					"have": [1, 2, 3, 4],
+					"missing": [5]
+				}
+			],
+			"events": [
+				{
+					"key": "g-aae20195b97350cfbca8eeaa",
+					"at": "2026-11-19T19:07:04Z",
+					"kind": "grabbed",
+					"reason": "",
+					"detail": "",
+					"release": "Chernobyl.S01E01.1080p.WEB.H264-LIVE",
+					"torrent": true,
+					"hash": "e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1",
+					"nzb": "",
+					"size": 3221225472,
+					"season": 1,
+					"episode": 1,
+					"pack": false,
+					"resolution": "1080p"
+				},
+				{
+					"key": "g-a0c1c385eba7f05297ecd3a6",
+					"at": "2026-11-19T19:07:04Z",
+					"kind": "grabbed",
+					"reason": "",
+					"detail": "",
+					"release": "Chernobyl.S01E02.1080p.WEB.H264-LIVE",
+					"torrent": true,
+					"hash": "e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2",
+					"nzb": "",
+					"size": 3221225472,
+					"season": 1,
+					"episode": 2,
+					"pack": false,
+					"resolution": "1080p"
+				},
+				{
+					"key": "g-638a6de21758759998cfa329",
+					"at": "2026-11-19T19:07:04Z",
+					"kind": "grabbed",
+					"reason": "",
+					"detail": "",
+					"release": "Chernobyl.S01E03.1080p.WEB.H264-LIVE",
+					"torrent": true,
+					"hash": "e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3",
+					"nzb": "",
+					"size": 3221225472,
+					"season": 1,
+					"episode": 3,
+					"pack": false,
+					"resolution": "1080p"
+				},
+				{
+					"key": "g-2fadfabbca224dd3be255f91",
+					"at": "2026-11-19T19:07:04Z",
+					"kind": "grabbed",
+					"reason": "",
+					"detail": "",
+					"release": "Chernobyl.S01E04.1080p.WEB.H264-LIVE",
+					"torrent": true,
+					"hash": "e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4e4",
+					"nzb": "",
+					"size": 3221225472,
+					"season": 1,
+					"episode": 4,
+					"pack": false,
+					"resolution": "1080p"
+				},
+				{
+					"key": "f-3296cc8cd1350b692eb29539",
+					"at": "2026-11-19T19:07:04Z",
+					"kind": "failed",
+					"reason": "nothing_found",
+					"detail": "still missing S01E05",
+					"release": "",
+					"torrent": false,
+					"hash": "",
+					"nzb": "",
+					"size": 0,
+					"pack": false,
+					"resolution": ""
+				}
+			]
+		}
+	]
+}

@@ -5,6 +5,7 @@ import { _resetTokenSecretForTest, encryptReleaseId } from '@/services/newznab/o
 import { putStoredNzb } from '@/services/newznab/store';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
 import { repository } from '@/services/repository';
+import { parseHistory } from '@/services/wantedHistory';
 import { createMockRequest, createMockResponse } from '@/test/utils/api';
 import { requireSponsor } from '@/utils/requireSponsor';
 import type { NextApiRequest } from 'next';
@@ -342,6 +343,51 @@ describe('POST /api/sponsor/wanted/history', () => {
 		const res = createMockResponse();
 		await historyHandler(createMockRequest({ method: 'GET' }), res);
 		expect(res._getStatusCode()).toBe(405);
+	});
+});
+
+// The bodies a real zurg posted (see fixtures/wantedHistory/README.md): every event and
+// snapshot it writes must read, since a refused one is never sent again.
+describe('a report zurg really sent', () => {
+	const report = (n: number) =>
+		JSON.parse(
+			readFileSync(
+				path.resolve(__dirname, `../../fixtures/wantedHistory/zurg-report-${n}.json`),
+				'utf8'
+			)
+		);
+
+	it.each([1, 2])('reads report %i whole, refusing nothing', (n) => {
+		const body = report(n);
+		const parsed = parseHistory(body);
+		if (typeof parsed === 'string') throw new Error(parsed);
+		expect(parsed.refused).toEqual([]);
+		expect(parsed.items.map((item) => item.events.length)).toEqual(
+			body.items.map((item: { events: unknown[] }) => item.events.length)
+		);
+	});
+
+	it('reads the grabs, the NZB turned down by its sha, the empty search and the snapshot', () => {
+		const parsed = [1, 2].flatMap((n) => {
+			const out = parseHistory(report(n));
+			if (typeof out === 'string') throw new Error(out);
+			return out.items;
+		});
+		const events = parsed.flatMap((item) => item.events);
+		expect(events.filter((e) => e.kind === 'grabbed' && e.torrent && e.hash)).toHaveLength(5);
+		expect(events.find((e) => e.reason === 'no_video')).toMatchObject({
+			kind: 'rejected',
+			torrent: false,
+			hash: null,
+			nzb: expect.stringMatching(/^[0-9a-f]{64}$/),
+		});
+		expect(events.find((e) => e.kind === 'failed')).toMatchObject({
+			reason: 'nothing_found',
+			detail: 'still missing S01E05',
+		});
+		expect(parsed.findLast((item) => item.seasons)?.seasons).toEqual([
+			{ season: 1, have: [1, 2, 3, 4], missing: [5] },
+		]);
 	});
 });
 

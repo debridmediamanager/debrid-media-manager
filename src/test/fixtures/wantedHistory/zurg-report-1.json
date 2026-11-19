@@ -1,0 +1,48 @@
+{
+	"items": [
+		{
+			"id": "22272e57-e44c-11f1-8f8b-767b177f6029",
+			"events": [
+				{
+					"key": "r-85ace8d80caffd95d6c7c1d1",
+					"at": "2026-11-19T19:07:04Z",
+					"kind": "rejected",
+					"reason": "no_video",
+					"detail": "it holds nothing but repair data and sidecars",
+					"release": "Dune.Part.Two.2024.2160p.WEB-DL.DDP5.1.H.265-NOVIDEO",
+					"torrent": false,
+					"hash": "",
+					"nzb": "b7731d0998b12d65cd54c5c4ac265660ae156282f4450bb25dad0f19e018e2da",
+					"size": 21474836480,
+					"pack": false,
+					"resolution": "2160p"
+				},
+				{
+					"key": "g-760cb397adc6450b34879d19",
+					"at": "2026-11-19T19:07:04Z",
+					"kind": "grabbed",
+					"reason": "",
+					"detail": "",
+					"release": "Dune.Part.Two.2024.1080p.WEB-DL.DDP5.1.H.264-LIVE",
+					"torrent": true,
+					"hash": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+					"nzb": "",
+					"size": 8589934592,
+					"pack": false,
+					"resolution": "1080p"
+				}
+			]
+		},
+		{
+			"id": "22272aec-e44c-11f1-8f8b-767b177f6029",
+			"seasons": [
+				{
+					"season": 1,
+					"have": [],
+					"missing": [1, 2, 3, 4, 5]
+				}
+			],
+			"events": []
+		}
+	]
+}
