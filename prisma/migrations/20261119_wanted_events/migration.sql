@@ -4,7 +4,8 @@
 -- deploying the code that reads them, since the website's wanted list selects `progress`.
 
 -- AlterTable
-ALTER TABLE `WantedItem` ADD COLUMN `progress` JSON NULL;
+-- INSTANT, so it fails instead of copying or locking the table DMM writes all day.
+ALTER TABLE `WantedItem` ADD COLUMN `progress` JSON NULL, ALGORITHM=INSTANT;
 
 -- CreateTable
 -- `key` is utf8mb4_bin: its alphabet is mixed-case, and under the table's case-insensitive
