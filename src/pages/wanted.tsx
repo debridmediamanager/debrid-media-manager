@@ -1,5 +1,6 @@
 import { followList, followSummary } from '@/components/FollowListButton';
 import Poster from '@/components/poster';
+import WantedHistoryDialog from '@/components/WantedHistoryDialog';
 import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
 import type { WantedItemResponse } from '@/pages/api/wanted';
 import type { WantedImportResponse } from '@/pages/api/wanted/import';
@@ -7,11 +8,13 @@ import type { WantedListResponse } from '@/pages/api/wanted/lists';
 import { GATEKEEPER_URL } from '@/utils/gatekeeper';
 import { shortDate, timeAgo } from '@/utils/timeAgo';
 import { toasterPosition } from '@/utils/toastOptions';
+import { progressLabel } from '@/utils/wantedProgress';
 import { WANTED_GUIDE_URL, wantedUnread } from '@/utils/wantedUnread';
 import { deflatedZipMember } from '@/utils/zipEntry';
 import {
 	BookmarkCheck,
 	Film,
+	History,
 	Home,
 	ListPlus,
 	Loader2,
@@ -104,6 +107,8 @@ export default function WantedPage() {
 	const [status, setStatus] = useState<keyof typeof STATUSES>('all');
 	const [sort, setSort] = useState<keyof typeof SORTS>('added');
 	const [selected, setSelected] = useState<Set<string>>(new Set());
+	/** The title whose history is open. */
+	const [historyOf, setHistoryOf] = useState<WantedItemResponse | null>(null);
 
 	const load = useCallback(async () => {
 		setError('');
@@ -712,6 +717,23 @@ export default function WantedPage() {
 													` · waiting for ${item.fulfilled.upgradeTo}`}
 											</span>
 										</span>
+										{/* What zurg holds of the show; the dialog has it season by season. */}
+										{item.progress && (
+											<span
+												className="block truncate text-[11px] text-gray-400"
+												title={progressLabel(item.progress)}
+											>
+												{progressLabel(item.progress)}
+											</span>
+										)}
+										<button
+											onClick={() => setHistoryOf(item)}
+											className="haptic-sm absolute top-1 right-9 rounded border-2 border-gray-500 bg-gray-900/80 p-1 text-gray-100 transition-colors hover:bg-gray-700"
+											title="What zurg did for this title"
+											aria-label={`History of ${item.title}`}
+										>
+											<History className="h-3.5 w-3.5" />
+										</button>
 										<button
 											onClick={() => remove(item)}
 											disabled={busy !== null}
@@ -726,6 +748,12 @@ export default function WantedPage() {
 							</ul>
 						</div>
 						{pager}
+						{historyOf && (
+							<WantedHistoryDialog
+								item={historyOf}
+								onClose={() => setHistoryOf(null)}
+							/>
+						)}
 					</>
 				)}
 			</div>

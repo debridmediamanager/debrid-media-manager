@@ -26,6 +26,8 @@ export interface WantedItemResponse {
 	lastPolledAt: string | null;
 	/** Releases picked by "Send to zurg"; absent when none. */
 	pins?: WantedPin[];
+	/** A show's episodes held and missing per season, once zurg reported them. */
+	progress?: WantedItemRow['progress'];
 }
 
 export const toResponse = (row: WantedItemRow): WantedItemResponse => ({
