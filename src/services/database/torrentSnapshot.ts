@@ -145,18 +145,39 @@ export class TorrentSnapshotService extends DatabaseClient {
 		});
 	}
 
+	/**
+	 * The newest snapshot of each hash. The newest day of each is found first on
+	 * the (hash, addedDate) index alone, then only those rows are read, so a
+	 * release re-added on many days costs one payload rather than one per day.
+	 */
 	public async getSnapshotsByHashes(hashes: string[]) {
 		if (hashes.length === 0) {
 			return [];
 		}
 
-		const snapshots = await this.prisma.torrentSnapshot.findMany({
-			where: {
-				hash: { in: hashes },
+		// Both reads in one REPEATABLE READ transaction, so the second sees the
+		// snapshot the first did: a row whose addedDate a post changes in between
+		// (one with an unparseable Added is dated by the clock on every post)
+		// is still found under the date the first read gave.
+		const snapshots = await this.prisma.$transaction(
+			async (tx) => {
+				const newest = await tx.torrentSnapshot.groupBy({
+					by: ['hash'],
+					where: { hash: { in: hashes } },
+					_max: { addedDate: true },
+				});
+				const wanted = newest.flatMap(({ hash, _max }) =>
+					_max.addedDate ? [{ hash, addedDate: _max.addedDate }] : []
+				);
+				if (wanted.length === 0) {
+					return [];
+				}
+				return tx.torrentSnapshot.findMany({ where: { OR: wanted } });
 			},
-			orderBy: { addedDate: 'desc' },
-		});
+			{ isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead }
+		);
 
+		// Two rows of one hash on the same newest day: keep one.
 		const snapshotMap = new Map<string, (typeof snapshots)[0]>();
 		for (const snapshot of snapshots) {
 			if (!snapshotMap.has(snapshot.hash)) {

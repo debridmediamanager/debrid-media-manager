@@ -271,6 +271,16 @@ export const SettingsSection = () => {
 			localStorage.setItem('settings:hideAnime', String(checked));
 	};
 
+	const [showSubtitleFlags, setShowSubtitleFlags] = useState(() =>
+		getLocalStorageBoolean('settings:showSubtitleFlags', false)
+	);
+	const handleShowSubtitleFlagsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const checked = e.target.checked;
+		setShowSubtitleFlags(checked);
+		if (typeof localStorage !== 'undefined')
+			localStorage.setItem('settings:showSubtitleFlags', String(checked));
+	};
+
 	const handleHideRdBlockedTorrentsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const checked = e.target.checked;
 		setHideRdBlockedTorrents(checked);
@@ -715,6 +725,28 @@ export const SettingsSection = () => {
 									>
 										Learn more
 									</a>
+								</p>
+							</div>
+
+							<div className="flex flex-col gap-1">
+								<div className="flex items-center gap-2">
+									<input
+										id="dmm-show-subtitle-flags"
+										type="checkbox"
+										className="h-5 w-5 rounded border-gray-600 bg-gray-800"
+										checked={showSubtitleFlags}
+										onChange={handleShowSubtitleFlagsChange}
+									/>
+									<label
+										htmlFor="dmm-show-subtitle-flags"
+										className="font-semibold"
+									>
+										Show embedded subtitle flags on search results
+									</label>
+								</div>
+								<p className="mt-1 text-xs text-gray-400">
+									Only for releases some zurg user has analyzed. Filter with{' '}
+									<code>subs:el</code> (or any language code) in the search box.
 								</p>
 							</div>
 

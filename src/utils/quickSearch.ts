@@ -1,5 +1,6 @@
 import { SearchResult } from '@/services/mediasearch';
 import { UserTorrent } from '@/torrent/userTorrent';
+import { normalizeLanguage, type SubtitleLanguageMap } from '@/utils/subtitleLanguages';
 
 // given a list, filter by query and paginate
 export function quickSearchLibrary(query: string, unfiltered: UserTorrent[]) {
@@ -28,7 +29,11 @@ export function quickSearchLibrary(query: string, unfiltered: UserTorrent[]) {
 		: unfiltered;
 }
 
-export function quickSearch(query: string, unfiltered: SearchResult[]) {
+export function quickSearch(
+	query: string,
+	unfiltered: SearchResult[],
+	subtitles?: SubtitleLanguageMap
+) {
 	if (!query) return unfiltered;
 	return unfiltered.filter((t) =>
 		query.split(' ').every((subquery) => {
@@ -59,6 +64,16 @@ export function quickSearch(query: string, unfiltered: SearchResult[]) {
 				}
 
 				return false;
+			}
+
+			// Embedded subtitle language (subs:el, subs:ell, subs:gre). A release with
+			// no stored probe is unknown, so it matches neither subs:X nor -subs:X.
+			if (q.startsWith('subs:')) {
+				const language = normalizeLanguage(q.substring(5));
+				const known = subtitles?.get(t.hash.toLowerCase());
+				if (!language || !known) return false;
+				const has = known.includes(language);
+				return isExclusion ? !has : has;
 			}
 
 			// Handle debrid availability queries

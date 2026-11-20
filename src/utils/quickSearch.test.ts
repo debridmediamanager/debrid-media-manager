@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { quickSearch, quickSearchLibrary } from './quickSearch';
+import { normalizeLanguage } from './subtitleLanguages';
 
 describe('quickSearchLibrary', () => {
 	const data: any[] = [
@@ -99,5 +100,60 @@ describe('quickSearch', () => {
 			expect(quickSearch('is:cached', withDl).map((r) => r.hash)).toContain('a8');
 			expect(quickSearch('is:uncached', withDl).map((r) => r.hash)).toEqual(['a5']);
 		});
+	});
+});
+
+describe('quickSearch subs:', () => {
+	const data: any[] = [
+		{ title: 'Greek and English', hash: 'AAA', videoCount: 1 },
+		{ title: 'English only', hash: 'bbb', videoCount: 1 },
+		{ title: 'Probed, no tagged subs', hash: 'ccc', videoCount: 1 },
+		{ title: 'Never probed', hash: 'ddd', videoCount: 1 },
+	];
+	const subtitles = new Map<string, string[]>([
+		['aaa', ['eng', 'gre']],
+		['bbb', ['eng']],
+		['ccc', []],
+	]);
+	const titles = (query: string) => quickSearch(query, data, subtitles).map((r) => r.title);
+
+	it('matches el, ell and gre alike, whatever the case of the hash', () => {
+		expect(titles('subs:el')).toEqual(['Greek and English']);
+		expect(titles('subs:ell')).toEqual(['Greek and English']);
+		expect(titles('subs:GRE')).toEqual(['Greek and English']);
+	});
+
+	it('never counts an unknown release as having or lacking a language', () => {
+		expect(titles('subs:en')).toEqual(['Greek and English', 'English only']);
+		expect(titles('-subs:el')).toEqual(['English only', 'Probed, no tagged subs']);
+	});
+
+	it('matches nothing for a code that is not a language, or without languages', () => {
+		expect(titles('subs:zz')).toEqual([]);
+		expect(quickSearch('subs:el', data)).toEqual([]);
+	});
+
+	it('ANDs with the other terms', () => {
+		expect(titles('subs:en only')).toEqual(['English only']);
+	});
+
+	it('treats a track tagged ht and one tagged hat as the same language', () => {
+		const haitian = [
+			{ title: 'Tagged ht', hash: 'h1', videoCount: 1 },
+			{ title: 'Tagged hat', hash: 'h2', videoCount: 1 },
+			{ title: 'French', hash: 'h3', videoCount: 1 },
+		] as any[];
+		const known = new Map([
+			['h1', [normalizeLanguage('ht')!]],
+			['h2', [normalizeLanguage('hat')!]],
+			['h3', ['fre']],
+		]);
+		for (const q of ['subs:ht', 'subs:hat']) {
+			expect(quickSearch(q, haitian, known).map((r) => r.title)).toEqual([
+				'Tagged ht',
+				'Tagged hat',
+			]);
+		}
+		expect(quickSearch('-subs:hat', haitian, known).map((r) => r.title)).toEqual(['French']);
 	});
 });
