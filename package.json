@@ -117,7 +117,8 @@
 			"postcss": "^8.5.31"
 		},
 		"@prisma/config": {
-			"deepmerge-ts": "^8.0.2"
+			"deepmerge-ts": "^8.0.2",
+			"effect": "^3.22.5"
 		},
 		"ip": "$ip",
 		"zod": "^4.6.6"
