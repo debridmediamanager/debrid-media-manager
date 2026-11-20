@@ -357,7 +357,7 @@ describe('a report zurg really sent', () => {
 			)
 		);
 
-	it.each([1, 2])('reads report %i whole, refusing nothing', (n) => {
+	it.each([1, 2, 3])('reads report %i whole, refusing nothing', (n) => {
 		const body = report(n);
 		const parsed = parseHistory(body);
 		if (typeof parsed === 'string') throw new Error(parsed);
@@ -365,6 +365,21 @@ describe('a report zurg really sent', () => {
 		expect(parsed.items.map((item) => item.events.length)).toEqual(
 			body.items.map((item: { events: unknown[] }) => item.events.length)
 		);
+	});
+
+	// Report 3 is the install that took an NZB DMM served: it names the grab by the token
+	// DMM wrote into the NZB, minted under the test DMM's own secret, which this one cannot
+	// open, so the event keeps the sha zurg sent.
+	it('reads a grab named by the token DMM wrote into the NZB', () => {
+		const parsed = parseHistory(report(3));
+		if (typeof parsed === 'string') throw new Error(parsed);
+		expect(parsed.items[0].events[0]).toMatchObject({
+			kind: 'grabbed',
+			torrent: false,
+			hash: null,
+			nzb: expect.stringMatching(/^[0-9a-f]{64}$/),
+			dmmId: null,
+		});
 	});
 
 	it('reads the grabs, the NZB turned down by its sha, the empty search and the snapshot', () => {

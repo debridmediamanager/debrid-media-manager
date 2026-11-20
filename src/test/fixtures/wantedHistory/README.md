@@ -8,3 +8,7 @@ were Dune: Part Two and Chernobyl; the item ids are that scratch database's.
 
 Record them again with that test (`ZURG_LIVE_RECORD=<dir>`) whenever zurg changes what
 it sends, so DMM's parser is held to what zurg writes and not to a hand-written guess.
+
+`zurg-report-3.json` is from 2026-11-20, zurg's `TestLiveAnNZBIsUploadedAndHandedOn`: the
+report of an install that took an NZB another sponsor's zurg had uploaded, fetched from a
+DMM with a real store. Its `dmm_id` is a grab token minted under that test DMM's secret.

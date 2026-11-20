@@ -1,0 +1,24 @@
+{
+	"items": [
+		{
+			"id": "bbbbbbbb-0000-4000-8000-000000000001",
+			"events": [
+				{
+					"key": "g-d901bf2786a7bdb8ac121fdb",
+					"at": "2026-11-20T08:00:17Z",
+					"kind": "grabbed",
+					"reason": "",
+					"detail": "",
+					"release": "Big.Buck.Bunny.2008.1080p.WEB.x264-LIVE",
+					"torrent": false,
+					"hash": "",
+					"nzb": "51ee5b15199de21dde7344e24b9058fa5092ae36d53b7adb8b979956b6b82a1c",
+					"dmm_id": "L07_qO1nhiKi_74s_3C028cu9aY6reE3FRJaFed3pzeixa4j1oxBEm5Ed5gOvDxsANhS2ewZL8cNgR1VGwuyqoEAVLZL1ETJ1q6csoyqBgj8kAsUMerBWeo8TqnE4vQ7lAXn",
+					"size": 629145600,
+					"pack": false,
+					"resolution": "1080p"
+				}
+			]
+		}
+	]
+}
