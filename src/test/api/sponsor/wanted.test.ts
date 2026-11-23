@@ -223,7 +223,38 @@ describe('/api/sponsor/wanted', () => {
 		expect(items.map((i: { id: string }) => i.id)).toEqual(['b', 'c']);
 		// Without the have/missing snapshots, which zurg never reads back.
 		expect(mockRepository.listWanted).toHaveBeenCalledWith('ZP1M', undefined, false);
-		expect(mockRepository.touchWantedPolled).toHaveBeenCalledWith('ZP1M');
+		// A zurg that does not say what it takes (before 2026-11-24) records that.
+		expect(mockRepository.touchWantedPolled).toHaveBeenCalledWith('ZP1M', null);
+	});
+
+	// A torrent-only zurg cannot take a pinned NZB (measured 2026-11-23: it took a torrent
+	// of the film instead), so each poll says what it takes and DMM keeps the answer for
+	// the Easynews rows' Send to zurg button.
+	describe('takes', () => {
+		const asked = (query: Record<string, string>) =>
+			createMockRequest({ method: 'GET', headers: { 'x-api-key': sponsorKey }, query });
+
+		it('records what the fetcher says it takes', async () => {
+			mockRepository.listWanted = vi.fn().mockResolvedValue([]);
+			const res = createMockResponse();
+			await listHandler(asked({ takes: 'torrent' }), res);
+			expect(res.status).toHaveBeenCalledWith(200);
+			expect(mockRepository.touchWantedPolled).toHaveBeenCalledWith('ZP1M', ['torrent']);
+
+			await listHandler(asked({ takes: 'nzb,torrent,nzb' }), createMockResponse());
+			expect(mockRepository.touchWantedPolled).toHaveBeenLastCalledWith('ZP1M', [
+				'nzb',
+				'torrent',
+			]);
+		});
+
+		it('refuses anything but nzb and torrent', async () => {
+			mockRepository.listWanted = vi.fn().mockResolvedValue([]);
+			const res = createMockResponse();
+			await listHandler(asked({ takes: 'nzb,magnet' }), res);
+			expect(res.status).toHaveBeenCalledWith(400);
+			expect(mockRepository.touchWantedPolled).not.toHaveBeenCalled();
+		});
 	});
 
 	// zurg holds a release and wants a better one, so the film stays listed with what it holds.

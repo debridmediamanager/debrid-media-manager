@@ -47,6 +47,7 @@ import {
 	WantedEventsService,
 	WantedItemsService,
 	WantedListsService,
+	type WantedTakes,
 	ZurgKeysService,
 } from './database';
 import type { FilenameIdentification } from './database/hashImdb';
@@ -1999,8 +2000,12 @@ export class Repository {
 		return this.wantedItemsService.polledAt(shortId);
 	}
 
-	public touchWantedPolled(shortId: string) {
-		return this.wantedItemsService.touchPolled(shortId);
+	public touchWantedPolled(shortId: string, takes: WantedTakes[] | null = null) {
+		return this.wantedItemsService.touchPolled(shortId, takes);
+	}
+
+	public wantedTakes(shortId: string) {
+		return this.wantedItemsService.takes(shortId);
 	}
 
 	// Followed lists: Trakt, MDBList, TMDB and Simkl lists whose new titles join the wanted list

@@ -34,6 +34,7 @@ import { WantedEventsService } from './wantedEvents';
 import { WantedItemsService } from './wantedItems';
 import { WantedListsService } from './wantedLists';
 import { ZurgKeysService } from './zurgKeys';
+export type { WantedTakes } from './wantedItems';
 
 export {
 	AllDebridCastService,

@@ -1,7 +1,7 @@
 import { ReleaseSection } from '@/components/ReleaseSection';
 import useLocalStorage from '@/hooks/localStorage';
 import { sponsorHeaders, useSponsor } from '@/hooks/useSponsor';
-import type { WantedItemResponse } from '@/pages/api/wanted';
+import type { WantedItemResponse, WantedListResponse } from '@/pages/api/wanted';
 import type { EasynewsCredentials, EasynewsResult } from '@/services/easynews';
 import { getLocalStorageItemOrDefault } from '@/utils/browserStorage';
 import { handleCastEasynews } from '@/utils/easynewsCastApiClient';
@@ -52,7 +52,14 @@ export async function postEasynews<T>(
 // (signed in under Settings): Easynews forbids sharing one. Download NZB fetches
 // a row's NZB with that login; Watch and Cast play the file straight from
 // Easynews, so unlike the rows above nothing goes through nzb2rd or Real-Debrid. "Send to zurg" pins a row on a sponsor's wanted list instead,
-// for their zurg to grab that exact release.
+// for their zurg to grab that exact release. A zurg with no Usenet account cannot
+// play an NZB and takes a torrent of the title in its place (measured 2026-11-23),
+// so the button is off where the sponsor's zurg said it takes no NZB, and a pin
+// their zurg answered with another release says so instead of "zurg took it".
+
+/** Whether what zurg said it took is the pinned file: an NZB grab is named `<file>.nzb`. */
+export const tookThePin = (took: string, release: string) =>
+	took.toLowerCase().replace(/\.nzb$/, '') === release.toLowerCase();
 const ICON_BUTTON =
 	'haptic flex shrink-0 items-center rounded border border-gray-500 bg-gray-800/60 px-2 text-gray-100 hover:bg-gray-700/50 disabled:opacity-60';
 const MAIN_BUTTON =
@@ -71,6 +78,9 @@ const EasynewsResults = ({
 }: EasynewsResultsProps) => {
 	const { isSponsor } = useSponsor();
 	const [wanted, setWanted] = useState<WantedItemResponse | null>(null);
+	// What the sponsor's zurg said it can take; null until it says, or for a zurg that does not.
+	const [takes, setTakes] = useState<WantedListResponse['takes']>(null);
+	const noNzb = takes !== null && !takes.includes('nzb');
 	const [sending, setSending] = useState<string | null>(null);
 	const [account] = useLocalStorage<EasynewsCredentials>('en:account');
 	// Settings' "Show Send to zurg" box: on unless switched off, and off makes Download NZB the main button.
@@ -121,9 +131,11 @@ const EasynewsResults = ({
 		if (!isSponsor || !account) return;
 		let cancelled = false;
 		fetch('/api/wanted', { headers: sponsorHeaders() })
-			.then((res) => (res.ok ? res.json() : { items: [] }))
-			.then((data: { items: WantedItemResponse[] }) => {
-				if (!cancelled) setWanted(data.items.find((i) => i.imdbId === imdbId) ?? null);
+			.then((res) => (res.ok ? res.json() : { items: [], takes: null }))
+			.then((data: WantedListResponse) => {
+				if (cancelled) return;
+				setWanted(data.items.find((i) => i.imdbId === imdbId) ?? null);
+				setTakes(Array.isArray(data.takes) ? data.takes : null);
 			})
 			.catch(() => {});
 		return () => {
@@ -310,19 +322,29 @@ const EasynewsResults = ({
 			rowKey={(result) => result.path}
 			actions={(result) => {
 				const hash = hashOf(result.path);
-				const sent = !!wanted?.pins?.some((pin) => pin.id === hash);
-				const taken = sent && kind === 'movie' && !!wanted?.fulfilledAt;
+				const pin = wanted?.pins?.find((p) => p.id === hash);
+				const sent = !!pin;
+				const took = wanted?.fulfilled?.release ?? '';
+				const answered = sent && kind === 'movie' && !!wanted?.fulfilledAt;
+				const taken = answered && !!took && tookThePin(took, pin.release);
+				// zurg acknowledged the film with a release that is not the pin: it could
+				// not take the file and searched instead (its history on /wanted says why).
+				const other = answered && !taken;
 				return (
 					<>
 						{!showSend ? null : isSponsor ? (
 							<button
 								type="button"
 								onClick={() => send(result)}
-								disabled={sending !== null || taken}
+								disabled={sending !== null || taken || noNzb}
 								title={
-									taken
-										? 'Your zurg grabbed this release'
-										: 'Your zurg grabs this exact release'
+									noNzb
+										? 'Your zurg has no Usenet account, so it cannot take an NZB'
+										: taken
+											? 'Your zurg grabbed this release'
+											: other
+												? `Your zurg could not take this file and took ${took || 'another release'} instead; its history on the wanted page says why`
+												: 'Your zurg grabs this exact release'
 								}
 								className={MAIN_BUTTON}
 							>
@@ -331,7 +353,13 @@ const EasynewsResults = ({
 								) : (
 									<Send className="h-3 w-3 shrink-0" />
 								)}
-								{taken ? 'zurg took it' : sent ? 'Sent to zurg' : 'Send to zurg'}
+								{taken
+									? 'zurg took it'
+									: other
+										? 'zurg took another release'
+										: sent
+											? 'Sent to zurg'
+											: 'Send to zurg'}
 							</button>
 						) : (
 							<Link

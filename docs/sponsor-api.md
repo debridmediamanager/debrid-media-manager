@@ -425,6 +425,14 @@ with `season` and `episode` (a multi-episode file's first); a show on the list o
 its pins follows no season, so its `seasons` is empty. A film with a pin leaves the list
 once acknowledged, `bands` or not.
 
+`GET /api/sponsor/wanted?takes=nzb,torrent` says what the fetcher can take: `nzb` when it
+has a Usenet account to play an NZB with, `torrent` when it has a debrid account that
+takes torrents. DMM keeps the last answer and offers **Send to zurg** on a Usenet result
+only to a sponsor whose fetcher takes `nzb`: a fetcher without one cannot take a pin and
+searches for the title instead, so the file it ends up with is not the one picked. A call
+without `takes` records that the fetcher did not say, and DMM then offers the button as
+before. Anything but `nzb` and `torrent` is a 400.
+
 `GET /api/sponsor/wanted?hints=1` adds two optional lists to a title, built from what
 other sponsors' fetchers reported (see [Wanted history](#wanted-history)):
 

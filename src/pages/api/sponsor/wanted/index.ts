@@ -1,5 +1,9 @@
 import { sponsorOfDmmApiKeyHeader } from '@/pages/api/zurg/auth';
-import type { WantedItemRow } from '@/services/database/wantedItems';
+import {
+	WANTED_TAKES,
+	type WantedItemRow,
+	type WantedTakes,
+} from '@/services/database/wantedItems';
 import { EASYNEWS_NZB_PREFIX } from '@/services/easynews';
 import { encryptReleaseId, hasTokenSecret } from '@/services/newznab/opaqueId';
 import { grabUrl } from '@/services/newznab/search';
@@ -23,6 +27,20 @@ function bandsAsked(value: unknown): string[] | null | undefined {
 	if (typeof value !== 'string') return undefined;
 	const bands = [...new Set(value.split(','))];
 	return bands.every((b) => BANDS.includes(b)) ? bands : undefined;
+}
+
+/**
+ * `?takes=nzb,torrent`: what the fetcher can take, so Send to zurg is offered on a Usenet
+ * result only where an NZB can be played. Null when it did not say (a zurg from before
+ * 2026-11-24), undefined when what it said is not a list of `WANTED_TAKES`.
+ */
+function takesAsked(value: unknown): WantedTakes[] | null | undefined {
+	if (value === undefined) return null;
+	if (typeof value !== 'string') return undefined;
+	const takes = [...new Set(value.split(','))];
+	return takes.every((t): t is WantedTakes => WANTED_TAKES.includes(t as WantedTakes))
+		? takes
+		: undefined;
 }
 
 /** What zurg holds of a film at each band it asked about, and which it wants bettered. */
@@ -83,7 +101,9 @@ const postsId = (imdbId: string) => `imdb:${Number(imdbId.replace(/^tt/i, ''))}`
  * every band holds a copy zurg wants no better than, and carries `bands` instead of
  * `upgrade`. A film with `pins` is done once acknowledged, bands or not. With
  * `?hints=1` a title carries `known` and `condemned`: what other sponsors' zurgs took
- * and what they found bad (services/wantedHints). See docs/sponsor-api.md.
+ * and what they found bad (services/wantedHints). `?takes=nzb,torrent` says what the
+ * fetcher can take, which the Easynews rows read before offering Send to zurg. See
+ * docs/sponsor-api.md.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method !== 'GET') {
@@ -106,6 +126,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		return res
 			.status(400)
 			.json({ error: '"bands" must list "720p", "1080p" or "2160p", separated by commas' });
+	}
+	const takes = takesAsked(req.query.takes);
+	if (takes === undefined) {
+		return res
+			.status(400)
+			.json({ error: '"takes" must list "nzb" or "torrent", separated by commas' });
 	}
 
 	const apiKey = req.headers['x-api-key'] as string;
@@ -153,7 +179,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				))
 			);
 		}
-		await db.touchWantedPolled(sponsor.shortId);
+		await db.touchWantedPolled(sponsor.shortId, takes);
 		res.setHeader('Cache-Control', 'private, no-store');
 		return res.status(200).json({ items });
 	} catch (error) {

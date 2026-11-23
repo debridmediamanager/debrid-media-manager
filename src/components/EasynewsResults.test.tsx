@@ -424,7 +424,17 @@ describe('EasynewsResults', () => {
 
 		it('says zurg took a pinned film once it is acknowledged', async () => {
 			mockSponsorApi([
-				wantedRow({ pins: [pinned], fulfilledAt: '2026-11-07T11:00:00.000Z' }),
+				wantedRow({
+					pins: [pinned],
+					fulfilledAt: '2026-11-07T11:00:00.000Z',
+					// zurg names an NZB grab after the file it saved.
+					fulfilled: {
+						release: 'Cocaine.Bear.2023.mkv.nzb',
+						grab: 'g',
+						torrent: false,
+						resolution: '',
+					},
+				}),
 			]);
 			render(
 				<EasynewsResults
@@ -436,6 +446,71 @@ describe('EasynewsResults', () => {
 			);
 			expect(await screen.findByRole('button', { name: 'zurg took it' })).toBeDisabled();
 			expect(screen.getByRole('button', { name: 'Send to zurg' })).toBeEnabled();
+		});
+
+		// Measured 2026-11-23 (r/debridmediamanager, "Issue with Cast to DDM via Easynews"):
+		// a torrent-only zurg cannot play the pinned NZB, searches instead and acknowledges
+		// the film with a 2160p torrent. The row used to call that "zurg took it".
+		it('says zurg took another release when the acknowledgement is not the pin', async () => {
+			mockSponsorApi([
+				wantedRow({
+					pins: [pinned],
+					fulfilledAt: '2026-11-23T22:04:13.000Z',
+					fulfilled: {
+						release:
+							'How the Grinch Stole Christmas 2000 2160p UHD Blu-ray Remux DV HDR HEVC TrueHD Atmos 7 1-CiNEPHiLES',
+						grab: 'a'.repeat(40),
+						torrent: true,
+						resolution: '2160p',
+					},
+				}),
+			]);
+			render(
+				<EasynewsResults
+					title="Cocaine Bear"
+					imdbId="tt14209916"
+					kind="movie"
+					year="2023"
+				/>
+			);
+			const button = await screen.findByRole('button', { name: 'zurg took another release' });
+			expect(button).toBeEnabled();
+			expect(button).toHaveAttribute(
+				'title',
+				expect.stringContaining('took How the Grinch Stole Christmas 2000 2160p')
+			);
+			expect(screen.queryByRole('button', { name: 'zurg took it' })).toBeNull();
+		});
+
+		// The same zurg tells DMM it takes torrents only, so the button is off before the pin.
+		it('switches Send to zurg off when the zurg takes no NZB', async () => {
+			const fetchMock = mockSponsorApi([]);
+			const listed = fetchMock.getMockImplementation()!;
+			fetchMock.mockImplementation((url: string, init?: RequestInit) =>
+				url === '/api/wanted'
+					? Promise.resolve({
+							ok: true,
+							json: async () => ({ items: [], takes: ['torrent'] }),
+						})
+					: listed(url, init)
+			);
+			render(
+				<EasynewsResults
+					title="Cocaine Bear"
+					imdbId="tt14209916"
+					kind="movie"
+					year="2023"
+				/>
+			);
+			await screen.findByText('Cocaine.Bear.2023.2160p');
+			const buttons = await screen.findAllByRole('button', { name: 'Send to zurg' });
+			await waitFor(() => expect(buttons[0]).toBeDisabled());
+			expect(buttons[0]).toHaveAttribute(
+				'title',
+				'Your zurg has no Usenet account, so it cannot take an NZB'
+			);
+			// Download NZB and Watch stay: the file still plays from Easynews.
+			expect(screen.getAllByRole('button', { name: /Download NZB for/ })[0]).toBeEnabled();
 		});
 
 		it('makes Download NZB the main button when Send to zurg is switched off', async () => {

@@ -73,6 +73,10 @@ export const MAX_WANTED_ROWS = 20000;
 /** Polled-at for a sponsor, kept beside the rows so an empty list still records it. */
 const polledKey = (shortId: string) => `wanted:polled:v1:${shortId}`;
 
+/** What a zurg can take: an NZB needs a Usenet account there, a torrent a debrid account. */
+export const WANTED_TAKES = ['nzb', 'torrent'] as const;
+export type WantedTakes = (typeof WANTED_TAKES)[number];
+
 /**
  * A title zurg still works on: every show (followed for new episodes), and a film it
  * has not fetched yet or holds a copy of it wants bettered.
@@ -323,15 +327,36 @@ export class WantedItemsService extends DatabaseClient {
 
 	/** When the sponsor's zurg last read the list, empty or not; null before the first read was recorded. */
 	public async polledAt(shortId: string): Promise<Date | null> {
-		const row = await this.prisma.cache.findUnique({ where: { key: polledKey(shortId) } });
-		const at = (row?.value as { at?: string } | null)?.at;
-		return at ? new Date(at) : null;
+		return (await this.polled(shortId)).at;
 	}
 
-	/** Records that the sponsor's zurg read the list, for the page's "last checked". */
-	public async touchPolled(shortId: string): Promise<void> {
+	/**
+	 * What the sponsor's zurg said it can take when it last read the list (`nzb`,
+	 * `torrent`), null when it did not say: a zurg from before 2026-11-24, or none yet.
+	 */
+	public async takes(shortId: string): Promise<WantedTakes[] | null> {
+		return (await this.polled(shortId)).takes;
+	}
+
+	private async polled(
+		shortId: string
+	): Promise<{ at: Date | null; takes: WantedTakes[] | null }> {
+		const row = await this.prisma.cache.findUnique({ where: { key: polledKey(shortId) } });
+		const value = row?.value as { at?: string; takes?: unknown } | null;
+		const takes = Array.isArray(value?.takes)
+			? value.takes.filter((t): t is WantedTakes => WANTED_TAKES.includes(t as WantedTakes))
+			: null;
+		return { at: value?.at ? new Date(value.at) : null, takes };
+	}
+
+	/**
+	 * Records that the sponsor's zurg read the list, for the page's "last checked", and
+	 * what it said it takes, so Send to zurg is offered only where an NZB can be played.
+	 * `takes` null is a zurg that did not say, and replaces what an earlier one said.
+	 */
+	public async touchPolled(shortId: string, takes: WantedTakes[] | null = null): Promise<void> {
 		const now = new Date();
-		const value = { at: now.toISOString() };
+		const value = { at: now.toISOString(), takes };
 		await Promise.all([
 			this.prisma.wantedItem.updateMany({ where: { shortId }, data: { lastPolledAt: now } }),
 			this.prisma.cache.upsert({

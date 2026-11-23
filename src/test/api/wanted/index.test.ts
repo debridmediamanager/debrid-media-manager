@@ -42,6 +42,7 @@ describe('/api/wanted', () => {
 	it("lists the sponsor's titles with dates as ISO strings", async () => {
 		mockRepository.listWanted = vi.fn().mockResolvedValue([stored]);
 		mockRepository.wantedPolledAt = vi.fn().mockResolvedValue(null);
+		mockRepository.wantedTakes = vi.fn().mockResolvedValue(null);
 		const res = createMockResponse();
 		await handler(call('GET'), res);
 		expect(res.status).toHaveBeenCalledWith(200);
@@ -53,14 +54,16 @@ describe('/api/wanted', () => {
 		});
 	});
 
-	it('says when zurg last read the list, empty or not', async () => {
+	it('says when zurg last read the list, empty or not, and what it takes', async () => {
 		mockRepository.listWanted = vi.fn().mockResolvedValue([]);
 		mockRepository.wantedPolledAt = vi.fn().mockResolvedValue(new Date('2026-11-10T15:00:00Z'));
+		mockRepository.wantedTakes = vi.fn().mockResolvedValue(['torrent']);
 		const res = createMockResponse();
 		await handler(call('GET'), res);
 		expect(vi.mocked(res.json).mock.calls[0][0]).toEqual({
 			items: [],
 			lastPolledAt: '2026-11-10T15:00:00.000Z',
+			takes: ['torrent'],
 		});
 	});
 

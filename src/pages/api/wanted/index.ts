@@ -4,6 +4,7 @@ import {
 	type WantedFulfilled,
 	type WantedItemRow,
 	type WantedPin,
+	type WantedTakes,
 } from '@/services/database/wantedItems';
 import { checkRateLimitFor, RATE_LIMIT_CONFIGS } from '@/services/rateLimit/withRateLimit';
 import { repository as db } from '@/services/repository';
@@ -28,6 +29,13 @@ export interface WantedItemResponse {
 	pins?: WantedPin[];
 	/** A show's episodes held and missing per season, once zurg reported them. */
 	progress?: WantedItemRow['progress'];
+}
+
+/** GET's answer for the whole list: the rows, when zurg last read it and what it takes. */
+export interface WantedListResponse {
+	items: WantedItemResponse[];
+	lastPolledAt: string | null;
+	takes: WantedTakes[] | null;
 }
 
 export const toResponse = (row: WantedItemRow): WantedItemResponse => ({
@@ -68,8 +76,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			const items = (await db.listWanted(payload.shortId, one)).map(toResponse);
 			if (one) return res.status(200).json({ items });
 			// Read beside the rows, so a list zurg reads while it is empty says so too.
-			const polled = await db.wantedPolledAt(payload.shortId);
-			return res.status(200).json({ items, lastPolledAt: polled?.toISOString() ?? null });
+			// `takes` is what that zurg said it can take (`nzb`, `torrent`), null when it
+			// did not say: the Easynews rows offer Send to zurg only where an NZB plays.
+			const [polled, takes] = await Promise.all([
+				db.wantedPolledAt(payload.shortId),
+				db.wantedTakes(payload.shortId),
+			]);
+			return res
+				.status(200)
+				.json({ items, lastPolledAt: polled?.toISOString() ?? null, takes });
 		}
 
 		if (req.method === 'POST') {
