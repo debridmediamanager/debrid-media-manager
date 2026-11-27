@@ -145,6 +145,36 @@ describe('WantedItemsService', () => {
 		expect(update).not.toHaveProperty('fulfilled');
 	});
 
+	// Every season but 1-8, so a season that airs later is wanted too.
+	it('keeps the seasons a show wanted whole leaves out', async () => {
+		prismaMock.wantedItem.findUnique.mockResolvedValue({ id: ROW.id });
+		prismaMock.wantedItem.upsert.mockImplementation(async (args: any) => ({
+			...ROW,
+			kind: 'show',
+			seasons: args.update.seasons,
+		}));
+		const row = await service.want('ZP1M', {
+			imdbId: 'tt0472954',
+			kind: 'show',
+			title: "It's Always Sunny in Philadelphia",
+			seasons: null,
+			except: [1, 2, 3, 4, 5, 6, 7, 8],
+		});
+		expect(prismaMock.wantedItem.upsert.mock.calls[0][0].update.seasons).toEqual({
+			except: [1, 2, 3, 4, 5, 6, 7, 8],
+		});
+		expect(row).toMatchObject({ seasons: null, except: [1, 2, 3, 4, 5, 6, 7, 8] });
+
+		await service.want('ZP1M', {
+			imdbId: 'tt0472954',
+			kind: 'show',
+			title: 'x',
+			seasons: null,
+			except: [],
+		});
+		expect(prismaMock.wantedItem.upsert.mock.calls[1][0].update.seasons).toBe(Prisma.DbNull);
+	});
+
 	describe('progress', () => {
 		const progress = [{ season: 1, have: [1, 2, 3], missing: [7] }];
 

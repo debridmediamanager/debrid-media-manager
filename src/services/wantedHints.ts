@@ -165,8 +165,8 @@ export async function wantedHints(
 	for (const row of rows) {
 		const wanted = (r: Release) =>
 			row.kind === 'movie' ||
-			!row.seasons ||
-			(r.season !== null && row.seasons.includes(r.season));
+			(!row.seasons && (r.season === null || !row.except?.includes(r.season))) ||
+			(r.season !== null && !!row.seasons?.includes(r.season));
 		const all = (releases.get(row.imdbId) ?? []).filter(wanted);
 		if (!all.length) continue;
 

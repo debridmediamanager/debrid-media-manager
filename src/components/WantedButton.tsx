@@ -22,9 +22,10 @@ const BUTTON =
 
 /**
  * Puts a title on the sponsor's wanted list, which their zurg fetches. On a
- * season page it wants that season, keeping the others already wanted; a show
- * wanted whole stays whole. A non-sponsor gets one "Want" link to `/wanted`,
- * which says what the list is and how to get it.
+ * season page it wants that season, keeping the others already wanted; on a show
+ * wanted whole it leaves that season out, and seasons yet to air still come. A
+ * non-sponsor gets one "Want" link to `/wanted`, which says what the list is and
+ * how to get it.
  */
 export default function WantedButton({ imdbId, kind, title, season }: WantedButtonProps) {
 	const { isSponsor } = useSponsor();
@@ -52,15 +53,16 @@ export default function WantedButton({ imdbId, kind, title, season }: WantedButt
 		};
 	}, [isSponsor, imdbId]);
 
+	const except = item?.except ?? [];
 	// A show's whole-show button is on only when every season is wanted.
 	const wanted =
 		!!item &&
 		(kind === 'movie' ||
-			item.seasons === null ||
-			(season !== undefined && item.seasons.includes(season)));
-
-	// Every season is wanted: the season button says so and leaves the change to the whole-show one.
-	const coveredByAll = season !== undefined && item?.seasons === null;
+			(season === undefined
+				? item.seasons === null && !except.length
+				: item.seasons === null
+					? !except.includes(season)
+					: item.seasons.includes(season)));
 
 	const toggle = useCallback(async () => {
 		setBusy(true);
@@ -68,18 +70,29 @@ export default function WantedButton({ imdbId, kind, title, season }: WantedButt
 			let res: Response;
 			let next: WantedItemResponse | null;
 			const others = item?.seasons?.filter((s) => s !== season) ?? [];
-			if (wanted && (season === undefined || item!.seasons === null || others.length === 0)) {
+			const all = season !== undefined && item?.seasons === null;
+			if (wanted && (season === undefined || (!all && others.length === 0))) {
 				res = await fetch(`/api/wanted?imdbId=${encodeURIComponent(imdbId)}`, {
 					method: 'DELETE',
 					headers: sponsorHeaders(),
 				});
 				next = null;
 			} else {
-				const seasons = season === undefined ? null : wanted ? others : [...others, season];
+				const body = all
+					? {
+							seasons: null,
+							except: wanted
+								? [...except, season].sort((a, b) => a - b)
+								: except.filter((s) => s !== season),
+						}
+					: {
+							seasons:
+								season === undefined ? null : wanted ? others : [...others, season],
+						};
 				res = await fetch('/api/wanted', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json', ...sponsorHeaders() },
-					body: JSON.stringify({ imdbId, kind, title, seasons }),
+					body: JSON.stringify({ imdbId, kind, title, ...body }),
 				});
 				next = res.ok ? (await res.json()).item : item;
 			}
@@ -98,7 +111,7 @@ export default function WantedButton({ imdbId, kind, title, season }: WantedButt
 		} finally {
 			setBusy(false);
 		}
-	}, [item, wanted, season, imdbId, kind, title]);
+	}, [item, except, wanted, season, imdbId, kind, title]);
 
 	const label =
 		kind === 'movie'
@@ -134,11 +147,11 @@ export default function WantedButton({ imdbId, kind, title, season }: WantedButt
 		<button
 			className={BUTTON}
 			onClick={toggle}
-			disabled={busy || coveredByAll}
+			disabled={busy}
 			aria-pressed={wanted}
 			title={
-				coveredByAll
-					? 'Every season of this show is on your wanted list'
+				season === undefined && except.length
+					? `Left out: S${except.join(', S')}; click to want every season`
 					: wanted
 						? 'On your wanted list; click to remove'
 						: 'Your zurg fetches what is on your wanted list'

@@ -75,6 +75,14 @@ describe('airedSeasons', () => {
 		expect(airedSeasons(thirdRock, [2, 5]).map((s) => s.season)).toEqual([2, 5]);
 	});
 
+	// r/debridmediamanager 1xq84po: a long-running show kept from season 9 on.
+	it('leaves out the seasons excepted and keeps every later one, the airing season too', () => {
+		const from9 = airedSeasons(simpsons, null, [1, 2, 3, 4, 5, 6, 7, 8]);
+		expect(from9[0].season).toBe(9);
+		expect(from9.at(-1)).toMatchObject({ season: 38, airing: true });
+		expect(from9).toHaveLength(30);
+	});
+
 	it('answers nothing for a show TMDB lists no seasons of', () => {
 		expect(airedSeasons({}, null)).toEqual([]);
 	});
@@ -191,6 +199,18 @@ describe('resolveWantedReused', () => {
 		expect(again).toEqual({ ...first, id: 'another-sponsor' });
 		await resolveWantedReused(film, 31 * 60_000);
 		expect(cache.searchTmdbByImdb).toHaveBeenCalledTimes(2);
+	});
+
+	// The answers are shared by every sponsor wanting the show: one wanting it whole
+	// must not hand another the seasons that one left out.
+	it('keeps a show with seasons left out apart from the same show wanted whole', async () => {
+		cache.searchTmdbByImdb.mockResolvedValue({ tv_results: [{ id: simpsons.id }] });
+		cache.getTmdbTvInfo.mockResolvedValue(simpsons);
+		cache.getTvmazeShow.mockResolvedValue(simpsonsTvmaze);
+		const whole = row({ imdbId: 'tt0096697', title: 'The Simpsons' });
+		expect((await resolveWantedReused(whole, 0)).seasons?.[0].season).toBe(1);
+		const from9 = { ...whole, id: 'another-sponsor', except: [1, 2, 3, 4, 5, 6, 7, 8] };
+		expect((await resolveWantedReused(from9, 1)).seasons?.[0].season).toBe(9);
 	});
 
 	it('does not keep an answer TMDB could not give', async () => {

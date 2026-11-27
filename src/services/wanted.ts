@@ -84,16 +84,20 @@ export interface WantedForZurg extends WantedHints {
 /**
  * The aired episodes of each regular season of a TMDB show, numbered as TMDB
  * numbers them. Specials (season 0) are left out, as zurg's acquisition does.
- * `only` keeps just those season numbers.
+ * `only` keeps just those season numbers; `except` leaves those out.
  */
-export function airedSeasons(show: any, only: number[] | null): WantedSeason[] {
+export function airedSeasons(
+	show: any,
+	only: number[] | null,
+	except: number[] = []
+): WantedSeason[] {
 	const out: WantedSeason[] = [];
 	for (const s of Array.isArray(show?.seasons) ? show.seasons : []) {
 		const season = s?.season_number;
 		const count = s?.episode_count;
 		if (!Number.isInteger(season) || season < 1 || !Number.isInteger(count) || count < 1)
 			continue;
-		if (only && !only.includes(season)) continue;
+		if ((only && !only.includes(season)) || except.includes(season)) continue;
 		const unaired = firstUnairedEpisode(
 			season,
 			show.next_episode_to_air,
@@ -217,7 +221,7 @@ async function lookUp(row: WantedItemRow): Promise<{ resolved: WantedForZurg; se
 		return { resolved: { ...base, tmdb }, settled: false };
 	}
 	const tvdb = show?.external_ids?.tvdb_id;
-	const seasons = airedSeasons(show, row.seasons);
+	const seasons = airedSeasons(show, row.seasons, row.except);
 	const newest = seasons.find((s) => s.aired);
 	if (newest?.aired) {
 		const recent = Date.now() - Date.parse(newest.aired) < TVMAZE_AIRED_WITHIN_MS;
@@ -264,7 +268,7 @@ export async function resolveWantedReused(
 	row: WantedItemRow,
 	now = Date.now()
 ): Promise<WantedForZurg> {
-	const key = `${row.kind}:${row.imdbId}:${row.seasons?.join(',') ?? '*'}:${row.title}`;
+	const key = `${row.kind}:${row.imdbId}:${row.seasons?.join(',') ?? '*'}:${row.except?.join(',') ?? ''}:${row.title}`;
 	const hit = resolvedTitles.get(key);
 	if (hit && hit.until > now) return { id: row.id, ...hit.resolved };
 	const { resolved, settled } = await lookUp(row);

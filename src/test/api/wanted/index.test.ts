@@ -112,6 +112,20 @@ describe('/api/wanted', () => {
 		expect(vi.mocked(mockRepository.want).mock.calls[0][1].seasons).toBeNull();
 	});
 
+	it('wants every season but those excepted, new ones included', async () => {
+		mockRepository.want = vi.fn().mockResolvedValue(stored);
+		await handler(
+			call('POST', {
+				body: { imdbId: 'tt0115082', kind: 'show', title: '3rd Rock', except: [2, 1, 2] },
+			}),
+			createMockResponse()
+		);
+		expect(vi.mocked(mockRepository.want).mock.calls[0][1]).toMatchObject({
+			seasons: null,
+			except: [1, 2],
+		});
+	});
+
 	it.each([
 		[{ imdbId: 'nope', kind: 'movie', title: 'x' }],
 		[{ imdbId: 'tt0133093', kind: 'album', title: 'x' }],
@@ -119,6 +133,9 @@ describe('/api/wanted', () => {
 		[{ imdbId: 'tt0133093', kind: 'movie', title: 'x', seasons: [1] }],
 		[{ imdbId: 'tt0115082', kind: 'show', title: 'x', seasons: [0] }],
 		[{ imdbId: 'tt0115082', kind: 'show', title: 'x', seasons: [] }],
+		[{ imdbId: 'tt0115082', kind: 'show', title: 'x', seasons: [1], except: [2] }],
+		[{ imdbId: 'tt0133093', kind: 'movie', title: 'x', except: [1] }],
+		[{ imdbId: 'tt0115082', kind: 'show', title: 'x', except: [0] }],
 	])('refuses %j', async (body) => {
 		mockRepository.want = vi.fn();
 		const res = createMockResponse();

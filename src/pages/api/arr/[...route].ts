@@ -146,14 +146,17 @@ async function route(
 				.status(400)
 				.json({ message: 'TMDB has no IMDb id for this title, so it cannot be wanted' });
 		}
-		const seasons = 'seasons' in found ? wantedSeasons(req.body?.seasons, found.seasons) : null;
-		if (seasons?.length === 0)
+		const picked =
+			'seasons' in found
+				? wantedSeasons(req.body?.seasons, found.seasons, found.monitorNewItems === 'all')
+				: { seasons: null };
+		if (picked.seasons?.length === 0)
 			return res.status(400).json({ message: 'No season is monitored' });
 		const row = await db.want(shortId, {
 			imdbId: found.imdbId,
 			kind: app === 'radarr' ? 'movie' : 'show',
 			title: found.title,
-			seasons,
+			...picked,
 		});
 		if (!row) {
 			return res

@@ -17,12 +17,13 @@ vi.mock('next/link', () => ({
 vi.mock('react-hot-toast', () => ({ default: { success: vi.fn(), error: vi.fn() } }));
 
 const SHOW = 'tt0115082';
-const stored = (seasons: number[] | null) => ({
+const stored = (seasons: number[] | null, except?: number[]) => ({
 	id: 'x',
 	imdbId: SHOW,
 	kind: 'show',
 	title: '3rd Rock',
 	seasons,
+	...(except?.length ? { except } : {}),
 	createdAt: '2026-10-24T10:00:00Z',
 	fulfilledAt: null,
 	lastPolledAt: null,
@@ -35,7 +36,7 @@ function mockFetch(listed: unknown[]) {
 		if (!init?.method) return new Response(JSON.stringify({ items: listed }));
 		if (init.method === 'POST') {
 			const body = JSON.parse(init.body as string);
-			return new Response(JSON.stringify({ item: stored(body.seasons) }));
+			return new Response(JSON.stringify({ item: stored(body.seasons, body.except) }));
 		}
 		return new Response(JSON.stringify({ ok: true }));
 	}) as any;
@@ -79,13 +80,41 @@ describe('WantedButton', () => {
 		);
 	});
 
-	// With every season wanted there is no season list to take one out of.
-	it('leaves a season button inert when every season is wanted', async () => {
-		mockFetch([stored(null)]);
-		render(<WantedButton imdbId={SHOW} kind="show" title="3rd Rock" season={3} />);
-		await waitFor(() =>
-			expect(screen.getByRole('button', { name: /Wanted: S3/ })).toBeDisabled()
+	// r/debridmediamanager 1xq84po (2026-11-07): keep a show from season 9 on, new
+	// seasons included. The season button of a show wanted whole was disabled, and a
+	// list of seasons never takes in one that airs later, so that could not be kept.
+	it('leaves one season out of a show wanted whole and keeps every other, new ones too', async () => {
+		const calls = mockFetch([stored(null, [1])]);
+		render(
+			<>
+				<WantedButton imdbId={SHOW} kind="show" title="3rd Rock" season={2} />
+				<WantedButton imdbId={SHOW} kind="show" title="3rd Rock" />
+			</>
 		);
+		fireEvent.click(await screen.findByRole('button', { name: /Wanted: S2/ }));
+		await screen.findByRole('button', { name: /Want S2/ });
+		expect(posted(calls)).toEqual([
+			{ imdbId: SHOW, kind: 'show', title: '3rd Rock', seasons: null, except: [1, 2] },
+		]);
+		expect(calls.some((c) => c.init?.method === 'DELETE')).toBe(false);
+		// Not every season any more: the whole-show button wants them all again.
+		fireEvent.click(screen.getByRole('button', { name: /Want all seasons/ }));
+		await screen.findByRole('button', { name: /Wanted: all seasons/ });
+		expect(posted(calls)[1]).toEqual({
+			imdbId: SHOW,
+			kind: 'show',
+			title: '3rd Rock',
+			seasons: null,
+		});
+		expect(screen.getByRole('button', { name: /Wanted: S2/ })).toBeEnabled();
+	});
+
+	it('puts a season left out back', async () => {
+		const calls = mockFetch([stored(null, [1, 2])]);
+		render(<WantedButton imdbId={SHOW} kind="show" title="3rd Rock" season={2} />);
+		fireEvent.click(await screen.findByRole('button', { name: /Want S2/ }));
+		await screen.findByRole('button', { name: /Wanted: S2/ });
+		expect(posted(calls)[0]).toMatchObject({ seasons: null, except: [1] });
 	});
 
 	it('wants every season from the whole-show button', async () => {
@@ -109,7 +138,7 @@ describe('WantedButton', () => {
 		);
 		fireEvent.click(await screen.findByRole('button', { name: /Want all seasons/ }));
 		await screen.findByRole('button', { name: /Wanted: all seasons/ });
-		expect(screen.getByRole('button', { name: /Wanted: S2/ })).toBeDisabled();
+		expect(screen.getByRole('button', { name: /Wanted: S2/ })).toBeEnabled();
 
 		fireEvent.click(screen.getByRole('button', { name: /Wanted: all seasons/ }));
 		await screen.findByRole('button', { name: /Want all seasons/ });

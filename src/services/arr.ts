@@ -155,7 +155,9 @@ export async function lookUpSeries(tvdbId: number, rows: WantedItemRow[]) {
 		.filter((n: unknown): n is number => Number.isInteger(n) && (n as number) >= 1)
 		.map((n: number) => ({
 			seasonNumber: n,
-			monitored: row !== null && (row.seasons === null || row.seasons.includes(n)),
+			monitored:
+				row !== null &&
+				(row.seasons === null ? !row.except?.includes(n) : row.seasons.includes(n)),
 		}));
 	return seriesShape(
 		{ tvdbId, imdbId, title: show.name, year: yearOf(show.first_air_date), seasons },
@@ -166,8 +168,14 @@ export async function lookUpSeries(tvdbId: number, rows: WantedItemRow[]) {
 /**
  * The seasons a Sonarr add or update asks for, as the wanted list keeps them:
  * null once every regular season is monitored, so seasons yet to air come too.
+ * A show already followed for new seasons (`followsNew`) keeps following them,
+ * with the seasons left unmonitored as its `except`.
  */
-export function wantedSeasons(asked: unknown, all: Season[]): number[] | null {
+export function wantedSeasons(
+	asked: unknown,
+	all: Season[],
+	followsNew = false
+): { seasons: number[] | null; except?: number[] } {
 	const monitored = new Set(
 		(Array.isArray(asked) ? asked : [])
 			.filter(
@@ -176,6 +184,10 @@ export function wantedSeasons(asked: unknown, all: Season[]): number[] | null {
 			)
 			.map((s) => s.seasonNumber as number)
 	);
-	if (all.length > 0 && all.every((s) => monitored.has(s.seasonNumber))) return null;
-	return [...monitored].sort((a, b) => a - b);
+	if (all.length > 0 && all.every((s) => monitored.has(s.seasonNumber))) return { seasons: null };
+	if (followsNew) {
+		const except = all.map((s) => s.seasonNumber).filter((n) => !monitored.has(n));
+		return { seasons: null, except: except.sort((a, b) => a - b) };
+	}
+	return { seasons: [...monitored].sort((a, b) => a - b) };
 }

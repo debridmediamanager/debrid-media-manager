@@ -48,6 +48,11 @@ export interface WantedItemRow {
 	title: string;
 	/** Season numbers wanted, or null for every season, new ones included. */
 	seasons: number[] | null;
+	/**
+	 * With `seasons` null: the seasons left out of every other, which a season's
+	 * Want button takes off. Seasons that air later are still wanted. Absent when none.
+	 */
+	except?: number[];
 	createdAt: Date;
 	fulfilledAt: Date | null;
 	fulfilled: WantedFulfilled | null;
@@ -92,13 +97,26 @@ export function isOpen(row: {
 	return !!took?.upgradeTo || Object.values(took?.bands ?? {}).some((b) => !!b.upgradeTo);
 }
 
+type WantedSeasons = { seasons: number[] | null; except?: number[] };
+
+/**
+ * How `seasons` is stored: a list of the seasons wanted, null for every one, or
+ * `{except: [...]}` for every one but those.
+ */
+function storedSeasons({ seasons, except }: WantedSeasons) {
+	if (seasons) return seasons;
+	return except?.length ? { except } : Prisma.DbNull;
+}
+
 function toRow(row: any): WantedItemRow {
+	const except = Array.isArray(row.seasons?.except) ? (row.seasons.except as number[]) : [];
 	return {
 		id: row.id,
 		imdbId: row.imdbId,
 		kind: row.kind === 'show' ? 'show' : 'movie',
 		title: row.title,
 		seasons: Array.isArray(row.seasons) ? row.seasons : null,
+		...(except.length ? { except } : {}),
 		createdAt: row.createdAt,
 		fulfilledAt: row.fulfilledAt ?? null,
 		fulfilled: row.fulfilled ?? null,
@@ -163,14 +181,14 @@ export class WantedItemsService extends DatabaseClient {
 	 */
 	public async want(
 		shortId: string,
-		item: { imdbId: string; kind: WantedKind; title: string; seasons: number[] | null }
+		item: { imdbId: string; kind: WantedKind; title: string } & WantedSeasons
 	): Promise<WantedItemRow | null> {
 		const existing = await this.prisma.wantedItem.findUnique({
 			where: { shortId_imdbId: { shortId, imdbId: item.imdbId } },
 			select: { id: true },
 		});
 		if (!existing && (await this.room(shortId)).room < 1) return null;
-		const seasons = item.seasons ?? Prisma.DbNull;
+		const seasons = storedSeasons(item);
 		const row = await this.prisma.wantedItem.upsert({
 			where: { shortId_imdbId: { shortId, imdbId: item.imdbId } },
 			update: {
@@ -236,7 +254,7 @@ export class WantedItemsService extends DatabaseClient {
 	 */
 	public async wantMany(
 		shortId: string,
-		items: { imdbId: string; kind: WantedKind; title: string; seasons: number[] | null }[]
+		items: ({ imdbId: string; kind: WantedKind; title: string } & WantedSeasons)[]
 	): Promise<{ added: number; alreadyWanted: number; overCap: number; dropped: string[] }> {
 		const { listed, room } = await this.room(shortId);
 		const fresh = items.filter((item) => !listed.has(item.imdbId));
@@ -248,7 +266,7 @@ export class WantedItemsService extends DatabaseClient {
 					imdbId: item.imdbId,
 					kind: item.kind,
 					title: item.title.slice(0, 512),
-					seasons: item.seasons ?? Prisma.DbNull,
+					seasons: storedSeasons(item),
 				})),
 				skipDuplicates: true,
 			});

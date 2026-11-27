@@ -21,6 +21,8 @@ export interface WantedItemResponse {
 	kind: 'movie' | 'show';
 	title: string;
 	seasons: number[] | null;
+	/** With `seasons` null: the seasons left out; later seasons are still wanted. */
+	except?: number[];
 	createdAt: string;
 	fulfilledAt: string | null;
 	fulfilled: WantedFulfilled | null;
@@ -56,8 +58,9 @@ function parseSeasons(raw: unknown): number[] | null | undefined {
 /**
  * The signed-in sponsor's wanted list, which their zurg reads from
  * `/api/sponsor/wanted`: GET lists it with when zurg last read it (`?imdbId=` lists
- * just that title, for a title page's button), POST `{imdbId, kind, title, seasons?}`
- * adds a title or replaces its seasons, DELETE `?imdbId=` removes one and
+ * just that title, for a title page's button), POST `{imdbId, kind, title, seasons?, except?}`
+ * adds a title or replaces its seasons (`except`, beside no `seasons`: every season
+ * but those, new ones included), DELETE `?imdbId=` removes one and
  * DELETE `{imdbIds: [...]}` several at once.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -93,8 +96,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				kind,
 				title,
 				seasons: rawSeasons,
+				except: rawExcept,
 			} = (req.body ?? {}) as Record<string, unknown>;
 			const seasons = parseSeasons(rawSeasons);
+			const except =
+				rawExcept == null || (Array.isArray(rawExcept) && !rawExcept.length)
+					? null
+					: parseSeasons(rawExcept);
 			if (
 				typeof imdbId !== 'string' ||
 				!IMDB_ID.test(imdbId) ||
@@ -103,10 +111,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				!title.trim() ||
 				title.length > 512 ||
 				seasons === undefined ||
-				(kind === 'movie' && seasons !== null)
+				except === undefined ||
+				(kind === 'movie' && seasons !== null) ||
+				(except !== null && (kind === 'movie' || seasons !== null))
 			) {
 				return res.status(400).json({
-					error: 'Expected {"imdbId": "tt…", "kind": "movie"|"show", "title": string, "seasons"?: [numbers] (shows only)}',
+					error: 'Expected {"imdbId": "tt…", "kind": "movie"|"show", "title": string, "seasons"?: [numbers], "except"?: [numbers] (shows only, except without seasons)}',
 				});
 			}
 			const row = await db.want(payload.shortId, {
@@ -114,6 +124,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				kind,
 				title: title.trim(),
 				seasons,
+				...(except ? { except } : {}),
 			});
 			if (!row) {
 				return res.status(409).json({ error: WANTED_FULL });

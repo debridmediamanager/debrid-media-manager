@@ -213,6 +213,27 @@ describe('/api/arr (Seerr talking to DMM as Radarr and Sonarr)', () => {
 		expect(vi.mocked(db.want).mock.calls[0][1].seasons).toBeNull();
 	});
 
+	// A show followed from season 2 on: Seerr reads it back and PUTs it again when it
+	// asks for another season, which must not stop the seasons still to air coming.
+	it('keeps a show followed for new seasons following them', async () => {
+		db.listWanted = vi
+			.fn()
+			.mockResolvedValue([
+				row({ kind: 'show', imdbId: 'tt11280740', seasons: null, except: [1] }),
+			]);
+		const [series] = (
+			await call('GET', '/sonarr/api/v3/series/lookup', { query: { term: 'tvdb:371980' } })
+		).body;
+		expect(series.monitorNewItems).toBe('all');
+		expect(series.seasons).toEqual([
+			{ seasonNumber: 1, monitored: false },
+			{ seasonNumber: 2, monitored: true },
+		]);
+		const updated = await call('PUT', '/sonarr/api/v3/series', { body: series });
+		expect(updated.status).toBe(202);
+		expect(vi.mocked(db.want).mock.calls[0][1]).toMatchObject({ seasons: null, except: [1] });
+	});
+
 	it('removes a title Seerr deletes', async () => {
 		db.listWanted = vi.fn().mockResolvedValue([row({})]);
 		expect((await call('DELETE', '/radarr/api/v3/movie/603')).status).toBe(200);

@@ -53,7 +53,13 @@ const SORTS = {
 } satisfies Record<string, [string, (a: WantedItemResponse, b: WantedItemResponse) => number]>;
 
 function seasonsLabel(item: WantedItemResponse): string {
-	if (item.seasons === null) return 'All seasons';
+	if (item.seasons === null) {
+		const except = item.except ?? [];
+		if (!except.length) return 'All seasons';
+		// Seasons 1-8 left out reads as where the show is followed from.
+		if (except.every((s, i) => s === i + 1)) return `Season ${except.length + 1} on`;
+		return `All seasons but ${except.join(', ')}`;
+	}
 	// A show on the list only for releases sent from its Easynews results.
 	if (!item.seasons.length) {
 		const n = item.pins?.length ?? 0;
