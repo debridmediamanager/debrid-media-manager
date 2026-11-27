@@ -4,8 +4,14 @@ export interface ArrWanted {
 	imdbId: string;
 	kind: 'movie' | 'show';
 	title: string;
-	/** Shows: the regular seasons with an episode Sonarr is still looking for. */
+	/** Shows: the regular seasons with an aired episode Sonarr is still looking for. */
 	seasons: number[] | null;
+	/**
+	 * Shows Sonarr monitors new seasons of, while they continue: the seasons it looks
+	 * for nothing in, which the wanted list leaves out of every other, so later seasons
+	 * come as Sonarr's would.
+	 */
+	except?: number[];
 }
 
 export interface ArrBackupWanted {
@@ -23,7 +29,8 @@ const IMDB_ID = /^tt\d{7,}$/;
  * What a Radarr or Sonarr database (the `.db` inside its backup zip) is searching
  * for: monitored films without a file that have reached their minimum
  * availability, and monitored episodes without a file that have aired, in
- * monitored shows. Specials (season 0) are left out, as the wanted list's are.
+ * monitored shows, with the seasons to leave out of a show Sonarr follows for new
+ * seasons. Specials (season 0) are left out, as the wanted list's are.
  * Null when the file is neither app's database.
  */
 export function readArrWanted(path: string, now = new Date()): ArrBackupWanted | null {
@@ -102,5 +109,25 @@ function sonarr(db: Database.Database, now: Date): ArrBackupWanted {
 	}
 	out.wanted = [...shows.values()];
 	out.noImdbId = noImdb.size;
+	// Sonarr 3 has no MonitorNewItems: its shows are imported by their seasons alone.
+	const columns = db.prepare("SELECT name FROM pragma_table_info('Series')").all();
+	if (!columns.some((c: any) => c.name === 'MonitorNewItems')) return out;
+	// Sonarr's MonitorNewItems 0 is "all", SeriesStatusType 0 "continuing".
+	const followed = db
+		.prepare(
+			`SELECT s.ImdbId AS imdbId, e.SeasonNumber AS season,
+				MAX(e.Monitored = 1 AND COALESCE(e.EpisodeFileId, 0) = 0) AS looking
+			FROM Episodes e JOIN Series s ON s.Id = e.SeriesId
+			WHERE s.Monitored = 1 AND s.MonitorNewItems = 0 AND s.Status = 0 AND e.SeasonNumber > 0
+			GROUP BY s.Id, e.SeasonNumber
+			ORDER BY e.SeasonNumber`
+		)
+		.all() as { imdbId: string | null; season: number; looking: number }[];
+	for (const row of followed) {
+		const show = shows.get(row.imdbId ?? '');
+		if (!show) continue;
+		show.except ??= [];
+		if (!row.looking) show.except.push(row.season);
+	}
 	return out;
 }

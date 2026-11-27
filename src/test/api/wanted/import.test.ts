@@ -26,6 +26,11 @@ const SONARR = join(
 	'../../../services/__fixtures__/sonarr_backup_v5.0.0.2569_2026.10.24_17.35.41.zip'
 );
 
+const SONARR_FROM_9 = join(
+	__dirname,
+	'../../../services/__fixtures__/sonarr_backup_v4.0.20.3014_2026.11.27_02.40.08.zip'
+);
+
 /** What the wanted page sends: the `.db` member, still deflated. */
 async function upload(token: string, body: Buffer): Promise<NextApiRequest> {
 	return Object.assign(Readable.from([body]), {
@@ -69,6 +74,25 @@ describe('/api/wanted/import', () => {
 			noImdbId: 0,
 			notAvailable: 0,
 			seasonsTmdbLacks: [{ title: 'Fruits Basket', seasons: [1] }],
+		});
+	});
+
+	it('wants a show Sonarr follows for new seasons whole, but for the seasons it leaves out', async () => {
+		const wantMany = vi.fn().mockResolvedValue({ added: 2, alreadyWanted: 0, overCap: 0 });
+		vi.mocked(repository).wantMany = wantMany;
+		const { data } = await deflatedZipMember(new Blob([readFileSync(SONARR_FROM_9)]), (n) =>
+			n.endsWith('.db')
+		);
+		await handler(
+			await upload(token, Buffer.from(await data.arrayBuffer())),
+			createMockResponse()
+		);
+		expect(wantMany.mock.calls[0][1]).toContainEqual({
+			imdbId: 'tt0472954',
+			kind: 'show',
+			title: "It's Always Sunny in Philadelphia",
+			seasons: null,
+			except: [1, 2, 3, 4, 5, 6, 7, 8],
 		});
 	});
 

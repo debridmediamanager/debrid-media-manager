@@ -83,7 +83,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		if (!found) {
 			return res.status(400).json({ error: 'That is not a Radarr or Sonarr backup' });
 		}
-		const { dropped: _, ...result } = await db.wantMany(payload.shortId, found.wanted);
+		// A show Sonarr follows for new seasons is wanted whole but for its `except`.
+		const { dropped: _, ...result } = await db.wantMany(
+			payload.shortId,
+			found.wanted.map((w) => (w.except ? { ...w, seasons: null } : w))
+		);
 		const body: WantedImportResponse = {
 			app: found.app,
 			found: found.wanted.length,

@@ -12,6 +12,14 @@ import { readArrWanted } from './arrBackup';
 const RADARR = join(__dirname, '__fixtures__/radarr_backup_v6.4.4.10685_2026.10.24_17.34.40.zip');
 const SONARR = join(__dirname, '__fixtures__/sonarr_backup_v5.0.0.2569_2026.10.24_17.35.41.zip');
 const BACKUP_TIME = new Date('2026-10-24T17:35:41Z');
+// A real Sonarr 4.0.20 backup (2026-11-27), cut down the same way: It's Always Sunny
+// added with every season monitored and seasons 1-8 then unmonitored with their
+// bookmarks, Monitor New Seasons left on; Bob's Burgers added monitoring its latest
+// season only, Monitor New Seasons off. No episode has a file.
+const SONARR_FROM_9 = join(
+	__dirname,
+	'__fixtures__/sonarr_backup_v4.0.20.3014_2026.11.27_02.40.08.zip'
+);
 
 const dir = mkdtempSync(join(tmpdir(), 'arr-backup-'));
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
@@ -52,6 +60,31 @@ describe('readArrWanted', () => {
 			noImdbId: 0,
 			notAvailable: 0,
 		});
+	});
+
+	// r/debridmediamanager 1xq84po: keep season 9 and every later season. Unmonitored
+	// seasons stayed out already; a show Sonarr follows for new seasons now follows
+	// them on the wanted list too, rather than stopping at the seasons it had.
+	it('follows a show for new seasons as Sonarr does, leaving out the seasons unmonitored', async () => {
+		const result = readArrWanted(
+			await databaseOf(SONARR_FROM_9),
+			new Date('2026-11-27T02:40:08Z')
+		);
+		expect(result?.wanted).toEqual([
+			{
+				imdbId: 'tt1561755',
+				kind: 'show',
+				title: "Bob's Burgers",
+				seasons: [16],
+			},
+			{
+				imdbId: 'tt0472954',
+				kind: 'show',
+				title: "It's Always Sunny in Philadelphia",
+				seasons: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+				except: [1, 2, 3, 4, 5, 6, 7, 8],
+			},
+		]);
 	});
 
 	it('leaves out episodes that had not aired yet', async () => {

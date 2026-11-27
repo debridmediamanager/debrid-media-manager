@@ -407,6 +407,7 @@ export default function WantedPage() {
 								the zip in its <code>Backups</code> folder) and everything it is
 								still searching for is added: its monitored films without a file,
 								and the seasons of its monitored shows with aired episodes missing.
+								A show it monitors new seasons of keeps getting them.
 							</p>
 							<label className="haptic-sm inline-flex cursor-pointer items-center rounded border-2 border-rose-500 bg-rose-900/30 px-2 py-1 text-rose-100 transition-colors hover:bg-rose-800/50">
 								{importing ? (
